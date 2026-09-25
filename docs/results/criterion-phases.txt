@@ -1,0 +1,26 @@
+    Finished `bench` profile [optimized + debuginfo] target(s) in 0.04s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking legal/main-midgame
+Benchmarking legal/main-midgame: Warming up for 1.0000 s
+Benchmarking legal/main-midgame: Collecting 20 samples in estimated 1.0000 s (30M iterations)
+Benchmarking legal/main-midgame: Analyzing
+legal/main-midgame      time:   [32.124 ns 32.514 ns 32.894 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) low mild
+
+Benchmarking legal/payment
+Benchmarking legal/payment: Warming up for 1.0000 s
+Benchmarking legal/payment: Collecting 20 samples in estimated 1.0000 s (65M iterations)
+Benchmarking legal/payment: Analyzing
+legal/payment           time:   [15.097 ns 15.203 ns 15.346 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking legal/return
+Benchmarking legal/return: Warming up for 1.0000 s
+Benchmarking legal/return: Collecting 20 samples in estimated 1.0000 s (11M iterations)
+Benchmarking legal/return: Analyzing
+legal/return            time:   [94.516 ns 94.797 ns 95.139 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild

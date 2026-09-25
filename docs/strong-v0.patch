@@ -1,0 +1,117 @@
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -1,4 +1,3 @@
+-#![forbid(unsafe_code)]
+ //! Agents receive observations only. The engine and setup seed are never passed in.
+ use splendor_core::{
+     Action, ActionSet, GOLD, NONE, Observation, Phase, Player, Rng, Source,
+@@ -78,9 +77,8 @@
+ }
+ fn card_worth(p: &Player, id: u8) -> i32 {
+     let c = CARDS[id as usize];
+-    let engine =
+-        300 / (1 + p.card_count() as i32 / 8) / (1 + p.bonuses[c.bonus as usize] as i32 / 3);
+-    c.points as i32 * 150 + engine
++    let engine = 100 / (1 + p.bonuses[c.bonus as usize] as i32 / 2);
++    c.points as i32 * 130 + engine
+ }
+ fn potential(o: &Observation, p: &Player) -> i32 {
+     let mut top = [0; 3];
+@@ -88,10 +86,7 @@
+         if p.owned & (1u128 << id) != 0 {
+             continue;
+         }
+-        let cost: i32 = (0..5)
+-            .map(|c| CARDS[id as usize].cost[c].saturating_sub(p.bonuses[c]) as i32)
+-            .sum();
+-        let value = card_worth(p, id) * 20 / ((deficit(p, id) + 2) * (cost + 2));
++        let value = card_worth(p, id) * 10 / (deficit(p, id) + 3);
+         if value > top[0] {
+             top[2] = top[1];
+             top[1] = top[0];
+@@ -122,14 +117,6 @@
+ }
+ /// Integer scores keep heuristic choices independent of floating-point platforms.
+ pub fn action_score(o: &Observation, a: Action, strong: bool) -> i32 {
+-    action_score_cached(o, a, strong, None)
+-}
+-fn action_score_cached(
+-    o: &Observation,
+-    a: Action,
+-    strong: bool,
+-    base_potential: Option<i32>,
+-) -> i32 {
+     let p = o.players[o.current as usize];
+     let mut q = p;
+     match a {
+@@ -149,7 +136,7 @@
+                 .map(|j| c.cost[j].saturating_sub(p.bonuses[j]) as i32)
+                 .sum();
+             if strong {
+-                1000 + card_worth(&p, id) + noble_gain * 3 - cost * 20
++                card_worth(&p, id) + noble_gain * 3 - cost * 12
+             } else {
+                 1000 + c.points as i32 * 300
+                     + 50 / (1 + p.bonuses[c.bonus as usize] as i32)
+@@ -161,9 +148,15 @@
+                 q.tokens[c] += v;
+             }
+             if strong {
+-                potential(o, &q)
+-                    - potential(o, &p)
+-                    - (q.token_count().saturating_sub(10) as i32) * 10
++                let mut gain = 0;
++                for id in target_ids(o) {
++                    let before = deficit(&p, id);
++                    let after = deficit(&q, id);
++                    let v = card_worth(&p, id) * (before - after) / (after + 3);
++                    gain = gain.max(v);
++                }
++                gain + 8 * t.iter().sum::<u8>() as i32
++                    - (q.token_count().saturating_sub(10) as i32) * 20
+             } else {
+                 token_value(o, &q, false) - token_value(o, &p, false)
+             }
+@@ -175,8 +168,7 @@
+             let id = o.market[i as usize];
+             let gap = deficit(&q, id);
+             if strong {
+-                let gold_gain =
+-                    (potential(o, &q) - base_potential.unwrap_or_else(|| potential(o, &p))) / 3;
++                let gold_gain = (potential(o, &q) - potential(o, &p)) / 3;
+                 gold_gain + card_worth(&p, id) / (gap + 4) / 3
+                     - 20
+                     - o.reserved_counts[o.current as usize] as i32 * 15
+@@ -235,10 +227,8 @@
+ fn best(o: &Observation, legal: &[Action], strong: bool) -> Action {
+     let mut chosen = legal[0];
+     let mut score = i32::MIN;
+-    let base =
+-        (strong && o.phase == Phase::Main).then(|| potential(o, &o.players[o.current as usize]));
+     for &a in legal {
+-        let s = action_score_cached(o, a, strong, base);
++        let s = action_score(o, a, strong);
+         if s > score {
+             score = s;
+             chosen = a;
+@@ -319,17 +309,9 @@
+         if o.phase != Phase::Main || legal.len() == 1 || self.config.iterations == 0 {
+             return best(o, legal, true);
+         }
+-        let base = Some(potential(o, &o.players[o.current as usize]));
+-        let mut ranked: Vec<_> = legal
+-            .iter()
+-            .map(|&a| (action_score_cached(o, a, true, base), a))
+-            .collect();
+-        ranked.sort_by_key(|&(score, _)| std::cmp::Reverse(score));
+-        let candidates: Vec<_> = ranked
+-            .into_iter()
+-            .take(self.config.width.max(1))
+-            .map(|(_, a)| a)
+-            .collect();
++        let mut candidates: Vec<_> = legal.iter().copied().collect();
++        candidates.sort_by_key(|&a| std::cmp::Reverse(action_score(o, a, true)));
++        candidates.truncate(self.config.width.max(1));
+         let mut sums = vec![0.0; candidates.len()];
+         let mut visits = vec![0u32; candidates.len()];
+         let start = Instant::now();

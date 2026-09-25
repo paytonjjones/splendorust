@@ -1,0 +1,88 @@
+{
+  "source_id": "72d75cf510bece62",
+  "max_decisions": 20000,
+  "invariants_checked": true,
+  "engine": "splendorust-v1",
+  "seed": 912345,
+  "players": 4,
+  "requested_games": 40,
+  "completed_games": 39,
+  "incomplete_games": 1,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 15,
+      "shared_wins": 0,
+      "win_share": 15.0,
+      "win_rate": 0.38461538461538464,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 2.1794871794871793,
+      "average_score": 12.051282051282051
+    },
+    {
+      "identity": 1,
+      "agent": "greedy",
+      "wins": 7,
+      "shared_wins": 0,
+      "win_share": 7.0,
+      "win_rate": 0.1794871794871795,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 2.41025641025641,
+      "average_score": 12.461538461538462
+    },
+    {
+      "identity": 2,
+      "agent": "greedy",
+      "wins": 9,
+      "shared_wins": 0,
+      "win_share": 9.0,
+      "win_rate": 0.23076923076923078,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 2.6666666666666665,
+      "average_score": 11.282051282051283
+    },
+    {
+      "identity": 3,
+      "agent": "greedy",
+      "wins": 8,
+      "shared_wins": 0,
+      "win_share": 8.0,
+      "win_rate": 0.20512820512820512,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 2.6666666666666665,
+      "average_score": 11.820512820512821
+    }
+  ],
+  "average_turns": 107.075,
+  "average_decisions": 170.375,
+  "runtime_seconds": 0.022443875,
+  "games_per_second": 1782.2234351242823,
+  "decisions_per_second": 303646.3177592996,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 8, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "c218f0efb8b8fd8fdad61cedc7eedace8a09b9211c8fef5417507f5de9f117be",
+  "record_set_sha256": "2414db61ad7ffa0592a7b611c924c182b36df65531ed7df011b03fb2fdea1832",
+  "raw_archive": "search-four-smoke.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 39,
+    "no_legal_action": 1
+  }
+}

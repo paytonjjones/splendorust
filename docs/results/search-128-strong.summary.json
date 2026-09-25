@@ -1,0 +1,56 @@
+{
+  "engine": "splendorust-v1",
+  "seed": 100001,
+  "players": 2,
+  "requested_games": 1000,
+  "completed_games": 1000,
+  "incomplete_games": 0,
+  "independent_blocks": 500,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 725,
+      "shared_wins": 0,
+      "win_share": 725.0,
+      "win_rate": 0.725,
+      "ci95": [
+        0.6605805252383857,
+        0.7894194747616142
+      ],
+      "average_position": 1.275,
+      "average_score": 14.067
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 275,
+      "shared_wins": 0,
+      "win_share": 275.0,
+      "win_rate": 0.275,
+      "ci95": [
+        0.21058052523838583,
+        0.3394194747616142
+      ],
+      "average_position": 1.725,
+      "average_score": 14.71
+    }
+  ],
+  "average_turns": 58.944,
+  "average_decisions": 94.399,
+  "runtime_seconds": 9.791228209,
+  "games_per_second": 102.13223291852292,
+  "decisions_per_second": 9641.180655275644,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "candidate exceeds equal-seat baseline",
+  "raw_report_sha256": "fc871bb23160efe777c6f4b65ac44bfd37c212717fe669759e2beb6df7bd337e",
+  "record_set_sha256": "4f2e8998eda3a45592dadf57897c6b74faf3ee792e3c63252878f70697472fa3",
+  "raw_archive": "search-128-strong.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 1000
+  }
+}

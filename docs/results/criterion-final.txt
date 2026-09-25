@@ -1,0 +1,54 @@
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-core)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 6.38s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking legal/opening
+Benchmarking legal/opening: Warming up for 1.0000 s
+Benchmarking legal/opening: Collecting 20 samples in estimated 1.0000 s (24M iterations)
+Benchmarking legal/opening: Analyzing
+legal/opening           time:   [41.570 ns 42.353 ns 43.088 ns]
+                        change: [-10.008% -8.7931% -7.3475%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking clone
+Benchmarking clone: Warming up for 1.0000 s
+Benchmarking clone: Collecting 20 samples in estimated 1.0000 s (82M iterations)
+Benchmarking clone: Analyzing
+clone                   time:   [12.111 ns 12.153 ns 12.201 ns]
+                        change: [-3.5181% -2.7559% -1.9813%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+
+Benchmarking clone_apply
+Benchmarking clone_apply: Warming up for 1.0000 s
+Benchmarking clone_apply: Collecting 20 samples in estimated 1.0000 s (41M iterations)
+Benchmarking clone_apply: Analyzing
+clone_apply             time:   [24.338 ns 24.583 ns 24.896 ns]
+                        change: [-2.2490% -1.6185% -0.6958%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+
+Benchmarking apply
+Benchmarking apply: Warming up for 1.0000 s
+Benchmarking apply: Collecting 20 samples in estimated 1.0000 s (27M iterations)
+Benchmarking apply: Analyzing
+apply                   time:   [25.708 ns 25.876 ns 26.064 ns]
+                        change: [-1.9491% -0.8702% +0.1434%] (p = 0.13 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking random_game
+Benchmarking random_game: Warming up for 1.0000 s
+Benchmarking random_game: Collecting 20 samples in estimated 1.0013 s (147k iterations)
+Benchmarking random_game: Analyzing
+random_game             time:   [6.7560 µs 6.7794 µs 6.8173 µs]
+                        change: [-0.1384% +0.8084% +1.8016%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe

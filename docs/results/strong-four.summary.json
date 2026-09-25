@@ -1,0 +1,85 @@
+{
+  "engine": "splendorust-v1",
+  "seed": 3000001,
+  "players": 4,
+  "requested_games": 4000,
+  "completed_games": 3999,
+  "incomplete_games": 1,
+  "independent_blocks": 1000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 1739,
+      "shared_wins": 18,
+      "win_share": 1748.0,
+      "win_rate": 0.43710927731932986,
+      "ci95": [
+        0.40097042756106804,
+        0.47329554171267574
+      ],
+      "average_position": 1.8072018004501125,
+      "average_score": 13.89697424356089
+    },
+    {
+      "identity": 1,
+      "agent": "greedy",
+      "wins": 842,
+      "shared_wins": 19,
+      "win_share": 851.5,
+      "win_rate": 0.2129282320580145,
+      "ci95": [
+        0.18290675001231133,
+        0.24311124686409902
+      ],
+      "average_position": 2.6064016004001,
+      "average_score": 11.08927231807952
+    },
+    {
+      "identity": 2,
+      "agent": "greedy",
+      "wins": 690,
+      "shared_wins": 14,
+      "win_share": 697.0,
+      "win_rate": 0.17429357339334833,
+      "ci95": [
+        0.14654407221756552,
+        0.2021997284228503
+      ],
+      "average_position": 2.7451862965741434,
+      "average_score": 10.550637659414853
+    },
+    {
+      "identity": 3,
+      "agent": "greedy",
+      "wins": 694,
+      "shared_wins": 17,
+      "win_share": 702.5,
+      "win_rate": 0.17566891722930733,
+      "ci95": [
+        0.14742314560770112,
+        0.20407065830477178
+      ],
+      "average_position": 2.773943485871468,
+      "average_score": 10.440110027506877
+    }
+  ],
+  "average_turns": 106.7345,
+  "average_decisions": 169.1065,
+  "runtime_seconds": 0.097809125,
+  "games_per_second": 40895.97979738598,
+  "decisions_per_second": 6915776.007606653,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 64, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "9463c496d0cbc74fa8bd07191f51d8a76a028cf058a52e32a1b21eff9c280668",
+  "record_set_sha256": "a39bbaa7ffea3355b8742deac9a72daf0087ba21c0e1cf9a1b16fea403db1d66",
+  "raw_archive": "strong-four.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 3999,
+    "no_legal_action": 1
+  }
+}

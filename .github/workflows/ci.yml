@@ -1,0 +1,21 @@
+name: correctness
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.98.1
+          components: rustfmt, clippy
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - run: cargo test --workspace --release --locked
+      - run: python3 scripts/check_data.py
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - run: cargo run --release --locked -- play --agents strong,greedy --seed 42 --check --output game.json
+      - run: cargo run --release --locked -- replay game.json

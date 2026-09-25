@@ -1,0 +1,71 @@
+{
+  "engine": "splendorust-v1",
+  "seed": 3000001,
+  "players": 3,
+  "requested_games": 3000,
+  "completed_games": 2999,
+  "incomplete_games": 1,
+  "independent_blocks": 1000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 1435,
+      "shared_wins": 31,
+      "win_share": 1450.5,
+      "win_rate": 0.48366122040680226,
+      "ci95": [
+        0.4449276797542396,
+        0.5224417145089543
+      ],
+      "average_position": 1.6735578526175392,
+      "average_score": 13.726242080693565
+    },
+    {
+      "identity": 1,
+      "agent": "greedy",
+      "wins": 787,
+      "shared_wins": 28,
+      "win_share": 801.0,
+      "win_rate": 0.26708902967655884,
+      "ci95": [
+        0.2331440547666807,
+        0.3011768333972648
+      ],
+      "average_position": 2.126708902967656,
+      "average_score": 11.534844948316106
+    },
+    {
+      "identity": 2,
+      "agent": "greedy",
+      "wins": 738,
+      "shared_wins": 19,
+      "win_share": 747.5,
+      "win_rate": 0.24924974991663887,
+      "ci95": [
+        0.215195563885473,
+        0.2834609161210615
+      ],
+      "average_position": 2.170390130043348,
+      "average_score": 11.240413471157053
+    }
+  ],
+  "average_turns": 82.144,
+  "average_decisions": 134.947,
+  "runtime_seconds": 0.061802708,
+  "games_per_second": 48541.56228882398,
+  "decisions_per_second": 6550538.2061899295,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 64, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "52fb82b2509677067c2978e0505d26300edb2d76dfe45c96bdcd7f10e8cda559",
+  "record_set_sha256": "963d3a50d01f231648fa49e2b682933134936bffb39da4613313e8944f8c5797",
+  "raw_archive": "strong-three.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 2999,
+    "no_legal_action": 1
+  }
+}

@@ -1,0 +1,108 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling libc v0.2.189
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling cfg-if v1.0.5
+   Compiling zerocopy v0.8.59
+   Compiling getrandom v0.3.4
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling crossbeam-epoch v0.9.21
+   Compiling autocfg v1.5.1
+   Compiling serde v1.0.229
+   Compiling getrandom v0.4.3
+   Compiling zmij v1.0.23
+   Compiling crossbeam-deque v0.8.8
+   Compiling rustix v1.1.5
+   Compiling num-traits v0.2.19
+   Compiling regex-syntax v0.8.11
+   Compiling rayon-core v1.13.0
+   Compiling once_cell v1.21.4
+   Compiling serde_json v1.0.151
+   Compiling bitflags v2.13.2
+   Compiling either v1.18.0
+   Compiling fastrand v2.5.0
+   Compiling plotters-backend v0.3.7
+   Compiling clap_lex v1.1.1
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling anstyle v1.0.14
+   Compiling ciborium-io v0.2.2
+   Compiling plotters-svg v0.3.7
+   Compiling clap_builder v4.6.7
+   Compiling regex-automata v0.4.18
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling itertools v0.10.5
+   Compiling bit-vec v0.8.0
+   Compiling errno v0.3.14
+   Compiling rand_core v0.9.5
+   Compiling wait-timeout v0.2.1
+   Compiling serde_derive v1.0.229
+   Compiling cast v0.3.0
+   Compiling quick-error v1.2.3
+   Compiling same-file v1.0.6
+   Compiling fnv v1.0.7
+   Compiling criterion-plot v0.5.0
+   Compiling walkdir v2.5.0
+   Compiling rand_xorshift v0.4.0
+   Compiling rand v0.9.5
+   Compiling bit-set v0.8.0
+   Compiling is-terminal v0.4.17
+   Compiling regex v1.13.1
+   Compiling clap v4.6.7
+   Compiling unarray v0.1.4
+   Compiling oorandom v11.1.5
+   Compiling anes v0.1.6
+   Compiling arrayvec v0.7.8
+   Compiling zerocopy-derive v0.8.59
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-core)
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling plotters v0.3.7
+   Compiling rayon v1.12.0
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling ciborium-ll v0.2.2
+   Compiling proptest v1.11.0
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `bench` profile [optimized + debuginfo] target(s) in 22.06s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking legal/opening
+Benchmarking legal/opening: Warming up for 1.0000 s
+Benchmarking legal/opening: Collecting 20 samples in estimated 1.0000 s (22M iterations)
+Benchmarking legal/opening: Analyzing
+legal/opening           time:   [45.976 ns 46.168 ns 46.332 ns]
+
+Benchmarking clone
+Benchmarking clone: Warming up for 1.0000 s
+Benchmarking clone: Collecting 20 samples in estimated 1.0000 s (79M iterations)
+Benchmarking clone: Analyzing
+clone                   time:   [12.503 ns 12.586 ns 12.675 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking clone_apply
+Benchmarking clone_apply: Warming up for 1.0000 s
+Benchmarking clone_apply: Collecting 20 samples in estimated 1.0000 s (40M iterations)
+Benchmarking clone_apply: Analyzing
+clone_apply             time:   [24.884 ns 24.959 ns 25.040 ns]
+
+Benchmarking apply
+Benchmarking apply: Warming up for 1.0000 s
+Benchmarking apply: Collecting 20 samples in estimated 1.0000 s (27M iterations)
+Benchmarking apply: Analyzing
+apply                   time:   [26.078 ns 26.172 ns 26.250 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+
+Benchmarking random_game
+Benchmarking random_game: Warming up for 1.0000 s
+Benchmarking random_game: Collecting 20 samples in estimated 1.0009 s (148k iterations)
+Benchmarking random_game: Analyzing
+random_game             time:   [6.7439 µs 6.8130 µs 6.8734 µs]

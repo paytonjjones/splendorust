@@ -1,0 +1,21 @@
+[package]
+name = "splendor-arena"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+[[bin]]
+name = "splendor"
+path = "src/main.rs"
+[dependencies]
+splendor-core.workspace = true
+splendor-agents.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+rayon.workspace = true
+[dev-dependencies]
+criterion.workspace = true
+[[bench]]
+name = "arena"
+harness = false

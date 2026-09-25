@@ -1,0 +1,57 @@
+{
+  "engine": "splendorust-v1",
+  "seed": 101,
+  "players": 2,
+  "requested_games": 1000,
+  "completed_games": 994,
+  "incomplete_games": 6,
+  "independent_blocks": 500,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 58,
+      "shared_wins": 0,
+      "win_share": 58.0,
+      "win_rate": 0.05835010060362173,
+      "ci95": [
+        0.014313285794904727,
+        0.10889256652317468
+      ],
+      "average_position": 1.9416498993963782,
+      "average_score": 7.285714285714286
+    },
+    {
+      "identity": 1,
+      "agent": "greedy",
+      "wins": 936,
+      "shared_wins": 0,
+      "win_share": 936.0,
+      "win_rate": 0.9416498993963782,
+      "ci95": [
+        0.8911074334768254,
+        0.9856867142050952
+      ],
+      "average_position": 1.0583501006036218,
+      "average_score": 15.714285714285714
+    }
+  ],
+  "average_turns": 119.502,
+  "average_decisions": 220.366,
+  "runtime_seconds": 0.048514375,
+  "games_per_second": 20612.44734163843,
+  "decisions_per_second": 4542282.570887495,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 64, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "2412f169f5aa3370b83586a9a26e0015dbc127b337611455ac05ba332b4f9fd1",
+  "record_set_sha256": "741bba49c4f268a63f996cdfd13d400238bd4883c2c796091807bf398cb1da89",
+  "raw_archive": "strong-v0-screen.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 994,
+    "decision_limit": 6
+  }
+}

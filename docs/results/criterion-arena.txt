@@ -1,0 +1,43 @@
+   Compiling utf8parse v0.2.2
+   Compiling colorchoice v1.0.5
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling heck v0.5.0
+   Compiling syn v3.0.6
+   Compiling strsim v0.11.1
+   Compiling regex-syntax v0.8.11
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-arena)
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-agents)
+   Compiling anstyle-parse v1.0.0
+   Compiling anstream v1.0.0
+   Compiling clap_builder v4.6.7
+   Compiling regex-automata v0.4.18
+   Compiling serde_derive v1.0.229
+   Compiling clap_derive v4.6.7
+   Compiling regex v1.13.1
+   Compiling clap v4.6.7
+   Compiling serde v1.0.229
+   Compiling tinytemplate v1.2.1
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `bench` profile [optimized + debuginfo] target(s) in 16.83s
+     Running benches/arena.rs (target/release/deps/arena-4e54a997d9c8b823)
+Gnuplot not found, using plotters backend
+Benchmarking arena/random/threads-1/256-games
+Benchmarking arena/random/threads-1/256-games: Warming up for 1.0000 s
+Benchmarking arena/random/threads-1/256-games: Collecting 20 samples in estimated 1.2271 s (420 iterations)
+Benchmarking arena/random/threads-1/256-games: Analyzing
+arena/random/threads-1/256-games
+                        time:   [2.9106 ms 2.9356 ms 2.9618 ms]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking arena/random/threads-4/256-games
+Benchmarking arena/random/threads-4/256-games: Warming up for 1.0000 s
+Benchmarking arena/random/threads-4/256-games: Collecting 20 samples in estimated 1.0794 s (1260 iterations)
+Benchmarking arena/random/threads-4/256-games: Analyzing
+arena/random/threads-4/256-games
+                        time:   [852.91 µs 855.57 µs 858.56 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) low mild
+  1 (5.00%) high mild

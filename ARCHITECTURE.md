@@ -1,0 +1,59 @@
+# Architecture
+
+## Crates
+
+- `splendor-core`: static metadata, fixed-size state, explicit SplitMix64 RNG, setup, action generation, action validation, transitions, observations, hidden-state sampling, and invariants. Its only production dependency is `arrayvec`. No I/O, serialization framework, clock, global RNG, or agent code.
+- `splendor-agents`: observation-only `Agent` trait, uniform random, two integer heuristics, and root UCB Monte Carlo search. The search clock is optional and outside the core.
+- `splendor-arena`: CLI, Rayon scheduling, statistics, JSON event snapshots, replay, and result reports.
+
+Unsafe Rust is forbidden in the three libraries. Full engine state fields are private. Cards use IDs 0–89; nobles use IDs 0–9. Colors are white, blue, green, red, black, then gold. `NONE = 255`. Purchased cards use a `u128` bitset; nobles use a `u16` bitset. The full state uses fixed storage. Cloning copies the state; there is no apply/undo path because measured clone cost is small.
+
+## Decision phases
+
+A complete player turn can require more than one agent decision:
+
+1. `Main`: take gems, reserve a visible card, reserve from a deck, or select a card to buy.
+2. `Payment`: choose the colored tokens to pay. Gold pays the remaining discounted cost, including voluntary substitution.
+3. `Return`: choose the complete bundle of excess tokens to return.
+4. `Noble`: choose one eligible noble, only when more than one qualifies.
+5. Finish the turn and advance the seat. A single eligible noble is claimed automatically.
+
+Payment and return are alternatives in ordinary turns. Pending decisions retain the current player. Only completed player turns increment `turns`. The engine checks the end-game trigger after the full turn. Seat zero starts; all players receive equal turns at the normal game end.
+
+`ActionSet` has stack storage for 256 actions. The largest payment space has 252 possibilities: distribute at most five gold substitutions across five colors. At most three tokens must be returned, giving at most 56 bundles over six colors. A loose upper bound for main decisions is 45 choices. Noble choice has at most five. Enumeration order is stable and part of engine version 1.
+
+This avoids a large Cartesian product of main moves, payments, returns, and noble choices. `RandomAgent` is uniform per decision phase. It is not uniform over all compound complete-turn paths. Consumers must distinguish decisions from player turns.
+
+`apply_action` validates directly before mutation. It does not rely on the agent or on a caller-supplied action list. Rejected actions leave the state unchanged. No heap allocation occurs in setup, cloning, legal generation, apply, or observation. Search and arena bookkeeping may allocate.
+
+## Hidden information
+
+An `Observation` contains public tokens, bonuses, points, purchased cards, nobles, market cards, deck sizes, reservation counts/tiers, and the viewer's private reservations. It contains no setup seed, random state, future deck order, or opponents' blind-reserved card IDs. A visible reservation stays known because an agent can legally remember the revealed card.
+
+Blind cards use `NONE` in opponent observations, so use `reserved_counts` rather than `Player::reserve_count()` on a redacted opponent. Slots stay compact. Reservation tier is observable because the deck chosen was observable.
+
+`Observation::determinize` assigns all unknown cards without replacement within each tier, then shuffles future decks. It verifies the reconstructed state. Root search receives only the observation and legal list. Each rollout player gets its own redacted observation. No API passes the real engine to an agent.
+
+The sampler models unknown cards uniformly. It does not condition on inferred opponent preferences or bidding history. Root UCB search restricts candidates to the top `width` heuristic actions and estimates their value through fixed-depth policy rollouts. Each simulation samples a fresh world. It has no persistent tree, shared-world belief updates, or claim of game-theoretic optimality. This is an initial determinization baseline.
+
+## Determinism and replay
+
+SplitMix64 uses explicit wrapping `u64` operations and rejection sampling for bounded values. Fisher–Yates shuffles each tier, then nobles, in a fixed order. Seed and action sequence determine every subsequent state; drawing cards does not call a hidden RNG.
+
+Arena setup `b` uses `SplitMix64(base_seed + b).next_u64()`. Arithmetic wraps explicitly. Each agent identity gets a separate seed derived from setup seed and identity. Seat rotation changes seating without changing those identity seeds. Rayon results are collected in game-index order, and statistics are reduced in that order.
+
+The integer core and heuristics are portable. Root UCB uses floating-point `ln` and square root; fixed iteration runs are deterministic on the tested target/toolchain. Cross-architecture equality for search choices is not yet claimed. Recorded actions replay independently of search math.
+
+A version-1 JSON `History` is an event-sourced state snapshot: engine version, player count, setup seed, action tags and payloads, and a diagnostic full-state string. Loading reconstructs setup and applies every decision with invariant checks, then checks the diagnostic snapshot. Any prefix is also a valid snapshot, including payment, return, and noble phases. This format favors auditability over constant-time loading. It contains privileged data and must not be passed to an agent.
+
+Action tags: 0 take, 1 visible reserve, 2 blind reserve, 3 visible buy, 4 reserved buy, 5 payment, 6 return, 7 noble. Each record is seven bytes in JSON integer-array form; unused payload bytes must be zero. Incompatible engine versions are rejected rather than silently reinterpreted.
+
+## Outcomes and statistics
+
+Normal rank uses prestige descending, then purchased-card count ascending. Exact ties share a competition rank and split one win credit. Reserved cards do not break ties. An unfinished state has no outcome.
+
+The official rules neither force eventual progress nor explain a turn with no legal main action. Core does not add a pass or a move-limit victory. The arena stops such games as `no_legal_action`, and stops looping policies as `decision_limit`. Both remain in per-game records. Both block promotion.
+
+Confidence intervals cluster the seat rotations from one setup. They use the bounded empirical Bernstein interval of Maurer and Pontil (2009), Theorem 4, applying alpha/2 to each tail: `log(4 / 0.05)`. Missing outcomes contribute worst-case credit 0 to the lower bound and 1 to the upper bound. This avoids selective deletion of failed games. Intervals assume independent random setups and a policy fixed before evaluation. These are conservative intervals, not normal/Wald intervals. No Elo is reported for multiplayer games.
+
+Source: https://arxiv.org/abs/0907.3740

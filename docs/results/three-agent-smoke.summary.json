@@ -1,0 +1,73 @@
+{
+  "source_id": "72d75cf510bece62",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 999,
+  "players": 3,
+  "requested_games": 300,
+  "completed_games": 300,
+  "incomplete_games": 0,
+  "independent_blocks": 100,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 158,
+      "shared_wins": 4,
+      "win_share": 160.0,
+      "win_rate": 0.5333333333333333,
+      "ci95": [
+        0.33596509913903194,
+        0.7307015675276347
+      ],
+      "average_position": 1.4666666666666666,
+      "average_score": 13.776666666666667
+    },
+    {
+      "identity": 1,
+      "agent": "greedy",
+      "wins": 138,
+      "shared_wins": 4,
+      "win_share": 140.0,
+      "win_rate": 0.4666666666666667,
+      "ci95": [
+        0.26929843247236523,
+        0.6640349008609681
+      ],
+      "average_position": 1.5733333333333333,
+      "average_score": 12.566666666666666
+    },
+    {
+      "identity": 2,
+      "agent": "random",
+      "wins": 0,
+      "shared_wins": 0,
+      "win_share": 0.0,
+      "win_rate": 0.0,
+      "ci95": [
+        0,
+        0.10328008903271774
+      ],
+      "average_position": 2.9466666666666668,
+      "average_score": 2.79
+    }
+  ],
+  "average_turns": 82.93,
+  "average_decisions": 136.99,
+  "runtime_seconds": 0.004723,
+  "games_per_second": 63518.949820029644,
+  "decisions_per_second": 8701460.935845861,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 64, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "candidate exceeds equal-seat baseline",
+  "raw_report_sha256": "a6a459f7f9b211979bbd210b7ec8b7066e27702392e571f0ecc649cf9cb49678",
+  "record_set_sha256": "f1280d2a9e2bf601365e5659ed110bf72a1077a786fbf05f53d3d7333381b167",
+  "raw_archive": "three-agent-smoke.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 300
+  }
+}

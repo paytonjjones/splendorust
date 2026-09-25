@@ -1,0 +1,56 @@
+{
+  "engine": "splendorust-v1",
+  "seed": 100001,
+  "players": 2,
+  "requested_games": 200,
+  "completed_games": 200,
+  "incomplete_games": 0,
+  "independent_blocks": 100,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 143,
+      "shared_wins": 0,
+      "win_share": 143.0,
+      "win_rate": 0.715,
+      "ci95": [
+        0.5018843424389449,
+        0.9281156575610551
+      ],
+      "average_position": 1.285,
+      "average_score": 14.11
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 57,
+      "shared_wins": 0,
+      "win_share": 57.0,
+      "win_rate": 0.285,
+      "ci95": [
+        0.07188434243894487,
+        0.4981156575610551
+      ],
+      "average_position": 1.715,
+      "average_score": 14.775
+    }
+  ],
+  "average_turns": 58.96,
+  "average_decisions": 94.275,
+  "runtime_seconds": 6.001080709,
+  "games_per_second": 33.32733047566816,
+  "decisions_per_second": 3141.934080593616,
+  "threads": 1,
+  "search_config": "SearchConfig { iterations: 1000000, depth: 8, width: 6, time_budget: Some(1ms), rollout: Strong, evaluation: Engine }",
+  "reproducible": false,
+  "promotion": "manual: timed search is not reproducible",
+  "raw_report_sha256": "9524cdfcd7d4279b15e59c776e5915fb0bf974790edf120adba0c824075613cf",
+  "record_set_sha256": "ced905d66083b35f49b7472b4c1b42f2f39ad6af03001a253a995d961cf25cfc",
+  "raw_archive": "search-1ms.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 200
+  }
+}
