@@ -1,0 +1,61 @@
+{
+  "process": {
+    "command": [
+      "target/release/splendor",
+      "compare",
+      "--agent-a",
+      "search",
+      "--agent-b",
+      "strong",
+      "--games",
+      "10000",
+      "--seed",
+      "112000000",
+      "--iterations",
+      "128",
+      "--depth",
+      "8",
+      "--width",
+      "6",
+      "--threads",
+      "4",
+      "--output",
+      "/tmp/search-v2-profile-report.json"
+    ],
+    "pid": 18190,
+    "sample_exit": 0,
+    "sample_output": "Sampling process 18190 for 5 seconds with 1 millisecond of run time between samples\nCouldn't find _sigtramp symbol in expected dylibs\nFound _sigtramp symbol after 5 tries\nSampling completed, processing symbols...\nSample analysis of process 18190 written to file /tmp/search-v2-profile.sample\n",
+    "arena_exit": 1
+  },
+  "engine": "splendorust-v2",
+  "source_id": "5fbacedf05ec987b",
+  "settings": {
+    "names": [
+      "search",
+      "strong"
+    ],
+    "games": 10000,
+    "seed": 112000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "statuses": {
+    "complete": 9998,
+    "no_legal_action": 2
+  },
+  "raw_report_sha256": "5a5d323fcfbd0cdbcb3e52f9bdd18a9c90258a76e01cfd733a4b28a9fd669c93",
+  "record_set_sha256": "e0bf1038eb7ca74f787274426a439b31805f8b6c6d27a1a189c36f109853f24a",
+  "profile_sha256": "934a9c8d939e822c7178d214201f0b8e0bd7e14fdce1705ce83ab8dd32f30975",
+  "sample_seconds": 5,
+  "sample_interval_ms": 1,
+  "note": "Profiled run elapsed time is not clean throughput evidence. Sample aggregates thread stacks and can attribute inlined work to callers."
+}

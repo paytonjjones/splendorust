@@ -936,3 +936,25 @@ Next: review current search runtime with a new profile before proposing an agent
 or performance change. The prior profile predates the sparse-owned scan and v2
 validation work. Use a fixed workload, record source/settings and sampling cost,
 and do not interpret a profiled run's elapsed time as clean throughput evidence.
+
+## Current search profile and E14 hypothesis
+
+Continued from `015453d`. Built current release, launched a fixed 10,000-game
+search/strong workload (112m, 128/8/6, four threads), and sampled the live process
+for five seconds at 1ms intervals. Sampling succeeded; arena completed with
+9,998 normal completions and two blocked games, exiting 1 as designed. Preserved
+full report, raw sample, process status, settings, hashes, and collapsed summary.
+Validated report records/settings. No throughput or promotion claim uses its
+profiled elapsed time.
+
+`potential` remains the largest sampled application symbol (8,622 collapsed
+samples; next action_score_cached has 813). Source inspection identifies one
+specific redundant calculation: the strong Take scorer ignores base_potential,
+while ReserveVisible already consumes it. Blame shows the Take expression was
+in the original baseline, not introduced by recent correctness work.
+
+Recorded E14 hypothesis before editing agents: reuse supplied base potential
+with the existing fallback, prove exact score/action equality, and measure
+alternating clean release runs at a new fixed seed. No agent code changed yet.
+Next: execute that small cache experiment with direct score-equivalence tests,
+strict Rust validation, and complete record comparisons; retain only if useful.

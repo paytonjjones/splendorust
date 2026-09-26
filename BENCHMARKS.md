@@ -186,3 +186,35 @@ cargo bench --locked -p splendor-core --bench engine -- \
   '^transition/' --sample-size 40 --warm-up-time 1 \
   --measurement-time 1 --save-baseline phase-v2
 ```
+
+## Current v2 search profile
+
+At source `5fbacedf05ec987b`, profiled a fixed release workload with macOS
+`sample`: five seconds at one-millisecond intervals, four arena threads,
+10,000 search/strong games, seed 112,000,000, 128 iterations, depth 8, width 6.
+The build finished before launch. The completed run contains 9,998 normal
+completions and two blocked games, with no capped game or invented winner.
+Its record/settings structure passes the archive validator. This is diagnostic
+sampling, not agent-strength evidence; its 78.24-second elapsed time is not a
+clean throughput baseline.
+
+The collapsed top-of-stack list reports 8,622 samples in `potential`, 813 in
+`action_score_cached`, 555 in legal generation, 394 in determinization, 173 in
+invariant checks, and 112 in action application. Counts combine sampled threads
+and can attribute inlined work to callers; they are not exact function timings
+or percentages of total wall time. The profile still supports focusing on
+heuristic evaluation before core transitions.
+
+Source inspection found that strong Take scoring recalculates the actor's base
+potential instead of using the supplied cached value. Visible reservation
+scoring already uses that cache. This expression predates the current branch's
+work; no recent v2 regression is inferred. E14 in EXPERIMENTS.md records a
+score-preserving cache hypothesis and required equivalence/timing checks before
+any agent edit.
+
+Evidence: `docs/results/search-v2-profile.json` records settings, source and
+record hashes, profiler arguments and process exits. The `.sample.gz` retains
+the full sample, `-summary.txt` the collapsed list, and `-report.json.gz` the
+complete arena report. The arena exits 1 because two games are blocked; sampling
+itself exits 0. Reproduce by launching the recorded arena command, then running
+`sample PID 5 1 -file OUTPUT` against that live process.

@@ -631,3 +631,21 @@ after source `93aa7293171a9875` uses v2. Both reports and hashes are archived in
 This is behavioral regression evidence, not a playing-strength promotion or
 performance claim. No failed boundary experiment is discarded: v1 debug and
 release failure results remain beside the v2 resource-error results.
+
+## E14 hypothesis: reuse base potential for Take scoring
+
+The current v2 release profile (fixed 10,000 search/strong games, seed
+112,000,000, 128 iterations, depth 8, width 6, four threads) still identifies
+`potential` as the largest sampled application function. Source inspection
+shows the strong Take branch recomputes `potential(o, p)` despite receiving the
+already computed `base_potential`; visible reservation scoring uses that cache.
+`git blame` shows the uncached Take expression predates this work, rather than
+being a regression from the recent v2 changes.
+
+Hypothesis: using the supplied base value, with the existing uncached fallback,
+will preserve every integer score and action while reducing search runtime.
+Before any edit, plan direct cached/uncached score equality across legal actions
+and phases, all Rust checks, and alternating fixed-budget release comparisons
+with exact record equality. Use a new workload seed for the clean timing runs;
+the profiled run's elapsed time is not a throughput baseline. This is a
+performance experiment, not a strength candidate or a change in game rules.
