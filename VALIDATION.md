@@ -117,7 +117,7 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 52 Python tests include 26 reference
+silently skipping the reference tests. The 54 Python tests include 26 reference
 tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 26.
 A fresh checkout and all 29 tests passed locally when this workflow was first added.
 Hosted Linux/macOS workflow results are not yet verified.
@@ -339,3 +339,27 @@ and confirmation stages correctly returned `retain baseline: benefit not
 confirmed` (exit 2). This smoke is not strength evidence. The separate random
 benchmark reported eight blocked games without inventing winners. Commands,
 logs, Cargo artifacts, and reports are in `docs/results/promotion-target-*`.
+
+## Export workload sequence checks
+
+The reference harness now checks each full export against its declared setup
+seed and policy schedule. Each game starts at turn zero. Every next `before`
+snapshot must equal the preceding selected `after` snapshot. The game count
+and order must match the header. A game ends at a normal finish, an explicit
+blocked record, or the exporter's 1,000-turn cap. Blocked and capped games
+receive no winner from this check.
+
+Tests reject missing, duplicate, reordered, truncated, and changed snapshots,
+wrong seeds or policies, and missing or conflicting workload scope metadata.
+The separate depletion-history exports do not declare a full-game schedule;
+the report explicitly marks this sequence check as not applied to them.
+
+Both archived 60-game workloads pass the new check, as do their existing
+transition and branch checks. All four archived input files were checked again;
+no new seeds or trajectories were generated. The new results are
+`docs/results/reference-v2-sequence.summary.json`,
+`reference-confirm-v2-sequence.summary.json`, and the corresponding
+`reference-v2-tier2-sequence.summary.json` / `reference-v2-tier3-sequence.summary.json`.
+All 54 Python tests pass with the pinned reference. These are local export
+continuity checks, not chained external-engine trajectory parity. Rust and
+engine semantics are unchanged.

@@ -9,7 +9,64 @@ import pathlib
 import subprocess
 import unittest
 
-from check_reference import Comparison, ROOT, boundary_coverage, validate_sampling
+from check_reference import Comparison, ROOT, WorkloadSequence, boundary_coverage, validate_sampling
+
+
+class WorkloadSequenceTests(unittest.TestCase):
+    @staticmethod
+    def cases():
+        result = []
+        for count in (2, 3, 4):
+            before = {"players": [{}] * count, "turns": 0, "terminal": False}
+            middle = {**before, "turns": 1}
+            end = {**before, "turns": 2, "terminal": True}
+            for old, new in ((before, middle), (middle, end)):
+                result.append({"seed": count * 1_000_000, "policy": "strong",
+                               "before": old, "after": new})
+        return result
+
+    def check(self, cases):
+        sequence = WorkloadSequence({"games_per_player_count": 1, "seed": 0})
+        for case in cases:
+            sequence.add(case)
+        return sequence.finish()
+
+    def test_full_sequence_and_corruption(self):
+        cases = self.cases()
+        self.assertEqual(self.check(cases)["games"], 3)
+        for bad in (cases[1:], cases[:-1], cases[:1] + cases, cases + cases[-2:], cases[:2] + cases[4:]):
+            with self.assertRaises(ValueError):
+                self.check(bad)
+        for field, value in (("seed", 99), ("policy", "random")):
+            bad = copy.deepcopy(cases)
+            bad[2][field] = value
+            with self.assertRaises(ValueError):
+                self.check(bad)
+        bad = copy.deepcopy(cases)
+        bad[1]["before"] = copy.deepcopy(bad[1]["before"])
+        bad[1]["before"]["players"][0]["injected"] = True
+        with self.assertRaisesRegex(ValueError, "discontinuity"):
+            self.check(bad)
+
+    def test_blocked_and_capped_sequences(self):
+        cases = self.cases()
+        for case in cases[1::2]:
+            case["after"] = case["before"]
+            case["status"] = "no_legal_action"
+        self.assertEqual(self.check(cases)["games"], 3)
+        capped = []
+        for count in (2, 3, 4):
+            for turn in range(1000):
+                before = {"players": [{}] * count, "turns": turn, "terminal": False}
+                capped.append({"seed": count * 1_000_000, "policy": "strong",
+                               "before": before, "after": {**before, "turns": turn + 1}})
+        self.assertEqual(self.check(capped)["games"], 3)
+        self.assertFalse(WorkloadSequence({"depletion_tier": 1}).finish()["checked"])
+        for metadata in ({}, {"depletion_tier": True}, {"depletion_tier": 3},
+                         {"games_per_player_count": 1, "seed": 0, "depletion_tier": 1},
+                         {"games_per_player_count": True, "seed": 0}):
+            with self.assertRaises(ValueError):
+                WorkloadSequence(metadata)
 
 
 class CoverageTests(unittest.TestCase):

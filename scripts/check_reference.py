@@ -23,6 +23,56 @@ def require(condition, message):
         raise ValueError(message)
 
 
+class WorkloadSequence:
+    """Check full exporter schedules and continuity, not external trajectory parity."""
+
+    def __init__(self, metadata):
+        self.games = metadata.get("games_per_player_count")
+        self.seed = metadata.get("seed")
+        self.index = 0
+        self.previous = None
+        self.cases = 0
+        if self.games is None:
+            require(type(metadata.get("depletion_tier")) is int and 0 <= metadata["depletion_tier"] <= 2,
+                    "missing full-game schedule or valid boundary-history scope")
+        else:
+            require("depletion_tier" not in metadata, "conflicting workload scopes")
+            require(type(self.games) is int and self.games > 0, "invalid workload game count")
+            require(type(self.seed) is int and 0 <= self.seed < 2**64, "invalid workload seed")
+
+    def add(self, case):
+        if self.games is None:
+            return
+        require(self.index < 3 * self.games, "extra workload game")
+        count, game = 2 + self.index // self.games, self.index % self.games
+        expected_seed = (self.seed + count * 1_000_000 + game) % 2**64
+        require(type(case["seed"]) is int and case["seed"] == expected_seed
+                and len(case["before"]["players"]) == count, "workload game schedule mismatch")
+        require(case["policy"] == ("strong" if game % 2 == 0 else "random"),
+                "workload policy schedule mismatch")
+        before, after = case["before"], case["after"]
+        if self.previous is None:
+            require(before["turns"] == 0 and not before["terminal"], "workload game must start at turn zero")
+        else:
+            require(before == self.previous, "workload snapshot discontinuity")
+        self.cases += 1
+        require(self.cases <= 1000, "workload exceeds exporter turn cap")
+        if after["terminal"] or case.get("status") == "no_legal_action" or self.cases == 1000:
+            self.index += 1
+            self.previous = None
+            self.cases = 0
+        else:
+            self.previous = after
+
+    def finish(self):
+        if self.games is None:
+            return {"checked": False, "reason": "boundary-history export has no full-game schedule"}
+        require(self.previous is None and self.index == 3 * self.games,
+                "incomplete workload game sequence")
+        return {"checked": True, "games": self.index, "turn_cap": 1000,
+                "scope": "Local snapshot continuity and declared exporter schedule only"}
+
+
 def boundary_coverage(before, after, actions):
     """Classify one already-validated shared transition; preserve zero counts."""
     counts = {f"tier_{tier}_{event}": 0 for tier in range(1, 4)
@@ -553,10 +603,12 @@ def main():
         check_successors = metadata["format"] == 2
         if check_successors:
             require(metadata.get("choice_successors") is True, "missing successor export flag")
+        sequence = WorkloadSequence(metadata)
         for line_number, line in enumerate(stream, 2):
             digest.update(line)
             case = json.loads(line)
             try:
+                sequence.add(case)
                 validate_sampling(metadata, case)
                 result = comparison.compare(case, winner_counts)
                 if case.get("choices") is not None:
@@ -570,6 +622,7 @@ def main():
                 categories[f"action_{case['actions'][0][0]}"] += 1
                 categories["terminal"] += int(case["after"]["terminal"])
                 categories["noble"] += int(case["before"]["nobles"] != case["after"]["nobles"])
+    workload_sequence = sequence.finish()
     require(counts["matched"] > 0, "no shared transitions were checked")
     report = {"reference": "https://github.com/roeey777/Splendor-AI", "commit": REFERENCE_COMMIT,
               "license": "MIT", "license_sha256": comparison.license_hash, "export": metadata,
@@ -577,6 +630,7 @@ def main():
               "harness_sha256": hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),
               "exporter_sha256": hashlib.sha256((ROOT / "crates/splendor-arena/examples/parity_export.rs").read_bytes()).hexdigest(),
               "cards_matched": 90, "nobles_matched": 10,
+              "workload_sequence": workload_sequence,
               "cases": dict(counts), "matched_coverage": dict(categories), "action_sets": dict(choice_counts),
               "selected_winners": dict(winner_counts),
               "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Winner masks checked when exported, with explicit reference tiebreak defects. Not full rules, RNG, observation, or rank parity."}

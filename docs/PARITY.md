@@ -581,3 +581,21 @@ This covers the successor gap in the older seven-card fixture without replacing
 it or treating excluded branches as external matches. All 46 Python tests pass.
 These are extracted regression cases from an already reported workload, not
 additional independent games or a new confirmation experiment.
+
+## Full-export continuity audit
+
+The harness now verifies the declared full-game workload as well as each
+isolated transition. Missing or duplicate cases, wrong game order or policy,
+changed adjacent snapshots, and truncated workloads fail. The check accepts
+explicit blocked endings and the 1,000-turn export cap without assigning wins.
+Depletion-history files remain outside the full-game schedule check and are
+marked as such in the report.
+
+The existing development and confirmation archives each pass for all 60 games.
+The selected-turn and branch counts are unchanged. Both depletion archives
+also pass their prior transition checks. The four `*-sequence.summary.json`
+results record the current harness hash and original input hashes. Reproduce
+with the same archived inputs and `scripts/check_reference.py`; no Rust rebuild
+or new seeds are needed. All 54 Python tests pass. This establishes local
+snapshot continuity only: the reference is still hydrated separately for each
+turn and does not provide a chained external trajectory comparison.
