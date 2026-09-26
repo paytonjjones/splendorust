@@ -1,0 +1,63 @@
+{
+  "comparison": "Every selected path and sampled branch snapshot is byte-identical after stricter final-round and terminal-phase validation.",
+  "prior_cases": "reference-winners.jsonl.gz",
+  "before": {
+    "boundary_choices": true,
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v1",
+    "format": 2,
+    "games_per_player_count": 20,
+    "seed": 92000000,
+    "source_id": "48500c720f030f9e",
+    "winner_checks": true
+  },
+  "after": {
+    "boundary_choices": true,
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v1",
+    "format": 2,
+    "games_per_player_count": 20,
+    "seed": 92000000,
+    "source_id": "6fb7813c76f86a6a",
+    "winner_checks": true
+  },
+  "case_count": 5470,
+  "cases_payload_sha256": "6359b9a05c5cf912bd6b3976be23257c2f5666e4f388b6382fe41a56343c54b3",
+  "prior_export_sha256": "1e42acaaf1aa5b9c8d560ff06fe3fa16f94c9d8042004c372b65c2ad95145b74",
+  "new_export_sha256": "9a4c2a53a940b9a5df4468c852a61109e8c19df764352aebf1d263c21eae2d76",
+  "audit": {
+    "command": [
+      "cargo",
+      "run",
+      "--release",
+      "--locked",
+      "--",
+      "audit",
+      "--games",
+      "100000",
+      "--seed",
+      "104000000",
+      "--threads",
+      "4"
+    ],
+    "actual_games": 99997,
+    "counts_by_player_count": {
+      "2": {
+        "completed": 32511,
+        "blocked": 821
+      },
+      "3": {
+        "completed": 27558,
+        "blocked": 5775
+      },
+      "4": {
+        "completed": 29032,
+        "blocked": 4300
+      }
+    },
+    "output": "threshold-audit.txt",
+    "output_sha256": "64565004cfb4aa375414e5de3d17349aa5d1567f90cee2f12f8d6ccc5b19f074"
+  }
+}

@@ -303,3 +303,30 @@ core observation validation for the reverse final-round implication: a completed
 turn with threshold prestige must not lose the final-round flag. A pending noble
 choice can legitimately delay that flag, so preserve valid intermediate phases
 and prove any new rejection with targeted evidence before changing validation.
+
+## Round-state observation validation
+
+Reproduced two accepted malformed observations before changing validation. The
+first relabeled a legal pending-noble state with 16 points as Main while keeping
+the final-round flag false. The second relabeled the terminal seed-42 state as
+Main. Both now fail with explicit invariant errors. A real four-player replay
+reaches the legitimate threshold/pending-noble boundary after 228 decisions;
+it still determinizes correctly for all viewers, and all noble branches finish
+with the correct final-round flag. No valid transition behavior changed.
+
+Validation: all 53 release Rust tests, all 29 Python tests, formatting, and
+strict release all-target workspace Clippy pass. Re-exported the full boundary
+workload under source `6fb7813c76f86a6a`: all 5,470 case lines and their branch
+snapshots are byte-identical to the previous export. A fresh random invariant
+audit used seed 104,000,000, four threads, and a requested 100,000 games; seat
+rounding gave 99,997 games, with 89,101 completed and 10,896 blocked. No capped
+outcome was assigned. Raw output and a fingerprinted comparison record are saved.
+The engine stays at version 1 because valid rules, RNG, enumeration, and replay
+semantics are unchanged.
+
+Next high-value agent investigation: E11's sole blocked screen history has a
+first-time return choice immediately before the opponent takes the last colored
+token. Enumerate those return alternatives and the following legal opponent
+turns to learn whether a different return preserves a purchase. Do not assume
+that it does, and do not change an agent before recording a supported hypothesis.
+The E11 candidate remains rejected and removed from active code.

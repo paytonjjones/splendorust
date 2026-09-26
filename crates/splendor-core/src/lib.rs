@@ -515,6 +515,22 @@ impl GameState {
         {
             return fail("final round threshold");
         }
+        // A purchase may cross 15 before a mandatory noble choice finishes
+        // the actor's turn. Every other threshold score must already have
+        // started the final round.
+        if !self.final_round
+            && self.players[..self.player_count()]
+                .iter()
+                .enumerate()
+                .any(|(i, p)| {
+                    p.score >= 15 && (self.phase != Phase::Noble || i != self.current_player())
+                })
+        {
+            return fail("missing final round");
+        }
+        if (self.phase == Phase::Terminal) != (self.final_round && self.current == 0) {
+            return fail("terminal phase");
+        }
         let mut seen = 0u128;
         let mut ns = self.nobles;
         let add = |seen: &mut u128, c: u8| -> bool {
@@ -632,9 +648,6 @@ impl GameState {
             Phase::Noble if self.eligible().count_ones() < 2 => return fail("noble phase"),
             Phase::Payment(src) if !self.source_card(src).is_some_and(|c| self.affordable(c)) => {
                 return fail("payment phase");
-            }
-            Phase::Terminal if !self.final_round || self.current != 0 => {
-                return fail("terminal phase");
             }
             _ => {}
         }

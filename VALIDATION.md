@@ -73,3 +73,25 @@ New run manifests and final decisions record SHA256 hashes of `promote.py` and
 `collect_evidence.py`, in addition to the Rust source fingerprint and raw/record
 hashes. Fresh promotion stages require structured settings. Historical archives
 remain readable and are not rewritten to claim checks that did not run.
+
+## Observation round-state consistency
+
+Determinization now rejects two inconsistent input states that previously passed
+structural checks: threshold prestige with no final-round flag in an ordinary
+main phase, and a completed final round relabeled as a main phase. A legal
+pending multiple-noble choice is different: the actor can have reached 15 points
+before the turn ends, with the final-round flag still false. That state remains
+valid for every viewer, and every legal noble choice remains available.
+
+The version-1 `threshold-noble-v1.json` replay reaches this boundary after 228
+legal decisions in a four-player game. Tests preserve that valid state and reject
+its malformed variants. The completed seed-42 replay tests the terminal restart
+rejection. These checks do not prove that every accepted observation is reachable.
+
+All 5,470 turn records and their sampled choice snapshots remain byte-identical
+to the prior winner audit, excluding the changed source header. A fresh invariant
+audit requested 100,000 games; complete seat-block rounding produced 99,997:
+89,101 normal completions and 10,896 blocked games with no winner. The command,
+source fingerprint, counts, and hashes are in `docs/results/threshold-validation.json`;
+stdout is in `docs/results/threshold-audit.txt`. No valid rule, RNG, enumeration,
+or replay behavior changed, so the engine remains `splendorust-v1`.

@@ -98,3 +98,61 @@ fn a_legal_cycle_can_ignore_affordable_purchases() {
     assert_eq!(before, after);
     assert_eq!(state.outcome(), None);
 }
+
+#[test]
+fn threshold_observations_allow_pending_nobles_but_require_completed_round_flag() {
+    use splendor_core::{Rng, RuleError};
+    let history: History =
+        serde_json::from_str(include_str!("fixtures/threshold-noble-v1.json")).unwrap();
+    let state = replay(&history).unwrap();
+    let current = state.current_player();
+    let observed = state.observe(current);
+    assert_eq!(observed.phase, Phase::Noble);
+    assert!(observed.players[current].score >= 15);
+    assert!(!observed.final_round);
+    for viewer in 0..state.player_count() {
+        let observation = state.observe(viewer);
+        let sampled = observation.determinize(&mut Rng::new(42)).unwrap();
+        assert_eq!(sampled.observe(viewer), observation);
+    }
+    // The same threshold score cannot be an ordinary start-of-turn position
+    // without the final-round flag.
+    let mut bad = observed;
+    bad.phase = Phase::Main;
+    assert_eq!(
+        bad.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("missing final round"))
+    );
+    let mut legal = ActionSet::new();
+    state.legal_actions(&mut legal);
+    assert!(legal.len() >= 2);
+    for choice in legal {
+        let mut finished = state.clone();
+        finished.apply_action(choice).unwrap();
+        finished.check_invariants().unwrap();
+        let mut observation = finished.observe(finished.current_player());
+        assert_eq!(observation.phase, Phase::Main);
+        assert!(observation.final_round);
+        observation.determinize(&mut Rng::new(42)).unwrap();
+        observation.final_round = false;
+        assert_eq!(
+            observation.determinize(&mut Rng::new(42)),
+            Err(RuleError::Invariant("missing final round"))
+        );
+    }
+}
+
+#[test]
+fn finished_round_observation_cannot_restart_main_phase() {
+    use splendor_core::{Rng, RuleError};
+    let history: History = serde_json::from_str(include_str!("fixtures/seed42.json")).unwrap();
+    let state = replay(&history).unwrap();
+    assert!(state.is_terminal());
+    let mut observation = state.observe(0);
+    observation.determinize(&mut Rng::new(42)).unwrap();
+    observation.phase = Phase::Main;
+    assert_eq!(
+        observation.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("terminal phase"))
+    );
+}
