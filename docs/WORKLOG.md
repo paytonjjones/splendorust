@@ -161,3 +161,26 @@ take again despite legal purchases. Full histories and a reproducible diagnostic
 harness are archived. The main checkout's agents remain unchanged at this point.
 E11's written hypothesis now tests a targeted purchase override on repeated main
 observations, with separate main/return memory and fresh screen/confirmation seeds.
+
+## E11 checkpoint
+
+The fresh 2,000-game screen completed 1,999 games with zero caps and one blocked.
+The original-search control completed 1,951, with 48 caps and the same blocked
+record. All 48 formerly capped games completed; no completed game became
+unfinished. The candidate's strength interval still includes equal strength.
+The gate rejected the incomplete screen and did not use confirmation seed
+1,101,000,000. Active agents were restored. Source patch, candidate tests, probe
+histories, paired reports, and decision are archived. All 51 final release Rust
+tests, formatting, and strict workspace all-target Clippy pass.
+
+The one remaining blocked history has no repeated candidate return phase and
+only one choice on its last two main decisions. Cycle memory alone cannot fix
+that path. The retained core replay test demonstrates a repeated position with
+affordable purchases; legal token takes must still remain available.
+
+Next high-value evidence issue: the promotion script reads the report's supplied
+confidence interval without checking its game records. Archive validation now
+checks those records and settings, but the promotion decision does not use that
+check. Inspect and close this boundary with a corrupted-report regression and
+an independently recomputed interval before more agent experiments. Full parity
+is still not claimed; reference exclusions and published-rule gaps remain.

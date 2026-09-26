@@ -267,3 +267,31 @@ four threads, and no clock budget. Use `scripts/promote.py`; confirmation is
 categories and paired changes. Reject any incomplete promotion run. Do not tune
 on confirmation results. This test can show a completion benefit conditional on
 these opponents and budget; it cannot prove termination.
+
+**Development result:** All four E10 capped games completed in 58–82 turns
+(86–131 decisions). These reused positions are diagnostic probes only.
+
+**Fresh screen result:** Candidate/search completed 1,999/2,000 games, with no
+caps and one blocked game. Original-search self-play on the same seeds completed
+1,951, with 48 caps and the same one blocked game. Every completed control game
+remained complete; all 48 capped control games became complete. Candidate win
+credit among completed games was 49.95%, with unconditional 95% interval
+[45.56%, 54.33%]. This does not establish a strength improvement.
+
+**Remaining failure:** Block 30, rotation one, setup 811,391,511,434,643,069
+reaches the same blocked record under both policies: trajectory
+`492d8eb9732382b7`, 29 turns, 39 decisions, scores 3–2, and no winner. The
+candidate had only one return phase, so no repeated-return override occurred.
+The last two candidate main decisions had only one legal action. This is a
+separate early blocking failure, not a residual capped cycle. Its full history
+and final-choice audit are archived under `docs/results/e11-blocked-*`.
+
+**Decision:** Reject because the screen is incomplete. Confirmation was not run;
+seed 1,101,000,000 remains unused. The candidate is removed from active code.
+The raw reports, summaries, paired categories, and gate decision are archived
+under `docs/results/e11-*`. Source fingerprint: `16c5a89309314fa9`. Apply
+`docs/e11-cycle-escape.patch` to `b370f17` to reproduce the agent source. The
+archived probe harness and focused candidate tests are in `docs/e11-*.rs`.
+A permanent replay test now shows that a legal token cycle can repeat even when
+purchases are affordable. The engine still preserves that choice and gives no
+winner to the cycle.

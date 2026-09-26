@@ -1,0 +1,108 @@
+diff --git a/crates/splendor-agents/src/lib.rs b/crates/splendor-agents/src/lib.rs
+index 1f24de1..ed7fca7 100644
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -399,12 +399,68 @@ impl Agent for SearchAgent {
+         candidates[j]
+     }
+ }
++/// Experimental observation-only escape from repeated main and return positions.
++pub struct CycleEscapeAgent {
++    inner: SearchAgent,
++    rng: Rng,
++    recent_main: std::collections::VecDeque<Observation>,
++    recent_return: std::collections::VecDeque<Observation>,
++}
++impl CycleEscapeAgent {
++    pub fn new(seed: u64, config: SearchConfig) -> Self {
++        Self {
++            inner: SearchAgent::new(seed, config),
++            rng: Rng::new(seed ^ 0x6a09e667f3bcc909),
++            recent_main: std::collections::VecDeque::with_capacity(16),
++            recent_return: std::collections::VecDeque::with_capacity(16),
++        }
++    }
++}
++impl Agent for CycleEscapeAgent {
++    fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
++        let preferred = self.inner.select_action(o, legal);
++        let recent = match o.phase {
++            Phase::Main => &mut self.recent_main,
++            Phase::Return => &mut self.recent_return,
++            _ => return preferred,
++        };
++        let mut position = o.clone();
++        position.turns = 0;
++        let repeated = recent.contains(&position);
++        if recent.len() == 16 {
++            recent.pop_front();
++        }
++        recent.push_back(position);
++        if repeated && o.phase == Phase::Main && matches!(preferred, Action::Take(_)) {
++            let purchases: Vec<_> = legal
++                .iter()
++                .copied()
++                .filter(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
++                .collect();
++            if !purchases.is_empty() {
++                return best(o, &purchases, true);
++            }
++        }
++        if repeated && o.phase == Phase::Return && legal.len() > 1 {
++            let index = self.rng.index(legal.len() - 1);
++            return legal
++                .iter()
++                .copied()
++                .filter(|&a| a != preferred)
++                .nth(index)
++                .unwrap();
++        }
++        preferred
++    }
++}
++
+ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dyn Agent>, String> {
+     Ok(match name {
+         "random" => Box::new(RandomAgent::new(seed)),
+         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
+         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
+         "search" | "mcts" => Box::new(SearchAgent::new(seed, search.clone())),
++        "search-cycle-escape" => Box::new(CycleEscapeAgent::new(seed, search.clone())),
+         _ => return Err(format!("unknown agent: {name}")),
+     })
+ }
+@@ -415,7 +471,13 @@ mod tests {
+     use splendor_core::GameState;
+     #[test]
+     fn every_agent_chooses_legal_and_is_reproducible() {
+-        for name in ["random", "greedy", "strong", "search"] {
++        for name in [
++            "random",
++            "greedy",
++            "strong",
++            "search",
++            "search-cycle-escape",
++        ] {
+             let config = SearchConfig {
+                 iterations: 8,
+                 depth: 2,
+@@ -451,11 +513,13 @@ mod tests {
+             depth: 3,
+             ..Default::default()
+         };
+-        let mut a = SearchAgent::new(4, config.clone());
+-        let mut b = SearchAgent::new(4, config);
+-        assert_eq!(
+-            a.select_action(&o, &aa),
+-            b.select_action(&alternative.observe(0), &aa)
+-        );
++        for name in ["search", "search-cycle-escape"] {
++            let mut a = make_agent(name, 4, &config).unwrap();
++            let mut b = make_agent(name, 4, &config).unwrap();
++            assert_eq!(
++                a.select_action(&o, &aa),
++                b.select_action(&alternative.observe(0), &aa)
++            );
++        }
+     }
+ }

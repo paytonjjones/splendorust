@@ -67,3 +67,34 @@ fn recorded_search_cycle_preserves_state_except_turn_count() {
     assert_eq!(after, before);
     assert_eq!(state.outcome(), None);
 }
+
+#[test]
+fn a_legal_cycle_can_ignore_affordable_purchases() {
+    use splendor_core::Action;
+    let history: History =
+        serde_json::from_str(include_str!("fixtures/main-cycle-v1.json")).unwrap();
+    let mut state = replay(&history).unwrap();
+    assert_eq!(state.phase(), Phase::Main);
+    let before = state.observe(state.current_player());
+    let mut legal = ActionSet::new();
+    state.legal_actions(&mut legal);
+    assert!(
+        legal
+            .iter()
+            .any(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
+    );
+    for action in [
+        Action::Take([0, 1, 0, 0, 0]),
+        Action::Return([0, 1, 0, 0, 0, 0]),
+        Action::Take([0, 1, 0, 0, 0]),
+        Action::Return([0, 1, 0, 0, 0, 0]),
+    ] {
+        state.apply_action(action).unwrap();
+        state.check_invariants().unwrap();
+    }
+    let mut after = state.observe(state.current_player());
+    assert_eq!(after.turns, before.turns + 2);
+    after.turns = before.turns;
+    assert_eq!(before, after);
+    assert_eq!(state.outcome(), None);
+}
