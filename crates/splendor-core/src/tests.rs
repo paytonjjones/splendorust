@@ -184,10 +184,11 @@ fn reservation_without_gold_and_three_limit() {
     let mut s = GameState::new(2, 9).unwrap();
     tokens(&mut s, 1, [0, 0, 0, 0, 0, 5]);
     for t in 0..3 {
-        s.current = 0;
+        s.apply_action(Action::ReserveDeck(t)).unwrap();
+        // Complete the opponent's turn rather than changing the active seat.
         s.apply_action(Action::ReserveDeck(t)).unwrap();
     }
-    s.current = 0;
+    assert_eq!(s.current_player(), 0);
     assert_eq!(s.players[0].tokens[GOLD], 0);
     reject(&mut s, Action::ReserveDeck(0));
     reject(&mut s, Action::ReserveVisible(0));
@@ -627,5 +628,32 @@ fn determinization_rejects_unlisted_reservation() {
     s.apply_action(Action::ReserveVisible(0)).unwrap();
     let mut o = s.observe(0);
     o.reserved_counts[0] = 0;
+    assert!(o.determinize(&mut Rng::new(8)).is_err());
+}
+
+#[test]
+fn determinization_rejects_final_round_without_threshold_score() {
+    for phase in [Phase::Main, Phase::Terminal] {
+        let mut o = GameState::new(2, 8).unwrap().observe(0);
+        o.final_round = true;
+        o.phase = phase;
+        assert!(o.determinize(&mut Rng::new(8)).is_err(), "{phase:?}");
+    }
+}
+
+#[test]
+fn determinization_rejects_market_gap_with_nonempty_deck() {
+    let mut o = GameState::new(2, 8).unwrap().observe(0);
+    // Put a visible card back into the unknown pool: the partition is complete,
+    // but a nonempty deck must have refilled the market immediately.
+    o.market[0] = NONE;
+    o.remaining[0] += 1;
+    assert!(o.determinize(&mut Rng::new(8)).is_err());
+}
+
+#[test]
+fn determinization_rejects_seat_turn_mismatch() {
+    let mut o = GameState::new(3, 8).unwrap().observe(0);
+    o.turns = 1;
     assert!(o.determinize(&mut Rng::new(8)).is_err());
 }

@@ -505,6 +505,16 @@ impl GameState {
         if !(2..=4).contains(&self.count) || self.current >= self.count {
             return fail("player index");
         }
+        if self.turns % u32::from(self.count) != u32::from(self.current) {
+            return fail("turn order");
+        }
+        if self.final_round
+            && !self.players[..self.player_count()]
+                .iter()
+                .any(|p| p.score >= 15)
+        {
+            return fail("final round threshold");
+        }
         let mut seen = 0u128;
         let mut ns = self.nobles;
         let add = |seen: &mut u128, c: u8| -> bool {
@@ -531,6 +541,9 @@ impl GameState {
             }
         }
         for (i, &c) in self.market.iter().enumerate() {
+            if c == NONE && self.remaining[i / 4] > 0 {
+                return fail("market refill");
+            }
             if c != NONE && (!add(&mut seen, c) || CARDS[c as usize].tier as usize != i / 4) {
                 return fail("market card");
             }
