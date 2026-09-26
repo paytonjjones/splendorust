@@ -1,0 +1,45 @@
+{
+  "source_commit": "fde0e418ab1939b510f64b9b54384fac6859b3aa",
+  "engine": "splendorust-v2",
+  "production_source_id": "50400f40eb161b1a",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "test_sha256": "e047284c14e9fb0033e4137bb35327eafa29ac4f5611ba6af0e0caa22f3ea923",
+  "games_requested": 768,
+  "players": [
+    2,
+    3,
+    4
+  ],
+  "setup_seed_range": [
+    131000000,
+    131000255
+  ],
+  "max_decisions_per_game": 2000,
+  "phase_counts": [
+    74702,
+    37778,
+    4650,
+    142,
+    744
+  ],
+  "action_branch_counts": [
+    505248,
+    246623,
+    61283,
+    144240,
+    33122,
+    42706,
+    68771,
+    291
+  ],
+  "allocation_calls": 0,
+  "control_allocation_detected": true,
+  "workspace_tests_passed": 72,
+  "commands": [
+    "cargo fmt --all -- --check",
+    "cargo clippy --workspace --all-targets --release --locked -- -D warnings",
+    "cargo test --workspace --release --locked",
+    "cargo test --release --locked -p splendor-core --test allocations -- --nocapture"
+  ],
+  "scope": "Sampled core paths only. Thread-local allocator instrumentation is confined to an integration test; production libraries remain unsafe-free. No timing or agent-strength claim."
+}

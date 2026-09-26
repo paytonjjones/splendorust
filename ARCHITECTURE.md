@@ -24,7 +24,7 @@ Payment and return are alternatives in ordinary turns. Pending decisions retain 
 
 This avoids a large Cartesian product of main moves, payments, returns, and noble choices. `RandomAgent` is uniform per decision phase. It is not uniform over all compound complete-turn paths. Consumers must distinguish decisions from player turns.
 
-`apply_action` validates directly before mutation. It does not rely on the agent or on a caller-supplied action list. Rejected actions leave the state unchanged. No heap allocation occurs in setup, cloning, legal generation, apply, or observation. Search and arena bookkeeping may allocate.
+`apply_action` validates directly before mutation. It does not rely on the agent or on a caller-supplied action list. Rejected actions leave the state unchanged. No heap allocation occurs in setup, cloning, legal generation, apply, or observation. Search and arena bookkeeping may allocate. A release integration test directly counts allocation calls over 768 fixed-seed core trajectories and every legal branch at their sampled states. It reaches all phases and action types with zero allocations; a deliberate allocation confirms the counter works. This is sampled evidence, not a proof for every reachable state. The test-only allocator wrapper is outside the unsafe-free production library. See `docs/results/core-allocation-validation.json`.
 
 ## Hidden information
 

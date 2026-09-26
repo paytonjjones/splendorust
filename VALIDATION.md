@@ -110,7 +110,7 @@ or replay behavior changed, so the engine remains `splendorust-v1`.
 example tests through an explicit Cargo target with `test = true`. These tests
 check the distinction between a bounded cutoff and a real block, and the
 adversarial result for each of five recorded root choices. The standard Rust
-suite currently runs 71 tests.
+suite currently runs 72 tests.
 
 CI fetches the independent reference at the exact commit recorded in
 `docs/PARITY.md`, then sets `SPLENDOR_REFERENCE` for Python test discovery on
@@ -419,3 +419,25 @@ All 57 Python tests pass with the pinned reference. The dense 60-game archive
 and both targeted depletion archives pass again with unchanged comparison
 counts. Results are the three `*-partition.summary.json` reports. Rust, core
 transitions, agents, and engine version are unchanged.
+
+## Core allocation regression test
+
+`crates/splendor-core/tests/allocations.rs` installs a test-only, thread-local
+allocation counter around the system allocator. A deliberate allocation
+checks the counter before the core workload. The production libraries remain
+unsafe-free and do not depend on the counter.
+
+The release workload requests 256 seeds for each of 2, 3, and 4 players,
+starting at 131,000,000, with a 2,000-decision cap per game. A simple test
+selector sometimes prefers purchases to reach all phases; it is not a new
+production agent. The test branches over every legal action at each visited
+state and covers setup, cloning, enumeration, apply, observation, invariants,
+and determinization. It asserts coverage of all five phases and eight action
+types. The observed allocation count is zero. Sampled coverage does not prove
+the absence of allocation on every possible input.
+
+Formatting, strict release workspace Clippy, and all 72 release workspace
+tests pass with Rust 1.98.1 and the lockfile. Exact coverage counts, test source
+hash, commands, and logs are in `docs/results/core-allocation-validation.json`
+and the adjacent `core-allocation-*.txt` files. No production Rust, rules,
+agent policy, RNG, replay, or engine version changed.
