@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "strong",
+      "strong"
+    ],
+    "games": 20,
+    "seed": 102000100,
+    "threads": 2,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "48500c720f030f9e",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 102000100,
+  "players": 2,
+  "requested_games": 20,
+  "completed_games": 20,
+  "incomplete_games": 0,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 11.95
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 11.95
+    }
+  ],
+  "average_turns": 57.2,
+  "average_decisions": 98.3,
+  "runtime_seconds": 0.000985125,
+  "games_per_second": 20301.992132978045,
+  "decisions_per_second": 1995685.826671742,
+  "threads": 2,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "raw_report_sha256": "2d256a266ed62459985673b1f2379bdcd28f5518081ada939f06e5fdf03da827",
+  "record_set_sha256": "f01e3588030002c4c2343f05936ee82ee60de410957237e58294cccb954817c4",
+  "raw_archive": "record-gate-fingerprints-screen.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20
+  }
+}

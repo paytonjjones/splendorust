@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "strong",
+      "strong"
+    ],
+    "games": 20,
+    "seed": 1102000100,
+    "threads": 2,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "48500c720f030f9e",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 1102000100,
+  "players": 2,
+  "requested_games": 20,
+  "completed_games": 20,
+  "incomplete_games": 0,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 13.25
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 13.25
+    }
+  ],
+  "average_turns": 55.0,
+  "average_decisions": 92.0,
+  "runtime_seconds": 0.000934084,
+  "games_per_second": 21411.35058517221,
+  "decisions_per_second": 1969844.2538358436,
+  "threads": 2,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "raw_report_sha256": "7337142f909ad62d421fa03be18147b91f54227b819637d22721662b0cd0b7ff",
+  "record_set_sha256": "8c5127b13ef248ee72f313cbff98db2b2f3c1d8ea9d5029624c21db60714d437",
+  "raw_archive": "record-gate-fingerprints-confirm.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20
+  }
+}

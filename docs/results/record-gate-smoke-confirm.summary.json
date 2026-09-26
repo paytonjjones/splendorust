@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "strong",
+      "strong"
+    ],
+    "games": 20,
+    "seed": 1102000000,
+    "threads": 2,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "48500c720f030f9e",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 1102000000,
+  "players": 2,
+  "requested_games": 20,
+  "completed_games": 20,
+  "incomplete_games": 0,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 13.0
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 13.0
+    }
+  ],
+  "average_turns": 56.2,
+  "average_decisions": 94.6,
+  "runtime_seconds": 0.0009225,
+  "games_per_second": 21680.21680216802,
+  "decisions_per_second": 2050948.5094850948,
+  "threads": 2,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "raw_report_sha256": "bec3da4e0e5b1ee2fe2930e064126125dd902162cd2d92f3953829333a3f828f",
+  "record_set_sha256": "bc0a18d2280c8efe90fe13cc00d21a7dcde627f5f698314eef53ab6728e7d946",
+  "raw_archive": "record-gate-smoke-confirm.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20
+  }
+}

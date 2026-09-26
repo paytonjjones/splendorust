@@ -100,26 +100,31 @@ def validate_report(report):
             'completion totals differ from records')
 
 
+def record_interval(records, players, identity):
+    """Two-sided bounds from validated seat blocks; unfinished credit is unknown."""
+    def credits(unknown):
+        result = []
+        for start in range(0, len(records), players):
+            total = 0
+            for game in records[start:start+players]:
+                if game['status'] != 'complete':
+                    total += unknown
+                    continue
+                seat = game['seats'].index(identity)
+                if game['winners'] & (1 << seat):
+                    total += 1 / game['winners'].bit_count()
+            result.append(total / players)
+        return result
+    return [interval(credits(0))[0], interval(credits(1))[1]]
+
+
 def summarize(raw, name):
     report = json.loads(raw)
     validate_report(report)
     records = report.pop('records')
     n = report['players']
     for agent in report['agents']:
-        def credits(unknown):
-            result = []
-            for start in range(0, len(records), n):
-                total = 0
-                for game in records[start:start+n]:
-                    if game['status'] != 'complete':
-                        total += unknown
-                        continue
-                    seat = game['seats'].index(agent['identity'])
-                    if game['winners'] & (1 << seat):
-                        total += 1 / game['winners'].bit_count()
-                result.append(total / n)
-            return result
-        agent['ci95'] = [interval(credits(0))[0], interval(credits(1))[1]]
+        agent['ci95'] = record_interval(records, n, agent['identity'])
     report['ci_method'] = 'Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1'
     report['raw_report_sha256'] = hashlib.sha256(raw).hexdigest()
     report['record_set_sha256'] = hashlib.sha256(json.dumps(records, sort_keys=True, separators=(',', ':')).encode()).hexdigest()

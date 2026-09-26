@@ -184,3 +184,26 @@ checks those records and settings, but the promotion decision does not use that
 check. Inspect and close this boundary with a corrupted-report regression and
 an independently recomputed interval before more agent experiments. Full parity
 is still not claimed; reference exclusions and published-rule gaps remain.
+
+## Record-based promotion decisions
+
+Closed the gap between archive validation and the promotion gate. The gate now
+checks records and exact requested stage settings, checks version-1 setup seeds,
+and requires stable engine/source identity across stages. It derives the
+candidate interval from records and rejects inconsistent supplied intervals.
+Throughput is checked against elapsed time and game count. Explicit CLI search
+settings prevent changed defaults from silently changing a run. The manifest
+and decision now fingerprint both Python evidence tools.
+
+All 21 Python tests pass. Two real 20+20 strong self-play workflow checks on fresh
+seeds retained the baseline with 50% credit. The checks also ran formatting,
+strict workspace Clippy, and all 51 release Rust tests. Raw evidence, manifests,
+and decisions are archived under `docs/results/record-gate-*`. No Rust source,
+agent policy, rule, RNG, or replay semantics changed.
+
+Next: return to independent parity coverage. The existing external comparison
+samples full shared action sets every ten turns but tests data/adapters through
+a few mutation regressions. Audit whether player-count, tie, terminal, and
+noble-choice boundaries are directly exercised by checked reference cases;
+add targeted reproducible coverage for a material missing boundary rather than
+merely increasing random sample counts. Keep reference rule differences explicit.

@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "strong",
+      "strong"
+    ],
+    "games": 20,
+    "seed": 102000000,
+    "threads": 2,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "48500c720f030f9e",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 102000000,
+  "players": 2,
+  "requested_games": 20,
+  "completed_games": 20,
+  "incomplete_games": 0,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 12.8
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 10,
+      "shared_wins": 0,
+      "win_share": 10.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.5,
+      "average_score": 12.8
+    }
+  ],
+  "average_turns": 56.6,
+  "average_decisions": 95.2,
+  "runtime_seconds": 0.000963167,
+  "games_per_second": 20764.83102099636,
+  "decisions_per_second": 1976811.9131988534,
+  "threads": 2,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "raw_report_sha256": "5357feac95620f887364ed1cef98c201522908318c54c229a0f6c8946519335b",
+  "record_set_sha256": "73e65ec73b592a5437e6b32196540d5afaf3da808f501f80b2b6709069c18ebe",
+  "raw_archive": "record-gate-smoke-screen.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20
+  }
+}

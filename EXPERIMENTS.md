@@ -295,3 +295,25 @@ archived probe harness and focused candidate tests are in `docs/e11-*.rs`.
 A permanent replay test now shows that a legal token cycle can repeat even when
 purchases are affordable. The engine still preserves that choice and gives no
 winner to the cycle.
+
+## Record-based promotion gate check
+
+The gate now checks raw game records, stage settings, setup seeds, and source
+continuity, then recomputes the candidate confidence interval. It rejects a
+fabricated interval even if that interval would otherwise pass the promotion
+threshold. A regression test confirms that such a screen cannot run confirmation.
+The evidence tools have their own hashes because the Rust source fingerprint
+does not identify Python decision logic.
+
+Two workflow smoke runs used strong/strong, 20 screen and 20 confirmation games,
+two threads, and fixed default search settings. Master seeds were 102,000,000
+and 102,000,100; confirmation seeds were 1,102,000,000 and 1,102,000,100. All games
+completed. Both stages in both runs gave 50% credit with interval [0, 1]; the
+gate correctly retained the baseline. These are workflow tests, not agent
+strength evidence. The second run also checks script fingerprints. Reports,
+manifests, and decisions are under `docs/results/record-gate-*`.
+
+All 21 Python tests passed, including shared-win clustering, incomplete-outcome
+bounds, interval corruption, record truncation, wrong setup seeds, changed
+sources/settings, and prior evidence preservation. Both real gate runs also
+passed formatting, strict workspace Clippy, and all 51 release Rust tests.

@@ -52,3 +52,24 @@ Tests cover non-default search settings, all rollout/evaluation choices,
 nanosecond duration preservation, unknown fields, changed game records,
 inconsistent metadata, missing settings, source/version mismatch, timed runs,
 and exact reproduction of capped records.
+
+## Promotion evidence checks
+
+The promotion gate validates ordered game records and structured settings before
+it accepts a stage. It checks the requested agents, game count, seed, thread
+count, fixed search budget, and version-1 setup seed schedule. Engine and source
+identity must stay the same between screen and confirmation. The CLI arguments
+state the depth, width, rollout policy, evaluation, and decision cap explicitly.
+
+The gate recomputes the candidate interval from independent setup blocks and
+uses that interval for decisions. A supplied interval that differs beyond
+floating-point tolerance is rejected. Shared wins retain fractional credit;
+unfinished outcomes retain bounds of zero and one. Throughput must agree with
+elapsed time and requested games. These checks establish report consistency;
+they do not replace engine validation or prove that an arbitrary report is a
+true record of executed games.
+
+New run manifests and final decisions record SHA256 hashes of `promote.py` and
+`collect_evidence.py`, in addition to the Rust source fingerprint and raw/record
+hashes. Fresh promotion stages require structured settings. Historical archives
+remain readable and are not rewritten to claim checks that did not run.
