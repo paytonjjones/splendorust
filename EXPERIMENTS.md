@@ -554,3 +554,41 @@ and 57 release workspace tests including its two focused recurrence tests.
 The restored baseline passed formatting, strict all-target workspace Clippy,
 and its 55 release workspace tests. The normal release binary was rebuilt.
 No rules, engine version, or replay semantics changed.
+
+### E13 new blocks: scarcity-filter regressions
+
+Reconstructed E13 at `bb68482` plus its saved patch. All three newly blocked
+candidate records and their completed controls reproduce exactly, including
+trajectory hashes, under source `bc5ac15a9e3914a2`. Invariants pass throughout.
+All three blocks affect candidate identity 0.
+
+| Block | Rotation | First differing decision | Only scarcity trigger | Newly affordable card | Candidate buys it at decision | Blocked after decisions |
+| --- | --- | --- | --- | --- | --- | --- |
+| 223 | 1 | 34 | 34 | 4 | 36 | 49 |
+| 237 | 0 | 29 | 29 | 35 | 35 | 43 |
+| 855 | 1 | 41 | 41 | 35 | 44 | 64 |
+
+In each history, the candidate has exactly one scarcity-filter event and no
+repeated Main or Return observation in the wrapper's 16-position memories.
+The first action divergence from the control is at that filter event. Therefore
+these histories implicate the affordability filter, not a cycle-escape choice.
+The newly affordable target is a visible card in all three cases. The candidate
+buys it before eventually blocking, so opponent removal of that card is not the
+explanation. Immediate affordability alone does not ensure later access to legal
+moves. This is a limit of the filter's premise, not a new engine-rule failure.
+
+The audit records both full histories, public token features, condition events,
+later purchases, and the last eight decisions. Input, source, and history hashes
+are in `docs/results/e13-block-audit.json.gz`; full histories are under
+`docs/results/e13-block-*-v1.json.gz`. To reproduce, restore the candidate,
+copy `docs/e13-block-audit.rs` to the arena examples directory, decompress the
+E13 screen/control reports, and run:
+
+```sh
+cargo run --release --locked --example e13_block_audit -- /tmp/e13-screen-replay.json /tmp/e13-control-replay.json /tmp/e13-block-histories-new
+```
+
+The output directory must be new. The historical candidate passes formatting,
+strict release all-target workspace Clippy, and all 55 release workspace tests.
+No new agent intervention is justified solely by these three reused cases.
+The active baseline and engine rules remain unchanged.

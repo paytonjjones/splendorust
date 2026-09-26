@@ -458,3 +458,26 @@ E13 games and identify whether the block affects the candidate or opponent and
 whether it follows an escape purchase or a scarcity-filter decision. Compare
 that evidence before changing either component. Do not assume the components'
 individual effects can be inferred from this combined screen alone.
+
+## E13 new blocks traced to the scarcity filter
+
+Continued from `3c5a5ea`. Restored the exact E13 source in a temporary worktree.
+All three newly blocked records and all three completed controls reproduce
+exactly with invariant checks. In blocks 223, 237, and 855 the candidate is the
+blocked player. First action divergence is the sole scarcity-filter event
+(decisions 34, 29, 41). No repeated-position condition occurs in any trajectory.
+The candidate buys the newly affordable market card in all three cases and
+blocks later. This rules out immediate card theft and cycle escape as the
+observed mechanism; local affordability is insufficient for sustained progress.
+
+Saved all six histories, public-token features, event/purchase traces, source
+hashes, and a reproduction harness. Candidate formatting, strict all-target
+Clippy, and 55 release workspace tests pass. No active-agent or core change.
+
+Next: prefer a broader evidence review before another local heuristic change.
+The E12/E13 filter premise now has three direct counterexamples even though its
+original probe succeeded. A useful alternative is to audit existing parity
+sampling for reachable phase/data coverage and select an uncovered boundary,
+or measure search rollout behavior in these blocked cases without retuning to
+them. Keep the published no-action gap explicit and do not restore rejected
+candidates as defaults.
