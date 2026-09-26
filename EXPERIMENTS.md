@@ -649,3 +649,33 @@ and phases, all Rust checks, and alternating fixed-budget release comparisons
 with exact record equality. Use a new workload seed for the clean timing runs;
 the profiled run's elapsed time is not a throughput baseline. This is a
 performance experiment, not a strength candidate or a change in game rules.
+
+### E14 result: retain the cache reuse
+
+The strong Take scorer now uses its supplied base potential, with the same
+uncached fallback. A regression test compares cached and uncached integer
+scores for every legal action over 96 seeded trajectories (2–4 players), in
+both scoring modes, and requires Main, Payment, Return, and Noble coverage.
+All 71 release workspace tests and strict release workspace Clippy pass.
+
+Measured eight serial release runs on the same Apple M4 Pro/macOS 26.7 host,
+Rust 1.98.1, Cargo.lock, and release settings. Screening uses ABBAAB order:
+1,000 search/strong games per run, seed 116,000,000, 128 iterations, depth 8,
+width 6, one thread, 20,000-decision cap, and no time budget. Baseline source
+`5fbacedf05ec987b` has runtimes 28.675, 29.219, 29.354 seconds; changed source
+`0bcb24bf9c705a56` has 22.976, 23.103, 23.326 seconds. Median runtime falls
+20.9% (29.219 to 23.103 seconds), equivalent to 26.5% greater throughput.
+All six runs complete all games and have identical full game records.
+
+Fresh confirmation seed 1,116,000,000 uses the same settings: 29.453 to 23.354
+seconds, a 20.7% reduction. Both builds have 999 completed games and one blocked
+game; both exit 1. Their full records match, including the unfinished result.
+No winner is assigned to that game. This is a score-preserving performance
+change, not a strength promotion. The result is conditional on this machine,
+opponents, and budget. Record equality does not claim saved action-trace
+equality; exact score tests separately support unchanged decisions.
+
+`docs/results/e14-comparison.json` records exact commands, settings, process
+exits, source IDs, binary hashes, raw report hashes, and record-set hashes.
+All eight full reports and process logs are archived as `e14-[0-7]-*`.
+No rule, RNG, enumeration, or replay semantics changed; engine stays v2.

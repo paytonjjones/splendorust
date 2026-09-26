@@ -218,3 +218,20 @@ the full sample, `-summary.txt` the collapsed list, and `-report.json.gz` the
 complete arena report. The arena exits 1 because two games are blocked; sampling
 itself exits 0. Reproduce by launching the recorded arena command, then running
 `sample PID 5 1 -file OUTPUT` against that live process.
+
+## Take potential cache (E14)
+
+A serial ABBAAB comparison of 1,000 search/strong games per run at seed 116m,
+128 iterations/depth 8/width 6, one thread, reduces median runtime from 29.219
+to 23.103 seconds (20.9%; throughput +26.5%). A fresh 1,116m confirmation pair
+falls from 29.453 to 23.354 seconds (20.7%). All game records are unchanged;
+the confirmation pair preserves one blocked game in each build. These are
+clean release runs, without sampling or concurrent test/build work.
+
+Host: Apple M4 Pro, macOS 26.7, Rust 1.98.1, pinned lockfile, release thin LTO
+and one codegen unit. Source changes from `5fbacedf05ec987b` to
+`0bcb24bf9c705a56`. This is a measured benefit for one workload and host,
+not a portable speed guarantee or a strength result. Full timing samples,
+commands, reports, source and binary hashes are in
+`docs/results/e14-comparison.json` and its referenced archives. See E14 in
+EXPERIMENTS.md for the pre-edit hypothesis and score-equivalence test.

@@ -958,3 +958,23 @@ with the existing fallback, prove exact score/action equality, and measure
 alternating clean release runs at a new fixed seed. No agent code changed yet.
 Next: execute that small cache experiment with direct score-equivalence tests,
 strict Rust validation, and complete record comparisons; retain only if useful.
+
+## E14 measured cache reuse
+
+Continued from f5638d5 and implemented the recorded hypothesis: Take scoring
+uses the already supplied base potential. Added exact cached/uncached score
+checks over 96 seeded 2–4-player trajectories, all legal actions, both scoring
+modes, and all four decision phases. Formatting, strict release Clippy, all 71
+release Rust tests, and all 46 Python tests (with the pinned external reference)
+pass. No version bump is needed for this score-preserving optimization.
+
+Six serial ABBAAB release runs have identical records and 1,000 completions
+each. Median runtime improves 20.9%. Fresh confirmation improves 20.7%, with
+identical 999 complete/one blocked records. Preserved all reports, logs,
+commands, source/binary hashes and timings under docs/results/e14-*. Retain
+this measured improvement. No strength promotion or full parity claim.
+
+Next: check the optimized profile to locate the remaining cost before choosing
+another performance edit. Existing independent shared-rule comparisons remain
+bounded by their documented reference exclusions and the published no-action
+gap. Do not repeat rejected E9–E13 policy experiments.

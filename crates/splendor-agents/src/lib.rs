@@ -162,7 +162,7 @@ fn action_score_cached(
             }
             if strong {
                 potential(o, &q)
-                    - potential(o, &p)
+                    - base_potential.unwrap_or_else(|| potential(o, &p))
                     - (q.token_count().saturating_sub(10) as i32) * 10
             } else {
                 token_value(o, &q, false) - token_value(o, &p, false)
@@ -420,6 +420,43 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    #[test]
+    fn cached_scores_equal_uncached_scores_for_every_legal_action() {
+        let mut phases = [false; 4];
+        for count in 2..=4 {
+            for seed in 0..32 {
+                let mut state = GameState::new(count, seed).unwrap();
+                let mut rng = Rng::new(seed ^ 116000000);
+                let mut legal = ActionSet::new();
+                for _ in 0..1000 {
+                    state.legal_actions(&mut legal);
+                    if legal.is_empty() {
+                        break;
+                    }
+                    let o = state.observe(state.current_player());
+                    let phase = match o.phase {
+                        Phase::Main => 0,
+                        Phase::Payment(_) => 1,
+                        Phase::Return => 2,
+                        Phase::Noble => 3,
+                        Phase::Terminal => unreachable!(),
+                    };
+                    phases[phase] = true;
+                    let base = potential(&o, &o.players[o.current as usize]);
+                    for &action in &legal {
+                        for strong in [false, true] {
+                            assert_eq!(
+                                action_score_cached(&o, action, strong, Some(base)),
+                                action_score(&o, action, strong)
+                            );
+                        }
+                    }
+                    state.apply_action(legal[rng.index(legal.len())]).unwrap();
+                }
+            }
+        }
+        assert_eq!(phases, [true; 4]);
+    }
     #[test]
     fn search_stops_at_counter_capacity_without_panicking() {
         let mut state = GameState::new(2, 123).unwrap();
