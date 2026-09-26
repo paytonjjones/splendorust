@@ -135,6 +135,45 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.comparison.compare_choices(bad, check_successors=True)
 
+    def test_excluded_reservation_cannot_invent_prestige_or_nobles(self):
+        original = self.cases[0]
+        branch = next(c for c in original['choices'] if c['actions'][0][0] == 2)
+        base = {'before': original['before'], 'after': branch['after'], 'actions': branch['actions']}
+        actor = base['before']['current']
+        for seat in (actor, (actor + 1) % len(base['before']['players'])):
+            bad = copy.deepcopy(base)
+            bad['after']['players'][seat]['score'] += 1
+            with self.assertRaisesRegex(ValueError, 'prestige'):
+                self.comparison.compare(bad)
+            bad = copy.deepcopy(base)
+            noble = bad['after']['nobles'].pop()
+            bad['after']['players'][seat]['nobles'].append(noble)
+            bad['after']['players'][seat]['score'] += 3
+            with self.assertRaisesRegex(ValueError, 'noble'):
+                self.comparison.compare(bad)
+        bad = copy.deepcopy(original)
+        choice = next(c for c in bad['choices'] if c['actions'][0][0] == 2)
+        choice['after']['players'][actor]['score'] += 1
+        with self.assertRaisesRegex(ValueError, 'prestige'):
+            self.comparison.compare_choices(bad, check_successors=True)
+
+    def test_local_noble_accounting_requires_a_visit_and_choice(self):
+        case = json.loads((ROOT / 'scripts/fixtures/reference-noble-choice.json').read_text())
+        self.comparison.check_prestige_bookkeeping(case['before'], case['after'], case['actions'])
+        actor = case['before']['current']
+        gained = (set(case['after']['players'][actor]['nobles'])
+                  - set(case['before']['players'][actor]['nobles']))
+        noble = gained.pop()
+        bad = copy.deepcopy(case)
+        bad['after']['players'][actor]['nobles'].remove(noble)
+        bad['after']['players'][actor]['score'] -= 3
+        bad['after']['nobles'].append(noble)
+        with self.assertRaisesRegex(ValueError, 'mandatory noble'):
+            self.comparison.check_prestige_bookkeeping(bad['before'], bad['after'], bad['actions'])
+        with self.assertRaisesRegex(ValueError, 'encoded noble phase'):
+            self.comparison.check_prestige_bookkeeping(
+                case['before'], case['after'], [a for a in case['actions'] if a[0] != 7])
+
     def test_blind_reservation_cannot_steal_cards_or_change_deck_accounting(self):
         original = self.cases[0]
         branch = next(c for c in original['choices'] if c['actions'][0][0] == 2)
@@ -344,7 +383,7 @@ class ReferenceTests(unittest.TestCase):
     def test_branch_successor_corruption_is_detected(self):
         case = copy.deepcopy(self.cases[0])
         case["choices"][0]["after"]["players"][0]["score"] += 1
-        with self.assertRaisesRegex(ValueError, "successor mismatch"):
+        with self.assertRaisesRegex(ValueError, "prestige score"):
             self.comparison.compare_choices(case, check_successors=True)
         case = copy.deepcopy(self.cases[0])
         del case["choices"][0]["after"]
@@ -373,7 +412,7 @@ class ReferenceTests(unittest.TestCase):
     def test_corrupt_score_is_detected(self):
         case = copy.deepcopy(self.cases[0])
         case["after"]["players"][0]["score"] += 1
-        with self.assertRaisesRegex(ValueError, "successor mismatch"):
+        with self.assertRaisesRegex(ValueError, "prestige score"):
             self.comparison.compare(case)
 
     def test_corrupt_bank_is_detected(self):

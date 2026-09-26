@@ -455,3 +455,26 @@ All 43 Python tests pass. `results/reference-v2{,-tier2,-tier3}-turns.summary.js
 records revalidation of unchanged input hashes and external classifications.
 Pre-fix failure: `results/excluded-turn-before.txt`. These are local export
 contract checks; excluded actions remain excluded from external parity.
+
+## Prestige and noble accounting before exclusion
+
+Local checks now derive each player's bonuses and prestige from owned cards and
+nobles, verify the unique player-count-plus-one noble partition, and verify
+purchase ownership changes. Claimed nobles cannot disappear or change opponents.
+After the action, exactly one available eligible noble must join the actor if
+any qualify. The available pool must lose that noble, and multiple eligible
+nobles require an explicit encoded choice. Exported branch noble metadata must
+agree with the successor even when the branch is excluded from reference parity.
+
+The regression first reproduced an excluded reservation with invented prestige.
+It now rejects actor/opponent score changes and ineligible noble awards, including
+awards whose three points are internally consistent. Separate checks reject an
+omitted mandatory visit and omitted explicit choice. Two older score-corruption
+tests now expect this earlier local diagnostic instead of a reference mismatch.
+
+All 45 Python tests pass. The three v2 workloads retain identical input hashes,
+external match/exclusion counts, shared successors, boundary coverage, and winner
+classifications. Stronger-check summaries are
+`results/reference-v2{,-tier2,-tier3}-prestige.summary.json`; the pre-fix failure
+is `results/excluded-prestige-before.txt`. These local accounting checks do not
+make unsupported reference actions externally matched or establish full parity.

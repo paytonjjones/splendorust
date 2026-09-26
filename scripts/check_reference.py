@@ -252,6 +252,12 @@ class Comparison:
                 self.check_reservation_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_token_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_blind_card_bookkeeping(before, choice["after"], choice["actions"])
+                self.check_prestige_bookkeeping(before, choice["after"], choice["actions"])
+                actor = before["current"]
+                gained = (set(choice["after"]["players"][actor]["nobles"])
+                          - set(before["players"][actor]["nobles"]))
+                require(gained == (set() if choice["noble"] == 255 else {choice["noble"]}),
+                        "choice noble disagrees with successor")
             if isinstance(action, str):
                 counts["local_" + action] += 1
             else:
@@ -261,10 +267,6 @@ class Comparison:
                 local.add(key)
                 if check_successors:
                     after = choice["after"]
-                    actor = before["current"]
-                    gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
-                    require(gained == (set() if choice["noble"] == 255 else {choice["noble"]}),
-                            "choice noble disagrees with successor")
                     result = self.compare({"before": before, "after": after, "actions": choice["actions"]}, counts)
                     require(result == "matched", f"shared successor was excluded: {result}")
                     counts.update({"boundary_" + k: v for k, v in boundary_coverage(before, after, choice["actions"]).items()})
@@ -438,6 +440,45 @@ class Comparison:
         require(bank == after['bank'] and hands == [p['tokens'] for p in after['players']],
                 'token successor mismatch')
 
+    def check_prestige_bookkeeping(self, before, after, actions):
+        for snapshot in (before, after):
+            noble_ids = list(snapshot['nobles'])
+            for player in snapshot['players']:
+                owned = player['owned']
+                require(all(type(c) is int and 0 <= c < len(self.cards) for c in owned)
+                        and len(owned) == len(set(owned)), 'invalid prestige card ownership')
+                nobles = player['nobles']
+                noble_ids.extend(nobles)
+                bonuses = [sum(self.cards[c].colour == color for c in owned) for color in COLORS[:5]]
+                require(player['bonuses'] == bonuses, 'prestige bonuses disagree with owned cards')
+                score = sum(self.cards[c].points for c in owned) + 3 * len(nobles)
+                require(type(player['score']) is int and player['score'] == score,
+                        'prestige score disagrees with owned cards and nobles')
+            require(all(type(n) is int and 0 <= n < len(self.nobles) for n in noble_ids)
+                    and len(noble_ids) == len(set(noble_ids)) == len(snapshot['players']) + 1,
+                    'invalid noble partition')
+        actor = before['current']
+        tag, slot = actions[0][:2]
+        for seat, (old, new) in enumerate(zip(before['players'], after['players'])):
+            owned = set(old['owned'])
+            if seat == actor and tag in (3, 4):
+                owned.add(before['market'][slot] if tag == 3 else old['reserved'][slot]['card'])
+            require(set(new['owned']) == owned, 'prestige ownership transition mismatch')
+            require(set(old['nobles']) <= set(new['nobles']), 'lost claimed noble')
+            if seat != actor:
+                require(old['nobles'] == new['nobles'], 'opponent noble changed')
+        player = after['players'][actor]
+        gained = set(player['nobles']) - set(before['players'][actor]['nobles'])
+        eligible = {n for n in before['nobles']
+                    if all(player['bonuses'][i] >= self.nobles[n][1].get(c, 0)
+                           for i, c in enumerate(COLORS[:5]))}
+        require(gained <= eligible and len(gained) == int(bool(eligible)),
+                'mandatory noble acquisition mismatch')
+        require(set(after['nobles']) == set(before['nobles']) - gained, 'available noble transition mismatch')
+        choices = [a[1] for a in actions if a[0] == 7]
+        require(bool(choices) == (len(eligible) > 1) and (not choices or set(choices) == gained),
+                'encoded noble phase disagrees with eligible choices')
+
     def check_turn_bookkeeping(self, before, after, actions):
         count = len(before['players'])
         require(2 <= count <= 4 and len(after['players']) == count, 'invalid turn player count')
@@ -472,6 +513,7 @@ class Comparison:
         self.check_reservation_bookkeeping(before, after, actions)
         self.check_token_bookkeeping(before, after, actions)
         self.check_blind_card_bookkeeping(before, after, actions)
+        self.check_prestige_bookkeeping(before, after, actions)
         if actions[0][0] == 2:
             return "blind_reservation"
         rule = self.hydrate(before, after)

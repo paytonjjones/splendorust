@@ -866,3 +866,27 @@ No Rust or simulator semantics changed, and no external parity expansion claimed
 Next: inspect derived score/bonus and noble accounting on excluded paths. A
 correct exclusion should not permit unrelated prestige or noble ownership
 changes. Reproduce a specific accepted corruption before extending local checks.
+
+## Excluded-path prestige and noble accounting
+
+Continued from `4fc278e`. Reproduced an excluded blind-reservation turn with an
+invented point. Added derived score/bonus checks, noble partition checks,
+purchase ownership transitions, and mandatory one-noble acquisition from the
+eligible available pool. Explicit Noble choice is required exactly when more
+than one qualifies. Branch noble metadata is checked before exclusion, rather
+than only for shared reference actions.
+
+Tests reject actor/opponent prestige changes and ineligible three-point noble
+awards on selected excluded paths and prestige changes in an excluded branch.
+A real noble-choice fixture checks omission of a mandatory visit and an explicit
+choice. Two existing score-corruption assertions initially failed because the
+new local check catches corruption earlier; updated their exact diagnostics.
+All 45 Python tests now pass with the pinned reference. Preserved the pre-fix
+failure and three new *-prestige.summary.json reports, whose input hashes and
+external counts exactly match the preceding workloads. No Rust or runtime change.
+
+Next: broaden independent comparison evidence beyond repeatedly reused seeds.
+The existing workloads are strong regression fixtures, but new confirmation
+seeds across 2/3/4 players can test whether the accumulated checks generalize.
+Use a separately labelled fixed workload, preserve all exclusions and blocked
+states, and do not combine overlapping branches as independent games.
