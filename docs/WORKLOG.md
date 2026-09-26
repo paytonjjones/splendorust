@@ -1124,3 +1124,22 @@ writing a new agent hypothesis. Actual search repeatedly postpones a purchase;
 its rollout policy is strong and may purchase on the next hypothetical turn.
 Thus a naive simulated-cycle penalty may not detect the actual repeated choice.
 Keep this distinction explicit; rejected E9–E13 policies remain rejected.
+
+## E16 rollout-policy mismatch and E17 hypothesis
+
+Continued from 2b4596f. Added an observation-based diagnostic with equal sampled
+worlds per legal action, strong rollouts, and the production Engine leaf formula.
+At the repeated search prefix, all 256 Take samples return to the root after two
+turns, then the rollout buys. Immediate purchases do not recur. Take has the
+highest estimate at horizons 8/16/32, but not 4. This is evidence of delay favored
+under a simulated future policy that differs from real root search, not a claim
+about exact UCB visits or game-theoretic value.
+
+Archived traces, counts, reward summaries and harness hash. Formatting, strict
+release all-target Clippy and all 71 workspace release tests pass. No agent code
+changed. Recorded E17 before edits: an optional search variant assigns zero
+heuristic reward when a simulated root Main observation repeats, ignoring only
+turn count. Keep game outcomes and ordinary search unchanged. Development uses
+known E16 case; fresh screen seed 124m and reserved confirmation 1,124m. Next:
+implement that candidate, validate it, and use the gate; do not restore earlier
+rejected policies or infer promotion from the development probe.

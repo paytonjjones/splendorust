@@ -1,0 +1,18 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "50400f40eb161b1a",
+  "history_archive": "e16-cap-1508-v2.json.gz",
+  "prefix": 52,
+  "samples_per_action": 256,
+  "seed": 123000000,
+  "depths": [
+    4,
+    8,
+    16,
+    32
+  ],
+  "command_template": "cargo run --release --locked --example rollout_audit -- HISTORY.json 52 256 DEPTH 123000000",
+  "harness_sha256": "b531d15c5bd5e6f1712f1cb14ff3a9c9146f12c304b5eaf47e815a51138d8989",
+  "scope": "Equal sampled worlds per legal root action; strong rollouts and current Engine leaf arithmetic. Not adaptive UCB visits, not strength evidence. Real state is used only to reconstruct root observation and legal actions.",
+  "checks": "Formatting, strict all-target release Clippy and 71 release workspace tests pass."
+}

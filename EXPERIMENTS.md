@@ -818,3 +818,59 @@ Clippy and all 71 release workspace tests pass. Evidence and history hashes are
 in `docs/results/e16-cap-validation.json`, `e16-cap-audit.jsonl`, and
 `e16-cap-1508-v2.json.gz`. The example adds no production semantics or version
 change; its own source hash is retained separately.
+
+### E16 simulated-continuation diagnosis
+
+At prefix 52 of the cap history, compare every legal root action on 256 common
+sampled worlds (seed 123m), using strong rollouts and the current Engine leaf
+arithmetic. This diagnostic uses the root observation, not the real future deck.
+It is equal sampling per action, not a trace of production adaptive UCB visits.
+
+| Completed-turn horizon | Take red | Buy market 0 | Buy market 3 |
+|---|---:|---:|---:|
+| 4 | 0.491977 | 0.484895 | 0.630305 |
+| 8 | 0.618059 | 0.426508 | 0.578375 |
+| 16 | 0.485598 | 0.343027 | 0.454168 |
+| 32 | 0.063969 | 0.020723 | 0.040797 |
+
+Values are mean diagnostic rewards, not win probabilities. In every sampled
+world at every tested horizon, Take returns to the original root observation
+after two turns, then the strong rollout buys. Immediate purchases do not
+return to the root. None of these probes blocks; horizons 4/8/16 do not reach
+terminal states. At horizon 32, 213/242/238 worlds respectively terminate.
+The depth-eight estimate favors delay even though actual search repeats that
+delay. Simply increasing the horizon is not a consistent solution in this probe.
+
+This supports a specific mismatch: the simulated future root policy purchases
+where the real root search postpones again. A detector that includes the initial
+root observation can see this recurrence before the rollout purchase. No core
+rule defect, eventual policy termination, or population strength claim follows.
+`rollout_audit` preserves the first sampled trace per action and counts purchase
+offsets, returns to root, terminal and blocked endpoints. Commands, source and
+harness hashes are in `docs/results/e16-rollout-validation.json`; full outputs
+are `e16-rollout-{4,8,16,32}.json`. Formatting, strict release all-target Clippy
+and 71 release workspace tests pass. No agent code changed.
+
+## E17 hypothesis: pessimistic value for a return to the root observation
+
+Recorded before agent edits. E16 shows that a root Take can restore the exact
+root observation two turns later in all sampled worlds, while the rollout then
+buys. Hypothesis: giving zero search reward to such a simulated recurrence will
+reduce purchase postponement and improve credit against the existing search
+policy at the same fixed budget. This differs from E9's no-legal-action penalty
+and E10/E11's actual-history action overrides.
+
+Candidate `search-root-cycle`: compare the root player's observation at later
+root Main phases with the initial observation after clearing only turn count.
+On equality, stop that simulation and use reward zero as an agent heuristic.
+Never change the core, legal actions, outcome, or arena completion status. Keep
+ordinary `search` unchanged. A recurrence cannot become a declared game loss or
+win. Do not use real setup seeds, decks, or hidden opponent reservations.
+
+Development: use the E16 capped prefix/full game at 256 iterations; test that
+only the candidate changes and that hidden-world permutations cannot affect
+its choice. Then use the promotion gate against search: fresh 2,000-game screen
+at 124m, 128 iterations/depth 8/width 6, four threads. Run matched search self-play
+control on the same setups. Confirmation at 1,124m stays untouched unless the
+screen qualifies under the gate. Retain failures, incomplete outcomes and timing
+cost; no tuning on confirmation. Reject the candidate if it fails the gate.
