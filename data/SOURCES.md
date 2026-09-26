@@ -54,3 +54,23 @@ No implementation code was copied or transition parity claimed.
 status, license hash, and data tuples without installing app dependencies.
 Node is required to import the two data modules. The exact differences and
 file hashes are in [the audit result](../docs/results/splendid-data-audit.json).
+
+## Rinascimento default configuration audit
+
+The [Rinascimento research framework](https://github.com/ivanbravi/RinascimentoFramework/tree/ce31592f78572096ceedd5ced1bac4f82c5f08db)
+was checked at `ce31592f78572096ceedd5ced1bac4f82c5f08db` (MIT, copyright
+2021 Ivan Bravi). Its default configuration contains 90 cards and ten nobles,
+but only 11 card tuples and four noble tuples match under the displayed color
+mapping. Of all 120 consistent suit permutations, none matches more than
+21 cards. This tests the default configuration, not every configurable variant.
+
+Source inspection also finds automatic first-eligible noble selection in
+`TakeNoble`, colored-first payment in `BuyCard`, and no reservation gold when
+the hand is full in `ReserveDeckCard`. These are source findings; no Java
+transition test was run. No code was copied. The default configuration is not
+an unchanged standard-game parity baseline.
+
+Reproduce with `python3 scripts/audit_rinascimento_data.py CHECKOUT` at the pinned
+commit. This reads CSV files and tests all suit permutations without Java or
+framework dependencies. [The result](../docs/results/rinascimento-data-audit.json)
+records input hashes, the mapping counts, and the best matching permutations.

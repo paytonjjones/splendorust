@@ -30,6 +30,14 @@ python3 scripts/audit_splendid_data.py /tmp/splendid-reference
 See `docs/results/splendid-data-audit.json` for the exact tuple differences,
 source hashes, and license hash. No external code was copied.
 
+A second source audit checked Rinascimento at
+`ce31592f78572096ceedd5ced1bac4f82c5f08db` (MIT). Its default 90-card data
+matches at most 21 tuples across all 120 consistent suit permutations.
+It therefore also needs a distinct scope before any transition comparison.
+See `data/SOURCES.md`, `scripts/audit_rinascimento_data.py`, and
+`docs/results/rinascimento-data-audit.json`. No Java transitions were tested.
+
+
 
 Checked on 2026-09-25 against `roeey777/Splendor-AI`, commit
 `95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b`:

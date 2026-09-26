@@ -1,0 +1,81 @@
+{
+  "repository": "https://github.com/ivanbravi/RinascimentoFramework",
+  "commit": "ce31592f78572096ceedd5ced1bac4f82c5f08db",
+  "license": "MIT, copyright 2021 Ivan Bravi",
+  "script_sha256": "c30626f9a0309a61da95c80089e6a1f48ade6d31f481e0ac1a64a061916d1c52",
+  "source_files_sha256": {
+    "assets/default/decks/1.csv": "a089df67d64d93bdb99fcb6cc8ff711d8bc4538e9bd7cf50b7fcfe05c802b985",
+    "assets/default/decks/2.csv": "c8059e112d2cd1744a94e07719c2325d991919093726903960e9c0d728646627",
+    "assets/default/decks/3.csv": "6af48d59f3510fcb182e7fb8bc5a6c9c905739e5e1e782fd04c9ce9009762c2b",
+    "assets/default/nobles/nobles.csv": "2e1b1196d3b5f316b7e44d92737b05f665618119fa6407f0c6c217318d9f5be5",
+    "LICENSE": "db8a32d7d02a8ddcdb12225cd30e4da6c39b63d6b8fe37568412000b03307321",
+    "src/gui/UIStandards.java": "7bccaa3c157c6417be3d2cf8dffce05f868e561e88102bb1237701c098691352",
+    "src/game/Parameters.java": "2ac524edfa81be53f0f7b488be0ac1034a189ea59001a5b49103a64da361f93a",
+    "src/game/action/passive/TakeNoble.java": "97154133437effb161d0469e19f61b315a383617ab50a598e29f817e9cefce63",
+    "src/game/action/active/buy/BuyCard.java": "bdf0ac6e3f83d9a346e2392fbfddc147289e8026c47150b78325fd79f1b361da",
+    "src/game/action/active/reserve/deck/ReserveDeckCard.java": "ba25d78162c749a35895549a1ebba3119fd170d927a1f4e216b1c5be5e9df41d"
+  },
+  "local_files_sha256": {
+    "data/cards.csv": "f9551803e4e8883073afdd2ef42e7afec81baa71cde617db57563010f0b5b23f",
+    "data/nobles.csv": "c25a49fc3f55ab6fa45ddecf7b130b20da8c92c997d35c5e157be3c21f953e19"
+  },
+  "reference_card_count": 90,
+  "reference_noble_count": 10,
+  "displayed_mapping": {
+    "suit_to_local_color": [
+      "green",
+      "blue",
+      "red",
+      "white",
+      "black"
+    ],
+    "matched_cards": 11,
+    "matched_nobles": 4
+  },
+  "best_card_match_count": 21,
+  "mapping_count": 120,
+  "card_match_histogram": {
+    "3": 4,
+    "4": 5,
+    "5": 5,
+    "6": 14,
+    "7": 12,
+    "8": 18,
+    "9": 12,
+    "10": 12,
+    "11": 8,
+    "12": 9,
+    "13": 6,
+    "14": 4,
+    "15": 3,
+    "17": 1,
+    "18": 4,
+    "19": 1,
+    "21": 2
+  },
+  "best_mappings": [
+    {
+      "suit_to_local_color": [
+        "blue",
+        "green",
+        "red",
+        "black",
+        "white"
+      ],
+      "matched_cards": 21,
+      "matched_nobles": 10
+    },
+    {
+      "suit_to_local_color": [
+        "blue",
+        "green",
+        "black",
+        "red",
+        "white"
+      ],
+      "matched_cards": 21,
+      "matched_nobles": 6
+    }
+  ],
+  "decision": "Default data is not a standard-game baseline under any consistent suit mapping. No transition parity tested."
+}
