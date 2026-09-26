@@ -1,0 +1,83 @@
+{
+  "comparisons": [
+    {
+      "archive": "reference-all-nobles",
+      "old_metadata": {
+        "boundary_choices": true,
+        "choice_interval": 10,
+        "choice_successors": true,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "games_per_player_count": 20,
+        "noble_acquisition_choices": true,
+        "seed": 92000000,
+        "source_id": "b414fd0c3eb3a5ea",
+        "winner_checks": true
+      },
+      "new_metadata": {
+        "boundary_choices": true,
+        "choice_interval": 10,
+        "choice_successors": true,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "games_per_player_count": 20,
+        "noble_acquisition_choices": true,
+        "seed": 92000000,
+        "source_id": "3992ef689453dcc8",
+        "winner_checks": true
+      },
+      "case_lines": 5470,
+      "unchanged_case_payload_sha256": "57b9de1b7e7abe44e175bea061c76160520d5d6fdefb3ace5e7e2171cc179572",
+      "new_file_sha256": "84853d1652221ea1b1443b77ed5207f5f2c99afa31df2908caf3a9db145d1522"
+    },
+    {
+      "archive": "reference-depletion-tier-2",
+      "old_metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 1,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "source_id": "b414fd0c3eb3a5ea",
+        "winner_checks": true
+      },
+      "new_metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 1,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "source_id": "3992ef689453dcc8",
+        "winner_checks": true
+      },
+      "case_lines": 16,
+      "unchanged_case_payload_sha256": "45e14dd36e6b07c3e701237a83cc3793cc2c1a18b227a1f3924a2984117f25f8",
+      "new_file_sha256": "35642cc3f2c76a6b3fd9d21cab14d5986c9aefe46ee2d793ee55d09f3f25d05e"
+    },
+    {
+      "archive": "reference-depletion-tier-3",
+      "old_metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 2,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "source_id": "b414fd0c3eb3a5ea",
+        "winner_checks": true
+      },
+      "new_metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 2,
+        "engine": "splendorust-v1",
+        "format": 2,
+        "source_id": "3992ef689453dcc8",
+        "winner_checks": true
+      },
+      "case_lines": 25,
+      "unchanged_case_payload_sha256": "f6f3ea571df03211085bb9dfd46beec38f98a761ea774dd4356cd9a759c71fbc",
+      "new_file_sha256": "a997f91027e050ab364fed3e3f281f05af098002f0d7f5afd2e126f57d7234d6"
+    }
+  ],
+  "audit_command": "cargo run --release --locked -- audit --games 100000 --seed 108000000 --threads 4"
+}

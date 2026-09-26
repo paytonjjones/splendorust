@@ -531,6 +531,20 @@ impl GameState {
         if (self.phase == Phase::Terminal) != (self.final_round && self.current == 0) {
             return fail("terminal phase");
         }
+        if self.phase != Phase::Terminal {
+            // A completed threshold turn ends play before seat zero starts
+            // again. During the final round, an earlier seat must have
+            // triggered it, and no unplayed seat can already have 15 points.
+            let current = self.current_player();
+            if (self.final_round && !self.players[..current].iter().any(|p| p.score >= 15))
+                || self.players[current..self.player_count()]
+                    .iter()
+                    .enumerate()
+                    .any(|(offset, p)| p.score >= 15 && (offset != 0 || self.phase != Phase::Noble))
+            {
+                return fail("final round trigger order");
+            }
+        }
         let mut seen = 0u128;
         let mut ns = self.nobles;
         let add = |seen: &mut u128, c: u8| -> bool {

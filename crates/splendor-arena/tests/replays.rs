@@ -209,3 +209,75 @@ fn legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots() {
         assert_eq!(state.outcome(), None);
     }
 }
+
+#[test]
+fn final_round_requires_a_threshold_player_who_already_finished_this_round() {
+    use splendor_core::{Rng, RuleError};
+    let history: History =
+        serde_json::from_str(include_str!("fixtures/threshold-noble-v1.json")).unwrap();
+    let state = replay(&history).unwrap();
+    let original = state.observe(state.current_player());
+    assert_eq!(original.current, 2);
+    assert_eq!(original.phase, Phase::Noble);
+    assert!(original.players[2].score >= 15);
+    assert!(original.players[..2].iter().all(|p| p.score < 15));
+    let mut premature = original.clone();
+    premature.final_round = true;
+    // The current player's turn is still waiting for a noble choice.
+    assert_eq!(
+        premature.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("final round trigger order"))
+    );
+    // A threshold player in a later seat cannot have triggered this round.
+    let mut later = premature;
+    later.current = 1;
+    later.turns -= 1;
+    later.phase = Phase::Main;
+    assert_eq!(
+        later.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("final round trigger order"))
+    );
+    // The valid pending state and all completed noble choices stay valid.
+    original.determinize(&mut Rng::new(42)).unwrap();
+    let mut legal = ActionSet::new();
+    state.legal_actions(&mut legal);
+    for action in legal {
+        let mut next = state.clone();
+        next.apply_action(action).unwrap();
+        let o = next.observe(next.current_player());
+        assert!(o.final_round);
+        o.determinize(&mut Rng::new(42)).unwrap();
+    }
+}
+
+#[test]
+fn final_round_cannot_put_threshold_scores_in_unplayed_seats() {
+    use splendor_core::{Rng, RuleError};
+    let h: History =
+        serde_json::from_str(include_str!("fixtures/final-round-ties-v1.json")).unwrap();
+    let state = replay(&h).unwrap();
+    assert!(state.is_terminal());
+    let mut observation = state.observe(0);
+    assert_eq!(
+        observation.players[..3]
+            .iter()
+            .map(|p| p.score)
+            .collect::<Vec<_>>(),
+        [16, 16, 14]
+    );
+    observation.phase = Phase::Main;
+    observation.current = 1;
+    observation.turns -= 2;
+    // Seat zero is a valid earlier trigger, but seat one has not played yet.
+    assert_eq!(
+        observation.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("final round trigger order"))
+    );
+    observation.players.swap(1, 2);
+    observation.reserved_counts.swap(1, 2);
+    // An earlier trigger cannot make a future threshold score valid either.
+    assert_eq!(
+        observation.determinize(&mut Rng::new(42)),
+        Err(RuleError::Invariant("final round trigger order"))
+    );
+}

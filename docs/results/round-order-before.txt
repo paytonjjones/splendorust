@@ -1,0 +1,24 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-arena)
+    Finished `release` profile [optimized] target(s) in 2.14s
+     Running tests/replays.rs (target/release/deps/replays-69478b16404ac33b)
+
+running 1 test
+test final_round_requires_a_threshold_player_who_already_finished_this_round ... FAILED
+
+failures:
+
+---- final_round_requires_a_threshold_player_who_already_finished_this_round stdout ----
+
+thread 'final_round_requires_a_threshold_player_who_already_finished_this_round' (12535508) panicked at crates/splendor-arena/tests/replays.rs:227:5:
+assertion `left == right` failed
+  left: Ok(GameState { players: [Player { tokens: [2, 3, 1, 1, 3, 0], bonuses: [1, 1, 5, 1, 2], score: 3, owned: 5188146788733028364, nobles: 0, reserved: [Reservation { card: 70, tier: 2, public: true }, Reservation { card: 58, tier: 1, public: true }, Reservation { card: 69, tier: 1, public: true }] }, Player { tokens: [3, 2, 1, 1, 1, 0], bonuses: [3, 4, 2, 3, 3], score: 9, owned: 110338431564963890, nobles: 0, reserved: [Reservation { card: 86, tier: 2, public: true }, Reservation { card: 68, tier: 1, public: true }, Reservation { card: 45, tier: 1, public: true }] }, Player { tokens: [0, 0, 2, 1, 1, 0], bonuses: [5, 4, 3, 3, 3], score: 16, owned: 4835740186306300007285696, nobles: 1, reserved: [Reservation { card: 75, tier: 2, public: true }, Reservation { card: 80, tier: 2, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [2, 2, 0, 4, 2, 0], bonuses: [4, 2, 1, 2, 3], score: 8, owned: 144134706557948929, nobles: 0, reserved: [Reservation { card: 63, tier: 1, public: true }, Reservation { card: 79, tier: 2, public: true }, Reservation { card: 85, tier: 2, public: true }] }], count: 4, current: 2, bank: [0, 0, 3, 0, 0, 5], market: [255, 255, 255, 255, 54, 41, 67, 50, 84, 73, 77, 88], decks: [[255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255], [47, 61, 66, 43, 60, 46, 64, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255], [71, 89, 76, 87, 81, 74, 83, 78, 72, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]], remaining: [0, 7, 9], nobles: 204, initial_nobles: 205, phase: Noble, final_round: true, turns: 142 })
+ right: Err(Invariant("final round trigger order"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    final_round_requires_a_threshold_player_who_already_finished_this_round
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test replays`

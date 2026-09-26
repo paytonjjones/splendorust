@@ -102,7 +102,7 @@ or replay behavior changed, so the engine remains `splendorust-v1`.
 example tests through an explicit Cargo target with `test = true`. These tests
 check the distinction between a bounded cutoff and a real block, and the
 adversarial result for each of five recorded root choices. The standard Rust
-suite currently runs 56 tests.
+suite currently runs 58 tests.
 
 CI fetches the independent reference at the exact commit recorded in
 `docs/PARITY.md`, then sets `SPLENDOR_REFERENCE` for Python test discovery on
@@ -122,3 +122,29 @@ known rule difference. See the high-tier history evidence in [docs/PARITY.md](do
 The parity harness separately checks local reservation visibility and ordered
 slot preservation, including branches excluded from external rule parity. The
 reference does not implement matching private-information masks.
+
+## Final-round trigger seat order
+
+A nonterminal final round must have been triggered by a threshold player in an
+earlier seat of the same round. An unplayed seat cannot already have 15 points:
+that score would have ended the previous round before seat zero played again.
+The current actor can newly reach 15 during a pending noble choice; that score
+does not set the final-round flag until the turn finishes. An earlier threshold
+player may already have set it.
+
+The validator now enforces these ordering constraints. Two malformed states
+were reproduced as accepted before the fix: a prematurely flagged pending noble
+choice, and an ordinary Main phase with the current actor already at threshold
+even though an earlier seat was a valid trigger. Regression tests also reject a
+threshold in a later seat while preserving real pending and completed turns.
+The tests use legal histories, including the three-player 16/16/14 finish at
+seed 95,000,017, then change only observation fields to construct the bad input.
+
+All 58 release Rust and 37 Python tests pass, with formatting and strict workspace
+Clippy. A fresh seed-108,000,000 invariant audit checked 99,997 games after seat
+rounding: 89,068 completed and 10,929 blocked, with no capped winner or invariant
+failure. All 5,511 selected case lines and their sampled branches in the three
+current parity workloads are byte-identical after removing source metadata.
+See `docs/results/round-order-validation.json` and the saved audit/reproduction
+logs. ENGINE_VERSION remains `splendorust-v1`: only malformed-observation
+acceptance changed; valid rules, action order, RNG, and replay semantics did not.

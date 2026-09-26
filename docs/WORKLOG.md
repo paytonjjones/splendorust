@@ -573,3 +573,26 @@ serialization/report validation or core malformed-observation rejection for
 uncovered numeric/phase boundary failures; do not spend another pass merely
 recounting already covered reservation slots. Cross-player-count depletion is
 also still an explicit extension opportunity, not a proven gap in engine rules.
+
+## Reject impossible final-round seat order
+
+Continued from `f3e0d24`. Audited malformed-observation validation and reproduced
+accepted impossible final-round states before editing the core. Added checks
+requiring an earlier finished threshold turn for nonterminal final_round=true,
+and rejecting threshold scores in unplayed seats (except the current actor's
+valid pending Noble phase). Preserved valid pending and completed noble turns.
+Two focused replay tests use existing real threshold/tiebreak trajectories.
+
+All 58 release Rust tests, 37 Python tests, formatting, and strict all-target
+Clippy pass. Fresh 108,000,000 audit: 99,997 games, 89,068 complete, 10,929 blocked,
+no invariant failure. Re-exported all three parity workloads: 5,511 case lines
+and all their branches byte-identical except metadata. Source fingerprint is
+`3992ef689453dcc8`; old archives remain intact and comparison hashes are saved.
+No ENGINE_VERSION bump because legal transition/RNG/enumeration/replay behavior
+is unchanged; only impossible input validation is stricter.
+
+Next useful robustness audit: inspect long-running legal cycles at integer turn
+counter boundaries and arena decision-limit parsing. Distinguish malformed
+inputs from genuinely reachable very long games before choosing a fix; any
+change to valid replay semantics requires explicit versioning. Do not repeat
+completed reservation/noble/depletion comparisons without a new failure or gap.
