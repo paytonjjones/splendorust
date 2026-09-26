@@ -725,3 +725,67 @@ Retain the change. These are workload-specific performance measurements, not
 a strength promotion or full simulator parity. Engine version stays v2.
 `docs/results/e15-comparison.json` and `e15-[0-7]-*` retain exact commands,
 settings, process status, binary/source/record hashes, all reports and logs.
+
+## E16 hypothesis: a larger fixed search budget after cache improvements
+
+E4 tested 32 versus 128 simulations; no retained experiment tests 256. E14/E15
+reduced search cost without changing its scores. Hypothesis: 256 simulations
+improve win credit against strong compared with 128, at increased compute cost.
+No agent code or default will change for this experiment. This is a budget
+comparison against a fixed opponent, not equal-compute policy evidence.
+
+Protocol recorded before execution: paired two-player search/strong runs at
+128 and 256 iterations, depth 8, width 6, strong rollouts, engine evaluation,
+four threads, 20,000-decision cap, no clock budget. Screen each on 2,000 games
+at fresh seed 121,000,000. If the conservative mean difference bound is positive
+and 256 has no more unfinished games, run both budgets on 20,000 fresh games
+at 1,121,000,000. Otherwise stop and record the screen. Keep all unfinished
+outcomes, with candidate win credit bounded by [0,1], and cluster both seat
+rotations per setup for paired differences. Report runtime separately.
+
+Confirmation requires a positive paired 95% lower confidence bound to support
+a benefit. Use bounded empirical Bernstein intervals on normalized per-setup
+differences; with unfinished outcomes, use separate 97.5% intervals for lower
+and upper credit bounds (Bonferroni gives at least 95% joint coverage). Never
+assign a winner to unfinished games. Any unfinished run remains ineligible for
+promotion. A strength promotion or default change would need the project gate;
+this experiment alone will not make either claim.
+
+### E16 result: conditional budget benefit, no promotion
+
+Screen: both 2,000-game runs complete. Win credit against strong is 73.50% at
+128 iterations and 77.20% at 256. Paired difference is +3.70 percentage points,
+95% interval [-1.92, +9.32]. This passes the recorded screen rule but is not
+confirmation by itself. The fresh 20,000-game comparison was then run.
+
+Confirmation at 1,121m: 128 completes 19,999 games with one blocked game;
+256 completes 19,997 with two blocked games and one decision-cap game. Both
+processes exit 1 as designed. Unconditional candidate-credit bounds are
+[73.315%, 73.320%] and [75.8775%, 75.8925%], respectively. The paired gain is
+bounded by [2.5575, 2.5775] percentage points; its conservative paired 95%
+interval is **[+1.04, +4.09] points**. This supports improved credit against
+strong at the larger budget, with the unfinished outcomes fully included.
+It is not a head-to-head result between search budgets or equal-compute evidence.
+
+Runtime is 105.89 versus 210.34 seconds on this host (four threads, serial runs,
+no overlapping build/tests). The larger budget costs about twice as much and
+has more unfinished games. Do not promote or change defaults. No policy code
+changed. The positive conditional strength result and negative completion
+result are both retained.
+
+New capped case: 256 iterations, block 1508, rotation 0, setup seed
+11864268526903350202, 20,000 decisions. The two 256 blocked cases are blocks
+992/rotation 0 and 5159/rotation 1; the 128 blocked case is block 7783/rotation 1.
+These are development audit inputs now, not fresh future confirmation seeds.
+
+`docs/results/e16-runs.json` retains exact commands, exits, source/binary hashes,
+status counts and full record hashes. All four reports and process logs are
+archived. `scripts/compare_budgets.py` validates paired configurations and seat
+schedules, computes block-level difference bounds, and retains analysis/report
+hashes. Its tests cover shared wins, rotation clustering, unfinished outcomes
+and mismatched inputs. All 52 Python tests pass with the pinned reference.
+Reproduce the confirmation analysis with:
+
+```sh
+python3 scripts/compare_budgets.py docs/results/e16-confirm-128.json.gz docs/results/e16-confirm-256.json.gz
+```

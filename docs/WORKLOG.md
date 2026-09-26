@@ -1085,3 +1085,21 @@ Next audit: gate provenance now identifies the binary, but routine validation
 commands still depend on callers to retain stdout/stderr. Assess a focused
 logging improvement or a higher-value uncovered rules/agent issue before adding
 new automation. No rule or agent change in this step; engine stays v2.
+
+## E16 larger fixed-budget experiment
+
+Continued from 8a2738d. Checked E4: it tested 32/128, not 256. Recorded hypothesis,
+paired setup protocol, fresh seeds and stopping rule before execution. Screen
+passes with +3.7 points and no incomplete games. Fresh 20,000-game confirmation
+supports +2.56 points against strong, paired 95% bounds +1.04 to +4.09 points,
+while preserving unfinished outcome uncertainty. Runtime roughly doubles.
+
+Completion worsens: 128 has one blocked game; 256 has two blocked and one capped
+game. No promotion or default change. Preserved full reports, failures, hashes,
+commands and runtimes. Added tested paired-budget analysis; all 52 Python tests
+pass with pinned reference. No Rust, rule, agent or engine-version change.
+
+Next: reproduce and diagnose the new 256-budget capped game (block 1508,
+rotation 0, setup seed 11864268526903350202). Compare its exact record and replay
+before drawing conclusions about recurrence. Prior failed E9–E13 policies remain
+rejected; do not silently restore them or infer a victory from the cap.

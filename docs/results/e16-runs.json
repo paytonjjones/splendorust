@@ -1,0 +1,137 @@
+{
+  "runs": [
+    {
+      "command": [
+        "target/release/splendor",
+        "compare",
+        "--agent-a",
+        "search",
+        "--agent-b",
+        "strong",
+        "--games",
+        "2000",
+        "--seed",
+        "121000000",
+        "--iterations",
+        "128",
+        "--depth",
+        "8",
+        "--width",
+        "6",
+        "--threads",
+        "4",
+        "--output",
+        "/tmp/e16-screen-128.json"
+      ],
+      "exit": 0,
+      "report": "/tmp/e16-screen-128.json",
+      "raw_sha256": "6bfc239b196ce2518e4c353b99c387e0ad89096073fe23196da44a7a42d0fe35",
+      "record_set_sha256": "d6224b15486f6ad71607bdd07e38fd5332bdd729f6b172323d138caff9fad9ba",
+      "statuses": {
+        "complete": 2000
+      },
+      "source_id": "50400f40eb161b1a"
+    },
+    {
+      "command": [
+        "target/release/splendor",
+        "compare",
+        "--agent-a",
+        "search",
+        "--agent-b",
+        "strong",
+        "--games",
+        "2000",
+        "--seed",
+        "121000000",
+        "--iterations",
+        "256",
+        "--depth",
+        "8",
+        "--width",
+        "6",
+        "--threads",
+        "4",
+        "--output",
+        "/tmp/e16-screen-256.json"
+      ],
+      "exit": 0,
+      "report": "/tmp/e16-screen-256.json",
+      "raw_sha256": "8daec36ec5692c8707a887cbf73609609f156f2be95780c34e12083193b362db",
+      "record_set_sha256": "32e3c14cc5da9221cf2c3aa13a9cf897f96a267ca3697dfe59373ffc34d9bea4",
+      "statuses": {
+        "complete": 2000
+      },
+      "source_id": "50400f40eb161b1a"
+    },
+    {
+      "command": [
+        "target/release/splendor",
+        "compare",
+        "--agent-a",
+        "search",
+        "--agent-b",
+        "strong",
+        "--games",
+        "20000",
+        "--seed",
+        "1121000000",
+        "--iterations",
+        "128",
+        "--depth",
+        "8",
+        "--width",
+        "6",
+        "--threads",
+        "4",
+        "--output",
+        "/tmp/e16-confirm-128.json"
+      ],
+      "exit": 1,
+      "report": "/tmp/e16-confirm-128.json",
+      "raw_sha256": "5a60950748fcdd33bf6a71b428d3e368c926a805500ae54aba56e6931374854f",
+      "record_set_sha256": "5e3788049fcd02a6c96460395990a90c33c617d0dda00020ce25d6a985f08088",
+      "statuses": {
+        "complete": 19999,
+        "no_legal_action": 1
+      },
+      "source_id": "50400f40eb161b1a"
+    },
+    {
+      "command": [
+        "target/release/splendor",
+        "compare",
+        "--agent-a",
+        "search",
+        "--agent-b",
+        "strong",
+        "--games",
+        "20000",
+        "--seed",
+        "1121000000",
+        "--iterations",
+        "256",
+        "--depth",
+        "8",
+        "--width",
+        "6",
+        "--threads",
+        "4",
+        "--output",
+        "/tmp/e16-confirm-256.json"
+      ],
+      "exit": 1,
+      "report": "/tmp/e16-confirm-256.json",
+      "raw_sha256": "59006c5c726861fe08137b0279cb6ba92dfe6b3a9864989c867e8cbff2401a39",
+      "record_set_sha256": "5052e940446b4d46f99807ff44f47cf9198e78206291582b9e4505f4d98e6ed8",
+      "statuses": {
+        "complete": 19997,
+        "no_legal_action": 2,
+        "decision_limit": 1
+      },
+      "source_id": "50400f40eb161b1a"
+    }
+  ],
+  "binary_sha256": "fec32522a79cee394794c3b9851f6e6104a7ed8eac0613a084d3753918ca1b06",
+  "note": "Serial runs, fixed iteration budgets, no concurrent build or test load. Comparison is conditional on strong opponent and this host. No default change or promotion."
+}
