@@ -191,6 +191,12 @@ class Comparison:
                 used.add(r["card"])
         state.board.decks = [[c for i, c in enumerate(self.cards) if i not in used and c.deck_id == t] for t in range(3)]
         require([len(d) for d in state.board.decks] == before["remaining"], "deck partition mismatch")
+        self.align_draw(rule, before, after)
+        rule.current_agent_index = before["current"]
+        return rule
+
+    def align_draw(self, rule, before, after):
+        state = rule.current_game_state
         # One turn draws at most one card. Align that exogenous draw; do not
         # claim RNG or hidden deck-order equivalence between implementations.
         for old, new in zip(before["market"], after["market"]):
@@ -200,8 +206,6 @@ class Comparison:
                 require(card in deck, "replacement card not in deck")
                 deck.remove(card)
                 deck.append(card)
-        rule.current_agent_index = before["current"]
-        return rule
 
     def normalized(self, rule):
         state = rule.current_game_state
@@ -583,13 +587,92 @@ class Comparison:
         return "matched"
 
 
+class SharedChains:
+    """Keep external successors across shared turns; reset only at explicit gaps."""
+
+    def __init__(self, comparison):
+        self.comparison = comparison
+        self.rule = None
+        self.previous = None
+        self.identity = None
+        self.length = 0
+        self.start_turn = None
+        self.lengths = collections.Counter()
+        self.breaks = collections.Counter()
+        self.complete_games = []
+
+    def close(self):
+        if self.length:
+            self.lengths[self.length] += 1
+        self.rule = None
+        self.length = 0
+
+    def add(self, case, isolated_result):
+        before, after = case["before"], case["after"]
+        identity = (len(before["players"]), case["seed"])
+        if identity != self.identity:
+            self.close()
+            self.previous = None
+            self.identity = identity
+        if self.previous is not None:
+            require(before == self.previous, "chain input snapshot discontinuity")
+        self.previous = after
+        if isolated_result != "matched":
+            self.close()
+            self.breaks[isolated_result] += 1
+            return
+        comparison = self.comparison
+        if self.rule is None:
+            self.rule = comparison.hydrate(before, before)
+            self.start_turn = before["turns"]
+        actual_before = comparison.normalized(self.rule)
+        require(actual_before == self.expected(before, actual_before), "retained reference state differs before turn")
+        comparison.align_draw(self.rule, before, after)
+        actor = before["current"]
+        gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
+        action = comparison.candidate(before, case["actions"], next(iter(gained)) if gained else 255, self.rule)
+        require(not isinstance(action, str), "retained reference changed shared action classification")
+        legal = self.rule.getLegalActions(self.rule.current_game_state, actor)
+        require(action in legal, "retained reference rejects shared action")
+        comparison.check_noble_phase(action, case["actions"], legal)
+        self.rule.update(action)
+        actual_after = comparison.normalized(self.rule)
+        require(actual_after == self.expected(after, actual_after), "retained reference successor mismatch")
+        comparison.compare_winner(self.rule, after, None)
+        self.length += 1
+        if after["terminal"]:
+            if self.start_turn == 0:
+                self.complete_games.append({"players": identity[0], "seed": identity[1],
+                                            "turns": self.length, "winner_mask": after.get("winner_mask")})
+            self.close()
+
+    @staticmethod
+    def expected(snapshot, normalized):
+        result = {key: snapshot[key] for key in normalized if key != "players"}
+        result["players"] = [{**{k: v for k, v in p.items() if k != "reserved"},
+                              "reserved": [r["card"] for r in p["reserved"]]} for p in snapshot["players"]]
+        return result
+
+    def finish(self):
+        self.close()
+        return {"segments": sum(self.lengths.values()),
+                "turns": sum(k * v for k, v in self.lengths.items()),
+                "max_segment_turns": max(self.lengths, default=0),
+                "segment_length_histogram": dict(sorted(self.lengths.items())),
+                "breaks": dict(self.breaks), "complete_games_without_reset": len(self.complete_games),
+                "complete_game_records": self.complete_games,
+                "scope": "Retained external state across shared turns; only replacement draws aligned. State reset after each explicit rule exclusion. Not RNG or hidden-information parity."}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", type=pathlib.Path, required=True)
     parser.add_argument("--cases", type=pathlib.Path, required=True)
     parser.add_argument("--output", type=pathlib.Path)
+    parser.add_argument("--chains", action="store_true", help="also retain reference state across consecutive shared turns")
     args = parser.parse_args()
     comparison = Comparison(args.reference.resolve())
+    chains = SharedChains(comparison) if args.chains else None
     counts = collections.Counter()
     categories = collections.Counter()
     choice_counts = collections.Counter()
@@ -611,6 +694,8 @@ def main():
                 sequence.add(case)
                 validate_sampling(metadata, case)
                 result = comparison.compare(case, winner_counts)
+                if chains is not None:
+                    chains.add(case, result)
                 if case.get("choices") is not None:
                     choice_counts.update(comparison.compare_choices(case, check_successors))
             except (ValueError, KeyError, IndexError) as exc:
@@ -634,6 +719,8 @@ def main():
               "cases": dict(counts), "matched_coverage": dict(categories), "action_sets": dict(choice_counts),
               "selected_winners": dict(winner_counts),
               "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Winner masks checked when exported, with explicit reference tiebreak defects. Not full rules, RNG, observation, or rank parity."}
+    if chains is not None:
+        report["shared_chains"] = chains.finish()
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(text)

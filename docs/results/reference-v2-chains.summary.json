@@ -1,0 +1,358 @@
+{
+  "action_sets": {
+    "boundary_free_purchase": 695,
+    "boundary_noble_after_reserve": 44,
+    "boundary_noble_after_take": 45,
+    "boundary_required_gold_payment": 210,
+    "boundary_reserve_without_gold": 204,
+    "boundary_reserved_purchase_blind_slot_0": 14,
+    "boundary_reserved_purchase_blind_slot_1": 16,
+    "boundary_reserved_purchase_blind_slot_2": 13,
+    "boundary_reserved_purchase_public_slot_0": 36,
+    "boundary_reserved_purchase_public_slot_1": 44,
+    "boundary_reserved_purchase_public_slot_2": 36,
+    "boundary_return_gold": 288,
+    "boundary_tier_1_empty_deck_purchase": 106,
+    "boundary_tier_1_empty_deck_reserve": 76,
+    "boundary_tier_1_final_draw": 57,
+    "boundary_tier_2_empty_deck_purchase": 0,
+    "boundary_tier_2_empty_deck_reserve": 0,
+    "boundary_tier_2_final_draw": 0,
+    "boundary_tier_3_empty_deck_purchase": 0,
+    "boundary_tier_3_empty_deck_reserve": 0,
+    "boundary_tier_3_final_draw": 0,
+    "local_blind_reservation": 1259,
+    "local_optional_gold_payment": 326,
+    "local_return_collected_color": 5466,
+    "local_seven_card_limit": 1,
+    "positions": 758,
+    "reference_global_fewest_card_defect": 26,
+    "reference_global_fewest_card_defect_players_3": 4,
+    "reference_global_fewest_card_defect_players_4": 22,
+    "reference_pass": 2,
+    "reference_reduced_take": 2566,
+    "shared_choices": 13741,
+    "shared_successors": 13741,
+    "shared_winner_matches": 1,
+    "successors_explicit_noble_choice": 22,
+    "successors_explicit_noble_choice_players_2": 6,
+    "successors_explicit_noble_choice_players_3": 8,
+    "successors_explicit_noble_choice_players_4": 8,
+    "successors_noble": 371,
+    "successors_players_2": 3750,
+    "successors_players_3": 4488,
+    "successors_players_4": 5503,
+    "successors_terminal": 802,
+    "unfinished_without_winner": 12939,
+    "winner_matches": 776,
+    "winner_matches_players_2": 252,
+    "winner_matches_players_3": 274,
+    "winner_matches_players_4": 250
+  },
+  "cards_matched": 90,
+  "cases": {
+    "blind_reservation": 90,
+    "matched": 5016,
+    "no_legal_action": 2,
+    "optional_gold_payment": 64,
+    "return_collected_color": 298
+  },
+  "cases_sha256": "839cecdcc0187b2a2e4a5d7ea180fe0181c3030deaedeb66693bdc877a38b332",
+  "commit": "95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b",
+  "export": {
+    "boundary_choices": true,
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v2",
+    "format": 2,
+    "games_per_player_count": 20,
+    "noble_acquisition_choices": true,
+    "seed": 92000000,
+    "source_id": "93aa7293171a9875",
+    "winner_checks": true
+  },
+  "exporter_sha256": "28f6e21bd6b07b69c719d71b3529789ed028e9bea9ed864837b555b7fcb40572",
+  "harness_sha256": "e9b0f0e203d4632376d1c90a51546a9a1a13989774f246d10ca9db087682e0a2",
+  "license": "MIT",
+  "license_sha256": "d876e3287cd147c5b1a8e5ea7a0cf7a7f09d5d60b819b018bbb6abd881925ce6",
+  "matched_coverage": {
+    "action_0": 1970,
+    "action_1": 341,
+    "action_3": 2547,
+    "action_4": 158,
+    "boundary_free_purchase": 812,
+    "boundary_noble_after_reserve": 1,
+    "boundary_noble_after_take": 1,
+    "boundary_required_gold_payment": 170,
+    "boundary_reserve_without_gold": 62,
+    "boundary_reserved_purchase_blind_slot_0": 15,
+    "boundary_reserved_purchase_blind_slot_1": 5,
+    "boundary_reserved_purchase_blind_slot_2": 12,
+    "boundary_reserved_purchase_public_slot_0": 53,
+    "boundary_reserved_purchase_public_slot_1": 34,
+    "boundary_reserved_purchase_public_slot_2": 39,
+    "boundary_return_gold": 8,
+    "boundary_tier_1_empty_deck_purchase": 122,
+    "boundary_tier_1_empty_deck_reserve": 2,
+    "boundary_tier_1_final_draw": 36,
+    "boundary_tier_2_empty_deck_purchase": 0,
+    "boundary_tier_2_empty_deck_reserve": 0,
+    "boundary_tier_2_final_draw": 0,
+    "boundary_tier_3_empty_deck_purchase": 0,
+    "boundary_tier_3_empty_deck_reserve": 0,
+    "boundary_tier_3_final_draw": 0,
+    "noble": 130,
+    "players_2": 1158,
+    "players_3": 1683,
+    "players_4": 2175,
+    "terminal": 52
+  },
+  "nobles_matched": 10,
+  "reference": "https://github.com/roeey777/Splendor-AI",
+  "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Winner masks checked when exported, with explicit reference tiebreak defects. Not full rules, RNG, observation, or rank parity.",
+  "selected_winners": {
+    "blocked_without_winner": 2,
+    "reference_global_fewest_card_defect": 2,
+    "reference_global_fewest_card_defect_players_3": 1,
+    "reference_global_fewest_card_defect_players_4": 1,
+    "shared_winner_matches": 1,
+    "unfinished_without_winner": 4964,
+    "winner_matches": 50,
+    "winner_matches_players_2": 18,
+    "winner_matches_players_3": 16,
+    "winner_matches_players_4": 16
+  },
+  "shared_chains": {
+    "breaks": {
+      "blind_reservation": 90,
+      "no_legal_action": 2,
+      "optional_gold_payment": 64,
+      "return_collected_color": 298
+    },
+    "complete_game_records": [
+      {
+        "players": 2,
+        "seed": 94000002,
+        "turns": 62,
+        "winner_mask": 3
+      },
+      {
+        "players": 2,
+        "seed": 94000004,
+        "turns": 56,
+        "winner_mask": 1
+      },
+      {
+        "players": 2,
+        "seed": 94000006,
+        "turns": 56,
+        "winner_mask": 1
+      },
+      {
+        "players": 2,
+        "seed": 94000008,
+        "turns": 52,
+        "winner_mask": 1
+      },
+      {
+        "players": 2,
+        "seed": 94000010,
+        "turns": 58,
+        "winner_mask": 1
+      },
+      {
+        "players": 2,
+        "seed": 94000012,
+        "turns": 54,
+        "winner_mask": 2
+      },
+      {
+        "players": 2,
+        "seed": 94000014,
+        "turns": 52,
+        "winner_mask": 1
+      },
+      {
+        "players": 2,
+        "seed": 94000016,
+        "turns": 56,
+        "winner_mask": 2
+      },
+      {
+        "players": 2,
+        "seed": 94000018,
+        "turns": 58,
+        "winner_mask": 2
+      },
+      {
+        "players": 3,
+        "seed": 95000000,
+        "turns": 81,
+        "winner_mask": 1
+      },
+      {
+        "players": 3,
+        "seed": 95000002,
+        "turns": 84,
+        "winner_mask": 2
+      },
+      {
+        "players": 3,
+        "seed": 95000004,
+        "turns": 78,
+        "winner_mask": 1
+      },
+      {
+        "players": 3,
+        "seed": 95000008,
+        "turns": 87,
+        "winner_mask": 1
+      },
+      {
+        "players": 3,
+        "seed": 95000010,
+        "turns": 78,
+        "winner_mask": 1
+      },
+      {
+        "players": 3,
+        "seed": 95000012,
+        "turns": 87,
+        "winner_mask": 1
+      },
+      {
+        "players": 3,
+        "seed": 95000014,
+        "turns": 75,
+        "winner_mask": 4
+      },
+      {
+        "players": 3,
+        "seed": 95000016,
+        "turns": 81,
+        "winner_mask": 4
+      },
+      {
+        "players": 3,
+        "seed": 95000018,
+        "turns": 69,
+        "winner_mask": 1
+      },
+      {
+        "players": 4,
+        "seed": 96000000,
+        "turns": 108,
+        "winner_mask": 1
+      },
+      {
+        "players": 4,
+        "seed": 96000002,
+        "turns": 104,
+        "winner_mask": 2
+      },
+      {
+        "players": 4,
+        "seed": 96000004,
+        "turns": 108,
+        "winner_mask": 2
+      },
+      {
+        "players": 4,
+        "seed": 96000006,
+        "turns": 100,
+        "winner_mask": 1
+      },
+      {
+        "players": 4,
+        "seed": 96000008,
+        "turns": 108,
+        "winner_mask": 4
+      },
+      {
+        "players": 4,
+        "seed": 96000010,
+        "turns": 104,
+        "winner_mask": 1
+      },
+      {
+        "players": 4,
+        "seed": 96000012,
+        "turns": 104,
+        "winner_mask": 8
+      },
+      {
+        "players": 4,
+        "seed": 96000014,
+        "turns": 108,
+        "winner_mask": 1
+      },
+      {
+        "players": 4,
+        "seed": 96000018,
+        "turns": 108,
+        "winner_mask": 8
+      }
+    ],
+    "complete_games_without_reset": 27,
+    "max_segment_turns": 108,
+    "scope": "Retained external state across shared turns; only replacement draws aligned. State reset after each explicit rule exclusion. Not RNG or hidden-information parity.",
+    "segment_length_histogram": {
+      "1": 70,
+      "2": 61,
+      "3": 63,
+      "4": 20,
+      "5": 29,
+      "6": 20,
+      "7": 19,
+      "8": 27,
+      "9": 14,
+      "10": 11,
+      "11": 13,
+      "12": 8,
+      "13": 3,
+      "14": 2,
+      "15": 8,
+      "16": 5,
+      "17": 1,
+      "18": 2,
+      "19": 1,
+      "20": 3,
+      "21": 2,
+      "22": 3,
+      "23": 3,
+      "24": 2,
+      "25": 2,
+      "27": 1,
+      "32": 3,
+      "37": 1,
+      "39": 2,
+      "43": 1,
+      "46": 2,
+      "49": 1,
+      "52": 3,
+      "54": 1,
+      "56": 3,
+      "58": 2,
+      "60": 1,
+      "62": 1,
+      "69": 1,
+      "75": 1,
+      "78": 2,
+      "81": 2,
+      "82": 1,
+      "84": 1,
+      "87": 2,
+      "100": 1,
+      "104": 3,
+      "108": 5
+    },
+    "segments": 433,
+    "turns": 5016
+  },
+  "workload_sequence": {
+    "checked": true,
+    "games": 60,
+    "scope": "Local snapshot continuity and declared exporter schedule only",
+    "turn_cap": 1000
+  }
+}

@@ -9,6 +9,10 @@ successors at 752 positions. Selected and branch counts overlap. They are
 not counts of independent games. The later sections retain the history of
 smaller checks and the exact reproduction records.
 
+The retained-state audit now also checks consecutive shared segments, including
+27 complete development games and 30 complete confirmation games with no state
+reset after setup. Replacement draws are still aligned.
+
 The primary reference still cannot check blind reservations, optional gold
 payment, or all legal token returns. Full trajectory parity, matching private
 observations, and matching RNG behavior are not established. The published
@@ -63,9 +67,10 @@ The reference draws from independently shuffled decks. The harness aligns the
 single replacement draw before a turn. It does not compare RNGs or assert that
 unknown deck orders match. State construction uses each player's own observation
 to recover private reservations for the test. This data never goes to an agent.
-The harness compares a turn in isolation; it does not feed one reference result
-into the next case. Thus the result is transition parity on the stated shared
-cases, not full engine equivalence.
+The default harness compares each turn in isolation. The optional `--chains`
+check also carries reference successors through consecutive shared turns; see
+the retained-state audit below. Both modes align replacement draws. Neither
+mode establishes full engine equivalence.
 
 The first fixed workload uses 20 games per player count (2, 3, 4), alternating
 strong and random policies, seed 92,000,000 plus player count times 1,000,000
@@ -599,3 +604,40 @@ with the same archived inputs and `scripts/check_reference.py`; no Rust rebuild
 or new seeds are needed. All 54 Python tests pass. This establishes local
 snapshot continuity only: the reference is still hydrated separately for each
 turn and does not provide a chained external trajectory comparison.
+
+## Retained-state audit of shared sequences
+
+Run the checker with `--chains` to retain each reference successor through the
+next shared turn. Only the replacement draw is aligned. The checker compares
+the retained state before and after every turn, verifies the next action is
+legal, and keeps the existing winner checks. A known rule exclusion ends the
+segment; the next shared segment is hydrated from its starting snapshot.
+
+| Archived workload | Shared turns | Segments | Longest segment | Complete games without reset |
+|---|---:|---:|---:|---:|
+| Development | 5,016 | 433 | 108 | 27 |
+| Confirmation | 4,949 | 427 | 112 | 30 |
+| Tier 2 depletion | 16 | 1 | 16 | 0 |
+| Tier 3 depletion | 24 | 2 | 14 | 0 |
+
+All prior selected-turn, branch, and winner counts are unchanged. Segment turns
+reuse those same selected cases and must not be added as independent evidence.
+The complete games start at turn zero and reach normal termination without
+state resets. They still use aligned draws and the known winner-tiebreak
+exception. No RNG, private-information, excluded-rule, or general winner
+equivalence is claimed.
+
+The four `docs/results/*-chains.summary.json` reports record input and harness
+hashes, segment-length histograms, break reasons, and complete-game seeds.
+For example:
+
+```sh
+gzip -dc docs/results/reference-confirm-v2.jsonl.gz > /tmp/reference-confirm-v2.jsonl
+python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check \
+  --cases /tmp/reference-confirm-v2.jsonl --chains \
+  --output /tmp/reference-confirm-v2-chains.summary.json
+```
+
+The optional tests check that hydration runs exactly once per segment and that
+corrupt retained bank state fails before the next turn. All 56 Python tests
+pass. This audit reuses the prior archives; no new games or seeds were added.

@@ -117,8 +117,8 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 54 Python tests include 26 reference
-tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 26.
+silently skipping the reference tests. The 56 Python tests include 28 reference
+tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 28.
 A fresh checkout and all 29 tests passed locally when this workflow was first added.
 Hosted Linux/macOS workflow results are not yet verified.
 
@@ -363,3 +363,27 @@ no new seeds or trajectories were generated. The new results are
 All 54 Python tests pass with the pinned reference. These are local export
 continuity checks, not chained external-engine trajectory parity. Rust and
 engine semantics are unchanged.
+
+## Retained external-state segments
+
+`check_reference.py --chains` now carries the external successor across
+consecutive shared turns. Before each turn it compares the retained state
+with the next local snapshot. It aligns only the exogenous replacement draw;
+it does not replace tokens, player cards, scores, nobles, or market state.
+An explicit rule exclusion ends the segment. A new game or a later shared
+segment starts from a snapshot. The ordinary isolated-turn checks still run.
+
+The development archive passes 5,016 turns in 433 segments, with 27 complete
+games from turn zero to normal termination without a state reset. Its longest
+segment has 108 turns. The confirmation archive passes 4,949 turns in 427
+segments, with 30 complete games without a reset and a longest segment of
+112 turns. Tier 2 passes 16 turns in one segment; tier 3 passes 24 turns in two
+segments. All four `*-chains.summary.json` files record segment histograms,
+explicit break counts, and the seeds of complete games without resets.
+
+The tests confirm one hydration per segment and reject corrupt retained bank
+state. All 56 Python tests pass with the pinned reference. These checks reuse
+the archived workloads; they are not new independent confirmation games.
+The reference winner defect is still checked as a known difference. This is
+stronger evidence for shared transitions over time, not full rule, RNG, deck
+order, observation, or winner parity. No engine or Rust code changed.

@@ -8,8 +8,9 @@ import os
 import pathlib
 import subprocess
 import unittest
+from unittest import mock
 
-from check_reference import Comparison, ROOT, WorkloadSequence, boundary_coverage, validate_sampling
+from check_reference import Comparison, ROOT, SharedChains, WorkloadSequence, boundary_coverage, validate_sampling
 
 
 class WorkloadSequenceTests(unittest.TestCase):
@@ -144,6 +145,28 @@ class ReferenceTests(unittest.TestCase):
             cwd=ROOT, check=True, capture_output=True, text=True)
         cls.metadata = json.loads(run.stdout.splitlines()[0])
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
+
+    def test_shared_chains_retain_state_and_reset_only_at_gaps(self):
+        results = [self.comparison.compare(case) for case in self.cases]
+        chains = SharedChains(self.comparison)
+        with mock.patch.object(self.comparison, "hydrate", wraps=self.comparison.hydrate) as hydrate:
+            for case, result in zip(self.cases, results):
+                chains.add(case, result)
+            summary = chains.finish()
+            self.assertEqual(hydrate.call_count, summary["segments"])
+        self.assertEqual(summary["turns"], results.count("matched"))
+        self.assertGreater(summary["max_segment_turns"], 1)
+        self.assertTrue(summary["breaks"])
+
+    def test_shared_chains_detect_retained_state_corruption(self):
+        first, second = self.cases[:2]
+        self.assertEqual(self.comparison.compare(first), "matched")
+        self.assertEqual(self.comparison.compare(second), "matched")
+        chains = SharedChains(self.comparison)
+        chains.add(first, "matched")
+        chains.rule.current_game_state.board.gems["white"] += 1
+        with self.assertRaisesRegex(ValueError, "retained reference state differs"):
+            chains.add(second, "matched")
 
     def test_exclusions_do_not_hide_token_corruption(self):
         examples = {}
