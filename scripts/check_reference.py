@@ -23,6 +23,35 @@ def require(condition, message):
         raise ValueError(message)
 
 
+def boundary_coverage(before, after, actions):
+    """Classify one already-validated shared transition; preserve zero counts."""
+    counts = {f"tier_{tier}_{event}": 0 for tier in range(1, 4)
+              for event in ("final_draw", "empty_deck_purchase", "empty_deck_reserve")}
+    counts.update({event: 0 for event in (
+        "reserve_without_gold", "return_gold", "required_gold_payment",
+        "free_purchase", "noble_after_take", "noble_after_reserve")})
+    tag, slot = actions[0][:2]
+    actor = before["current"]
+    if tag in (1, 3):
+        tier = slot // 4
+        if before["remaining"][tier] == 1 and after["remaining"][tier] == 0:
+            counts[f"tier_{tier + 1}_final_draw"] = 1
+        if before["remaining"][tier] == 0:
+            event = "empty_deck_reserve" if tag == 1 else "empty_deck_purchase"
+            counts[f"tier_{tier + 1}_{event}"] = 1
+    counts["reserve_without_gold"] = int(tag == 1 and before["bank"][5] == 0)
+    counts["return_gold"] = int(any(a[0] == 6 and a[6] > 0 for a in actions))
+    if tag in (3, 4):
+        gold = before["players"][actor]["tokens"][5] - after["players"][actor]["tokens"][5]
+        counts["required_gold_payment"] = int(gold > 0)
+        payment = next(a[1:6] for a in actions if a[0] == 5)
+        counts["free_purchase"] = int(not any(payment) and gold == 0)
+    noble = before["players"][actor]["nobles"] != after["players"][actor]["nobles"]
+    counts["noble_after_take"] = int(tag == 0 and noble)
+    counts["noble_after_reserve"] = int(tag == 1 and noble)
+    return counts
+
+
 def validate_sampling(metadata, case):
     interval = metadata.get("choice_interval", 0)
     boundary_choices = metadata.get("boundary_choices", False)
@@ -221,6 +250,7 @@ class Comparison:
                             "choice noble disagrees with successor")
                     result = self.compare({"before": before, "after": after, "actions": choice["actions"]}, counts)
                     require(result == "matched", f"shared successor was excluded: {result}")
+                    counts.update({"boundary_" + k: v for k, v in boundary_coverage(before, after, choice["actions"]).items()})
                     counts["shared_successors"] += 1
                     counts[f"successors_players_{len(before['players'])}"] += 1
                     counts["successors_terminal"] += int(after["terminal"])
@@ -355,6 +385,7 @@ def main():
                 raise ValueError(f"case line {line_number}, seed {case['seed']}, turn {case['before']['turns']}: {exc}") from exc
             counts[result] += 1
             if result == "matched":
+                categories.update({"boundary_" + k: v for k, v in boundary_coverage(case["before"], case["after"], case["actions"]).items()})
                 categories[f"players_{len(case['before']['players'])}"] += 1
                 categories[f"action_{case['actions'][0][0]}"] += 1
                 categories["terminal"] += int(case["after"]["terminal"])

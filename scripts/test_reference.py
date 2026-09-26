@@ -7,7 +7,38 @@ import pathlib
 import subprocess
 import unittest
 
-from check_reference import Comparison, ROOT, validate_sampling
+from check_reference import Comparison, ROOT, boundary_coverage, validate_sampling
+
+
+class CoverageTests(unittest.TestCase):
+    def test_tier_draw_and_empty_deck_boundaries_are_separate(self):
+        before = {"current": 0, "remaining": [0, 1, 0], "bank": [0]*6,
+                  "players": [{"tokens": [0]*6, "nobles": []}]}
+        after = copy.deepcopy(before)
+        after["remaining"][1] = 0
+        counts = boundary_coverage(before, after, [[1, 7, 0, 0, 0, 0, 0]])
+        self.assertEqual(counts["tier_2_final_draw"], 1)
+        self.assertEqual(counts["tier_2_empty_deck_reserve"], 0)
+        self.assertEqual(counts["reserve_without_gold"], 1)
+        counts = boundary_coverage(before, after, [[3, 11, 0, 0, 0, 0, 0], [5, 0, 0, 0, 0, 0, 0]])
+        self.assertEqual(counts["tier_3_empty_deck_purchase"], 1)
+        self.assertEqual(counts["tier_3_final_draw"], 0)
+        self.assertEqual(counts["free_purchase"], 1)
+
+    def test_gold_payment_is_not_free_and_return_gold_is_separate(self):
+        before = {"current": 0, "remaining": [2, 2, 2], "bank": [0]*6,
+                  "players": [{"tokens": [0, 0, 0, 0, 0, 1], "nobles": []}]}
+        after = copy.deepcopy(before)
+        after["players"][0]["tokens"][5] = 0
+        counts = boundary_coverage(before, after, [[4, 0, 0, 0, 0, 0, 0], [5, 0, 0, 0, 0, 0, 0]])
+        self.assertEqual(counts["required_gold_payment"], 1)
+        self.assertEqual(counts["free_purchase"], 0)
+        self.assertEqual(counts["return_gold"], 0)
+        after["players"][0]["nobles"] = [0]
+        counts = boundary_coverage(before, after, [[0, 1, 1, 1, 0, 0, 0], [6, 0, 0, 0, 0, 0, 1]])
+        self.assertEqual(counts["return_gold"], 1)
+        self.assertEqual(counts["noble_after_take"], 1)
+        self.assertEqual(counts["noble_after_reserve"], 0)
 
 
 @unittest.skipUnless(os.environ.get("SPLENDOR_REFERENCE"), "set SPLENDOR_REFERENCE to the pinned checkout")

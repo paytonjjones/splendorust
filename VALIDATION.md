@@ -109,7 +109,7 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 29 Python tests include 15 reference
+silently skipping the reference tests. The 31 Python tests include 15 reference
 tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 15.
 A fresh checkout and all 29 tests passed locally when this workflow was added.
 Hosted Linux/macOS workflow results are not yet verified.

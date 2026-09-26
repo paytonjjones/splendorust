@@ -216,3 +216,45 @@ the new masks. Old archives remain readable, with no retrospective winner claim.
 The local engine and replay version remain unchanged. Lower-place ranks,
 reference forced-pass outcomes, RNG, and hidden-information behavior remain
 outside the comparison; full parity is not claimed.
+
+## Measured boundary coverage
+
+The harness now counts boundary events only after a shared successor passes
+comparison. Selected-turn counts and sampled branch counts remain separate;
+branches overlap selected turns and are not additional independent games.
+All defined counters include zero values, so missing coverage is visible.
+
+Rechecking the existing winner archive with the new counters gives:
+
+| Shared boundary | Selected transitions | Branch transitions |
+| --- | ---: | ---: |
+| Tier 1 final deck draw | 36 | 42 |
+| Tier 1 purchase after deck exhaustion | 122 | 72 |
+| Tier 1 reservation after deck exhaustion | 2 | 37 |
+| Tier 2 final draw / exhausted purchase / exhausted reservation | 0 / 0 / 0 | 0 / 0 / 0 |
+| Tier 3 final draw / exhausted purchase / exhausted reservation | 0 / 0 / 0 | 0 / 0 / 0 |
+| Reservation without gold available | 62 | 204 |
+| Return includes gold | 8 | 285 |
+| Required gold payment | 170 | 202 |
+| Free purchase | 812 | 499 |
+| Noble awarded after take | 1 | 0 |
+| Noble awarded after visible reservation | 1 | 0 |
+
+Optional-gold paths remain excluded as a reference difference. The gold-payment
+counter therefore describes required gold only among checked shared paths.
+An action requiring a final draw is distinct from one taken after the deck is
+already empty. A zero in this table is a sampling gap, not a rule mismatch.
+
+Evidence: `docs/results/reference-coverage.summary.json` rechecks the unchanged
+`reference-winners.jsonl.gz` archive. It retains the raw case hash and records
+the new harness hash. Existing counts remain 5,016 matched selected transitions
+and 11,889 shared branch successors; this is additional classification, not new
+sampled games or a larger parity claim. All 31 Python tests pass, including two
+new counter tests and the 15 external-reference tests.
+
+The next narrow coverage target is the full action sets at the two observed
+non-purchase noble acquisitions. Current boundary sampling triggers explicit
+noble choice, final-round entry, and termination; a single automatic noble
+acquisition can occur between those samples. Tier 2/3 deck-exhaustion boundaries
+also remain open and need explicit legal-history evidence or clearly labeled
+constructed-state tests before a coverage claim.

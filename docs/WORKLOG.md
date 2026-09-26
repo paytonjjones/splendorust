@@ -481,3 +481,25 @@ sampling for reachable phase/data coverage and select an uncovered boundary,
 or measure search rollout behavior in these blocked cases without retuning to
 them. Keep the published no-action gap explicit and do not restore rejected
 candidates as defaults.
+
+## Parity boundary coverage measured
+
+Continued from `048984c`. Reviewed the independent comparison workload instead
+of tuning another local agent heuristic. Added explicit post-comparison boundary
+counters, preserving zero values and separating selected transitions from
+sampled branch successors. Two focused tests cover tier boundaries and gold/free
+purchase classification. All 31 Python tests pass with the pinned reference.
+
+Rechecked the unchanged winner archive: all prior comparison counts still pass.
+Tier 1 final draws and exhausted-deck actions are covered, but all corresponding
+tier 2/3 counts are zero. Two shared selected transitions award nobles after a
+take or visible reservation (one each), but neither has sampled branch coverage.
+Saved the fingerprinted coverage summary and documented these precise gaps.
+No Rust, engine, replay, or agent changes were made.
+
+Next: extend explicit boundary sampling to every noble acquisition, including a
+single automatic award, with a versioned metadata flag so old archives remain
+honestly interpreted. Re-export the same workload to target these known omitted
+action sets; compare only genuinely new branches as added coverage. Then consider
+legal-history generation for tier 2/3 exhaustion. Do not count the coverage
+reclassification as new independent games or claim full parity.
