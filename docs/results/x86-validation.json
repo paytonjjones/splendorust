@@ -1,0 +1,61 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "50400f40eb161b1a",
+  "host": "Apple M4 Pro, macOS 26.7; x86_64 executed with Rosetta",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "commands": [
+    "rustup target add x86_64-apple-darwin",
+    "cargo test --release --locked --workspace --target x86_64-apple-darwin",
+    "cargo build --release --locked --target x86_64-apple-darwin"
+  ],
+  "binary_type": "target/x86_64-apple-darwin/release/splendor: Mach-O 64-bit executable x86_64",
+  "binary_sha256": "85605317f3d3ad4df24f3e8f7980e697bb176754399a342396f13e4f489d4c35",
+  "runs": [
+    {
+      "command": [
+        "target/x86_64-apple-darwin/release/splendor",
+        "verify-report",
+        "/tmp/e15-7-after.json"
+      ],
+      "exit": 0,
+      "seconds": 35.56830216594972,
+      "output": "Verified all 1000 game records; timing and summaries were not compared\n",
+      "input_raw_sha256": "68cde4787aa477917e18e28be97f86a97af1085eaf6f8d7a0bfbfcb9902b8944",
+      "source_id": "50400f40eb161b1a",
+      "games": 1000,
+      "players": 2,
+      "archive": "e15-7-after.json.gz"
+    },
+    {
+      "command": [
+        "target/x86_64-apple-darwin/release/splendor",
+        "verify-report",
+        "/tmp/e15-3p-after.json"
+      ],
+      "exit": 0,
+      "seconds": 10.290281999972649,
+      "output": "Verified all 300 game records; timing and summaries were not compared\n",
+      "input_raw_sha256": "5cc141614ca89fe55350bd5588dfb6cbd0183ec648bcbfc41a9e23d6e355e1b5",
+      "source_id": "50400f40eb161b1a",
+      "games": 300,
+      "players": 3,
+      "archive": "e15-3p-after.json.gz"
+    },
+    {
+      "command": [
+        "target/x86_64-apple-darwin/release/splendor",
+        "verify-report",
+        "/tmp/e15-4p-after.json"
+      ],
+      "exit": 0,
+      "seconds": 13.33372283296194,
+      "output": "Verified all 400 game records; timing and summaries were not compared\n",
+      "input_raw_sha256": "aadf68cade36278c4a826dfc394184e18a916c69524d90845ebe08a7e7029c2a",
+      "source_id": "50400f40eb161b1a",
+      "games": 400,
+      "players": 4,
+      "archive": "e15-4p-after.json.gz"
+    }
+  ],
+  "note": "All 71 x86_64 release tests pass. All 1700 ARM report records, including trajectory hashes, reproduce on x86_64. Timing and report summaries not compared. Bounded macOS architecture evidence; no Linux or universal floating-point guarantee."
+}

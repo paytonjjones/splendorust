@@ -1028,3 +1028,20 @@ No full parity claim or new confirmation-seed claim.
 Next audit: assess cross-platform deterministic validation gaps and whether a
 local second target is available. Hosted CI remains unverified because nothing
 has been pushed. Do not turn one-host performance results into portable claims.
+
+## Bounded second-architecture validation
+
+Audited local capability: only ARM Rust target was installed, but Rosetta can
+execute x86_64 binaries. Installed the pinned toolchain's x86_64 macOS standard
+library, built locked release workspace, and passed all 71 tests. No project
+source/toolchain settings changed for this check.
+
+Ran x86_64 verify-report on existing ARM reports: all 1,000 two-player,
+300 three-player, and 400 four-player records reproduce, including trajectory
+hashes. All are complete. Saved build/test logs, exact commands, binary/input
+hashes and process results. Updated architecture documentation to state this
+bounded evidence, not a universal guarantee. Linux and hosted CI remain open.
+
+Next: inspect whether the local container runtime can supply a pinned Linux
+validation target without modifying project semantics or publishing anything.
+If unavailable, record that limit and choose another useful project issue.

@@ -274,3 +274,22 @@ reference winner defects remain unchanged. This is regression validation on
 existing seeds, not a new independent sample or full parity. Exact commands,
 hashes, archive reconstruction and checker output are retained in
 `docs/results/reference-e15-validation.json` and `reference-e15.summary.json`.
+
+### Local second-architecture validation
+
+At source `50400f40eb161b1a`, installed the pinned Rust 1.98.1
+`x86_64-apple-darwin` target and ran release workspace tests and build with
+Cargo.lock. All 71 tests pass under Rosetta on the Apple M4 Pro/macOS 26.7 host.
+This includes golden replays, rule tests, and search determinism tests.
+
+The x86_64 CLI's verify-report command reproduces every record from the ARM
+build's 1,000 two-player games (1,117m), 300 three-player games (118m), and 400
+four-player games (119m). Settings are search/strong at 128/8/6; the multiplayer
+runs enable invariants. All 1,700 games complete, with exact record and
+trajectory-hash agreement. Timing and report summaries are not compared.
+Commands, input and binary hashes, process results, test/build logs are in
+`docs/results/x86-validation.json` and `x86-*.txt`.
+
+This establishes agreement for those workloads and two macOS CPU targets under
+one toolchain. Rosetta is not a physical Intel host or a Linux environment.
+Hosted CI and a universal floating-point search guarantee remain unverified.
