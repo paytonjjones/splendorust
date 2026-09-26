@@ -106,3 +106,20 @@ each identity received 50% credit. The gate correctly retained the baseline.
 These small samples test the workflow and do not establish agent strength or
 throughput. Parameters, decision, hashes, and compressed reports are in
 `docs/results/gate-smoke.json` and its linked archives.
+
+## E8 — Sparse owned-card scans
+
+**Hypothesis:** Hidden-state sampling and invariant checks spend unnecessary
+work scanning all 90 card IDs for each player, most of which are not owned.
+
+**Change:** Iterate owned set bits in ascending card-ID order, with no change
+to RNG calls or validation rules. Fixed opening and turn-40 benchmarks showed
+35–43% lower sampling time and 29–59% lower invariant-check time. See
+[BENCHMARKS.md](BENCHMARKS.md) for workload, estimates, and limits.
+
+**Equivalence:** All 1,000 search/strong records at master seed 97,000,000,
+128 iterations, depth 8, width 6, and one thread matched exactly. Both versions
+reached the same no-action position in block 12, rotation 0, setup seed
+18,210,048,530,404,438,792. It has no ranks or winners. Therefore this run
+cannot promote an agent. Retain the core optimization based on the measured
+operations and unchanged records, not on a strength claim.

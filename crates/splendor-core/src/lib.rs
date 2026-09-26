@@ -569,14 +569,16 @@ impl GameState {
             }
             let mut bonuses = [0; 5];
             let mut score = p.nobles.count_ones() as u16 * 3;
-            for (c, card) in CARDS.iter().enumerate() {
-                if p.owned & (1u128 << c) != 0 {
-                    if !add(&mut seen, c as u8) {
-                        return fail("owned duplicate");
-                    }
-                    bonuses[card.bonus as usize] += 1;
-                    score += card.points as u16;
+            let mut owned = p.owned;
+            while owned != 0 {
+                let c = owned.trailing_zeros() as usize;
+                owned &= owned - 1;
+                if !add(&mut seen, c as u8) {
+                    return fail("owned duplicate");
                 }
+                let card = &CARDS[c];
+                bonuses[card.bonus as usize] += 1;
+                score += card.points as u16;
             }
             if bonuses != p.bonuses || score != p.score as u16 {
                 return fail("score or bonuses");
@@ -700,10 +702,11 @@ impl Observation {
             if p.owned >> 90 != 0 {
                 return Err(RuleError::InvalidObservation);
             }
-            for c in 0..90 {
-                if p.owned & (1u128 << c) != 0 {
-                    add(c)?;
-                }
+            let mut owned = p.owned;
+            while owned != 0 {
+                let c = owned.trailing_zeros() as u8;
+                owned &= owned - 1;
+                add(c)?;
             }
             for (j, r) in p.reserved.iter().enumerate() {
                 if j < self.reserved_counts[pi] as usize {

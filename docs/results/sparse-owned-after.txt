@@ -1,0 +1,117 @@
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 6.09s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking determinize/opening-2p
+Benchmarking determinize/opening-2p: Warming up for 1.0000 s
+Benchmarking determinize/opening-2p: Collecting 20 samples in estimated 1.0001 s (2.8M iterations)
+Benchmarking determinize/opening-2p: Analyzing
+determinize/opening-2p  time:   [355.78 ns 358.57 ns 361.35 ns]
+                        change: [-37.656% -36.957% -36.291%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking invariants/opening-2p
+Benchmarking invariants/opening-2p: Warming up for 1.0000 s
+Benchmarking invariants/opening-2p: Collecting 20 samples in estimated 1.0000 s (11M iterations)
+Benchmarking invariants/opening-2p: Analyzing
+invariants/opening-2p   time:   [84.690 ns 85.329 ns 86.152 ns]
+                        change: [-45.027% -44.438% -43.773%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking determinize/midgame-2p
+Benchmarking determinize/midgame-2p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-2p: Collecting 20 samples in estimated 1.0000 s (3.1M iterations)
+Benchmarking determinize/midgame-2p: Analyzing
+determinize/midgame-2p  time:   [319.67 ns 320.92 ns 322.04 ns]
+                        change: [-35.301% -34.781% -34.264%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking invariants/midgame-2p
+Benchmarking invariants/midgame-2p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-2p: Collecting 20 samples in estimated 1.0000 s (9.6M iterations)
+Benchmarking invariants/midgame-2p: Analyzing
+invariants/midgame-2p   time:   [103.09 ns 105.46 ns 107.73 ns]
+                        change: [-31.440% -30.633% -29.535%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 20 measurements (15.00%)
+  2 (10.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking determinize/opening-3p
+Benchmarking determinize/opening-3p: Warming up for 1.0000 s
+Benchmarking determinize/opening-3p: Collecting 20 samples in estimated 1.0001 s (2.8M iterations)
+Benchmarking determinize/opening-3p: Analyzing
+determinize/opening-3p  time:   [357.75 ns 361.21 ns 365.31 ns]
+                        change: [-40.952% -40.542% -40.095%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking invariants/opening-3p
+Benchmarking invariants/opening-3p: Warming up for 1.0000 s
+Benchmarking invariants/opening-3p: Collecting 20 samples in estimated 1.0000 s (11M iterations)
+Benchmarking invariants/opening-3p: Analyzing
+invariants/opening-3p   time:   [87.479 ns 87.800 ns 88.224 ns]
+                        change: [-54.330% -54.022% -53.710%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking determinize/midgame-3p
+Benchmarking determinize/midgame-3p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-3p: Collecting 20 samples in estimated 1.0001 s (3.0M iterations)
+Benchmarking determinize/midgame-3p: Analyzing
+determinize/midgame-3p  time:   [333.25 ns 336.29 ns 339.36 ns]
+                        change: [-40.245% -39.778% -39.296%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking invariants/midgame-3p
+Benchmarking invariants/midgame-3p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-3p: Collecting 20 samples in estimated 1.0000 s (9.4M iterations)
+Benchmarking invariants/midgame-3p: Analyzing
+invariants/midgame-3p   time:   [105.47 ns 105.88 ns 106.33 ns]
+                        change: [-44.005% -43.165% -42.375%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) low mild
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking determinize/opening-4p
+Benchmarking determinize/opening-4p: Warming up for 1.0000 s
+Benchmarking determinize/opening-4p: Collecting 20 samples in estimated 1.0001 s (2.7M iterations)
+Benchmarking determinize/opening-4p: Analyzing
+determinize/opening-4p  time:   [360.81 ns 363.17 ns 365.98 ns]
+                        change: [-43.719% -43.212% -42.664%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking invariants/opening-4p
+Benchmarking invariants/opening-4p: Warming up for 1.0000 s
+Benchmarking invariants/opening-4p: Collecting 20 samples in estimated 1.0000 s (11M iterations)
+Benchmarking invariants/opening-4p: Analyzing
+invariants/opening-4p   time:   [91.282 ns 93.614 ns 96.951 ns]
+                        change: [-59.352% -58.682% -57.737%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) high mild
+  2 (10.00%) high severe
+
+Benchmarking determinize/midgame-4p
+Benchmarking determinize/midgame-4p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-4p: Collecting 20 samples in estimated 1.0001 s (2.8M iterations)
+Benchmarking determinize/midgame-4p: Analyzing
+determinize/midgame-4p  time:   [355.56 ns 357.54 ns 359.35 ns]
+                        change: [-39.479% -38.864% -38.217%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking invariants/midgame-4p
+Benchmarking invariants/midgame-4p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-4p: Collecting 20 samples in estimated 1.0000 s (8.7M iterations)
+Benchmarking invariants/midgame-4p: Analyzing
+invariants/midgame-4p   time:   [114.12 ns 116.16 ns 117.84 ns]
+                        change: [-48.952% -47.966% -47.080%] (p = 0.00 < 0.05)
+                        Performance has improved.
+

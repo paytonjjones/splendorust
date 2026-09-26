@@ -60,3 +60,50 @@ cargo run --release -- benchmark --games 100000 --threads 4
 ```
 
 Criterion stores machine-readable estimates below `target/criterion`. Checked-in text reports preserve this run's evidence. Record CPU, OS, compiler, source fingerprint, seeds, sample size, thread count, and concurrent work when comparing future results. Avoid timing regression gates on shared CI runners; use the promotion script's explicit throughput floor on a controlled host when required.
+
+## Sparse owned-card scans
+
+The new sampling and invariant fixtures use setup seed 42, random trajectory
+seed 123, and hidden-sampling seed 456. Each player-count fixture is measured
+at opening and after 40 complete turns. The same pinned toolchain, host, bench
+profile, 20 samples, and one-second warm-up/measurement windows were used.
+No build or other planned compute workload ran during each measurement.
+
+The prior implementation tested every card ID for every player in both
+observation sampling and derived-score validation. The retained implementation
+visits only set bits in ascending ID order. It makes no RNG calls and preserves
+all validation checks. These checks are outside normal action transitions.
+
+| Hidden-state sample | Before | After |
+|---|---:|---:|
+| Opening, 2 players | 571.64 ns | 358.57 ns |
+| Turn 40, 2 players | 491.18 ns | 320.92 ns |
+| Opening, 3 players | 605.19 ns | 361.21 ns |
+| Turn 40, 3 players | 555.33 ns | 336.29 ns |
+| Opening, 4 players | 632.01 ns | 363.17 ns |
+| Turn 40, 4 players | 590.47 ns | 357.54 ns |
+
+Sampling time fell about 35–43% on these fixtures. Invariant-check time fell
+about 29–59%. These are one before/after Criterion pair on a shared Mac, not
+dedicated-host or cross-platform guarantees. Raw intervals, estimates, source
+identifiers, benchmark hash, and settings are in
+`docs/results/sparse-owned-benchmarks.json` and the adjacent text logs.
+
+A 1,000-game search/strong comparison (128 iterations, depth 8, width 6,
+one thread, master seed 97,000,000) produced identical records and trajectory
+hashes before and after. Both runs had 999 normal completions and one blocked
+game. This is equivalence evidence, not agent-promotion evidence. The whole-run
+times were 30.78 s and 30.08 s; a single pair does not establish an overall
+search-speed improvement. Compressed reports retain the incomplete record.
+
+Reproduce the microbenchmark with:
+
+```sh
+cargo bench -p splendor-core --bench engine --locked -- \
+  'determinize|invariants' --sample-size 20 --warm-up-time 1 \
+  --measurement-time 1 --save-baseline before
+# With the candidate source:
+cargo bench -p splendor-core --bench engine --locked -- \
+  'determinize|invariants' --sample-size 20 --warm-up-time 1 \
+  --measurement-time 1 --baseline before
+```

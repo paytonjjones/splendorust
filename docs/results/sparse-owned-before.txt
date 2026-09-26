@@ -1,0 +1,155 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling libc v0.2.189
+   Compiling quote v1.0.47
+   Compiling cfg-if v1.0.5
+   Compiling zerocopy v0.8.59
+   Compiling getrandom v0.3.4
+   Compiling crossbeam-utils v0.8.23
+   Compiling serde_core v1.0.229
+   Compiling autocfg v1.5.1
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling rustix v1.1.5
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling serde v1.0.229
+   Compiling num-traits v0.2.19
+   Compiling serde_json v1.0.151
+   Compiling bitflags v2.13.2
+   Compiling either v1.18.0
+   Compiling regex-syntax v0.8.11
+   Compiling once_cell v1.21.4
+   Compiling rayon-core v1.13.0
+   Compiling errno v0.3.14
+   Compiling anstyle v1.0.14
+   Compiling memchr v2.8.3
+   Compiling fastrand v2.5.0
+   Compiling clap_lex v1.1.1
+   Compiling plotters-backend v0.3.7
+   Compiling ciborium-io v0.2.2
+   Compiling itoa v1.0.18
+   Compiling plotters-svg v0.3.7
+   Compiling clap_builder v4.6.7
+   Compiling wait-timeout v0.2.1
+   Compiling regex-automata v0.4.18
+   Compiling itertools v0.10.5
+   Compiling same-file v1.0.6
+   Compiling bit-vec v0.8.0
+   Compiling cast v0.3.0
+   Compiling fnv v1.0.7
+   Compiling quick-error v1.2.3
+   Compiling bit-set v0.8.0
+   Compiling clap v4.6.7
+   Compiling walkdir v2.5.0
+   Compiling is-terminal v0.4.17
+   Compiling anes v0.1.6
+   Compiling regex v1.13.1
+   Compiling oorandom v11.1.5
+   Compiling unarray v0.1.4
+   Compiling arrayvec v0.7.8
+   Compiling criterion-plot v0.5.0
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling rand_core v0.9.5
+   Compiling rand v0.9.5
+   Compiling rand_xorshift v0.4.0
+   Compiling serde_derive v1.0.229
+   Compiling zerocopy-derive v0.8.59
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling plotters v0.3.7
+   Compiling rayon v1.12.0
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling ciborium-ll v0.2.2
+   Compiling proptest v1.11.0
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `bench` profile [optimized + debuginfo] target(s) in 21.57s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking determinize/opening-2p
+Benchmarking determinize/opening-2p: Warming up for 1.0000 s
+Benchmarking determinize/opening-2p: Collecting 20 samples in estimated 1.0001 s (1.7M iterations)
+Benchmarking determinize/opening-2p: Analyzing
+determinize/opening-2p  time:   [567.40 ns 571.64 ns 576.30 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) low mild
+  1 (5.00%) high mild
+
+Benchmarking invariants/opening-2p
+Benchmarking invariants/opening-2p: Warming up for 1.0000 s
+Benchmarking invariants/opening-2p: Collecting 20 samples in estimated 1.0000 s (6.6M iterations)
+Benchmarking invariants/opening-2p: Analyzing
+invariants/opening-2p   time:   [152.34 ns 153.86 ns 155.49 ns]
+
+Benchmarking determinize/midgame-2p
+Benchmarking determinize/midgame-2p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-2p: Collecting 20 samples in estimated 1.0001 s (2.0M iterations)
+Benchmarking determinize/midgame-2p: Analyzing
+determinize/midgame-2p  time:   [488.71 ns 491.18 ns 493.80 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking invariants/midgame-2p
+Benchmarking invariants/midgame-2p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-2p: Collecting 20 samples in estimated 1.0000 s (6.5M iterations)
+Benchmarking invariants/midgame-2p: Analyzing
+invariants/midgame-2p   time:   [148.81 ns 149.52 ns 150.08 ns]
+
+Benchmarking determinize/opening-3p
+Benchmarking determinize/opening-3p: Warming up for 1.0000 s
+Benchmarking determinize/opening-3p: Collecting 20 samples in estimated 1.0001 s (1.6M iterations)
+Benchmarking determinize/opening-3p: Analyzing
+determinize/opening-3p  time:   [601.34 ns 605.19 ns 609.29 ns]
+
+Benchmarking invariants/opening-3p
+Benchmarking invariants/opening-3p: Warming up for 1.0000 s
+Benchmarking invariants/opening-3p: Collecting 20 samples in estimated 1.0000 s (5.1M iterations)
+Benchmarking invariants/opening-3p: Analyzing
+invariants/opening-3p   time:   [190.77 ns 192.11 ns 193.37 ns]
+
+Benchmarking determinize/midgame-3p
+Benchmarking determinize/midgame-3p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-3p: Collecting 20 samples in estimated 1.0001 s (1.8M iterations)
+Benchmarking determinize/midgame-3p: Analyzing
+determinize/midgame-3p  time:   [552.84 ns 555.33 ns 557.83 ns]
+
+Benchmarking invariants/midgame-3p
+Benchmarking invariants/midgame-3p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-3p: Collecting 20 samples in estimated 1.0000 s (5.4M iterations)
+Benchmarking invariants/midgame-3p: Analyzing
+invariants/midgame-3p   time:   [183.00 ns 184.98 ns 187.93 ns]
+
+Benchmarking determinize/opening-4p
+Benchmarking determinize/opening-4p: Warming up for 1.0000 s
+Benchmarking determinize/opening-4p: Collecting 20 samples in estimated 1.0000 s (1.6M iterations)
+Benchmarking determinize/opening-4p: Analyzing
+determinize/opening-4p  time:   [627.21 ns 632.01 ns 636.48 ns]
+
+Benchmarking invariants/opening-4p
+Benchmarking invariants/opening-4p: Warming up for 1.0000 s
+Benchmarking invariants/opening-4p: Collecting 20 samples in estimated 1.0000 s (4.4M iterations)
+Benchmarking invariants/opening-4p: Analyzing
+invariants/opening-4p   time:   [224.10 ns 225.60 ns 226.81 ns]
+
+Benchmarking determinize/midgame-4p
+Benchmarking determinize/midgame-4p: Warming up for 1.0000 s
+Benchmarking determinize/midgame-4p: Collecting 20 samples in estimated 1.0000 s (1.7M iterations)
+Benchmarking determinize/midgame-4p: Analyzing
+determinize/midgame-4p  time:   [587.78 ns 590.47 ns 593.07 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) low mild
+
+Benchmarking invariants/midgame-4p
+Benchmarking invariants/midgame-4p: Warming up for 1.0000 s
+Benchmarking invariants/midgame-4p: Collecting 20 samples in estimated 1.0000 s (4.6M iterations)
+Benchmarking invariants/midgame-4p: Analyzing
+invariants/midgame-4p   time:   [216.01 ns 216.85 ns 218.10 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+

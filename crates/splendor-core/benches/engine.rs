@@ -38,6 +38,39 @@ fn bench(c: &mut Criterion) {
             b.iter(|| black_box(&fixture).legal_actions(black_box(&mut a)))
         });
     }
+    // Fixed opening and midgame observations, including hidden reservations.
+    // No agent policy, I/O, or clock is included in these measured operations.
+    for count in 2..=4 {
+        let mut state = GameState::new(count, 42).unwrap();
+        let mut choices = ActionSet::new();
+        let mut fixture_rng = Rng::new(123);
+        for label in ["opening", "midgame"] {
+            if label == "midgame" {
+                while state.turns() < 40 {
+                    state.legal_actions(&mut choices);
+                    assert!(!choices.is_empty(), "fixed fixture must reach turn 40");
+                    state
+                        .apply_action(choices[fixture_rng.index(choices.len())])
+                        .unwrap();
+                }
+            }
+            let observation = state.observe(state.current_player());
+            c.bench_function(&format!("determinize/{label}-{count}p"), |b| {
+                b.iter_batched(
+                    || Rng::new(456),
+                    |mut rng| {
+                        black_box(&observation)
+                            .determinize(black_box(&mut rng))
+                            .unwrap()
+                    },
+                    criterion::BatchSize::SmallInput,
+                )
+            });
+            c.bench_function(&format!("invariants/{label}-{count}p"), |b| {
+                b.iter(|| black_box(&state).check_invariants().unwrap())
+            });
+        }
+    }
     c.bench_function("clone", |b| b.iter(|| black_box(black_box(&s).clone())));
     c.bench_function("clone_apply", |b| {
         b.iter(|| {
