@@ -416,3 +416,23 @@ external match/exclusion counts, shared successor counts, boundary coverage,
 and winner classifications are unchanged. New summaries are
 `results/reference-v2{,-tier2,-tier3}-tokens.summary.json`; the prior summaries
 remain intact. All 41 Python tests pass with the pinned reference.
+
+## Blind-reservation card accounting
+
+Blind reservations remain excluded from external transition parity. The local
+contract now checks the new card's requested tier, unique card partition and
+per-tier deck counts before and after, the single-card deck decrement, unchanged
+market, and unchanged purchased cards/bonuses. Reservation order/visibility and
+token transfers remain covered by the earlier local checks.
+
+A pre-fix regression accepted a wrong-tier blind card. New corruption cases
+cover that error, taking a market card, not decrementing the deck, changing the
+market, changing bonuses, and an invalid tier. Both selected and exported branch
+paths are tested. A positive case substitutes a different unseen same-tier
+card and remains excluded: hidden deck order is not available in these exports,
+so this check must not claim to verify the actual top card or RNG.
+
+All 42 Python tests pass. Rechecking the same v2 case files preserves their
+hashes, external classifications, shared successor counts, and winner results.
+New evidence is in `results/reference-v2{,-tier2,-tier3}-blind-cards.summary.json`;
+`results/blind-card-before.txt` records the pre-fix failure.

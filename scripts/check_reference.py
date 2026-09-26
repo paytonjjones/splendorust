@@ -250,6 +250,7 @@ class Comparison:
             if check_successors:
                 self.check_reservation_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_token_bookkeeping(before, choice["after"], choice["actions"])
+                self.check_blind_card_bookkeeping(before, choice["after"], choice["actions"])
             if isinstance(action, str):
                 counts["local_" + action] += 1
             else:
@@ -360,6 +361,39 @@ class Comparison:
                     expected.pop(slot)
             require(actual == expected, "reservation identity, visibility, or order changed")
 
+    def check_blind_card_bookkeeping(self, before, after, actions):
+        if actions[0][0] != 2:
+            return
+        tier = actions[0][1]
+        require(tier < 3, 'invalid blind reservation tier')
+        actor = before['current']
+        card = after['players'][actor]['reserved'][-1]['card']
+        require(type(card) is int and 0 <= card < len(self.cards)
+                and self.cards[card].deck_id == tier, 'blind reservation card tier mismatch')
+        require(before['market'] == after['market'], 'blind reservation changed market')
+        expected = list(before['remaining'])
+        require(len(expected) == 3 and expected[tier] > 0, 'blind reservation from empty deck')
+        expected[tier] -= 1
+        require(after['remaining'] == expected, 'blind reservation deck count mismatch')
+        for old, new in zip(before['players'], after['players']):
+            require(old['owned'] == new['owned'] and old['bonuses'] == new['bonuses'],
+                    'blind reservation changed purchased cards or bonuses')
+        for snapshot in (before, after):
+            require(isinstance(snapshot['remaining'], list) and len(snapshot['remaining']) == 3
+                    and all(type(n) is int and 0 <= n <= 40 for n in snapshot['remaining']),
+                    'invalid blind reservation deck counts')
+            used = [c for c in snapshot['market'] if c != 255]
+            for player in snapshot['players']:
+                used.extend(player['owned'])
+                used.extend(r['card'] for r in player['reserved'])
+            require(all(type(c) is int and 0 <= c < len(self.cards) for c in used)
+                    and len(used) == len(set(used)), 'blind reservation card partition duplicate or invalid ID')
+            remaining = [sum(c.deck_id == t for c in self.cards)
+                         - sum(self.cards[c].deck_id == t for c in used) for t in range(3)]
+            require(snapshot['remaining'] == remaining, 'blind reservation card partition count mismatch')
+        # The partition and unchanged prior reservations imply that the new card
+        # was in the requested deck. Its order in that deck is not observable here.
+
     def check_token_bookkeeping(self, before, after, actions):
         # Local contract for all branches, including reference exclusions.
         # This is not an independent reference transition comparison.
@@ -419,6 +453,7 @@ class Comparison:
         self.validate_path(actions, noble_id)
         self.check_reservation_bookkeeping(before, after, actions)
         self.check_token_bookkeeping(before, after, actions)
+        self.check_blind_card_bookkeeping(before, after, actions)
         if actions[0][0] == 2:
             return "blind_reservation"
         rule = self.hydrate(before, after)

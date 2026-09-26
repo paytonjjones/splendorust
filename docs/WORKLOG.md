@@ -820,3 +820,28 @@ excluded, and that choice has no successor snapshot. Removed that unsupported
 test assumption. Token corruption coverage is explicitly three exclusion
 categories, not four; the new accounting call also applies to seven-card
 successors when they are exported.
+
+## Blind-reservation card accounting
+
+Continued from `6b9f2b4`. Reproduced accepted wrong-tier card corruption on an
+excluded blind-reservation turn. Existing checks covered append visibility,
+reservation order, and token transfers but not the new card's source tier or
+partition. Added local checks for requested tier, unique IDs, per-tier partition
+counts, one deck decrement, unchanged market, and unchanged ownership/bonuses.
+Both selected turns and branch successors invoke the check before exclusion.
+
+Regression cases reject wrong tier, stolen market identity, stale deck count,
+market removal, changed bonus, and invalid requested tier. A same-tier unseen
+alternative remains accepted by the local contract, explicitly demonstrating
+that hidden top-card/RNG parity is not claimed. Preserved the pre-fix failure.
+
+All 42 Python tests pass with the pinned external implementation. All three
+current workloads pass again with exactly the same external counts, coverage,
+winner classifications, and input hashes. New *-blind-cards.summary.json files
+preserve this stronger local validation without overwriting earlier evidence.
+No Rust or runtime behavior changed; source remains 5fbacedf05ec987b.
+
+Next: audit complete-turn metadata on excluded paths. The checker compares
+current/terminal through the reference only on shared actions. Establish whether
+an excluded turn can carry an unchanged turn counter, wrong next player, or
+incorrect final-round transition while still receiving a valid exclusion label.

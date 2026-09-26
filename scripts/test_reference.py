@@ -114,6 +114,43 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'token'):
             self.comparison.compare_choices(case, check_successors=True)
 
+    def test_blind_reservation_cannot_steal_cards_or_change_deck_accounting(self):
+        original = self.cases[0]
+        branch = next(c for c in original['choices'] if c['actions'][0][0] == 2)
+        actor = original['before']['current']
+        tier = branch['actions'][0][1]
+        case = {'before': original['before'], 'after': branch['after'], 'actions': branch['actions']}
+        self.assertEqual(self.comparison.compare(case), 'blind_reservation')
+        used = set(original['before']['market'])
+        wrong_tier = next(i for i, card in enumerate(self.comparison.cards)
+                          if card.deck_id != tier and i not in used)
+        mutations = [
+            lambda c: c['after']['players'][actor]['reserved'][-1].update(card=wrong_tier),
+            lambda c: c['after']['players'][actor]['reserved'][-1].update(card=c['before']['market'][0]),
+            lambda c: c['after']['remaining'].__setitem__(tier, c['before']['remaining'][tier]),
+            lambda c: c['after']['market'].__setitem__(0, 255),
+            lambda c: c['after']['players'][actor]['bonuses'].__setitem__(0, 1),
+            lambda c: c['actions'][0].__setitem__(1, 255),
+        ]
+        for mutate in mutations:
+            bad = copy.deepcopy(case)
+            mutate(bad)
+            with self.assertRaisesRegex(ValueError, 'blind'):
+                self.comparison.compare(bad)
+        bad = copy.deepcopy(original)
+        choice = next(c for c in bad['choices'] if c['actions'][0][0] == 2)
+        choice['after']['players'][actor]['reserved'][-1]['card'] = wrong_tier
+        with self.assertRaisesRegex(ValueError, 'blind'):
+            self.comparison.compare_choices(bad, check_successors=True)
+        alternative = copy.deepcopy(case)
+        drawn = alternative['after']['players'][actor]['reserved'][-1]['card']
+        replacement = next(i for i, card in enumerate(self.comparison.cards)
+                           if card.deck_id == tier and i not in used and i != drawn)
+        alternative['after']['players'][actor]['reserved'][-1]['card'] = replacement
+        # The export has no original deck order; another unseen same-tier card
+        # is consistent with this local contract and must not be called parity.
+        self.assertEqual(self.comparison.compare(alternative), 'blind_reservation')
+
     def test_reservation_visibility_cannot_change_on_an_unrelated_take(self):
         case = json.loads((ROOT / "scripts/fixtures/reference-reservation-visibility.json").read_text())
         self.assertEqual(self.comparison.compare(case), "matched")
