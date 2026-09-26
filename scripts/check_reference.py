@@ -106,17 +106,12 @@ class Comparison:
                 "nobles": sorted(self.noble_ids[n[0]] for n in state.board.nobles),
                 "current": rule.current_agent_index, "terminal": rule.gameEnds()}
 
-    def compare(self, case):
-        before, after, actions = case["before"], case["after"], case["actions"]
+    def candidate(self, before, actions, noble_id, rule):
         tag, payload = actions[0][0], actions[0][1:]
         if tag == 2:
             return "blind_reservation"
-        rule = self.hydrate(before, after)
         p = before["players"][before["current"]]
-        q = after["players"][before["current"]]
-        gained = set(q["nobles"]) - set(p["nobles"])
-        require(len(gained) <= 1, "multiple noble acquisitions")
-        noble = self.nobles[next(iter(gained))] if gained else None
+        noble = self.nobles[noble_id] if noble_id != 255 else None
         action = {"noble": noble}
         if tag in (0, 1):
             collected = payload[:5] + [0] if tag == 0 else [0]*5 + [int(before["bank"][5] > 0)]
@@ -133,7 +128,9 @@ class Comparison:
             card = self.cards[card_id]
             if p["bonuses"][COLORS.index(card.colour)] == 7:
                 return "seven_card_limit"
-            payment = [a-b for a, b in zip(p["tokens"], q["tokens"])]
+            payment = next(a[1:6] for a in actions if a[0] == 5)
+            cost = sum(max(card.cost.get(c, 0) - p["bonuses"][i], 0) for i, c in enumerate(COLORS[:5]))
+            payment = payment + [cost - sum(payment)]
             paid = {c: n for c, n in zip(COLORS, payment) if n}
             if paid != rule.resources_sufficient(rule.current_game_state.agents[before["current"]], card.cost):
                 return "optional_gold_payment"
@@ -141,6 +138,57 @@ class Comparison:
                           card_position=divmod(payload[0], 4) if tag == 3 else (3, payload[0]), returned_gems=paid)
         else:
             raise ValueError(f"unexpected main action {tag}")
+        return action
+
+    @staticmethod
+    def signature(action):
+        return (action["type"], action["card"].code if "card" in action else None,
+                tuple(action.get("collected_gems", {}).get(c, 0) for c in COLORS),
+                tuple(action.get("returned_gems", {}).get(c, 0) for c in COLORS),
+                action["noble"][0] if action["noble"] else None)
+
+    def compare_choices(self, case):
+        before = case["before"]
+        rule = self.hydrate(before, before)
+        local, reference = set(), set()
+        counts = collections.Counter()
+        for choice in case["choices"]:
+            action = self.candidate(before, choice["actions"], choice["noble"], rule)
+            if isinstance(action, str):
+                counts["local_" + action] += 1
+            else:
+                key = self.signature(action)
+                require(key not in local, "duplicate local compound action")
+                local.add(key)
+        for action in rule.getLegalActions(rule.current_game_state, before["current"]):
+            if action["type"] == "pass":
+                counts["reference_pass"] += 1
+                continue
+            if action["type"] == "collect_diff" and sum(action["collected_gems"].values()) != min(3, sum(n > 0 for n in before["bank"][:5])):
+                counts["reference_reduced_take"] += 1
+                continue
+            key = self.signature(action)
+            require(key not in reference, "duplicate reference compound action")
+            reference.add(key)
+        require(local == reference, f"action-set mismatch: local only {local - reference}, reference only {reference - local}")
+        counts["positions"] += 1
+        counts["shared_choices"] += len(local)
+        return counts
+
+    def compare(self, case):
+        before, after, actions = case["before"], case["after"], case["actions"]
+        if not actions:
+            require(case.get("status") == "no_legal_action" and before == after and not before["terminal"], "invalid blocked-state record")
+            return "no_legal_action"
+        if actions[0][0] == 2:
+            return "blind_reservation"
+        rule = self.hydrate(before, after)
+        actor = before["current"]
+        gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
+        require(len(gained) <= 1, "multiple noble acquisitions")
+        action = self.candidate(before, actions, next(iter(gained)) if gained else 255, rule)
+        if isinstance(action, str):
+            return action
         legal = rule.getLegalActions(rule.current_game_state, before["current"])
         require(action in legal, f"reference rejects shared action: {action}")
         rule.update(action)
@@ -148,10 +196,6 @@ class Comparison:
         expected = {key: after[key] for key in actual if key != "players"}
         expected["players"] = [{**{k: v for k, v in p.items() if k != "reserved"},
                                 "reserved": [r["card"] for r in p["reserved"]]} for p in after["players"]]
-        # The Rust terminal state retains the last actor; reference update
-        # advances to seat zero. Compare turn order before normal termination.
-        if after["terminal"]:
-            expected["current"] = 0
         require(actual == expected, f"successor mismatch: expected {expected}, got {actual}")
         return "matched"
 
@@ -165,6 +209,7 @@ def main():
     comparison = Comparison(args.reference.resolve())
     counts = collections.Counter()
     categories = collections.Counter()
+    choice_counts = collections.Counter()
     digest = hashlib.sha256()
     with args.cases.open("rb") as stream:
         first = next(stream)
@@ -176,6 +221,8 @@ def main():
             case = json.loads(line)
             try:
                 result = comparison.compare(case)
+                if case.get("choices") is not None:
+                    choice_counts.update(comparison.compare_choices(case))
             except (ValueError, KeyError, IndexError) as exc:
                 raise ValueError(f"case line {line_number}, seed {case['seed']}, turn {case['before']['turns']}: {exc}") from exc
             counts[result] += 1
@@ -191,8 +238,8 @@ def main():
               "harness_sha256": hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),
               "exporter_sha256": hashlib.sha256((ROOT / "crates/splendor-arena/examples/parity_export.rs").read_bytes()).hexdigest(),
               "cards_matched": 90, "nobles_matched": 10,
-              "cases": dict(counts), "matched_coverage": dict(categories),
-              "scope": "Selected shared complete-turn transitions; aligned exogenous draws. Not full action-set, RNG, observation, or outcome parity."}
+              "cases": dict(counts), "matched_coverage": dict(categories), "action_sets": dict(choice_counts),
+              "scope": "Shared complete-turn transitions and sampled shared action sets; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."}
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(text)

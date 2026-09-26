@@ -39,6 +39,27 @@ of a collected color, and 64 optional gold payments. These are counted, not
 silently removed. The summary includes source, exporter, harness, license,
 and case-file identifiers. The compressed cases preserve the exact inputs.
 
+## Complete action sets
+
+A second export of the same workload enumerates every complete-turn path at
+every tenth turn, plus each blocked position. This includes payment, return,
+and noble branches. After explicit rule-difference filters, both engines have
+exactly the same **10,258 shared choices at 574 positions**. Two of these
+positions have no local legal action; the reference offers a pass.
+
+The local exclusions are 981 blind reservations, 288 optional gold payments,
+and 5,046 returns of a collected color. The reference exclusions are 2,257
+reduced takes and two passes. Counts refer to compound turn paths, so several
+paths can start with the same main action. Duplicate shared paths fail the
+check. Missing or extra shared choices also fail it. The seven-card limit is
+an explicit filter but was not reached in this workload.
+
+Evidence: `docs/results/reference-choices.summary.json` and its compressed
+case file. Use a third exporter argument of `10` to reproduce this sampling.
+An argument of `1` checks every visited position; `0` disables regular
+choice sampling. Blocked states always include their empty choice set.
+The optional tests also inject missing and duplicate choices.
+
 ## Differences and limits
 
 The publisher's refreshed rules remain the rule authority:
@@ -49,7 +70,7 @@ https://cdn.svc.asmodee.net/production-asmodeeca/uploads/2022/01/SCSPL01EN_SPLEN
 | Blind reservations | No action | Supported; excluded from shared-turn check |
 | Gold payment | Uses colored tokens first | Preserves optional gold use; those payments excluded |
 | Token returns | Cannot return a collected color | Preserves every excess-return choice; those returns excluded |
-| Reduced takes | Allows smaller takes near the hand limit | Local takes follow available-pile count; full action-set parity not yet checked |
+| Reduced takes | Allows smaller takes near the hand limit | Local takes follow available-pile count; Shared full-turn choices checked after explicit filters |
 | Bonus count | Blocks a purchase at exactly seven cards of that color | No such local cap; excluded if encountered |
 | Nobles | Includes a choice in each compound action | Local pending phase or automatic single choice; compared after complete turns |
 | No legal action | Adds pass, ends when all pass | Local engine reports unresolved rules gap, with no winner |

@@ -23,16 +23,44 @@ fn snapshot(state: &GameState) -> Value {
         "terminal": state.is_terminal(), "final_round": o.final_round, "turns": o.turns})
 }
 
+fn complete_choices(
+    state: &GameState,
+    actor: usize,
+    old_nobles: u16,
+    path: &mut Vec<[u8; 7]>,
+    out: &mut Vec<Value>,
+) {
+    if !path.is_empty() && matches!(state.phase(), Phase::Main | Phase::Terminal) {
+        let gained = state.observe(actor).players[actor].nobles & !old_nobles;
+        out.push(json!({"actions": path, "noble": if gained == 0 { NONE } else { gained.trailing_zeros() as u8 }}));
+        return;
+    }
+    let mut legal = ActionSet::new();
+    state.legal_actions(&mut legal);
+    for action in legal {
+        let mut next = state.clone();
+        next.apply_action(action).expect("generated legal action");
+        next.check_invariants().expect("branch invariants");
+        path.push(encode(action));
+        complete_choices(&next, actor, old_nobles, path, out);
+        path.pop();
+    }
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = std::env::args().skip(1);
     let games: u64 = args.next().unwrap_or_else(|| "20".into()).parse()?;
     let seed: u64 = args.next().unwrap_or_else(|| "92000000".into()).parse()?;
+    let choice_interval: u32 = args.next().unwrap_or_else(|| "0".into()).parse()?;
+    if games == 0 {
+        return Err("games must be positive".into());
+    }
     let mut out = BufWriter::new(io::stdout().lock());
     writeln!(
         out,
         "{}",
         json!({"format": 1, "engine": ENGINE_VERSION,
-        "source_id": env!("SPLENDOR_SOURCE_ID"), "games_per_player_count": games, "seed": seed})
+        "source_id": env!("SPLENDOR_SOURCE_ID"), "games_per_player_count": games, "seed": seed, "choice_interval": choice_interval})
     )?;
     for count in 2..=4 {
         for game in 0..games {
@@ -45,6 +73,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     break;
                 }
                 let before = snapshot(&state);
+                let choices =
+                    if choice_interval > 0 && state.turns().is_multiple_of(choice_interval) {
+                        let actor = state.current_player();
+                        let mut paths = Vec::new();
+                        complete_choices(
+                            &state,
+                            actor,
+                            state.observe(actor).players[actor].nobles,
+                            &mut Vec::new(),
+                            &mut paths,
+                        );
+                        Some(paths)
+                    } else {
+                        None
+                    };
                 let mut actions = Vec::new();
                 loop {
                     let mut legal = ActionSet::new();
@@ -62,13 +105,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 if actions.is_empty() {
+                    writeln!(
+                        out,
+                        "{}",
+                        json!({"seed": setup, "policy": policy,
+                        "before": before, "choices": [], "actions": [], "after": snapshot(&state), "status": "no_legal_action"})
+                    )?;
                     break;
                 }
                 writeln!(
                     out,
                     "{}",
                     json!({"seed": setup, "policy": policy,
-                    "before": before, "actions": actions, "after": snapshot(&state)})
+                    "before": before, "choices": choices, "actions": actions, "after": snapshot(&state)})
                 )?;
             }
         }
