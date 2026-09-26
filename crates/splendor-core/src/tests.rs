@@ -601,3 +601,31 @@ fn noble_csv_matches_runtime_data() {
         assert_eq!(&cells[2..], &NOBLES[i]);
     }
 }
+
+#[test]
+fn determinization_rejects_disclosed_opponent_blind_reservation() {
+    let mut s = GameState::new(2, 8).unwrap();
+    s.apply_action(Action::ReserveDeck(1)).unwrap();
+    let mut o = s.observe(1);
+    o.players[0].reserved[0].card = s.observe(0).players[0].reserved[0].card;
+    // A claimed opponent observation cannot contain this private identity.
+    assert!(o.determinize(&mut Rng::new(8)).is_err());
+}
+
+#[test]
+fn determinization_rejects_phantom_reservation_count() {
+    let s = GameState::new(2, 8).unwrap();
+    let mut o = s.observe(0);
+    // Inactive seats have no reservations, even when empty slot data look valid.
+    o.reserved_counts[3] = 1;
+    assert!(o.determinize(&mut Rng::new(8)).is_err());
+}
+
+#[test]
+fn determinization_rejects_unlisted_reservation() {
+    let mut s = GameState::new(2, 8).unwrap();
+    s.apply_action(Action::ReserveVisible(0)).unwrap();
+    let mut o = s.observe(0);
+    o.reserved_counts[0] = 0;
+    assert!(o.determinize(&mut Rng::new(8)).is_err());
+}

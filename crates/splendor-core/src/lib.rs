@@ -698,6 +698,9 @@ impl Observation {
                         return Err(RuleError::InvalidObservation);
                     }
                     if r.card != NONE {
+                        if pi != self.viewer as usize && !r.public {
+                            return Err(RuleError::InvalidObservation);
+                        }
                         add(r.card)?;
                     } else if pi == self.viewer as usize || r.public {
                         return Err(RuleError::InvalidObservation);
