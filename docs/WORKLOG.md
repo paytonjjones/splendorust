@@ -435,3 +435,26 @@ hypothesis, with new screen/confirmation seeds. E11 already tested recurrence
 handling alone and E12 affordability alone; do not present a combination as an
 established improvement. An alternative useful next task is to inspect E12's
 three unchanged blocked games for public features missed by the narrow trigger.
+
+## E13 combination screen rejected
+
+Continued from `d10ac5a`. Recorded hypothesis at `bb68482`, then combined the
+exact E12 root filter with E11 recurrence handling. Initial patch integration
+failed candidate registration; tests caught it before games ran and the failed
+gate record is retained. Corrected candidate passed legality, repeatability,
+hidden-information, and focused recurrence tests.
+
+Four known failure probes completed. Fresh 106,000,000 screen: 1,994 complete,
+zero caps, six blocks; original-search control: 1,948 complete, 48 caps, four
+blocks. All control caps and one block became complete, but three completed
+control games became blocked. Win interval [47.04%, 55.91%] proves no strength
+gain. Gate rejects; confirmation 1,106,000,000 unused. Full reports, paired
+statuses, probe histories, source patch, and failure records archived.
+
+Candidate removed and release binary restored. Candidate's 57 and baseline's
+55 release workspace tests pass, as do formatting and strict all-target Clippy.
+No core or rule changes. Next valuable task: reproduce the three newly blocked
+E13 games and identify whether the block affects the candidate or opponent and
+whether it follows an escape purchase or a scarcity-filter decision. Compare
+that evidence before changing either component. Do not assume the components'
+individual effects can be inferred from this combined screen alone.

@@ -1,0 +1,151 @@
+diff --git a/crates/splendor-agents/src/lib.rs b/crates/splendor-agents/src/lib.rs
+index 1f24de1..31dac86 100644
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -284,6 +284,7 @@ pub struct SearchAgent {
+     rng: Rng,
+     pub config: SearchConfig,
+     pub simulations: u64,
++    preserve_affordable: bool,
+ }
+ impl SearchAgent {
+     pub fn new(seed: u64, config: SearchConfig) -> Self {
+@@ -291,9 +292,28 @@ impl SearchAgent {
+             rng: Rng::new(seed),
+             config,
+             simulations: 0,
++            preserve_affordable: false,
+         }
+     }
+ }
++fn affordable_take(o: &Observation, action: Action) -> bool {
++    let Action::Take(take) = action else {
++        return false;
++    };
++    let mut p = o.players[o.current as usize];
++    for (c, amount) in take.into_iter().enumerate() {
++        p.tokens[c] += amount;
++    }
++    p.token_count() <= 10 && target_ids(o).any(|id| deficit(&p, id) == 0)
++}
++
++fn filter_affordable(o: &Observation, legal: &[Action]) -> bool {
++    o.reserved_counts[o.current as usize] == 3
++        && o.bank[..5].iter().map(|&v| u16::from(v)).sum::<u16>() <= 10
++        && legal.iter().all(|a| matches!(a, Action::Take(_)))
++        && legal.iter().any(|&a| affordable_take(o, a))
++}
++
+ fn evaluation(o: &Observation, root: usize, kind: Evaluation) -> f64 {
+     let value = |p: &Player| {
+         p.score as f64
+@@ -319,9 +339,11 @@ impl Agent for SearchAgent {
+         if o.phase != Phase::Main || legal.len() == 1 || self.config.iterations == 0 {
+             return best(o, legal, true);
+         }
++        let restrict = self.preserve_affordable && filter_affordable(o, legal);
+         let base = Some(potential(o, &o.players[o.current as usize]));
+         let mut ranked: Vec<_> = legal
+             .iter()
++            .filter(|&&a| !restrict || affordable_take(o, a))
+             .map(|&a| (action_score_cached(o, a, true, base), a))
+             .collect();
+         ranked.sort_by_key(|&(score, _)| std::cmp::Reverse(score));
+@@ -399,8 +421,68 @@ impl Agent for SearchAgent {
+         candidates[j]
+     }
+ }
++/// Experimental observation-only escape from repeated main and return positions.
++pub struct CycleEscapeAgent {
++    inner: SearchAgent,
++    rng: Rng,
++    recent_main: std::collections::VecDeque<Observation>,
++    recent_return: std::collections::VecDeque<Observation>,
++}
++impl CycleEscapeAgent {
++    pub fn new(seed: u64, config: SearchConfig) -> Self {
++        Self {
++            inner: SearchAgent::new(seed, config),
++            rng: Rng::new(seed ^ 0x6a09e667f3bcc909),
++            recent_main: std::collections::VecDeque::with_capacity(16),
++            recent_return: std::collections::VecDeque::with_capacity(16),
++        }
++    }
++}
++impl Agent for CycleEscapeAgent {
++    fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
++        let preferred = self.inner.select_action(o, legal);
++        let recent = match o.phase {
++            Phase::Main => &mut self.recent_main,
++            Phase::Return => &mut self.recent_return,
++            _ => return preferred,
++        };
++        let mut position = o.clone();
++        position.turns = 0;
++        let repeated = recent.contains(&position);
++        if recent.len() == 16 {
++            recent.pop_front();
++        }
++        recent.push_back(position);
++        if repeated && o.phase == Phase::Main && matches!(preferred, Action::Take(_)) {
++            let purchases: Vec<_> = legal
++                .iter()
++                .copied()
++                .filter(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
++                .collect();
++            if !purchases.is_empty() {
++                return best(o, &purchases, true);
++            }
++        }
++        if repeated && o.phase == Phase::Return && legal.len() > 1 {
++            let index = self.rng.index(legal.len() - 1);
++            return legal
++                .iter()
++                .copied()
++                .filter(|&a| a != preferred)
++                .nth(index)
++                .unwrap();
++        }
++        preferred
++    }
++}
++
+ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dyn Agent>, String> {
+     Ok(match name {
++        "search-combined" => {
++            let mut agent = CycleEscapeAgent::new(seed, search.clone());
++            agent.inner.preserve_affordable = true;
++            Box::new(agent)
++        }
+         "random" => Box::new(RandomAgent::new(seed)),
+         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
+         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
+@@ -415,7 +497,7 @@ mod tests {
+     use splendor_core::GameState;
+     #[test]
+     fn every_agent_chooses_legal_and_is_reproducible() {
+-        for name in ["random", "greedy", "strong", "search"] {
++        for name in ["random", "greedy", "strong", "search", "search-combined"] {
+             let config = SearchConfig {
+                 iterations: 8,
+                 depth: 2,
+@@ -451,11 +533,13 @@ mod tests {
+             depth: 3,
+             ..Default::default()
+         };
+-        let mut a = SearchAgent::new(4, config.clone());
+-        let mut b = SearchAgent::new(4, config);
+-        assert_eq!(
+-            a.select_action(&o, &aa),
+-            b.select_action(&alternative.observe(0), &aa)
+-        );
++        for name in ["search", "search-combined"] {
++            let mut a = make_agent(name, 4, &config).unwrap();
++            let mut b = make_agent(name, 4, &config).unwrap();
++            assert_eq!(
++                a.select_action(&o, &aa),
++                b.select_action(&alternative.observe(0), &aa)
++            );
++        }
+     }
+ }

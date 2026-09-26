@@ -516,3 +516,41 @@ games, fresh seed 106,000,000, four threads, 128 iterations, depth 8, width 6.
 Use 20,000 confirmation games with seed 1,106,000,000 only if the gate permits.
 Run same-seed search/search as a completion control. Report regressions and
 unfinished games, and remove the candidate if rejected.
+
+### E13 result: rejected
+
+The first integration attempt stopped before any games: overlapping archived
+patches left the new agent name unregistered. Both candidate legality/privacy
+tests failed, and the gate recorded an execution failure. Those run and decision
+records are retained as `e13-integration-failure-*`; no screen seed was consumed.
+The corrected combination then passed those tests and both recurrence tests.
+
+All four development probes completed. The known E11 block finished in 78 turns;
+the three E12 cap regressions finished in 66, 88, and 84 turns. At the known
+scarcity position, all 32 tested agent seeds chose an affordable-card take and
+repeated their choices exactly. These are reused probes, not fresh strength
+evidence.
+
+The fresh screen completed 1,994/2,000 games, with zero caps and six blocks.
+Candidate completed-game credit was 51.48%, with unconditional interval
+[47.04%, 55.91%]. The same-seed original-search control completed 1,948 games,
+with 48 caps and four blocks. Paired categories: 1,945 completed in both; all
+48 control caps became complete; one control block became complete; three
+blocks stayed blocked; and three control completions became blocked.
+Thus recurrence handling has a clear completion effect in this workload, but
+the combined policy also introduces blocking regressions and proves no strength
+gain. No broader opponent or compute-budget claim follows.
+
+The gate rejected the incomplete screen. Confirmation seed 1,106,000,000 remains
+unused. The candidate was removed from active source. Apply
+`docs/e13-combined.patch` to `bb68482` to reproduce production fingerprint
+`bc5ac15a9e3914a2`. Probe and focused test sources are saved as `docs/e13-*.rs`;
+copy them back to their respective arena examples/tests directories to run.
+All raw reports, paired categories, gate decisions, settings, and four complete
+probe histories are under `docs/results/e13-*`.
+
+The corrected candidate passed formatting, strict all-target workspace Clippy,
+and 57 release workspace tests including its two focused recurrence tests.
+The restored baseline passed formatting, strict all-target workspace Clippy,
+and its 55 release workspace tests. The normal release binary was rebuilt.
+No rules, engine version, or replay semantics changed.
