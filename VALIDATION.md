@@ -117,8 +117,8 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 56 Python tests include 28 reference
-tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 28.
+silently skipping the reference tests. The 57 Python tests include 29 reference
+tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 29.
 A fresh checkout and all 29 tests passed locally when this workflow was first added.
 Hosted Linux/macOS workflow results are not yet verified.
 
@@ -401,3 +401,21 @@ This run adds fresh seeds and denser coverage; it does not close excluded
 rules or hidden-information parity. See the fresh all-position section in
 [docs/PARITY.md](docs/PARITY.md) and the `reference-dense-v2` archive, summary,
 and workload manifest in `docs/results`. No Rust or agent code changed.
+
+## External retained deck partition
+
+A corruption audit showed that equal deck counts did not establish a correct
+retained reference partition. A duplicate hidden card and a card swapped
+between tiers both passed the prior check when the next action drew no card.
+The new regression test failed for both cases before the fix.
+
+The harness now checks every normalized external state for all 90 unique
+card identities across decks, market, purchases, and reservations, plus
+correct deck and market tiers. It checks three decks and four market slots
+per tier. A deck-order reversal remains accepted: the check does not assert
+hidden-order or RNG equality. Both corruptions now fail before the next turn.
+
+All 57 Python tests pass with the pinned reference. The dense 60-game archive
+and both targeted depletion archives pass again with unchanged comparison
+counts. Results are the three `*-partition.summary.json` reports. Rust, core
+transitions, agents, and engine version are unchanged.

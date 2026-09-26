@@ -168,6 +168,26 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "retained reference state differs"):
             chains.add(second, "matched")
 
+    def test_retained_deck_partition_rejects_hidden_corruption(self):
+        first, second = self.cases[:2]
+        for corruption in ("duplicate", "wrong_tier"):
+            with self.subTest(corruption=corruption):
+                chains = SharedChains(self.comparison)
+                chains.add(first, "matched")
+                decks = chains.rule.current_game_state.board.decks
+                if corruption == "duplicate":
+                    decks[0][0] = decks[0][1]
+                else:
+                    decks[0][0], decks[1][0] = decks[1][0], decks[0][0]
+                with self.assertRaisesRegex(ValueError, "reference deck partition"):
+                    chains.add(second, "matched")
+        chains = SharedChains(self.comparison)
+        chains.add(first, "matched")
+        for deck in chains.rule.current_game_state.board.decks:
+            deck.reverse()
+        chains.add(second, "matched")
+        self.assertEqual(chains.finish()["turns"], 2)
+
     def test_exclusions_do_not_hide_token_corruption(self):
         examples = {}
         for case in self.cases:

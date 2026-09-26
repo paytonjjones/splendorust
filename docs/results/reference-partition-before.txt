@@ -1,0 +1,23 @@
+.........................FF.........
+======================================================================
+FAIL: test_retained_deck_partition_rejects_hidden_corruption (test_reference.ReferenceTests.test_retained_deck_partition_rejects_hidden_corruption) (corruption='duplicate')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_reference.py", line 182, in test_retained_deck_partition_rejects_hidden_corruption
+    with self.assertRaisesRegex(ValueError, "reference deck partition"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_retained_deck_partition_rejects_hidden_corruption (test_reference.ReferenceTests.test_retained_deck_partition_rejects_hidden_corruption) (corruption='wrong_tier')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_reference.py", line 182, in test_retained_deck_partition_rejects_hidden_corruption
+    with self.assertRaisesRegex(ValueError, "reference deck partition"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 35 tests in 5.150s
+
+FAILED (failures=2)

@@ -685,3 +685,19 @@ archive hashes, all setup seeds, and their disjointness from the two prior
 60-game archives and both depletion histories. All checks use the same pinned
 MIT reference. No external full-rule, RNG, observation, or winner parity is
 claimed. No Rust or agent code changed.
+
+## Retained deck partition corruption check
+
+The external-state normalizer now checks that all 90 cards occur exactly once
+across hidden decks, market, purchased cards, and reservations. Deck and market
+cards must be in the correct tier. Before this change, equal deck counts could
+hide a duplicate undrawn card or a cross-tier swap. The regression test failed
+for both corruptions before the fix and passes after it. Reversing deck order
+remains valid; no hidden-order equivalence is claimed.
+
+The fresh dense workload and both depletion histories were checked again.
+All prior counts are unchanged. The dense run still matches 95,867 shared
+successors; the depletion histories still match 276 and 313. See the three
+`*-partition.summary.json` reports and the before/after test logs
+`reference-partition-before.txt` and `reference-partition-after.txt`.
+All 57 Python tests pass. No new games or seeds were introduced in this check.

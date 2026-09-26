@@ -207,7 +207,23 @@ class Comparison:
                 deck.remove(card)
                 deck.append(card)
 
+    def check_reference_partition(self, rule):
+        state = rule.current_game_state
+        cards = []
+        require(len(state.board.decks) == len(state.board.dealt) == 3,
+                "invalid reference deck partition dimensions")
+        for tier, (deck, market) in enumerate(zip(state.board.decks, state.board.dealt)):
+            require(len(market) == 4, "invalid reference deck partition market size")
+            for card in [*deck, *(c for c in market if c is not None)]:
+                require(card.deck_id == tier, "reference deck partition tier mismatch")
+                cards.append(card.code)
+        for player in state.agents:
+            cards.extend(card.code for color in COLORS for card in player.cards[color])
+        require(len(cards) == 90 and len(set(cards)) == 90 and set(cards) == set(self.card_ids),
+                "reference deck partition has missing or duplicate cards")
+
     def normalized(self, rule):
+        self.check_reference_partition(rule)
         state = rule.current_game_state
         players = []
         for p in state.agents:
