@@ -330,3 +330,20 @@ token. Enumerate those return alternatives and the following legal opponent
 turns to learn whether a different return preserves a purchase. Do not assume
 that it does, and do not change an agent before recording a supported hypothesis.
 The E11 candidate remains rejected and removed from active code.
+
+## E11 return alternatives checked
+
+At clean baseline `9af0879`, enumerated all five candidate returns at decision
+37 and all four complete opponent replies per return. All five returns allow
+an immediate block when the opponent takes the returned token. Each also
+permits three opponent purchases that preserve a candidate purchase. This
+rejects the proposed return-only explanation for this failure; no agent change
+was made. Full paths, legal actions, and hashes are archived in
+`docs/results/e11-return-audit.json`, with a maintained offline Rust example.
+The production source fingerprint remains `6fb7813c76f86a6a`. Formatting,
+strict release all-target workspace Clippy, and all 53 release Rust tests pass.
+
+Next: inspect the five Main alternatives at decision 32 and the opponent's
+preceding purchase decisions. Determine whether a public-information feature
+can predict blocking risk before the forced takes. Do not infer probabilities
+from unweighted branch counts or treat this probe as fresh evaluation evidence.

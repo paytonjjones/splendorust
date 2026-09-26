@@ -317,3 +317,31 @@ All 21 Python tests passed, including shared-win clustering, incomplete-outcome
 bounds, interval corruption, record truncation, wrong setup seeds, changed
 sources/settings, and prior evidence preservation. Both real gate runs also
 passed formatting, strict workspace Clippy, and all 51 release Rust tests.
+
+## E11 blocked-return branch audit
+
+An exhaustive local audit checked whether the sole E11 blocked screen game
+could avoid the block by changing its first return. This is a diagnosis of one
+recorded game, not a new agent experiment. The full archived history passes
+replay validation before the audit truncates it at decision 37.
+
+All five legal returns have four complete opponent replies. In each case, taking
+the returned token leaves the candidate with no legal action. The other three
+replies are purchases; each leaves the candidate with one legal purchase and
+at least one token action. Thus all 20 paths are checked, five end in a block,
+and none gives a terminal outcome. No return choice guarantees continued play.
+This evidence does not support a return-only change for this failure. The
+opponent's choice also matters; these branch counts are not probabilities.
+
+The maintained `return_audit` example checks every transition invariant and
+records complete reply paths and next legal actions. Decompress
+`docs/results/e11-blocked-v1.json.gz` to `/tmp/e11-blocked.json`, then run:
+
+```sh
+cargo run --release --locked --example return_audit -- /tmp/e11-blocked.json 37
+```
+
+`docs/results/e11-return-audit.json` records the results, production source
+fingerprint, diagnostic source hash, and input archive hash. Rules and agents
+are unchanged. The next useful diagnosis is the earlier Main choice at decision
+32, where the candidate still had five legal takes.
