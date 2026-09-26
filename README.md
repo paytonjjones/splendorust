@@ -39,13 +39,13 @@ Search options: `--iterations`, `--depth` (completed player turns), `--width`, `
 ## Experiment workflow
 
 ```sh
-python3 scripts/promote.py --candidate strong --baseline greedy --seed 12345
+python3 scripts/promote.py --candidate strong --baseline greedy --seed 12345 --output results/promotion-new
 cargo bench -p splendor-core --bench engine -- --save-baseline before
 # Make one measured change, then:
 cargo bench -p splendor-core --bench engine -- --baseline before
 cargo bench -p splendor-arena --bench arena
 ```
 
-The gate runs checks, a throughput smoke test, a 2,000-game screen, and a 20,000-game confirmation on disjoint seeds. It writes `decision.json`. It rejects unfinished games and can enforce a throughput floor. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
+The gate runs checks, a throughput smoke test, a 2,000-game screen, and a 20,000-game confirmation on disjoint seeds. It requires a new output directory, records parameters in `run.json`, and writes `decision.json`. It rejects unfinished games and can enforce a throughput floor. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [EXPERIMENTS.md](EXPERIMENTS.md), [BENCHMARKS.md](BENCHMARKS.md), and [data/SOURCES.md](data/SOURCES.md).

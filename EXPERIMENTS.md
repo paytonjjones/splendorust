@@ -89,3 +89,20 @@ A regression test reproduced the old failure: with no inputs, the script
 replaced a nonempty index with `[]`. The fix also prevents an input with a
 reused name from silently replacing the original raw evidence. Archive tests
 use a real checked-in paired report and temporary output directories.
+
+## Promotion workflow checks
+
+Each promotion run now needs an unused output directory. `run.json` records
+the parameters and confirmation seed before checks start. A failed command
+writes an explicit rejection. The gate rejects non-finite throughput and
+invalid confidence intervals. Final decisions include raw-report and
+record-set SHA-256 identifiers. Prior evidence is never deleted for a retry.
+The caller must still choose fresh confirmation seeds for each new candidate;
+a new directory alone does not make reused seeds a fresh holdout.
+
+A real smoke run used strong against strong, 20 screen and 20 confirmation
+games, seed 96,000,000, and one thread. All 40 comparison games completed;
+each identity received 50% credit. The gate correctly retained the baseline.
+These small samples test the workflow and do not establish agent strength or
+throughput. Parameters, decision, hashes, and compressed reports are in
+`docs/results/gate-smoke.json` and its linked archives.
