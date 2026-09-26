@@ -31,3 +31,10 @@ There are five adjacent pairs with four bonuses each, and five adjacent triples 
 Source audit caught two issues: bouk's `src/noble.rs` has only nine entries; another inspected implementation (`boardgamers/splendor`, `data.ts`) replaces the white/red/black triple with white/green/red. Neither list was used as the ground truth. The complete seal256 list agrees with the nine valid bouk entries plus the missing white/blue pair.
 
 No reference implementation code was copied. The reference engine chooses the first eligible noble and does not expose a noble-choice action, so full trajectory equivalence would not validate our rules. Its absent repository license is another reason not to embed an adapter or copied implementation.
+
+## Independent transition audit
+
+The optional audit also checks all card and noble tuples against the MIT-licensed
+`roeey777/Splendor-AI` commit `95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b`.
+See [the parity record](../docs/PARITY.md) for the source, license verification,
+transition checks, exclusions, and reproduction commands.
