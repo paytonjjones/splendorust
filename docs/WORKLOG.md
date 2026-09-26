@@ -978,3 +978,17 @@ Next: check the optimized profile to locate the remaining cost before choosing
 another performance edit. Existing independent shared-rule comparisons remain
 bounded by their documented reference exclusions and the published no-action
 gap. Do not repeat rejected E9–E13 policy experiments.
+
+## Post-E14 profile and next hypothesis
+
+Reprofiled the fixed 112m workload at the changed source. All 10,000 full
+records (including trajectory hashes) match the earlier baseline; 9,998 finish
+and two remain blocked. Preserved the full sample and report. Potential remains
+the largest sampled application function. Sample counts do not measure the
+speedup; the separate serial E14 runs do.
+
+Recorded E15 before code edits: cache target cost and worth across token-only
+alternatives, with the original arithmetic as an exact test oracle. Planned
+fresh seeds are 117m and 1,117m. Payment requires different bonuses/ownership
+and must not reuse stale values. Next work is to implement and measure this
+bounded cache, or reject it if the cost/benefit is poor. Goal remains active.

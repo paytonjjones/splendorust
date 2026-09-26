@@ -235,3 +235,20 @@ not a portable speed guarantee or a strength result. Full timing samples,
 commands, reports, source and binary hashes are in
 `docs/results/e14-comparison.json` and its referenced archives. See E14 in
 EXPERIMENTS.md for the pre-edit hypothesis and score-equivalence test.
+
+### Profile after E14
+
+Repeated the original 10,000-game diagnostic workload at source
+`0bcb24bf9c705a56` (112m, 128/8/6, four threads), sampled for five seconds at
+1ms. Full records, including trajectory hashes, equal the earlier profile's
+records: 9,998 completions and two blocked games, arena exit 1. Sample exit 0.
+`potential` remains the largest application top-of-stack entry (9,897 samples),
+followed by action_score_cached (1,259), legal generation (807), and
+determinization (629). Counts are not comparable wall-time shares between
+profiles. Inlining, scheduling and the sampled portion of the workload can
+change attribution. Clean E14 timing evidence is separate above.
+
+Raw sample, report, commands, hashes and summary are retained as
+`docs/results/e14-profile*`. Source inspection identifies repeated discount,
+cost, and card-worth calculations across token-only alternatives. E15 records
+a hypothesis to cache those fixed values before any further agent change.

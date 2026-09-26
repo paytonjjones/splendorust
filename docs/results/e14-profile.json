@@ -1,0 +1,62 @@
+{
+  "process": {
+    "command": [
+      "target/release/splendor",
+      "compare",
+      "--agent-a",
+      "search",
+      "--agent-b",
+      "strong",
+      "--games",
+      "10000",
+      "--seed",
+      "112000000",
+      "--iterations",
+      "128",
+      "--depth",
+      "8",
+      "--width",
+      "6",
+      "--threads",
+      "4",
+      "--output",
+      "/tmp/e14-profile-report.json"
+    ],
+    "pid": 19459,
+    "sample_exit": 0,
+    "sample_output": "Sampling process 19459 for 5 seconds with 1 millisecond of run time between samples\nSampling completed, processing symbols...\nSample analysis of process 19459 written to file /tmp/e14-profile.sample\n",
+    "arena_exit": 1
+  },
+  "engine": "splendorust-v2",
+  "source_id": "0bcb24bf9c705a56",
+  "settings": {
+    "names": [
+      "search",
+      "strong"
+    ],
+    "games": 10000,
+    "seed": 112000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "statuses": {
+    "complete": 9998,
+    "no_legal_action": 2
+  },
+  "raw_report_sha256": "ff70d552e380438dd1c4ed2fbcf16a4da77e9d89a134bfd69621c1944ed3b1d8",
+  "record_set_sha256": "e0bf1038eb7ca74f787274426a439b31805f8b6c6d27a1a189c36f109853f24a",
+  "profile_sha256": "d31631f1f28be8d4ddb9057b10ca14aacc29f96498dae3ee6ba4f987109f9ffb",
+  "sample_seconds": 5,
+  "sample_interval_ms": 1,
+  "previous_profile_records_equal": true,
+  "note": "Profiled elapsed time is not a clean throughput measurement. Collapsed samples can include inlined callees and are not directly comparable runtime shares."
+}

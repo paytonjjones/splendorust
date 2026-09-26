@@ -679,3 +679,24 @@ equality; exact score tests separately support unchanged decisions.
 exits, source IDs, binary hashes, raw report hashes, and record-set hashes.
 All eight full reports and process logs are archived as `e14-[0-7]-*`.
 No rule, RNG, enumeration, or replay semantics changed; engine stays v2.
+
+## E15 hypothesis: cache fixed target values across token alternatives
+
+After E14, the fresh diagnostic sample still identifies potential as the largest
+sampled application function. Each invocation scans up to 15 visible/reserved
+targets and recomputes discounted cost and card worth. Take, Return, and gold
+reservation scoring alter tokens but leave bonuses and owned cards unchanged.
+
+Hypothesis: a fixed-capacity per-decision cache of target discounted costs and
+card worth can reduce this repeated work without changing integer scores.
+Keep the original potential calculation as an independent test oracle. Scope
+cache use to token-only changes; a Payment changes bonuses/ownership and must
+use newly derived values or the original path. Preserve target order, top-three
+ranking, integer division order, hidden-information boundaries, and fallback
+behavior. Use no heap allocation for this cache. Test every legal action across
+seeded 2–4-player trajectories and every phase, including varied token/gold
+holdings and owned-card exclusions. Run all required Rust checks, then serial
+release comparisons and a fresh confirmation seed with exact record equality.
+Keep the change only if the measured benefit supports its added complexity.
+Planned fresh screening seed: 117,000,000; confirmation: 1,117,000,000. These
+seeds have not been run for this hypothesis. No strength promotion is proposed.
