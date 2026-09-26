@@ -20,7 +20,8 @@ fn snapshot(state: &GameState) -> Value {
         .collect();
     json!({"players": players, "current": o.current, "bank": o.bank, "market": o.market,
         "remaining": o.remaining, "nobles": (0..10).filter(|n| o.nobles & (1 << n) != 0).collect::<Vec<_>>(),
-        "terminal": state.is_terminal(), "final_round": o.final_round, "turns": o.turns})
+        "terminal": state.is_terminal(), "final_round": o.final_round, "turns": o.turns,
+        "winner_mask": state.outcome().map(|outcome| outcome.winners)})
 }
 
 fn complete_choices(
@@ -65,7 +66,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut out = BufWriter::new(io::stdout().lock());
     let mut metadata = json!({"format": 1, "engine": ENGINE_VERSION,
         "source_id": env!("SPLENDOR_SOURCE_ID"), "games_per_player_count": games,
-        "seed": seed, "choice_interval": choice_interval});
+        "seed": seed, "choice_interval": choice_interval, "winner_checks": true});
     if include_successors {
         metadata["format"] = json!(2);
         metadata["choice_successors"] = json!(true);

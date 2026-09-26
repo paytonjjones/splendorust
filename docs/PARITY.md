@@ -74,7 +74,7 @@ https://cdn.svc.asmodee.net/production-asmodeeca/uploads/2022/01/SCSPL01EN_SPLEN
 | Bonus count | Blocks a purchase at exactly seven cards of that color | No such local cap; excluded if encountered |
 | Nobles | Includes a choice in each compound action | Local pending phase or automatic single choice; compared after complete turns |
 | No legal action | Adds pass, ends when all pass | Local engine reports unresolved rules gap, with no winner |
-| Tiebreak | Minimum cards computed over all players | Local minimum is among tied leaders; outcome parity not claimed |
+| Tiebreak | Minimum cards computed over all players | Local minimum is among tied leaders; winner differences classified explicitly; lower-place ranks not compared |
 | Information | Full state and decks exposed; no private-information mask | Local agents receive redacted observations; information parity not claimed |
 | Invalid actions | Successor assumes valid input | Local validation rejects invalid actions; error parity not claimed |
 | RNG and replay | Different setup and history representation | Not compared |
@@ -144,7 +144,7 @@ python3 scripts/check_reference.py --reference /tmp/splendor-reference \
 
 The final `true` enables branch snapshots. All earlier scope limits still apply,
 including reference rule exclusions, aligned replacement draws, isolated
-transitions, and no outcome or hidden-information parity claim.
+transitions, and no full outcome or hidden-information parity claim.
 
 ## Targeted boundary samples
 
@@ -178,3 +178,41 @@ python3 scripts/check_reference.py --reference /tmp/splendor-reference \
 
 This extends checked choice and transition coverage. The documented outcome,
 RNG, information, and rule differences still prevent a full-parity claim.
+
+## Normal-game winner masks
+
+New exports include the actual `GameState::outcome()` winner mask, with
+`winner_checks: true` in metadata. Nonterminal snapshots have `null`; a blocked
+state cannot acquire a winner. The harness checks the local mask against
+prestige and the fewest purchased cards among tied leaders. It also checks
+final-round and terminal flags at the exported complete-turn boundaries.
+Required masks cannot be omitted from selected or branch snapshots.
+
+For shared normal finishes, the harness calls the reference's `calScore` and
+compares the set of highest-scoring players. It classifies a difference only
+when a nonleader has fewer cards than every leader, the leaders have unequal
+card counts, and the reference incorrectly retains all tied leaders. Other
+winner mismatches fail the audit. Copying that incorrect shared result into the
+local mask also fails; this is a reference defect, not a local rule variant.
+
+Results on the boundary workload:
+
+| Checked finishes | Winner matches | Known reference tiebreak defect |
+|---|---:|---:|
+| 52 shared selected finishes | 50 | 2 |
+| 802 shared branch finishes | 776 | 26 |
+
+Each set includes one matching shared victory. Branch results overlap selected
+results and must not be added as independent games. Both recorded blocked cases
+have no winner. The known defect appears in three- and four-player games, not
+two-player games. A focused fixture uses setup 95,000,017, turn 107: scores
+16/16/14, purchased-card counts 19/18/16, local winner mask `2`, and reference
+winner mask `3`.
+
+Evidence: `docs/results/reference-winners.jsonl.gz` and its summary. The same
+five-argument boundary export command now includes winner masks. All prior
+paths and snapshot fields were compared and remain unchanged after removing
+the new masks. Old archives remain readable, with no retrospective winner claim.
+The local engine and replay version remain unchanged. Lower-place ranks,
+reference forced-pass outcomes, RNG, and hidden-information behavior remain
+outside the comparison; full parity is not claimed.

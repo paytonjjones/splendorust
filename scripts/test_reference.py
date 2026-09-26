@@ -1,5 +1,6 @@
 """Optional external audit tests: SPLENDOR_REFERENCE=/path/to/checkout python3 -m unittest discover -s scripts -p test_reference.py."""
 import copy
+import collections
 import json
 import os
 import pathlib
@@ -40,6 +41,47 @@ class ReferenceTests(unittest.TestCase):
         bad["actions"][-1][-1] = 1
         with self.assertRaisesRegex(ValueError, "padding"):
             self.comparison.compare(bad)
+
+    def test_winner_checks_keep_reference_tiebreak_defect_explicit(self):
+        case = json.loads((ROOT / "scripts/fixtures/reference-winner-tiebreak.json").read_text())
+        counts = collections.Counter()
+        self.assertEqual(self.comparison.compare(case, counts), "matched")
+        self.assertEqual(case["after"]["winner_mask"], 2)
+        self.assertEqual(counts["reference_global_fewest_card_defect"], 1)
+        self.assertEqual(counts["winner_matches"], 0)
+        from unittest.mock import patch
+        with patch.object(self.comparison.Rule, "calScore", return_value=1):
+            with self.assertRaisesRegex(ValueError, "unclassified reference winner mismatch"):
+                self.comparison.compare(case)
+        # Copying the reference's incorrect shared result must not pass locally.
+        case["after"]["winner_mask"] = 3
+        with self.assertRaisesRegex(ValueError, "leader-only fewest-card rule"):
+            self.comparison.compare(case)
+
+    def test_unfinished_or_corrupt_winner_data_is_rejected(self):
+        case = copy.deepcopy(self.cases[0])
+        case["after"]["winner_mask"] = 1
+        with self.assertRaisesRegex(ValueError, "unfinished state has a winner"):
+            self.comparison.compare(case)
+        case = copy.deepcopy(self.cases[0])
+        case["after"]["final_round"] = True
+        with self.assertRaisesRegex(ValueError, "final-round flag"):
+            self.comparison.compare(case)
+        case = copy.deepcopy(self.cases[0])
+        del case["after"]["winner_mask"]
+        with self.assertRaisesRegex(ValueError, "missing exported winner mask"):
+            validate_sampling(self.metadata, case)
+        case = copy.deepcopy(self.cases[0])
+        del case["choices"][0]["after"]["winner_mask"]
+        with self.assertRaisesRegex(ValueError, "missing branch winner mask"):
+            validate_sampling(self.metadata, case)
+
+    def test_normal_winners_match_and_blocked_games_have_none(self):
+        counts = collections.Counter()
+        for case in self.cases:
+            self.comparison.compare(case, counts)
+        self.assertGreater(counts["winner_matches"], 0)
+        self.assertGreater(counts["blocked_without_winner"], 0)
 
     def test_known_reference_seven_card_limit_is_explicit(self):
         case = json.loads((ROOT / "scripts/fixtures/reference-seven-card-limit.json").read_text())

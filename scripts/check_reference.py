@@ -29,6 +29,12 @@ def validate_sampling(metadata, case):
     require(type(interval) is int and interval >= 0, "invalid choice interval")
     require(type(boundary_choices) is bool, "invalid boundary sampling flag")
     before, after = case["before"], case["after"]
+    require(type(metadata.get("winner_checks", False)) is bool, "invalid winner check flag")
+    if metadata.get("winner_checks"):
+        require("winner_mask" in before and "winner_mask" in after, "missing exported winner mask")
+        if metadata.get("choice_successors"):
+            require(all("winner_mask" in choice.get("after", {}) for choice in case.get("choices") or []),
+                    "missing branch winner mask")
     boundary = boundary_choices and (
         after["terminal"] or any(a[0] == 7 for a in case["actions"])
         or (not before["final_round"] and after["final_round"]))
@@ -213,7 +219,7 @@ class Comparison:
                     gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
                     require(gained == (set() if choice["noble"] == 255 else {choice["noble"]}),
                             "choice noble disagrees with successor")
-                    result = self.compare({"before": before, "after": after, "actions": choice["actions"]})
+                    result = self.compare({"before": before, "after": after, "actions": choice["actions"]}, counts)
                     require(result == "matched", f"shared successor was excluded: {result}")
                     counts["shared_successors"] += 1
                     counts[f"successors_players_{len(before['players'])}"] += 1
@@ -238,10 +244,60 @@ class Comparison:
         counts["shared_choices"] += len(local)
         return counts
 
-    def compare(self, case):
+    @staticmethod
+    def check_local_winner(snapshot):
+        if "winner_mask" not in snapshot:
+            return
+        scores = [p["score"] for p in snapshot["players"]]
+        final_round = max(scores) >= 15
+        require(snapshot["final_round"] == final_round, "final-round flag disagrees with scores")
+        require(snapshot["terminal"] == (final_round and snapshot["current"] == 0),
+                "terminal flag disagrees with round boundary")
+        if not snapshot["terminal"]:
+            require(snapshot["winner_mask"] is None, "unfinished state has a winner")
+            return
+        leaders = [i for i, score in enumerate(scores) if score == max(scores)]
+        fewest = min(len(snapshot["players"][i]["owned"]) for i in leaders)
+        expected = sum(1 << i for i in leaders if len(snapshot["players"][i]["owned"]) == fewest)
+        require(type(snapshot["winner_mask"]) is int and snapshot["winner_mask"] == expected,
+                "winner mask disagrees with leader-only fewest-card rule")
+
+    def compare_winner(self, rule, snapshot, counts):
+        if "winner_mask" not in snapshot:
+            return
+        if not snapshot["terminal"]:
+            if counts is not None:
+                counts["unfinished_without_winner"] += 1
+            return
+        state = rule.current_game_state
+        scores = [rule.calScore(state, i) for i in range(len(state.agents))]
+        reference_mask = sum(1 << i for i, score in enumerate(scores) if score == max(scores))
+        local_mask = snapshot["winner_mask"]
+        if reference_mask == local_mask:
+            result = "winner_matches"
+            if counts is not None and local_mask.bit_count() > 1:
+                counts["shared_winner_matches"] += 1
+        else:
+            prestige = [p["score"] for p in snapshot["players"]]
+            card_counts = [len(p["owned"]) for p in snapshot["players"]]
+            leaders = [i for i, score in enumerate(prestige) if score == max(prestige)]
+            leader_mask = sum(1 << i for i in leaders)
+            require(min(card_counts) < min(card_counts[i] for i in leaders)
+                    and local_mask != leader_mask and reference_mask == leader_mask,
+                    "unclassified reference winner mismatch")
+            result = "reference_global_fewest_card_defect"
+        if counts is not None:
+            counts[result] += 1
+            counts[f"{result}_players_{len(state.agents)}"] += 1
+
+    def compare(self, case, winner_counts=None):
         before, after, actions = case["before"], case["after"], case["actions"]
+        self.check_local_winner(before)
+        self.check_local_winner(after)
         if not actions:
             require(case.get("status") == "no_legal_action" and before == after and not before["terminal"], "invalid blocked-state record")
+            if winner_counts is not None and "winner_mask" in after:
+                winner_counts["blocked_without_winner"] += 1
             return "no_legal_action"
         actor = before["current"]
         gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
@@ -263,6 +319,7 @@ class Comparison:
         expected["players"] = [{**{k: v for k, v in p.items() if k != "reserved"},
                                 "reserved": [r["card"] for r in p["reserved"]]} for p in after["players"]]
         require(actual == expected, f"successor mismatch: expected {expected}, got {actual}")
+        self.compare_winner(rule, after, winner_counts)
         return "matched"
 
 
@@ -276,6 +333,7 @@ def main():
     counts = collections.Counter()
     categories = collections.Counter()
     choice_counts = collections.Counter()
+    winner_counts = collections.Counter()
     digest = hashlib.sha256()
     with args.cases.open("rb") as stream:
         first = next(stream)
@@ -290,7 +348,7 @@ def main():
             case = json.loads(line)
             try:
                 validate_sampling(metadata, case)
-                result = comparison.compare(case)
+                result = comparison.compare(case, winner_counts)
                 if case.get("choices") is not None:
                     choice_counts.update(comparison.compare_choices(case, check_successors))
             except (ValueError, KeyError, IndexError) as exc:
@@ -309,7 +367,8 @@ def main():
               "exporter_sha256": hashlib.sha256((ROOT / "crates/splendor-arena/examples/parity_export.rs").read_bytes()).hexdigest(),
               "cards_matched": 90, "nobles_matched": 10,
               "cases": dict(counts), "matched_coverage": dict(categories), "action_sets": dict(choice_counts),
-              "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."}
+              "selected_winners": dict(winner_counts),
+              "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Winner masks checked when exported, with explicit reference tiebreak defects. Not full rules, RNG, observation, or rank parity."}
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(text)

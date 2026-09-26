@@ -274,3 +274,32 @@ Add actual engine winner masks to the diagnostic export and distinguish checked
 matches from this precise reference defect. Do not compare lower-place ranks
 against the reference's different score-adjustment convention or award winners
 to blocked cases.
+
+## Normal-game winner comparison
+
+Added actual engine winner masks to diagnostic snapshots and required them when
+the export declares winner checking. Local masks are checked against tied-leader
+fewest-card rules. The harness also checks the exported complete-turn final-round
+and terminal flags, keeps nonterminal masks null, and compares reference
+`calScore` winners after shared normal transitions.
+
+The boundary workload has 50 selected winner matches and two instances of the
+known reference defect; its shared branches have 776 matches and 26 instances.
+Both result groups include one shared-victory match and overlap each other.
+The two blocked records have no winner. The exact reference defect is classified;
+other mismatches fail. A fixture shows scores 16/16/14 and owned counts 19/18/16,
+where the local winner is seat one but the reference also retains seat zero.
+Tests reject copying the reference's wrong mask, unexpected reference winners,
+false unfinished winners, missing masks, and inconsistent round flags.
+
+All old paths and snapshot fields are unchanged after removing the added masks.
+The new compressed export and fingerprinted summary are archived. No core rule,
+agent, RNG, ID, or replay semantics changed. Remaining parity limits include
+lower-place rank conventions, forced-pass outcomes, hidden information, and RNG.
+
+Validation for this checkpoint: all 29 Python tests, 51 release Rust tests,
+formatting, and strict release all-target workspace Clippy pass. Next inspect
+core observation validation for the reverse final-round implication: a completed
+turn with threshold prestige must not lose the final-round flag. A pending noble
+choice can legitimately delay that flag, so preserve valid intermediate phases
+and prove any new rejection with targeted evidence before changing validation.
