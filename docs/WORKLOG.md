@@ -368,3 +368,27 @@ hypothesis based on that observation-only calculation. E9 already tried a zero
 reward for blocked rollout leaves and failed; do not simply repeat that change.
 Keep E10/E11 rejected and their confirmation seeds unused. Full external parity
 remains bounded by the documented reference differences in docs/PARITY.md.
+
+## E12 affordable-purchase filter rejected
+
+Continued from `fa34531`. Observation-only features show that the three takes
+without forced blocks in the bounded E11 tree all make market card 18 affordable.
+The other two do not. Recorded the E12 hypothesis at `6654cbf` before changing
+agents. Tested a narrow root filter for full reservation slots, only-take legal
+actions, and at most ten colored bank tokens. It keeps takes that afford a
+visible/own reserved card without requiring a return, if any exist.
+
+The known game completed, but fresh seed 105,000,000 screen evidence is mixed:
+1,968/2,000 complete, 29 caps, three blocks; paired control 1,966 complete,
+31 caps, three blocks. Five caps improved and three new caps appeared. Gate
+rejected; confirmation 1,105,000,000 unused. Candidate removed; patch and all
+raw evidence archived. Formatting, strict all-target Clippy, and all 53 release
+workspace tests pass on candidate and restored baseline.
+
+Next: inspect the three newly capped paired E12 games before combining or
+changing cycle handling. Their identities are directly recoverable from the
+archived E12 reports. Alternatively audit validation coverage across maintained
+examples: `cargo test --workspace` does not run their tests by default, so the
+block-audit regression tests currently require a separate documented command.
+Do not repeat E9's blocked-leaf reward change or claim general safety from this
+single public-feature case. External parity remains scoped as documented.

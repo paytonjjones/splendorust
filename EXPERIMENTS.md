@@ -413,3 +413,34 @@ Use `scripts/promote.py`: candidate against search, two players, 2,000 screen
 games, seed 105,000,000, four threads, 128 iterations, depth 8, width 6. If the
 gate allows confirmation, use 20,000 games and fresh seed 1,105,000,000. Report
 all incomplete games and retain no strength claim without gate evidence.
+
+### E12 result: rejected
+
+The observation-only audit is saved in `docs/results/e11-token-audit.json`.
+The new `token_audit` example records all target deficits, bank supply, and
+existing heuristic scores before any return. It marks returns as required
+rather than claiming that all collected tokens can be kept.
+
+The development probe selected an affordable-card take for all 32 independent
+agent RNG seeds, with identical choices on repeat. The full known blocked game
+then completed at 78 turns and 122 decisions, scores 9–16. This is a reused
+development case, not confirmation evidence.
+
+The fresh 2,000-game screen completed 1,968 games, with 29 caps and three blocks.
+Candidate completed-game credit was 51.42%; the unconditional interval was
+[46.39%, 56.39%]. The same-seed original-search control completed 1,966 games,
+with 31 caps and three blocks. Paired results: 1,963 games completed in both,
+26 were capped in both, all three blocked games stayed blocked, five control
+caps became complete, and three control completions became capped. The small
+net completion gain therefore includes regressions and proves no strength gain.
+
+The gate rejected the incomplete screen. Confirmation seed 1,105,000,000 was
+not used. The candidate was removed from active source. Reproduce it by applying
+`docs/e12-affordable.patch` to `6654cbf`; candidate production fingerprint is
+`37d082b07f81f7f7`. The probe source is `docs/e12-probe.rs` (copy to the arena
+examples directory to run it). Raw reports, summaries, paired statuses, probe
+history, run settings, and gate decision are archived under `docs/results/e12-*`.
+
+Both candidate and restored baseline passed formatting, strict workspace
+all-target Clippy, and all 53 release workspace tests. No rules or replay
+semantics changed; ENGINE_VERSION remains `splendorust-v1`.

@@ -1,0 +1,80 @@
+{
+  "run_config": {
+    "names": [
+      "search-affordable",
+      "search"
+    ],
+    "games": 2000,
+    "seed": 105000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "37d082b07f81f7f7",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 105000000,
+  "players": 2,
+  "requested_games": 2000,
+  "completed_games": 1968,
+  "incomplete_games": 32,
+  "independent_blocks": 1000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search-affordable",
+      "wins": 997,
+      "shared_wins": 30,
+      "win_share": 1012.0,
+      "win_rate": 0.5142276422764228,
+      "ci95": [
+        0.46392100702424816,
+        0.5639481401627268
+      ],
+      "average_position": 1.4781504065040652,
+      "average_score": 13.49339430894309
+    },
+    {
+      "identity": 1,
+      "agent": "search",
+      "wins": 941,
+      "shared_wins": 30,
+      "win_share": 956.0,
+      "win_rate": 0.48577235772357724,
+      "ci95": [
+        0.4360518598372733,
+        0.5360789929757518
+      ],
+      "average_position": 1.5066056910569106,
+      "average_score": 13.388719512195122
+    }
+  ],
+  "average_turns": 216.3365,
+  "average_decisions": 400.5645,
+  "runtime_seconds": 51.398145708,
+  "games_per_second": 38.91190961172563,
+  "decisions_per_second": 15586.729617666073,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "0a5787d45f8fd98ab97089439966459b501fbaf5dbc6b25d04ea909cd07a9248",
+  "record_set_sha256": "aabda46c2c115068960af0500efd44b9a635895af35fd2dcf945f588762d9594",
+  "raw_archive": "e12-screen.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 1968,
+    "decision_limit": 29,
+    "no_legal_action": 3
+  }
+}
