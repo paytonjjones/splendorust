@@ -1,0 +1,60 @@
+{
+  "action_sets": {
+    "local_blind_reservation": 1103,
+    "local_optional_gold_payment": 324,
+    "local_return_collected_color": 5290,
+    "local_seven_card_limit": 1,
+    "positions": 668,
+    "reference_pass": 2,
+    "reference_reduced_take": 2461,
+    "shared_choices": 11889,
+    "shared_successors": 11889,
+    "successors_explicit_noble_choice": 16,
+    "successors_explicit_noble_choice_players_2": 6,
+    "successors_explicit_noble_choice_players_3": 6,
+    "successors_explicit_noble_choice_players_4": 4,
+    "successors_noble": 138,
+    "successors_players_2": 3214,
+    "successors_players_3": 3698,
+    "successors_players_4": 4977,
+    "successors_terminal": 802
+  },
+  "cards_matched": 90,
+  "cases": {
+    "blind_reservation": 90,
+    "matched": 5016,
+    "no_legal_action": 2,
+    "optional_gold_payment": 64,
+    "return_collected_color": 298
+  },
+  "cases_sha256": "41a3f42562d82ddd1ed929084ce9ed7f7296dc4be8cf6aaf90f7817c75b3bd91",
+  "commit": "95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b",
+  "export": {
+    "boundary_choices": true,
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v1",
+    "format": 2,
+    "games_per_player_count": 20,
+    "seed": 92000000,
+    "source_id": "48500c720f030f9e"
+  },
+  "exporter_sha256": "d5f9dc9d30cabc1df1eddc1fd83704ecf89370db4275174d6ab460441a81db5d",
+  "harness_sha256": "0f4ae34f2324884409e3dea3ab01df2387c145a4406dd7e8bc0a174c818c134b",
+  "license": "MIT",
+  "license_sha256": "d876e3287cd147c5b1a8e5ea7a0cf7a7f09d5d60b819b018bbb6abd881925ce6",
+  "matched_coverage": {
+    "action_0": 1970,
+    "action_1": 341,
+    "action_3": 2547,
+    "action_4": 158,
+    "noble": 130,
+    "players_2": 1158,
+    "players_3": 1683,
+    "players_4": 2175,
+    "terminal": 52
+  },
+  "nobles_matched": 10,
+  "reference": "https://github.com/roeey777/Splendor-AI",
+  "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."
+}

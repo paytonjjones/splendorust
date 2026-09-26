@@ -6,7 +6,7 @@ import pathlib
 import subprocess
 import unittest
 
-from check_reference import Comparison, ROOT
+from check_reference import Comparison, ROOT, validate_sampling
 
 
 @unittest.skipUnless(os.environ.get("SPLENDOR_REFERENCE"), "set SPLENDOR_REFERENCE to the pinned checkout")
@@ -17,6 +17,7 @@ class ReferenceTests(unittest.TestCase):
         run = subprocess.run(
             ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--", "2", "92000000", "10", "true"],
             cwd=ROOT, check=True, capture_output=True, text=True)
+        cls.metadata = json.loads(run.stdout.splitlines()[0])
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
 
     def test_encoded_noble_choice_must_match_successor(self):
@@ -40,6 +41,12 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "padding"):
             self.comparison.compare(bad)
 
+    def test_known_reference_seven_card_limit_is_explicit(self):
+        case = json.loads((ROOT / "scripts/fixtures/reference-seven-card-limit.json").read_text())
+        counts = self.comparison.compare_choices(case)
+        self.assertEqual(counts["local_seven_card_limit"], 1)
+        self.assertGreater(counts["shared_choices"], 0)
+
     def test_shared_transitions_and_explicit_exclusions(self):
         results = {self.comparison.compare(case) for case in self.cases}
         self.assertEqual(results, {"matched", "blind_reservation", "return_collected_color", "optional_gold_payment", "no_legal_action"})
@@ -53,6 +60,35 @@ class ReferenceTests(unittest.TestCase):
                 checked += 1
         self.assertGreater(checked, 0)
 
+    def test_boundary_sampling_checks_multiplayer_noble_branches(self):
+        run = subprocess.run(
+            ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--",
+             "8", "92000000", "0", "true", "true"],
+            cwd=ROOT, check=True, capture_output=True, text=True)
+        lines = [json.loads(line) for line in run.stdout.splitlines()]
+        self.assertTrue(lines[0]["boundary_choices"])
+        noble_branches = {3: 0, 4: 0}
+        terminal_counts = {2: 0, 3: 0, 4: 0}
+        for case in lines[1:]:
+            validate_sampling(lines[0], case)
+            before, after = case["before"], case["after"]
+            boundary = (after["terminal"] or any(a[0] == 7 for a in case["actions"])
+                        or (not before["final_round"] and after["final_round"]))
+            if boundary:
+                self.assertIsNotNone(case["choices"])
+                missing = {**case, "choices": None}
+                with self.assertRaisesRegex(ValueError, "missing required choice sample"):
+                    validate_sampling(lines[0], missing)
+                counts = self.comparison.compare_choices(case, check_successors=True)
+                players = len(before["players"])
+                if players in noble_branches:
+                    noble_branches[players] += counts["successors_explicit_noble_choice"]
+                terminal_counts[players] += counts["successors_terminal"]
+            elif case.get("status") != "no_legal_action":
+                self.assertIsNone(case["choices"])
+        self.assertTrue(all(n >= 2 for n in noble_branches.values()), noble_branches)
+        self.assertTrue(all(n > 0 for n in terminal_counts.values()), terminal_counts)
+
     def test_branch_successor_corruption_is_detected(self):
         case = copy.deepcopy(self.cases[0])
         case["choices"][0]["after"]["players"][0]["score"] += 1
@@ -62,6 +98,13 @@ class ReferenceTests(unittest.TestCase):
         del case["choices"][0]["after"]
         with self.assertRaisesRegex(ValueError, "missing choice successor"):
             self.comparison.compare_choices(case, check_successors=True)
+
+    def test_missing_regular_sample_is_detected(self):
+        case = copy.deepcopy(self.cases[0])
+        validate_sampling(self.metadata, case)
+        del case["choices"]
+        with self.assertRaisesRegex(ValueError, "missing required choice sample"):
+            validate_sampling(self.metadata, case)
 
     def test_missing_choice_is_detected(self):
         case = copy.deepcopy(self.cases[0])

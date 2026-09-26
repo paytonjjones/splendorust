@@ -145,3 +145,36 @@ python3 scripts/check_reference.py --reference /tmp/splendor-reference \
 The final `true` enables branch snapshots. All earlier scope limits still apply,
 including reference rule exclusions, aligned replacement draws, isolated
 transitions, and no outcome or hidden-information parity claim.
+
+## Targeted boundary samples
+
+The fifth exporter argument, `true`, adds choice sampling at every observed
+explicit noble-choice turn, terminal turn, and first turn of the final round.
+It supplements the regular interval without changing the played trajectory.
+The verifier rejects a missing sample at a required regular or boundary position.
+
+On the same 60-game workload this adds 94 positions (28 two-player, 32
+three-player, 34 four-player). The combined result is **11,889 shared branch
+successors at 668 positions**, including 802 terminal successors, 138 noble
+acquisitions, and 16 explicit noble-choice branches: six for two players, six
+for three players, and four for four players. These overlap prior checks; they
+are not additional independent games. All prior selected paths and sampled
+branches were compared and remain unchanged.
+
+The wider boundary coverage also reaches the reference's seven-card purchase
+limit once, at setup 96,000,011, turn 135. It remains an explicit rule exclusion,
+not a local restriction. A small fixture now tests that difference directly.
+Other branch exclusions are 1,103 blind reservations, 324 optional gold payments,
+and 5,290 returns of collected colors; the reference excludes 2,461 reduced
+takes and two passes. Selected-turn counts are unchanged.
+
+Evidence: `docs/results/reference-boundaries.jsonl.gz` and its summary. Run:
+
+```sh
+cargo run --release --locked --example parity_export -- 20 92000000 10 true true > /tmp/boundaries.jsonl
+python3 scripts/check_reference.py --reference /tmp/splendor-reference \
+  --cases /tmp/boundaries.jsonl --output /tmp/boundaries-summary.json
+```
+
+This extends checked choice and transition coverage. The documented outcome,
+RNG, information, and rule differences still prevent a full-parity claim.

@@ -251,3 +251,26 @@ paths contain such phases outside the every-tenth-turn sample. Add targeted
 sampling of observed noble-choice and terminal boundaries, then verify full
 branch successors there. This can extend rare-case coverage without merely
 increasing random game counts. Outcome tiebreak differences remain explicit.
+
+## Multiplayer boundary parity
+
+Added optional choice sampling at observed noble-choice turns, terminal turns,
+and starts of the final round. The same 60-game workload now checks 11,889 shared
+branch successors at 668 positions. It includes six explicit three-player noble
+branches and four four-player branches, plus six two-player branches. It checks
+802 terminal successors and 138 noble acquisitions. All old paths and sampled
+branches remain unchanged. New cases and exact counters are archived.
+
+The boundary sample also exercises one known seven-card reference restriction;
+a focused fixture now checks that exclusion. The harness rejects missing whole
+samples required by the declared interval or boundary mode. All 26 Python tests,
+51 release Rust tests, formatting, and strict release all-target workspace
+Clippy passed. No engine or policy semantics changed.
+
+Next: compare normal-game winner masks explicitly. The reference's documented
+fewest-card defect is observable in existing data: setup 95,000,017 at turn 107
+has leaders at 16/16 points with 19/18 cards, while a nonleader has fewer cards.
+Add actual engine winner masks to the diagnostic export and distinguish checked
+matches from this precise reference defect. Do not compare lower-place ranks
+against the reference's different score-adjustment convention or award winners
+to blocked cases.

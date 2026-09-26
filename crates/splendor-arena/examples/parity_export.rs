@@ -58,6 +58,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let seed: u64 = args.next().unwrap_or_else(|| "92000000".into()).parse()?;
     let choice_interval: u32 = args.next().unwrap_or_else(|| "0".into()).parse()?;
     let include_successors: bool = args.next().unwrap_or_else(|| "false".into()).parse()?;
+    let boundary_choices: bool = args.next().unwrap_or_else(|| "false".into()).parse()?;
     if games == 0 {
         return Err("games must be positive".into());
     }
@@ -68,6 +69,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if include_successors {
         metadata["format"] = json!(2);
         metadata["choice_successors"] = json!(true);
+    }
+    if boundary_choices {
+        metadata["boundary_choices"] = json!(true);
     }
     writeln!(out, "{metadata}")?;
     for count in 2..=4 {
@@ -80,23 +84,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if state.is_terminal() {
                     break;
                 }
+                let before_state = state.clone();
                 let before = snapshot(&state);
-                let choices =
-                    if choice_interval > 0 && state.turns().is_multiple_of(choice_interval) {
-                        let actor = state.current_player();
-                        let mut paths = Vec::new();
-                        complete_choices(
-                            &state,
-                            actor,
-                            state.observe(actor).players[actor].nobles,
-                            &mut Vec::new(),
-                            &mut paths,
-                            include_successors,
-                        );
-                        Some(paths)
-                    } else {
-                        None
-                    };
                 let mut actions = Vec::new();
                 loop {
                     let mut legal = ActionSet::new();
@@ -113,6 +102,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         break;
                     }
                 }
+                let boundary = boundary_choices
+                    && (state.is_terminal()
+                        || actions.iter().any(|a| a[0] == 7)
+                        || (!before_state
+                            .observe(before_state.current_player())
+                            .final_round
+                            && state.observe(state.current_player()).final_round));
+                let choices = if boundary
+                    || (choice_interval > 0 && before_state.turns().is_multiple_of(choice_interval))
+                {
+                    let actor = before_state.current_player();
+                    let mut paths = Vec::new();
+                    complete_choices(
+                        &before_state,
+                        actor,
+                        before_state.observe(actor).players[actor].nobles,
+                        &mut Vec::new(),
+                        &mut paths,
+                        include_successors,
+                    );
+                    Some(paths)
+                } else {
+                    None
+                };
                 if actions.is_empty() {
                     writeln!(
                         out,

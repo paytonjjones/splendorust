@@ -23,6 +23,21 @@ def require(condition, message):
         raise ValueError(message)
 
 
+def validate_sampling(metadata, case):
+    interval = metadata.get("choice_interval", 0)
+    boundary_choices = metadata.get("boundary_choices", False)
+    require(type(interval) is int and interval >= 0, "invalid choice interval")
+    require(type(boundary_choices) is bool, "invalid boundary sampling flag")
+    before, after = case["before"], case["after"]
+    boundary = boundary_choices and (
+        after["terminal"] or any(a[0] == 7 for a in case["actions"])
+        or (not before["final_round"] and after["final_round"]))
+    required = boundary or (interval > 0 and before["turns"] % interval == 0)
+    if "choice_interval" in metadata:
+        required |= case.get("status") == "no_legal_action"
+    require(not required or isinstance(case.get("choices"), list), "missing required choice sample")
+
+
 def load_reference(path):
     revision = subprocess.check_output(["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
     require(revision == REFERENCE_COMMIT, f"reference revision mismatch: {revision}")
@@ -204,7 +219,10 @@ class Comparison:
                     counts[f"successors_players_{len(before['players'])}"] += 1
                     counts["successors_terminal"] += int(after["terminal"])
                     counts["successors_noble"] += int(bool(gained))
-                    counts["successors_explicit_noble_choice"] += int(any(a[0] == 7 for a in choice["actions"]))
+                    explicit_noble = any(a[0] == 7 for a in choice["actions"])
+                    counts["successors_explicit_noble_choice"] += int(explicit_noble)
+                    if explicit_noble:
+                        counts[f"successors_explicit_noble_choice_players_{len(before['players'])}"] += 1
         for action in legal:
             if action["type"] == "pass":
                 counts["reference_pass"] += 1
@@ -271,6 +289,7 @@ def main():
             digest.update(line)
             case = json.loads(line)
             try:
+                validate_sampling(metadata, case)
                 result = comparison.compare(case)
                 if case.get("choices") is not None:
                     choice_counts.update(comparison.compare_choices(case, check_successors))
