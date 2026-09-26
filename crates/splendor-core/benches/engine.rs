@@ -1,5 +1,35 @@
 use criterion::{Criterion, black_box, criterion_group, criterion_main};
 use splendor_core::{ActionSet, GameState, Phase, Rng};
+fn bench_transition(c: &mut Criterion, name: &str, fixture: &GameState) {
+    fixture.check_invariants().unwrap();
+    let mut choices = ActionSet::new();
+    fixture.legal_actions(&mut choices);
+    let action = choices[0];
+    let mut successor = fixture.clone();
+    successor.apply_action(action).unwrap();
+    successor.check_invariants().unwrap();
+    // Identity and invariant checks are outside the measurement. Include both
+    // states so a changed draw or pending-phase result changes this identifier.
+    let hash = format!("{fixture:?}:{action:?}:{successor:?}")
+        .bytes()
+        .fold(0xcbf29ce484222325u64, |h, byte| {
+            (h ^ u64::from(byte)).wrapping_mul(0x100000001b3)
+        });
+    eprintln!(
+        "transition fixture {name}: turns={} action={action:?} state_action_successor={hash:016x}",
+        fixture.turns()
+    );
+    c.bench_function(&format!("transition/{name}"), |b| {
+        b.iter_batched(
+            || fixture.clone(),
+            |mut state| {
+                state.apply_action(black_box(action)).unwrap();
+                black_box(state)
+            },
+            criterion::BatchSize::SmallInput,
+        )
+    });
+}
 fn bench(c: &mut Criterion) {
     let s = GameState::new(2, 42).unwrap();
     let mut a = ActionSet::new();
@@ -37,7 +67,19 @@ fn bench(c: &mut Criterion) {
         c.bench_function(&format!("legal/{name}"), |b| {
             b.iter(|| black_box(&fixture).legal_actions(black_box(&mut a)))
         });
+        bench_transition(c, name, &fixture);
     }
+    // Fixed random trajectory found offline, not a search inside the benchmark.
+    // Four players, setup seed 9, policy RNG 123: decision 215 is Noble.
+    let mut noble = GameState::new(4, 9).unwrap();
+    let mut noble_rng = Rng::new(123);
+    for _ in 0..215 {
+        noble.legal_actions(&mut a);
+        noble.apply_action(a[noble_rng.index(a.len())]).unwrap();
+        noble.check_invariants().unwrap();
+    }
+    assert_eq!(noble.phase(), Phase::Noble);
+    bench_transition(c, "noble", &noble);
     // Fixed opening and midgame observations, including hidden reservations.
     // No agent policy, I/O, or clock is included in these measured operations.
     for count in 2..=4 {

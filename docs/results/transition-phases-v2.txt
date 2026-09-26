@@ -1,0 +1,42 @@
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 5.74s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+transition fixture main-midgame: turns=31 action=Take([1, 1, 1, 0, 0]) state_action_successor=270d35f4fbd02884
+Benchmarking transition/main-midgame
+Benchmarking transition/main-midgame: Warming up for 1.0000 s
+Benchmarking transition/main-midgame: Collecting 40 samples in estimated 1.0000 s (31M iterations)
+Benchmarking transition/main-midgame: Analyzing
+transition/main-midgame time:   [25.110 ns 25.242 ns 25.365 ns]
+Found 1 outliers among 40 measurements (2.50%)
+  1 (2.50%) low mild
+
+transition fixture payment: turns=8 action=Pay([0, 0, 0, 0, 0]) state_action_successor=b726cfd36386898e
+Benchmarking transition/payment
+Benchmarking transition/payment: Warming up for 1.0000 s
+Benchmarking transition/payment: Collecting 40 samples in estimated 1.0000 s (33M iterations)
+Benchmarking transition/payment: Analyzing
+transition/payment      time:   [26.539 ns 26.759 ns 26.985 ns]
+Found 8 outliers among 40 measurements (20.00%)
+  6 (15.00%) low mild
+  2 (5.00%) high severe
+
+transition fixture return: turns=11 action=Return([0, 0, 0, 0, 0, 2]) state_action_successor=7aaf6fda7dd5fb21
+Benchmarking transition/return
+Benchmarking transition/return: Warming up for 1.0000 s
+Benchmarking transition/return: Collecting 40 samples in estimated 1.0000 s (30M iterations)
+Benchmarking transition/return: Analyzing
+transition/return       time:   [25.541 ns 25.792 ns 26.070 ns]
+
+transition fixture noble: turns=138 action=Noble(7) state_action_successor=07538ae20ff281b1
+Benchmarking transition/noble
+Benchmarking transition/noble: Warming up for 1.0000 s
+Benchmarking transition/noble: Collecting 40 samples in estimated 1.0000 s (37M iterations)
+Benchmarking transition/noble: Analyzing
+transition/noble        time:   [22.712 ns 22.826 ns 22.952 ns]
+Found 5 outliers among 40 measurements (12.50%)
+  1 (2.50%) low severe
+  1 (2.50%) low mild
+  1 (2.50%) high mild
+  2 (5.00%) high severe
+

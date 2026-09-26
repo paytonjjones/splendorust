@@ -147,3 +147,42 @@ cargo bench --locked -p splendor-core --bench engine -- \
   '^(clone_apply|apply|random_game)$' --sample-size 40 \
   --warm-up-time 1 --measurement-time 1 --save-baseline capacity-RUN-VERSION
 ```
+
+## Fixed phase transition baselines
+
+The core benchmark now includes `transition/main-midgame`, `transition/payment`,
+`transition/return`, and `transition/noble`. Each fixture and its selected
+successor pass full invariants before timing. Criterion creates fresh states
+in untimed batch setup; the measured closure applies one action and consumes
+the resulting state. No fixture search, validation, formatting, or I/O is in
+the measured closure. As with the opening apply benchmark, this is not a
+subtraction estimate of an isolated function call.
+
+Main, Payment, and Return use the existing two-player seed-42 trajectory with
+policy RNG 123. Noble uses a fixed four-player trajectory: setup seed 9, policy
+RNG 123, after 215 decisions. An offline search found that trajectory; the
+benchmark itself replays only the fixed prefix and asserts Phase::Noble.
+All four select the first generated legal action. The log identifies the
+turn, action, and an FNV fingerprint of full starting state/action/successor.
+
+Initial v2 run, same host/toolchain as the counter-check comparison, 40 samples,
+one-second warm-up and measurement windows:
+
+| Fixture and selected action | Mean | Criterion 95% mean interval |
+|---|---:|---:|
+| Turn 31 Main: take three colors | 25.33 ns | 25.20–25.44 ns |
+| Turn 8 Payment: zero colored tokens | 26.68 ns | 26.58–26.79 ns |
+| Turn 11 Return: two gold tokens | 26.48 ns | 26.09–26.88 ns |
+| Turn 138 Noble: choose noble 7 | 22.83 ns | 22.67–23.02 ns |
+
+These are one fixture per phase, not a distribution over all payments, returns,
+nobles, end-game states, or player counts. No performance improvement is claimed.
+The new benchmark source is outside the production fingerprint; its SHA-256,
+source `5fbacedf05ec987b`, fixture identities, and all estimates are recorded in
+`docs/results/transition-phases-v2.json`, with the adjacent raw text log.
+
+```sh
+cargo bench --locked -p splendor-core --bench engine -- \
+  '^transition/' --sample-size 40 --warm-up-time 1 \
+  --measurement-time 1 --save-baseline phase-v2
+```

@@ -763,3 +763,27 @@ Next: audit benchmark coverage before another timing study. The current apply
 benchmarks cover only an opening Take; payment/return/noble transition costs
 have no isolated fixed-state measurements. Add phase coverage only if it can
 use invariant-valid fixtures and keep setup/clone costs explicit.
+
+## Phase transition benchmark coverage
+
+Continued from `23df2be`. Existing apply measurements exercised only opening
+Take. Added batched Main, Payment, Return, and Noble transitions with invariant
+checks on both fixture and selected successor outside timing. Reused the
+existing fixed trajectory for the first three phases. Offline random search
+found a valid Noble at four-player seed 9 / policy RNG 123 / decision 215;
+the benchmark replays that fixed prefix, without a search in measured code.
+Removed the temporary search example after identifying the fixture.
+
+Each benchmark logs action and full-state/successor fingerprint. Release
+40-sample means: Main 25.33ns, Payment 26.68ns, Return 26.48ns, Noble 22.83ns.
+Archived intervals, raw logs, host/compiler details, benchmark hash, and source
+identity. These are baseline fixture costs, not optimization evidence or all-
+phase distributions. Setup cloning is untimed; result consumption remains timed.
+
+Formatting, strict release all-target Clippy, and all 70 release Rust tests
+pass. The benchmark ran all four validated fixtures. No production code, agent,
+engine version, or external parity scope changed; source remains 5fbacedf05ec987b.
+
+Next: return to independent rule validation. Review the comparison harness's
+known-difference classification order for cases with multiple differences;
+ensure an excluded branch cannot hide unrelated corruption in shared fields.

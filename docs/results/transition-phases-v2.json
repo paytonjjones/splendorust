@@ -1,0 +1,236 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "5fbacedf05ec987b",
+  "parent_commit": "23df2be8ce21a1435677db8c6a58f3feb708b3fb",
+  "benchmark_sha256": "9aaf0c4ae347d14e3b5993595555406d795ac6bb87848082fde38725835149da",
+  "log_sha256": "b506b88e7c9f6f4ba8c616e6523e6f9f96438353360ff7ac65d6cdf570dea68f",
+  "command": "cargo bench --locked -p splendor-core --bench engine -- '^transition/' --sample-size 40 --warm-up-time 1 --measurement-time 1 --save-baseline phase-v2",
+  "host": {
+    "cpu": "Apple M4 Pro",
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.7\nBuildVersion:\t\t25G229\n",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n"
+  },
+  "workload": {
+    "main_payment_return": {
+      "players": 2,
+      "setup_seed": 42,
+      "policy_seed": 123,
+      "selection": "first matching phase; Main requires turns > 30"
+    },
+    "noble": {
+      "players": 4,
+      "setup_seed": 9,
+      "policy_seed": 123,
+      "decisions": 215
+    },
+    "action": "first generated legal action",
+    "timed": "apply action to fresh batched state and consume resulting state; clone batch setup and invariants excluded",
+    "concurrency": "serial on shared Mac; no other agent-owned compute job"
+  },
+  "runs": [
+    {
+      "name": "main-midgame",
+      "fixture": "transition fixture main-midgame: turns=31 action=Take([1, 1, 1, 0, 0]) state_action_successor=270d35f4fbd02884",
+      "estimates": {
+        "mean": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 25.20171381104548,
+            "upper_bound": 25.443718552229164
+          },
+          "point_estimate": 25.326626305318833,
+          "standard_error": 0.06208636039297119
+        },
+        "median": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 25.239675400110862,
+            "upper_bound": 25.534725649848447
+          },
+          "point_estimate": 25.32082731560041,
+          "standard_error": 0.07257974444246394
+        },
+        "median_abs_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.2446427001201553,
+            "upper_bound": 0.579209380101263
+          },
+          "point_estimate": 0.43336814993258577,
+          "standard_error": 0.08707874823100444
+        },
+        "slope": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 25.109697629439953,
+            "upper_bound": 25.364669298570742
+          },
+          "point_estimate": 25.24197970701446,
+          "standard_error": 0.06537073400679873
+        },
+        "std_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.29606780760544116,
+            "upper_bound": 0.49167650495937165
+          },
+          "point_estimate": 0.3962038224700474,
+          "standard_error": 0.05104845485110727
+        }
+      }
+    },
+    {
+      "name": "payment",
+      "fixture": "transition fixture payment: turns=8 action=Pay([0, 0, 0, 0, 0]) state_action_successor=b726cfd36386898e",
+      "estimates": {
+        "mean": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 26.5795068933038,
+            "upper_bound": 26.785516158883354
+          },
+          "point_estimate": 26.67943992375647,
+          "standard_error": 0.05268933249005652
+        },
+        "median": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 26.62676585123056,
+            "upper_bound": 26.76013998864054
+          },
+          "point_estimate": 26.662003924816553,
+          "standard_error": 0.031732455388721284
+        },
+        "median_abs_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.0842047376382494,
+            "upper_bound": 0.27270759355808766
+          },
+          "point_estimate": 0.156353743300669,
+          "standard_error": 0.04750072073908244
+        },
+        "slope": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 26.539393853451227,
+            "upper_bound": 26.98496928832004
+          },
+          "point_estimate": 26.758698444769855,
+          "standard_error": 0.11469002944852082
+        },
+        "std_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.21520488990598097,
+            "upper_bound": 0.44204998213621
+          },
+          "point_estimate": 0.33985916178482356,
+          "standard_error": 0.058255007871759516
+        }
+      }
+    },
+    {
+      "name": "return",
+      "fixture": "transition fixture return: turns=11 action=Return([0, 0, 0, 0, 0, 2]) state_action_successor=7aaf6fda7dd5fb21",
+      "estimates": {
+        "mean": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 26.086461702957028,
+            "upper_bound": 26.883897356039654
+          },
+          "point_estimate": 26.47709134505111,
+          "standard_error": 0.20347885319502426
+        },
+        "median": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 25.67512859939052,
+            "upper_bound": 27.059994915973636
+          },
+          "point_estimate": 26.01201718386217,
+          "standard_error": 0.36990790158982434
+        },
+        "median_abs_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.8272192671079206,
+            "upper_bound": 2.00649575575992
+          },
+          "point_estimate": 1.441804722082276,
+          "standard_error": 0.28950190699871486
+        },
+        "slope": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 25.54129464526878,
+            "upper_bound": 26.069810975504673
+          },
+          "point_estimate": 25.792416281374592,
+          "standard_error": 0.1347564500800147
+        },
+        "std_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 1.0621139625523677,
+            "upper_bound": 1.4902126974554117
+          },
+          "point_estimate": 1.307090516299768,
+          "standard_error": 0.10905820781952683
+        }
+      }
+    },
+    {
+      "name": "noble",
+      "fixture": "transition fixture noble: turns=138 action=Noble(7) state_action_successor=07538ae20ff281b1",
+      "estimates": {
+        "mean": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 22.673197182595427,
+            "upper_bound": 23.022716987607133
+          },
+          "point_estimate": 22.833734409710623,
+          "standard_error": 0.08896253781363352
+        },
+        "median": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 22.69886196113469,
+            "upper_bound": 22.89391317527681
+          },
+          "point_estimate": 22.81013529024893,
+          "standard_error": 0.05607864050692633
+        },
+        "median_abs_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.13158447927075334,
+            "upper_bound": 0.33247698063173664
+          },
+          "point_estimate": 0.21378103819703523,
+          "standard_error": 0.04877132658630321
+        },
+        "slope": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 22.71219765172001,
+            "upper_bound": 22.952333438346304
+          },
+          "point_estimate": 22.826240285841173,
+          "standard_error": 0.06103615352917852
+        },
+        "std_dev": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower_bound": 0.2550798993019625,
+            "upper_bound": 0.8293620991205847
+          },
+          "point_estimate": 0.5696688361477665,
+          "standard_error": 0.14977174145162192
+        }
+      }
+    }
+  ]
+}
