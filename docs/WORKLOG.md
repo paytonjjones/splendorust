@@ -916,3 +916,23 @@ These confirmation seeds are now used development evidence for later edits.
 Next: inspect the eight seven-card branch successors in this new archive and
 retain a complete action-set regression if it adds coverage beyond the old
 no-successor fixture. Keep selected-turn and full-action-set evidence distinct.
+
+## Seven-card branch successor regression
+
+Continued from `d16d3be`. Inspected all eight seven-card excluded branch positions
+in the fresh archive. The old fixture has no branch successor; the new selected-
+turn fixture does not exercise complete choice-set comparison. Added a compact
+manifest selecting the smallest complete action set per player count from the
+existing archive, with raw archive and canonical full-case SHA-256 checks.
+
+Cases: 2p 113000013/turn79, 3p 114000015/turn103, 4p 115000005/turn140. Their
+142 total paths include 34 shared successors and three seven-card exclusions.
+The test retains all choices, checks exact classifications, and injects token
+and noble-metadata errors into each excluded branch. Both must fail. All 46
+Python tests pass against the pinned reference. No engine/runtime change and
+no new independent-game count; this is coverage extracted from used seeds.
+
+Next: review current search runtime with a new profile before proposing an agent
+or performance change. The prior profile predates the sparse-owned scan and v2
+validation work. Use a fixed workload, record source/settings and sampling cost,
+and do not interpret a profiled run's elapsed time as clean throughput evidence.

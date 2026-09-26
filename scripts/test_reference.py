@@ -1,6 +1,8 @@
 """Optional external audit tests: SPLENDOR_REFERENCE=/path/to/checkout python3 -m unittest discover -s scripts -p test_reference.py."""
 import copy
 import collections
+import gzip
+import hashlib
 import json
 import os
 import pathlib
@@ -299,6 +301,43 @@ class ReferenceTests(unittest.TestCase):
         counts = self.comparison.compare_choices(case)
         self.assertEqual(counts["local_seven_card_limit"], 1)
         self.assertGreater(counts["shared_choices"], 0)
+
+    def test_seven_card_exclusion_keeps_full_successors_at_all_player_counts(self):
+        manifest = json.loads((ROOT / 'scripts/fixtures/reference-seven-card-branches.json').read_text())
+        raw = gzip.decompress((ROOT / manifest['archive']).read_bytes())
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), manifest['raw_sha256'])
+        wanted = {(r['players'], r['seed'], r['turn']): r for r in manifest['cases']}
+        self.assertEqual({key[0] for key in wanted}, {2, 3, 4})
+        found = set()
+        for line in raw.splitlines()[1:]:
+            case = json.loads(line)
+            key = (len(case['before']['players']), case['seed'], case['before']['turns'])
+            if key not in wanted:
+                continue
+            self.assertNotIn(key, found)
+            found.add(key)
+            expected = wanted[key]
+            digest = hashlib.sha256(json.dumps(case, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+            self.assertEqual(digest, expected['case_sha256'])
+            self.assertEqual(len(case['choices']), expected['choices'])
+            counts = self.comparison.compare_choices(case, check_successors=True)
+            self.assertEqual(dict(counts), expected['expected_counts'])
+            self.assertEqual(counts['local_seven_card_limit'], 1)
+            self.assertEqual(counts['shared_choices'], counts['shared_successors'])
+            rule = self.comparison.hydrate(case['before'], case['before'])
+            index = next(i for i, choice in enumerate(case['choices'])
+                         if self.comparison.candidate(case['before'], choice['actions'], choice['noble'], rule)
+                         == 'seven_card_limit')
+            bad = copy.deepcopy(case)
+            bad['choices'][index]['after']['bank'][0] += 1
+            with self.assertRaisesRegex(ValueError, 'token'):
+                self.comparison.compare_choices(bad, check_successors=True)
+            bad = copy.deepcopy(case)
+            choice = bad['choices'][index]
+            choice['noble'] = (choice['noble'] + 1) % 10
+            with self.assertRaisesRegex(ValueError, 'choice noble'):
+                self.comparison.compare_choices(bad, check_successors=True)
+        self.assertEqual(found, set(wanted))
 
     def test_shared_transitions_and_explicit_exclusions(self):
         results = {self.comparison.compare(case) for case in self.cases}

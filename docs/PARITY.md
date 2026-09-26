@@ -520,3 +520,25 @@ Evidence: `results/reference-confirm-v2.jsonl.gz`, its `.summary.json`, and
 setup, policy, outcome, case-set hash, lack of seed overlap, extraction hash,
 and exact commands. Tier-2/3 depletion is not reached here; the separate legal
 history workloads continue to supply that coverage.
+
+## Seven-card complete action-set regression
+
+The fresh archive includes eight sampled positions with a seven-card-limit
+branch. Retained the smallest complete action set for each player count through
+`scripts/fixtures/reference-seven-card-branches.json`. This manifest identifies
+three cases in the existing compressed archive by setup, turn, complete-case
+SHA-256, and raw archive SHA-256; no choices or successor fields are removed.
+
+| Players | Seed | Turn | All paths | Shared successors | Seven-card exclusions |
+|---|---:|---:|---:|---:|---:|
+| 2 | 113,000,013 | 79 | 12 | 8 | 1 |
+| 3 | 114,000,015 | 103 | 5 | 4 | 1 |
+| 4 | 115,000,005 | 140 | 125 | 22 | 1 |
+
+The routine external test verifies exact counts and complete successor coverage,
+then corrupts tokens and noble metadata on each excluded seven-card branch and
+requires rejection. Other paths retain their existing explicit classifications.
+This covers the successor gap in the older seven-card fixture without replacing
+it or treating excluded branches as external matches. All 46 Python tests pass.
+These are extracted regression cases from an already reported workload, not
+additional independent games or a new confirmation experiment.
