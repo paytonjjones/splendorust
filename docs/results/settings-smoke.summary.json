@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "strong"
+    ],
+    "games": 20,
+    "seed": 100000000,
+    "threads": 2,
+    "max_decisions": 20000,
+    "check": true,
+    "search": {
+      "iterations": 7,
+      "depth": 3,
+      "width": 2,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "48500c720f030f9e",
+  "max_decisions": 20000,
+  "invariants_checked": true,
+  "engine": "splendorust-v1",
+  "seed": 100000000,
+  "players": 2,
+  "requested_games": 20,
+  "completed_games": 20,
+  "incomplete_games": 0,
+  "independent_blocks": 10,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 11,
+      "shared_wins": 0,
+      "win_share": 11.0,
+      "win_rate": 0.55,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.45,
+      "average_score": 13.0
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 9,
+      "shared_wins": 0,
+      "win_share": 9.0,
+      "win_rate": 0.45,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.55,
+      "average_score": 13.2
+    }
+  ],
+  "average_turns": 56.4,
+  "average_decisions": 93.5,
+  "runtime_seconds": 0.012746792,
+  "games_per_second": 1569.0222292793355,
+  "decisions_per_second": 146703.57843761786,
+  "threads": 2,
+  "search_config": "SearchConfig { iterations: 7, depth: 3, width: 2, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "raw_report_sha256": "6b6a60789487d0fe7d889b7b25a0b25edfd8691a9c433e01c4227ee67c43c98f",
+  "record_set_sha256": "e74e17e3bdd342dcc2baa9fe0951de127f20f878f5065509658ab4dfbeba2316",
+  "raw_archive": "settings-smoke.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20
+  }
+}

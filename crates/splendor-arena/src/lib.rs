@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 //! Tournament/replay layer. All serialization and wall-clock measurement live here.
+mod settings;
+
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use splendor_agents::{SearchConfig, make_agent};
@@ -110,7 +112,8 @@ pub struct GameRecord {
     pub status: String,
     pub trajectory_hash: String,
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct RunConfig {
     pub names: Vec<String>,
     pub games: usize,
@@ -118,6 +121,7 @@ pub struct RunConfig {
     pub threads: usize,
     pub max_decisions: usize,
     pub check: bool,
+    #[serde(with = "settings::SearchSettings")]
     pub search: SearchConfig,
 }
 impl RunConfig {
@@ -250,6 +254,9 @@ pub struct AgentStats {
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Report {
+    /// Absent in older reports. Never reconstruct settings from debug text.
+    #[serde(default)]
+    pub run_config: Option<RunConfig>,
     pub source_id: String,
     pub max_decisions: usize,
     pub invariants_checked: bool,
@@ -272,6 +279,46 @@ pub struct Report {
     pub reproducible: bool,
     pub promotion: String,
     pub records: Vec<GameRecord>,
+}
+impl Report {
+    /// Recover a checked fixed-budget configuration for this exact source build.
+    pub fn verification_config(&self) -> Result<RunConfig, String> {
+        if self.engine != ENGINE_VERSION || self.source_id != env!("SPLENDOR_SOURCE_ID") {
+            return Err("report engine or source fingerprint differs from this build".into());
+        }
+        let config = self
+            .run_config
+            .as_ref()
+            .ok_or("report has no structured run settings")?;
+        config.validate()?;
+        if config.search.time_budget.is_some() || !self.reproducible {
+            return Err("timed or non-reproducible reports cannot be verified by rerunning".into());
+        }
+        let names: Vec<_> = self.agents.iter().map(|a| a.agent.as_str()).collect();
+        if config.names.iter().map(String::as_str).collect::<Vec<_>>() != names
+            || self.agents.iter().enumerate().any(|(i, a)| a.identity != i)
+            || config.games != self.requested_games
+            || config.seed != self.seed
+            || config.names.len() != self.players
+            || config.threads != self.threads
+            || config.max_decisions != self.max_decisions
+            || config.check != self.invariants_checked
+            || format!("{:?}", config.search) != self.search_config
+        {
+            return Err("structured run settings disagree with report metadata".into());
+        }
+        Ok(config.clone())
+    }
+
+    /// Check every recorded result, including blocked and capped games.
+    /// Timing and statistical summaries are not part of this comparison.
+    pub fn verify_records(&self) -> Result<(), String> {
+        let rerun = tournament(&self.verification_config()?)?;
+        if self.records != rerun.records {
+            return Err("rerun game records differ from the report".into());
+        }
+        Ok(())
+    }
 }
 /// Conservative empirical Bernstein interval for independent bounded block means.
 /// Seat rotations are clustered, never treated as independent observations.
@@ -384,6 +431,7 @@ pub fn tournament(config: &RunConfig) -> Result<Report, String> {
     }
     .to_string();
     Ok(Report {
+        run_config: Some(config.clone()),
         source_id: env!("SPLENDOR_SOURCE_ID").into(),
         max_decisions: config.max_decisions,
         invariants_checked: config.check,engine:ENGINE_VERSION.into(),seed:config.seed,players:n,requested_games:config.games,completed_games:completed,incomplete_games:config.games-completed,independent_blocks:blocks,ci_method:"95% empirical Bernstein over independent setup blocks; rotations clustered; shared wins split; unfinished credit bounded by 0 and 1".into(),agents,average_turns:turns/config.games as f64,average_decisions:decisions/config.games as f64,runtime_seconds:elapsed,games_per_second:config.games as f64/elapsed,decisions_per_second:decisions/elapsed,threads:config.threads,search_config:format!("{:?}",config.search),reproducible:config.search.time_budget.is_none(),promotion,records})
@@ -426,6 +474,86 @@ mod tests {
             check: true,
             search: SearchConfig::default(),
         }
+    }
+    #[test]
+    fn structured_settings_preserve_all_policies_and_duration_precision() {
+        use splendor_agents::{Evaluation, RolloutPolicy};
+        for rollout in [
+            RolloutPolicy::Random,
+            RolloutPolicy::Greedy,
+            RolloutPolicy::Strong,
+        ] {
+            for evaluation in [Evaluation::Score, Evaluation::Engine] {
+                let mut c = config();
+                c.search = SearchConfig {
+                    iterations: 7,
+                    depth: 3,
+                    width: 2,
+                    time_budget: Some(std::time::Duration::new(3, 123_456_789)),
+                    rollout,
+                    evaluation,
+                };
+                let json = serde_json::to_string(&c).unwrap();
+                let restored: RunConfig = serde_json::from_str(&json).unwrap();
+                restored.validate().unwrap();
+                assert_eq!(format!("{c:?}"), format!("{restored:?}"));
+                assert!(
+                    serde_json::from_str::<RunConfig>(&json.replace("\"depth\"", "\"typo\""))
+                        .is_err()
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn report_rerun_checks_records_and_rejects_unsafe_or_missing_settings() {
+        let mut c = config();
+        c.names = vec!["search".into(), "strong".into()];
+        c.games = 2;
+        c.threads = 2;
+        c.search.iterations = 7;
+        c.search.depth = 3;
+        c.search.width = 2;
+        let report = tournament(&c).unwrap();
+        let json = serde_json::to_value(&report).unwrap();
+        let restored: Report = serde_json::from_value(json.clone()).unwrap();
+        restored.verify_records().unwrap();
+        let mut bad = restored.clone();
+        bad.records[0].trajectory_hash.push('0');
+        assert!(bad.verify_records().unwrap_err().contains("records differ"));
+        for field in ["seed", "max_decisions", "threads", "requested_games"] {
+            let mut bad = json.clone();
+            bad[field] = serde_json::json!(1);
+            let bad: Report = serde_json::from_value(bad).unwrap();
+            assert!(bad.verification_config().is_err(), "{field}");
+        }
+        let mut bad = restored.clone();
+        bad.source_id.push('0');
+        assert!(bad.verification_config().is_err());
+        let mut bad = restored.clone();
+        bad.engine.push('0');
+        assert!(bad.verification_config().is_err());
+        let mut bad = restored.clone();
+        bad.run_config.as_mut().unwrap().search.time_budget =
+            Some(std::time::Duration::from_nanos(1));
+        assert!(bad.verification_config().unwrap_err().contains("timed"));
+        let mut bad = restored.clone();
+        bad.run_config.as_mut().unwrap().names[0] = "unknown-agent".into();
+        assert!(bad.verification_config().is_err());
+        let mut legacy = json;
+        legacy.as_object_mut().unwrap().remove("run_config");
+        let legacy: Report = serde_json::from_value(legacy).unwrap();
+        assert!(
+            legacy
+                .verification_config()
+                .unwrap_err()
+                .contains("no structured")
+        );
+
+        c.max_decisions = 1;
+        let capped = tournament(&c).unwrap();
+        assert_eq!(capped.incomplete_games, 2);
+        capped.verify_records().unwrap();
     }
     #[test]
     fn replay_roundtrip_and_reject_version_and_corruption() {

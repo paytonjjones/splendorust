@@ -13,6 +13,7 @@ cargo test --workspace --release --locked
 cargo run --release -- play --agents strong,greedy --seed 42 --check --output game.json
 cargo run --release -- replay game.json
 cargo run --release -- compare --agent-a strong --agent-b greedy --games 20000 --seed 9000001 --threads 4 --output comparison.json
+cargo run --release -- verify-report comparison.json
 cargo run --release -- compare --agent-a search --agent-b strong --games 1000 --seed 100001 --threads 4 --iterations 128 --depth 8
 cargo run --release -- tournament --agents strong,greedy,random --games 3000 --threads 4
 cargo run --release -- benchmark --games 10000 --players 2 --threads 4
@@ -21,7 +22,7 @@ cargo run --release -- audit --games 1000002 --threads 4
 
 `games` must be divisible by the player count. Each setup is played in all seat rotations. `compare` puts one candidate against N−1 copies of the baseline. `tournament` accepts 2–4 named identities. A repeated agent name still has a separate RNG stream per identity.
 
-Use `--help` on any command. `play --trace` prints all decisions. `--check` enables state audits after each decision. JSON reports contain ordered per-game records and trajectory hashes. The source fingerprint identifies uncommitted experiments too. Timing fields vary between runs; fixed-budget game records do not depend on thread count.
+Use `--help` on any command. `play --trace` prints all decisions. `--check` enables state audits after each decision. JSON reports contain ordered per-game records and trajectory hashes. The source fingerprint identifies uncommitted experiments too. Timing fields vary between runs; fixed-budget game records do not depend on thread count. New reports also store structured run settings. `verify-report` reruns these settings and compares every game record, including blocked and capped games. It requires the same source fingerprint and engine version, and rejects timed runs. It does not check timing fields or statistical summaries. Older reports remain readable, but cannot use this command because their settings are not structured.
 
 ## Agents
 

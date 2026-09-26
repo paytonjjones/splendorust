@@ -1,6 +1,8 @@
 use clap::{Args, Parser, Subcommand};
 use splendor_agents::{Evaluation, RolloutPolicy, SearchConfig};
-use splendor_arena::{History, RunConfig, play_game, replay, save_history, summary, tournament};
+use splendor_arena::{
+    History, Report, RunConfig, play_game, replay, save_history, summary, tournament,
+};
 use splendor_core::{ActionSet, GameState, Rng};
 use std::{
     hint::black_box,
@@ -51,6 +53,10 @@ enum Command {
         games: usize,
         #[arg(long)]
         output: Option<PathBuf>,
+    },
+    /// Rerun a report from this source build and compare all game records.
+    VerifyReport {
+        file: PathBuf,
     },
     Replay {
         file: PathBuf,
@@ -212,6 +218,16 @@ fn run() -> Result<(), String> {
             c.names = vec![agent_b; players as usize];
             c.names[0] = agent_a;
             write_report(c, output)?;
+        }
+        Command::VerifyReport { file } => {
+            let report: Report =
+                serde_json::from_slice(&std::fs::read(file).map_err(|e| e.to_string())?)
+                    .map_err(|e| e.to_string())?;
+            report.verify_records()?;
+            println!(
+                "Verified all {} game records; timing and summaries were not compared",
+                report.records.len()
+            );
         }
         Command::Replay { file } => {
             let h: History =

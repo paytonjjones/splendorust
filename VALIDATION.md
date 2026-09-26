@@ -35,3 +35,20 @@ Normal-game results, no-action counts, and decision-limit counts must be reporte
 No external engine is used as an unquestioned oracle. A pinned MIT-licensed independent engine now matches 5,016 shared complete-turn transitions, 10,258 shared choices at 574 positions, and all 90 card / 10 noble tuples. [The comparison record](docs/PARITY.md) defines the workload, checks, exclusions, source, and license. The reference has material rule and information differences. This is bounded transition parity, not full engine equivalence. Earlier data sources include an unlicensed repository; no implementation code from it was copied. The local independent enumerators cover the largest combinatorial decisions.
 
 No test suite proves all reachable states correct. The milestone is a tested foundation with explicit rule boundaries. Search strength has been measured against the included agents, not against expert humans. The core does not yet have a formal verification proof, external engine equivalence certificate, or tested cross-platform floating-point search guarantee.
+
+## Report rerun checks
+
+New reports contain `run_config`, including all search settings and an optional
+precise duration. Serialization stays in the arena crate. `verify-report FILE`
+requires a matching engine and source fingerprint, fixed budgets, valid run
+settings, and agreement between structured settings and existing metadata. It
+reruns the tournament and compares ordered game records exactly. Capped and
+blocked records can pass this reproducibility check; they still cannot pass the
+promotion gate. This command does not verify statistical summaries or timing.
+Reports without structured settings remain readable and fail rerun verification
+with an explicit error. Search equality across architectures remains untested.
+
+Tests cover non-default search settings, all rollout/evaluation choices,
+nanosecond duration preservation, unknown fields, changed game records,
+inconsistent metadata, missing settings, source/version mismatch, timed runs,
+and exact reproduction of capped records.

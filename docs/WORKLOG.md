@@ -110,3 +110,29 @@ reruns less dependent on manual transcription. Keep older reports readable and
 keep configuration data outside the core and agent observation boundary.
 Further agent work can inspect E10's four remaining capped states, but must use
 a new written hypothesis and fresh confirmation seeds before a new candidate.
+
+## Structured report settings checkpoint
+
+New arena reports contain all run settings as structured JSON. The agent and
+core crates still have no serialization dependency. The `verify-report` command
+checks engine/source identity, rejects timed or legacy settings, checks duplicate
+metadata, then reruns and compares every ordered game record. It does not claim
+to verify timing or statistical summaries. Incomplete records can reproduce;
+this does not make them eligible for promotion. No engine version change was
+needed because legal actions, RNG, and replay semantics did not change.
+
+Validation: formatting, strict release all-target workspace Clippy, all 50
+release Rust tests, and all 16 Python tests passed. Tests include non-default
+search settings, all policy variants, precise durations, malformed settings,
+legacy reports, changed records, and capped reruns. A CLI smoke run used 20 games,
+seed 100,000,000, search/strong, two threads, seven iterations, depth three, width
+two, and invariant checks. All 20 completed and all rerun records matched.
+`docs/results/settings-smoke.json.gz` preserves the raw report. Its source ID is
+`48500c720f030f9e`; record-set SHA256 is
+`e74e17e3bdd342dcc2baa9fe0951de127f20f878f5065509658ab4dfbeba2316`.
+This small smoke run is not an agent strength experiment.
+
+Next: audit whether archive validation checks the new settings as well as the
+per-game records. Then inspect the remaining E10 capped trajectories if no more
+material report-integrity gap is found. Independent parity remains bounded to
+the checked shared rules; the published blocked-state gap remains open.
