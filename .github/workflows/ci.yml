@@ -16,6 +16,14 @@ jobs:
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo test --workspace --release --locked
       - run: python3 scripts/check_data.py
-      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - name: Check out the pinned independent rules reference
+        run: |
+          git init "$RUNNER_TEMP/splendor-reference"
+          git -C "$RUNNER_TEMP/splendor-reference" fetch --depth 1 https://github.com/roeey777/Splendor-AI.git 95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b
+          git -C "$RUNNER_TEMP/splendor-reference" checkout --detach FETCH_HEAD
+      - name: Test evidence tools and independent rule comparisons
+        env:
+          SPLENDOR_REFERENCE: ${{ runner.temp }}/splendor-reference
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
       - run: cargo run --release --locked -- play --agents strong,greedy --seed 42 --check --output game.json
       - run: cargo run --release --locked -- replay game.json

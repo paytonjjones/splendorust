@@ -95,3 +95,21 @@ audit requested 100,000 games; complete seat-block rounding produced 99,997:
 source fingerprint, counts, and hashes are in `docs/results/threshold-validation.json`;
 stdout is in `docs/results/threshold-audit.txt`. No valid rule, RNG, enumeration,
 or replay behavior changed, so the engine remains `splendorust-v1`.
+
+## Validation workflow coverage
+
+`cargo test --workspace --release --locked` includes the two `block_audit`
+example tests through an explicit Cargo target with `test = true`. These tests
+check the distinction between a bounded cutoff and a real block, and the
+adversarial result for each of five recorded root choices. The standard Rust
+suite currently runs 55 tests.
+
+CI fetches the independent reference at the exact commit recorded in
+`docs/PARITY.md`, then sets `SPLENDOR_REFERENCE` for Python test discovery on
+both operating systems. The comparison loader checks commit, tracked-file
+cleanliness, and license before importing the rules. No external ML packages
+are installed. Fetch or validation failures fail the workflow rather than
+silently skipping the reference tests. The 29 Python tests include 15 reference
+tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 15.
+A fresh checkout and all 29 tests passed locally when this workflow was added.
+Hosted Linux/macOS workflow results are not yet verified.

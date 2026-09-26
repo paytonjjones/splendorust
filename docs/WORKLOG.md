@@ -392,3 +392,24 @@ examples: `cargo test --workspace` does not run their tests by default, so the
 block-audit regression tests currently require a separate documented command.
 Do not repeat E9's blocked-leaf reward change or claim general safety from this
 single public-feature case. External parity remains scoped as documented.
+
+## Routine validation now includes diagnostic and reference tests
+
+At `676432f`, verified that the standard workspace test command omitted both
+block-audit tests and CI left all 15 independent-reference tests skipped.
+Added an explicit Cargo example target with testing enabled. Updated CI to
+fetch the exact pinned reference commit into the runner temporary directory
+and provide it to Python test discovery; reference identity/license checks
+remain enforced by the existing comparison loader.
+
+Validation: formatting, strict release all-target workspace Clippy, all 55
+release workspace tests, and all 29 Python tests passed. The reference test
+used a fresh shallow fetch, not the previous cached checkout. No tests skipped.
+The CI configuration is updated but hosted runs are not claimed: no push was
+made. Cargo manifest fingerprint changes are expected; engine rules, replay
+semantics, and active agents are unchanged.
+
+Next unresolved research item remains the three E12 games that became capped
+when their control games completed. Reconstruct their exact histories from the
+archived candidate patch and compare recurrence patterns before proposing any
+combined intervention. The full parity boundary remains explicit.
