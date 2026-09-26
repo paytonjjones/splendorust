@@ -1,0 +1,55 @@
+{
+  "action_sets": {
+    "local_blind_reservation": 981,
+    "local_optional_gold_payment": 288,
+    "local_return_collected_color": 5046,
+    "positions": 574,
+    "reference_pass": 2,
+    "reference_reduced_take": 2257,
+    "shared_choices": 10258,
+    "shared_successors": 10258,
+    "successors_explicit_noble_choice": 4,
+    "successors_noble": 50,
+    "successors_players_2": 2650,
+    "successors_players_3": 3167,
+    "successors_players_4": 4441,
+    "successors_terminal": 57
+  },
+  "cards_matched": 90,
+  "cases": {
+    "blind_reservation": 90,
+    "matched": 5016,
+    "no_legal_action": 2,
+    "optional_gold_payment": 64,
+    "return_collected_color": 298
+  },
+  "cases_sha256": "30d67bbfdd980c598314d4b762417e683f709f5c4113e1bb0904fceeb5faa432",
+  "commit": "95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b",
+  "export": {
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v1",
+    "format": 2,
+    "games_per_player_count": 20,
+    "seed": 92000000,
+    "source_id": "48500c720f030f9e"
+  },
+  "exporter_sha256": "0dffa0299a29f6d57a1dd05f88f257a4e560fad40ea8a17f1f5965d95b449fed",
+  "harness_sha256": "a96086a2a87626dd4c34d566b2a1abc4ea2c24eb745a249f067428b552283807",
+  "license": "MIT",
+  "license_sha256": "d876e3287cd147c5b1a8e5ea7a0cf7a7f09d5d60b819b018bbb6abd881925ce6",
+  "matched_coverage": {
+    "action_0": 1970,
+    "action_1": 341,
+    "action_3": 2547,
+    "action_4": 158,
+    "noble": 130,
+    "players_2": 1158,
+    "players_3": 1683,
+    "players_4": 2175,
+    "terminal": 52
+  },
+  "nobles_matched": 10,
+  "reference": "https://github.com/roeey777/Splendor-AI",
+  "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."
+}

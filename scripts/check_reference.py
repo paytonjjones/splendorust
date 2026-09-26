@@ -175,13 +175,15 @@ class Comparison:
         require((len(options) > 1) == any(a[0] == 7 for a in path),
                 "encoded noble phase disagrees with available noble choices")
 
-    def compare_choices(self, case):
+    def compare_choices(self, case, check_successors=False):
         before = case["before"]
         rule = self.hydrate(before, before)
         local, reference = set(), set()
         legal = rule.getLegalActions(rule.current_game_state, before["current"])
         counts = collections.Counter()
         for choice in case["choices"]:
+            if check_successors:
+                require(isinstance(choice.get("after"), dict), "missing choice successor")
             action = self.candidate(before, choice["actions"], choice["noble"], rule)
             if isinstance(action, str):
                 counts["local_" + action] += 1
@@ -190,6 +192,19 @@ class Comparison:
                 key = self.signature(action)
                 require(key not in local, "duplicate local compound action")
                 local.add(key)
+                if check_successors:
+                    after = choice["after"]
+                    actor = before["current"]
+                    gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
+                    require(gained == (set() if choice["noble"] == 255 else {choice["noble"]}),
+                            "choice noble disagrees with successor")
+                    result = self.compare({"before": before, "after": after, "actions": choice["actions"]})
+                    require(result == "matched", f"shared successor was excluded: {result}")
+                    counts["shared_successors"] += 1
+                    counts[f"successors_players_{len(before['players'])}"] += 1
+                    counts["successors_terminal"] += int(after["terminal"])
+                    counts["successors_noble"] += int(bool(gained))
+                    counts["successors_explicit_noble_choice"] += int(any(a[0] == 7 for a in choice["actions"]))
         for action in legal:
             if action["type"] == "pass":
                 counts["reference_pass"] += 1
@@ -248,14 +263,17 @@ def main():
         first = next(stream)
         digest.update(first)
         metadata = json.loads(first)
-        require(metadata["format"] == 1, "unsupported export format")
+        require(metadata["format"] in (1, 2), "unsupported export format")
+        check_successors = metadata["format"] == 2
+        if check_successors:
+            require(metadata.get("choice_successors") is True, "missing successor export flag")
         for line_number, line in enumerate(stream, 2):
             digest.update(line)
             case = json.loads(line)
             try:
                 result = comparison.compare(case)
                 if case.get("choices") is not None:
-                    choice_counts.update(comparison.compare_choices(case))
+                    choice_counts.update(comparison.compare_choices(case, check_successors))
             except (ValueError, KeyError, IndexError) as exc:
                 raise ValueError(f"case line {line_number}, seed {case['seed']}, turn {case['before']['turns']}: {exc}") from exc
             counts[result] += 1
@@ -272,7 +290,7 @@ def main():
               "exporter_sha256": hashlib.sha256((ROOT / "crates/splendor-arena/examples/parity_export.rs").read_bytes()).hexdigest(),
               "cards_matched": 90, "nobles_matched": 10,
               "cases": dict(counts), "matched_coverage": dict(categories), "action_sets": dict(choice_counts),
-              "scope": "Shared complete-turn transitions and sampled shared action sets; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."}
+              "scope": "Shared complete-turn transitions and sampled shared action sets, with branch successors when exported; aligned exogenous draws. Not full rules, RNG, observation, or outcome parity."}
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(text)

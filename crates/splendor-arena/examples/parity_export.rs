@@ -29,10 +29,15 @@ fn complete_choices(
     old_nobles: u16,
     path: &mut Vec<[u8; 7]>,
     out: &mut Vec<Value>,
+    include_successors: bool,
 ) {
     if !path.is_empty() && matches!(state.phase(), Phase::Main | Phase::Terminal) {
         let gained = state.observe(actor).players[actor].nobles & !old_nobles;
-        out.push(json!({"actions": path, "noble": if gained == 0 { NONE } else { gained.trailing_zeros() as u8 }}));
+        let mut choice = json!({"actions": path, "noble": if gained == 0 { NONE } else { gained.trailing_zeros() as u8 }});
+        if include_successors {
+            choice["after"] = snapshot(state);
+        }
+        out.push(choice);
         return;
     }
     let mut legal = ActionSet::new();
@@ -42,7 +47,7 @@ fn complete_choices(
         next.apply_action(action).expect("generated legal action");
         next.check_invariants().expect("branch invariants");
         path.push(encode(action));
-        complete_choices(&next, actor, old_nobles, path, out);
+        complete_choices(&next, actor, old_nobles, path, out, include_successors);
         path.pop();
     }
 }
@@ -52,16 +57,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let games: u64 = args.next().unwrap_or_else(|| "20".into()).parse()?;
     let seed: u64 = args.next().unwrap_or_else(|| "92000000".into()).parse()?;
     let choice_interval: u32 = args.next().unwrap_or_else(|| "0".into()).parse()?;
+    let include_successors: bool = args.next().unwrap_or_else(|| "false".into()).parse()?;
     if games == 0 {
         return Err("games must be positive".into());
     }
     let mut out = BufWriter::new(io::stdout().lock());
-    writeln!(
-        out,
-        "{}",
-        json!({"format": 1, "engine": ENGINE_VERSION,
-        "source_id": env!("SPLENDOR_SOURCE_ID"), "games_per_player_count": games, "seed": seed, "choice_interval": choice_interval})
-    )?;
+    let mut metadata = json!({"format": 1, "engine": ENGINE_VERSION,
+        "source_id": env!("SPLENDOR_SOURCE_ID"), "games_per_player_count": games,
+        "seed": seed, "choice_interval": choice_interval});
+    if include_successors {
+        metadata["format"] = json!(2);
+        metadata["choice_successors"] = json!(true);
+    }
+    writeln!(out, "{metadata}")?;
     for count in 2..=4 {
         for game in 0..games {
             let setup = seed.wrapping_add(count as u64 * 1_000_000 + game);
@@ -83,6 +91,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             state.observe(actor).players[actor].nobles,
                             &mut Vec::new(),
                             &mut paths,
+                            include_successors,
                         );
                         Some(paths)
                     } else {

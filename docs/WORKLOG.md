@@ -227,3 +227,27 @@ Next gap: complete action sets currently check each alternative's signature,
 but only the selected turn has its resulting state compared with the reference.
 Extend the diagnostic export to include successor snapshots for sampled choice
 branches, and verify those snapshots with the same external transition check.
+
+## Independent branch successor comparison
+
+Extended the offline exporter with optional format-2 branch snapshots. The
+reference harness now verifies every shared sampled choice's successor, not
+only the selected policy path. Missing branch snapshots and corrupt branch
+scores are rejected. Old format-1 archives remain readable.
+
+The fixed 60-game workload checks 10,258 shared branch successors at 574 positions
+(2,650 two-player, 3,167 three-player, 4,441 four-player). It covers 57 terminal
+successors, 50 noble acquisitions, and four explicit noble-choice branches.
+Selected transitions and exclusion counts remain unchanged. Compared all old
+and new exported cases after removing the new snapshots: every selected action
+path and choice signature matches. The compressed format-2 evidence and summary
+are archived. Formatting, strict release all-target workspace Clippy, and all
+51 release Rust tests passed. The optional reference tests include new branch
+mutation checks. No engine version change is needed for this diagnostic format.
+
+Next parity boundary: explicit multiple-noble branch successors in this regular
+sample occur only at two-player positions. Existing three-/four-player selected
+paths contain such phases outside the every-tenth-turn sample. Add targeted
+sampling of observed noble-choice and terminal boundaries, then verify full
+branch successors there. This can extend rare-case coverage without merely
+increasing random game counts. Outcome tiebreak differences remain explicit.

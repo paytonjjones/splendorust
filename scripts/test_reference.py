@@ -15,7 +15,7 @@ class ReferenceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.comparison = Comparison(pathlib.Path(os.environ["SPLENDOR_REFERENCE"]))
         run = subprocess.run(
-            ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--", "2", "92000000", "10"],
+            ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--", "2", "92000000", "10", "true"],
             cwd=ROOT, check=True, capture_output=True, text=True)
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
 
@@ -48,9 +48,20 @@ class ReferenceTests(unittest.TestCase):
         checked = 0
         for case in self.cases:
             if case.get("choices") is not None:
-                self.comparison.compare_choices(case)
+                counts = self.comparison.compare_choices(case, check_successors=True)
+                self.assertEqual(counts["shared_choices"], counts["shared_successors"])
                 checked += 1
         self.assertGreater(checked, 0)
+
+    def test_branch_successor_corruption_is_detected(self):
+        case = copy.deepcopy(self.cases[0])
+        case["choices"][0]["after"]["players"][0]["score"] += 1
+        with self.assertRaisesRegex(ValueError, "successor mismatch"):
+            self.comparison.compare_choices(case, check_successors=True)
+        case = copy.deepcopy(self.cases[0])
+        del case["choices"][0]["after"]
+        with self.assertRaisesRegex(ValueError, "missing choice successor"):
+            self.comparison.compare_choices(case, check_successors=True)
 
     def test_missing_choice_is_detected(self):
         case = copy.deepcopy(self.cases[0])

@@ -115,3 +115,33 @@ shared choices at 574 positions, with unchanged exclusions. This is a recheck
 with a repaired verifier, not an increase in sampled coverage. Evidence is in
 `docs/results/reference-path-audit.summary.json`; its case-file hash identifies
 the existing `reference-choices.jsonl.gz` input after decompression.
+
+## Shared branch successors
+
+Export format 2 adds a privileged successor snapshot to every sampled compound
+choice. The harness checks the resulting state for each shared choice through
+the external engine, as well as comparing the complete shared action sets.
+Missing snapshots and corrupt branch scores fail validation. Format 1 remains
+readable; no successor claim is made for its alternative branches.
+
+The fixed 60-game workload now matches **10,258 shared branch successors**:
+2,650 for two players, 3,167 for three players, and 4,441 for four players.
+These include 57 terminal successors, 50 noble acquisitions, and four explicit
+noble-choice branches. Some overlap the selected-turn checks; these are not
+counts of additional independent games. The 5,016 selected-turn matches and all
+exclusion counts remain unchanged. Every selected path and choice signature
+was also checked against the prior export and is unchanged.
+
+Evidence: `docs/results/reference-successors.jsonl.gz` and
+`docs/results/reference-successors.summary.json`. The engine remains version 1;
+format 2 versions the offline audit data, not game rules or replay semantics.
+
+```sh
+cargo run --release --locked --example parity_export -- 20 92000000 10 true > /tmp/successors.jsonl
+python3 scripts/check_reference.py --reference /tmp/splendor-reference \
+  --cases /tmp/successors.jsonl --output /tmp/successors-summary.json
+```
+
+The final `true` enables branch snapshots. All earlier scope limits still apply,
+including reference rule exclusions, aligned replacement draws, isolated
+transitions, and no outcome or hidden-information parity claim.
