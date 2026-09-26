@@ -377,3 +377,21 @@ harness hash; the raw archives are not replaced. Tests reject unrelated public
 flag changes, malformed flag types, incorrect append visibility, survivor flag
 changes after each slot removal, and corruption of an excluded blind branch.
 All 37 Python tests pass with the pinned reference. No simulator behavior changed.
+
+
+## Engine v2 regression comparison
+
+Version 2 adds only the explicit counter-capacity resource contract described
+in VALIDATION.md. Re-exported the current all-noble and two high-tier depletion
+workloads under v2 and reran the pinned independent checker. All 5,511 case
+lines and their branch successors are byte-identical to the prior exports,
+excluding metadata. The checker still validates 14,330 shared branch successors
+and 5,056 selected shared transitions, with the same explicit rule differences
+and reference winner defect. This does not extend the external parity scope.
+
+Current archives: `results/reference-v2{,-tier2,-tier3}.jsonl.gz`, with matching
+`.summary.json` files. `results/capacity-validation.json` records source identity,
+raw hashes, identical payload hashes, and the corresponding v1 archive names.
+Older archived reference exports retain their v1 metadata. These exports are
+diagnostic comparison cases, not replay histories and not evidence of counter
+handling in the independent reference.

@@ -661,3 +661,39 @@ Validation: formatting, strict release all-target workspace Clippy, and all
 counter failure evidence was inspected. The audit is intentionally not a test
 that requires buggy behavior to continue; a future fixed engine can emit a
 resource error in the same diagnostic.
+
+## Engine v2 atomic counter capacity
+
+Continued from `e03b638`. Fixed the confirmed reachable counter defect with
+`RuleError::TurnLimit`, checked after legality but before any mutation. All
+phases use the same guard. Legal enumeration stays intact; capacity does not
+create a terminal state or winners. A real final turn can reach the maximum
+and still produce its normal outcome. Search stops rollouts at capacity and
+uses its existing nonterminal evaluator, with a heuristic fallback at a root
+already at capacity. Arena errors propagate rather than creating a report.
+
+Bumped ENGINE_VERSION to `splendorust-v2`. Retained all ten old golden fixture
+files unchanged, added v2 copies, and verified only their engine labels differ.
+The current replay tests, diagnostic examples, and reference tests use v2.
+Old engine histories are explicitly rejected. Updated the promotion stage
+validator and its version-rejection test. JSON history format remains 1.
+
+Validation: formatting, strict release all-target workspace Clippy, all 68
+release Rust tests, and all 37 Python tests against the pinned reference pass.
+Debug/release audits both return TurnLimit with unchanged state and valid
+invariants. Added tests for atomic rejection across all decision phases,
+near-capacity search, and a real terminal turn reaching the limit.
+
+The 1,000-game search/strong comparison at seed 110,000,000, 64 iterations,
+depth 8, width 6 has identical records before/after, all complete. Sources:
+v1 `ae728260bd1abd30`, v2 `93aa7293171a9875`. Archived reports and record hashes.
+Re-exported and checked all three current reference workloads under v2:
+5,511 case lines byte-identical except metadata, 5,056 matched selected
+transitions, and 14,330 checked shared successors. Known reference differences
+and winner defects remain explicit. No full parity or strength claim.
+
+Next useful audit: inspect replay/report tooling for version assumptions after
+this intentional engine change. In particular, confirm archived historical
+reports remain inspectable without being eligible for new promotion or silent
+replay relabelling. Then return to any uncovered public-rule/action boundary;
+do not repeat the same three parity exports without a new change or gap.

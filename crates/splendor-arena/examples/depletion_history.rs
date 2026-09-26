@@ -103,7 +103,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     history.state_debug = format!("{state:?}");
                     assert_eq!(replay(&history)?, state);
                     std::fs::write(
-                        output.join(format!("tier-{}-v1.json", tier + 1)),
+                        output.join(format!("tier-{}-v2.json", tier + 1)),
                         serde_json::to_vec(&history)?,
                     )?;
                     println!(

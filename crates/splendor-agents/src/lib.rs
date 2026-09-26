@@ -316,7 +316,11 @@ fn evaluation(o: &Observation, root: usize, kind: Evaluation) -> f64 {
 }
 impl Agent for SearchAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
-        if o.phase != Phase::Main || legal.len() == 1 || self.config.iterations == 0 {
+        if o.phase != Phase::Main
+            || legal.len() == 1
+            || self.config.iterations == 0
+            || o.turns == u32::MAX
+        {
             return best(o, legal, true);
         }
         let base = Some(potential(o, &o.players[o.current as usize]));
@@ -360,6 +364,7 @@ impl Agent for SearchAgent {
             let mut aa = ActionSet::new();
             for _ in 0..self.config.depth.saturating_mul(4).max(4) {
                 if state.is_terminal()
+                    || state.turns() == u32::MAX
                     || (state.turns() - o.turns >= self.config.depth
                         && state.phase() == Phase::Main)
                 {
@@ -415,6 +420,34 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    #[test]
+    fn search_stops_at_counter_capacity_without_panicking() {
+        let mut state = GameState::new(2, 123).unwrap();
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let mut observation = state.observe(0);
+        observation.turns = u32::MAX - 1;
+        observation.determinize(&mut Rng::new(42)).unwrap();
+        let mut agent = SearchAgent::new(
+            42,
+            SearchConfig {
+                iterations: 4,
+                ..Default::default()
+            },
+        );
+        assert!(legal.contains(&agent.select_action(&observation, &legal)));
+        assert_eq!(agent.simulations, 4);
+        state.apply_action(legal[0]).unwrap();
+        state.legal_actions(&mut legal);
+        observation = state.observe(1);
+        observation.turns = u32::MAX;
+        observation.determinize(&mut Rng::new(42)).unwrap();
+        assert_eq!(
+            agent.select_action(&observation, &legal),
+            best(&observation, &legal, true)
+        );
+        assert_eq!(agent.simulations, 4);
+    }
     #[test]
     fn large_search_depth_does_not_wrap_at_nonzero_turn() {
         let mut state = GameState::new(2, 123).unwrap();

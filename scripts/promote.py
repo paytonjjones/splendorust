@@ -75,7 +75,7 @@ def validate_stage(report, args, games, seed, previous_source):
     if report.get('run_config') != expected:
         raise ValueError('report settings differ from the requested stage')
     source = (report['engine'], report['source_id'])
-    if (source[0] != 'splendorust-v1' or not isinstance(source[1], str) or not source[1]
+    if (source[0] != 'splendorust-v2' or not isinstance(source[1], str) or not source[1]
             or (previous_source is not None and source != previous_source)):
         raise ValueError('unsupported engine or source changed between stages')
     for record in report['records']:

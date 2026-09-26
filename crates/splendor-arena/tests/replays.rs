@@ -2,7 +2,7 @@ use splendor_arena::{History, replay};
 use splendor_core::{ActionSet, Phase};
 #[test]
 fn golden_completed_game_and_all_prefix_snapshots() {
-    let history: History = serde_json::from_str(include_str!("fixtures/seed42.json")).unwrap();
+    let history: History = serde_json::from_str(include_str!("fixtures/seed42-v2.json")).unwrap();
     let state = replay(&history).unwrap();
     assert!(state.is_terminal());
     let mut saw_payment = false;
@@ -27,8 +27,8 @@ fn golden_completed_game_and_all_prefix_snapshots() {
 #[test]
 fn published_rule_gap_is_a_reproducible_blocked_state_not_a_victory() {
     for fixture in [
-        include_str!("fixtures/blocked.json"),
-        include_str!("fixtures/blocked-search-v1.json"),
+        include_str!("fixtures/blocked-v2.json"),
+        include_str!("fixtures/blocked-search-v2.json"),
     ] {
         let history: History = serde_json::from_str(fixture).unwrap();
         let state = replay(&history).unwrap();
@@ -48,7 +48,7 @@ fn published_rule_gap_is_a_reproducible_blocked_state_not_a_victory() {
 fn recorded_search_cycle_preserves_state_except_turn_count() {
     use splendor_core::Action;
     let history: History =
-        serde_json::from_str(include_str!("fixtures/return-cycle-v1.json")).unwrap();
+        serde_json::from_str(include_str!("fixtures/return-cycle-v2.json")).unwrap();
     let mut state = replay(&history).unwrap();
     let viewer = state.current_player();
     let before = state.observe(viewer);
@@ -72,7 +72,7 @@ fn recorded_search_cycle_preserves_state_except_turn_count() {
 fn a_legal_cycle_can_ignore_affordable_purchases() {
     use splendor_core::Action;
     let history: History =
-        serde_json::from_str(include_str!("fixtures/main-cycle-v1.json")).unwrap();
+        serde_json::from_str(include_str!("fixtures/main-cycle-v2.json")).unwrap();
     let mut state = replay(&history).unwrap();
     assert_eq!(state.phase(), Phase::Main);
     let before = state.observe(state.current_player());
@@ -103,7 +103,7 @@ fn a_legal_cycle_can_ignore_affordable_purchases() {
 fn threshold_observations_allow_pending_nobles_but_require_completed_round_flag() {
     use splendor_core::{Rng, RuleError};
     let history: History =
-        serde_json::from_str(include_str!("fixtures/threshold-noble-v1.json")).unwrap();
+        serde_json::from_str(include_str!("fixtures/threshold-noble-v2.json")).unwrap();
     let state = replay(&history).unwrap();
     let current = state.current_player();
     let observed = state.observe(current);
@@ -145,7 +145,7 @@ fn threshold_observations_allow_pending_nobles_but_require_completed_round_flag(
 #[test]
 fn finished_round_observation_cannot_restart_main_phase() {
     use splendor_core::{Rng, RuleError};
-    let history: History = serde_json::from_str(include_str!("fixtures/seed42.json")).unwrap();
+    let history: History = serde_json::from_str(include_str!("fixtures/seed42-v2.json")).unwrap();
     let state = replay(&history).unwrap();
     assert!(state.is_terminal());
     let mut observation = state.observe(0);
@@ -162,8 +162,8 @@ fn legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots() {
     use splendor_arena::decode;
     use splendor_core::{Action, GameState, NONE};
     for (tier, raw) in [
-        (1, include_str!("fixtures/depleted-tier-2-v1.json")),
-        (2, include_str!("fixtures/depleted-tier-3-v1.json")),
+        (1, include_str!("fixtures/depleted-tier-2-v2.json")),
+        (2, include_str!("fixtures/depleted-tier-3-v2.json")),
     ] {
         let history: History = serde_json::from_str(raw).unwrap();
         let expected = replay(&history).unwrap();
@@ -214,7 +214,7 @@ fn legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots() {
 fn final_round_requires_a_threshold_player_who_already_finished_this_round() {
     use splendor_core::{Rng, RuleError};
     let history: History =
-        serde_json::from_str(include_str!("fixtures/threshold-noble-v1.json")).unwrap();
+        serde_json::from_str(include_str!("fixtures/threshold-noble-v2.json")).unwrap();
     let state = replay(&history).unwrap();
     let original = state.observe(state.current_player());
     assert_eq!(original.current, 2);
@@ -254,7 +254,7 @@ fn final_round_requires_a_threshold_player_who_already_finished_this_round() {
 fn final_round_cannot_put_threshold_scores_in_unplayed_seats() {
     use splendor_core::{Rng, RuleError};
     let h: History =
-        serde_json::from_str(include_str!("fixtures/final-round-ties-v1.json")).unwrap();
+        serde_json::from_str(include_str!("fixtures/final-round-ties-v2.json")).unwrap();
     let state = replay(&h).unwrap();
     assert!(state.is_terminal());
     let mut observation = state.observe(0);
@@ -280,4 +280,56 @@ fn final_round_cannot_put_threshold_scores_in_unplayed_seats() {
         observation.determinize(&mut Rng::new(42)),
         Err(RuleError::Invariant("final round trigger order"))
     );
+}
+
+#[test]
+fn old_engine_histories_are_not_silently_relabelled() {
+    let history: History = serde_json::from_str(include_str!("fixtures/seed42.json")).unwrap();
+    assert_eq!(replay(&history).unwrap_err(), "unsupported replay version");
+}
+
+#[test]
+fn counter_limit_rejects_legal_cycle_action_without_mutation_or_outcome() {
+    use splendor_core::{Action, Rng, RuleError};
+    let history: History =
+        serde_json::from_str(include_str!("fixtures/return-cycle-v2.json")).unwrap();
+    let state = replay(&history).unwrap();
+    let mut observation = state.observe(state.current_player());
+    observation.turns = u32::MAX;
+    let mut boundary = observation.determinize(&mut Rng::new(42)).unwrap();
+    let before = boundary.clone();
+    let action = Action::Return([0, 0, 1, 0, 1, 0]);
+    let mut legal = ActionSet::new();
+    boundary.legal_actions(&mut legal);
+    assert!(legal.contains(&action));
+    assert_eq!(boundary.apply_action(action), Err(RuleError::TurnLimit));
+    assert_eq!(boundary, before);
+    boundary.check_invariants().unwrap();
+    assert_eq!(boundary.outcome(), None);
+}
+
+#[test]
+fn final_representable_turn_can_still_finish_a_real_game() {
+    use splendor_arena::decode;
+    use splendor_core::{Rng, RuleError};
+    let mut history: History =
+        serde_json::from_str(include_str!("fixtures/final-round-ties-v2.json")).unwrap();
+    let expected = replay(&history).unwrap().outcome();
+    let final_action = decode(history.actions.pop().unwrap()).unwrap();
+    history.state_debug.clear();
+    let state = replay(&history).unwrap();
+    let mut observation = state.observe(state.current_player());
+    observation.turns = u32::MAX - 1;
+    let mut boundary = observation.determinize(&mut Rng::new(42)).unwrap();
+    boundary.apply_action(final_action).unwrap();
+    assert_eq!(boundary.turns(), u32::MAX);
+    boundary.check_invariants().unwrap();
+    assert_eq!(boundary.outcome(), expected);
+    assert!(boundary.is_terminal());
+    let before = boundary.clone();
+    assert_eq!(
+        boundary.apply_action(final_action),
+        Err(RuleError::IllegalAction)
+    );
+    assert_eq!(boundary, before);
 }

@@ -7,7 +7,7 @@ use std::panic::{AssertUnwindSafe, catch_unwind};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let history: History =
-        serde_json::from_str(include_str!("../tests/fixtures/return-cycle-v1.json"))?;
+        serde_json::from_str(include_str!("../tests/fixtures/return-cycle-v2.json"))?;
     let mut state = replay(&history)?;
     let viewer = state.current_player();
     let cycle = [

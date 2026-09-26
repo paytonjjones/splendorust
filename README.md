@@ -50,3 +50,9 @@ cargo bench -p splendor-arena --bench arena
 The gate runs checks, a throughput smoke test, a 2,000-game screen, and a 20,000-game confirmation on disjoint seeds. It requires a new output directory, records parameters in `run.json`, and writes `decision.json`. It rejects unfinished games and can enforce a throughput floor. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [EXPERIMENTS.md](EXPERIMENTS.md), [BENCHMARKS.md](BENCHMARKS.md), and [data/SOURCES.md](data/SOURCES.md).
+
+
+Current engine: `splendorust-v2`. At the `u32` turn-counter limit the core returns
+an atomic `TurnLimit` resource error, not a game outcome. Old v1 replay files
+require the matching v1 source; current versioned fixtures and migration evidence
+are documented in [VALIDATION.md](VALIDATION.md).

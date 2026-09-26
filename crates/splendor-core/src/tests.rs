@@ -657,3 +657,44 @@ fn determinization_rejects_seat_turn_mismatch() {
     o.turns = 1;
     assert!(o.determinize(&mut Rng::new(8)).is_err());
 }
+
+#[test]
+fn counter_capacity_is_atomic_for_all_generated_actions() {
+    let mut seen = [false; 4];
+    let mut rng = Rng::new(110000100);
+    for seed in 0..1000 {
+        let mut state = GameState::new(2 + (seed % 3) as u8, seed).unwrap();
+        for _ in 0..500 {
+            let legal = actions(&state);
+            if legal.is_empty() {
+                break;
+            }
+            let index = match state.phase {
+                Phase::Main => 0,
+                Phase::Payment(_) => 1,
+                Phase::Return => 2,
+                Phase::Noble => 3,
+                Phase::Terminal => unreachable!(),
+            };
+            if !seen[index] {
+                // Exercise each phase's pre-mutation guard independently of seat order.
+                let mut boundary = state.clone();
+                boundary.turns = u32::MAX;
+                for &action in &legal {
+                    assert_eq!(boundary.apply_action(action), Err(RuleError::TurnLimit));
+                    assert_eq!(boundary.turns, u32::MAX);
+                    let mut restored = boundary.clone();
+                    restored.turns = state.turns;
+                    assert_eq!(restored, state);
+                    assert_eq!(boundary.outcome(), None);
+                }
+                seen[index] = true;
+            }
+            state.apply_action(legal[rng.index(legal.len())]).unwrap();
+            if seen.iter().all(|&s| s) {
+                return;
+            }
+        }
+    }
+    assert_eq!(seen, [true; 4]);
+}

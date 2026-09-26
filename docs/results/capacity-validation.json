@@ -1,0 +1,122 @@
+{
+  "command": "cargo run --release --locked --bin splendor -- compare --agent-a search --agent-b strong --games 1000 --seed 110000000 --iterations 64 --depth 8 --width 6 --threads 4 --check --output FILE",
+  "identical_records": 1000,
+  "reports": {
+    "before": {
+      "engine": "splendorust-v1",
+      "source_id": "ae728260bd1abd30",
+      "raw_sha256": "be4bd969ffe6fe2031e89f93f430a0d1710213e1683971f216f1046ebfd53b03",
+      "records_sha256": "67e2ff8fd0cbaeeed491478140c3e176d95f02fd17724666fa1aac70ed35608a",
+      "completed_games": 1000
+    },
+    "after": {
+      "engine": "splendorust-v2",
+      "source_id": "93aa7293171a9875",
+      "raw_sha256": "14939163c0d9e87c524d3f9c7406f7455fcd94a161808c58cee2d22983d20d28",
+      "records_sha256": "67e2ff8fd0cbaeeed491478140c3e176d95f02fd17724666fa1aac70ed35608a",
+      "completed_games": 1000
+    }
+  },
+  "parity": {
+    "reference-v2": {
+      "raw_sha256": "839cecdcc0187b2a2e4a5d7ea180fe0181c3030deaedeb66693bdc877a38b332",
+      "previous_archive": "reference-all-nobles.jsonl.gz",
+      "identical_payload_sha256": "57b9de1b7e7abe44e175bea061c76160520d5d6fdefb3ace5e7e2171cc179572",
+      "cases": 5470,
+      "metadata": {
+        "boundary_choices": true,
+        "choice_interval": 10,
+        "choice_successors": true,
+        "engine": "splendorust-v2",
+        "format": 2,
+        "games_per_player_count": 20,
+        "noble_acquisition_choices": true,
+        "seed": 92000000,
+        "source_id": "93aa7293171a9875",
+        "winner_checks": true
+      }
+    },
+    "reference-v2-tier2": {
+      "raw_sha256": "9fe92f66b05220281fd77b53f2886784cb3d8d771108584abec8375dc37d83d5",
+      "previous_archive": "reference-depletion-tier-2.jsonl.gz",
+      "identical_payload_sha256": "45e14dd36e6b07c3e701237a83cc3793cc2c1a18b227a1f3924a2984117f25f8",
+      "cases": 16,
+      "metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 1,
+        "engine": "splendorust-v2",
+        "format": 2,
+        "source_id": "93aa7293171a9875",
+        "winner_checks": true
+      }
+    },
+    "reference-v2-tier3": {
+      "raw_sha256": "e9b1f3529facc771e9b5b3ab2888b3f3390761bbcdc641553b440517d0700aac",
+      "previous_archive": "reference-depletion-tier-3.jsonl.gz",
+      "identical_payload_sha256": "f6f3ea571df03211085bb9dfd46beec38f98a761ea774dd4356cd9a759c71fbc",
+      "cases": 25,
+      "metadata": {
+        "choice_interval": 0,
+        "choice_successors": true,
+        "depletion_tier": 2,
+        "engine": "splendorust-v2",
+        "format": 2,
+        "source_id": "93aa7293171a9875",
+        "winner_checks": true
+      }
+    }
+  },
+  "fixtures": {
+    "blocked-search-v2.json": {
+      "old": "blocked-search-v1.json",
+      "old_sha256": "3ac023674848e36ae93d7f373f83954c702fdc690061485cdc6a43f18897edf0",
+      "new_sha256": "ffd1382776ff422e8632e2262a96e42fe927453880a22f6e3d008f663ed86dcd"
+    },
+    "main-cycle-v2.json": {
+      "old": "main-cycle-v1.json",
+      "old_sha256": "e6d45b2dfed4c436b0458be9f0d80720396400438d0ff844a9c7156d3cccef44",
+      "new_sha256": "621ce24173ed448a67d6e898f424306b4df07c5a06e446e029ee7b01cef50b8e"
+    },
+    "return-cycle-v2.json": {
+      "old": "return-cycle-v1.json",
+      "old_sha256": "c39b641b2405344cacd7779cccf82240f4dcc51bb2497db4c68db04866d73931",
+      "new_sha256": "68428854dd1f005cb15e60b4651317773f082254b25883941c58abe8b5d73518"
+    },
+    "depleted-tier-3-v2.json": {
+      "old": "depleted-tier-3-v1.json",
+      "old_sha256": "fcc576f813372b5b49dfadcdbf86b198814cd2542ad5d93e18ecd5a1216e085f",
+      "new_sha256": "2f2006e15d5a34109befe697b1402f51468c1cda1b4ca0c3ff536a15bd3dea3e"
+    },
+    "depleted-tier-2-v2.json": {
+      "old": "depleted-tier-2-v1.json",
+      "old_sha256": "e1228455b27ad1f5303fd70d7fcb51d5844bd95a6d4ebcb6bc1cd8d81c78d99c",
+      "new_sha256": "4cc3dd6911fcdc257fb8fcb28a5976b08dadeb3f357a86ae136687d22f719e2a"
+    },
+    "threshold-noble-v2.json": {
+      "old": "threshold-noble-v1.json",
+      "old_sha256": "8775d386c8c84a450fee504e58258cd720fc5d8b53957c3a1f84ac2d8b513c32",
+      "new_sha256": "28b15b176b4545976581558797d57c5ec37e61c6606df9d0e1e7e2ce030bd0f2"
+    },
+    "seed42-v2.json": {
+      "old": "seed42.json",
+      "old_sha256": "b16003d882f8e176efe3e7ac3cf8e805c6f5e21fe83c73182d6dc63fc916456c",
+      "new_sha256": "d291eaefd58fafba8607a336131a4447077b0af5dd74323803447aac8a6c75a4"
+    },
+    "blocked-v2.json": {
+      "old": "blocked.json",
+      "old_sha256": "ab5ae6330de4a2d97b398b438d12358fc35ac857abcbad270adf7f585d72b218",
+      "new_sha256": "838c6b9d89b257d2bd23a87923953b94aa1fd3ceda1d699f85c5da5ff99971d0"
+    },
+    "blocked-e11-v2.json": {
+      "old": "blocked-e11-v1.json",
+      "old_sha256": "228e1681604056bb7fb7b4caaef075d33816e7432dfae49217cd7504a308bb0c",
+      "new_sha256": "6e4810a626b6e9800ab5e2e7b2aef248d7472d51940ffd7944f9425e119cbcc4"
+    },
+    "final-round-ties-v2.json": {
+      "old": "final-round-ties-v1.json",
+      "old_sha256": "6d5c0e7f768574fa7c3a127fcbd8f6d6a7671696d73750c8a914f533254f1dba",
+      "new_sha256": "60b2731acde884d78e259dfca04e4119f9a4cd4271b91bcbd5e23d86edf5a698"
+    }
+  }
+}

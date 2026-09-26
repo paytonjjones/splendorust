@@ -613,3 +613,21 @@ game records before and after; all games complete. Reports and hashes are in
 `docs/results/search-depth-comparison.json`. Source changes from
 `3992ef689453dcc8` to `8046abddb9a4d723`. Timing from this small run is not a
 performance result. No strength promotion is claimed.
+
+## Counter-capacity search handling
+
+Hypothesis: stopping a rollout at the engine counter capacity prevents a
+resource-limit panic without changing ordinary fixed-budget search decisions.
+At a root already at capacity, select the usual heuristic legal action; the
+core caller receives the explicit resource error. At a rollout boundary, use
+the existing nonterminal evaluation, never a fabricated outcome. Validate the
+boundary directly and compare a fixed seed workload with the prior build.
+
+The capacity tests pass. A fixed 1,000-game search/strong comparison at seed
+110,000,000, 64 iterations, depth 8, width 6 and four threads has identical full
+records: all 1,000 games complete. Before source `ae728260bd1abd30` uses v1;
+after source `93aa7293171a9875` uses v2. Both reports and hashes are archived in
+`docs/results/capacity-{before,after}.json.gz` and `capacity-validation.json`.
+This is behavioral regression evidence, not a playing-strength promotion or
+performance claim. No failed boundary experiment is discarded: v1 debug and
+release failure results remain beside the v2 resource-error results.

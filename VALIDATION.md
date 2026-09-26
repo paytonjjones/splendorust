@@ -151,9 +151,8 @@ acceptance changed; valid rules, action order, RNG, and replay semantics did not
 
 Search rollout depth uses elapsed turns, so a large requested depth cannot
 wrap an absolute `u32` turn deadline. The regression covers a legal nonzero-turn
-position and eight fixed agent seeds. This does not resolve eventual exhaustion
-of the core's `u32` turn counter after billions of turns; that separate limit
-requires a versioned engine decision. See the search depth audit in EXPERIMENTS.md.
+position and eight fixed agent seeds. Core counter exhaustion is handled separately by the v2 resource-limit
+contract described below. See the search depth audit in EXPERIMENTS.md.
 
 The public arena `play_game` entry point validates `RunConfig` and requires
 `rotation < player_count`. Invalid counts (including values that truncate when
@@ -187,9 +186,35 @@ cargo run --locked --example turn_limit_audit
 cargo run --release --locked --example turn_limit_audit
 ```
 
-This remains an open engine defect, separate from the fixed search depth
-addition. A versioned fix must check capacity before mutation, distinguish
-resource exhaustion from an illegal action or a terminal game, and prevent
-search rollouts from panicking at that boundary. Widening the counter alone
-would only move the same defect to a larger limit. The ordinary arena decision
-cap does not prove that all direct core callers stay below the boundary.
+This was confirmed in v1 and is fixed by the v2 contract below. Widening
+the counter alone would only move the defect to a larger limit. The ordinary
+arena decision cap does not prove all direct core callers stay below the boundary.
+
+
+### Version 2 resource-limit contract
+
+`ENGINE_VERSION` is `splendorust-v2`. At `turns == u32::MAX`, a rules-legal
+`apply_action` returns `RuleError::TurnLimit` before mutation. Illegal actions
+still return `IllegalAction`. Legal enumeration remains unchanged: capacity
+is an implementation limit, not a published rule or a victory. All decision
+phases use the same guard. A turn starting below the limit can reach the limit
+and can end the game normally. Terminal outcomes remain available at the limit.
+
+Search evaluates a truncated rollout at capacity with its existing nonterminal
+evaluation. At a root already at capacity it selects the usual heuristic legal
+action; the caller receives the core resource error. The arena propagates that
+error and cannot present the failed run as a complete promotion result.
+
+Old v1 histories are retained unchanged and rejected by the v2 replay loader.
+The ten `*-v2.json` golden fixtures copy only the engine label; tests replay
+and check their unchanged actions and snapshots. Hashes and semantic-copy
+checks are recorded in `docs/results/capacity-validation.json`. Use the original
+v1 commit to replay old reports or histories; do not silently relabel evidence.
+The promotion stage validator now requires v2 and tests reject v1 stage input.
+
+Both debug and release boundary audits return TurnLimit with unchanged state,
+valid invariants, and no outcome. New tests also check every legal action in
+all four decision phases, search near/at capacity, and an actual final turn
+that reaches the limit and keeps its correct outcome. All 68 release workspace
+Rust tests and 37 Python tests pass. The fixed 1,000-game search/strong comparison
+at seed 110,000,000 has identical complete game records before and after.

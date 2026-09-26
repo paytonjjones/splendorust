@@ -20,7 +20,7 @@ A complete player turn can require more than one agent decision:
 
 Payment and return are alternatives in ordinary turns. Pending decisions retain the current player. Only completed player turns increment `turns`. The engine checks the end-game trigger after the full turn. Seat zero starts; all players receive equal turns at the normal game end.
 
-`ActionSet` has stack storage for 256 actions. The largest payment space has 252 possibilities: distribute at most five gold substitutions across five colors. At most three tokens must be returned, giving at most 56 bundles over six colors. A loose upper bound for main decisions is 45 choices. Noble choice has at most five. Enumeration order is stable and part of engine version 1.
+`ActionSet` has stack storage for 256 actions. The largest payment space has 252 possibilities: distribute at most five gold substitutions across five colors. At most three tokens must be returned, giving at most 56 bundles over six colors. A loose upper bound for main decisions is 45 choices. Noble choice has at most five. Enumeration order is stable and unchanged from engine version 1 in version 2.
 
 This avoids a large Cartesian product of main moves, payments, returns, and noble choices. `RandomAgent` is uniform per decision phase. It is not uniform over all compound complete-turn paths. Consumers must distinguish decisions from player turns.
 
@@ -57,3 +57,11 @@ The official rules neither force eventual progress nor explain a turn with no le
 Confidence intervals cluster the seat rotations from one setup. They use the bounded empirical Bernstein interval of Maurer and Pontil (2009), Theorem 4, applying alpha/2 to each tail: `log(4 / 0.05)`. Missing outcomes contribute worst-case credit 0 to the lower bound and 1 to the upper bound. This avoids selective deletion of failed games. Intervals assume independent random setups and a policy fixed before evaluation. These are conservative intervals, not normal/Wald intervals. No Elo is reported for multiplayer games.
 
 Source: https://arxiv.org/abs/0907.3740
+
+
+Engine version 2 adds a checked turn-counter resource limit. `apply_action`
+validates rule legality first, then returns `TurnLimit` without mutation when
+`turns == u32::MAX`. This leaves legal enumeration intact and assigns no outcome.
+Search stops rollouts at capacity; arena execution errors propagate to callers.
+Replay version 1 remains the JSON format, while the engine label must match v2.
+See VALIDATION.md for fixture migration and boundary evidence.

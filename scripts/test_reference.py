@@ -238,7 +238,7 @@ class ReferenceTests(unittest.TestCase):
 
     def test_high_tier_depletion_histories_check_both_empty_slot_actions(self):
         for tier in (2, 3):
-            fixture = ROOT / f"crates/splendor-arena/tests/fixtures/depleted-tier-{tier}-v1.json"
+            fixture = ROOT / f"crates/splendor-arena/tests/fixtures/depleted-tier-{tier}-v2.json"
             run = subprocess.run(
                 ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--",
                  "--history", str(fixture), str(tier - 1)],

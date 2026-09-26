@@ -115,7 +115,7 @@ mod tests {
     use super::*;
 
     fn history() -> History {
-        serde_json::from_str(include_str!("../tests/fixtures/blocked-e11-v1.json")).unwrap()
+        serde_json::from_str(include_str!("../tests/fixtures/blocked-e11-v2.json")).unwrap()
     }
 
     #[test]

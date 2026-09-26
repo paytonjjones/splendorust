@@ -12,6 +12,7 @@ from promote import decision, setup_seed, validate_stage
 def synthetic_report():
     """Structurally valid all-candidate-wins evidence for gate unit tests only."""
     report = json.loads(gzip.decompress((ROOT / 'docs/results/settings-smoke.json.gz').read_bytes()))
+    report['engine'] = 'splendorust-v2'
     config = report['run_config']
     config.update(games=1000, seed=42, threads=4, check=False)
     config['search'].update(iterations=128, depth=8, width=6)
@@ -81,6 +82,7 @@ class GateTests(unittest.TestCase):
         for mutate in [lambda r: r['run_config']['search'].update(iterations=127),
                        lambda r: r.update(run_config=None),
                        lambda r: r.update(engine='future-engine'),
+                       lambda r: r.update(engine='splendorust-v1'),
                        lambda r: r.update(source_id='other-source'),
                        lambda r: [g.update(seed=0) for g in r['records'][:2]]]:
             bad = copy.deepcopy(report)

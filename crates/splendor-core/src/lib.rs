@@ -6,7 +6,7 @@ use arrayvec::ArrayVec;
 use data::{CARDS, NOBLES};
 pub use rng::Rng;
 
-pub const ENGINE_VERSION: &str = "splendorust-v1";
+pub const ENGINE_VERSION: &str = "splendorust-v2";
 pub const NONE: u8 = 255;
 pub const GOLD: usize = 5;
 /// Maximum: 252 payments (at most five wild tokens over five colors).
@@ -116,6 +116,8 @@ pub struct Observation {
 pub enum RuleError {
     PlayerCount,
     IllegalAction,
+    /// The turn counter cannot represent further play. This is not a game outcome.
+    TurnLimit,
     InvalidObservation,
     Invariant(&'static str),
 }
@@ -322,6 +324,10 @@ impl GameState {
     pub fn apply_action(&mut self, a: Action) -> Result<(), RuleError> {
         if !self.valid_action(a) {
             return Err(RuleError::IllegalAction);
+        }
+        // Check before any phase-specific mutation, including pending decisions.
+        if self.turns == u32::MAX {
+            return Err(RuleError::TurnLimit);
         }
         let pi = self.current_player();
         match a {
