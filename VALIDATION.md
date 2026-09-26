@@ -162,3 +162,34 @@ play. `block` remains a caller-supplied record label. A direct-call regression
 checks all seats for 2/3/4 players against tournament records, including capped
 games with no winners or ranks. Tournaments validate once before their workers
 call the private game runner.
+
+### Confirmed v1 turn-counter boundary defect
+
+`turn_limit_audit` first replays `return-cycle-v1.json` and checks a full legal
+cycle restores its observation except for two completed turns. The cycle uses
+only Take and Return, so hidden decks and card ownership stay fixed. Repeating
+that cycle 2,147,483,617 times advances the recorded turn 61 to `u32::MAX`.
+The audit skips those identical cycles by changing only the public turn count,
+then reconstructs a valid hidden state. It does not claim to replay billions of
+turns or preserve the original hidden deck order.
+
+The next legal Return reproduces two distinct failures at current v1:
+
+- Debug panics after changing tokens, leaving an invalid Return phase.
+- Release accepts the action, wraps turns to zero, and passes invariants in
+  this two-player state.
+
+Neither produces an outcome. Raw results and stderr are archived in
+`docs/results/turn-limit-{debug,release}.{json,stderr}`. Reproduce with:
+
+```sh
+cargo run --locked --example turn_limit_audit
+cargo run --release --locked --example turn_limit_audit
+```
+
+This remains an open engine defect, separate from the fixed search depth
+addition. A versioned fix must check capacity before mutation, distinguish
+resource exhaustion from an illegal action or a terminal game, and prevent
+search rollouts from panicking at that boundary. Widening the counter alone
+would only move the same defect to a larger limit. The ordinary arena decision
+cap does not prove that all direct core callers stay below the boundary.

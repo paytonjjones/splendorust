@@ -634,3 +634,30 @@ the four direct-call tests also pass in debug. Next open issue: establish a
 reproducible test at the core's turn-counter boundary before deciding whether
 to widen the counter or return an explicit resource-limit error. This is not
 a published-rule terminal outcome and must not assign winners.
+
+## Reachable turn-counter boundary audit
+
+Continued from `fe685a0`. Added `turn_limit_audit`, which verifies the existing
+legal token cycle, skips only a whole number of identical two-turn repetitions,
+and determinizes the resulting observation at turn `u32::MAX`. This is a
+reachable public state argument, not a fabricated initial-board counter or
+an assertion that billions of turns were replayed. It preserves only the
+observation, not the original hidden deck; the cycle never reads that deck.
+
+Both profiles reproduce the next Return defect: debug mutates tokens then
+panics and fails the Return invariant; release wraps to zero and passes
+invariants. Neither has an outcome. Archived JSON and stderr identify source
+`ae728260bd1abd30`. This audit changes no engine behavior.
+
+Next: implement an explicit, atomic core resource-limit error at the existing
+counter capacity and handle it in search. Bump ENGINE_VERSION and version
+current golden fixtures because valid unbounded cycle execution changes at
+that limit. Keep old evidence and fixtures available for their original engine
+version. Do not silently saturate, wrap, invent a terminal state, or treat
+resource exhaustion as a published-rule stalemate.
+
+Validation: formatting, strict release all-target workspace Clippy, and all
+63 release workspace Rust tests pass. Both diagnostic runs completed and their
+counter failure evidence was inspected. The audit is intentionally not a test
+that requires buggy behavior to continue; a future fixed engine can emit a
+resource error in the same diagnostic.
