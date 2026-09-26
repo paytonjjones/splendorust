@@ -698,3 +698,90 @@ fn counter_capacity_is_atomic_for_all_generated_actions() {
     }
     assert_eq!(seen, [true; 4]);
 }
+
+#[test]
+fn every_optional_gold_payment_preserves_full_state_invariants() {
+    // Card 0 costs one of each non-black color. Start with a real dealt copy,
+    // enough colored tokens for full payment, and enough gold for any subset.
+    let initial = (0..1000)
+        .map(|seed| GameState::new(2, seed).unwrap())
+        .find(|s| s.market.contains(&0))
+        .unwrap();
+    for reserved in [false, true] {
+        let mut state = initial.clone();
+        let slot = state.market.iter().position(|&id| id == 0).unwrap() as u8;
+        let buy = if reserved {
+            state.apply_action(Action::ReserveVisible(slot)).unwrap();
+            state.apply_action(Action::Take([1, 1, 1, 0, 0])).unwrap();
+            Action::BuyReserved(0)
+        } else {
+            Action::BuyVisible(slot)
+        };
+        tokens(&mut state, 0, [1, 1, 1, 1, 0, 5]);
+        state.check_invariants().unwrap();
+        assert!(actions(&state).contains(&buy));
+        let before = state.clone();
+        state.apply_action(buy).unwrap();
+        assert!(matches!(state.phase(), Phase::Payment(_)));
+        assert_eq!(state.turns(), before.turns());
+        state.check_invariants().unwrap();
+        assert_eq!(actions(&state).len(), 16);
+        for mask in 0u8..16 {
+            let colored: [u8; 5] = std::array::from_fn(|c| if c < 4 { (mask >> c) & 1 } else { 0 });
+            let payment = Action::Pay(colored);
+            assert!(actions(&state).contains(&payment));
+            let mut branch = state.clone();
+            branch.apply_action(payment).unwrap();
+            branch.check_invariants().unwrap();
+            let gold = 4 - mask.count_ones() as u8;
+            for (c, &paid) in colored.iter().enumerate() {
+                assert_eq!(
+                    branch.players[0].tokens[c],
+                    before.players[0].tokens[c] - paid
+                );
+                assert_eq!(branch.bank[c], before.bank[c] + paid);
+            }
+            assert_eq!(branch.players[0].tokens[GOLD], 5 - gold);
+            assert_eq!(branch.bank[GOLD], before.bank[GOLD] + gold);
+            assert_eq!(branch.players[0].owned, 1);
+            assert_eq!(branch.players[0].bonuses, [0, 0, 0, 0, 1]);
+            assert_eq!(branch.players[0].reserve_count(), 0);
+            assert_eq!(branch.turns(), before.turns() + 1);
+            assert_eq!(branch.current_player(), 1);
+            assert_eq!(branch.outcome(), None);
+        }
+    }
+}
+
+#[test]
+fn eighth_bonus_of_a_color_is_a_legal_purchase() {
+    // The external reference has a seven-card cap; the local rules do not.
+    let target = 0u8;
+    let mut state = (0..1000)
+        .map(|seed| GameState::new(2, seed).unwrap())
+        .find(|s| s.market.contains(&target))
+        .unwrap();
+    let color = CARDS[target as usize].bonus as usize;
+    let mut candidates: Vec<_> = CARDS
+        .iter()
+        .enumerate()
+        .filter(|&(id, card)| id != target as usize && card.bonus as usize == color)
+        .collect();
+    candidates.sort_by_key(|&(id, card)| (card.points, id));
+    for &(id, _) in candidates.iter().take(7) {
+        own(&mut state, 0, id as u8);
+    }
+    tokens(&mut state, 0, [0, 0, 0, 0, 0, 5]);
+    state.check_invariants().unwrap();
+    assert_eq!(state.players[0].bonuses[color], 7);
+    let slot = state.market.iter().position(|&id| id == target).unwrap() as u8;
+    let buy = Action::BuyVisible(slot);
+    assert!(actions(&state).contains(&buy));
+    state.apply_action(buy).unwrap();
+    state.check_invariants().unwrap();
+    state.apply_action(Action::Pay([0; 5])).unwrap();
+    state.check_invariants().unwrap();
+    assert_eq!(state.players[0].bonuses[color], 8);
+    assert_eq!(state.players[0].owned.count_ones(), 8);
+    assert_eq!(state.players[0].tokens[GOLD], 1);
+}

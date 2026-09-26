@@ -238,3 +238,20 @@ Audit identities, raw hashes, tool hashes, and CLI output are in
 `docs/results/version-tools-*`. These checks do not certify old reports as
 current-build experiments. Both added regression tests failed before the fix;
 all 39 Python tests now pass with the pinned independent reference.
+
+### Local tests for excluded reference rules
+
+The optional-gold transition test now starts with a real dealt card and a
+conserved token supply. It checks all 16 colored/gold payment subsets for card
+0, including all gold, for both market and reserved purchases: 32 complete
+purchase branches. Each branch checks bank/hand changes, ownership, bonus,
+reservation removal, turn advancement, no outcome, and full invariants. This
+supplements the independent Cartesian payment-generator test and the existing
+invalid-payment tests, whose manually replaced market is not a valid full state.
+
+A second valid-state test owns seven cards of one bonus color, purchases an
+eighth, and checks the complete partition and token invariants. The reference's
+seven-card cap is still excluded explicitly; local success is not external
+agreement. Existing return tests already apply every generated excess return
+with invariants, including old, newly collected, and gold tokens. No rules,
+actions, or agent behavior changed in this coverage addition.

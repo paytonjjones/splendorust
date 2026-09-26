@@ -717,3 +717,28 @@ or agent changes, so the production fingerprint remains `93aa7293171a9875`.
 Next: return to rule coverage. Inspect the local tests for each known external
 reference exclusion, especially optional gold and return of collected colors,
 and identify any missing boundary rather than repeating matched parity cases.
+
+## Local coverage of reference exclusions
+
+Continued from `be25091`. Audited known exclusions against Rust tests. Payment
+and return generators already have independent Cartesian checks, and return
+branches already check full invariants. The optional-gold purchase test used a
+manually replaced market card, so it could not verify complete card partition
+or conserved bank supply. Added a consistent-state test of all 16 payment
+subsets, including all gold, for both market and reserved sources. All 32
+branches check exact bank/hand payment, ownership, bonus, reservation removal,
+turn advancement, and invariants.
+
+Also added a valid-state purchase from seven to eight cards of one bonus color.
+The existing Python fixture classifies the reference's seven-card cap, but this
+new Rust test directly checks the local engine and full state conservation.
+These are local validation additions, not new external parity claims.
+
+All 70 release workspace Rust tests and 39 Python tests pass, as do formatting
+and strict release all-target Clippy. No runtime source changed; the build's
+source fingerprint nevertheless changes to `5fbacedf05ec987b` because it hashes
+core test source as well. ENGINE_VERSION remains v2.
+
+Next useful work: measure current core transition costs against pre-capacity
+v1 with a fixed release workload. Recent correctness checks have not yet had a
+controlled runtime comparison; do not infer a cost or optimize without one.
