@@ -249,6 +249,7 @@ class Comparison:
             action = self.candidate(before, choice["actions"], choice["noble"], rule)
             if check_successors:
                 self.check_reservation_bookkeeping(before, choice["after"], choice["actions"])
+                self.check_token_bookkeeping(before, choice["after"], choice["actions"])
             if isinstance(action, str):
                 counts["local_" + action] += 1
             else:
@@ -359,6 +360,49 @@ class Comparison:
                     expected.pop(slot)
             require(actual == expected, "reservation identity, visibility, or order changed")
 
+    def check_token_bookkeeping(self, before, after, actions):
+        # Local contract for all branches, including reference exclusions.
+        # This is not an independent reference transition comparison.
+        for snapshot in (before, after):
+            vectors = [snapshot['bank']] + [p['tokens'] for p in snapshot['players']]
+            require(all(isinstance(v, list) and len(v) == 6
+                        and all(type(n) is int and 0 <= n <= 255 for n in v) for v in vectors),
+                    'invalid token vector')
+        actor = before['current']
+        bank = list(before['bank'])
+        hands = [list(p['tokens']) for p in before['players']]
+        tag, slot = actions[0][:2]
+        transfer = [0]*6  # Positive amounts move from bank to actor.
+        if tag == 0:
+            transfer = actions[0][1:6] + [0]
+        elif tag in (1, 2):
+            transfer[5] = int(bank[5] > 0)
+        elif tag in (3, 4):
+            player = before['players'][actor]
+            card_id = before['market'][slot] if tag == 3 else player['reserved'][slot]['card']
+            card = self.cards[card_id]
+            cost = [max(card.cost.get(c, 0) - player['bonuses'][i], 0)
+                    for i, c in enumerate(COLORS[:5])]
+            colored = actions[1][1:6]
+            require(all(paid <= due for paid, due in zip(colored, cost)), 'token overpayment')
+            transfer = [-paid for paid in colored] + [-(sum(cost) - sum(colored))]
+        for c, amount in enumerate(transfer):
+            bank[c] -= amount
+            hands[actor][c] += amount
+        require(min(bank + hands[actor]) >= 0, 'token overdraft')
+        returns = [a[1:] for a in actions if a[0] == 6]
+        excess = max(sum(hands[actor]) - 10, 0)
+        require(bool(returns) == (excess > 0), 'token return phase disagrees with excess')
+        if returns:
+            returned = returns[0]
+            require(sum(returned) == excess and all(r <= n for r, n in zip(returned, hands[actor])),
+                    'invalid token return')
+            for c, amount in enumerate(returned):
+                bank[c] += amount
+                hands[actor][c] -= amount
+        require(bank == after['bank'] and hands == [p['tokens'] for p in after['players']],
+                'token successor mismatch')
+
     def compare(self, case, winner_counts=None):
         before, after, actions = case["before"], case["after"], case["actions"]
         self.check_local_winner(before)
@@ -374,6 +418,7 @@ class Comparison:
         noble_id = next(iter(gained)) if gained else 255
         self.validate_path(actions, noble_id)
         self.check_reservation_bookkeeping(before, after, actions)
+        self.check_token_bookkeeping(before, after, actions)
         if actions[0][0] == 2:
             return "blind_reservation"
         rule = self.hydrate(before, after)

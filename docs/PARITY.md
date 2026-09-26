@@ -395,3 +395,24 @@ raw hashes, identical payload hashes, and the corresponding v1 archive names.
 Older archived reference exports retain their v1 metadata. These exports are
 diagnostic comparison cases, not replay histories and not evidence of counter
 handling in the independent reference.
+
+## Token accounting on excluded paths
+
+The harness now checks local token accounting before it accepts a known rule
+exclusion. For every selected nonempty turn and every exported branch successor,
+it derives bank/hand transfers from the encoded take, reservation gold, discounted
+payment, and excess return. It rejects overdrafts, overpayment, invalid return
+amounts, changed opponent hands, and mismatched bank/hand successors. This is a
+local contract check, not external transition parity for excluded actions.
+
+Two pre-fix regressions show that an excluded selected turn or blind branch
+could carry unrelated token corruption. The tests now reject both new tokens
+and a wrong transfer that preserves total supply, under blind reservation,
+optional gold, and collected-color return exclusions. Raw
+pre-fix failures are in `results/excluded-token-before.txt`.
+
+Rechecked all three v2 archives with the stronger harness. Their case hashes,
+external match/exclusion counts, shared successor counts, boundary coverage,
+and winner classifications are unchanged. New summaries are
+`results/reference-v2{,-tier2,-tier3}-tokens.summary.json`; the prior summaries
+remain intact. All 41 Python tests pass with the pinned reference.

@@ -1,0 +1,23 @@
+.............FF..........
+======================================================================
+FAIL: test_excluded_branch_checks_tokens_before_skipping (test_reference.ReferenceTests.test_excluded_branch_checks_tokens_before_skipping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_reference.py", line 111, in test_excluded_branch_checks_tokens_before_skipping
+    with self.assertRaisesRegex(ValueError, 'token'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_exclusions_do_not_hide_token_corruption (test_reference.ReferenceTests.test_exclusions_do_not_hide_token_corruption)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_reference.py", line 104, in test_exclusions_do_not_hide_token_corruption
+    with self.assertRaisesRegex(ValueError, 'token'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 25 tests in 4.220s
+
+FAILED (failures=2)

@@ -787,3 +787,36 @@ engine version, or external parity scope changed; source remains 5fbacedf05ec987
 Next: return to independent rule validation. Review the comparison harness's
 known-difference classification order for cases with multiple differences;
 ensure an excluded branch cannot hide unrelated corruption in shared fields.
+
+## Excluded-path token validation
+
+Continued from `6ff8cda`. The reference checker returned early for known rule
+differences after reservation validation, so unrelated token errors could be
+hidden by a correct exclusion label. Reproduced accepted bank corruption for
+selected excluded turns and exported blind-reservation branches before editing.
+
+Added local accounting of encoded takes, reservation gold, discounted colored/
+gold payments, and excess returns. Check before exclusion in selected cases
+and all branch successors. Reject overdrafts, overpayment, invalid excess,
+and incorrect bank or any player's hand. Tests include both supply inflation
+and conserved-but-wrong transfers for three excluded transition categories.
+This does not convert excluded actions into externally matched transitions.
+
+All 41 Python tests pass against the pinned reference. Rechecked all three
+current v2 archives; raw hashes, external classifications, shared successors,
+coverage, and winner counts match the prior summaries exactly. Saved new
+*-tokens.summary.json results and retained the pre-fix failures. No Rust,
+agent, or engine change; no new full-parity claim.
+
+Next: inspect card/deck bookkeeping on excluded blind-reservation paths. The
+existing reservation check preserves order and visibility but permits the
+newly appended card identity without independently checking its tier/deck
+membership. Use a concrete corruption case before adding another local check.
+
+
+An added test initially treated the seven-card fixture's selected turn as
+excluded. It is actually a shared turn; only one of its old-format choices is
+excluded, and that choice has no successor snapshot. Removed that unsupported
+test assumption. Token corruption coverage is explicitly three exclusion
+categories, not four; the new accounting call also applies to seven-card
+successors when they are exported.

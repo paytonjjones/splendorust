@@ -86,6 +86,34 @@ class ReferenceTests(unittest.TestCase):
         cls.metadata = json.loads(run.stdout.splitlines()[0])
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
 
+    def test_exclusions_do_not_hide_token_corruption(self):
+        examples = {}
+        for case in self.cases:
+            reason = self.comparison.compare(case)
+            if reason in ('blind_reservation', 'optional_gold_payment', 'return_collected_color'):
+                examples.setdefault(reason, case)
+        self.assertEqual(len(examples), 3)
+        for reason, case in examples.items():
+            self.assertEqual(self.comparison.compare(case), reason)
+            for balanced in (False, True):
+                bad = copy.deepcopy(case)
+                if balanced:
+                    donor, color = next((i, c) for i, p in enumerate(bad['after']['players'])
+                                        for c, n in enumerate(p['tokens']) if n)
+                    bad['after']['bank'][color] += 1
+                    bad['after']['players'][donor]['tokens'][color] -= 1
+                else:
+                    bad['after']['bank'][0] += 1
+                with self.assertRaisesRegex(ValueError, 'token'):
+                    self.comparison.compare(bad)
+
+    def test_excluded_branch_checks_tokens_before_skipping(self):
+        case = copy.deepcopy(self.cases[0])
+        choice = next(c for c in case['choices'] if c['actions'][0][0] == 2)
+        choice['after']['bank'][0] += 1
+        with self.assertRaisesRegex(ValueError, 'token'):
+            self.comparison.compare_choices(case, check_successors=True)
+
     def test_reservation_visibility_cannot_change_on_an_unrelated_take(self):
         case = json.loads((ROOT / "scripts/fixtures/reference-reservation-visibility.json").read_text())
         self.assertEqual(self.comparison.compare(case), "matched")
