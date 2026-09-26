@@ -1,0 +1,162 @@
+{
+  "repository": "https://github.com/csmith/splendid",
+  "commit": "52b017c96d0b010fe228b8284b4646da505545e2",
+  "license": "MIT",
+  "license_sha256": "c84dbce62ceda5d536dc48641af1970726c960609b63f2ae2709d6125433f838",
+  "script_sha256": "3164ebd6efdbed471b5ecfbcc034a9ef8abbb7f07248a933bec094d47b5bab56",
+  "files_sha256": {
+    "src/games/splendid/data/cards.js": "80873a9548a6dcecb7ba4b12dd28e58f0ccf4cddeb4925338397bd61829d8059",
+    "src/games/splendid/data/nobles.js": "ed188adc8896ced68097f8b7793d72293daa70a9f2d9f9c363f3bd0c1ca1cc11"
+  },
+  "local_files_sha256": {
+    "data/cards.csv": "f9551803e4e8883073afdd2ef42e7afec81baa71cde617db57563010f0b5b23f",
+    "data/nobles.csv": "c25a49fc3f55ab6fa45ddecf7b130b20da8c92c997d35c5e157be3c21f953e19"
+  },
+  "color_order": [
+    "white",
+    "blue",
+    "green",
+    "red",
+    "black"
+  ],
+  "card_tuple": "tier, bonus, points, five costs",
+  "noble_tuple": "five requirements only; no prestige comparison",
+  "cards": {
+    "local_count": 90,
+    "reference_count": 89,
+    "shared_count": 87,
+    "missing_from_reference": [
+      [
+        2,
+        "black",
+        2,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        "blue",
+        1,
+        0,
+        2,
+        3,
+        0,
+        3
+      ],
+      [
+        2,
+        "green",
+        1,
+        3,
+        0,
+        2,
+        3,
+        0
+      ]
+    ],
+    "extra_in_reference": [
+      [
+        2,
+        "black",
+        2,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      [
+        2,
+        "green",
+        1,
+        3,
+        0,
+        2,
+        2,
+        0
+      ]
+    ]
+  },
+  "nobles": {
+    "local_count": 10,
+    "reference_count": 20,
+    "shared_count": 10,
+    "missing_from_reference": [],
+    "extra_in_reference": [
+      [
+        0,
+        0,
+        4,
+        0,
+        4
+      ],
+      [
+        0,
+        3,
+        0,
+        3,
+        3
+      ],
+      [
+        0,
+        3,
+        3,
+        0,
+        3
+      ],
+      [
+        0,
+        4,
+        0,
+        0,
+        4
+      ],
+      [
+        0,
+        4,
+        0,
+        4,
+        0
+      ],
+      [
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      [
+        3,
+        0,
+        3,
+        3,
+        0
+      ],
+      [
+        3,
+        3,
+        0,
+        3,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        4,
+        0
+      ],
+      [
+        4,
+        0,
+        4,
+        0,
+        0
+      ]
+    ]
+  },
+  "decision": "Reject as a full standard-game parity baseline; no transition parity tested."
+}

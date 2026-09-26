@@ -32,7 +32,7 @@ Normal-game results, no-action counts, and decision-limit counts must be reporte
 
 ## Limits of the evidence
 
-No external engine is used as an unquestioned oracle. A pinned MIT-licensed independent engine now matches 5,016 shared complete-turn transitions, 13,741 shared choices and their successor states at 758 positions, and all 90 card / 10 noble tuples. [The comparison record](docs/PARITY.md) defines the workload, checks, exclusions, source, and license. The reference has material rule and information differences. This is bounded transition parity, not full engine equivalence. Earlier data sources include an unlicensed repository; no implementation code from it was copied. The local independent enumerators cover the largest combinatorial decisions.
+No external engine is used as an unquestioned oracle. The pinned MIT-licensed reference matches all 90 card / 10 noble tuples. The development workload and separate tier-depletion histories cover 5,056 matched selected turns and 14,330 shared branch successors. A fresh 60-game confirmation covers 4,949 matched selected turns and 14,342 shared branch successors at 752 positions. Selected and branch cases can overlap; these are not independent game counts. [The comparison record](docs/PARITY.md) defines the workload, checks, exclusions, source, and license. The reference has material rule and information differences. This is bounded transition parity, not full engine equivalence. Earlier data sources include an unlicensed repository; no implementation code from it was copied. The local independent enumerators cover the largest combinatorial decisions.
 
 No test suite proves all reachable states correct. The milestone is a tested foundation with explicit rule boundaries. Search strength has been measured against the included agents, not against expert humans. The core does not yet have a formal verification proof, external engine equivalence certificate, or tested cross-platform floating-point search guarantee.
 
@@ -46,7 +46,10 @@ reruns the tournament and compares ordered game records exactly. Capped and
 blocked records can pass this reproducibility check; they still cannot pass the
 promotion gate. This command does not verify statistical summaries or timing.
 Reports without structured settings remain readable and fail rerun verification
-with an explicit error. Search equality across architectures remains untested.
+with an explicit error. The same 1,700 fixed-budget game records match on
+ARM macOS, x86-64 macOS under Rosetta, and ARM Linux. See
+`docs/results/x86-validation.json` and `docs/results/linux-validation.json`.
+This bounded check is not a general floating-point portability guarantee.
 
 Tests cover non-default search settings, all rollout/evaluation choices,
 nanosecond duration preservation, unknown fields, changed game records,
@@ -57,7 +60,7 @@ and exact reproduction of capped records.
 
 The promotion gate validates ordered game records and structured settings before
 it accepts a stage. It checks the requested agents, game count, seed, thread
-count, fixed search budget, and version-1 setup seed schedule. Engine and source
+count, fixed search budget, and the setup seed schedule retained from version 1. Engine and source
 identity must stay the same between screen and confirmation. The CLI arguments
 state the depth, width, rollout policy, evaluation, and decision cap explicitly.
 
@@ -73,6 +76,11 @@ New run manifests and final decisions record SHA256 hashes of `promote.py` and
 `collect_evidence.py`, in addition to the Rust source fingerprint and raw/record
 hashes. Fresh promotion stages require structured settings. Historical archives
 remain readable and are not rewritten to claim checks that did not run.
+
+## Historical validation records
+
+The sections below record checks at the time of each change. Engine versions and
+test counts in those records are historical unless explicitly marked current.
 
 ## Observation round-state consistency
 
@@ -102,16 +110,16 @@ or replay behavior changed, so the engine remains `splendorust-v1`.
 example tests through an explicit Cargo target with `test = true`. These tests
 check the distinction between a bounded cutoff and a real block, and the
 adversarial result for each of five recorded root choices. The standard Rust
-suite currently runs 58 tests.
+suite currently runs 71 tests.
 
 CI fetches the independent reference at the exact commit recorded in
 `docs/PARITY.md`, then sets `SPLENDOR_REFERENCE` for Python test discovery on
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 37 Python tests include 19 reference
-tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 19.
-A fresh checkout and all 29 tests passed locally when this workflow was added.
+silently skipping the reference tests. The 52 Python tests include 26 reference
+tests; local runs without `SPLENDOR_REFERENCE` explicitly skip those 26.
+A fresh checkout and all 29 tests passed locally when this workflow was first added.
 Hosted Linux/macOS workflow results are not yet verified.
 
 Two additional legal four-player histories cover tier 2/3 final draws and both

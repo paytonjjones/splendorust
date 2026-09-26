@@ -1,5 +1,36 @@
 # Independent engine comparison
 
+## Current evidence boundary
+
+The development workload plus tier 2/3 depletion histories have 5,056 matched
+selected turns and 14,330 shared branch successors. The separate fresh
+60-game confirmation has 4,949 matched selected turns and 14,342 shared branch
+successors at 752 positions. Selected and branch counts overlap. They are
+not counts of independent games. The later sections retain the history of
+smaller checks and the exact reproduction records.
+
+The primary reference still cannot check blind reservations, optional gold
+payment, or all legal token returns. Full trajectory parity, matching private
+observations, and matching RNG behavior are not established. The published
+no-action rule gap remains open. The later platform checks establish exact
+fixed-budget records only for their stated 1,700-game workload.
+
+An additional source, `csmith/splendid` at
+`52b017c96d0b010fe228b8284b4646da505545e2`, failed the standard data check:
+89 cards (87 shared tuples) and 20 noble requirements (ten shared tuples).
+It is MIT licensed, but these data differences prevent its use as an unchanged
+full-game baseline. No transitions were compared. Reproduce with:
+
+```sh
+git clone https://github.com/csmith/splendid /tmp/splendid-reference
+git -C /tmp/splendid-reference checkout --detach 52b017c96d0b010fe228b8284b4646da505545e2
+python3 scripts/audit_splendid_data.py /tmp/splendid-reference
+```
+
+See `docs/results/splendid-data-audit.json` for the exact tuple differences,
+source hashes, and license hash. No external code was copied.
+
+
 Checked on 2026-09-25 against `roeey777/Splendor-AI`, commit
 `95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b`:
 https://github.com/roeey777/Splendor-AI/tree/95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b

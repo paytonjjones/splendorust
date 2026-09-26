@@ -38,3 +38,19 @@ The optional audit also checks all card and noble tuples against the MIT-license
 `roeey777/Splendor-AI` commit `95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b`.
 See [the parity record](../docs/PARITY.md) for the source, license verification,
 transition checks, exclusions, and reproduction commands.
+
+## Additional reference rejected for full-game parity
+
+The MIT-licensed [csmith/splendid](https://github.com/csmith/splendid/tree/52b017c96d0b010fe228b8284b4646da505545e2)
+was checked at commit `52b017c96d0b010fe228b8284b4646da505545e2`.
+Its card data has 89 entries: 87 tuples match, three local tuples are missing,
+and two external tuples differ. Its noble data has all ten standard requirement
+tuples plus ten extra tuples. No noble prestige comparison was made in this
+data-only check. The license is MIT, copyright Chris Smith 2023.
+
+These differences prevent use as an unchanged full standard-game reference.
+No implementation code was copied or transition parity claimed.
+`scripts/audit_splendid_data.py CHECKOUT` checks the pinned commit, tracked-file
+status, license hash, and data tuples without installing app dependencies.
+Node is required to import the two data modules. The exact differences and
+file hashes are in [the audit result](../docs/results/splendid-data-audit.json).
