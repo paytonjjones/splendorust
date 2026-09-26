@@ -291,3 +291,53 @@ formatting, and strict all-target workspace Clippy pass.
 Tier 2/3 last draws and exhausted-deck actions still have zero coverage in this
 workload. The other reference rule, hidden-information, and RNG differences
 remain explicit; full parity is not claimed.
+
+## Legal high-tier depletion histories
+
+Two new cooperative coverage histories fill the tier 2/3 gap. The maintained
+`depletion_history` example favors drawing down a selected tier, avoids purchases
+that directly reach 15 points, and uses fixed seeded exploration. It is a test
+case generator, not a competitive agent or a strength experiment. Every move is
+legal, every transition passes invariants, and the full replay matches its saved
+state. No state is constructed by assigning cards or changing decks.
+
+Tier 2 uses four-player seed 107,001,000: 114 turns, 170 decisions, scores
+12/10/9/4. Tier 3 uses seed 107,002,003: 115 turns, 171 decisions, scores
+7/8/8/11. Both end at nonterminal replay prefixes after a final draw and both
+kinds of market removal from the exhausted tier. The first three tier-3 search
+attempts reached normal terminal states before covering both removal types;
+those failed coverage attempts are recorded, not counted as successful cases.
+
+The exporter's `--history FILE ZERO_BASED_TIER` mode validates the full history,
+then enumerates every compound action from positions with at most one card
+remaining in that tier. At the replay endpoint it selects one legal enumerated
+branch as the primary comparison and retains every alternative. Metadata
+`depletion_tier` declares the required sampling contract.
+
+| Target tier | Sampled positions | Shared branches | Final-draw branches | Empty-deck purchase branches | Empty-deck reservation branches |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2 | 16 | 276 | 1 | 3 | 2 |
+| 3 | 25 | 313 | 2 | 2 | 4 |
+
+All 589 shared successors match the pinned reference. Forty selected transitions
+match; one tier-3 selected path is excluded for the documented return-collected-
+color difference. These are two new legal-history workloads, separate from the
+60-game all-noble archive. Branches remain overlapping alternatives, not
+independent games. This closes the specified high-tier coverage gap, not the
+remaining rules, RNG, private-information, or rank differences.
+
+Evidence: `docs/results/reference-depletion-tier-{2,3}.jsonl.gz` and summaries;
+`docs/results/depletion-history-search.json` records generator/input hashes,
+failed attempts, and exact reproduction of both history fixtures. Reproduce:
+
+```sh
+cargo run --release --locked --example depletion_history -- /tmp/new-depletion-histories
+cargo run --release --locked --example parity_export -- --history crates/splendor-arena/tests/fixtures/depleted-tier-2-v1.json 1 > /tmp/tier-2.jsonl
+cargo run --release --locked --example parity_export -- --history crates/splendor-arena/tests/fixtures/depleted-tier-3-v1.json 2 > /tmp/tier-3.jsonl
+```
+
+Run `check_reference.py` on each export as above. A Rust regression test checks
+both full histories, the last-card refill, and subsequent empty market slots.
+An external-reference regression checks all branch successors and rejects
+missing declared samples. All 56 release Rust tests, 34 Python tests, formatting,
+and strict all-target workspace Clippy pass. Engine semantics are unchanged.

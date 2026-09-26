@@ -2,7 +2,7 @@
 //! These records are test data only and must never be supplied to an agent.
 use serde_json::{Value, json};
 use splendor_agents::{SearchConfig, make_agent};
-use splendor_arena::encode;
+use splendor_arena::{History, decode, encode, replay};
 use splendor_core::{ActionSet, ENGINE_VERSION, GameState, NONE, Phase};
 use std::io::{self, BufWriter, Write};
 
@@ -53,9 +53,85 @@ fn complete_choices(
     }
 }
 
+fn history_boundaries(file: &str, tier: usize) -> Result<(), Box<dyn std::error::Error>> {
+    if tier > 2 {
+        return Err("tier must be 0..=2".into());
+    }
+    let history: History = serde_json::from_slice(&std::fs::read(file)?)?;
+    let end = replay(&history)?;
+    if end.phase() != Phase::Main || end.observe(end.current_player()).remaining[tier] != 0 {
+        return Err("history must end at a nonterminal exhausted-deck Main phase".into());
+    }
+    let mut state = GameState::new(history.players, history.seed)?;
+    let mut out = BufWriter::new(io::stdout().lock());
+    writeln!(
+        out,
+        "{}",
+        json!({"format":2,"engine":ENGINE_VERSION,"source_id":env!("SPLENDOR_SOURCE_ID"),
+        "choice_successors":true,"winner_checks":true,"choice_interval":0,"depletion_tier":tier})
+    )?;
+    let mut index = 0;
+    loop {
+        let before_state = state.clone();
+        let before = snapshot(&state);
+        let actor = state.current_player();
+        let at_end = index == history.actions.len();
+        let mut actions = Vec::new();
+        if !at_end {
+            loop {
+                let encoded = history.actions[index];
+                state.apply_action(decode(encoded)?)?;
+                state.check_invariants()?;
+                actions.push(encoded);
+                index += 1;
+                if matches!(state.phase(), Phase::Main | Phase::Terminal) {
+                    break;
+                }
+            }
+        }
+        if before_state.observe(actor).remaining[tier] <= 1 {
+            let mut choices = Vec::new();
+            complete_choices(
+                &before_state,
+                actor,
+                before_state.observe(actor).players[actor].nobles,
+                &mut Vec::new(),
+                &mut choices,
+                true,
+            );
+            if at_end {
+                // At the verified replay endpoint, select one enumerated legal
+                // branch as the case's primary path; retain every alternative.
+                let first = choices.first().ok_or("exhausted endpoint is blocked")?;
+                actions = serde_json::from_value(first["actions"].clone())?;
+                for &a in &actions {
+                    state.apply_action(decode(a)?)?;
+                    state.check_invariants()?;
+                }
+            }
+            writeln!(
+                out,
+                "{}",
+                json!({"seed":history.seed,"policy":"depletion-history",
+                "endpoint_branch":at_end,"before":before,"actions":actions,"after":snapshot(&state),"choices":choices})
+            )?;
+        }
+        if at_end {
+            break;
+        }
+    }
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = std::env::args().skip(1);
-    let games: u64 = args.next().unwrap_or_else(|| "20".into()).parse()?;
+    let first = args.next().unwrap_or_else(|| "20".into());
+    if first == "--history" {
+        let file = args.next().ok_or("missing history path")?;
+        let tier = args.next().ok_or("missing zero-based tier")?.parse()?;
+        return history_boundaries(&file, tier);
+    }
+    let games: u64 = first.parse()?;
     let seed: u64 = args.next().unwrap_or_else(|| "92000000".into()).parse()?;
     let choice_interval: u32 = args.next().unwrap_or_else(|| "0".into()).parse()?;
     let include_successors: bool = args.next().unwrap_or_else(|| "false".into()).parse()?;

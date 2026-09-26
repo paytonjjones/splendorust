@@ -72,6 +72,10 @@ def validate_sampling(metadata, case):
         or (noble_acquisitions and before["nobles"] != after["nobles"])
         or (not before["final_round"] and after["final_round"]))
     required = boundary or (interval > 0 and before["turns"] % interval == 0)
+    if "depletion_tier" in metadata:
+        tier = metadata["depletion_tier"]
+        require(type(tier) is int and 0 <= tier <= 2, "invalid depletion tier")
+        required |= before["remaining"][tier] <= 1
     if "choice_interval" in metadata:
         required |= case.get("status") == "no_legal_action"
     require(not required or isinstance(case.get("choices"), list), "missing required choice sample")

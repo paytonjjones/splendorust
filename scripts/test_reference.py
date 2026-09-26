@@ -198,6 +198,25 @@ class ReferenceTests(unittest.TestCase):
         self.assertGreater(totals["boundary_noble_after_take"], 0)
         self.assertGreater(totals["boundary_noble_after_reserve"], 0)
 
+    def test_high_tier_depletion_histories_check_both_empty_slot_actions(self):
+        for tier in (2, 3):
+            fixture = ROOT / f"crates/splendor-arena/tests/fixtures/depleted-tier-{tier}-v1.json"
+            run = subprocess.run(
+                ["cargo", "run", "--quiet", "--release", "--locked", "--example", "parity_export", "--",
+                 "--history", str(fixture), str(tier - 1)],
+                cwd=ROOT, check=True, capture_output=True, text=True)
+            lines = [json.loads(line) for line in run.stdout.splitlines()]
+            self.assertEqual(lines[0]["depletion_tier"], tier - 1)
+            counts = collections.Counter()
+            for case in lines[1:]:
+                validate_sampling(lines[0], case)
+                with self.assertRaisesRegex(ValueError, "missing required choice sample"):
+                    validate_sampling(lines[0], {**case, "choices": None})
+                self.assertIn(self.comparison.compare(case), ("matched", "return_collected_color"))
+                counts.update(self.comparison.compare_choices(case, check_successors=True))
+            for event in ("final_draw", "empty_deck_purchase", "empty_deck_reserve"):
+                self.assertGreater(counts[f"boundary_tier_{tier}_{event}"], 0)
+
     def test_branch_successor_corruption_is_detected(self):
         case = copy.deepcopy(self.cases[0])
         case["choices"][0]["after"]["players"][0]["score"] += 1

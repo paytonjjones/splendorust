@@ -102,14 +102,19 @@ or replay behavior changed, so the engine remains `splendorust-v1`.
 example tests through an explicit Cargo target with `test = true`. These tests
 check the distinction between a bounded cutoff and a real block, and the
 adversarial result for each of five recorded root choices. The standard Rust
-suite currently runs 55 tests.
+suite currently runs 56 tests.
 
 CI fetches the independent reference at the exact commit recorded in
 `docs/PARITY.md`, then sets `SPLENDOR_REFERENCE` for Python test discovery on
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 33 Python tests include 16 reference
-tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 16.
+silently skipping the reference tests. The 34 Python tests include 17 reference
+tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 17.
 A fresh checkout and all 29 tests passed locally when this workflow was added.
 Hosted Linux/macOS workflow results are not yet verified.
+
+Two additional legal four-player histories cover tier 2/3 final draws and both
+purchase and reservation after deck exhaustion. All 589 shared branch successors
+match the pinned reference; one selected return path remains excluded under its
+known rule difference. See the high-tier history evidence in [docs/PARITY.md](docs/PARITY.md).

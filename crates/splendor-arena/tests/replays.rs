@@ -156,3 +156,56 @@ fn finished_round_observation_cannot_restart_main_phase() {
         Err(RuleError::Invariant("terminal phase"))
     );
 }
+
+#[test]
+fn legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots() {
+    use splendor_arena::decode;
+    use splendor_core::{Action, GameState, NONE};
+    for (tier, raw) in [
+        (1, include_str!("fixtures/depleted-tier-2-v1.json")),
+        (2, include_str!("fixtures/depleted-tier-3-v1.json")),
+    ] {
+        let history: History = serde_json::from_str(raw).unwrap();
+        let expected = replay(&history).unwrap();
+        let mut state = GameState::new(history.players, history.seed).unwrap();
+        let mut removal = None;
+        let mut final_draws = 0;
+        let mut empty_buys = 0;
+        let mut empty_reserves = 0;
+        for encoded in &history.actions {
+            let action = decode(*encoded).unwrap();
+            if let Action::BuyVisible(slot) | Action::ReserveVisible(slot) = action
+                && usize::from(slot) / 4 == tier
+            {
+                let remaining = state.observe(state.current_player()).remaining[tier];
+                removal = Some((usize::from(slot), remaining));
+                if remaining == 0 {
+                    if matches!(action, Action::BuyVisible(_)) {
+                        empty_buys += 1;
+                    } else {
+                        empty_reserves += 1;
+                    }
+                }
+            }
+            state.apply_action(action).unwrap();
+            state.check_invariants().unwrap();
+            if state.phase() == Phase::Main
+                && let Some((slot, remaining)) = removal.take()
+            {
+                let o = state.observe(state.current_player());
+                if remaining == 0 {
+                    assert_eq!(o.market[slot], NONE);
+                }
+                if remaining == 1 {
+                    final_draws += 1;
+                    assert_eq!(o.remaining[tier], 0);
+                    assert_ne!(o.market[slot], NONE);
+                }
+            }
+        }
+        assert_eq!(state, expected);
+        assert_eq!(final_draws, 1);
+        assert!(empty_buys > 0 && empty_reserves > 0);
+        assert_eq!(state.outcome(), None);
+    }
+}

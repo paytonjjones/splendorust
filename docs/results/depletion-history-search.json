@@ -1,0 +1,19 @@
+{
+  "generator_sha256": "95a19963705601ef4f036ec72b698e82d082d206eaf6615907b477c27df521e1",
+  "command": "cargo run --release --locked --example depletion_history -- /tmp/depletion-reproduction",
+  "history_sha256": {
+    "crates/splendor-arena/tests/fixtures/depleted-tier-2-v1.json": "e1228455b27ad1f5303fd70d7fcb51d5844bd95a6d4ebcb6bc1cd8d81c78d99c",
+    "crates/splendor-arena/tests/fixtures/depleted-tier-3-v1.json": "fcc576f813372b5b49dfadcdbf86b198814cd2542ad5d93e18ecd5a1216e085f"
+  },
+  "successes": [
+    "tier 2 seed 107001000 attempts 1 turns 114 decisions 170 scores [12, 10, 9, 4]",
+    "tier 3 seed 107002003 attempts 4 turns 115 decisions 171 scores [7, 8, 8, 11]"
+  ],
+  "unsuccessful_attempts": [
+    "tier 3 seed 107002000 failed: turns 116 remaining 0 phase Terminal removal_mask 2",
+    "tier 3 seed 107002001 failed: turns 120 remaining 0 phase Terminal removal_mask 1",
+    "tier 3 seed 107002002 failed: turns 120 remaining 0 phase Terminal removal_mask 1"
+  ],
+  "exact_history_reproduction": true,
+  "purpose": "Cooperative legal coverage generation, not playing-strength evidence"
+}

@@ -527,3 +527,26 @@ shared coverage. Seek legal histories that intentionally draw down those tiers
 without triggering early terminal play, or explicitly label any constructed
 states and validate their invariants. Do not imply that tier-1 exhaustion tests
 prove all tier boundary behavior.
+
+## High-tier exhaustion parity gap filled with legal histories
+
+Continued from `791b6c7`. Added a fixed-seed cooperative coverage generator.
+Initial short prefixes reached depletion but did not expose both exhausted
+market removal types, so extended the stop condition to cover purchase and
+reservation. Tier 2 succeeded at seed 107001000; tier 3 at 107002003 after three
+attempts ended normally before satisfying both coverage requirements. Failed
+attempts and exact fixture reproduction are recorded.
+
+Added history-boundary mode to the exporter and explicit required sampling
+metadata. No state assignment, hidden deck editing, core changes, or agent
+changes. Full legal histories now have last-card refill and empty-slot regression
+coverage. Shared parity: 276 tier-2 branches at 16 positions and 313 tier-3
+branches at 25 positions. All match. One selected tier-3 path has the existing
+return-collected-color exclusion. Archives and source/input hashes are saved.
+
+Final validation: 56 release workspace tests, 34 Python tests with the pinned
+reference, formatting, and strict all-target Clippy pass. No engine bump needed.
+Next evidence review: test depletion behavior across player counts (these new
+histories are four-player only), or inspect coverage of buying public versus
+blind reserved cards and their slot compaction. Preserve explicit differences
+rather than claiming these additions establish full parity.
