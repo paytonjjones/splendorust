@@ -956,3 +956,26 @@ from seat-rotation blocks. All reports pass `validate_report`. Both gates ran
 formatting, strict workspace Clippy, and the 72 release workspace tests.
 Source fingerprint is unchanged at `50400f40eb161b1a`. No multiplayer Elo,
 equal-compute advantage, or guarantee against other opponents is claimed.
+
+**Three-player block diagnosis:** The report record reproduces exactly with
+invariants enabled and a saved v2 history. Search (identity 0, seat 1) is
+blocked: the colored bank is empty, it has three reservations and no affordable
+card. Four gold remain in the bank. There is no core terminal outcome.
+
+Search's last decision, index 83, takes white/red/black. At that observation
+the bank has 1/2/2/2/2 colored tokens, and all ten distinct three-color takes
+are legal. Six alternatives make at least one current market card affordable
+without a return; the chosen take does not. The subsequent two strong moves
+empty the colored bank. The last move is the only one of its 16 alternatives
+that immediately blocks the next player. These facts do not establish a
+forced block, the outcome under changed future policy choices, or a successful
+agent fix. Earlier E12-style affordability filtering already failed its gate.
+
+The extended `cap_audit` accepts an optional `no_legal_action` mode. It reruns
+all matching report records with invariants, requires exact record equality,
+saves histories, and records the last 12 decisions with immediate alternative
+successors. The default cap mode still reproduces the E16 diagnostic exactly.
+Formatting, strict release workspace Clippy, and all 72 release workspace tests
+pass. The history, diagnostic output, public-token feature audit, commands, and
+hashes are retained in `docs/results/e18-block*` and `e18-token-audit.json`.
+No agent, rule, or production source fingerprint changed.

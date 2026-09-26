@@ -1,4 +1,5 @@
 //! Reproduce capped records and check short legal token cycles.
+//! Optional `no_legal_action` mode records blocked endpoints and nearby choices.
 //! Diagnostic full-state access only; never an agent or a termination rule.
 use serde_json::{Value, json};
 use splendor_arena::{Report, decode, play_game, replay};
@@ -7,6 +8,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = std::env::args().skip(1);
     let report: Value = serde_json::from_slice(&std::fs::read(args.next().ok_or("report path")?)?)?;
     let output = std::path::PathBuf::from(args.next().ok_or("new output directory")?);
+    let status = args.next().unwrap_or_else(|| "decision_limit".into());
+    if !matches!(status.as_str(), "decision_limit" | "no_legal_action") {
+        return Err("status must be decision_limit or no_legal_action".into());
+    }
     let checked: Report = serde_json::from_value(report.clone())?;
     let mut config = checked.verification_config()?;
     std::fs::create_dir(&output)?;
@@ -16,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .as_array()
         .unwrap()
         .iter()
-        .filter(|r| r["status"] == "decision_limit")
+        .filter(|r| r["status"] == status)
     {
         let block = expected["block"].as_u64().ok_or("invalid block")?;
         let rotation = expected["rotation"].as_u64().unwrap() as usize;
@@ -30,6 +35,48 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         )?;
         let n = history.actions.len();
         let end = replay(&history)?;
+        if status == "no_legal_action" {
+            let mut legal = ActionSet::new();
+            end.legal_actions(&mut legal);
+            assert!(legal.is_empty());
+            assert!(!end.is_terminal());
+            assert_eq!(end.outcome(), None);
+            let mut state = GameState::new(players as u8, seed)?;
+            let mut tail = Vec::new();
+            for (index, &encoded) in history.actions.iter().enumerate() {
+                if index >= n.saturating_sub(12) {
+                    state.legal_actions(&mut legal);
+                    let mut alternatives = Vec::new();
+                    for &action in &legal {
+                        let mut next = state.clone();
+                        next.apply_action(action)?;
+                        next.check_invariants()?;
+                        let mut following = ActionSet::new();
+                        next.legal_actions(&mut following);
+                        alternatives.push(json!({"action":splendor_arena::encode(action),
+                            "next_phase":format!("{:?}",next.phase()),
+                            "next_player":next.current_player(),"next_legal_count":following.len(),
+                            "blocked_immediately":following.is_empty() && !next.is_terminal()}));
+                    }
+                    tail.push(
+                        json!({"index":index,"identity":(state.current_player()+rotation)%players,
+                        "phase":format!("{:?}",state.phase()),"action":encoded,
+                        "observation":format!("{:?}",state.observe(state.current_player())),
+                        "alternatives":alternatives}),
+                    );
+                }
+                state.apply_action(decode(encoded)?)?;
+                state.check_invariants()?;
+            }
+            println!(
+                "{}",
+                json!({"record":record,"blocked_player":end.current_player(),
+                "blocked_identity":(end.current_player()+rotation)%players,
+                "endpoint":format!("{:?}",end.observe(end.current_player())),"tail":tail,
+                "scope":"Immediate alternative successors only; no forced-block or policy counterfactual claim."})
+            );
+            continue;
+        }
         let period = (1..=16).find(|&p| {
             if n < 80 {
                 return false;

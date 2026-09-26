@@ -1,0 +1,18 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "50400f40eb161b1a",
+  "history_sha256": "845eb8b94e5154a4b631d0ee668c2bc05d3b8eaf2f35a422692ec4646d0da61e",
+  "helper_sha256": "27449ec1ee12f0d7afd611577834528567414b392825e0e89030f6a7ddf4a8d7",
+  "commands": [
+    "cargo run --quiet --release --locked --example cap_audit -- /tmp/e18-three-player/screen.json /tmp/e18-block-histories no_legal_action",
+    "cargo run --quiet --release --locked --example token_audit -- /tmp/e18-block-histories/818-2.json 83",
+    "cargo run --quiet --release --locked --example cap_audit -- /tmp/e16-confirm-256.json /tmp/e18-cap-regression",
+    "cargo fmt --all -- --check",
+    "cargo clippy --workspace --all-targets --release --locked -- -D warnings",
+    "cargo test --workspace --release --locked"
+  ],
+  "exact_record_reproduced": true,
+  "invariants_checked": true,
+  "default_cap_diagnostic_matches_e16": true,
+  "scope": "Privileged diagnostic history only. Alternative outcomes are immediate successors, not forced-block or policy counterfactual results."
+}
