@@ -89,6 +89,11 @@ A regression test reproduced the old failure: with no inputs, the script
 replaced a nonempty index with `[]`. The fix also prevents an input with a
 reused name from silently replacing the original raw evidence. Archive tests
 use a real checked-in paired report and temporary output directories.
+Before computing confidence intervals, the archiver checks record counts,
+ordered seat rotations, distinct setup blocks, per-block seeds, completion
+totals, ranks, and winners. Incomplete games must have no ranks or winners.
+A truncated record list cannot retain an unchanged requested-game count.
+All historical report archives passed these checks without modification.
 
 ## Promotion workflow checks
 

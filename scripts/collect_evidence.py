@@ -21,8 +21,48 @@ def interval(xs):
     return [max(0, mean - half), min(1, mean + half)]
 
 
+def validate_report(report):
+    """Require complete ordered seat blocks before computing an interval."""
+    def require(condition, message):
+        if not condition:
+            raise ValueError(message)
+
+    n = report['players']
+    games = report['requested_games']
+    records = report['records']
+    require(type(n) is int and 2 <= n <= 4, 'invalid player count')
+    require(type(games) is int and games > 0 and games % n == 0, 'incomplete requested seat blocks')
+    require(len(records) == games, 'record count differs from requested games')
+    require(report['independent_blocks'] == games // n, 'setup-block count differs')
+    require(sorted(a['identity'] for a in report['agents']) == list(range(n)), 'invalid agent identities')
+    completed = 0
+    seeds = set()
+    for i, game in enumerate(records):
+        block, rotation = divmod(i, n)
+        require(game['block'] == block and game['rotation'] == rotation, 'unordered or incomplete seat block')
+        require(game['seats'] == [(seat + rotation) % n for seat in range(n)], 'invalid seat rotation')
+        require(type(game['seed']) is int and 0 <= game['seed'] < 2**64, 'invalid setup seed')
+        require(game['seed'] == records[block*n]['seed'], 'setup seed differs within a block')
+        if rotation == 0:
+            require(game['seed'] not in seeds, 'repeated setup counted as an independent block')
+            seeds.add(game['seed'])
+        require(game['status'] in ('complete', 'no_legal_action', 'decision_limit'), 'unknown game status')
+        require(len(game['scores']) == len(game['ranks']) == n, 'invalid player result count')
+        require(all(type(x) is int and 0 <= x <= 255 for x in game['scores']), 'invalid score')
+        if game['status'] == 'complete':
+            completed += 1
+            require(all(type(rank) is int and 1 <= rank <= n for rank in game['ranks']), 'invalid normal ranks')
+            winners = sum(1 << seat for seat, rank in enumerate(game['ranks']) if rank == 1)
+            require(winners != 0 and game['winners'] == winners, 'winners and ranks disagree')
+        else:
+            require(game['winners'] == 0 and game['ranks'] == [0]*n, 'unfinished game has a winner or rank')
+    require(report['completed_games'] == completed and report['incomplete_games'] == games-completed,
+            'completion totals differ from records')
+
+
 def summarize(raw, name):
     report = json.loads(raw)
+    validate_report(report)
     records = report.pop('records')
     n = report['players']
     for agent in report['agents']:

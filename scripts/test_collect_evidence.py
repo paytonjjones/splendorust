@@ -52,6 +52,26 @@ class ArchiveTests(unittest.TestCase):
             collect([self.report('a-new'), original], self.output)
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
 
+    def test_malformed_reports_fail_before_any_batch_write(self):
+        mutations = [
+            lambda r: r['records'].pop(),
+            lambda r: r['records'][1].update(seed=0),
+            lambda r: r['records'][1].update(rotation=0),
+            lambda r: r['records'][1].update(seats=[0, 1]),
+            lambda r: r.update(completed_games=0),
+            lambda r: [g.update(seed=r['records'][0]['seed']) for g in r['records'][2:4]],
+            lambda r: r['records'][0].update(status='decision_limit'),
+            lambda r: r['records'][0].update(winners=0),
+        ]
+        for mutate in mutations:
+            report = json.loads(self.raw)
+            mutate(report)
+            bad = self.report('z-bad', json.dumps(report).encode())
+            with self.assertRaises(ValueError):
+                collect([self.report('a-good'), bad], self.output)
+            self.assertEqual(list(self.output.iterdir()), [])
+
+
 
 if __name__ == '__main__':
     unittest.main()
