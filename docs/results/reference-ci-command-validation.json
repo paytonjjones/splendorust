@@ -1,0 +1,13 @@
+{
+  "workflow_sha256": "5e8339b531bedd8930a4176542ff9a365e18d9a3d237480e8b6291094ae48eac",
+  "commands": [
+    "cargo run --quiet --release --locked --example parity_export -- 2 92000000 1 true true > /tmp/reference-ci-cases.jsonl",
+    "python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check --cases /tmp/reference-ci-cases.jsonl --chains --output docs/results/reference-ci-command.summary.json"
+  ],
+  "positive_exit": 0,
+  "negative_mutation": "Remove the first case while retaining the original header and remaining cases",
+  "negative_exit": 1,
+  "negative_report_created": false,
+  "raw_input_sha256": "38778fb0f92939626a56a9440f422320a4118f5a996cc99f3afa0e4872451240",
+  "scope": "Local execution of the CI commands; hosted workflow not run. Existing regression seeds, not fresh independent confirmation."
+}

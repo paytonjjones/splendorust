@@ -441,3 +441,18 @@ tests pass with Rust 1.98.1 and the lockfile. Exact coverage counts, test source
 hash, commands, and logs are in `docs/results/core-allocation-validation.json`
 and the adjacent `core-allocation-*.txt` files. No production Rust, rules,
 agent policy, RNG, replay, or engine version changed.
+
+## Full parity CLI in routine CI
+
+CI now exports six fixed regression games (two per player count) with every
+position sampled and runs the full `check_reference.py --chains` command.
+This covers command argument handling, JSONL loading, full-workload sequence
+validation, shared branches, retained external state, and summary output in
+one invocation. It uses the same pinned reference checkout as the unit tests.
+
+The exact commands passed locally: 449 selected turns and 9,486 shared branch
+successors matched. Removing the first case caused exit 1 with an explicit
+turn-zero error, and no success report was created. The result, command and
+workflow hashes, and failure log are in the `reference-ci-command` files under
+`docs/results`. These are existing regression seeds, not fresh confirmation.
+Hosted Linux/macOS CI has not been run; no changes were pushed.

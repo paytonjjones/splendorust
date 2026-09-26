@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/check_reference.py", line 710, in main
+    sequence.add(case)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/check_reference.py", line 55, in add
+    require(before["turns"] == 0 and not before["terminal"], "workload game must start at turn zero")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/check_reference.py", line 23, in require
+    raise ValueError(message)
+ValueError: workload game must start at turn zero
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/check_reference.py", line 747, in <module>
+    main()
+    ~~~~^^
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/check_reference.py", line 718, in main
+    raise ValueError(f"case line {line_number}, seed {case['seed']}, turn {case['before']['turns']}: {exc}") from exc
+ValueError: case line 2, seed 94000000, turn 1: workload game must start at turn zero

@@ -49,6 +49,8 @@ cargo bench -p splendor-arena --bench arena
 
 The gate runs checks, a throughput smoke test, a 2,000-game screen, and a 20,000-game confirmation on disjoint seeds. It requires a new output directory, records parameters in `run.json`, and writes `decision.json`. It rejects unfinished games and can enforce a throughput floor. It uses the executable reported by Cargo, including custom target directories, and records its path and SHA-256 in `build.json` beside `cargo-build.jsonl`. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
 
+CI also runs the pinned independent-reference comparison on six fixed games, checking every visited action set and retaining reference state across shared turns. See [docs/PARITY.md](docs/PARITY.md) for the checked scope and explicit rule differences.
+
 See [ARCHITECTURE.md](ARCHITECTURE.md), [EXPERIMENTS.md](EXPERIMENTS.md), [BENCHMARKS.md](BENCHMARKS.md), and [data/SOURCES.md](data/SOURCES.md).
 
 

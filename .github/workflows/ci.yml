@@ -25,5 +25,9 @@ jobs:
         env:
           SPLENDOR_REFERENCE: ${{ runner.temp }}/splendor-reference
         run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - name: Check full parity command with retained reference state
+        run: |
+          cargo run --quiet --release --locked --example parity_export -- 2 92000000 1 true true > "$RUNNER_TEMP/reference-cases.jsonl"
+          python3 scripts/check_reference.py --reference "$RUNNER_TEMP/splendor-reference" --cases "$RUNNER_TEMP/reference-cases.jsonl" --chains --output "$RUNNER_TEMP/reference-summary.json"
       - run: cargo run --release --locked -- play --agents strong,greedy --seed 42 --check --output game.json
       - run: cargo run --release --locked -- replay game.json
