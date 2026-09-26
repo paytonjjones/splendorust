@@ -1,0 +1,658 @@
+{
+  "commands": [
+    "cargo run --release --locked --example parity_export -- 20 111000000 10 true true > /tmp/reference-confirm-v2.jsonl",
+    "python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check --cases /tmp/reference-confirm-v2.jsonl --output docs/results/reference-confirm-v2.summary.json"
+  ],
+  "metadata": {
+    "boundary_choices": true,
+    "choice_interval": 10,
+    "choice_successors": true,
+    "engine": "splendorust-v2",
+    "format": 2,
+    "games_per_player_count": 20,
+    "noble_acquisition_choices": true,
+    "seed": 111000000,
+    "source_id": "5fbacedf05ec987b",
+    "winner_checks": true
+  },
+  "raw_sha256": "67f236fae347418e89897ef2a69d05c3f6dfc1ab49b6192f9a60bfa0e8430201",
+  "case_count": 5370,
+  "distinct_games": 60,
+  "overlap_with_development_games": 0,
+  "per_player_count": {
+    "2": {
+      "games": 20,
+      "statuses": {
+        "complete": 20
+      },
+      "cases": 1322
+    },
+    "3": {
+      "games": 20,
+      "statuses": {
+        "complete": 19,
+        "no_legal_action": 1
+      },
+      "cases": 1815
+    },
+    "4": {
+      "games": 20,
+      "statuses": {
+        "complete": 18,
+        "no_legal_action": 2
+      },
+      "cases": 2233
+    }
+  },
+  "games": [
+    {
+      "players": 2,
+      "seed": 113000000,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 56,
+      "cases": 56,
+      "winner_mask": 1,
+      "case_set_sha256": "da8814b65f3b8b0707ead29dc8af3110e0a0b29c49175dc3b909c3910150815e"
+    },
+    {
+      "players": 2,
+      "seed": 113000001,
+      "policy": "random",
+      "status": "complete",
+      "turns": 76,
+      "cases": 76,
+      "winner_mask": 2,
+      "case_set_sha256": "ad10cbde866c0ac1975379c0dde2e98f447b3b172143eeb295ea00bff9285bb3"
+    },
+    {
+      "players": 2,
+      "seed": 113000002,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 62,
+      "cases": 62,
+      "winner_mask": 1,
+      "case_set_sha256": "7c5208c547da92ddd237d871b51739e475917992973bdbaa8b77bac9ed35a076"
+    },
+    {
+      "players": 2,
+      "seed": 113000003,
+      "policy": "random",
+      "status": "complete",
+      "turns": 86,
+      "cases": 86,
+      "winner_mask": 2,
+      "case_set_sha256": "949ef37d9139431c90fca4b94889108fe559cd7b05ad3e516275d263eca9de13"
+    },
+    {
+      "players": 2,
+      "seed": 113000004,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 60,
+      "cases": 60,
+      "winner_mask": 2,
+      "case_set_sha256": "3c8576184ebfddcb243e39ac530f8fa1f2da1e43b71b003819b34980ffc1a17c"
+    },
+    {
+      "players": 2,
+      "seed": 113000005,
+      "policy": "random",
+      "status": "complete",
+      "turns": 66,
+      "cases": 66,
+      "winner_mask": 2,
+      "case_set_sha256": "4c466ee5c3ef6d215012a9fd88d1b2ad40db0f681af51d31ca9645ce1abb6af1"
+    },
+    {
+      "players": 2,
+      "seed": 113000006,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 60,
+      "cases": 60,
+      "winner_mask": 1,
+      "case_set_sha256": "bd354813433c883b10f36073a3c5bd9cfef546d45f8d0913e4174cf38227629a"
+    },
+    {
+      "players": 2,
+      "seed": 113000007,
+      "policy": "random",
+      "status": "complete",
+      "turns": 68,
+      "cases": 68,
+      "winner_mask": 2,
+      "case_set_sha256": "34eea291d35320058767811d3952d993fb11c60fbacdd262eed568e7308bf914"
+    },
+    {
+      "players": 2,
+      "seed": 113000008,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 54,
+      "cases": 54,
+      "winner_mask": 2,
+      "case_set_sha256": "18af88c5f060ee162bba26387edacb4655f60da212a2366393bd0601548374a2"
+    },
+    {
+      "players": 2,
+      "seed": 113000009,
+      "policy": "random",
+      "status": "complete",
+      "turns": 74,
+      "cases": 74,
+      "winner_mask": 2,
+      "case_set_sha256": "1430256e8a95ba5072f3baabde6e4c383fa2cd95ddb0ad8d43ab9e7c44ea51ce"
+    },
+    {
+      "players": 2,
+      "seed": 113000010,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 60,
+      "cases": 60,
+      "winner_mask": 2,
+      "case_set_sha256": "74e4744fa2eb135350cbc7b94116fc27edd78724d13e51921857f359b6a57b76"
+    },
+    {
+      "players": 2,
+      "seed": 113000011,
+      "policy": "random",
+      "status": "complete",
+      "turns": 72,
+      "cases": 72,
+      "winner_mask": 2,
+      "case_set_sha256": "d4f201f8d72b722594329c34c5e178f10e355749aac8294c9494d73fcceafacc"
+    },
+    {
+      "players": 2,
+      "seed": 113000012,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 54,
+      "cases": 54,
+      "winner_mask": 1,
+      "case_set_sha256": "a5745df6efbcef8a00605aac3ba59ca209a63d9d64ba8e440732ddc1244609b5"
+    },
+    {
+      "players": 2,
+      "seed": 113000013,
+      "policy": "random",
+      "status": "complete",
+      "turns": 80,
+      "cases": 80,
+      "winner_mask": 1,
+      "case_set_sha256": "84971ef6d13c463ed700c05fc5456e5b19d1a68f5de1fe21f54a1d4ce40e605a"
+    },
+    {
+      "players": 2,
+      "seed": 113000014,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 58,
+      "cases": 58,
+      "winner_mask": 2,
+      "case_set_sha256": "cc406605a235f82bbacaf90500d3525a10d374f7464f4d11de6ce941403c0b77"
+    },
+    {
+      "players": 2,
+      "seed": 113000015,
+      "policy": "random",
+      "status": "complete",
+      "turns": 66,
+      "cases": 66,
+      "winner_mask": 2,
+      "case_set_sha256": "6a57baa59d09abc8bc1a772bcf1e4d5bfd9664c98899662775b7d4de60b1271f"
+    },
+    {
+      "players": 2,
+      "seed": 113000016,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 60,
+      "cases": 60,
+      "winner_mask": 1,
+      "case_set_sha256": "60f8eb6a686fec894f0204059d27875ee89927580dfb0c3a1979b7aa1ff7ca22"
+    },
+    {
+      "players": 2,
+      "seed": 113000017,
+      "policy": "random",
+      "status": "complete",
+      "turns": 84,
+      "cases": 84,
+      "winner_mask": 2,
+      "case_set_sha256": "a288a966de13280fdbbcf071fdd77e8532aed91f86f68704da5fd9fe5f84f658"
+    },
+    {
+      "players": 2,
+      "seed": 113000018,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 58,
+      "cases": 58,
+      "winner_mask": 2,
+      "case_set_sha256": "ed47651d6b63338aa48f0587c0575d99959127534d27fa9b252247ef912b7899"
+    },
+    {
+      "players": 2,
+      "seed": 113000019,
+      "policy": "random",
+      "status": "complete",
+      "turns": 68,
+      "cases": 68,
+      "winner_mask": 2,
+      "case_set_sha256": "6f907ebde319d109b436bce069b111dadfa117cda6068cfb788f49f6d61d27d9"
+    },
+    {
+      "players": 3,
+      "seed": 114000000,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 78,
+      "cases": 78,
+      "winner_mask": 1,
+      "case_set_sha256": "56974733fd7e41b9bb22ae0ccf06dca1dc1ece3d54b221feffe89488ae0e66ef"
+    },
+    {
+      "players": 3,
+      "seed": 114000001,
+      "policy": "random",
+      "status": "complete",
+      "turns": 102,
+      "cases": 102,
+      "winner_mask": 1,
+      "case_set_sha256": "5a1c125dd662edd1a169e0c6559fd83c526b2f9fe95fa5a939bfc2a87d21c964"
+    },
+    {
+      "players": 3,
+      "seed": 114000002,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 81,
+      "cases": 81,
+      "winner_mask": 1,
+      "case_set_sha256": "19acb17ccc42a3362bdb43cd3b2b6c9cb26e519a36955b288a4fe2782c2722ce"
+    },
+    {
+      "players": 3,
+      "seed": 114000003,
+      "policy": "random",
+      "status": "complete",
+      "turns": 123,
+      "cases": 123,
+      "winner_mask": 1,
+      "case_set_sha256": "ee333f0b5b881b3bea22fc7af0de2878a82b13120c7559f171300c4fe327a250"
+    },
+    {
+      "players": 3,
+      "seed": 114000004,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 81,
+      "cases": 81,
+      "winner_mask": 2,
+      "case_set_sha256": "9c663d3fa345b74a34b91955f02b46bb3ab3c12ac1d172269bbbbb2224b14675"
+    },
+    {
+      "players": 3,
+      "seed": 114000005,
+      "policy": "random",
+      "status": "complete",
+      "turns": 96,
+      "cases": 96,
+      "winner_mask": 2,
+      "case_set_sha256": "f84e3682910f6370bb7d2d3b5bbd947f9c372305cd3890eb9e468bf5dfec3754"
+    },
+    {
+      "players": 3,
+      "seed": 114000006,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 78,
+      "cases": 78,
+      "winner_mask": 2,
+      "case_set_sha256": "fe2ff422b9e3a65dfdea18d8089792a64a85fe438e5448f35f7ad13c8f7c977c"
+    },
+    {
+      "players": 3,
+      "seed": 114000007,
+      "policy": "random",
+      "status": "complete",
+      "turns": 102,
+      "cases": 102,
+      "winner_mask": 4,
+      "case_set_sha256": "74002e329e7cd181cbcb3720c421478cb433f0cee191c3c82d1dd02d281df8f4"
+    },
+    {
+      "players": 3,
+      "seed": 114000008,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 81,
+      "cases": 81,
+      "winner_mask": 4,
+      "case_set_sha256": "f1400f22a667b86f04dc476ecdc8662c559c6ac6c4356f54686c6cf98bda865d"
+    },
+    {
+      "players": 3,
+      "seed": 114000009,
+      "policy": "random",
+      "status": "no_legal_action",
+      "turns": 47,
+      "cases": 48,
+      "winner_mask": null,
+      "case_set_sha256": "69bafaa3c98b86e9fb0689f9484b3ecb452e2cfea2003a1a5dc0b95ae7dc04e9"
+    },
+    {
+      "players": 3,
+      "seed": 114000010,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 78,
+      "cases": 78,
+      "winner_mask": 2,
+      "case_set_sha256": "d13f4a432973ab0adab652a0f7e019f9c8d1829f5c1342023ea53ed923032a00"
+    },
+    {
+      "players": 3,
+      "seed": 114000011,
+      "policy": "random",
+      "status": "complete",
+      "turns": 108,
+      "cases": 108,
+      "winner_mask": 4,
+      "case_set_sha256": "d3c80cc162b829f4c1a9b99bcc30677633fdfc77d7621f1e362a7220787ab1a8"
+    },
+    {
+      "players": 3,
+      "seed": 114000012,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 78,
+      "cases": 78,
+      "winner_mask": 1,
+      "case_set_sha256": "87359bb66747f130d35449c7f60e117fbe2f5f8d5f7d0a5475c90678fd4f9f80"
+    },
+    {
+      "players": 3,
+      "seed": 114000013,
+      "policy": "random",
+      "status": "complete",
+      "turns": 114,
+      "cases": 114,
+      "winner_mask": 2,
+      "case_set_sha256": "393c90998327a3d1c16f8c85e4db11d6050747be65938b27c2fe8ebb8fcc5cf6"
+    },
+    {
+      "players": 3,
+      "seed": 114000014,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 78,
+      "cases": 78,
+      "winner_mask": 1,
+      "case_set_sha256": "e185604243610928a5c0c3462ba66d6e2c02f0c2199e5a569ffabc7e03d9d8a0"
+    },
+    {
+      "players": 3,
+      "seed": 114000015,
+      "policy": "random",
+      "status": "complete",
+      "turns": 105,
+      "cases": 105,
+      "winner_mask": 2,
+      "case_set_sha256": "acbb007ca9e9e8b56bb4c114ecc339532de09112c22cfaa1259b63ffe32b469e"
+    },
+    {
+      "players": 3,
+      "seed": 114000016,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 90,
+      "cases": 90,
+      "winner_mask": 4,
+      "case_set_sha256": "389448117af3a8b6bff4c1d6bab62a03dbd39e55655bed7b32a3826f73de9f6c"
+    },
+    {
+      "players": 3,
+      "seed": 114000017,
+      "policy": "random",
+      "status": "complete",
+      "turns": 99,
+      "cases": 99,
+      "winner_mask": 4,
+      "case_set_sha256": "8a4c38cba41784e5e9c0b44a7dca92fd0d14f33297f691ed069699a6a4d560d4"
+    },
+    {
+      "players": 3,
+      "seed": 114000018,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 81,
+      "cases": 81,
+      "winner_mask": 1,
+      "case_set_sha256": "2cdd58ee4dd369150bece2a6ad089343792d75cc8e104d09993c9e863a07ad95"
+    },
+    {
+      "players": 3,
+      "seed": 114000019,
+      "policy": "random",
+      "status": "complete",
+      "turns": 114,
+      "cases": 114,
+      "winner_mask": 2,
+      "case_set_sha256": "1ff9f2e20333666824910618448ccc837bc13326d78a7740ef9285435ec2c9d9"
+    },
+    {
+      "players": 4,
+      "seed": 115000000,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 4,
+      "case_set_sha256": "bfa945cdf8725a2e205c20aef44e7a36d232abace40ac5ee5f8c3deebde7315a"
+    },
+    {
+      "players": 4,
+      "seed": 115000001,
+      "policy": "random",
+      "status": "no_legal_action",
+      "turns": 43,
+      "cases": 44,
+      "winner_mask": null,
+      "case_set_sha256": "67ac7e5e314c20ecb76212297959f64fbf26779eacd3e6e0e2033f81118eb24c"
+    },
+    {
+      "players": 4,
+      "seed": 115000002,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 104,
+      "cases": 104,
+      "winner_mask": 2,
+      "case_set_sha256": "4d4bf67622e84ba24c6ece0baf883f38c750df13bd0d78e32e64e4fd88572791"
+    },
+    {
+      "players": 4,
+      "seed": 115000003,
+      "policy": "random",
+      "status": "complete",
+      "turns": 140,
+      "cases": 140,
+      "winner_mask": 1,
+      "case_set_sha256": "e717ae81a1eb217a5f4ff7d104626b803cbcc8b462fbb7daa9cdc12e2f129534"
+    },
+    {
+      "players": 4,
+      "seed": 115000004,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 1,
+      "case_set_sha256": "00aa19e4f78316dfc79ea3c7d6a2aee4239061aedd962c68310d405fa956103c"
+    },
+    {
+      "players": 4,
+      "seed": 115000005,
+      "policy": "random",
+      "status": "complete",
+      "turns": 144,
+      "cases": 144,
+      "winner_mask": 8,
+      "case_set_sha256": "b28c69c060558358ff2df22bd4100eb66cc803f1a5f12ed3603bf52a11f44c6e"
+    },
+    {
+      "players": 4,
+      "seed": 115000006,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 112,
+      "cases": 112,
+      "winner_mask": 1,
+      "case_set_sha256": "8a3bd99739e2fa5084535ac92b9defd74bd4236b3f130209ba2c3719014f0434"
+    },
+    {
+      "players": 4,
+      "seed": 115000007,
+      "policy": "random",
+      "status": "complete",
+      "turns": 144,
+      "cases": 144,
+      "winner_mask": 1,
+      "case_set_sha256": "c65167dab72f068d08fd6ec67d63101b31872a026d7d5c989cb86904d1060abf"
+    },
+    {
+      "players": 4,
+      "seed": 115000008,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 8,
+      "case_set_sha256": "752916d9325e3a2854d461f46d06ffe615c6bd8e5778177e8189298c3250b97e"
+    },
+    {
+      "players": 4,
+      "seed": 115000009,
+      "policy": "random",
+      "status": "complete",
+      "turns": 148,
+      "cases": 148,
+      "winner_mask": 8,
+      "case_set_sha256": "d4f3eb053dc0e0238ffddee034b07dd63fac259b0b9523648aab05354325ad1a"
+    },
+    {
+      "players": 4,
+      "seed": 115000010,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 2,
+      "case_set_sha256": "28555e0f6d6d939d97b37f817893dfc95a892e6066994d7e73fd954cd7380a66"
+    },
+    {
+      "players": 4,
+      "seed": 115000011,
+      "policy": "random",
+      "status": "complete",
+      "turns": 136,
+      "cases": 136,
+      "winner_mask": 2,
+      "case_set_sha256": "725f2249c80465e09085d55ffdb16c3dabb8703ebcb19e3513be6fea65708eb7"
+    },
+    {
+      "players": 4,
+      "seed": 115000012,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 4,
+      "case_set_sha256": "20001ecd3fe5269f3d7bead8b5c79e3ded95e1bf53afc9135970b5220ae8766d"
+    },
+    {
+      "players": 4,
+      "seed": 115000013,
+      "policy": "random",
+      "status": "complete",
+      "turns": 136,
+      "cases": 136,
+      "winner_mask": 4,
+      "case_set_sha256": "cdfb3fb43c8b37a7308d317411c9da73ea69f4e6236cf6f02d7e7503948e22cd"
+    },
+    {
+      "players": 4,
+      "seed": 115000014,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 96,
+      "cases": 96,
+      "winner_mask": 2,
+      "case_set_sha256": "331f6aa7a9cddf3eac84fa2a34da3ec24940a889c9738b590f47356158ffea4f"
+    },
+    {
+      "players": 4,
+      "seed": 115000015,
+      "policy": "random",
+      "status": "no_legal_action",
+      "turns": 48,
+      "cases": 49,
+      "winner_mask": null,
+      "case_set_sha256": "de9f3ebe5a3b52446529e60500eccd0865af81adb72de23b2f13c65a86eaa4c5"
+    },
+    {
+      "players": 4,
+      "seed": 115000016,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 100,
+      "cases": 100,
+      "winner_mask": 4,
+      "case_set_sha256": "51fb2f5549cf0677d1d60b73c28dfa28a4b6b44292de8fcd87fe688ffe298765"
+    },
+    {
+      "players": 4,
+      "seed": 115000017,
+      "policy": "random",
+      "status": "complete",
+      "turns": 148,
+      "cases": 148,
+      "winner_mask": 1,
+      "case_set_sha256": "6aa8f6b05db560198bf3eebb6725772729cc0bed81676533e69cf617a05dae8f"
+    },
+    {
+      "players": 4,
+      "seed": 115000018,
+      "policy": "strong",
+      "status": "complete",
+      "turns": 96,
+      "cases": 96,
+      "winner_mask": 1,
+      "case_set_sha256": "6c6c79531539bc34dca9368a50e449986d279b6f65abf69f1acabb8ae7426745"
+    },
+    {
+      "players": 4,
+      "seed": 115000019,
+      "policy": "random",
+      "status": "complete",
+      "turns": 136,
+      "cases": 136,
+      "winner_mask": 2,
+      "case_set_sha256": "27ace98b8c627721f3336ea370603d1c95762c1df160ca858084615ce2c059bd"
+    }
+  ],
+  "extracted_regression": {
+    "path": "scripts/fixtures/reference-seven-card-successor.json",
+    "sha256": "82e581dd045381ac7c3e8c18d7f6c9472291bf89cfb7b573e1feb97cb7f2ecc8",
+    "players": 4,
+    "seed": 115000017,
+    "turn": 142,
+    "classification": "seven_card_limit",
+    "note": "Extracted after the untouched confirmation workload passed; these seeds are now development evidence for future checker changes."
+  }
+}

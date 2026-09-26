@@ -93,6 +93,8 @@ class ReferenceTests(unittest.TestCase):
             if reason in ('blind_reservation', 'optional_gold_payment', 'return_collected_color'):
                 examples.setdefault(reason, case)
         self.assertEqual(len(examples), 3)
+        examples['seven_card_limit'] = json.loads(
+            (ROOT / 'scripts/fixtures/reference-seven-card-successor.json').read_text())
         for reason, case in examples.items():
             self.assertEqual(self.comparison.compare(case), reason)
             for balanced in (False, True):

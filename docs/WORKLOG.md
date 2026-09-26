@@ -890,3 +890,29 @@ The existing workloads are strong regression fixtures, but new confirmation
 seeds across 2/3/4 players can test whether the accumulated checks generalize.
 Use a separately labelled fixed workload, preserve all exclusions and blocked
 states, and do not combine overlapping branches as independent games.
+
+## Fresh independent confirmation
+
+Continued from `473494c`. Ran the existing exporter/checker unchanged on fresh
+master seed 111,000,000, 20 games per player count, interval 10, full branch
+successors and all noble/final-round boundaries. Verified no overlap with the
+original 60 development setups. Archived all raw cases plus per-game manifests,
+source/reference identities, hashes, and exact reproduction commands.
+
+Results: 60 games, 57 complete, three blocked (one 3p, two 4p), zero capped.
+5,370 case records; 4,949 matched selected turns. At 752 sampled positions,
+14,342 shared successors match. All expected exclusion categories remain
+explicit, including one selected seven-card purchase and eight sampled seven-
+card branches. Terminal branches: 816 winner matches and 29 known reference
+four-player tiebreak defects. No unclassified mismatch, and no invented blocked
+winner. No full parity claim and no pooling branch counts as independent games.
+
+After the untouched confirmation passed, extracted a full seven-card successor
+from seed 115,000,017 turn 142 and extended token-corruption tests to it. This
+closes the test-data limit recorded earlier, where the old fixture's excluded
+choice lacked a successor. All 45 Python tests pass. No runtime code change.
+These confirmation seeds are now used development evidence for later edits.
+
+Next: inspect the eight seven-card branch successors in this new archive and
+retain a complete action-set regression if it adds coverage beyond the old
+no-successor fixture. Keep selected-turn and full-action-set evidence distinct.

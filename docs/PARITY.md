@@ -478,3 +478,45 @@ classifications. Stronger-check summaries are
 `results/reference-v2{,-tier2,-tier3}-prestige.summary.json`; the pre-fix failure
 is `results/excluded-prestige-before.txt`. These local accounting checks do not
 make unsupported reference actions externally matched or establish full parity.
+
+## Fresh v2 confirmation workload
+
+After the accounting checks were complete at `473494c`, ran a separately
+labelled 60-game workload: 20 games each for 2/3/4 players, master seed
+111,000,000. Actual setup ranges are 113,000,000–113,000,019,
+114,000,000–114,000,019, and 115,000,000–115,000,019. These have no overlap with
+the original 60 development setups. Policies still alternate strong/random;
+choice sampling is every tenth turn plus all noble/final-round boundaries,
+with full branch successors. The per-game cap remains 1,000 complete turns.
+
+| Players | Games | Normal completion | Blocked | Capped | Matched selected turns |
+|---|---:|---:|---:|---:|---:|
+| 2 | 20 | 20 | 0 | 0 | 1,230 |
+| 3 | 20 | 19 | 1 | 0 | 1,681 |
+| 4 | 20 | 18 | 2 | 0 | 2,038 |
+
+All 5,370 exported cases passed. There are 4,949 matched selected turns;
+exclusions are 96 blind reservations, 76 optional gold payments, 245 collected-
+color returns, one seven-card-limit purchase, and three blocked records.
+Blocked games have no winner. At 752 sampled positions, all 14,342 shared
+choices and successors match: 4,110 two-player, 4,739 three-player, and 5,493
+four-player branches. These include 459 noble branches and 34 explicit choices.
+
+Of 845 shared terminal branches, 816 winner masks match and 29 have the known
+reference global-fewest-card defect, all in four-player games. Shared selected
+terminal turns have 52 matching masks and two known reference defects. Branches
+and selected transitions overlap; they are not independent games or additive
+sample sizes. No new mismatch was found, and full parity is still not claimed.
+
+The fresh workload also contains a complete seven-card-limit successor at
+four-player seed 115,000,017, turn 142. After confirmation passed, extracted
+`scripts/fixtures/reference-seven-card-successor.json` and extended the token
+corruption regression to that fourth exclusion category. The old no-successor
+fixture remains intact. These seeds are now development evidence for any future
+checker change, not fresh confirmation seeds again. All 45 Python tests pass.
+
+Evidence: `results/reference-confirm-v2.jsonl.gz`, its `.summary.json`, and
+`results/reference-confirm-v2-workload.json`. The workload file records every
+setup, policy, outcome, case-set hash, lack of seed overlap, extraction hash,
+and exact commands. Tier-2/3 depletion is not reached here; the separate legal
+history workloads continue to supply that coverage.
