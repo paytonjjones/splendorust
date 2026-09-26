@@ -225,3 +225,45 @@ candidate test (`docs/e10-return-escape-test.rs`), full reports, paired status
 counts, and probe history under `docs/results/e10-*`. Apply the patch to
 commit `566d253` to reproduce its agent source. The active replay regression
 checks the natural four-decision cycle without changing any game rule.
+
+### E10 capped-state audit
+
+All four remaining capped games reproduce the archived records exactly,
+including their trajectory hashes. Each reaches the same normalized return
+observation on thousands of consecutive candidate turns. Return exploration
+changes the discarded color, but the next main decision still chooses a token
+take while several legal purchases exist. The last eight decisions show three
+to five purchase alternatives at each sampled candidate main phase. Increasing
+return memory would not address these immediate repeats.
+
+To reproduce: check out `566d253`, apply `docs/e10-return-escape.patch`, copy
+`docs/e10-cap-audit.rs` to `crates/splendor-arena/examples/cap_audit.rs`, and run
+`cargo run --release --locked --example cap_audit`. The harness records exact
+block/rotation/setup seeds, uses the screen's 128/8/6 search budget, checks
+invariants, and prints repeat distances and final legal choices. Output is in
+`docs/results/e10-cap-audit.txt`; four full histories are `e10-cap-*-v1.json.gz`.
+This is diagnosis on development evidence, not an independent strength test.
+
+## E11 — Main-phase cycle escape hypothesis
+
+**Hypothesis, before implementation:** Extending E10 with memory of repeated
+main-phase observations can escape cycles that return-only exploration cannot.
+If the default search chooses a token take on an exact repeated main observation
+and a purchase is legal, select the strongest heuristic purchase. Keep all
+legal actions in the engine. This is an agent policy, not a forced-progress rule.
+
+**Candidate:** `search-cycle-escape`. Keep separate last-16 observation histories
+for main and return phases, ignoring only completed turns. Keep E10's return
+exploration and independent seeded RNG unchanged. On a repeated main position,
+replace a preferred take with the highest-scored legal purchase if one exists.
+Otherwise retain original search. Do not change rollouts, evaluation, or payment
+choices. Both histories use only the acting agent's observation.
+
+**Protocol:** Use E10's four capped games as development probes. Then run a
+2,000-game candidate/search screen and original-search self-play control at new
+master seed 101,000,000, with 128 iterations, depth eight, width six, two players,
+four threads, and no clock budget. Use `scripts/promote.py`; confirmation is
+20,000 games at 1,101,000,000 only if screening permits it. Report all incomplete
+categories and paired changes. Reject any incomplete promotion run. Do not tune
+on confirmation results. This test can show a completion benefit conditional on
+these opponents and budget; it cannot prove termination.

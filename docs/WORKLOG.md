@@ -151,3 +151,13 @@ write preservation. All 35 existing raw report archives pass validation. This
 change affects Python evidence tooling only; it does not change engine or agent
 behavior. Next investigate E10's four remaining capped trajectories, starting
 from archived evidence and its saved candidate patch.
+
+## E10 residual-cap diagnosis and E11 hypothesis
+
+Restored E10 at its documented source in a separate temporary worktree. All four
+capped screen records and trajectory hashes match. The candidate repeats the
+same return observation on successive turns, changes returns, then chooses a
+take again despite legal purchases. Full histories and a reproducible diagnostic
+harness are archived. The main checkout's agents remain unchanged at this point.
+E11's written hypothesis now tests a targeted purchase override on repeated main
+observations, with separate main/return memory and fresh screen/confirmation seeds.
