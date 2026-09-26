@@ -73,6 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     if boundary_choices {
         metadata["boundary_choices"] = json!(true);
+        metadata["noble_acquisition_choices"] = json!(true);
     }
     writeln!(out, "{metadata}")?;
     for count in 2..=4 {
@@ -105,7 +106,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 let boundary = boundary_choices
                     && (state.is_terminal()
-                        || actions.iter().any(|a| a[0] == 7)
+                        || before_state.observe(before_state.current_player()).nobles
+                            != state.observe(state.current_player()).nobles
                         || (!before_state
                             .observe(before_state.current_player())
                             .final_round

@@ -32,7 +32,7 @@ Normal-game results, no-action counts, and decision-limit counts must be reporte
 
 ## Limits of the evidence
 
-No external engine is used as an unquestioned oracle. A pinned MIT-licensed independent engine now matches 5,016 shared complete-turn transitions, 11,889 shared choices and their successor states at 668 positions, and all 90 card / 10 noble tuples. [The comparison record](docs/PARITY.md) defines the workload, checks, exclusions, source, and license. The reference has material rule and information differences. This is bounded transition parity, not full engine equivalence. Earlier data sources include an unlicensed repository; no implementation code from it was copied. The local independent enumerators cover the largest combinatorial decisions.
+No external engine is used as an unquestioned oracle. A pinned MIT-licensed independent engine now matches 5,016 shared complete-turn transitions, 13,741 shared choices and their successor states at 758 positions, and all 90 card / 10 noble tuples. [The comparison record](docs/PARITY.md) defines the workload, checks, exclusions, source, and license. The reference has material rule and information differences. This is bounded transition parity, not full engine equivalence. Earlier data sources include an unlicensed repository; no implementation code from it was copied. The local independent enumerators cover the largest combinatorial decisions.
 
 No test suite proves all reachable states correct. The milestone is a tested foundation with explicit rule boundaries. Search strength has been measured against the included agents, not against expert humans. The core does not yet have a formal verification proof, external engine equivalence certificate, or tested cross-platform floating-point search guarantee.
 
@@ -109,7 +109,7 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 31 Python tests include 15 reference
-tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 15.
+silently skipping the reference tests. The 33 Python tests include 16 reference
+tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 16.
 A fresh checkout and all 29 tests passed locally when this workflow was added.
 Hosted Linux/macOS workflow results are not yet verified.

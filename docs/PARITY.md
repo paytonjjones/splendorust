@@ -258,3 +258,36 @@ noble choice, final-round entry, and termination; a single automatic noble
 acquisition can occur between those samples. Tier 2/3 deck-exhaustion boundaries
 also remain open and need explicit legal-history evidence or clearly labeled
 constructed-state tests before a coverage claim.
+
+## All noble-acquisition boundaries
+
+Boundary exports now declare `noble_acquisition_choices: true` and sample every
+turn that removes a noble from the available set, including an automatic award
+with no separate Noble action. The verifier requires the declared sample.
+Legacy exports without this flag retain their previous sampling contract; they
+are not retroactively treated as complete at automatic-award boundaries.
+
+Re-exporting the same 60 games adds 90 sampled positions and 1,852 shared branch
+successors. All match the pinned reference. Totals are now 758 positions and
+13,741 shared branch successors (3,750 two-player, 4,488 three-player, 5,503
+four-player). Noble-acquiring branches increase from 138 to 371. This includes
+45 take branches and 44 visible-reservation branches with a noble award, closing
+the specific non-purchase sampling gap found in the coverage audit. Explicit
+noble-choice branches increase from 16 to 22. Terminal/winner counts are unchanged.
+
+Every selected case and every previously sampled choice set is byte-for-byte
+equivalent as parsed JSON. The added samples do not change the selected policies,
+seeds, transitions, or engine semantics. This is more branch coverage within the
+same games, not 90 new games or independent trials.
+
+Evidence: `docs/results/reference-all-nobles.jsonl.gz`, its comparison summary,
+and `reference-all-nobles-delta.json`. The delta identifies each new sampled
+position and confirms preservation of old cases. Reproduce with the same
+five-argument exporter command listed above. Focused fixtures cover seed
+95,000,015 turn 89 (reservation) and seed 96,000,000 turn 103 (take), and tests
+reject deletion of either required sample. All 55 Rust and 33 Python tests,
+formatting, and strict all-target workspace Clippy pass.
+
+Tier 2/3 last draws and exhausted-deck actions still have zero coverage in this
+workload. The other reference rule, hidden-information, and RNG differences
+remain explicit; full parity is not claimed.

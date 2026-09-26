@@ -57,6 +57,9 @@ def validate_sampling(metadata, case):
     boundary_choices = metadata.get("boundary_choices", False)
     require(type(interval) is int and interval >= 0, "invalid choice interval")
     require(type(boundary_choices) is bool, "invalid boundary sampling flag")
+    noble_acquisitions = metadata.get("noble_acquisition_choices", False)
+    require(type(noble_acquisitions) is bool, "invalid noble acquisition sampling flag")
+    require(not noble_acquisitions or boundary_choices, "noble acquisition sampling requires boundary sampling")
     before, after = case["before"], case["after"]
     require(type(metadata.get("winner_checks", False)) is bool, "invalid winner check flag")
     if metadata.get("winner_checks"):
@@ -66,6 +69,7 @@ def validate_sampling(metadata, case):
                     "missing branch winner mask")
     boundary = boundary_choices and (
         after["terminal"] or any(a[0] == 7 for a in case["actions"])
+        or (noble_acquisitions and before["nobles"] != after["nobles"])
         or (not before["final_round"] and after["final_round"]))
     required = boundary or (interval > 0 and before["turns"] % interval == 0)
     if "choice_interval" in metadata:

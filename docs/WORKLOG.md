@@ -503,3 +503,27 @@ honestly interpreted. Re-export the same workload to target these known omitted
 action sets; compare only genuinely new branches as added coverage. Then consider
 legal-history generation for tier 2/3 exhaustion. Do not count the coverage
 reclassification as new independent games or claim full parity.
+
+## Automatic noble boundaries now have full branch comparison
+
+Continued from `ce0773d`. Extended boundary sampling to all noble acquisitions,
+including automatic single awards. New metadata flag
+`noble_acquisition_choices` makes the stronger contract explicit; the verifier
+requires those samples and preserves legacy behavior without the flag.
+
+The same 60-game workload adds 90 positions and 1,852 matched shared branch
+successors: now 758 positions and 13,741 branches. Non-purchase noble branches
+are now covered (45 takes, 44 visible reservations); explicit noble branches
+increase to 22. Selected cases and all previous choices remain unchanged,
+verified by a delta comparison. No new independent games are claimed.
+
+Saved the full archive, fingerprinted summary, delta, and two automatic-noble
+fixtures. Tests reject missing declared samples. All 55 release Rust tests,
+33 Python tests, formatting, and strict all-target workspace Clippy pass.
+No ENGINE_VERSION bump: only diagnostic sampling changed.
+
+Next parity gap: tier 2/3 final draws and exhausted-deck actions still have zero
+shared coverage. Seek legal histories that intentionally draw down those tiers
+without triggering early terminal play, or explicitly label any constructed
+states and validate their invariants. Do not imply that tier-1 exhaustion tests
+prove all tier boundary behavior.

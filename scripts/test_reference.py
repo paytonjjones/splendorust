@@ -11,6 +11,21 @@ from check_reference import Comparison, ROOT, boundary_coverage, validate_sampli
 
 
 class CoverageTests(unittest.TestCase):
+    def test_automatic_noble_sampling_is_explicit_and_required(self):
+        case = {"before": {"turns": 1, "final_round": False, "nobles": [0, 1]},
+                "after": {"terminal": False, "final_round": False, "nobles": [1]},
+                "actions": [[0, 1, 1, 1, 0, 0, 0]], "choices": None}
+        legacy = {"boundary_choices": True, "choice_interval": 0}
+        validate_sampling(legacy, case)
+        current = {**legacy, "noble_acquisition_choices": True}
+        with self.assertRaisesRegex(ValueError, "missing required choice sample"):
+            validate_sampling(current, case)
+        validate_sampling(current, {**case, "choices": []})
+        with self.assertRaisesRegex(ValueError, "invalid noble acquisition sampling flag"):
+            validate_sampling({**current, "noble_acquisition_choices": 1}, case)
+        with self.assertRaisesRegex(ValueError, "requires boundary sampling"):
+            validate_sampling({**current, "boundary_choices": False}, case)
+
     def test_tier_draw_and_empty_deck_boundaries_are_separate(self):
         before = {"current": 0, "remaining": [0, 1, 0], "bank": [0]*6,
                   "players": [{"tokens": [0]*6, "nobles": []}]}
@@ -140,12 +155,13 @@ class ReferenceTests(unittest.TestCase):
             cwd=ROOT, check=True, capture_output=True, text=True)
         lines = [json.loads(line) for line in run.stdout.splitlines()]
         self.assertTrue(lines[0]["boundary_choices"])
+        self.assertTrue(lines[0]["noble_acquisition_choices"])
         noble_branches = {3: 0, 4: 0}
         terminal_counts = {2: 0, 3: 0, 4: 0}
         for case in lines[1:]:
             validate_sampling(lines[0], case)
             before, after = case["before"], case["after"]
-            boundary = (after["terminal"] or any(a[0] == 7 for a in case["actions"])
+            boundary = (after["terminal"] or before["nobles"] != after["nobles"]
                         or (not before["final_round"] and after["final_round"]))
             if boundary:
                 self.assertIsNotNone(case["choices"])
@@ -161,6 +177,26 @@ class ReferenceTests(unittest.TestCase):
                 self.assertIsNone(case["choices"])
         self.assertTrue(all(n >= 2 for n in noble_branches.values()), noble_branches)
         self.assertTrue(all(n > 0 for n in terminal_counts.values()), terminal_counts)
+
+    def test_automatic_nonpurchase_nobles_have_checked_action_sets(self):
+        cases = json.loads((ROOT / "scripts/fixtures/reference-automatic-nobles.json").read_text())
+        self.assertEqual({c["actions"][0][0] for c in cases}, {0, 1})
+        metadata = {"boundary_choices": True, "noble_acquisition_choices": True,
+                    "choice_interval": 0, "choice_successors": True, "winner_checks": True}
+        totals = collections.Counter()
+        for case in cases:
+            self.assertFalse(any(a[0] == 7 for a in case["actions"]))
+            self.assertFalse(case["after"]["terminal"])
+            self.assertEqual(case["before"]["final_round"], case["after"]["final_round"])
+            validate_sampling(metadata, case)
+            with self.assertRaisesRegex(ValueError, "missing required choice sample"):
+                validate_sampling(metadata, {**case, "choices": None})
+            self.assertEqual(self.comparison.compare(case), "matched")
+            counts = self.comparison.compare_choices(case, check_successors=True)
+            self.assertEqual(counts["shared_choices"], counts["shared_successors"])
+            totals.update(counts)
+        self.assertGreater(totals["boundary_noble_after_take"], 0)
+        self.assertGreater(totals["boundary_noble_after_reserve"], 0)
 
     def test_branch_successor_corruption_is_detected(self):
         case = copy.deepcopy(self.cases[0])
