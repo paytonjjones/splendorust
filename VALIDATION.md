@@ -255,3 +255,22 @@ seven-card cap is still excluded explicitly; local success is not external
 agreement. Existing return tests already apply every generated excess return
 with invariants, including old, newly collected, and gold tokens. No rules,
 actions, or agent behavior changed in this coverage addition.
+
+### Validation after target-cache performance changes
+
+E14/E15 preserve cached versus original scores across all legal actions in
+96 seeded 2–4-player trajectories, including all four decision phases. Fresh
+invariant-enabled search/strong comparisons at 128/8/6 include 300 three-player
+games (118m) and 400 four-player games (119m). Every game completes; before and
+after records, including trajectory hashes, match exactly. Reports and commands
+are retained in `docs/results/e15-multiplayer.json` and referenced archives.
+
+Re-exported the existing 60-game independent-reference workload (111m master)
+after both optimizations. All 5,370 case payloads are byte-identical; only source
+metadata changes from `5fbacedf05ec987b` to `50400f40eb161b1a`. The pinned MIT
+reference check again matches 4,949 shared selected successors and 14,342
+sampled shared branch successors. Known exclusions, three blocked games, and
+reference winner defects remain unchanged. This is regression validation on
+existing seeds, not a new independent sample or full parity. Exact commands,
+hashes, archive reconstruction and checker output are retained in
+`docs/results/reference-e15-validation.json` and `reference-e15.summary.json`.

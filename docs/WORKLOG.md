@@ -1010,3 +1010,21 @@ no rule, RNG or enumeration changes, engine remains v2.
 Next: three- and four-player before/after comparisons with invariants enabled
 at new seeds, to check behavior beyond the two-player timing workload. These
 are regression checks, not a promotion or new independent-rule parity claim.
+
+## E15 multiplayer and independent-reference regression
+
+Both builds complete all 300 three-player and 400 four-player games with
+invariants enabled. Full records and trajectory hashes match. Archived reports
+and exact commands. This validates behavior outside the two-player timing
+workload; one pair per player count is not a multiplayer speed claim.
+
+Re-exported existing independent workload after E14/E15: all 5,370 complete
+case payloads are byte-identical, only source metadata differs. Reran the pinned
+MIT reference: 4,949 selected and 14,342 sampled branch successors still match,
+with unchanged exclusions and unresolved outcomes. Saved hashes, reconstruction
+recipe and summary, without duplicating the identical case payload archive.
+No full parity claim or new confirmation-seed claim.
+
+Next audit: assess cross-platform deterministic validation gaps and whether a
+local second target is available. Hosted CI remains unverified because nothing
+has been pushed. Do not turn one-host performance results into portable claims.

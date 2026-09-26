@@ -1,0 +1,15 @@
+{
+  "commands": [
+    "cargo run --release --locked --example parity_export -- 20 111000000 10 true true > /tmp/reference-e15.jsonl",
+    "python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check --cases /tmp/reference-e15.jsonl --output /tmp/reference-e15.summary.json"
+  ],
+  "before_source": "5fbacedf05ec987b",
+  "after_source": "50400f40eb161b1a",
+  "previous_archive": "reference-confirm-v2.jsonl.gz",
+  "raw_sha256": "2886e78e20a290106f365b7e10ee29cb747fb30adfcdcd766a8b96f1ee8ad4a0",
+  "case_payload_sha256": "2f33ab9a24992b5977c52b86d521de7c8393a43852797909be745ffbd121a888",
+  "case_count": 5370,
+  "payload_byte_identical": true,
+  "reconstruction": "Decompress previous_archive; replace only source_id in the first JSON line with after_source. Preserve compact sorted-key JSON and a newline. Remaining bytes are identical.",
+  "note": "Regression on an existing workload after E14/E15, not fresh independent confirmation or expanded parity."
+}
