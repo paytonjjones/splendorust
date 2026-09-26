@@ -347,3 +347,24 @@ Next: inspect the five Main alternatives at decision 32 and the opponent's
 preceding purchase decisions. Determine whether a public-information feature
 can predict blocking risk before the forced takes. Do not infer probabilities
 from unweighted branch counts or treat this probe as fresh evaluation evidence.
+
+## E11 earlier blocking risk located
+
+Continued from `69741ef`. A bounded adversarial audit of decision 32 finds that
+the recorded white/red/black take and the two-white take allow the opponent to
+force a candidate block within seven decisions. Three alternatives do not.
+The result persists at ten decisions (1,058,779 visited states); white/blue/black
+has no actor-blocked leaf within either horizon. Counts are unweighted paths,
+not probabilities. Actual hidden deck state is used only in this offline audit.
+No agent behavior, engine semantics, or production source fingerprint changed.
+
+Saved full history fixture, diagnostic example, fingerprinted seven/ten-decision
+results, and two regression tests. Formatting, strict release all-target
+workspace Clippy, 53 release workspace tests, and two example tests pass.
+
+Next useful research task: determine which public card deficits and token-supply
+features distinguish these five takes. Before any agent change, record a
+hypothesis based on that observation-only calculation. E9 already tried a zero
+reward for blocked rollout leaves and failed; do not simply repeat that change.
+Keep E10/E11 rejected and their confirmation seeds unused. Full external parity
+remains bounded by the documented reference differences in docs/PARITY.md.

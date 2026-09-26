@@ -345,3 +345,45 @@ cargo run --release --locked --example return_audit -- /tmp/e11-blocked.json 37
 fingerprint, diagnostic source hash, and input archive hash. Rules and agents
 are unchanged. The next useful diagnosis is the earlier Main choice at decision
 32, where the candidate still had five legal takes.
+
+## E11 earlier Main decision audit
+
+The next audit starts before decision 32 in the same recorded game. It checks
+all legal branches within seven and ten decisions, including payment, return,
+and noble decisions. The actor chooses to avoid its own block; the opponent
+chooses to cause it. A nonterminal state with no legal actions is a block. A
+horizon cutoff is unresolved and receives no winner or claim of lasting safety.
+
+| Take | Opponent can force actor block by 7 decisions | By 10 decisions | Actor-blocked leaves at 10 |
+| --- | --- | --- | --- |
+| White, blue, red | No | No | 4 |
+| White, blue, black | No | No | 0 |
+| White, red, black (recorded) | Yes | Yes | 19 |
+| Blue, red, black | No | No | 8 |
+| Two white | Yes | Yes | 12 |
+
+The seven-decision audit visits 12,218 states; the ten-decision audit visits
+1,058,779. Counts include repeated states on distinct paths and are not branch
+probabilities. Every applied transition passes invariants. The full recorded
+history is verified before truncation. No terminal state occurs in either tree.
+The earlier choice is therefore material to this specific failure, unlike the
+later return choice. This does not establish agent strength or eventual game
+completion for any alternative.
+
+This is privileged offline analysis with the recorded hidden deck and complete
+states. It does not establish a strategy that works across unknown decks. Any
+agent feature must be computed from Observation and tested with independent
+seeds. No agent change is made here. The maintained `block_audit` example has
+explicit horizon and node limits; exhausting its node limit fails the run
+without an exhaustive-result claim.
+
+```sh
+cargo run --release --locked --example block_audit -- crates/splendor-arena/tests/fixtures/blocked-e11-v1.json 32 7
+cargo run --release --locked --example block_audit -- crates/splendor-arena/tests/fixtures/blocked-e11-v1.json 32 10
+cargo test --release --locked --example block_audit
+```
+
+Results and source/input hashes are in `docs/results/e11-main-audit-{7,10}.json`.
+Two diagnostic regression tests distinguish cutoffs from blocks and check the
+five root alternatives. Formatting, strict release all-target workspace Clippy,
+all 53 release workspace tests, and both diagnostic tests pass.

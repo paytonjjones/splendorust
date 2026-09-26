@@ -1,0 +1,107 @@
+{
+  "actor": 1,
+  "branches": [
+    {
+      "action": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "actor_blocked_leaves": 4,
+      "horizon_leaves": 74388,
+      "nodes": 112156,
+      "opponent_blocked_leaves": 8,
+      "opponent_can_force_actor_block": false,
+      "terminal_leaves": 0
+    },
+    {
+      "action": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "actor_blocked_leaves": 0,
+      "horizon_leaves": 97736,
+      "nodes": 122525,
+      "opponent_blocked_leaves": 0,
+      "opponent_can_force_actor_block": false,
+      "terminal_leaves": 0
+    },
+    {
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "actor_blocked_leaves": 19,
+      "horizon_leaves": 196674,
+      "nodes": 271163,
+      "opponent_blocked_leaves": 0,
+      "opponent_can_force_actor_block": true,
+      "terminal_leaves": 0
+    },
+    {
+      "action": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "actor_blocked_leaves": 8,
+      "horizon_leaves": 58453,
+      "nodes": 79230,
+      "opponent_blocked_leaves": 3,
+      "opponent_can_force_actor_block": false,
+      "terminal_leaves": 0
+    },
+    {
+      "action": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actor_blocked_leaves": 12,
+      "horizon_leaves": 398244,
+      "nodes": 473705,
+      "opponent_blocked_leaves": 0,
+      "opponent_can_force_actor_block": true,
+      "terminal_leaves": 0
+    }
+  ],
+  "decision_horizon": 10,
+  "engine": "splendorust-v1",
+  "prefix_length": 32,
+  "recorded_action": [
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0
+  ],
+  "seed": 811391511434643069,
+  "source_id": "6fb7813c76f86a6a",
+  "audit_sha256": "a396114d434513d7682a0c49c669f9c2d1b767f5533c3c1173b5c587b557f380",
+  "history_sha256": "228e1681604056bb7fb7b4caaef075d33816e7432dfae49217cd7504a308bb0c",
+  "command": "cargo run --release --locked --example block_audit -- crates/splendor-arena/tests/fixtures/blocked-e11-v1.json 32 10"
+}
