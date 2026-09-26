@@ -248,6 +248,7 @@ class Comparison:
                 require(isinstance(choice.get("after"), dict), "missing choice successor")
             action = self.candidate(before, choice["actions"], choice["noble"], rule)
             if check_successors:
+                self.check_turn_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_reservation_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_token_bookkeeping(before, choice["after"], choice["actions"])
                 self.check_blind_card_bookkeeping(before, choice["after"], choice["actions"])
@@ -292,13 +293,13 @@ class Comparison:
 
     @staticmethod
     def check_local_winner(snapshot):
-        if "winner_mask" not in snapshot:
-            return
         scores = [p["score"] for p in snapshot["players"]]
         final_round = max(scores) >= 15
         require(snapshot["final_round"] == final_round, "final-round flag disagrees with scores")
         require(snapshot["terminal"] == (final_round and snapshot["current"] == 0),
                 "terminal flag disagrees with round boundary")
+        if "winner_mask" not in snapshot:
+            return
         if not snapshot["terminal"]:
             require(snapshot["winner_mask"] is None, "unfinished state has a winner")
             return
@@ -437,10 +438,27 @@ class Comparison:
         require(bank == after['bank'] and hands == [p['tokens'] for p in after['players']],
                 'token successor mismatch')
 
+    def check_turn_bookkeeping(self, before, after, actions):
+        count = len(before['players'])
+        require(2 <= count <= 4 and len(after['players']) == count, 'invalid turn player count')
+        for snapshot in (before, after):
+            require(type(snapshot['turns']) is int and 0 <= snapshot['turns'] < 2**32,
+                    'invalid turn counter')
+            require(type(snapshot['current']) is int and 0 <= snapshot['current'] < count
+                    and snapshot['turns'] % count == snapshot['current'], 'turn seat mismatch')
+            require(type(snapshot['final_round']) is bool and type(snapshot['terminal']) is bool,
+                    'invalid turn flags')
+            self.check_local_winner(snapshot)
+        if actions:
+            require(not before['terminal'], 'action after terminal turn')
+            require(after['turns'] == before['turns'] + 1, 'complete turn did not advance once')
+            require(after['current'] == (before['current'] + 1) % count, 'incorrect next turn player')
+            expected_final = before['final_round'] or after['players'][before['current']]['score'] >= 15
+            require(after['final_round'] == expected_final, 'invalid final-round turn transition')
+
     def compare(self, case, winner_counts=None):
         before, after, actions = case["before"], case["after"], case["actions"]
-        self.check_local_winner(before)
-        self.check_local_winner(after)
+        self.check_turn_bookkeeping(before, after, actions)
         if not actions:
             require(case.get("status") == "no_legal_action" and before == after and not before["terminal"], "invalid blocked-state record")
             if winner_counts is not None and "winner_mask" in after:

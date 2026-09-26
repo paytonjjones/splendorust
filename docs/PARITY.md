@@ -436,3 +436,22 @@ All 42 Python tests pass. Rechecking the same v2 case files preserves their
 hashes, external classifications, shared successor counts, and winner results.
 New evidence is in `results/reference-v2{,-tier2,-tier3}-blind-cards.summary.json`;
 `results/blind-card-before.txt` records the pre-fix failure.
+
+## Complete-turn metadata on all paths
+
+The checker now validates turn metadata for both selected turns and exported
+branch successors, before any reference exclusion. Counts must fit the engine's
+unsigned 32-bit counter, the active seat must match the count modulo player
+count, and a nonempty compound turn must increment once and advance one seat.
+Actions cannot follow a terminal state. Final-round activation is checked against
+the acting player's resulting score and the previous flag. Snapshot terminal
+and threshold flags are checked even in old exports without winner masks.
+Blocked records still require identical before/after states and no terminal win.
+
+The new regression reproduced an excluded turn with an unchanged counter. It
+now rejects that case, wrong next-player metadata, and bad final/terminal flags,
+with and without legacy winner metadata, plus an excluded branch successor.
+All 43 Python tests pass. `results/reference-v2{,-tier2,-tier3}-turns.summary.json`
+records revalidation of unchanged input hashes and external classifications.
+Pre-fix failure: `results/excluded-turn-before.txt`. These are local export
+contract checks; excluded actions remain excluded from external parity.

@@ -114,6 +114,27 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'token'):
             self.comparison.compare_choices(case, check_successors=True)
 
+    def test_excluded_turns_require_exact_turn_progression(self):
+        original = self.cases[0]
+        branch = next(c for c in original['choices'] if c['actions'][0][0] == 2)
+        base = {'before': original['before'], 'after': branch['after'], 'actions': branch['actions']}
+        for legacy in (False, True):
+            for field, value in [('turns', base['before']['turns']),
+                                 ('current', base['before']['current']),
+                                 ('final_round', True), ('terminal', True)]:
+                bad = copy.deepcopy(base)
+                if legacy:
+                    bad['before'].pop('winner_mask', None)
+                    bad['after'].pop('winner_mask', None)
+                bad['after'][field] = value
+                with self.assertRaises(ValueError):
+                    self.comparison.compare(bad)
+        bad = copy.deepcopy(original)
+        choice = next(c for c in bad['choices'] if c['actions'][0][0] == 2)
+        choice['after']['turns'] = bad['before']['turns']
+        with self.assertRaises(ValueError):
+            self.comparison.compare_choices(bad, check_successors=True)
+
     def test_blind_reservation_cannot_steal_cards_or_change_deck_accounting(self):
         original = self.cases[0]
         branch = next(c for c in original['choices'] if c['actions'][0][0] == 2)

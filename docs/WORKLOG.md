@@ -845,3 +845,24 @@ Next: audit complete-turn metadata on excluded paths. The checker compares
 current/terminal through the reference only on shared actions. Establish whether
 an excluded turn can carry an unchanged turn counter, wrong next player, or
 incorrect final-round transition while still receiving a valid exclusion label.
+
+## Excluded complete-turn metadata
+
+Continued from `6a86036`. Reproduced an excluded blind-reservation turn retaining
+its old turn counter. Added common snapshot/transition metadata validation
+before exclusion on selected turns and exported branch successors. Check u32
+range, strict flag types, player count, seat/counter consistency, one turn and
+seat increment, no action after terminal, and final-round activation. Threshold
+and terminal flag checks no longer depend on winner_mask being present, while
+old exports can still omit the mask itself.
+
+The regression covers counter/seat errors and final/terminal flag errors with
+and without winner metadata; it also corrupts an excluded branch successor.
+Preserved the pre-fix failure. All 43 Python tests pass with the pinned reference.
+All three full v2 workloads pass with unchanged input hashes, external counts,
+coverage, and winner classifications. Saved new *-turns.summary.json evidence.
+No Rust or simulator semantics changed, and no external parity expansion claimed.
+
+Next: inspect derived score/bonus and noble accounting on excluded paths. A
+correct exclusion should not permit unrelated prestige or noble ownership
+changes. Reproduce a specific accepted corruption before extending local checks.
