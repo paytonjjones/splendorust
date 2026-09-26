@@ -35,6 +35,8 @@ Use `--help` on any command. `play --trace` prints all decisions. `--check` enab
 
 `mcts` is a CLI alias for `search`, **not** a claim that this implementation has a persistent MCTS tree. The current search is a simple measured baseline.
 
+At 128 iterations, a fresh four-player comparison against three strong opponents completed all 20,000 games and earned 38.565% win credit (95% CI 37.224%–39.906%). The three-player screen had a blocked game and failed the completion gate. These results depend on opponents and compute budget; see E18 in [EXPERIMENTS.md](EXPERIMENTS.md).
+
 Search options: `--iterations`, `--depth` (completed player turns), `--width`, `--rollout random|greedy|strong`, and `--evaluation score|engine`. Fixed iterations are the default. `--search-ms` adds a soft wall-clock cap and marks the report as non-reproducible. A simulation can run past the time cap. Saved action histories still replay exactly.
 
 ## Experiment workflow

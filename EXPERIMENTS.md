@@ -909,3 +909,50 @@ for seeded action choices and equivalent hidden-world observations; it makes
 no universal privacy or strength claim. After removal, formatting, strict
 release all-target Clippy, 71 release workspace tests and 52 Python tests pass.
 Engine stays v2; ordinary policies remain random/greedy/strong/search.
+
+## E18 — Search transfer to three and four players
+
+**Hypothesis, before runs:** The retained 128-iteration search policy earns
+more than equal-seat win credit against two or three copies of strong. Earlier
+multiplayer strength evidence concerns strong versus greedy; the E15 multiplayer
+runs checked exact records and performance, not a fresh strength confirmation.
+
+No agent change is proposed. Run the actual promotion gate with fixed 128
+iterations, depth 8, width 6, strong rollouts, engine evaluation, four arena
+threads, and a 20,000-decision cap. Use a one-percentage-point margin over
+1/player_count. Three players: screen 3,000 games at master seed 132,000,000,
+then 21,000 games at 1,132,000,000 if the gate proceeds. Four players: screen
+4,000 games at 133,000,000, then 20,000 at 1,133,000,000 if the gate proceeds.
+These seeds are reserved before execution. Keep all blocked and capped games;
+an incomplete stage rejects promotion. Run the two gates in sequence. Results
+are conditional on these opponents and this unequal search/heuristic compute
+budget. No multiplayer Elo or universal strength claim is planned.
+
+**Three-player result:** The screen has 2,999 normal completions and one
+blocked game. Search wins 1,568 games: 52.28% conditional win credit, with
+unconditional 95% CI [48.309%, 56.258%]. The gate rejects incomplete games
+before confirmation. The blocked record is setup block 818, rotation 2, seed
+11622764811484448866, at turn 61 / decision 86, scores 5/6/4, winner mask zero,
+trajectory hash `1e4968871b4c2d80`. The confirmation seed 1,132,000,000 remains
+unused. This screen shows conditional strength but does not pass promotion.
+
+**Four-player result:** All 4,000 screening games complete. Search wins 1,579,
+for 39.475% credit and 95% CI [35.996%, 42.954%]. The gate continues to the
+fresh 20,000-game confirmation (5,000 setup blocks). All games complete.
+Search wins 7,713, for **38.565%** credit and **95% CI [37.224%, 39.906%]**.
+The lower bound exceeds the 26% threshold (25% equal-seat credit plus one
+percentage point). The actual gate returns `promote`. No source or defaults
+change: this is evidence for the existing policy at the stated budget.
+
+Runtime is 15.66 seconds for the three-player screen, 20.73 seconds for the
+four-player screen, and 105.55 seconds for confirmation on the current host.
+The gates ran sequentially with no concurrent simulation or test workload.
+These are run times, not a paired performance improvement claim.
+
+Full compressed reports, gate logs, build and run manifests, and both decisions
+are in `docs/results/e18-*`. `e18-summary.json` records raw and record-set
+hashes, the exact blocked record, and intervals independently recomputed
+from seat-rotation blocks. All reports pass `validate_report`. Both gates ran
+formatting, strict workspace Clippy, and the 72 release workspace tests.
+Source fingerprint is unchanged at `50400f40eb161b1a`. No multiplayer Elo,
+equal-compute advantage, or guarantee against other opponents is claimed.

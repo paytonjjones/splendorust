@@ -1,0 +1,126 @@
+{
+  "hypothesis_commit_parent": "b7dd650",
+  "source_id": "50400f40eb161b1a",
+  "settings": "128 iterations, depth 8, width 6, strong rollout, engine evaluation, four threads, 20000 decision cap",
+  "results": [
+    {
+      "report": "e18-three-screen.json.gz",
+      "raw_sha256": "90d6c4d6d9aae5a1b75b65459c18027d257b927acfd9071e312da9641c439a83",
+      "record_set_sha256": "97739997ced01ab48f33f96993fd78a558c9b6613f77ad818f3e8ce18ea0a087",
+      "players": 3,
+      "games": 3000,
+      "completed_games": 2999,
+      "candidate": {
+        "identity": 0,
+        "agent": "search",
+        "wins": 1568,
+        "shared_wins": 0,
+        "win_share": 1568.0,
+        "win_rate": 0.5228409469823274,
+        "ci95": [
+          0.48308756846645934,
+          0.5625768226673113
+        ],
+        "average_position": 1.7049016338779592,
+        "average_score": 12.97132377459153
+      },
+      "interval_recomputed": [
+        0.4830875684664591,
+        0.5625768226673111
+      ],
+      "unfinished_records": [
+        {
+          "block": 818,
+          "rotation": 2,
+          "seed": 11622764811484448866,
+          "seats": [
+            2,
+            0,
+            1
+          ],
+          "scores": [
+            5,
+            6,
+            4
+          ],
+          "ranks": [
+            0,
+            0,
+            0
+          ],
+          "winners": 0,
+          "turns": 61,
+          "decisions": 86,
+          "status": "no_legal_action",
+          "trajectory_hash": "1e4968871b4c2d80"
+        }
+      ],
+      "elapsed_seconds": 15.655367416,
+      "seed": 132000000,
+      "independent_blocks": 1000
+    },
+    {
+      "report": "e18-four-screen.json.gz",
+      "raw_sha256": "0aabcbd545695ee616968603ecc727fdcf6a0103aae3965433591976ce08c73f",
+      "record_set_sha256": "178195f9baa2c9cc51c106575793f9f6c83b687687fcf61876b717273cd4f855",
+      "players": 4,
+      "games": 4000,
+      "completed_games": 4000,
+      "candidate": {
+        "identity": 0,
+        "agent": "search",
+        "wins": 1579,
+        "shared_wins": 0,
+        "win_share": 1579.0,
+        "win_rate": 0.39475,
+        "ci95": [
+          0.3599589849643264,
+          0.4295410150356736
+        ],
+        "average_position": 2.19825,
+        "average_score": 12.4355
+      },
+      "interval_recomputed": [
+        0.3599589849643263,
+        0.42954101503567366
+      ],
+      "unfinished_records": [],
+      "elapsed_seconds": 20.726573417,
+      "seed": 133000000,
+      "independent_blocks": 1000
+    },
+    {
+      "report": "e18-four-confirm.json.gz",
+      "raw_sha256": "82a8cc7f04d98519e01333685c8ccd9fc85c344fc44b5d22cb692448861742b2",
+      "record_set_sha256": "c905c07162a374886ee51dd0bdb61d27e3f906cc18987819afbcff3cff911c94",
+      "players": 4,
+      "games": 20000,
+      "completed_games": 20000,
+      "candidate": {
+        "identity": 0,
+        "agent": "search",
+        "wins": 7713,
+        "shared_wins": 0,
+        "win_share": 7713.0,
+        "win_rate": 0.38565,
+        "ci95": [
+          0.3722367832734488,
+          0.3990632167265512
+        ],
+        "average_position": 2.2197,
+        "average_score": 12.3734
+      },
+      "interval_recomputed": [
+        0.3722367832734488,
+        0.3990632167265512
+      ],
+      "unfinished_records": [],
+      "elapsed_seconds": 105.545804708,
+      "seed": 1133000000,
+      "independent_blocks": 5000
+    }
+  ],
+  "three_player_confirmation": "not run; seed 1132000000 remains unused",
+  "decision": "Four-player gate promotes; three-player gate rejects incomplete screen. No code or defaults changed.",
+  "scope": "Conditional on strong opponents and stated search compute budget. No multiplayer Elo or universal strength claim."
+}
