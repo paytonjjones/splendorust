@@ -613,3 +613,24 @@ improvement claim. Core turn-counter exhaustion remains explicit and unfixed.
 Next: inspect the public arena `play_game` entry point, which bypasses config
 validation and adds a caller-supplied rotation before modulo. Test invalid
 player counts and extreme rotations before changing its error contract.
+
+## Direct arena input validation
+
+Continued from `a45f01f`. Three pre-fix tests show the public `play_game` API
+accepts invalid run settings and panics on 258 agent names or `usize::MAX`
+rotation. Logs are in `docs/results/direct-game-before.txt`. CLI and tournament
+callers already validate settings, so this defect concerns direct library use.
+
+The public API now validates the same RunConfig contract as tournaments and
+rejects noncanonical rotations before seat arithmetic. The internal tournament
+runner retains one validation per run. A regression compares public direct
+calls with tournament records at every seat for 2/3/4 players; capped games
+still have zero winners/ranks and their histories replay. No engine rules,
+enumeration, RNG, or replay changes; ENGINE_VERSION remains v1.
+
+Validation: all 63 release workspace Rust tests and 37 Python tests against the
+pinned reference pass. Formatting and strict release all-target Clippy pass;
+the four direct-call tests also pass in debug. Next open issue: establish a
+reproducible test at the core's turn-counter boundary before deciding whether
+to widen the counter or return an explicit resource-limit error. This is not
+a published-rule terminal outcome and must not assign winners.

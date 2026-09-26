@@ -154,3 +154,11 @@ wrap an absolute `u32` turn deadline. The regression covers a legal nonzero-turn
 position and eight fixed agent seeds. This does not resolve eventual exhaustion
 of the core's `u32` turn counter after billions of turns; that separate limit
 requires a versioned engine decision. See the search depth audit in EXPERIMENTS.md.
+
+The public arena `play_game` entry point validates `RunConfig` and requires
+`rotation < player_count`. Invalid counts (including values that truncate when
+cast to `u8`), invalid run settings, and extreme rotations return errors before
+play. `block` remains a caller-supplied record label. A direct-call regression
+checks all seats for 2/3/4 players against tournament records, including capped
+games with no winners or ranks. Tournaments validate once before their workers
+call the private game runner.

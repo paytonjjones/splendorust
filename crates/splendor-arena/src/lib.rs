@@ -144,7 +144,24 @@ impl RunConfig {
         Ok(())
     }
 }
+/// Play one game with a validated run configuration and a canonical seat rotation.
+/// `block` is a record label; the caller supplies the game's setup seed.
 pub fn play_game(
+    config: &RunConfig,
+    block: usize,
+    rotation: usize,
+    seed: u64,
+    record: bool,
+) -> Result<(GameRecord, Option<History>), String> {
+    config.validate()?;
+    if rotation >= config.names.len() {
+        return Err("rotation must be less than player count".into());
+    }
+    play_validated_game(config, block, rotation, seed, record)
+}
+
+// Callers validate the configuration and ensure rotation < player count.
+fn play_validated_game(
     config: &RunConfig,
     block: usize,
     rotation: usize,
@@ -349,7 +366,7 @@ pub fn tournament(config: &RunConfig) -> Result<Report, String> {
             .map(|i| {
                 let block = i / n;
                 let seed = Rng::new(config.seed.wrapping_add(block as u64)).next_u64();
-                play_game(config, block, i % n, seed, false).map(|x| x.0)
+                play_validated_game(config, block, i % n, seed, false).map(|x| x.0)
             })
             .collect()
     });
@@ -473,6 +490,62 @@ mod tests {
             max_decisions: 20000,
             check: true,
             search: SearchConfig::default(),
+        }
+    }
+    #[test]
+    fn direct_game_rejects_invalid_player_counts() {
+        for count in [0, 1, 5, 258] {
+            let mut c = config();
+            c.names = vec!["random".into(); count];
+            c.max_decisions = 1;
+            assert!(play_game(&c, 0, 0, 42, false).is_err(), "count={count}");
+        }
+    }
+    #[test]
+    fn direct_game_rejects_invalid_rotations() {
+        let mut c = config();
+        c.max_decisions = 1;
+        for rotation in [usize::MAX, c.names.len()] {
+            assert!(play_game(&c, 0, rotation, 42, false).is_err());
+        }
+    }
+    #[test]
+    fn direct_game_rejects_invalid_run_settings() {
+        for field in [
+            "games",
+            "rotation_count",
+            "threads",
+            "max_decisions",
+            "agent",
+        ] {
+            let mut c = config();
+            match field {
+                "games" => c.games = 0,
+                "rotation_count" => c.games = 3,
+                "threads" => c.threads = 0,
+                "max_decisions" => c.max_decisions = 0,
+                "agent" => c.names[0] = "unknown".into(),
+                _ => unreachable!(),
+            }
+            assert!(play_game(&c, 0, 0, 42, false).is_err(), "{field}");
+        }
+    }
+    #[test]
+    fn direct_game_matches_tournament_for_every_seat() {
+        for count in 2..=4 {
+            let mut c = config();
+            c.names = vec!["random".into(); count];
+            c.games = count;
+            c.max_decisions = 1;
+            for expected in tournament(&c).unwrap().records {
+                let (actual, history) =
+                    play_game(&c, expected.block, expected.rotation, expected.seed, true).unwrap();
+                assert_eq!(actual, expected);
+                assert_eq!(actual.status, "decision_limit");
+                assert_eq!(actual.winners, 0);
+                assert!(actual.ranks.iter().all(|&rank| rank == 0));
+                replay(&history.unwrap()).unwrap();
+            }
         }
     }
     #[test]

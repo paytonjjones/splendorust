@@ -1,0 +1,85 @@
+   Compiling utf8parse v0.2.2
+   Compiling anstyle-query v1.1.5
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling colorchoice v1.0.5
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling anstyle v1.0.14
+   Compiling either v1.18.0
+   Compiling zmij v1.0.23
+   Compiling clap_lex v1.1.1
+   Compiling itoa v1.0.18
+   Compiling strsim v0.11.1
+   Compiling memchr v2.8.3
+   Compiling zerocopy v0.8.59
+   Compiling anstyle-parse v1.0.0
+   Compiling cfg-if v1.0.5
+   Compiling ciborium-io v0.2.2
+   Compiling plotters-backend v0.3.7
+   Compiling anstream v1.0.0
+   Compiling regex-syntax v0.8.11
+   Compiling itertools v0.10.5
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-arena)
+   Compiling num-traits v0.2.19
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-agents)
+   Compiling libc v0.2.189
+   Compiling plotters-svg v0.3.7
+   Compiling crossbeam-epoch v0.9.21
+   Compiling clap_builder v4.6.7
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling walkdir v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling crossbeam-deque v0.8.8
+   Compiling oorandom v11.1.5
+   Compiling anes v0.1.6
+   Compiling plotters v0.3.7
+   Compiling is-terminal v0.4.17
+   Compiling rayon-core v1.13.0
+   Compiling rayon v1.12.0
+   Compiling regex-automata v0.4.18
+   Compiling criterion-plot v0.5.0
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.151
+   Compiling clap v4.6.7
+   Compiling tinytemplate v1.2.1
+   Compiling regex v1.13.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.78s
+     Running unittests src/lib.rs (target/debug/deps/splendor_arena-b239de6d3fc86d35)
+
+running 3 tests
+test tests::direct_game_rejects_invalid_player_counts ... FAILED
+test tests::direct_game_rejects_invalid_rotations ... FAILED
+test tests::direct_game_rejects_invalid_run_settings ... FAILED
+
+failures:
+
+---- tests::direct_game_rejects_invalid_player_counts stdout ----
+
+thread 'tests::direct_game_rejects_invalid_player_counts' (12551792) panicked at crates/splendor-arena/src/lib.rs:221:27:
+range end index 258 out of range for slice of length 4
+
+---- tests::direct_game_rejects_invalid_rotations stdout ----
+
+thread 'tests::direct_game_rejects_invalid_rotations' (12551793) panicked at crates/splendor-arena/src/lib.rs:155:43:
+attempt to add with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- tests::direct_game_rejects_invalid_run_settings stdout ----
+
+thread 'tests::direct_game_rejects_invalid_run_settings' (12551794) panicked at crates/splendor-arena/src/lib.rs:507:13:
+games
+
+
+failures:
+    tests::direct_game_rejects_invalid_player_counts
+    tests::direct_game_rejects_invalid_rotations
+    tests::direct_game_rejects_invalid_run_settings
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p splendor-arena --lib`
