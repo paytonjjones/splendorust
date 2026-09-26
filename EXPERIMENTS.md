@@ -123,3 +123,29 @@ reached the same no-action position in block 12, rotation 0, setup seed
 18,210,048,530,404,438,792. It has no ranks or winners. Therefore this run
 cannot promote an agent. Retain the core optimization based on the measured
 operations and unchanged records, not on a strength claim.
+
+## E9 — Blocked-rollout penalty (planned)
+
+**Evidence:** The E8 replay ends when search takes the last colored bank token,
+leaving strong with three reservations and no affordable card. The scores are
+8 and 4. Current search evaluates unfinished rollout leaves by relative score,
+bonuses, and tokens, so a blocked position can have positive heuristic value.
+The exact version-1 replay is `crates/splendor-arena/tests/fixtures/blocked-search-v1.json`.
+
+**Hypothesis:** Assigning zero heuristic utility to a nonterminal rollout leaf
+with no legal action will reduce this failure mode without reducing strength
+against the existing search policy at the same simulation budget.
+
+**Candidate:** A separate `search-avoid-blocked` identity. The existing `search`
+policy stays available and unchanged. The candidate checks legal availability
+at a main-phase leaf, including the depth boundary. Zero utility is a policy
+penalty, not a game outcome or a claim that either player lost.
+
+**Protocol, fixed before implementation:** First replay the known failing setup
+as a development probe; it is not confirmation evidence. Then use the promotion
+gate for 2,000 screen games against `search`, master seed 98,000,000, and a
+20,000-game confirmation at seed 1,098,000,000 if the screen passes. Two players,
+four threads, 128 simulations per decision, depth 8, width 6, strong rollouts,
+engine evaluation, no wall-clock cap. Both policies have the same simulation
+budget; extra leaf checks can change wall-clock cost. No tuning on confirmation
+results. Any incomplete run prevents promotion. Record failure as well as success.

@@ -26,15 +26,20 @@ fn golden_completed_game_and_all_prefix_snapshots() {
 }
 #[test]
 fn published_rule_gap_is_a_reproducible_blocked_state_not_a_victory() {
-    let history: History = serde_json::from_str(include_str!("fixtures/blocked.json")).unwrap();
-    let state = replay(&history).unwrap();
-    state.check_invariants().unwrap();
-    assert!(!state.is_terminal());
-    assert_eq!(state.outcome(), None);
-    let mut actions = ActionSet::new();
-    state.legal_actions(&mut actions);
-    assert!(actions.is_empty());
-    let o = state.observe(state.current_player());
-    assert_eq!(o.bank[..5], [0; 5]);
-    assert_eq!(o.reserved_counts[o.current as usize], 3);
+    for fixture in [
+        include_str!("fixtures/blocked.json"),
+        include_str!("fixtures/blocked-search-v1.json"),
+    ] {
+        let history: History = serde_json::from_str(fixture).unwrap();
+        let state = replay(&history).unwrap();
+        state.check_invariants().unwrap();
+        assert!(!state.is_terminal());
+        assert_eq!(state.outcome(), None);
+        let mut actions = ActionSet::new();
+        state.legal_actions(&mut actions);
+        assert!(actions.is_empty());
+        let o = state.observe(state.current_player());
+        assert_eq!(o.bank[..5], [0; 5]);
+        assert_eq!(o.reserved_counts[o.current as usize], 3);
+    }
 }
