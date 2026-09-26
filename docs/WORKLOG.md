@@ -596,3 +596,20 @@ counter boundaries and arena decision-limit parsing. Distinguish malformed
 inputs from genuinely reachable very long games before choosing a fix; any
 change to valid replay semantics requires explicit versioning. Do not repeat
 completed reservation/noble/depletion comparisons without a new failure or gap.
+
+## Search depth overflow
+
+Continued from `f200420`. Reproduced a search depth arithmetic defect with a
+legal turn-one observation and depth `u32::MAX`: debug panics, release wraps and
+changes the selected action. Replaced the absolute deadline with elapsed turns.
+No engine transition, replay, or enumeration change; ENGINE_VERSION stays v1.
+
+All 59 release workspace Rust tests and 37 Python tests with the pinned reference
+pass, as do formatting and strict release all-target Clippy. The 100-game fixed
+seed 109,000,000 comparison preserves every record. Archived both full reports,
+source/record hashes, and pre-fix debug/release failures. No strength or runtime
+improvement claim. Core turn-counter exhaustion remains explicit and unfixed.
+
+Next: inspect the public arena `play_game` entry point, which bypasses config
+validation and adds a caller-supplied rotation before modulo. Test invalid
+player counts and extreme rotations before changing its error contract.

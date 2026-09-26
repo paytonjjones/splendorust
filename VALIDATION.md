@@ -148,3 +148,9 @@ current parity workloads are byte-identical after removing source metadata.
 See `docs/results/round-order-validation.json` and the saved audit/reproduction
 logs. ENGINE_VERSION remains `splendorust-v1`: only malformed-observation
 acceptance changed; valid rules, action order, RNG, and replay semantics did not.
+
+Search rollout depth uses elapsed turns, so a large requested depth cannot
+wrap an absolute `u32` turn deadline. The regression covers a legal nonzero-turn
+position and eight fixed agent seeds. This does not resolve eventual exhaustion
+of the core's `u32` turn counter after billions of turns; that separate limit
+requires a versioned engine decision. See the search depth audit in EXPERIMENTS.md.

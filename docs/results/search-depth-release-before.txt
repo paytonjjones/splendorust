@@ -1,0 +1,24 @@
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-agents)
+    Finished `release` profile [optimized] target(s) in 1.93s
+     Running unittests src/lib.rs (target/release/deps/splendor_agents-1aa161bf6a6bfbc4)
+
+running 1 test
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... FAILED
+
+failures:
+
+---- tests::large_search_depth_does_not_wrap_at_nonzero_turn stdout ----
+
+thread 'tests::large_search_depth_does_not_wrap_at_nonzero_turn' (12546407) panicked at crates/splendor-agents/src/lib.rs:437:13:
+assertion `left == right` failed
+  left: Take([1, 0, 1, 0, 1])
+ right: Take([0, 1, 1, 0, 1])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::large_search_depth_does_not_wrap_at_nonzero_turn
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p splendor-agents --lib`

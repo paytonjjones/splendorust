@@ -1,0 +1,24 @@
+   Compiling arrayvec v0.7.8
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-agents)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.47s
+     Running unittests src/lib.rs (target/debug/deps/splendor_agents-46072ebc958fd895)
+
+running 1 test
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... FAILED
+
+failures:
+
+---- tests::large_search_depth_does_not_wrap_at_nonzero_turn stdout ----
+
+thread 'tests::large_search_depth_does_not_wrap_at_nonzero_turn' (12546137) panicked at crates/splendor-agents/src/lib.rs:360:24:
+attempt to add with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::large_search_depth_does_not_wrap_at_nonzero_turn
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `-p splendor-agents --lib`

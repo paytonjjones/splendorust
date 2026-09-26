@@ -357,10 +357,12 @@ impl Agent for SearchAgent {
             };
             let mut state = o.determinize(&mut self.rng).expect("engine observation");
             state.apply_action(candidates[j]).expect("root legal");
-            let stop = o.turns + self.config.depth;
             let mut aa = ActionSet::new();
             for _ in 0..self.config.depth.saturating_mul(4).max(4) {
-                if state.is_terminal() || (state.turns() >= stop && state.phase() == Phase::Main) {
+                if state.is_terminal()
+                    || (state.turns() - o.turns >= self.config.depth
+                        && state.phase() == Phase::Main)
+                {
                     break;
                 }
                 state.legal_actions(&mut aa);
@@ -413,6 +415,37 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    #[test]
+    fn large_search_depth_does_not_wrap_at_nonzero_turn() {
+        let mut state = GameState::new(2, 123).unwrap();
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        state.apply_action(legal[0]).unwrap();
+        assert_eq!(state.turns(), 1);
+        state.legal_actions(&mut legal);
+        let observation = state.observe(state.current_player());
+        for seed in 0..8 {
+            let config = SearchConfig {
+                iterations: 4,
+                depth: 1024,
+                width: 4,
+                ..Default::default()
+            };
+            let mut bounded = SearchAgent::new(seed, config.clone());
+            let mut large = SearchAgent::new(
+                seed,
+                SearchConfig {
+                    depth: u32::MAX,
+                    ..config
+                },
+            );
+            assert_eq!(
+                bounded.select_action(&observation, &legal),
+                large.select_action(&observation, &legal)
+            );
+            assert_eq!(bounded.simulations, large.simulations);
+        }
+    }
     #[test]
     fn every_agent_chooses_legal_and_is_reproducible() {
         for name in ["random", "greedy", "strong", "search"] {

@@ -592,3 +592,24 @@ The output directory must be new. The historical candidate passes formatting,
 strict release all-target workspace Clippy, and all 55 release workspace tests.
 No new agent intervention is justified solely by these three reused cases.
 The active baseline and engine rules remain unchanged.
+
+## Search depth arithmetic audit
+
+Hypothesis: a search depth of `u32::MAX` overflows the absolute turn limit
+once play has started. Comparing elapsed rollout turns with the requested
+depth will remove this overflow and preserve all ordinary depth decisions.
+This is a numeric correctness change, not a strength candidate. Validate a
+legal position at turn one with large depths, then compare fixed-budget arena
+records before and after the change. No claim of improved playing strength is
+planned. Core turn-counter exhaustion remains a separate limit.
+
+The regression failed before the change in debug (integer overflow) and release
+(different chosen action). Both failure logs are in `docs/results/search-depth-*-before.txt`.
+The elapsed-turn check passes for eight fixed agent seeds at a legal turn-one
+position, comparing depth 1024 with `u32::MAX`. The paired 100-game search/strong
+run at setup seed 109,000,000, 16 iterations, depth 8, width 6 has identical full
+game records before and after; all games complete. Reports and hashes are in
+`docs/results/search-depth-{before,after}.json.gz` and
+`docs/results/search-depth-comparison.json`. Source changes from
+`3992ef689453dcc8` to `8046abddb9a4d723`. Timing from this small run is not a
+performance result. No strength promotion is claimed.
