@@ -493,3 +493,26 @@ strict release all-target workspace Clippy, and all 53 release workspace tests
 pass in this historical candidate checkout. The main branch remains unchanged
 apart from research records; its standard suite includes 55 tests after the
 later example-test configuration change.
+
+## E13 hypothesis: combine scarcity filtering and recurrence handling
+
+Before changing agents: E11 greatly reduced capped games but left one early
+block. E12's observation-only affordability filter completed that known blocked
+probe, while its three new screen caps were all repeated token cycles with
+legal purchases. Its filter is inactive in those cycles. These mechanisms act
+at different observed failures, which supports a controlled combination test.
+It does not establish that either mechanism improves playing strength.
+
+Candidate `search-combined` will apply E12's exact root affordability filter
+inside E11's exact observation-only cycle wrapper. Keep the same 16-position
+Main/Return memories, normalized turn counter, separate return RNG, and
+purchase selection on repeated Main positions. Do not change reward, rollout
+policy, evaluation, core rules, or baseline search. This is a combination test,
+not a new tuning pass on the old screen seeds.
+
+Use the known E11 block and three new E12 caps as development probes only.
+Use `scripts/promote.py` against original search: two players, 2,000 screen
+games, fresh seed 106,000,000, four threads, 128 iterations, depth 8, width 6.
+Use 20,000 confirmation games with seed 1,106,000,000 only if the gate permits.
+Run same-seed search/search as a completion control. Report regressions and
+unfinished games, and remove the candidate if rejected.
