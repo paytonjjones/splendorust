@@ -550,3 +550,26 @@ Next evidence review: test depletion behavior across player counts (these new
 histories are four-player only), or inspect coverage of buying public versus
 blind reserved cards and their slot compaction. Preserve explicit differences
 rather than claiming these additions establish full parity.
+
+## Reservation metadata verifier gap fixed
+
+Continued from `2188271`. Reproduced an accepted corrupt export: a blind opponent
+reservation changed to public after a take at seed 94000001 turn 11, but the
+reference comparison still matched because its normalized representation drops
+visibility. Added explicit local reservation bookkeeping checks before external
+normalization, including excluded branch successors. Kept the distinction from
+external observation parity explicit.
+
+Checked public/blind appends, exact ordered removal on purchases, untouched
+opponents, and boolean flag types. Added three tests including the real corrupt
+case and an excluded blind branch. New coverage counters show checked purchases
+from all three public and blind slots. Revalidated all-noble and both depletion
+archives with unchanged shared transition/outcome counts. All 37 Python tests
+pass; no Rust or active-agent changes. New summaries preserve old raw archives.
+
+Next useful robustness review: the parity export's hidden metadata is now
+checked locally, but published reference limitations remain. Inspect arena
+serialization/report validation or core malformed-observation rejection for
+uncovered numeric/phase boundary failures; do not spend another pass merely
+recounting already covered reservation slots. Cross-player-count depletion is
+also still an explicit extension opportunity, not a proven gap in engine rules.

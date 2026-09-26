@@ -11,6 +11,25 @@ from check_reference import Comparison, ROOT, boundary_coverage, validate_sampli
 
 
 class CoverageTests(unittest.TestCase):
+    def test_reservation_slots_keep_visibility_when_compacted(self):
+        reserved = [{"card": 0, "public": False}, {"card": 1, "public": True},
+                    {"card": 2, "public": False}]
+        before = {"current": 0, "players": [{"reserved": reserved}], "market": [3]}
+        for slot in range(3):
+            after = {"players": [{"reserved": reserved[:slot] + reserved[slot+1:]}]}
+            Comparison.check_reservation_bookkeeping(before, after, [[4, slot]])
+            bad = copy.deepcopy(after)
+            bad["players"][0]["reserved"][0]["public"] ^= True
+            with self.assertRaisesRegex(ValueError, "visibility"):
+                Comparison.check_reservation_bookkeeping(before, bad, [[4, slot]])
+        empty = {"current": 0, "players": [{"reserved": []}], "market": [3]}
+        for tag, public in ((1, True), (2, False)):
+            after = {"players": [{"reserved": [{"card": 3, "public": public}]}]}
+            Comparison.check_reservation_bookkeeping(empty, after, [[tag, 0]])
+            after["players"][0]["reserved"][0]["public"] = not public
+            with self.assertRaises(ValueError):
+                Comparison.check_reservation_bookkeeping(empty, after, [[tag, 0]])
+
     def test_automatic_noble_sampling_is_explicit_and_required(self):
         case = {"before": {"turns": 1, "final_round": False, "nobles": [0, 1]},
                 "after": {"terminal": False, "final_round": False, "nobles": [1]},
@@ -42,7 +61,7 @@ class CoverageTests(unittest.TestCase):
 
     def test_gold_payment_is_not_free_and_return_gold_is_separate(self):
         before = {"current": 0, "remaining": [2, 2, 2], "bank": [0]*6,
-                  "players": [{"tokens": [0, 0, 0, 0, 0, 1], "nobles": []}]}
+                  "players": [{"tokens": [0, 0, 0, 0, 0, 1], "nobles": [], "reserved": [{"card": 0, "public": False}]}]}
         after = copy.deepcopy(before)
         after["players"][0]["tokens"][5] = 0
         counts = boundary_coverage(before, after, [[4, 0, 0, 0, 0, 0, 0], [5, 0, 0, 0, 0, 0, 0]])
@@ -66,6 +85,25 @@ class ReferenceTests(unittest.TestCase):
             cwd=ROOT, check=True, capture_output=True, text=True)
         cls.metadata = json.loads(run.stdout.splitlines()[0])
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
+
+    def test_reservation_visibility_cannot_change_on_an_unrelated_take(self):
+        case = json.loads((ROOT / "scripts/fixtures/reference-reservation-visibility.json").read_text())
+        self.assertEqual(self.comparison.compare(case), "matched")
+        blind = next((i, j) for i, p in enumerate(case["after"]["players"])
+                     for j, r in enumerate(p["reserved"]) if not r["public"] and i != case["before"]["current"])
+        for value in (True, 0, None):
+            bad = copy.deepcopy(case)
+            bad["after"]["players"][blind[0]]["reserved"][blind[1]]["public"] = value
+            with self.assertRaisesRegex(ValueError, "visibility"):
+                self.comparison.compare(bad)
+
+    def test_excluded_blind_branch_still_checks_local_visibility(self):
+        case = copy.deepcopy(self.cases[0])
+        choice = next(c for c in case["choices"] if c["actions"][0][0] == 2)
+        actor = case["before"]["current"]
+        choice["after"]["players"][actor]["reserved"][-1]["public"] = True
+        with self.assertRaisesRegex(ValueError, "blind reservation append"):
+            self.comparison.compare_choices(case, check_successors=True)
 
     def test_encoded_noble_choice_must_match_successor(self):
         case = json.loads((ROOT / "scripts/fixtures/reference-noble-choice.json").read_text())

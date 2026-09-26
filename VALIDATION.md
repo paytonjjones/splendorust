@@ -109,8 +109,8 @@ CI fetches the independent reference at the exact commit recorded in
 both operating systems. The comparison loader checks commit, tracked-file
 cleanliness, and license before importing the rules. No external ML packages
 are installed. Fetch or validation failures fail the workflow rather than
-silently skipping the reference tests. The 34 Python tests include 17 reference
-tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 17.
+silently skipping the reference tests. The 37 Python tests include 19 reference
+tests; local runs without `SPLENDOR_REFERENCE` still explicitly skip those 19.
 A fresh checkout and all 29 tests passed locally when this workflow was added.
 Hosted Linux/macOS workflow results are not yet verified.
 
@@ -118,3 +118,7 @@ Two additional legal four-player histories cover tier 2/3 final draws and both
 purchase and reservation after deck exhaustion. All 589 shared branch successors
 match the pinned reference; one selected return path remains excluded under its
 known rule difference. See the high-tier history evidence in [docs/PARITY.md](docs/PARITY.md).
+
+The parity harness separately checks local reservation visibility and ordered
+slot preservation, including branches excluded from external rule parity. The
+reference does not implement matching private-information masks.

@@ -30,6 +30,7 @@ def boundary_coverage(before, after, actions):
     counts.update({event: 0 for event in (
         "reserve_without_gold", "return_gold", "required_gold_payment",
         "free_purchase", "noble_after_take", "noble_after_reserve")})
+    counts.update({f"reserved_purchase_{kind}_slot_{slot}": 0 for kind in ("public", "blind") for slot in range(3)})
     tag, slot = actions[0][:2]
     actor = before["current"]
     if tag in (1, 3):
@@ -41,6 +42,9 @@ def boundary_coverage(before, after, actions):
             counts[f"tier_{tier + 1}_{event}"] = 1
     counts["reserve_without_gold"] = int(tag == 1 and before["bank"][5] == 0)
     counts["return_gold"] = int(any(a[0] == 6 and a[6] > 0 for a in actions))
+    if tag == 4:
+        kind = "public" if before["players"][actor]["reserved"][slot]["public"] else "blind"
+        counts[f"reserved_purchase_{kind}_slot_{slot}"] = 1
     if tag in (3, 4):
         gold = before["players"][actor]["tokens"][5] - after["players"][actor]["tokens"][5]
         counts["required_gold_payment"] = int(gold > 0)
@@ -243,6 +247,8 @@ class Comparison:
             if check_successors:
                 require(isinstance(choice.get("after"), dict), "missing choice successor")
             action = self.candidate(before, choice["actions"], choice["noble"], rule)
+            if check_successors:
+                self.check_reservation_bookkeeping(before, choice["after"], choice["actions"])
             if isinstance(action, str):
                 counts["local_" + action] += 1
             else:
@@ -328,6 +334,31 @@ class Comparison:
             counts[result] += 1
             counts[f"{result}_players_{len(state.agents)}"] += 1
 
+    @staticmethod
+    def check_reservation_bookkeeping(before, after, actions):
+        # The reference stores identities but has no visibility flags. Check
+        # local preservation separately; this is not observation parity.
+        require(len(before["players"]) == len(after["players"]), "player count changed")
+        for snapshot in (before, after):
+            require(all(type(r.get("public")) is bool for p in snapshot["players"] for r in p["reserved"]),
+                    "invalid reservation visibility flag")
+        actor = before["current"]
+        tag, slot = actions[0][:2]
+        for i, (old, new) in enumerate(zip(before["players"], after["players"])):
+            expected = list(old["reserved"])
+            actual = new["reserved"]
+            if i == actor:
+                if tag == 1:
+                    expected.append({"card": before["market"][slot], "public": True})
+                elif tag == 2:
+                    require(len(actual) == len(expected) + 1 and actual[-1]["public"] is False,
+                            "invalid blind reservation append")
+                    expected.append(actual[-1])
+                elif tag == 4:
+                    require(slot < len(expected), "invalid reserved purchase slot")
+                    expected.pop(slot)
+            require(actual == expected, "reservation identity, visibility, or order changed")
+
     def compare(self, case, winner_counts=None):
         before, after, actions = case["before"], case["after"], case["actions"]
         self.check_local_winner(before)
@@ -342,6 +373,7 @@ class Comparison:
         require(len(gained) <= 1, "multiple noble acquisitions")
         noble_id = next(iter(gained)) if gained else 255
         self.validate_path(actions, noble_id)
+        self.check_reservation_bookkeeping(before, after, actions)
         if actions[0][0] == 2:
             return "blind_reservation"
         rule = self.hydrate(before, after)

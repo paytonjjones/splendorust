@@ -341,3 +341,39 @@ both full histories, the last-card refill, and subsequent empty market slots.
 An external-reference regression checks all branch successors and rejects
 missing declared samples. All 56 release Rust tests, 34 Python tests, formatting,
 and strict all-target workspace Clippy pass. Engine semantics are unchanged.
+
+## Reservation visibility and ordered slots
+
+An audit found a gap in the comparison harness: changing an opponent's blind
+reservation to public after an unrelated take still returned `matched`. The
+reference stores reservation identities but no corresponding public/private
+flag, and the shared normalization intentionally removes that field. The
+reproduction is seed 94,000,001, turn 11.
+
+The harness now checks local reservation bookkeeping before reference
+normalization. Uninvolved players keep the same ordered reservation list.
+Visible reservations append the selected card with `public: true`; blind
+reservations append one entry with `public: false`. Reserved purchases remove
+the selected slot and preserve all surviving card identities, visibility flags,
+and order. Other actions preserve the list. Flags must be JSON booleans.
+These checks also cover exported branches excluded from external rule parity.
+
+This is an explicit local contract check, not evidence that the reference has
+matching hidden-information behavior. In particular, importing a privileged
+blind-card identity for isolated transition comparison does not give it to a
+production agent or establish reference observation parity.
+
+Rechecked all three current archives with these checks. Their prior action,
+transition, and outcome counts are unchanged. The main 60-game workload contains:
+
+| Purchased reservation | Slot 0 selected / branch | Slot 1 selected / branch | Slot 2 selected / branch |
+| --- | ---: | ---: | ---: |
+| Public | 53 / 36 | 34 / 44 | 39 / 36 |
+| Blind | 15 / 14 | 5 / 16 | 12 / 13 |
+
+Slot numbers are zero-based. Branch and selected counts overlap. The new
+`*-visibility.summary.json` files record the existing raw case hashes and new
+harness hash; the raw archives are not replaced. Tests reject unrelated public
+flag changes, malformed flag types, incorrect append visibility, survivor flag
+changes after each slot removal, and corruption of an excluded blind branch.
+All 37 Python tests pass with the pinned reference. No simulator behavior changed.
