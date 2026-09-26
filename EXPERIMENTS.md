@@ -74,3 +74,18 @@ A 1 ms soft budget, 1,000,000 iteration ceiling, one arena thread, and 200 games
 Master seed 81,000,000, four threads, nominal count 1,000,002. To keep every seat block complete, the audit ran 333,334 two-player, 333,333 three-player, and 333,332 four-player trajectories: **999,999 total**. Each game seed is derived by the documented arena formula after adding player-count × 1,000,000 to the master seed.
 
 **Result:** 890,430 normal completions, 109,569 no-action positions, zero decision-cap cases, zero invariant failures. This confirms broad transition safety; it does not prove every legal policy terminates. See the complete console report and the checked-in blocked replay fixture.
+
+## Evidence archive maintenance
+
+`scripts/collect_evidence.py` archives new reports from `results/` and
+`results/promotion/`. It keeps prior index entries when their raw inputs are
+absent. An empty input set leaves the archive unchanged. A repeated report is
+idempotent. If an existing name refers to different raw bytes or record hashes,
+the script rejects the entire input batch before writing it. Use a new name
+for a new experiment, including a timing repetition. `--input` and `--output`
+allow checks in separate directories.
+
+A regression test reproduced the old failure: with no inputs, the script
+replaced a nonempty index with `[]`. The fix also prevents an input with a
+reused name from silently replacing the original raw evidence. Archive tests
+use a real checked-in paired report and temporary output directories.
