@@ -185,7 +185,7 @@ address a cycle with legal actions. A future candidate should test a response
 to repeated return positions, with observation-only memory and separate fresh
 screen/confirmation seeds. No such candidate is retained yet.
 
-## E10 — Repeated-return escape (planned)
+## E10 — Repeated-return escape: partial improvement, rejected
 
 **Hypothesis, before implementation:** A bounded memory of repeated return
 observations can break the observed take-and-return cycles without changing
@@ -207,3 +207,21 @@ games at 1,099,000,000 only if the screen passes. Two players, four threads,
 128 iterations, depth 8, width 6, strong rollouts, engine evaluation, and no time
 cap. Record completion categories and paired outcomes. No changes based on
 confirmation results. Any incomplete run prevents promotion.
+
+**Development result:** The known capped setup completed at 15–9 after 118 turns
+and 193 decisions. This is a development probe, not confirmation.
+
+**Fresh screen:** Candidate/search completed 1,990/2,000 games: six blocked and
+four capped. The original-search self-play control completed 1,940/2,000:
+seven blocked and 53 capped. Paired records show 49 capped games and one blocked
+game became complete. All 1,940 completed control games remained complete.
+Candidate conditional win credit was 51.71%, with unconditional 95% interval
+[47.15%, 56.24%]. This does not establish a strength improvement.
+
+**Decision:** Reject under the complete-run promotion rule. Confirmation was
+not run; seed 1,099,000,000 remains unused. Remove the candidate from active
+agents. Preserve its forward patch (`docs/e10-return-escape.patch`), focused
+candidate test (`docs/e10-return-escape-test.rs`), full reports, paired status
+counts, and probe history under `docs/results/e10-*`. Apply the patch to
+commit `566d253` to reproduce its agent source. The active replay regression
+checks the natural four-decision cycle without changing any game rule.

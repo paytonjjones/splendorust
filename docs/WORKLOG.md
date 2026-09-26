@@ -86,3 +86,27 @@ is no full-engine equivalence claim. No-action positions remain unresolved by
 the publisher rules and have no assigned winner. Fresh confirmation seeds are
 still the researcher's responsibility; new output directories do not prevent
 reuse of a holdout in a different directory.
+
+## E10 checkpoint
+
+The repeated-return candidate completed the capped development setup in 118
+turns. On fresh screen seed 99,000,000 it completed 1,990/2,000 games, with six
+blocked and four capped. Original self-play on the same seeds completed 1,940,
+with seven blocked and 53 capped. Paired records show 50 formerly unfinished
+games became complete; no completed control game became unfinished. The gate
+still rejected the candidate because ten games were incomplete. Confirmation
+seed 1,099,000,000 was not used. The candidate was removed from active agents;
+its source patch, targeted test, and reports are archived under E10.
+
+A permanent version-1 replay prefix and test now demonstrate the natural
+four-decision cycle: after return/take/return/take the same observation recurs
+except for two additional completed turns. No outcome is assigned. All 48
+release Rust tests, formatting, and strict all-target workspace Clippy pass.
+The two new paired report archives pass structural validation.
+
+Next useful reproducibility issue: reports record search configuration only as
+a Rust debug string. A structured, validated run configuration would make exact
+reruns less dependent on manual transcription. Keep older reports readable and
+keep configuration data outside the core and agent observation boundary.
+Further agent work can inspect E10's four remaining capped states, but must use
+a new written hypothesis and fresh confirmation seeds before a new candidate.

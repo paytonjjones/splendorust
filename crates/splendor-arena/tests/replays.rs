@@ -43,3 +43,27 @@ fn published_rule_gap_is_a_reproducible_blocked_state_not_a_victory() {
         assert_eq!(o.reserved_counts[o.current as usize], 3);
     }
 }
+
+#[test]
+fn recorded_search_cycle_preserves_state_except_turn_count() {
+    use splendor_core::Action;
+    let history: History =
+        serde_json::from_str(include_str!("fixtures/return-cycle-v1.json")).unwrap();
+    let mut state = replay(&history).unwrap();
+    let viewer = state.current_player();
+    let before = state.observe(viewer);
+    for action in [
+        Action::Return([0, 0, 1, 0, 1, 0]),
+        Action::Take([0, 0, 1, 0, 1]),
+        Action::Return([0, 0, 1, 0, 1, 0]),
+        Action::Take([0, 0, 1, 0, 1]),
+    ] {
+        state.apply_action(action).unwrap();
+        state.check_invariants().unwrap();
+    }
+    let mut after = state.observe(viewer);
+    assert_eq!(after.turns, before.turns + 2);
+    after.turns = before.turns;
+    assert_eq!(after, before);
+    assert_eq!(state.outcome(), None);
+}

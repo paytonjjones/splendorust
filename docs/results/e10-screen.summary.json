@@ -1,0 +1,70 @@
+{
+  "source_id": "c1462ba30664c27e",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 99000000,
+  "players": 2,
+  "requested_games": 2000,
+  "completed_games": 1990,
+  "incomplete_games": 10,
+  "independent_blocks": 1000,
+  "ci_method": "95% empirical Bernstein over independent setup blocks; rotations clustered; shared wins split; unfinished credit bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search-return-escape",
+      "wins": 1014,
+      "shared_wins": 30,
+      "win_share": 1029.0,
+      "win_rate": 0.5170854271356784,
+      "ci95": [
+        0.4714942670325492,
+        0.5623823574451898
+      ],
+      "average_position": 1.4753768844221105,
+      "average_score": 13.405527638190955
+    },
+    {
+      "identity": 1,
+      "agent": "search",
+      "wins": 946,
+      "shared_wins": 30,
+      "win_share": 961.0,
+      "win_rate": 0.4829145728643216,
+      "ci95": [
+        0.43761764255481006,
+        0.5285057329674507
+      ],
+      "average_position": 1.5095477386934673,
+      "average_score": 13.247738693467337
+    }
+  ],
+  "average_turns": 92.242,
+  "average_decisions": 152.132,
+  "runtime_seconds": 31.449970874999998,
+  "games_per_second": 63.593063661303,
+  "decisions_per_second": 9674.539960921347,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_archive": "e10-screen.json.gz",
+  "raw_report_sha256": "ab06998c52135a850678e10365f1352baad0a153747bda03826ef281d5852cea",
+  "record_set_sha256": "2d6197f2da00d5e711b9e7b873a99f2675eaeb04f3caf3f9bd5ddcde69bb1db0",
+  "status_counts": {
+    "complete": 1990,
+    "no_legal_action": 6,
+    "decision_limit": 4
+  },
+  "decision": {
+    "decision": "reject: incomplete games",
+    "stage": "screen",
+    "report": "/Users/payton.jones/dev/splendorust-astra/results/e10-return-escape/screen.json",
+    "source_id": "c1462ba30664c27e",
+    "margin": 0.01,
+    "raw_report_sha256": "ab06998c52135a850678e10365f1352baad0a153747bda03826ef281d5852cea",
+    "record_set_sha256": "2d6197f2da00d5e711b9e7b873a99f2675eaeb04f3caf3f9bd5ddcde69bb1db0",
+    "minimum_games_per_second": 0
+  }
+}
