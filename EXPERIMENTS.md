@@ -789,3 +789,32 @@ Reproduce the confirmation analysis with:
 ```sh
 python3 scripts/compare_budgets.py docs/results/e16-confirm-128.json.gz docs/results/e16-confirm-256.json.gz
 ```
+
+### E16 capped-state audit
+
+The 256-budget capped game reproduces the full archived record with invariant
+checks: trajectory `bbd0114e285933e5`, 20,000 decisions, 10,010 turns, scores
+3–3, no winner. From decision 51, 19,949 actions follow a period-four suffix:
+strong returns one red token; search takes it; search returns it; strong takes
+it. This advances two player turns. Search has two legal purchases at its Main
+phase; strong has only the token take. One more full period is legal, preserves
+all players' observations except turn count, and has no outcome. Because the
+period has only token actions, hidden card order and ownership cannot change.
+
+This is the same purchase-avoidance pattern as earlier cap audits, now on a
+fresh larger-budget case. It is not a core termination defect or a proof that
+the RNG-driven policy repeats forever. Do not restore rejected E10/E11 wrappers
+from this one case. Source inspection also matters: simulated root-player
+future turns use strong rollouts, while actual root decisions use search.
+A repeated-state penalty inside rollouts might miss a cycle that this policy
+difference creates. Inspect those simulated continuations before proposing it.
+
+The reusable `cap_audit` example checks source/settings, replays each capped
+record exactly, and writes histories to a new directory with block/rotation
+filenames. No detected short token period is reported as unknown, not absence
+of all recurrence. A four-player, one-decision-cap smoke produces four distinct
+histories, no cycle claim, and no winner. Formatting, strict release all-target
+Clippy and all 71 release workspace tests pass. Evidence and history hashes are
+in `docs/results/e16-cap-validation.json`, `e16-cap-audit.jsonl`, and
+`e16-cap-1508-v2.json.gz`. The example adds no production semantics or version
+change; its own source hash is retained separately.

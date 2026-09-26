@@ -1,0 +1,22 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "50400f40eb161b1a",
+  "commands": [
+    "cargo fmt --all",
+    "cargo clippy --release --locked --workspace --all-targets -- -D warnings",
+    "cargo test --release --locked --workspace",
+    "cargo run --release --locked --example cap_audit -- /tmp/e16-confirm-256.json /tmp/e16-cap-histories",
+    "target/release/splendor compare --agent-a random --agent-b random --players 4 --games 4 --seed 122000000 --max-decisions 1 --output /tmp/e16-short-cap.json",
+    "cargo run --release --locked --example cap_audit -- /tmp/e16-short-cap.json /tmp/e16-short-cap-histories"
+  ],
+  "history_sha256": "d14a753924eab910749c52e82eaa18ffe9aafb01c5851a259d983db03a208e59",
+  "harness_sha256": "728c29ab88ba58983c09a13843f13769d4e00aae2b9fcffa50cacf2b08cbfba8",
+  "record_exact_match": true,
+  "period_decisions": 4,
+  "suffix_start": 51,
+  "suffix_decisions": 19949,
+  "turns_per_period": 2,
+  "short_history_count": 4,
+  "short_history_cycles": 0,
+  "note": "A verified legal token cycle and observed policy suffix, not proof the RNG-driven policy repeats forever. All 71 release workspace tests and strict all-target release Clippy pass."
+}

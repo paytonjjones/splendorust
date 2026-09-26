@@ -1103,3 +1103,24 @@ Next: reproduce and diagnose the new 256-budget capped game (block 1508,
 rotation 0, setup seed 11864268526903350202). Compare its exact record and replay
 before drawing conclusions about recurrence. Prior failed E9–E13 policies remain
 rejected; do not silently restore them or infer a victory from the cap.
+
+## E16 exact cap diagnosis
+
+Continued from 3567f9b. Adapted the historical cap harness into a reusable
+source/settings-checked example supporting all player counts, unique rotation
+files and short-history/no-cycle output. Exact reproduction matches all fields
+of the E16 cap record. The period-four red-token suffix begins at decision 51
+and lasts 19,949 decisions; search has two purchases but takes the token.
+All observations except turn count return after another legal period, with no
+outcome. This repeats an established failure pattern, not a new core defect.
+
+Saved full history, hashes, diagnostic observations and validation logs. A
+four-player one-decision cap smoke confirms short histories do not underflow or
+produce a false cycle/winner. Formatting, strict all-target release Clippy and
+71 workspace release tests pass. No agent code changed.
+
+Next: inspect simulated continuations at the cycle's search Main phase before
+writing a new agent hypothesis. Actual search repeatedly postpones a purchase;
+its rollout policy is strong and may purchase on the next hypothetical turn.
+Thus a naive simulated-cycle penalty may not detect the actual repeated choice.
+Keep this distinction explicit; rejected E9–E13 policies remain rejected.
