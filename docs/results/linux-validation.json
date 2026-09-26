@@ -1,0 +1,80 @@
+{
+  "source_commit": "bc85ea6",
+  "engine": "splendorust-v2",
+  "source_id": "50400f40eb161b1a",
+  "image": "rust@sha256:93ce27a88655056a51dbdd8f5f2d7ddc071c7b0070fb288a37b5a285fc83971e",
+  "image_identity": "sha256:93ce27a88655056a51dbdd8f5f2d7ddc071c7b0070fb288a37b5a285fc83971e",
+  "architecture": "aarch64-unknown-linux-gnu",
+  "host": "Docker Desktop 28.1.1 ARM Linux VM on Apple M4 Pro/macOS 26.7",
+  "binary_sha256": "f3c53798681600e473d84acc5c8f4b10e22f30c6ffde33c5c092c1c0b0d69692",
+  "checks": [
+    {
+      "name": "fmt",
+      "exit": 0,
+      "command": "cargo fmt --all -- --check"
+    },
+    {
+      "name": "clippy",
+      "exit": 0,
+      "command": "cargo clippy --release --locked --workspace --all-targets -- -D warnings"
+    },
+    {
+      "name": "tests",
+      "exit": 0,
+      "command": "cargo test --release --locked --workspace"
+    },
+    {
+      "name": "build",
+      "exit": 0,
+      "command": "cargo build --release --locked"
+    },
+    {
+      "name": "python",
+      "exit": 0,
+      "command": "SPLENDOR_REFERENCE=/reference python3 -m unittest discover -s scripts -p 'test_*.py'"
+    }
+  ],
+  "verify": [
+    {
+      "archive": "e15-7-after.json.gz",
+      "command": "/build/release/splendor verify-report /logs/e15-7-after.json",
+      "exit": 0,
+      "input_raw_sha256": "68cde4787aa477917e18e28be97f86a97af1085eaf6f8d7a0bfbfcb9902b8944",
+      "players": 2,
+      "games": 1000,
+      "source_id": "50400f40eb161b1a"
+    },
+    {
+      "archive": "e15-3p-after.json.gz",
+      "command": "/build/release/splendor verify-report /logs/e15-3p-after.json",
+      "exit": 0,
+      "input_raw_sha256": "5cc141614ca89fe55350bd5588dfb6cbd0183ec648bcbfc41a9e23d6e355e1b5",
+      "players": 3,
+      "games": 300,
+      "source_id": "50400f40eb161b1a"
+    },
+    {
+      "archive": "e15-4p-after.json.gz",
+      "command": "/build/release/splendor verify-report /logs/e15-4p-after.json",
+      "exit": 0,
+      "input_raw_sha256": "aadf68cade36278c4a826dfc394184e18a916c69524d90845ebe08a7e7029c2a",
+      "players": 4,
+      "games": 400,
+      "source_id": "50400f40eb161b1a"
+    }
+  ],
+  "source_preparation": "rsync -a --exclude .git --exclude target --exclude __pycache__ ./ /tmp/splendor-linux-validation-source/",
+  "container_mounts": {
+    "/work": "read-only source snapshot",
+    "/reference": "read-only pinned independent checkout",
+    "/build": "separate build directory",
+    "/logs": "validation scripts and logs"
+  },
+  "container_environment": {
+    "CARGO_TARGET_DIR": "/build"
+  },
+  "container_workdir": "/work",
+  "check_entrypoint": "bash /logs/checks.sh",
+  "verify_entrypoint": "bash /logs/verify.sh",
+  "note": "All 71 Rust and 46 Python tests pass; 1700 full ARM macOS records reproduce. First attempt stopped before checks due to a host-only linked-worktree Git path; retained attempt-1 log. This is bounded local Linux evidence, not hosted CI or universal floating-point portability."
+}

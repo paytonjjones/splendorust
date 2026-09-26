@@ -1045,3 +1045,23 @@ bounded evidence, not a universal guarantee. Linux and hosted CI remain open.
 Next: inspect whether the local container runtime can supply a pinned Linux
 validation target without modifying project semantics or publishing anything.
 If unavailable, record that limit and choose another useful project issue.
+
+## Local Linux validation
+
+Continued from bc85ea6. Docker CLI was installed but its daemon was stopped.
+Started the local runtime and pulled the pinned Rust 1.98.1 image, recording its
+digest. First attempt stopped before tests: linked-worktree Git path was absent
+in the container. Retained failure evidence, then used a read-only source
+snapshot excluding .git and target with separate build output.
+
+ARM Linux passes fmt, strict release workspace Clippy, 71 release Rust tests,
+and all 46 Python tests with the pinned MIT reference. Linux verify-report
+reproduces all 1,700 macOS records, including trajectory hashes, for 2–4 players.
+Archived logs, scripts, image/binary/input hashes and statuses. Containers exit
+and are removed. No source semantics changed and nothing was pushed.
+
+Next: audit reproducible validation automation against these now-established
+cross-target checks. A reusable local command should fail if any check fails,
+retain platform/source provenance, and avoid treating local success as hosted
+CI evidence. Existing shell experiment scaffolding is evidence, not yet a
+supported reusable validation tool.

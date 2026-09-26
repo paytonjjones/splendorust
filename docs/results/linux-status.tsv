@@ -1,0 +1,5 @@
+fmt	0	cargo fmt --all -- --check
+clippy	0	cargo clippy --release --locked --workspace --all-targets -- -D warnings
+tests	0	cargo test --release --locked --workspace
+build	0	cargo build --release --locked
+python	0	SPLENDOR_REFERENCE=/reference python3 -m unittest discover -s scripts -p 'test_*.py'

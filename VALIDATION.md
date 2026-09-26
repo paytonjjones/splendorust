@@ -293,3 +293,24 @@ Commands, input and binary hashes, process results, test/build logs are in
 This establishes agreement for those workloads and two macOS CPU targets under
 one toolchain. Rosetta is not a physical Intel host or a Linux environment.
 Hosted CI and a universal floating-point search guarantee remain unverified.
+
+### Local ARM Linux validation
+
+At source `50400f40eb161b1a`, Rust 1.98.1 on `aarch64-unknown-linux-gnu`
+passes formatting, strict release workspace Clippy, all 71 release Rust tests,
+and all 46 Python tests with the pinned independent reference. A Docker Desktop
+ARM Linux VM uses the official Rust image pinned by digest
+`sha256:93ce27a88655056a51dbdd8f5f2d7ddc071c7b0070fb288a37b5a285fc83971e`.
+Source and reference mounts are read-only; build output is separate.
+
+Linux verify-report reproduces all 1,000 two-player, 300 three-player and 400
+four-player records used in the x86 macOS check above, including trajectory
+hashes. All games finish. This checks these fixed budgets and seeds across
+native ARM macOS, x86 macOS under Rosetta, and ARM Linux. It does not prove
+all-platform floating-point equality or replace a hosted CI run.
+
+The first setup attempt exited before testing because the linked worktree's
+Git file referenced a host-only path. A source snapshot without that link fixed
+the container setup. The failed attempt and successful test/build/verification
+logs are retained in `docs/results/linux-*`; `linux-validation.json` identifies
+the source, image, binary, input hashes, commands, mounts and exit statuses.

@@ -42,7 +42,7 @@ SplitMix64 uses explicit wrapping `u64` operations and rejection sampling for bo
 
 Arena setup `b` uses `SplitMix64(base_seed + b).next_u64()`. Arithmetic wraps explicitly. Each agent identity gets a separate seed derived from setup seed and identity. Seat rotation changes seating without changing those identity seeds. Rayon results are collected in game-index order, and statistics are reduced in that order.
 
-The integer core and heuristics are portable. Root UCB uses floating-point `ln` and square root; fixed iteration runs are deterministic on the tested target/toolchain. A 1,700-game fixed-budget comparison agrees between native ARM and x86_64 under Rosetta on macOS with Rust 1.98.1 (see VALIDATION.md). General cross-platform equality for search choices is not claimed. Recorded actions replay independently of search math.
+The integer core and heuristics are portable. Root UCB uses floating-point `ln` and square root; fixed iteration runs are deterministic on the tested target/toolchain. A 1,700-game fixed-budget comparison agrees between native ARM macOS, x86_64 macOS under Rosetta, and ARM Linux with Rust 1.98.1 (see VALIDATION.md). General cross-platform equality for search choices is not claimed. Recorded actions replay independently of search math.
 
 A version-1 JSON `History` is an event-sourced state snapshot: engine version, player count, setup seed, action tags and payloads, and a diagnostic full-state string. Loading reconstructs setup and applies every decision with invariant checks, then checks the diagnostic snapshot. Any prefix is also a valid snapshot, including payment, return, and noble phases. This format favors auditability over constant-time loading. It contains privileged data and must not be passed to an agent.
 
