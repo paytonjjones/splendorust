@@ -742,3 +742,24 @@ core test source as well. ENGINE_VERSION remains v2.
 Next useful work: measure current core transition costs against pre-capacity
 v1 with a fixed release workload. Recent correctness checks have not yet had a
 controlled runtime comparison; do not infer a cost or optimize without one.
+
+## Counter-check performance measurement
+
+Continued from `388243b`. Built a detached v1 `e03b638` worktree and current v2
+with identical benchmark source, toolchain, lockfile, and bench profile. Both
+builds completed before six serial Criterion runs in ABBAAB order. Forty
+samples per operation, one-second warm-up/measurement, same opening action and
+seed-42/RNG-123 random game. Recorded source identities, host/compiler, exact
+commands, raw log hashes, and all Criterion estimates in capacity-benchmarks.json.
+
+Median-of-means changes: batched apply +0.6%, clone/apply +0.9%, fixed random
+game -1.4%. Small mixed local results do not justify an optimization. No runtime
+change was made, and no broad speed claim is supported. The pre-existing
+1,000-game identical-record evidence is referenced separately, not presented
+as the benchmark's workload. Removed the clean temporary baseline worktree
+after preserving measurements. Current worktree remains the isolated branch.
+
+Next: audit benchmark coverage before another timing study. The current apply
+benchmarks cover only an opening Take; payment/return/noble transition costs
+have no isolated fixed-state measurements. Add phase coverage only if it can
+use invariant-valid fixtures and keep setup/clone costs explicit.

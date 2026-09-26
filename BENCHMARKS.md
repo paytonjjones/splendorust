@@ -107,3 +107,43 @@ cargo bench -p splendor-core --bench engine --locked -- \
   'determinize|invariants' --sample-size 20 --warm-up-time 1 \
   --measurement-time 1 --baseline before
 ```
+
+## Version 2 counter-check measurement
+
+Compared v1 commit `e03b638` (source `ae728260bd1abd30`) with v2 commit
+`388243b` (source `5fbacedf05ec987b`) on the same Apple M4 Pro, macOS 26.7,
+Rust 1.98.1 / LLVM 22.1.8. Benchmark source, Cargo.lock, toolchain, and profiles
+are identical. The core runtime difference is the pre-mutation capacity check
+and its error/version declarations. Test-only source changes also affect the
+build fingerprint. Both builds finished before timing; runs were serial in
+v1, v2, v2, v1, v1, v2 order. This remains a shared-machine measurement.
+
+Each run uses 40 Criterion samples, one-second warm-up and measurement windows.
+The table gives medians of the three per-run mean estimates, not a confidence
+interval over independent machines.
+
+| Operation | v1 | v2 | Change |
+|---|---:|---:|---:|
+| Batched opening apply | 25.256 ns | 25.406 ns | +0.6% |
+| Opening clone plus apply | 23.694 ns | 23.906 ns | +0.9% |
+| Fixed seeded random game | 6.225 µs | 6.139 µs | −1.4% |
+
+These small mixed differences do not justify a performance change. They do not
+prove that the guard is free or that all phases have identical performance.
+Apply benchmarks use the first opening action. The full-game workload uses two
+players, setup seed 42, policy RNG seed 123, and a 10,000-decision limit. It
+includes setup and legal generation. This experiment does not measure search
+throughput or the counter-limit error path. The separate capacity validation
+already established identical records for 1,000 search/strong games.
+
+Raw text logs `docs/results/capacity-[0-5]-v*.txt` and
+`docs/results/capacity-benchmarks.json` preserve all estimates and intervals,
+source and workload identity, host/compiler details, log hashes, and commands.
+Reproduce in separate checkouts at the two stated commits, after compiling both:
+
+```sh
+cargo bench --locked -p splendor-core --bench engine --no-run
+cargo bench --locked -p splendor-core --bench engine -- \
+  '^(clone_apply|apply|random_game)$' --sample-size 40 \
+  --warm-up-time 1 --measurement-time 1 --save-baseline capacity-RUN-VERSION
+```

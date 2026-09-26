@@ -1,0 +1,27 @@
+    Finished `bench` profile [optimized + debuginfo] target(s) in 0.03s
+     Running benches/engine.rs (target/release/deps/engine-14c81ffb1625e680)
+Gnuplot not found, using plotters backend
+Benchmarking clone_apply
+Benchmarking clone_apply: Warming up for 1.0000 s
+Benchmarking clone_apply: Collecting 40 samples in estimated 1.0000 s (42M iterations)
+Benchmarking clone_apply: Analyzing
+clone_apply             time:   [23.923 ns 24.047 ns 24.165 ns]
+Found 6 outliers among 40 measurements (15.00%)
+  1 (2.50%) low severe
+  2 (5.00%) low mild
+  3 (7.50%) high mild
+
+Benchmarking apply
+Benchmarking apply: Warming up for 1.0000 s
+Benchmarking apply: Collecting 40 samples in estimated 1.0000 s (31M iterations)
+Benchmarking apply: Analyzing
+apply                   time:   [25.195 ns 25.320 ns 25.444 ns]
+
+Benchmarking random_game
+Benchmarking random_game: Warming up for 1.0000 s
+Benchmarking random_game: Collecting 40 samples in estimated 1.0024 s (160k iterations)
+Benchmarking random_game: Analyzing
+random_game             time:   [6.1992 µs 6.2347 µs 6.2776 µs]
+Found 1 outliers among 40 measurements (2.50%)
+  1 (2.50%) high mild
+
