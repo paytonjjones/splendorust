@@ -1,0 +1,86 @@
+diff --git a/crates/splendor-agents/src/lib.rs b/crates/splendor-agents/src/lib.rs
+index 1f24de1..669c05a 100644
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -284,6 +284,7 @@ pub struct SearchAgent {
+     rng: Rng,
+     pub config: SearchConfig,
+     pub simulations: u64,
++    avoid_blocked: bool,
+ }
+ impl SearchAgent {
+     pub fn new(seed: u64, config: SearchConfig) -> Self {
+@@ -291,6 +292,15 @@ impl SearchAgent {
+             rng: Rng::new(seed),
+             config,
+             simulations: 0,
++            avoid_blocked: false,
++        }
++    }
++    /// Research candidate: penalize unfinished no-action rollout leaves.
++    /// This is a policy utility, never a game outcome or winner assignment.
++    pub fn avoiding_blocked(seed: u64, config: SearchConfig) -> Self {
++        Self {
++            avoid_blocked: true,
++            ..Self::new(seed, config)
+         }
+     }
+ }
+@@ -375,7 +385,13 @@ impl Agent for SearchAgent {
+                 };
+                 state.apply_action(a).unwrap();
+             }
+-            let reward = if let Some(result) = state.outcome() {
++            let blocked = self.avoid_blocked && state.phase() == Phase::Main && {
++                state.legal_actions(&mut aa);
++                aa.is_empty()
++            };
++            let reward = if blocked {
++                0.0
++            } else if let Some(result) = state.outcome() {
+                 if result.winners & (1 << o.current) != 0 {
+                     1.0 / result.winners.count_ones() as f64
+                 } else {
+@@ -405,6 +421,7 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
+         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
+         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
+         "search" | "mcts" => Box::new(SearchAgent::new(seed, search.clone())),
++        "search-avoid-blocked" => Box::new(SearchAgent::avoiding_blocked(seed, search.clone())),
+         _ => return Err(format!("unknown agent: {name}")),
+     })
+ }
+@@ -415,7 +432,13 @@ mod tests {
+     use splendor_core::GameState;
+     #[test]
+     fn every_agent_chooses_legal_and_is_reproducible() {
+-        for name in ["random", "greedy", "strong", "search"] {
++        for name in [
++            "random",
++            "greedy",
++            "strong",
++            "search",
++            "search-avoid-blocked",
++        ] {
+             let config = SearchConfig {
+                 iterations: 8,
+                 depth: 2,
+@@ -451,11 +474,13 @@ mod tests {
+             depth: 3,
+             ..Default::default()
+         };
+-        let mut a = SearchAgent::new(4, config.clone());
+-        let mut b = SearchAgent::new(4, config);
+-        assert_eq!(
+-            a.select_action(&o, &aa),
+-            b.select_action(&alternative.observe(0), &aa)
+-        );
++        for name in ["search", "search-avoid-blocked"] {
++            let mut a = make_agent(name, 4, &config).unwrap();
++            let mut b = make_agent(name, 4, &config).unwrap();
++            assert_eq!(
++                a.select_action(&o, &aa),
++                b.select_action(&alternative.observe(0), &aa)
++            );
++        }
+     }
+ }

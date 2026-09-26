@@ -1,0 +1,68 @@
+{
+  "source_id": "dd224ed1b35892cb",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v1",
+  "seed": 98000000,
+  "players": 2,
+  "requested_games": 2000,
+  "completed_games": 1943,
+  "incomplete_games": 57,
+  "independent_blocks": 1000,
+  "ci_method": "95% empirical Bernstein over independent setup blocks; rotations clustered; shared wins split; unfinished credit bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search-avoid-blocked",
+      "wins": 962,
+      "shared_wins": 25,
+      "win_share": 974.5,
+      "win_rate": 0.5015440041173443,
+      "ci95": [
+        0.4447521276748185,
+        0.5578600311431081
+      ],
+      "average_position": 1.492022645393721,
+      "average_score": 13.291816778178076
+    },
+    {
+      "identity": 1,
+      "agent": "search",
+      "wins": 956,
+      "shared_wins": 25,
+      "win_share": 968.5,
+      "win_rate": 0.4984559958826557,
+      "ci95": [
+        0.442139968856892,
+        0.5552478723251816
+      ],
+      "average_position": 1.4951106536284098,
+      "average_score": 13.236747297992794
+    }
+  ],
+  "average_turns": 325.64,
+  "average_decisions": 619.0655,
+  "runtime_seconds": 59.306397042,
+  "games_per_second": 33.72317489770331,
+  "decisions_per_second": 20876.854129634146,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_archive": "e9-screen.json.gz",
+  "decision": {
+    "decision": "reject: incomplete games",
+    "stage": "screen",
+    "report": "/Users/payton.jones/dev/splendorust-astra/results/e9-avoid-blocked/screen.json",
+    "source_id": "dd224ed1b35892cb",
+    "margin": 0.01,
+    "raw_report_sha256": "b3fb5ec2a18746f8b7a6f5433ab77eb9fb1ef471da717b21db4042e0e2069825",
+    "record_set_sha256": "6654e6824ea6ffb2bb003b40a9126aba8364d60dbf8bc292d56c10bb688bb3e2",
+    "minimum_games_per_second": 0
+  },
+  "status_counts": {
+    "complete": 1943,
+    "no_legal_action": 6,
+    "decision_limit": 51
+  }
+}

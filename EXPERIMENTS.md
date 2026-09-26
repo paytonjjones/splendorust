@@ -124,7 +124,7 @@ reached the same no-action position in block 12, rotation 0, setup seed
 cannot promote an agent. Retain the core optimization based on the measured
 operations and unchanged records, not on a strength claim.
 
-## E9 — Blocked-rollout penalty (planned)
+## E9 — Failed blocked-rollout penalty
 
 **Evidence:** The E8 replay ends when search takes the last colored bank token,
 leaving strong with three reservations and no affordable card. The scores are
@@ -149,3 +149,19 @@ four threads, 128 simulations per decision, depth 8, width 6, strong rollouts,
 engine evaluation, no wall-clock cap. Both policies have the same simulation
 budget; extra leaf checks can change wall-clock cost. No tuning on confirmation
 results. Any incomplete run prevents promotion. Record failure as well as success.
+
+**Development probe:** The known blocked setup completed at 16–12 with the
+candidate. This was a development check, not confirmation.
+
+**Screen result:** 1,943/2,000 complete, six no-action positions, and 51 decision
+limits. Conditional candidate credit was 50.15%; the unconditional 95% interval
+was [44.48%, 55.79%]. The promotion gate rejected the run and did not use the
+confirmation seeds. The candidate was removed from active code. Its forward
+patch is `docs/e9-avoid-blocked.patch`; apply only for historical reproduction.
+The raw report, summary, and probe replay are in `docs/results/e9-*`.
+**Matched control:** Original search against itself, same seeds and budgets,
+also had 1,943 completions, six no-action positions, and 51 decision limits.
+The candidate did not reduce the number of unfinished games in this screen.
+This identifies a baseline self-play limitation; the failures cannot be
+attributed to the candidate alone. The control report is retained beside the
+candidate report. Confirmation was not run, and the candidate was rejected.
