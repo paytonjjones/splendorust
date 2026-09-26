@@ -21,6 +21,45 @@ def interval(xs):
     return [max(0, mean - half), min(1, mean + half)]
 
 
+def validate_run_settings(report):
+    """Check new structured settings without guessing settings for old reports."""
+    config = report.get('run_config')
+    if config is None:
+        return
+
+    def require(condition, message):
+        if not condition:
+            raise ValueError('invalid run settings: ' + message)
+
+    def uint(value, bits=64):
+        return type(value) is int and 0 <= value < 2**bits
+
+    require(type(config) is dict and set(config) == {
+        'names', 'games', 'seed', 'threads', 'max_decisions', 'check', 'search'}, 'fields')
+    for setting, metadata in [('games', 'requested_games'), ('seed', 'seed'),
+                              ('threads', 'threads'), ('max_decisions', 'max_decisions')]:
+        require(uint(config[setting]) and config[setting] == report[metadata], setting)
+    require(config['threads'] > 0 and config['max_decisions'] > 0, 'zero limit')
+    require(type(config['check']) is bool and config['check'] == report['invariants_checked'], 'check')
+    agents = sorted(report['agents'], key=lambda a: a['identity'])
+    require(type(config['names']) is list and all(type(name) is str and name for name in config['names'])
+            and config['names'] == [a['agent'] for a in agents], 'agent names')
+    search = config['search']
+    require(type(search) is dict and set(search) == {
+        'iterations', 'depth', 'width', 'time_budget', 'rollout', 'evaluation'}, 'search fields')
+    require(uint(search['iterations'], 32) and uint(search['depth'], 32)
+            and uint(search['width']), 'search counts')
+    require(search['rollout'] in ('random', 'greedy', 'strong')
+            and search['evaluation'] in ('score', 'engine'), 'search policy')
+    duration = search['time_budget']
+    if duration is not None:
+        require(type(duration) is dict and set(duration) == {'secs', 'nanos'}
+                and uint(duration['secs']) and uint(duration['nanos'], 32)
+                and duration['nanos'] < 1_000_000_000, 'time budget')
+    require(type(report['reproducible']) is bool
+            and report['reproducible'] == (duration is None), 'reproducibility flag')
+
+
 def validate_report(report):
     """Require complete ordered seat blocks before computing an interval."""
     def require(condition, message):
@@ -35,6 +74,7 @@ def validate_report(report):
     require(len(records) == games, 'record count differs from requested games')
     require(report['independent_blocks'] == games // n, 'setup-block count differs')
     require(sorted(a['identity'] for a in report['agents']) == list(range(n)), 'invalid agent identities')
+    validate_run_settings(report)
     completed = 0
     seeds = set()
     for i, game in enumerate(records):

@@ -52,6 +52,35 @@ class ArchiveTests(unittest.TestCase):
             collect([self.report('a-new'), original], self.output)
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
 
+    def test_structured_settings_reject_conflicts_before_writing(self):
+        raw = gzip.decompress((ROOT / 'docs/results/settings-smoke.json.gz').read_bytes())
+        self.assertEqual(collect([self.report('settings', raw)], self.output), 1)
+        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+        mutations = [
+            lambda r: r['run_config'].update(seed=0),
+            lambda r: r['run_config'].update(names=['strong', 'search']),
+            lambda r: r['run_config'].update(threads=True),
+            lambda r: r['run_config'].update(check=False),
+            lambda r: r['run_config']['search'].update(iterations=-1),
+            lambda r: r['run_config']['search'].update(depth=2**32),
+            lambda r: r['run_config']['search'].update(rollout='unknown'),
+            lambda r: r['run_config']['search'].update(time_budget={'secs': 0, 'nanos': 10**9}),
+            lambda r: r['run_config']['search'].update(time_budget={'secs': 0, 'nanos': 1}),
+            lambda r: r['run_config']['search'].update(typo=1),
+            lambda r: r.update(reproducible=False),
+        ]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate):
+                report = json.loads(raw)
+                mutate(report)
+                with self.assertRaisesRegex(ValueError, 'run settings'):
+                    collect([self.report('a-new'), self.report('z-bad', json.dumps(report).encode())], self.output)
+                self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
+        timed = json.loads(raw)
+        timed['run_config']['search']['time_budget'] = {'secs': 0, 'nanos': 123}
+        timed['reproducible'] = False
+        self.assertEqual(collect([self.report('timed', json.dumps(timed).encode())], self.output), 1)
+
     def test_malformed_reports_fail_before_any_batch_write(self):
         mutations = [
             lambda r: r['records'].pop(),

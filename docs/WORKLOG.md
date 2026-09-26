@@ -136,3 +136,18 @@ Next: audit whether archive validation checks the new settings as well as the
 per-game records. Then inspect the remaining E10 capped trajectories if no more
 material report-integrity gap is found. Independent parity remains bounded to
 the checked shared rules; the published blocked-state gap remains open.
+
+## Archive settings validation
+
+The archive path now checks structured settings when they are present. It
+rejects conflicting seeds, agent names, limits, invariant flags, invalid search
+policies/counts/durations, unknown fields, and inconsistent reproducibility
+flags before any batch write. Historical reports without these settings still
+pass their existing record checks. A timed report can be archived with the
+correct non-reproducible flag; it cannot pass the rerun or promotion gate.
+
+All five archive tests pass, including eleven settings corruptions and batch
+write preservation. All 35 existing raw report archives pass validation. This
+change affects Python evidence tooling only; it does not change engine or agent
+behavior. Next investigate E10's four remaining capped trajectories, starting
+from archived evidence and its saved candidate patch.
