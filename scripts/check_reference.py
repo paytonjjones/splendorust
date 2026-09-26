@@ -106,7 +106,29 @@ class Comparison:
                 "nobles": sorted(self.noble_ids[n[0]] for n in state.board.nobles),
                 "current": rule.current_agent_index, "terminal": rule.gameEnds()}
 
+    @staticmethod
+    def validate_path(actions, noble_id):
+        require(bool(actions), "empty compound action")
+        require(all(isinstance(a, list) and len(a) == 7
+                    and all(type(v) is int and 0 <= v <= 255 for v in a) for a in actions),
+                "invalid action encoding")
+        tags = [a[0] for a in actions]
+        require(tags[0] in range(5), "invalid main action tag")
+        expected = [tags[0]]
+        if tags[0] in (3, 4):
+            expected.append(5)
+        elif 6 in tags:
+            expected.append(6)
+        if 7 in tags:
+            expected.append(7)
+        require(tags == expected, "invalid compound action phase order")
+        payload_sizes = {0: 5, 1: 1, 2: 1, 3: 1, 4: 1, 5: 5, 6: 6, 7: 1}
+        require(all(not any(a[payload_sizes[a[0]] + 1:]) for a in actions), "nonzero action padding")
+        if tags[-1] == 7:
+            require(actions[-1][1] == noble_id, "encoded noble choice disagrees with acquired noble")
+
     def candidate(self, before, actions, noble_id, rule):
+        self.validate_path(actions, noble_id)
         tag, payload = actions[0][0], actions[0][1:]
         if tag == 2:
             return "blind_reservation"
@@ -147,20 +169,28 @@ class Comparison:
                 tuple(action.get("returned_gems", {}).get(c, 0) for c in COLORS),
                 action["noble"][0] if action["noble"] else None)
 
+    def check_noble_phase(self, action, path, legal):
+        base = self.signature(action)[:-1]
+        options = {self.signature(a)[-1] for a in legal if self.signature(a)[:-1] == base}
+        require((len(options) > 1) == any(a[0] == 7 for a in path),
+                "encoded noble phase disagrees with available noble choices")
+
     def compare_choices(self, case):
         before = case["before"]
         rule = self.hydrate(before, before)
         local, reference = set(), set()
+        legal = rule.getLegalActions(rule.current_game_state, before["current"])
         counts = collections.Counter()
         for choice in case["choices"]:
             action = self.candidate(before, choice["actions"], choice["noble"], rule)
             if isinstance(action, str):
                 counts["local_" + action] += 1
             else:
+                self.check_noble_phase(action, choice["actions"], legal)
                 key = self.signature(action)
                 require(key not in local, "duplicate local compound action")
                 local.add(key)
-        for action in rule.getLegalActions(rule.current_game_state, before["current"]):
+        for action in legal:
             if action["type"] == "pass":
                 counts["reference_pass"] += 1
                 continue
@@ -180,17 +210,20 @@ class Comparison:
         if not actions:
             require(case.get("status") == "no_legal_action" and before == after and not before["terminal"], "invalid blocked-state record")
             return "no_legal_action"
-        if actions[0][0] == 2:
-            return "blind_reservation"
-        rule = self.hydrate(before, after)
         actor = before["current"]
         gained = set(after["players"][actor]["nobles"]) - set(before["players"][actor]["nobles"])
         require(len(gained) <= 1, "multiple noble acquisitions")
+        noble_id = next(iter(gained)) if gained else 255
+        self.validate_path(actions, noble_id)
+        if actions[0][0] == 2:
+            return "blind_reservation"
+        rule = self.hydrate(before, after)
         action = self.candidate(before, actions, next(iter(gained)) if gained else 255, rule)
         if isinstance(action, str):
             return action
         legal = rule.getLegalActions(rule.current_game_state, before["current"])
         require(action in legal, f"reference rejects shared action: {action}")
+        self.check_noble_phase(action, actions, legal)
         rule.update(action)
         actual = self.normalized(rule)
         expected = {key: after[key] for key in actual if key != "players"}

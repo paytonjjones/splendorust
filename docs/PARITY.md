@@ -98,3 +98,20 @@ SPLENDOR_REFERENCE=/tmp/splendor-reference \
 The optional integration tests verify matches and exclusions, and ensure that
 corrupt scores, bank counts, and deck partitions are detected. Ordinary Cargo
 tests stay offline and do not require the reference checkout.
+
+## Encoded-path audit
+
+A mutation of the noble-choice action in setup 94,000,012, turn 45 exposed a
+harness defect: the adapter inferred the noble from the successor and ignored
+the explicit encoded noble ID. Changing ID 7 to 8 still reported a match. The
+harness now checks the encoded ID, required multiple-noble phase, compound phase
+order, byte shape, and zero padding. The regression fixture is
+`scripts/fixtures/reference-noble-choice.json`, extracted from the archived
+choice workload. It also rejects removal of a required noble choice and a
+duplicate noble phase. No engine behavior changed.
+
+The stronger check passed all 5,016 previously shared transitions and all 10,258
+shared choices at 574 positions, with unchanged exclusions. This is a recheck
+with a repaired verifier, not an increase in sampled coverage. Evidence is in
+`docs/results/reference-path-audit.summary.json`; its case-file hash identifies
+the existing `reference-choices.jsonl.gz` input after decompression.

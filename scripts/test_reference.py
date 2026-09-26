@@ -19,6 +19,27 @@ class ReferenceTests(unittest.TestCase):
             cwd=ROOT, check=True, capture_output=True, text=True)
         cls.cases = [json.loads(line) for line in run.stdout.splitlines()[1:]]
 
+    def test_encoded_noble_choice_must_match_successor(self):
+        case = json.loads((ROOT / "scripts/fixtures/reference-noble-choice.json").read_text())
+        self.assertEqual(self.comparison.compare(case), "matched")
+        bad = copy.deepcopy(case)
+        noble = next(a for a in bad["actions"] if a[0] == 7)
+        noble[1] = (noble[1] + 1) % 10
+        with self.assertRaisesRegex(ValueError, "encoded noble choice"):
+            self.comparison.compare(bad)
+        bad = copy.deepcopy(case)
+        bad["actions"].append(copy.deepcopy(bad["actions"][-1]))
+        with self.assertRaisesRegex(ValueError, "phase order"):
+            self.comparison.compare(bad)
+        bad = copy.deepcopy(case)
+        bad["actions"].pop()
+        with self.assertRaisesRegex(ValueError, "encoded noble phase"):
+            self.comparison.compare(bad)
+        bad = copy.deepcopy(case)
+        bad["actions"][-1][-1] = 1
+        with self.assertRaisesRegex(ValueError, "padding"):
+            self.comparison.compare(bad)
+
     def test_shared_transitions_and_explicit_exclusions(self):
         results = {self.comparison.compare(case) for case in self.cases}
         self.assertEqual(results, {"matched", "blind_reservation", "return_collected_color", "optional_gold_payment", "no_legal_action"})

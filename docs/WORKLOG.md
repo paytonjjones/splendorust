@@ -207,3 +207,23 @@ a few mutation regressions. Audit whether player-count, tie, terminal, and
 noble-choice boundaries are directly exercised by checked reference cases;
 add targeted reproducible coverage for a material missing boundary rather than
 merely increasing random sample counts. Keep reference rule differences explicit.
+
+## Independent comparison path validation
+
+Audited the archived boundary coverage before adding cases. Existing inputs
+already include multiple nobles, depleted decks, market gaps, and final rounds.
+Found and reproduced a harness error: changing an explicit noble-choice ID from
+7 to 8 still matched because the adapter trusted the successor's noble. Fixed
+encoded-path checks, including required noble phases, duplicate phases, byte
+shape, and padding. The targeted optional-reference regression passes.
+
+Rechecked the existing archived workload under the repaired harness: 5,016
+shared transitions and 10,258 shared choices at 574 positions still pass, with
+unchanged explicit exclusions. This is stronger verification of old evidence,
+not new sampled coverage. The summary and small noble-choice fixture are saved.
+No Rust or simulator semantics changed.
+
+Next gap: complete action sets currently check each alternative's signature,
+but only the selected turn has its resulting state compared with the reference.
+Extend the diagnostic export to include successor snapshots for sampled choice
+branches, and verify those snapshots with the same external transition check.
