@@ -184,3 +184,26 @@ return choice to the static strong heuristic. The E9 no-action penalty does not
 address a cycle with legal actions. A future candidate should test a response
 to repeated return positions, with observation-only memory and separate fresh
 screen/confirmation seeds. No such candidate is retained yet.
+
+## E10 — Repeated-return escape (planned)
+
+**Hypothesis, before implementation:** A bounded memory of repeated return
+observations can break the observed take-and-return cycles without changing
+ordinary search decisions. On a repeated return position, choose a different
+legal return bundle using a separate seeded RNG. This changes policy only;
+there is still no forced pass, forced progress rule, or invented outcome.
+
+**Candidate:** `search-return-escape`, wrapping the unchanged search policy.
+Keep the last 16 return observations, ignoring only the completed-turn counter.
+All other public information and the agent's own private information remain in
+the comparison. On an exact repeat with more than one legal return, select
+uniformly among alternatives to the default return. Do not change rollouts or
+combine this with the rejected E9 penalty. The memory and RNG are agent-local.
+
+**Protocol:** Use the known capped setup 3,717,527,058,913,988,934 as a development
+probe. Run original search self-play and a 2,000-game candidate/search screen
+at fresh master seed 99,000,000. Use `scripts/promote.py`; run 20,000 confirmation
+games at 1,099,000,000 only if the screen passes. Two players, four threads,
+128 iterations, depth 8, width 6, strong rollouts, engine evaluation, and no time
+cap. Record completion categories and paired outcomes. No changes based on
+confirmation results. Any incomplete run prevents promotion.
