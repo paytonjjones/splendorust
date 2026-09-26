@@ -1,0 +1,70 @@
+{
+  "source_id": "36c41eca9c6d8ede",
+  "screen_statuses": {
+    "complete": 1942,
+    "decision_limit": 51,
+    "no_legal_action": 7
+  },
+  "control_statuses": {
+    "complete": 1942,
+    "decision_limit": 51,
+    "no_legal_action": 7
+  },
+  "changed_records": [
+    {
+      "block": 687,
+      "rotation": 1,
+      "before": {
+        "block": 687,
+        "rotation": 1,
+        "seed": 13319824648469878419,
+        "seats": [
+          1,
+          0
+        ],
+        "scores": [
+          16,
+          13
+        ],
+        "ranks": [
+          1,
+          2
+        ],
+        "winners": 1,
+        "turns": 78,
+        "decisions": 126,
+        "status": "complete",
+        "trajectory_hash": "9cc4a0f6420022ae"
+      },
+      "after": {
+        "block": 687,
+        "rotation": 1,
+        "seed": 13319824648469878419,
+        "seats": [
+          1,
+          0
+        ],
+        "scores": [
+          17,
+          8
+        ],
+        "ranks": [
+          1,
+          2
+        ],
+        "winners": 1,
+        "turns": 86,
+        "decisions": 141,
+        "status": "complete",
+        "trajectory_hash": "af177446533e76a8"
+      }
+    }
+  ],
+  "screen_runtime_seconds": 50.199933375,
+  "control_runtime_seconds": 48.787218667,
+  "control_command": "target/release/splendor compare --agent-a search --agent-b search --games 2000 --seed 124000000 --iterations 128 --depth 8 --width 6 --threads 4 --output /tmp/e17-control.json",
+  "control_raw_sha256": "66ba4e020518abe5558a0fe0b72588a6be9ada0f2a9c8e7ceb9ac788aec551f1",
+  "control_record_set_sha256": "3e1f1107ec85bb65fa3ec446bd5a4209ec13a94567a2b6fa87841deba7ea0f99",
+  "confirmation_used": false,
+  "decision": "Rejected and removed; one development cycle solved, no screen completion or winner change."
+}

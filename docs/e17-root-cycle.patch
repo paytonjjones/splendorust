@@ -1,0 +1,110 @@
+diff --git a/crates/splendor-agents/src/lib.rs b/crates/splendor-agents/src/lib.rs
+index 6c98476..3037657 100644
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -342,6 +342,7 @@ impl Default for SearchConfig {
+ /// This is a flat Monte Carlo baseline, not a persistent information-set tree.
+ pub struct SearchAgent {
+     rng: Rng,
++    reject_root_cycle: bool,
+     pub config: SearchConfig,
+     pub simulations: u64,
+ }
+@@ -349,6 +350,7 @@ impl SearchAgent {
+     pub fn new(seed: u64, config: SearchConfig) -> Self {
+         Self {
+             rng: Rng::new(seed),
++            reject_root_cycle: false,
+             config,
+             simulations: 0,
+         }
+@@ -397,6 +399,8 @@ impl Agent for SearchAgent {
+             .collect();
+         let mut sums = vec![0.0; candidates.len()];
+         let mut visits = vec![0u32; candidates.len()];
++        let mut root_observation = o.clone();
++        root_observation.turns = 0;
+         let start = Instant::now();
+         for iter in 0..self.config.iterations {
+             if iter > 0
+@@ -423,12 +427,24 @@ impl Agent for SearchAgent {
+             let mut state = o.determinize(&mut self.rng).expect("engine observation");
+             state.apply_action(candidates[j]).expect("root legal");
+             let mut aa = ActionSet::new();
++            let mut root_cycle = false;
+             for _ in 0..self.config.depth.saturating_mul(4).max(4) {
+-                if state.is_terminal()
+-                    || state.turns() == u32::MAX
+-                    || (state.turns() - o.turns >= self.config.depth
+-                        && state.phase() == Phase::Main)
++                if state.is_terminal() || state.turns() == u32::MAX {
++                    break;
++                }
++                if self.reject_root_cycle
++                    && state.current_player() == o.current as usize
++                    && state.phase() == Phase::Main
++                    && state.turns() > o.turns
+                 {
++                    let mut observation = state.observe(o.current as usize);
++                    observation.turns = 0;
++                    if observation == root_observation {
++                        root_cycle = true;
++                        break;
++                    }
++                }
++                if state.turns() - o.turns >= self.config.depth && state.phase() == Phase::Main {
+                     break;
+                 }
+                 state.legal_actions(&mut aa);
+@@ -443,7 +459,9 @@ impl Agent for SearchAgent {
+                 };
+                 state.apply_action(a).unwrap();
+             }
+-            let reward = if let Some(result) = state.outcome() {
++            let reward = if root_cycle {
++                0.0
++            } else if let Some(result) = state.outcome() {
+                 if result.winners & (1 << o.current) != 0 {
+                     1.0 / result.winners.count_ones() as f64
+                 } else {
+@@ -473,6 +491,11 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
+         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
+         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
+         "search" | "mcts" => Box::new(SearchAgent::new(seed, search.clone())),
++        "search-root-cycle" => {
++            let mut agent = SearchAgent::new(seed, search.clone());
++            agent.reject_root_cycle = true;
++            Box::new(agent)
++        }
+         _ => return Err(format!("unknown agent: {name}")),
+     })
+ }
+@@ -581,7 +604,7 @@ mod tests {
+     }
+     #[test]
+     fn every_agent_chooses_legal_and_is_reproducible() {
+-        for name in ["random", "greedy", "strong", "search"] {
++        for name in ["random", "greedy", "strong", "search", "search-root-cycle"] {
+             let config = SearchConfig {
+                 iterations: 8,
+                 depth: 2,
+@@ -617,11 +640,13 @@ mod tests {
+             depth: 3,
+             ..Default::default()
+         };
+-        let mut a = SearchAgent::new(4, config.clone());
+-        let mut b = SearchAgent::new(4, config);
+-        assert_eq!(
+-            a.select_action(&o, &aa),
+-            b.select_action(&alternative.observe(0), &aa)
+-        );
++        for name in ["search", "search-root-cycle"] {
++            let mut a = make_agent(name, 4, &config).unwrap();
++            let mut b = make_agent(name, 4, &config).unwrap();
++            assert_eq!(
++                a.select_action(&o, &aa),
++                b.select_action(&alternative.observe(0), &aa)
++            );
++        }
+     }
+ }

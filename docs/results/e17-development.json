@@ -1,0 +1,86 @@
+[
+  {
+    "command": [
+      "target/release/splendor",
+      "play",
+      "--agents",
+      "search,strong",
+      "--seed",
+      "11864268526903350202",
+      "--iterations",
+      "256",
+      "--depth",
+      "8",
+      "--width",
+      "6",
+      "--check",
+      "--output",
+      "/tmp/e17-development-search.json"
+    ],
+    "exit": 1,
+    "record": {
+      "block": 0,
+      "rotation": 0,
+      "seed": 11864268526903350202,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        3,
+        3
+      ],
+      "ranks": [
+        0,
+        0
+      ],
+      "winners": 0,
+      "turns": 10010,
+      "decisions": 20000,
+      "status": "decision_limit",
+      "trajectory_hash": "bbd0114e285933e5"
+    }
+  },
+  {
+    "command": [
+      "target/release/splendor",
+      "play",
+      "--agents",
+      "search-root-cycle,strong",
+      "--seed",
+      "11864268526903350202",
+      "--iterations",
+      "256",
+      "--depth",
+      "8",
+      "--width",
+      "6",
+      "--check",
+      "--output",
+      "/tmp/e17-development-search-root-cycle.json"
+    ],
+    "exit": 0,
+    "record": {
+      "block": 0,
+      "rotation": 0,
+      "seed": 11864268526903350202,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        12,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 70,
+      "decisions": 111,
+      "status": "complete",
+      "trajectory_hash": "121ef343763f7dc7"
+    }
+  }
+]

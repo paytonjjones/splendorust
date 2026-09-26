@@ -874,3 +874,38 @@ at 124m, 128 iterations/depth 8/width 6, four threads. Run matched search self-p
 control on the same setups. Confirmation at 1,124m stays untouched unless the
 screen qualifies under the gate. Retain failures, incomplete outcomes and timing
 cost; no tuning on confirmation. Reject the candidate if it fails the gate.
+
+### E17 result: development cycle solved, screen rejected
+
+Candidate source `36c41eca9c6d8ede` assigns zero heuristic reward on a later
+root Main observation equal to the initial observation except turn count. The
+check runs before the horizon cutoff. It changes no core outcome. Ordinary
+search retains its old behavior; the known full capped game still reproduces
+trajectory `bbd0114e285933e5` exactly.
+
+At the E16 prefix, 16 agent seeds at 256 iterations/depth 8 all choose Take for
+search and BuyVisible(3) for the candidate. At depth 2 both choose that purchase.
+Equivalent hidden-world observations give identical choices. In the full known
+game against strong, the candidate finishes in 111 decisions/70 turns and loses
+12–15; ordinary search remains capped at 20,000 decisions, with no winner.
+Completing that probe is not evidence of a win or population improvement.
+
+The real promotion gate's fresh 124m screen rejects the candidate: 1,942 of
+2,000 complete, seven blocked and 51 capped. Conditional completed-game credit
+is 51.36%; unconditional 95% bounds [45.57%, 57.06%]. The matched search/search
+control has exactly the same completion counts and winning identities. Only
+one full record changes (block 687, rotation 1), and its winner stays the same.
+All 58 unfinished records are identical. Candidate/control runtime is
+50.20/48.79 seconds; this single pair is descriptive, not a precise overhead
+benchmark. Confirmation seed 1,124m remains unused.
+
+Reject and remove the candidate. Its success against the strong-opponent probe
+did not transfer to this search-opponent screen. Do not broaden its rule or tune
+on confirmation in this experiment. The candidate patch is
+`docs/e17-root-cycle.patch` against `b5dc58b`. Gate manifest, executable hash,
+full screen/control records, histories, probe actions and failed decision are
+preserved under `docs/results/e17-*`. `agent_probe` is a reusable diagnostic
+for seeded action choices and equivalent hidden-world observations; it makes
+no universal privacy or strength claim. After removal, formatting, strict
+release all-target Clippy, 71 release workspace tests and 52 Python tests pass.
+Engine stays v2; ordinary policies remain random/greedy/strong/search.

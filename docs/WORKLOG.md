@@ -1143,3 +1143,27 @@ turn count. Keep game outcomes and ordinary search unchanged. Development uses
 known E16 case; fresh screen seed 124m and reserved confirmation 1,124m. Next:
 implement that candidate, validate it, and use the gate; do not restore earlier
 rejected policies or infer promotion from the development probe.
+
+## E17 rejected after fixed-budget screen
+
+Continued from b5dc58b and implemented only the recorded candidate. Development
+probes change Take to BuyVisible(3) for all 16 seeds at depth 8, preserve hidden-
+world equality, and complete the known full game in 111 decisions (a 12–15 loss).
+Ordinary search exactly reproduces the prior capped trajectory. The candidate
+checks recurrence at the horizon too, without changing game outcomes.
+
+Real gate screen at fresh 124m rejects: 1,942 complete, seven blocked, 51 capped;
+credit interval includes 50%. Matched search self-play has identical completion
+and winner results, with only one completed record changed. All unfinished
+records are identical. Saved the patch, gate decision and executable identity,
+full reports, development histories, probes, hashes and logs. Confirmation
+1,124m was not used. Removed candidate and restored baseline agent source.
+
+Retained a generic observation action-probe example. Final formatting, strict
+all-target release Clippy, 71 release workspace tests and 52 Python tests pass.
+No default, core, engine version or replay semantics change.
+
+Next: return to the independent parity evidence and assess the largest remaining
+unsupported comparison dimension. The recent agent probes show opponent-specific
+policy mismatch; do not keep extending a failed candidate to fit one case.
+Existing reference exclusions and published no-action gap remain explicit.
