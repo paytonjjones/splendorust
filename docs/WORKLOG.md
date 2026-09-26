@@ -413,3 +413,25 @@ Next unresolved research item remains the three E12 games that became capped
 when their control games completed. Reconstruct their exact histories from the
 archived candidate patch and compare recurrence patterns before proposing any
 combined intervention. The full parity boundary remains explicit.
+
+## E12 new caps reproduced and classified
+
+Continued from `b7ab94b`. Restored E12 in a temporary historical worktree and
+reproduced all three new capped records exactly, including trajectory hashes.
+All have four-decision take/return cycles starting at decisions 87, 75, and 91.
+Both sides have legal purchases throughout. E12's only-takes condition is false
+in these positions, so its filter cannot change these recurrent decisions.
+
+Archived all full histories, source/input hashes, recurrence summaries, and
+reproduction harness. The first diagnostic assumption (two repeated actions
+imply a state cycle) failed its observation assertion; the final detector checks
+both viewers and correctly includes the active-player change. No core, rule,
+or active-agent change was made. Historical candidate formatting, strict
+all-target Clippy, and 53 release tests pass; the current standard suite has 55.
+
+Next useful experiment could combine the independently diagnosed early token
+scarcity and later repeated-Main failures, but only after a new written
+hypothesis, with new screen/confirmation seeds. E11 already tested recurrence
+handling alone and E12 affordability alone; do not present a combination as an
+established improvement. An alternative useful next task is to inspect E12's
+three unchanged blocked games for public features missed by the narrow trigger.

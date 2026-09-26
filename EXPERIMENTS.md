@@ -444,3 +444,52 @@ history, run settings, and gate decision are archived under `docs/results/e12-*`
 Both candidate and restored baseline passed formatting, strict workspace
 all-target Clippy, and all 53 release workspace tests. No rules or replay
 semantics changed; ENGINE_VERSION remains `splendorust-v1`.
+
+### E12 newly capped games: exact recurrence diagnosis
+
+Reconstructed the candidate at `6654cbf` plus its archived patch in a temporary
+worktree. All three newly capped games match every archived record field,
+including trajectory hashes, under source `37d082b07f81f7f7`. Invariants were
+checked during play and replay. Each run stops at 20,000 decisions without an
+outcome.
+
+| Block | Rotation | Repeating suffix starts at decision | Decisions in suffix | Candidate purchases available in cycle |
+| --- | --- | --- | --- | --- |
+| 179 | 0 | 87 | 19,913 | 5 |
+| 444 | 1 | 75 | 19,925 | 3 |
+| 927 | 1 | 91 | 19,909 | 5 |
+
+Each cycle has four decisions and two completed turns. Both players repeatedly
+take and return one red token in blocks 179 and 444, or one black token in block
+927. The opponents also have affordable purchases: five, five, and four,
+respectively. A full period preserves both players' observations except the
+turn count. Its actions move tokens only, so the hidden decks and card locations
+cannot change. No winner is assigned.
+
+An initial action-only period detector proposed a two-decision period, but the
+observation equality assertion rejected it because the active player changed.
+The saved diagnostic requires both action repetition and observation equality;
+this identifies the four-decision state cycle. This failed diagnostic assumption
+is not counted as evidence for a shorter cycle.
+
+E12's only-takes condition is false in every Main phase in these cycles. Thus
+the filter changed earlier play but has no effect once these positions recur.
+This is the same purchase-avoidance pattern diagnosed in E10/E11, not a new rule
+failure. It supports testing recurrence handling as a separate intervention;
+it does not establish that combining rejected candidates improves strength.
+
+The three full histories and a fingerprinted audit are saved under
+`docs/results/e12-cap-*`. To reproduce, apply the E12 patch to `6654cbf`, copy
+`docs/e12-cap-audit.rs` into `crates/splendor-arena/examples/e12_cap_audit.rs`,
+decompress the E12 screen report, and run:
+
+```sh
+cargo run --release --locked --example e12_cap_audit -- /tmp/e12-screen-replay.json /tmp/e12-cap-histories-new
+```
+
+The output directory must be new. The harness checks the production fingerprint
+and exact archived records before reporting recurrence evidence. Formatting,
+strict release all-target workspace Clippy, and all 53 release workspace tests
+pass in this historical candidate checkout. The main branch remains unchanged
+apart from research records; its standard suite includes 55 tests after the
+later example-test configuration change.
