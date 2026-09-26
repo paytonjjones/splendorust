@@ -641,3 +641,47 @@ python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check \
 The optional tests check that hydration runs exactly once per segment and that
 corrupt retained bank state fails before the next turn. All 56 Python tests
 pass. This audit reuses the prior archives; no new games or seeds were added.
+
+## Fresh all-position validation
+
+Pre-run plan: 20 games for each of 2, 3, and 4 players, master seed
+126,000,000. The exporter produces setup seeds 128,000,000–128,000,019,
+129,000,000–129,000,019, and 130,000,000–130,000,019. Use alternating
+strong/random policies, the fixed 1,000-turn export cap, and complete choice
+sampling at every visited position (`choice_interval=1`). Keep successor,
+winner, boundary, local sequence, and retained reference-state checks enabled.
+
+This adds fresh seeds and denser action-set coverage than the earlier
+every-tenth-turn workloads. It does not change agents or rules. Keep every
+exclusion, blocked ending, cap, and reference winner defect in the result.
+Do not replace failed seeds or treat branch counts as independent games.
+
+Result: all **95,867 shared choices and successors** match at **5,354 positions**.
+The complete local enumeration has 154,947 paths. Exclusions are 9,350 blind
+reservations, 2,654 optional gold payments, 47,069 returns of a collected
+color, and seven seven-card-limit paths. The reference filters contain
+21,258 reduced takes and four passes. These are compound paths, not independent
+games. All local bookkeeping checks still run before an exclusion.
+
+The selected paths have 4,910 matched turns and 444 explicit exclusions or
+blocked records: 95 blind reservations, 85 optional gold payments, 258 returns
+of a collected color, three seven-card-limit paths, and three blocked records.
+The 60 games have 57 normal endings, three blocked endings, and no turn caps.
+The 53 shared selected terminal transitions have 52 winner matches and one
+known four-player reference tiebreak defect. Among 869 shared terminal
+branches, 847 winner masks match and 22 show that same known defect.
+
+Retained-state checks pass for 427 shared segments, including 26 complete
+games without a reset and a longest segment of 108 turns. Branch coverage
+includes 70 explicit noble choices, 52 noble acquisitions after reserve,
+54 after take, 2,210 gold-return paths, and 1,686 required-gold purchases.
+Tier 2/3 deck depletion was not reached; the separate targeted histories
+remain the evidence for those boundaries.
+
+Evidence is in `reference-dense-v2.jsonl.gz`, `reference-dense-v2.summary.json`,
+and `reference-dense-v2.workload.json` under `docs/results`. The manifest
+records exact commands, source fingerprint `50400f40eb161b1a`, input and
+archive hashes, all setup seeds, and their disjointness from the two prior
+60-game archives and both depletion histories. All checks use the same pinned
+MIT reference. No external full-rule, RNG, observation, or winner parity is
+claimed. No Rust or agent code changed.

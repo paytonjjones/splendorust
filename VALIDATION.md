@@ -387,3 +387,17 @@ the archived workloads; they are not new independent confirmation games.
 The reference winner defect is still checked as a known difference. This is
 stronger evidence for shared transitions over time, not full rule, RNG, deck
 order, observation, or winner parity. No engine or Rust code changed.
+
+## Fresh dense action-set validation
+
+The next independent 60-game seed set checks every complete-turn choice at
+every visited position. It passes 95,867 shared successors at 5,354 positions,
+4,910 selected shared turns, and 26 complete games with retained reference
+state. All 60 local game sequences pass: 57 complete and three blocked, with
+no capped games. One selected ending and 22 terminal branches retain the
+known reference tiebreak difference. All exclusions remain in the report.
+
+This run adds fresh seeds and denser coverage; it does not close excluded
+rules or hidden-information parity. See the fresh all-position section in
+[docs/PARITY.md](docs/PARITY.md) and the `reference-dense-v2` archive, summary,
+and workload manifest in `docs/results`. No Rust or agent code changed.

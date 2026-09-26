@@ -1,0 +1,279 @@
+{
+  "source_commit": "5c933a6aa03e3a2e1a32345b7453de7f92497303",
+  "metadata": {
+    "boundary_choices": true,
+    "choice_interval": 1,
+    "choice_successors": true,
+    "engine": "splendorust-v2",
+    "format": 2,
+    "games_per_player_count": 20,
+    "noble_acquisition_choices": true,
+    "seed": 126000000,
+    "source_id": "50400f40eb161b1a",
+    "winner_checks": true
+  },
+  "commands": [
+    "cargo run --quiet --release --locked --example parity_export -- 20 126000000 1 true true > /tmp/reference-dense-v2.jsonl",
+    "python3 scripts/check_reference.py --reference /tmp/astra-ci-reference-check --cases /tmp/reference-dense-v2.jsonl --chains --output docs/results/reference-dense-v2.summary.json"
+  ],
+  "raw_sha256": "3ae9731ad67fa0d703562145c4050f201cd6821be4cfae20a209839370849474",
+  "archive_sha256": "709226c06ec714273b95f72f220d14f819e98e628503c86b5a384c7d8b90d20e",
+  "exporter_sha256": "28f6e21bd6b07b69c719d71b3529789ed028e9bea9ed864837b555b7fcb40572",
+  "harness_sha256": "e9b0f0e203d4632376d1c90a51546a9a1a13989774f246d10ca9db087682e0a2",
+  "cases": 5354,
+  "local_complete_turn_choices": 154947,
+  "games": 60,
+  "endings": {
+    "complete": 57,
+    "no_legal_action": 3
+  },
+  "disjoint_from_archives": [
+    "reference-v2.jsonl.gz",
+    "reference-confirm-v2.jsonl.gz",
+    "reference-v2-tier2.jsonl.gz",
+    "reference-v2-tier3.jsonl.gz"
+  ],
+  "setup_seeds": [
+    {
+      "players": 2,
+      "seed": 128000000
+    },
+    {
+      "players": 2,
+      "seed": 128000001
+    },
+    {
+      "players": 2,
+      "seed": 128000002
+    },
+    {
+      "players": 2,
+      "seed": 128000003
+    },
+    {
+      "players": 2,
+      "seed": 128000004
+    },
+    {
+      "players": 2,
+      "seed": 128000005
+    },
+    {
+      "players": 2,
+      "seed": 128000006
+    },
+    {
+      "players": 2,
+      "seed": 128000007
+    },
+    {
+      "players": 2,
+      "seed": 128000008
+    },
+    {
+      "players": 2,
+      "seed": 128000009
+    },
+    {
+      "players": 2,
+      "seed": 128000010
+    },
+    {
+      "players": 2,
+      "seed": 128000011
+    },
+    {
+      "players": 2,
+      "seed": 128000012
+    },
+    {
+      "players": 2,
+      "seed": 128000013
+    },
+    {
+      "players": 2,
+      "seed": 128000014
+    },
+    {
+      "players": 2,
+      "seed": 128000015
+    },
+    {
+      "players": 2,
+      "seed": 128000016
+    },
+    {
+      "players": 2,
+      "seed": 128000017
+    },
+    {
+      "players": 2,
+      "seed": 128000018
+    },
+    {
+      "players": 2,
+      "seed": 128000019
+    },
+    {
+      "players": 3,
+      "seed": 129000000
+    },
+    {
+      "players": 3,
+      "seed": 129000001
+    },
+    {
+      "players": 3,
+      "seed": 129000002
+    },
+    {
+      "players": 3,
+      "seed": 129000003
+    },
+    {
+      "players": 3,
+      "seed": 129000004
+    },
+    {
+      "players": 3,
+      "seed": 129000005
+    },
+    {
+      "players": 3,
+      "seed": 129000006
+    },
+    {
+      "players": 3,
+      "seed": 129000007
+    },
+    {
+      "players": 3,
+      "seed": 129000008
+    },
+    {
+      "players": 3,
+      "seed": 129000009
+    },
+    {
+      "players": 3,
+      "seed": 129000010
+    },
+    {
+      "players": 3,
+      "seed": 129000011
+    },
+    {
+      "players": 3,
+      "seed": 129000012
+    },
+    {
+      "players": 3,
+      "seed": 129000013
+    },
+    {
+      "players": 3,
+      "seed": 129000014
+    },
+    {
+      "players": 3,
+      "seed": 129000015
+    },
+    {
+      "players": 3,
+      "seed": 129000016
+    },
+    {
+      "players": 3,
+      "seed": 129000017
+    },
+    {
+      "players": 3,
+      "seed": 129000018
+    },
+    {
+      "players": 3,
+      "seed": 129000019
+    },
+    {
+      "players": 4,
+      "seed": 130000000
+    },
+    {
+      "players": 4,
+      "seed": 130000001
+    },
+    {
+      "players": 4,
+      "seed": 130000002
+    },
+    {
+      "players": 4,
+      "seed": 130000003
+    },
+    {
+      "players": 4,
+      "seed": 130000004
+    },
+    {
+      "players": 4,
+      "seed": 130000005
+    },
+    {
+      "players": 4,
+      "seed": 130000006
+    },
+    {
+      "players": 4,
+      "seed": 130000007
+    },
+    {
+      "players": 4,
+      "seed": 130000008
+    },
+    {
+      "players": 4,
+      "seed": 130000009
+    },
+    {
+      "players": 4,
+      "seed": 130000010
+    },
+    {
+      "players": 4,
+      "seed": 130000011
+    },
+    {
+      "players": 4,
+      "seed": 130000012
+    },
+    {
+      "players": 4,
+      "seed": 130000013
+    },
+    {
+      "players": 4,
+      "seed": 130000014
+    },
+    {
+      "players": 4,
+      "seed": 130000015
+    },
+    {
+      "players": 4,
+      "seed": 130000016
+    },
+    {
+      "players": 4,
+      "seed": 130000017
+    },
+    {
+      "players": 4,
+      "seed": 130000018
+    },
+    {
+      "players": 4,
+      "seed": 130000019
+    }
+  ],
+  "scope": "Fresh all-position shared-rule validation; explicit exclusions, aligned draws, and known reference winner differences remain."
+}
