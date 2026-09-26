@@ -132,6 +132,7 @@ def summarize(raw, name):
     report['summary_note'] = 'Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.'
     report['status_counts'] = {key: sum(g['status'] == key for g in records) for key in sorted({g['status'] for g in records})}
     entry = {'name': name, 'games': report['requested_games'], 'completed': report['completed_games'],
+             'engine': report.get('engine'), 'source_id': report.get('source_id'),
              'seed': report['seed'], 'players': n, 'candidate': report['agents'][0]['agent'],
              'opponent': report['agents'][1]['agent'], 'credit': report['agents'][0]['win_rate'],
              'ci95': report['agents'][0]['ci95'], 'seconds': report['runtime_seconds'],

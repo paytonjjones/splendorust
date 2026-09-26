@@ -697,3 +697,23 @@ this intentional engine change. In particular, confirm archived historical
 reports remain inspectable without being eligible for new promotion or silent
 replay relabelling. Then return to any uncovered public-rule/action boundary;
 do not repeat the same three parity exports without a new change or gap.
+
+## Report version boundaries
+
+Continued from `7d3f7f7`. The full promotion workflow already rejected old
+engine reports, but the separately callable `decision` helper could still
+return promote for a synthetic old-engine report. Added a shared v2 engine and
+nonempty source check to both entry points. Archive index entries omitted both
+identities; added engine and nullable source fields without rejecting older
+reports or inventing missing fingerprints. Two pre-fix failures are preserved.
+
+All 49 archived reports remain readable and preserve engine/source metadata:
+48 v1, one v2, with 17 missing historical source fingerprints. The audit records
+raw and tool hashes. All old-engine decisions reject. Current CLI verify-report
+rejects the v1 capacity report and reproduces every one of the 1,000 v2 records.
+All 39 Python tests pass against the pinned reference. No Rust, core semantics,
+or agent changes, so the production fingerprint remains `93aa7293171a9875`.
+
+Next: return to rule coverage. Inspect the local tests for each known external
+reference exclusion, especially optional gold and return of collected colors,
+and identify any missing boundary rather than repeating matched parity cases.

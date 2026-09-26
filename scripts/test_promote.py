@@ -38,6 +38,17 @@ def stage_args():
 
 
 class GateTests(unittest.TestCase):
+    def test_standalone_decision_requires_current_engine_and_source_identity(self):
+        for engine, source in [('splendorust-v1', 'old-source'),
+                               ('future-engine', 'source'),
+                               ('splendorust-v2', None),
+                               ('splendorust-v2', ''),
+                               ('splendorust-v2', 42)]:
+            report = synthetic_report()
+            report.update(engine=engine, source_id=source)
+            self.assertEqual(decision(report, 2, 0.01, 10),
+                             'reject: unsupported engine or missing source identity')
+
     def test_promotion_requires_complete_reproducible_fast_and_better(self):
         report = synthetic_report()
         expected_lower = 1 - 7 * math.log(80) / (3 * 499)

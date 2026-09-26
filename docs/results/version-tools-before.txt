@@ -1,0 +1,67 @@
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: invalid margin, threads, or speed floor
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: invalid margin, threads, or speed floor
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: iterations must fit an unsigned 32-bit count
+.usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: output already exists; choose a new directory to preserve prior evidence
+.reject: execution failure: Command '['cargo', 'fmt']' returned non-zero exit status 1.
+......F.
+======================================================================
+FAIL: test_standalone_decision_requires_current_engine_and_source_identity (test_promote.GateTests.test_standalone_decision_requires_current_engine_and_source_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_promote.py", line 49, in test_standalone_decision_requires_current_engine_and_source_identity
+    self.assertEqual(decision(report, 2, 0.01, 10),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     'reject: unsupported engine or missing source identity')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'promote' != 'reject: unsupported engine or missing source identity'
+- promote
++ reject: unsupported engine or missing source identity
+
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.105s
+
+FAILED (failures=1)
+reject: invalid report evidence: candidate interval disagrees with game records
+..E...
+======================================================================
+ERROR: test_index_preserves_engine_and_nullable_historical_source (test_collect_evidence.ArchiveTests.test_index_preserves_engine_and_nullable_historical_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_collect_evidence.py", line 15, in test_index_preserves_engine_and_nullable_historical_source
+    self.assertEqual(index['old']['engine'], 'splendorust-v1')
+                     ~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'engine'
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.465s
+
+FAILED (errors=1)

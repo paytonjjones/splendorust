@@ -218,3 +218,23 @@ all four decision phases, search near/at capacity, and an actual final turn
 that reaches the limit and keeps its correct outcome. All 68 release workspace
 Rust tests and 37 Python tests pass. The fixed 1,000-game search/strong comparison
 at seed 110,000,000 has identical complete game records before and after.
+
+### Historical report handling after v2
+
+The archive collector accepts historical report schemas and preserves their
+engine/source fields. New index entries include `engine` and `source_id`; a
+missing historical source is recorded as null, never inferred. Existing index
+entries are retained unless their corresponding raw report is processed again.
+The standalone promotion decision and the full stage validator share a v2
+engine/source-presence check. The full workflow still checks settings, seed
+schedule, record consistency, and source consistency across stages.
+
+An audit of all 49 archived raw reports (48 v1, one v2) preserves their identity
+and permits historical summarization. Seventeen old reports have no source
+fingerprint. None of those identities is filled in or relabelled. The current
+decision helper rejects all v1 reports. `verify-report` rejects the archived
+v1 capacity report and reproduces all 1,000 records of the matching v2 report.
+Audit identities, raw hashes, tool hashes, and CLI output are in
+`docs/results/version-tools-*`. These checks do not certify old reports as
+current-build experiments. Both added regression tests failed before the fix;
+all 39 Python tests now pass with the pinned independent reference.

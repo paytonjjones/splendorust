@@ -8,6 +8,17 @@ from collect_evidence import ROOT, collect
 
 
 class ArchiveTests(unittest.TestCase):
+    def test_index_preserves_engine_and_nullable_historical_source(self):
+        current = gzip.decompress((ROOT / 'docs/results/capacity-after.json.gz').read_bytes())
+        collect([self.report('old'), self.report('current', current)], self.output)
+        index = {r['name']: r for r in json.loads((self.output / 'index.json').read_text())}
+        self.assertEqual(index['old']['engine'], 'splendorust-v1')
+        self.assertIsNone(index['old']['source_id'])
+        self.assertEqual(index['current']['engine'], 'splendorust-v2')
+        self.assertEqual(index['current']['source_id'], json.loads(current)['source_id'])
+        self.assertEqual(gzip.decompress((self.output / 'old.json.gz').read_bytes()), self.raw)
+        self.assertEqual(gzip.decompress((self.output / 'current.json.gz').read_bytes()), current)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

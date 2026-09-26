@@ -11,6 +11,12 @@ import sys
 from collect_evidence import record_interval, validate_report
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+CURRENT_ENGINE = 'splendorust-v2'
+
+
+def supported_source(report):
+    return (report.get('engine') == CURRENT_ENGINE
+            and isinstance(report.get('source_id'), str) and bool(report['source_id']))
 
 
 def run(command):
@@ -39,6 +45,8 @@ def checked_interval(report, players):
 
 
 def decision(report, players, margin, minimum_rate):
+    if not supported_source(report):
+        return 'reject: unsupported engine or missing source identity'
     try:
         lower, _ = checked_interval(report, players)
     except (KeyError, TypeError, ValueError, IndexError, OverflowError) as error:
@@ -75,7 +83,7 @@ def validate_stage(report, args, games, seed, previous_source):
     if report.get('run_config') != expected:
         raise ValueError('report settings differ from the requested stage')
     source = (report['engine'], report['source_id'])
-    if (source[0] != 'splendorust-v2' or not isinstance(source[1], str) or not source[1]
+    if (not supported_source(report)
             or (previous_source is not None and source != previous_source)):
         raise ValueError('unsupported engine or source changed between stages')
     for record in report['records']:
