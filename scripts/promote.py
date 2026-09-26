@@ -24,6 +24,34 @@ def run(command):
     subprocess.run(list(map(str, command)), cwd=ROOT, check=True)
 
 
+def build_release(output):
+    """Use Cargo's actual executable, including custom target dirs and targets."""
+    command = ['cargo', 'build', '--release', '--locked', '--package', 'splendor-arena',
+               '--bin', 'splendor', '--message-format=json']
+    print('+', ' '.join(command), flush=True)
+    proc = subprocess.run(command, cwd=ROOT, stdout=subprocess.PIPE, text=True)
+    (output / 'cargo-build.jsonl').write_text(proc.stdout)
+    if proc.returncode:
+        raise subprocess.CalledProcessError(proc.returncode, command)
+    executables = set()
+    for line in proc.stdout.splitlines():
+        message = json.loads(line)
+        target = message.get('target', {})
+        if (message.get('reason') == 'compiler-artifact'
+                and target.get('name') == 'splendor' and target.get('kind') == ['bin']
+                and message.get('profile', {}).get('test') is False
+                and message.get('executable')):
+            executables.add(pathlib.Path(message['executable']).resolve())
+    if len(executables) != 1:
+        raise RuntimeError('Cargo did not report exactly one splendor executable')
+    binary = executables.pop()
+    (output / 'build.json').write_text(json.dumps({
+        'command': command, 'executable': str(binary),
+        'binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(),
+    }, indent=2) + '\n')
+    return binary
+
+
 def checked_interval(report, players):
     """Reject malformed evidence and derive the candidate interval from records."""
     validate_report(report)
@@ -141,8 +169,7 @@ def execute(args):
     run(['cargo', 'fmt', '--all', '--check'])
     run(['cargo', 'clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings'])
     run(['cargo', 'test', '--workspace', '--release', '--locked'])
-    run(['cargo', 'build', '--release', '--locked'])
-    binary = ROOT / 'target/release/splendor'
+    binary = build_release(args.output)
     run([binary, 'benchmark', '--games', 200, '--threads', args.threads])
     previous_source = None
     for stage, games, seed in [('screen', args.screen, args.seed),

@@ -1065,3 +1065,23 @@ cross-target checks. A reusable local command should fail if any check fails,
 retain platform/source provenance, and avoid treating local success as hosted
 CI evidence. Existing shell experiment scaffolding is evidence, not yet a
 supported reusable validation tool.
+
+## Promotion uses the actual Cargo executable
+
+Continued from 9d973b6. Audit found a concrete reproducibility defect: promotion
+build respected CARGO_TARGET_DIR but execution used ROOT/target/release/splendor.
+A stale default binary could be evaluated after a successful custom-directory
+build. Wrote a regression and confirmed failure against the old code.
+
+The gate now reads the named binary's Cargo artifact, rejects failed/missing/
+ambiguous output, and saves raw build messages plus executable path and hash.
+Both benchmark and comparison use that path. Existing report/source checks
+remain. All 48 Python tests pass. Full custom-directory smoke passes Rust checks,
+uses the expected executable and correctly retains the baseline with two-game
+screen/confirmation samples. Archived regression failure and full smoke evidence;
+the random benchmark's eight blocked games remain explicit.
+
+Next audit: gate provenance now identifies the binary, but routine validation
+commands still depend on callers to retain stdout/stderr. Assess a focused
+logging improvement or a higher-value uncovered rules/agent issue before adding
+new automation. No rule or agent change in this step; engine stays v2.

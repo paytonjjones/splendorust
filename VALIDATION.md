@@ -314,3 +314,20 @@ Git file referenced a host-only path. A source snapshot without that link fixed
 the container setup. The failed attempt and successful test/build/verification
 logs are retained in `docs/results/linux-*`; `linux-validation.json` identifies
 the source, image, binary, input hashes, commands, mounts and exit statuses.
+
+### Promotion executable provenance
+
+The gate builds the named arena binary with Cargo JSON output and selects the
+reported executable. It no longer assumes `target/release/splendor`, which can
+be stale when CARGO_TARGET_DIR or a configured target changes the output path.
+It rejects failed builds, missing executables, and ambiguous executable reports.
+Each run now retains `cargo-build.jsonl` and `build.json` with the exact selected
+path and binary SHA-256. Source and report validation still apply separately.
+
+A regression test failed against the old hard-coded path. The fixed gate passed
+all 48 Python tests. An actual custom-target run also passed required Rust checks
+and used `/private/tmp/promotion-custom-target/release/splendor`. Two-game screen
+and confirmation stages correctly returned `retain baseline: benefit not
+confirmed` (exit 2). This smoke is not strength evidence. The separate random
+benchmark reported eight blocked games without inventing winners. Commands,
+logs, Cargo artifacts, and reports are in `docs/results/promotion-target-*`.

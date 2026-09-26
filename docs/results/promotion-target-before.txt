@@ -1,0 +1,63 @@
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: invalid margin, threads, or speed floor
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: invalid margin, threads, or speed floor
+usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: iterations must fit an unsigned 32-bit count
+.usage: python3.14 -m unittest [-h] [--candidate CANDIDATE]
+                              [--baseline BASELINE] [--players {2,3,4}]
+                              [--screen SCREEN] [--confirm CONFIRM]
+                              [--seed SEED] [--threads THREADS]
+                              [--iterations ITERATIONS] [--margin MARGIN]
+                              [--min-games-per-second MIN_GAMES_PER_SECOND]
+                              [--output OUTPUT]
+python3.14 -m unittest: error: output already exists; choose a new directory to preserve prior evidence
+.reject: execution failure: Command '['cargo', 'fmt']' returned non-zero exit status 1.
+....F....
+======================================================================
+FAIL: test_gate_uses_executable_reported_by_cargo (test_promote.GateTests.test_gate_uses_executable_reported_by_cargo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_promote.py", line 143, in test_gate_uses_executable_reported_by_cargo
+    result = main(['--candidate', 'search', '--baseline', 'strong', '--screen', '1000',
+                   '--confirm', '1000', '--seed', '42', '--output', str(output)])
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/promote.py", line 131, in main
+    return execute(args)
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/promote.py", line 156, in execute
+    proc = subprocess.run(list(map(str, cmd)), cwd=ROOT)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/Users/payton.jones/dev/splendorust-astra/scripts/test_promote.py", line 139, in fake_process
+    self.assertEqual(pathlib.Path(command[0]), binary)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PosixPath('/Users/payton.jones/dev/splendorust-astra/[20 chars]dor') != PosixPath('/var/folders/6l/8jtx16xn24d4dl6xxlg6m2gc00[38 chars]dor')
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.185s
+
+FAILED (failures=1)
+reject: invalid report evidence: candidate interval disagrees with game records

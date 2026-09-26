@@ -1,0 +1,324 @@
++ cargo fmt --all --check
++ cargo clippy --workspace --all-targets --locked -- -D warnings
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+    Checking cfg-if v1.0.5
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling zerocopy v0.8.59
+   Compiling crossbeam-epoch v0.9.21
+   Compiling zmij v1.0.23
+    Checking utf8parse v0.2.2
+   Compiling serde v1.0.229
+   Compiling crossbeam-deque v0.8.8
+   Compiling serde_json v1.0.151
+   Compiling rayon-core v1.13.0
+    Checking anstyle-parse v1.0.0
+    Checking anstyle v1.0.14
+    Checking colorchoice v1.0.5
+    Checking anstyle-query v1.1.5
+    Checking either v1.18.0
+    Checking is_terminal_polyfill v1.70.2
+   Compiling autocfg v1.5.1
+    Checking anstream v1.0.0
+    Checking memchr v2.8.3
+   Compiling num-traits v0.2.19
+   Compiling heck v0.5.0
+    Checking itoa v1.0.18
+    Checking arrayvec v0.7.8
+    Checking clap_lex v1.1.1
+    Checking strsim v0.11.1
+    Checking clap_builder v4.6.7
+    Checking regex-syntax v0.8.11
+    Checking once_cell v1.21.4
+    Checking splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+    Checking plotters-backend v0.3.7
+    Checking ciborium-io v0.2.2
+    Checking regex-automata v0.4.18
+    Checking plotters-svg v0.3.7
+    Checking itertools v0.10.5
+    Checking cast v0.3.0
+    Checking same-file v1.0.6
+    Checking is-terminal v0.4.17
+    Checking oorandom v11.1.5
+    Checking walkdir v2.5.0
+    Checking anes v0.1.6
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-agents)
+   Compiling getrandom v0.3.4
+    Checking criterion-plot v0.5.0
+    Checking regex v1.13.1
+   Compiling rustix v1.1.5
+   Compiling getrandom v0.4.3
+    Checking errno v0.3.14
+    Checking bitflags v2.13.2
+    Checking fastrand v2.5.0
+    Checking wait-timeout v0.2.1
+    Checking quick-error v1.2.3
+    Checking bit-vec v0.8.0
+    Checking fnv v1.0.7
+    Checking unarray v0.1.4
+    Checking bit-set v0.8.0
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+    Checking rayon v1.12.0
+   Compiling zerocopy-derive v0.8.59
+   Compiling serde_derive v1.0.229
+   Compiling clap_derive v4.6.7
+    Checking plotters v0.3.7
+    Checking clap v4.6.7
+    Checking rand_core v0.9.5
+    Checking rand_xorshift v0.4.0
+    Checking rand v0.9.5
+    Checking tempfile v3.27.0
+    Checking rusty-fork v0.3.1
+    Checking tinytemplate v1.2.1
+    Checking half v2.7.1
+    Checking ppv-lite86 v0.2.21
+    Checking rand_chacha v0.9.0
+    Checking ciborium-ll v0.2.2
+    Checking proptest v1.11.0
+    Checking ciborium v0.2.2
+    Checking criterion v0.5.1
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.38s
++ cargo test --workspace --release --locked
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.5
+   Compiling zerocopy v0.8.59
+   Compiling crossbeam-utils v0.8.23
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling serde v1.0.229
+   Compiling utf8parse v0.2.2
+   Compiling zmij v1.0.23
+   Compiling colorchoice v1.0.5
+   Compiling rayon-core v1.13.0
+   Compiling anstyle-parse v1.0.0
+   Compiling anstyle-query v1.1.5
+   Compiling autocfg v1.5.1
+   Compiling serde_json v1.0.151
+   Compiling arrayvec v0.7.8
+   Compiling anstyle v1.0.14
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling either v1.18.0
+   Compiling anstream v1.0.0
+   Compiling num-traits v0.2.19
+   Compiling clap_lex v1.1.1
+   Compiling itoa v1.0.18
+   Compiling heck v0.5.0
+   Compiling strsim v0.11.1
+   Compiling memchr v2.8.3
+   Compiling clap_builder v4.6.7
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-core)
+   Compiling regex-syntax v0.8.11
+   Compiling once_cell v1.21.4
+   Compiling ciborium-io v0.2.2
+   Compiling plotters-backend v0.3.7
+   Compiling itertools v0.10.5
+   Compiling plotters-svg v0.3.7
+   Compiling cast v0.3.0
+   Compiling same-file v1.0.6
+   Compiling walkdir v2.5.0
+   Compiling regex-automata v0.4.18
+   Compiling criterion-plot v0.5.0
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling regex v1.13.1
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-agents)
+   Compiling anes v0.1.6
+   Compiling oorandom v11.1.5
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-arena)
+   Compiling getrandom v0.3.4
+   Compiling rustix v1.1.5
+   Compiling getrandom v0.4.3
+   Compiling is-terminal v0.4.17
+   Compiling errno v0.3.14
+   Compiling bitflags v2.13.2
+   Compiling fastrand v2.5.0
+   Compiling zerocopy-derive v0.8.59
+   Compiling serde_derive v1.0.229
+   Compiling clap_derive v4.6.7
+   Compiling wait-timeout v0.2.1
+   Compiling fnv v1.0.7
+   Compiling bit-vec v0.8.0
+   Compiling quick-error v1.2.3
+   Compiling bit-set v0.8.0
+   Compiling unarray v0.1.4
+   Compiling clap v4.6.7
+   Compiling rayon v1.12.0
+   Compiling plotters v0.3.7
+   Compiling rand_core v0.9.5
+   Compiling rand v0.9.5
+   Compiling rand_xorshift v0.4.0
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling ciborium-ll v0.2.2
+   Compiling proptest v1.11.0
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `release` profile [optimized] target(s) in 20.46s
+     Running unittests src/lib.rs (/tmp/promotion-custom-target/release/deps/splendor_agents-1aa161bf6a6bfbc4)
+
+running 5 tests
+test tests::search_cannot_distinguish_unknown_decks ... ok
+test tests::search_stops_at_counter_capacity_without_panicking ... ok
+test tests::every_agent_chooses_legal_and_is_reproducible ... ok
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... ok
+test tests::cached_scores_equal_uncached_scores_for_every_legal_action ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running unittests src/lib.rs (/tmp/promotion-custom-target/release/deps/splendor_arena-9653cfb0fe67d38d)
+
+running 11 tests
+test tests::confidence_interval_keeps_uncertainty_at_boundaries ... ok
+test tests::wire_roundtrip_all_actions ... ok
+test tests::direct_game_rejects_invalid_rotations ... ok
+test tests::direct_game_rejects_invalid_player_counts ... ok
+test tests::direct_game_rejects_invalid_run_settings ... ok
+test tests::incomplete_games_cannot_promote ... ok
+test tests::replay_roundtrip_and_reject_version_and_corruption ... ok
+test tests::structured_settings_preserve_all_policies_and_duration_precision ... ok
+test tests::direct_game_matches_tournament_for_every_seat ... ok
+test tests::parallel_results_match_serial_bit_for_bit ... ok
+test tests::report_rerun_checks_records_and_rejects_unsafe_or_missing_settings ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (/tmp/promotion-custom-target/release/deps/splendor-7d46109bab99026e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/replays.rs (/tmp/promotion-custom-target/release/deps/replays-110e0d52c22fd623)
+
+running 12 tests
+test final_round_cannot_put_threshold_scores_in_unplayed_seats ... ok
+test counter_limit_rejects_legal_cycle_action_without_mutation_or_outcome ... ok
+test final_representable_turn_can_still_finish_a_real_game ... ok
+test final_round_requires_a_threshold_player_who_already_finished_this_round ... ok
+test old_engine_histories_are_not_silently_relabelled ... ok
+test finished_round_observation_cannot_restart_main_phase ... ok
+test a_legal_cycle_can_ignore_affordable_purchases ... ok
+test recorded_search_cycle_preserves_state_except_turn_count ... ok
+test threshold_observations_allow_pending_nobles_but_require_completed_round_flag ... ok
+test published_rule_gap_is_a_reproducible_blocked_state_not_a_victory ... ok
+test legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots ... ok
+test golden_completed_game_and_all_prefix_snapshots ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests examples/block_audit.rs (/tmp/promotion-custom-target/release/examples/block_audit-1b628842b4f637fe)
+
+running 2 tests
+test tests::cutoff_is_not_a_block_but_a_real_block_is_detected_at_zero_depth ... ok
+test tests::earlier_takes_have_different_forced_block_risks ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (/tmp/promotion-custom-target/release/deps/splendor_core-4192f33006fd5ee9)
+
+running 41 tests
+test tests::buying_reserved_compacts_slots ... ok
+test tests::blind_reservation_does_not_refill_market ... ok
+test tests::choose_exactly_one_noble_then_next_turn_can_claim_another ... ok
+test tests::buy_payments_include_optional_gold_and_exact_cost ... ok
+test tests::depleted_decks_leave_empty_slots ... ok
+test tests::determinization_rejects_disclosed_opponent_blind_reservation ... ok
+test tests::counter_capacity_is_atomic_for_all_generated_actions ... ok
+test tests::determinization_rejects_final_round_without_threshold_score ... ok
+test tests::determinization_rejects_market_gap_with_nonempty_deck ... ok
+test tests::determinization_rejects_phantom_reservation_count ... ok
+test tests::different_gems_and_double_threshold ... ok
+test tests::discounts_and_free_purchase ... ok
+test tests::determinization_rejects_unlisted_reservation ... ok
+test tests::determinization_rejects_seat_turn_mismatch ... ok
+test tests::eighth_bonus_of_a_color_is_a_legal_purchase ... ok
+test tests::every_optional_gold_payment_preserves_full_state_invariants ... ok
+test tests::final_round_waits_for_returns_and_noble_choice ... ok
+test tests::initial_actions_exact ... ok
+test tests::invalid_observations_are_rejected_without_panics ... ok
+test tests::malformed_indices_do_not_panic_or_mutate ... ok
+test tests::noble_can_trigger_end_and_last_seat_ends_immediately ... ok
+test tests::noble_csv_matches_runtime_data ... ok
+test tests::noble_is_mandatory_and_uses_bonuses_not_tokens ... ok
+test tests::observations_independent_of_hidden_permutations ... ok
+test tests::official_noble_dataset_exact ... ok
+test tests::payment_capacity_bound ... ok
+test tests::private_information_is_redacted_and_determinization_preserves_observation ... ok
+test tests::replay_deterministic_every_decision ... ok
+test tests::reservation_without_gold_and_three_limit ... ok
+test tests::reserve_at_ten_can_return_the_new_gold ... ok
+test tests::rng_golden_sequence ... ok
+test tests::setup_counts_and_supply ... ok
+test tests::taking_tokens_can_repeat_forever_under_official_rules ... ok
+test tests::tie_break_uses_fewest_owned_cards_then_shared_win ... ok
+test tests::token_returns_allow_old_new_and_gold_tokens ... ok
+test tests::return_generator_matches_independent_cartesian_reference ... ok
+test tests::static_data_complete_and_auditable ... ok
+test tests::visible_reservation_and_refill ... ok
+test tests::payment_generator_matches_independent_cartesian_reference ... ok
+test tests::all_generated_actions_preserve_invariants ... ok
+test tests::ten_thousand_random_games ... ok
+
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+   Doc-tests splendor_agents
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests splendor_arena
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests splendor_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
++ cargo build --release --locked --package splendor-arena --bin splendor --message-format=json
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling either v1.18.0
+   Compiling rayon v1.12.0
+   Compiling serde_json v1.0.151
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-astra/crates/splendor-arena)
+    Finished `release` profile [optimized] target(s) in 6.02s
++ /private/tmp/promotion-custom-target/release/splendor benchmark --games 200 --threads 1
+legal/opening: 55.7 ns/op
+clone/apply: 18.1 ns/op; state 352 bytes, action 7 bytes
+core outcomes: 196 completed, 4 blocked (no winner)
+core random: 94465.9 games/s, 11002439 decisions/s (200 games)
+splendorust-v2: 192/200 complete, 2 players, 100 setup blocks
+  #0 random: 48.96% win credit among completed games, 95% unconditional CI [25.38, 72.26]%, wins 94, shared 0, mean rank 1.510, score 12.833
+  #1 random: 51.04% win credit among completed games, 95% unconditional CI [27.74, 74.62]%, wins 98, shared 0, mean rank 1.490, score 12.974
+  72.42 turns/game, 0.00s, 81442.9 games/s, 9314622 decisions/s
+  reject: incomplete games
+Run: 192 completed; 8 blocked; invariant checks disabled
+splendorust-v2: 2/2 complete, 2 players, 1 setup blocks
+  #0 strong: 100.00% win credit among completed games, 95% unconditional CI [0.00, 100.00]%, wins 2, shared 0, mean rank 1.000, score 15.500
+  #1 random: 0.00% win credit among completed games, 95% unconditional CI [0.00, 100.00]%, wins 0, shared 0, mean rank 2.000, score 5.000
+  60.00 turns/game, 0.00s, 19223.2 games/s, 1941542 decisions/s
+  inconclusive
+splendorust-v2: 2/2 complete, 2 players, 1 setup blocks
+  #0 strong: 100.00% win credit among completed games, 95% unconditional CI [0.00, 100.00]%, wins 2, shared 0, mean rank 1.000, score 17.500
+  #1 random: 0.00% win credit among completed games, 95% unconditional CI [0.00, 100.00]%, wins 0, shared 0, mean rank 2.000, score 6.000
+  61.00 turns/game, 0.00s, 19777.5 games/s, 1928307 decisions/s
+  inconclusive
+retain baseline: benefit not confirmed

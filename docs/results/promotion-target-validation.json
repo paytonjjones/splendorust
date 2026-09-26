@@ -1,0 +1,9 @@
+{
+  "command": "CARGO_TARGET_DIR=/tmp/promotion-custom-target python3 scripts/promote.py --candidate strong --baseline random --screen 2 --confirm 2 --iterations 1 --threads 1 --seed 120000000 --output /tmp/promotion-target-smoke",
+  "exit": 2,
+  "decision": "retain baseline: benefit not confirmed",
+  "python_tests": 48,
+  "rust_tests": 71,
+  "selected_binary": "/private/tmp/promotion-custom-target/release/splendor",
+  "note": "Workflow smoke only. Two games per stage cannot establish strength. The separate 200-game random throughput smoke has 192 completions and 8 blocked games; it is not promotion evidence. Initial regression test fails on the old hard-coded binary path."
+}

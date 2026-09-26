@@ -119,6 +119,57 @@ class GateTests(unittest.TestCase):
         unknown = [{'seats': r['seats'], 'status': 'decision_limit', 'winners': 0} for r in many]
         self.assertEqual(record_interval(unknown, 3, 0), [0, 1])
 
+    def test_gate_uses_executable_reported_by_cargo(self):
+        import pathlib
+        import tempfile
+        from unittest.mock import patch
+        from promote import main
+        report = synthetic_report()
+        report['agents'][0]['ci95'] = [0.99, 1.0]
+        with tempfile.TemporaryDirectory() as directory:
+            binary = pathlib.Path(directory).resolve() / 'custom-target' / 'splendor'
+            binary.parent.mkdir()
+            binary.write_bytes(b'test executable')
+            output = pathlib.Path(directory) / 'run'
+            artifact = dict(reason='compiler-artifact', target=dict(name='splendor', kind=['bin']),
+                            executable=str(binary), profile=dict(test=False))
+            def fake_process(command, **kwargs):
+                if command[0] == 'cargo':
+                    return SimpleNamespace(returncode=0, stdout=json.dumps(artifact) + '\n')
+                self.assertEqual(pathlib.Path(command[0]), binary)
+                pathlib.Path(command[command.index('--output') + 1]).write_text(json.dumps(report))
+                return SimpleNamespace(returncode=0)
+            with patch('promote.run') as run, patch('promote.subprocess.run', side_effect=fake_process):
+                result = main(['--candidate', 'search', '--baseline', 'strong', '--screen', '1000',
+                               '--confirm', '1000', '--seed', '42', '--output', str(output)])
+            self.assertEqual(result, 2)
+            benchmark = [call.args[0] for call in run.call_args_list if 'benchmark' in call.args[0]]
+            self.assertEqual(pathlib.Path(benchmark[0][0]), binary)
+
+    def test_build_rejects_missing_ambiguous_and_failed_artifacts(self):
+        import pathlib
+        import subprocess
+        import tempfile
+        from unittest.mock import patch
+        from promote import build_release
+        good = dict(reason='compiler-artifact', target=dict(name='splendor', kind=['bin']),
+                    executable='/unused/splendor', profile=dict(test=False))
+        variants = [[], [{**good, 'executable': None}],
+                    [{**good, 'target': dict(name='other', kind=['bin'])}],
+                    [{**good, 'profile': dict(test=True)}],
+                    [good, {**good, 'executable': '/other/splendor'}]]
+        with tempfile.TemporaryDirectory() as directory:
+            output = pathlib.Path(directory)
+            for messages in variants:
+                raw = '\n'.join(map(json.dumps, messages))
+                with patch('promote.subprocess.run', return_value=SimpleNamespace(returncode=0, stdout=raw)):
+                    with self.assertRaises(RuntimeError):
+                        build_release(output)
+                self.assertFalse((output / 'build.json').exists())
+            with patch('promote.subprocess.run', return_value=SimpleNamespace(returncode=1, stdout='')):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    build_release(output)
+
     def test_bad_screen_never_runs_confirmation(self):
         import pathlib
         import tempfile
@@ -131,7 +182,8 @@ class GateTests(unittest.TestCase):
             return SimpleNamespace(returncode=0)
         with tempfile.TemporaryDirectory() as directory:
             output = pathlib.Path(directory) / 'run'
-            with patch('promote.run'), patch('promote.subprocess.run', side_effect=fake_compare) as compare:
+            with patch('promote.run'), patch('promote.build_release', return_value=ROOT / 'mock-splendor'), \
+                    patch('promote.subprocess.run', side_effect=fake_compare) as compare:
                 result = main(['--candidate', 'search', '--baseline', 'strong', '--screen', '1000',
                                '--confirm', '1000', '--seed', '42', '--output', str(output)])
             self.assertEqual(result, 2)
