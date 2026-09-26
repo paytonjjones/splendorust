@@ -170,3 +170,17 @@ The candidate did not reduce the number of unfinished games in this screen.
 This identifies a baseline self-play limitation; the failures cannot be
 attributed to the candidate alone. The control report is retained beside the
 candidate report. Confirmation was not run, and the candidate was rejected.
+
+**Capped control replay:** Setup seed 3,717,527,058,913,988,934, rotation 0,
+reproduced 20,000 decisions with invariant checks and trajectory hash
+`0f0d8df6a15de62a`. It has 10,017 completed turns and no outcome. The last 100
+decisions alternate taking one green and one black token, then returning those
+same tokens. Both players have three reservations. This is a legal no-progress
+cycle, not a conservation failure. The full version-1 history is preserved in
+`docs/results/search-selfplay-cap-v1.json.gz`.
+
+At these repeated positions, search can have only one main action and delegates
+return choice to the static strong heuristic. The E9 no-action penalty does not
+address a cycle with legal actions. A future candidate should test a response
+to repeated return positions, with observation-only memory and separate fresh
+screen/confirmation seeds. No such candidate is retained yet.

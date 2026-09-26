@@ -50,11 +50,32 @@ matched, including one blocked game. Sampling improved about 35-43% and
 invariants about 29-59% on these fixtures. Retain the change; see BENCHMARKS.md.
 The incomplete run is not promotion evidence.
 
-Next useful research issue: the search/strong workload found a blocked game
-at setup seed 18,210,048,530,404,438,792, rotation 0. Preserve its replay and
-inspect whether search values blocked rollout leaves too favorably. Any agent
-change needs a written hypothesis, a fixed development screen, and fresh
-confirmation seeds. Do not confuse this with a core rule failure.
+## Latest research and next issue
+
+E9, the blocked-rollout penalty, was implemented as a separate candidate and
+rejected by `scripts/promote.py`. Its 2,000-game screen at seed 98,000,000 had
+1,943 completions, six blocked games, and 51 decision limits. Original search
+self-play on the same seeds had exactly the same status for every game. Only
+nine records changed. The candidate completed the known blocked development
+probe but did not reduce screen failures. Confirmation seed 1,098,000,000 was
+not used. Active agent code is restored; the candidate patch and reports are
+archived. See EXPERIMENTS.md E9 and commit `fc85c09`.
+
+A capped original-search replay at setup seed 3,717,527,058,913,988,934 reproduced
+20,000 decisions with invariants checked, trajectory `0f0d8df6a15de62a`.
+The last 100 decisions alternate take green/black and return green/black.
+Both players have three reservations; one main action can leave all decisions
+to the static return heuristic. Full replay: `docs/results/search-selfplay-cap-v1.json.gz`.
+
+Next valuable issue: test an observation-only response to repeated return
+positions. Write a fresh hypothesis before any agent change. Do not treat
+E9's zero-value blocked leaf as a solution to legal cycles. A new candidate
+must use new screen/confirmation seeds and fixed budgets. Original self-play
+failure counts are not evidence of a core rule failure.
+
+The archive validator now rejects truncated records, malformed rotations,
+repeated setup blocks, inconsistent completion totals, and unfinished winners.
+All 32 existing archived reports passed without modification (`f685a9b`).
 
 ## Remaining boundaries
 
