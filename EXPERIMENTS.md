@@ -700,3 +700,28 @@ release comparisons and a fresh confirmation seed with exact record equality.
 Keep the change only if the measured benefit supports its added complexity.
 Planned fresh screening seed: 117,000,000; confirmation: 1,117,000,000. These
 seeds have not been run for this hypothesis. No strength promotion is proposed.
+
+### E15 result: retain fixed target cache
+
+Implemented a stack-resident cache for up to 15 targets. It stores discounted
+color costs, their total, and card worth times 20. Main token actions and Return
+reuse it; Payment keeps the original calculation because ownership and bonuses
+change. Integer division and top-three ordering are unchanged. The original
+potential implementation remains the uncached path and score-test oracle.
+The 96-trajectory all-action test now also checks cached base potential and all
+cached action scores against that oracle. All 71 release Rust tests, strict
+release workspace Clippy, and formatting pass.
+
+Same Apple M4 Pro/macOS 26.7 host and Rust 1.98.1 release settings as E14.
+Serial ABBAAB screening: 1,000 search/strong games, seed 117m, 128 iterations,
+depth 8, width 6, one thread, 20,000-decision cap, no time budget. Baseline
+source `0bcb24bf9c705a56` takes 23.509, 23.554, 23.589 seconds; changed source
+`50400f40eb161b1a` takes 18.609, 18.662, 18.753 seconds. Median runtime falls
+20.8% (throughput +26.2%). Fresh confirmation seed 1,117m takes 23.730 versus
+18.744 seconds, a 21.0% reduction. All eight runs complete every game, exit 0,
+and have identical full records within each seed, including trajectory hashes.
+
+Retain the change. These are workload-specific performance measurements, not
+a strength promotion or full simulator parity. Engine version stays v2.
+`docs/results/e15-comparison.json` and `e15-[0-7]-*` retain exact commands,
+settings, process status, binary/source/record hashes, all reports and logs.

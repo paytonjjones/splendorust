@@ -105,6 +105,53 @@ fn potential(o: &Observation, p: &Player) -> i32 {
     }
     top[0] + top[1] / 5 + top[2] / 10
 }
+// Valid only while bonuses and ownership stay fixed (Main token actions and Return).
+struct PotentialTargets {
+    targets: [([u8; 5], i32, i32); 15],
+    len: usize,
+}
+impl PotentialTargets {
+    fn new(o: &Observation) -> Self {
+        let p = &o.players[o.current as usize];
+        let mut result = Self {
+            targets: [([0; 5], 0, 0); 15],
+            len: 0,
+        };
+        for id in target_ids(o) {
+            if p.owned & (1u128 << id) != 0 {
+                continue;
+            }
+            let cost =
+                std::array::from_fn(|c| CARDS[id as usize].cost[c].saturating_sub(p.bonuses[c]));
+            let total = cost.iter().map(|&v| v as i32).sum::<i32>();
+            result.targets[result.len] = (cost, total, card_worth(p, id) * 20);
+            result.len += 1;
+        }
+        result
+    }
+    fn score(&self, tokens: &[u8; 6]) -> i32 {
+        let mut top = [0; 3];
+        for &(cost, total, worth) in &self.targets[..self.len] {
+            let gap = (0..5)
+                .map(|c| cost[c].saturating_sub(tokens[c]) as i32)
+                .sum::<i32>()
+                .saturating_sub(tokens[GOLD] as i32)
+                .max(0);
+            let value = worth / ((gap + 2) * (total + 2));
+            if value > top[0] {
+                top[2] = top[1];
+                top[1] = top[0];
+                top[0] = value;
+            } else if value > top[1] {
+                top[2] = top[1];
+                top[1] = value;
+            } else if value > top[2] {
+                top[2] = value;
+            }
+        }
+        top[0] + top[1] / 5 + top[2] / 10
+    }
+}
 fn token_value(o: &Observation, p: &Player, strong: bool) -> i32 {
     if strong {
         potential(o, p) + p.tokens[GOLD] as i32 * 16
@@ -122,13 +169,14 @@ fn token_value(o: &Observation, p: &Player, strong: bool) -> i32 {
 }
 /// Integer scores keep heuristic choices independent of floating-point platforms.
 pub fn action_score(o: &Observation, a: Action, strong: bool) -> i32 {
-    action_score_cached(o, a, strong, None)
+    action_score_cached(o, a, strong, None, None)
 }
 fn action_score_cached(
     o: &Observation,
     a: Action,
     strong: bool,
     base_potential: Option<i32>,
+    targets: Option<&PotentialTargets>,
 ) -> i32 {
     let p = o.players[o.current as usize];
     let mut q = p;
@@ -161,7 +209,7 @@ fn action_score_cached(
                 q.tokens[c] += v;
             }
             if strong {
-                potential(o, &q)
+                targets.map_or_else(|| potential(o, &q), |t| t.score(&q.tokens))
                     - base_potential.unwrap_or_else(|| potential(o, &p))
                     - (q.token_count().saturating_sub(10) as i32) * 10
             } else {
@@ -175,8 +223,9 @@ fn action_score_cached(
             let id = o.market[i as usize];
             let gap = deficit(&q, id);
             if strong {
-                let gold_gain =
-                    (potential(o, &q) - base_potential.unwrap_or_else(|| potential(o, &p))) / 3;
+                let gold_gain = (targets.map_or_else(|| potential(o, &q), |t| t.score(&q.tokens))
+                    - base_potential.unwrap_or_else(|| potential(o, &p)))
+                    / 3;
                 gold_gain + card_worth(&p, id) / (gap + 4) / 3
                     - 20
                     - o.reserved_counts[o.current as usize] as i32 * 15
@@ -214,7 +263,12 @@ fn action_score_cached(
             for (j, &v) in r.iter().enumerate() {
                 q.tokens[j] -= v;
             }
-            token_value(o, &q, strong)
+            if strong {
+                targets.map_or_else(|| potential(o, &q), |t| t.score(&q.tokens))
+                    + q.tokens[GOLD] as i32 * 16
+            } else {
+                token_value(o, &q, false)
+            }
         }
         Action::Noble(n) => {
             // All give three points. Take the tile closest to an opponent first.
@@ -235,10 +289,16 @@ fn action_score_cached(
 fn best(o: &Observation, legal: &[Action], strong: bool) -> Action {
     let mut chosen = legal[0];
     let mut score = i32::MIN;
-    let base =
-        (strong && o.phase == Phase::Main).then(|| potential(o, &o.players[o.current as usize]));
+    let targets = (strong && matches!(o.phase, Phase::Main | Phase::Return))
+        .then(|| PotentialTargets::new(o));
+    let base = (strong && o.phase == Phase::Main).then(|| {
+        targets
+            .as_ref()
+            .unwrap()
+            .score(&o.players[o.current as usize].tokens)
+    });
     for &a in legal {
-        let s = action_score_cached(o, a, strong, base);
+        let s = action_score_cached(o, a, strong, base, targets.as_ref());
         if s > score {
             score = s;
             chosen = a;
@@ -323,10 +383,11 @@ impl Agent for SearchAgent {
         {
             return best(o, legal, true);
         }
-        let base = Some(potential(o, &o.players[o.current as usize]));
+        let targets = PotentialTargets::new(o);
+        let base = Some(targets.score(&o.players[o.current as usize].tokens));
         let mut ranked: Vec<_> = legal
             .iter()
-            .map(|&a| (action_score_cached(o, a, true, base), a))
+            .map(|&a| (action_score_cached(o, a, true, base, Some(&targets)), a))
             .collect();
         ranked.sort_by_key(|&(score, _)| std::cmp::Reverse(score));
         let candidates: Vec<_> = ranked
@@ -443,10 +504,12 @@ mod tests {
                     };
                     phases[phase] = true;
                     let base = potential(&o, &o.players[o.current as usize]);
+                    let targets = PotentialTargets::new(&o);
+                    assert_eq!(targets.score(&o.players[o.current as usize].tokens), base);
                     for &action in &legal {
                         for strong in [false, true] {
                             assert_eq!(
-                                action_score_cached(&o, action, strong, Some(base)),
+                                action_score_cached(&o, action, strong, Some(base), Some(&targets)),
                                 action_score(&o, action, strong)
                             );
                         }

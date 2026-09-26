@@ -252,3 +252,17 @@ Raw sample, report, commands, hashes and summary are retained as
 `docs/results/e14-profile*`. Source inspection identifies repeated discount,
 cost, and card-worth calculations across token-only alternatives. E15 records
 a hypothesis to cache those fixed values before any further agent change.
+
+## Fixed target cache (E15)
+
+After E14, cached discounted target costs and card worth reduce serial median
+search/strong runtime from 23.554 to 18.662 seconds (20.8%, throughput +26.2%).
+Settings: 1,000 games, seed 117m, 128/8/6, one thread, ABBAAB order. Fresh seed
+1,117m gives 23.730 to 18.744 seconds (21.0%). Every game completes and full
+records, including trajectory hashes, are unchanged within each workload.
+
+Same M4 Pro/macOS 26.7, pinned Rust 1.98.1, Cargo.lock and release profile.
+Source `0bcb24bf9c705a56` changes to `50400f40eb161b1a`. No profiler or concurrent
+build/test ran during timing. Full evidence is in `docs/results/e15-comparison.json`
+and its referenced reports/logs. Do not add the E14 and E15 percentages: the
+baselines and seeds differ. No portable speed or playing-strength claim.

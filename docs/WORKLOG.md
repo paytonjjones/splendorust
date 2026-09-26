@@ -992,3 +992,21 @@ alternatives, with the original arithmetic as an exact test oracle. Planned
 fresh seeds are 117m and 1,117m. Payment requires different bonuses/ownership
 and must not reuse stale values. Next work is to implement and measure this
 bounded cache, or reject it if the cost/benefit is poor. Goal remains active.
+
+## E15 fixed target cache
+
+Continued from 6a946ab. Implemented the recorded cache hypothesis only for
+unchanged bonuses/ownership, leaving Payment uncached. Original potential is
+the oracle. Extended the existing 96-trajectory test to compare cached base
+and all legal action scores. Formatting, strict release workspace Clippy,
+71 release Rust tests and 46 Python tests with pinned reference all pass.
+
+Six serial screening runs improve median runtime by 20.8%; fresh confirmation
+improves 21.0%. All 8,000 games complete. Full records and trajectory hashes
+are identical within each seed. Preserved reports, logs, exact commands,
+settings and source/binary hashes as e15-* evidence. Retain the optimization;
+no rule, RNG or enumeration changes, engine remains v2.
+
+Next: three- and four-player before/after comparisons with invariants enabled
+at new seeds, to check behavior beyond the two-player timing workload. These
+are regression checks, not a promotion or new independent-rule parity claim.
