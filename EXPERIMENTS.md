@@ -387,3 +387,29 @@ Results and source/input hashes are in `docs/results/e11-main-audit-{7,10}.json`
 Two diagnostic regression tests distinguish cutoffs from blocks and check the
 five root alternatives. Formatting, strict release all-target workspace Clippy,
 all 53 release workspace tests, and both diagnostic tests pass.
+
+## E12 hypothesis: preserve an affordable purchase under token scarcity
+
+Before any E12 agent change: the observation-only audit of E11 decision 32
+shows that all three takes which avoid a forced block within ten decisions
+make visible card 18 affordable. The two takes that permit a forced block make
+no target affordable. Existing strong heuristic scores are 125, 132, 60, 132,
+and 0 in enumeration order; search selected the third action despite its lower
+heuristic score. The token feature uses only the current Observation.
+
+Hypothesis: when the player has three reservations, all legal root actions are
+takes, and at most ten colored tokens remain in the bank, restrict search to
+takes that make at least one visible or own reserved card affordable without
+requiring a return, if such a take exists. This may reduce blocks caused by
+token hoarding without reducing playing strength. A visible card can still be
+bought by an opponent; this filter is not a proof of future legal play.
+
+Candidate `search-affordable` will use this root filter only. Rollout choices,
+reward, evaluation, search depth, and original `search` remain unchanged. This
+is distinct from E9's failed blocked-leaf reward penalty and does not restore
+E10/E11 cycle logic. The known E11 history is a development probe only.
+
+Use `scripts/promote.py`: candidate against search, two players, 2,000 screen
+games, seed 105,000,000, four threads, 128 iterations, depth 8, width 6. If the
+gate allows confirmation, use 20,000 games and fresh seed 1,105,000,000. Report
+all incomplete games and retain no strength claim without gate evidence.
