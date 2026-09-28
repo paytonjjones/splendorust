@@ -1,0 +1,120 @@
+{
+  "audit_date": "2026-09-28",
+  "candidates": [
+    {
+      "name": "seal256",
+      "url": "https://github.com/seal256/splendor",
+      "commit": "263abc066c563a1c89dba4bdc408446a20ad9d1d",
+      "language": "C++",
+      "license": "No license file found in pinned source",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "installed": true,
+      "build": "clang++ -O3 -DNDEBUG -std=c++17 -pthread; engine sources only",
+      "patch": "seal256-interface.patch: expose unchanged verify_action method via public access",
+      "comparable_workloads": [
+        "opening_clone_take (restricted transition only)",
+        "seal256-intersection-v1 random/fixed games until complete/profile_blocked/unsupported_noble_choice/no_legal_action/decision_limit"
+      ],
+      "whole_game_comparable": false,
+      "excluded_rules": [
+        "No blind reservations",
+        "No token-return decisions; take exceeding ten is forbidden and reservation can exceed ten",
+        "Only three-color and double takes; no one/two-color exhausted-bank takes",
+        "Automatic first eligible noble and only on purchase",
+        "Colored-first payment only",
+        "Forced pass when actions empty; all-pass terminal"
+      ],
+      "termination": "15 points at equal-turn round boundary; all-pass terminal also allowed; fewest purchased-card tiebreak and shared winner supported",
+      "rng": "Template-specific thread_local mt19937 initialized from std::rand; one setup seeded by srand in adapter; no timed RNG",
+      "api": "SplendorGameState::get_actions, clone, verify_action (access-only patch), apply_action, is_terminal",
+      "search": "MCTS iterations/max_chance_children and neural policy exist; search not built because game rules differ and full app requires libtorch",
+      "confidence": "Smoke validates legal W/B/G take, normalized token/turn fields and unchanged pointer sequences for decks, markets, nobles. No whole-game equivalence claim.",
+      "aligned_profile_viable": true,
+      "aligned_profile_validation": "64 fixed and64 random trajectories matched every selected key and full common per-turn state; legal-key comparison pending",
+      "aligned_profile_limits": "Subset of actual legal space; native double-take omission at hand8; overflow/blind actions removed; stop before multi-eligible noble purchase; no pass; all incomplete statuses retained"
+    },
+    {
+      "name": "splendimax",
+      "url": "https://github.com/bouk/splendimax",
+      "commit": "5ffcb148ee0093e3b47f612b04a1927301ff13ee",
+      "language": "Rust",
+      "license": "No license file found in pinned source",
+      "players": [
+        2
+      ],
+      "installed": true,
+      "build": "cargo build --release, project pinned Rust 1.98.1, resolved rand 0.3.23/0.4.6; local Cargo.lock retained",
+      "patch": "splendimax-isolation.patch: append empty Cargo workspace table only",
+      "tests": "9 passed, 1 failed; upstream generate_possible_moves deliberately asserts false",
+      "comparable_workloads": [],
+      "whole_game_comparable": false,
+      "excluded_rules": [
+        "No blind reservations",
+        "Prunes legal takes and returns; cannot return newly taken colors or gold",
+        "One colored-first payment",
+        "Reserve return subtracts player tokens without returning them to bank",
+        "Market refill occurs outside State::apply",
+        "Forced pass at no actions",
+        "Terminal immediately when either score >=15; no equal-round finish"
+      ],
+      "rng": "rand::thread_rng setup and shuffling; no public setup seed API",
+      "api": "algo::State trait generate_moves/apply/undo/is_terminal; no native state clone API",
+      "search": "Minimax/alpha-beta; immediate terminal and no refills inside search mean search throughput cannot be matched to Splendorust",
+      "confidence": "Build succeeded; source audit and upstream test failure recorded. Excluded from all rankings."
+    },
+    {
+      "name": "cestpasphoto-alpha-zero-general",
+      "url": "https://github.com/cestpasphoto/alpha-zero-general",
+      "commit": "846b919f781b871da2fff0a05fb4ae069d1a9d45",
+      "language": "Python/Numba",
+      "license": "MIT",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "installed": "Source clone only; optimized fork audited separately",
+      "whole_game_comparable": false,
+      "excluded_rules": [
+        "Awards all eligible nobles in one purchase",
+        "62*N move limit assigns a points-based winner",
+        "Payment and token-return decision semantics differ"
+      ],
+      "rng": "Numba numpy random setup; random_seed argument on next state selects deterministic but nonstandard deck draw mapping when nonzero",
+      "api": "Board and SplendorGame getInitBoard/getNextState/getValidMoves/getGameEnded; wrapper default2, Board supports2-4",
+      "confidence": "Source inspected; no runtime result claimed."
+    },
+    {
+      "name": "averagestardust",
+      "url": "https://github.com/AverageStardust/splendor-engine",
+      "commit": "3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e",
+      "language": "Go",
+      "license": "No license file found in pinned source",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "installed": true,
+      "build": "Official isolated Go1.27.1 darwin/arm64; archive SHA256 ee215d57e0ec269c60cc9ceca68e6bda321ba9ee5afe24f4b0988703c2d87d12; no source patch",
+      "whole_game_comparable": false,
+      "excluded_rules": [
+        "Triple-take generation ignores bank availability and emits6 permutations per set",
+        "No purchase of reserved cards",
+        "No blind reservation",
+        "Reserve transfers gold without bank availability check",
+        "Winner requires points >15, no fewest-card tiebreak",
+        "Payment choices collapsed"
+      ],
+      "rng": "math/rand/v2 global random state, no seed injection API",
+      "api": "NewRandomGame, NewGame, Game.Moves, Move.Apply; exported state but move fields private",
+      "search": "README says MCTS; pinned agents contain Maxn and MaxnThreaded depth search",
+      "tests": "go test ./... builds all packages; no test files exist; main binary builds; executable rule probe emits60 illegal takes with empty bank",
+      "confidence": "Excluded by source and runtime rule probe before timings. No gameplay source patch."
+    }
+  ]
+}

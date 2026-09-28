@@ -7,6 +7,11 @@ use data::{CARDS, NOBLES};
 pub use rng::Rng;
 
 pub const ENGINE_VERSION: &str = "splendorust-v2";
+/// Version for explicit benchmark-only setup/pass profiles, never normal replays.
+#[cfg(feature = "benchmark-compat")]
+pub const BENCHMARK_COMPAT_ENGINE_VERSION: &str = "splendorust-v2-benchmark-compat-v1";
+#[cfg(feature = "benchmark-compat")]
+mod benchmark_compat;
 pub const NONE: u8 = 255;
 pub const GOLD: usize = 5;
 /// Maximum: 252 payments (at most five wild tokens over five colors).
@@ -118,6 +123,8 @@ pub enum RuleError {
     IllegalAction,
     /// The turn counter cannot represent further play. This is not a game outcome.
     TurnLimit,
+    #[cfg(feature = "benchmark-compat")]
+    InvalidBenchmarkSetup,
     InvalidObservation,
     Invariant(&'static str),
 }

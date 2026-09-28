@@ -1,0 +1,26 @@
+{
+  "engine": "lyquentxy/splendor",
+  "url": "https://github.com/lyquentxy/splendor",
+  "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+  "license": "MIT",
+  "isolated_directory": "local/benchmarks/external/python_lyquentxy",
+  "install": ["uv venv --python 3.12 local/benchmarks/external/python_lyquentxy/.venv", "uv pip install --python local/benchmarks/external/python_lyquentxy/.venv/bin/python numpy==1.26.4 numba==0.62.0 llvmlite==0.45.1 colorama==0.4.6"],
+  "verified_python": "3.12.7",
+  "upstream_patches": [],
+  "supported_players": {"public_game_api": [2], "board_internal": [2, 3, 4]},
+  "full_game_comparable": false,
+  "restricted_workload": "Two-player opening clone plus take white/blue/green. Complete input/output array equality checked against expected token and turn changes. Markets differ and are unchanged by this action.",
+  "adapter": "benchmarks/adapters/python_lyquentxy.py",
+  "rng": "Numba numpy.random explicitly seeded for setup; per-transition random_seed=0 is unused on token take. No common cross-engine shuffle is claimed.",
+  "rule_mismatches": [
+    {"source": "splendor/SplendorLogicNumba.py:187", "issue": "Pass is always legal."},
+    {"source": "splendor/SplendorLogicNumba.py:422-434", "issue": "Taking above ten is forbidden; smaller distinct takes allowed even with all colors available."},
+    {"source": "splendor/SplendorLogicNumba.py:446-463", "issue": "Voluntary token returns are standalone full-turn actions."},
+    {"source": "splendor/SplendorLogicNumba.py:398", "issue": "Reserve at ten tokens omits gold rather than taking gold and returning chosen excess."},
+    {"source": "splendor/SplendorLogicNumba.py:344-357", "issue": "Payment always uses matching colored tokens before gold; no optional gold choice."},
+    {"source": "splendor/SplendorLogicNumba.py:465-470", "issue": "Awards all eligible nobles on purchase rather than mandatory choice of one."},
+    {"source": "splendor/SplendorLogicNumba.py:147,221-240", "issue": "At 62 turns per player, check_end_game awards score-based outcomes without normal victory threshold."}
+  ],
+  "setup_failure_resolved": "numpy2.3.3 fails upstream valid_moves with missing np.bool8. Pin numpy1.26.4; no source patch.",
+  "search_status": "Not run. Requires model/inference dependencies and non-comparable rules. Fixed search budgets alone do not resolve the action-set mismatch."
+}

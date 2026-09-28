@@ -1,0 +1,11 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 917eb41..0815924 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -5,3 +5,6 @@ authors = ["Bouke van der Bijl <boukevanderbijl@gmail.com>"]
+ 
+ [dependencies]
+ rand = "0.3"
++
++# Interface build isolation only; no engine change.
++[workspace]

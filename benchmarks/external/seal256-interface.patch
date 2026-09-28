@@ -1,0 +1,15 @@
+diff --git a/src/splendor.h b/src/splendor.h
+index ae9d548..03972dc 100644
+--- a/src/splendor.h
++++ b/src/splendor.h
+@@ -160,8 +160,9 @@ public:
+     void print(std::ostream& os) const override;
+     void to_json(nlohmann::json& j) const override;
+ 
+-private:
++public: // Benchmark interface only: expose the unchanged validation method.
+     std::pair<bool, ActionError> verify_action(const int action_id) const;
++private:
+     void increment_player_to_move();
+     void set_table_card_needed(int level);
+     bool player_can_afford_card(const SplendorPlayerState& player, const Card& card) const;

@@ -1,0 +1,29 @@
+{
+  "engine": "inclement/lapidary-ai",
+  "url": "https://github.com/inclement/lapidary-ai",
+  "revision": "4680663785da947fb77d99f9ab77326f24087633",
+  "license": "No top-level license found in pinned tree",
+  "isolated_directory": "local/benchmarks/external/python_lapidary",
+  "supported_players": {
+    "engine": [
+      2,
+      3,
+      4
+    ],
+    "trained_ai": [
+      2
+    ]
+  },
+  "full_game_comparable": false,
+  "benchmark_status": "Documented non-comparable reference. No long benchmark or neural runtime installed.",
+  "rule_mismatches": [
+    "README Rules changes: blind reservations public; AI knows real deck order.",
+    "README Rules changes: fewer than three distinct tokens allowed.",
+    "game.py:1297: first eligible noble awarded automatically.",
+    "game.py:327-344: gold used only for color deficits.",
+    "game.py:1870-1872: no-move positions become a printed passing action."
+  ],
+  "api": "lapidary/game.py GameState(players, init_game, validate, generator); get_current_player_valid_moves(); copy(); make_move(move). Imports numpy and sibling data.py; no TensorFlow needed for engine.",
+  "rng": "GameState accepts numpy.random.RandomState; defaults to OS-seeded generator. Some auxiliary code imports Python random.",
+  "verification": "Python3.12.7 numpy1.26.4: import, two-player seeded setup and native legal generation passed (30 opening actions). No neural framework loaded."
+}
