@@ -20,6 +20,16 @@ The printed rules do not define a forced pass or stalemate winner. We therefore 
 
 Normal-game results, no-action counts, and decision-limit counts must be reported separately. The promotion gate rejects a candidate when any game is unfinished. A future optional forced-pass ruleset would need its own version and experiments. It must not silently change this ground truth.
 
+Search now checks a sufficient public-information bound before certain token
+takes. This prevents its avoidable E18 three-player block. It changes agent
+selection only; empty legal-action sets still have no core outcome. The
+original v2 blocked history remains a regression fixture. Tests reproduce
+the original endpoint, check every opponent reply to all six safe takes at
+decision 83, and verify that the changed policy completes the whole game.
+They also check repeatable choices across equivalent hidden worlds and search
+budgets of zero, one, and 128 iterations. See E19 in
+[EXPERIMENTS.md](EXPERIMENTS.md) for completion and promotion evidence.
+
 ## Interpretations
 
 - Take three distinct colors when at least three piles are available. Take fewer only when fewer colors remain. The newer publisher rules state this explicitly.

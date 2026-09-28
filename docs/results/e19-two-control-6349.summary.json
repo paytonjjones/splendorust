@@ -1,0 +1,79 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "strong"
+    ],
+    "games": 2,
+    "seed": 1136006349,
+    "threads": 1,
+    "max_decisions": 20000,
+    "check": true,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "50400f40eb161b1a",
+  "max_decisions": 20000,
+  "invariants_checked": true,
+  "engine": "splendorust-v2",
+  "seed": 1136006349,
+  "players": 2,
+  "requested_games": 2,
+  "completed_games": 1,
+  "incomplete_games": 1,
+  "independent_blocks": 1,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 1,
+      "shared_wins": 0,
+      "win_share": 1.0,
+      "win_rate": 1.0,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 1.0,
+      "average_score": 17.0
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 0,
+      "shared_wins": 0,
+      "win_share": 0.0,
+      "win_rate": 0.0,
+      "ci95": [
+        0,
+        1
+      ],
+      "average_position": 2.0,
+      "average_score": 14.0
+    }
+  ],
+  "average_turns": 47.5,
+  "average_decisions": 73.5,
+  "runtime_seconds": 0.033346417,
+  "games_per_second": 59.97645864021912,
+  "decisions_per_second": 4408.269710056105,
+  "threads": 1,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "66290db4173546f92e354f3f4b8fae25d7f9a0d8afc520d0c850a8619415fd61",
+  "record_set_sha256": "33bb37f1ccb9fa39546ea5a89aa81b8c802fd73f796536fc51b8f7b3cd8b7f74",
+  "raw_archive": "e19-two-control-6349.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 1,
+    "no_legal_action": 1
+  }
+}

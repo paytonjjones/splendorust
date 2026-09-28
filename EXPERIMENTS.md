@@ -979,3 +979,79 @@ Formatting, strict release workspace Clippy, and all 72 release workspace tests
 pass. The history, diagnostic output, public-token feature audit, commands, and
 hashes are retained in `docs/results/e18-block*` and `e18-token-audit.json`.
 No agent, rule, or production source fingerprint changed.
+
+## E19 — Preserve a legal next turn under bank depletion
+
+**Hypothesis, before implementation:** Search can avoid the E18 block by
+excluding a take when public information proves that another take preserves
+a legal next turn. This is narrower than E12's affordability filter. An
+affordable visible card is safe only if opponents cannot both empty the bank
+and remove all affordable cards before the actor's next turn.
+
+For a take without excess tokens and with three reservations, let B be the
+remaining colored bank total and N the number of opponents. Each opponent
+can take at most three colored tokens in one turn, or remove at most one
+market card. Emptying the bank needs at least ceil(B/3) taking turns. Thus
+the actor retains a main action if B > 3N, an own reservation is affordable,
+or more than N - ceil(B/3) market cards are affordable. Payments and returns
+can add colored tokens to the bank; they cannot invalidate this bound.
+Apply the filter only when all root actions are takes, at least one passes
+the bound, and at least one fails. Keep all takes when none passes. Apply
+the same filter to zero-iteration search. Do not change heuristic rollouts,
+returns, payments, core actions, or replay semantics.
+
+Development checks: replay E18 block 818 / rotation 2 with invariants; probe
+decision 83 over fixed agent seeds and hidden-world reconstructions; rerun
+all 3,000 E18 screening games and compare statuses with the archived report.
+These reused seeds are regression evidence, not fresh confirmation.
+
+Use the actual promotion gate against strong, 128 iterations, depth 8,
+width 6, four threads, and a 20,000-decision limit. Reserve fresh three-player
+screen seed 134,000,000 (3,000 games) and confirmation seed 1,134,000,000
+(21,000 games). Then check two players at 136,000,000 / 1,136,000,000
+(2,000 / 20,000 games) and four players at 135,000,000 / 1,135,000,000
+(4,000 / 20,000 games). Run stages in sequence without concurrent simulation
+work. Any incomplete stage rejects promotion. Retain failed evidence as
+well as successful evidence. These comparisons measure search against the
+stated heuristic opponents, not equal-compute or universal strength.
+
+**Development result:** The E18 regression set now completes all 3,000 games:
+2,999 completed controls stay complete and the one blocked control completes.
+Block 818 / rotation 2 ends after 78 turns and 116 decisions, scores 18/7/5,
+winner mask 1, trajectory hash `445dbcad68d2731b`. Invariants pass. The
+original blocked history stays intact as a v2 fixture with no core outcome.
+Tests explore every complete opponent reply to all six blue-containing takes
+at decision 83. Every branch that reaches the actor again has a legal action.
+The fixed-seed probes also preserve choices across equivalent hidden worlds,
+including zero-iteration and one-iteration search.
+
+**Three-player gate:** All 3,000 fresh screen games and all 21,000 confirmation
+games complete. Search wins 11,007 confirmation games, for 52.414% win credit
+and 95% CI [51.162%, 53.666%]. The lower bound exceeds the 34.333% gate
+threshold. The actual gate returns `promote`. A repeat after a unit-test
+assertion refinement has identical ordered records for all 24,000 games.
+Those repeated seeds are not additional independent confirmation evidence.
+The final production fingerprint is `9a5cd6ed81093bd5`.
+
+**Four-player gate:** All 4,000 screen games and all 20,000 confirmation games
+complete. Search earns 39.145% confirmation win credit, with 95% CI
+[37.813%, 40.477%]. The gate returns `promote`. This is a separate confirmation
+against three strong opponents at the stated search budget.
+
+**Two-player gate: rejected.** All 2,000 screen games complete, but two of
+20,000 confirmation games block. The gate correctly rejects the incomplete
+confirmation. Both blocked records, and the other seat rotation of each
+setup, reproduce exactly under the saved unmodified `69232e5` release binary
+with invariants enabled. The failed records are block 786 / rotation 1
+(seed 6745147577365571494, hash `cfd3539f2f3c2944`) and block 6349 / rotation 0
+(seed 16072322170756429076, hash `c58f9f9581a0742d`). These two failures predate
+the patch. They remain unfinished with no winner and do not qualify for a
+two-player promotion claim. This targeted control is not a comparison of all
+20,000 candidate/control records.
+
+Retain the fix for the reported E18 block, with successful three-player and
+four-player gate evidence. Do not claim universal termination or promote the
+incomplete two-player run. No core rule, RNG, enumeration, or replay behavior
+changes; the engine stays v2. Compressed reports, recomputed intervals,
+record-set hashes, gate decisions/manifests, control comparisons, and final
+validation are retained under `docs/results/e19-*`.
