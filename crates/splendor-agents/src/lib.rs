@@ -374,13 +374,57 @@ fn evaluation(o: &Observation, root: usize, kind: Evaluation) -> f64 {
         .fold(f64::NEG_INFINITY, f64::max);
     ((own - others) / 20.0 + 0.5).clamp(0.0, 1.0)
 }
+// A sufficient bound, not a prediction of opponent policy. To empty B colored
+// tokens, opponents need at least ceil(B/3) taking turns. Each other turn can
+// remove at most one affordable market card. Own reservations cannot be removed.
+fn preserves_next_turn(o: &Observation, take: [u8; 5]) -> bool {
+    let mut p = o.players[o.current as usize];
+    let mut bank = 0usize;
+    for (c, &amount) in take.iter().enumerate() {
+        p.tokens[c] += amount;
+        bank += usize::from(o.bank[c] - amount);
+    }
+    // A required return can change affordability and the bank. Do not certify it.
+    if p.token_count() > 10 {
+        return false;
+    }
+    let opponents = usize::from(o.count - 1);
+    if bank > 3 * opponents
+        || p.reserved
+            .iter()
+            .any(|r| r.card != NONE && deficit(&p, r.card) == 0)
+    {
+        return true;
+    }
+    let affordable = o
+        .market
+        .iter()
+        .filter(|&&id| id != NONE && deficit(&p, id) == 0)
+        .count();
+    affordable > opponents - bank.div_ceil(3)
+}
+fn safe_takes(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
+    if o.reserved_counts[o.current as usize] != 3
+        || !legal.iter().all(|a| matches!(a, Action::Take(_)))
+    {
+        return None;
+    }
+    let safe: Vec<_> = legal
+        .iter()
+        .copied()
+        .filter(|a| matches!(a, Action::Take(t) if preserves_next_turn(o, *t)))
+        .collect();
+    // Without a certified alternative, retain the original legal choices.
+    (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
+}
 impl Agent for SearchAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
-        if o.phase != Phase::Main
-            || legal.len() == 1
-            || self.config.iterations == 0
-            || o.turns == u32::MAX
-        {
+        if o.phase != Phase::Main || legal.len() == 1 || o.turns == u32::MAX {
+            return best(o, legal, true);
+        }
+        let safe = safe_takes(o, legal);
+        let legal = safe.as_deref().unwrap_or(legal);
+        if self.config.iterations == 0 {
             return best(o, legal, true);
         }
         let targets = PotentialTargets::new(o);
@@ -481,6 +525,67 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    #[test]
+    fn next_turn_bound_counts_depletion_and_market_removal_separately() {
+        // Isolate the public-information bound: card 6 costs three green.
+        for (count, bank, affordable, safe) in [
+            (2, 0, 1, false), // One opponent can remove the only card.
+            (2, 0, 2, true),
+            (2, 3, 1, true), // Emptying the bank uses the opponent's only turn.
+            (2, 4, 0, true), // The bank cannot be emptied in one turn.
+            (3, 0, 2, false),
+            (3, 0, 3, true),
+            (3, 3, 1, false), // One take and one card removal are possible.
+            (3, 3, 2, true),
+            (3, 6, 0, false),
+            (3, 6, 1, true), // Both opponents must take to empty the bank.
+            (3, 7, 0, true),
+            (4, 3, 2, false),
+            (4, 3, 3, true),
+            (4, 6, 1, false),
+            (4, 6, 2, true),
+            (4, 9, 1, true),
+            (4, 10, 0, true),
+        ] {
+            let mut o = GameState::new(count, 0).unwrap().observe(0);
+            o.players[0] = Player::default();
+            o.players[0].tokens[2] = 3;
+            o.market = [NONE; 12];
+            o.market[..affordable].fill(6);
+            o.bank = [bank, 0, 0, 0, 0, 0];
+            assert_eq!(preserves_next_turn(&o, [0; 5]), safe);
+        }
+        for count in 2..=4 {
+            let mut o = GameState::new(count, 0).unwrap().observe(0);
+            o.players[0] = Player::default();
+            o.players[0].tokens[2] = 3;
+            o.market = [NONE; 12];
+            o.bank = [0; 6];
+            o.players[0].reserved[0].card = 6;
+            assert!(preserves_next_turn(&o, [0; 5]));
+            o.players[0].tokens[2] = 2;
+            assert!(!preserves_next_turn(&o, [0; 5]));
+            o.players[0].tokens[GOLD] = 1;
+            assert!(preserves_next_turn(&o, [0; 5]));
+            o.players[0].tokens[0] = 8;
+            assert!(!preserves_next_turn(&o, [0; 5]));
+        }
+    }
+    #[test]
+    fn take_filter_keeps_uncertified_choices_without_a_safe_alternative() {
+        let mut o = GameState::new(3, 0).unwrap().observe(0);
+        o.players[0] = Player::default();
+        o.market = [NONE; 12];
+        o.bank = [2; 6];
+        o.reserved_counts[0] = 3;
+        let legal = [Action::Take([1, 1, 1, 0, 0]), Action::Take([0, 0, 1, 1, 1])];
+        assert_eq!(safe_takes(&o, &legal), None);
+        o.bank = [1, 1, 1, 1, 1, 0];
+        assert_eq!(safe_takes(&o, &legal), None);
+        assert_eq!(safe_takes(&o, &[Action::BuyVisible(0), legal[0]]), None);
+        o.reserved_counts[0] = 2;
+        assert_eq!(safe_takes(&o, &legal), None);
+    }
     #[test]
     fn cached_scores_equal_uncached_scores_for_every_legal_action() {
         let mut phases = [false; 4];

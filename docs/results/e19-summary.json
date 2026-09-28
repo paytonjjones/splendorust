@@ -1,0 +1,172 @@
+{
+  "base_commit": "69232e52f25f84d390efeec102bbac196632bb57",
+  "engine": "splendorust-v2",
+  "source_id": "9a5cd6ed81093bd5",
+  "date": "2026-09-28",
+  "results": [
+    {
+      "report": "e19-three-screen.json.gz",
+      "players": 3,
+      "games": 3000,
+      "completed": 3000,
+      "statuses": {
+        "complete": 3000
+      },
+      "candidate_credit": 0.51,
+      "ci95": [
+        0.4714397174355856,
+        0.5485602825644145
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "6ae9664277b7aeffb90ca05429a687185754f05f33eb930c235c8f49ad0d5109",
+      "record_set_sha256": "ad801d620d026cabe705f4a00af414dab00b75c27f338be9e8b49d7aa41377d4"
+    },
+    {
+      "report": "e19-three-confirm.json.gz",
+      "players": 3,
+      "games": 21000,
+      "completed": 21000,
+      "statuses": {
+        "complete": 21000
+      },
+      "candidate_credit": 0.5241428571428571,
+      "ci95": [
+        0.5116229304189547,
+        0.5366627838667596
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "cb7d886789e534cf19d09751acc5479bb03d9ae0b7b0a8f55480d0fc34ffe4a4",
+      "record_set_sha256": "5b16994675da0b39361ffadbe2bab4d569ec66a8a0500554edba4386325774cc"
+    },
+    {
+      "report": "e19-two-screen.json.gz",
+      "players": 2,
+      "games": 2000,
+      "completed": 2000,
+      "statuses": {
+        "complete": 2000
+      },
+      "candidate_credit": 0.7205,
+      "ci95": [
+        0.6784153943368758,
+        0.7625846056631242
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "89951e32cdccd9f7582e6c2a06b25ef8bc7c5136468b3ad078083557c602a5a8",
+      "record_set_sha256": "5a3b26268469b231224df81656baed3980c568f476e2b8b3e660236fe28d75cd"
+    },
+    {
+      "report": "e19-two-confirm.json.gz",
+      "players": 2,
+      "games": 20000,
+      "completed": 19998,
+      "statuses": {
+        "complete": 19998,
+        "no_legal_action": 2
+      },
+      "candidate_credit": 0.7311481148114811,
+      "ci95": [
+        0.7202966824090646,
+        0.7419534871696345
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "54b0dd062f4c21d47e18b7b36be072f373f21f6cd4f0704802ad4faad4d6fc60",
+      "record_set_sha256": "39f5749cf29b37678ef1935288fb3941f60f4db0b7d5795377413bd94393c08d"
+    },
+    {
+      "report": "e19-four-screen.json.gz",
+      "players": 4,
+      "games": 4000,
+      "completed": 4000,
+      "statuses": {
+        "complete": 4000
+      },
+      "candidate_credit": 0.375,
+      "ci95": [
+        0.34002833029420904,
+        0.40997166970579096
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "4dca00f22cde7be5cd510df64056c71f459bc40b0251e37087dd425bb357fffa",
+      "record_set_sha256": "af50260433aaa54c14c2308baf2017c2de6d0691982277151b21e002b3ff34d1"
+    },
+    {
+      "report": "e19-four-confirm.json.gz",
+      "players": 4,
+      "games": 20000,
+      "completed": 20000,
+      "statuses": {
+        "complete": 20000
+      },
+      "candidate_credit": 0.39145,
+      "ci95": [
+        0.37813219761745875,
+        0.4047678023825413
+      ],
+      "source_id": "9a5cd6ed81093bd5",
+      "raw_sha256": "0eb5d2f482bc77abba594329e19e4746ae45fffded3b12c3a10c7884e510664a",
+      "record_set_sha256": "a5ccbb7e3c95499b1f85328cb65cc9d8eabc0ff95c57c781ac96706a6cde53bd"
+    }
+  ],
+  "gate_decisions": {
+    "three": "promote",
+    "two": "reject: incomplete games",
+    "four": "promote"
+  },
+  "e18_regression": {
+    "paired_status_counts": [
+      {
+        "before": "complete",
+        "after": "complete",
+        "games": 2999
+      },
+      {
+        "before": "no_legal_action",
+        "after": "complete",
+        "games": 1
+      }
+    ],
+    "previously_blocked_record": {
+      "block": 818,
+      "rotation": 2,
+      "seed": 11622764811484448866,
+      "seats": [
+        2,
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        7,
+        5
+      ],
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "winners": 1,
+      "turns": 78,
+      "decisions": 116,
+      "status": "complete",
+      "trajectory_hash": "445dbcad68d2731b"
+    }
+  },
+  "two_player_failed_records_unchanged_under_baseline": true,
+  "two_player_control_scope": "Both rotations of the two failed setups only; not a full paired confirmation.",
+  "three_player_test_refinement_repeat": {
+    "screen": {
+      "ordered_records_equal": true,
+      "games": 3000,
+      "before_source": "01a580e951f90826",
+      "after_source": "9a5cd6ed81093bd5"
+    },
+    "confirm": {
+      "ordered_records_equal": true,
+      "games": 21000,
+      "before_source": "01a580e951f90826",
+      "after_source": "9a5cd6ed81093bd5"
+    }
+  },
+  "scope": "Fix the reported E18 block. Three/four-player gates pass against strong at 128 iterations. Two-player gate rejects inherited blocked records. No universal termination or equal-compute strength claim."
+}

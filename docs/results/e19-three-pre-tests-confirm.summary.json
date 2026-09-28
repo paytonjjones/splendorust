@@ -1,0 +1,93 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "strong",
+      "strong"
+    ],
+    "games": 21000,
+    "seed": 1134000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "01a580e951f90826",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v2",
+  "seed": 1134000000,
+  "players": 3,
+  "requested_games": 21000,
+  "completed_games": 21000,
+  "incomplete_games": 0,
+  "independent_blocks": 7000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 11007,
+      "shared_wins": 0,
+      "win_share": 11007.0,
+      "win_rate": 0.5241428571428571,
+      "ci95": [
+        0.5116229304189547,
+        0.5366627838667596
+      ],
+      "average_position": 1.7015714285714285,
+      "average_score": 13.001333333333333
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 4466,
+      "shared_wins": 70,
+      "win_share": 4501.0,
+      "win_rate": 0.21433333333333332,
+      "ci95": [
+        0.20442250223642364,
+        0.224244164430243
+      ],
+      "average_position": 2.193,
+      "average_score": 12.58604761904762
+    },
+    {
+      "identity": 2,
+      "agent": "strong",
+      "wins": 5457,
+      "shared_wins": 70,
+      "win_share": 5492.0,
+      "win_rate": 0.26152380952380955,
+      "ci95": [
+        0.250907075410023,
+        0.272140543637596
+      ],
+      "average_position": 2.092857142857143,
+      "average_score": 13.078857142857142
+    }
+  ],
+  "average_turns": 83.06828571428571,
+  "average_decisions": 133.96176190476191,
+  "runtime_seconds": 109.453843,
+  "games_per_second": 191.86169644130266,
+  "decisions_per_second": 25702.13089731349,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "candidate exceeds equal-seat baseline",
+  "raw_report_sha256": "1994750ad38b28551bae5218e7498e269c1859cfd069b356960726dd90839fcf",
+  "record_set_sha256": "5b16994675da0b39361ffadbe2bab4d569ec66a8a0500554edba4386325774cc",
+  "raw_archive": "e19-three-pre-tests-confirm.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 21000
+  }
+}

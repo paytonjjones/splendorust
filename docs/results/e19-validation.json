@@ -1,0 +1,32 @@
+{
+  "engine": "splendorust-v2",
+  "source_id": "9a5cd6ed81093bd5",
+  "rust_workspace_tests_passed": 76,
+  "python_tests_passed": 57,
+  "format_check_passed": true,
+  "strict_release_all_target_clippy_passed": true,
+  "functional_data_check_passed": true,
+  "original_e18_report_exactly_reproduced_under_base_binary": true,
+  "e18_regression_invariants_checked": true,
+  "e18_regression_completed_games": 3000,
+  "final_probe_hidden_world_choices_equal": true,
+  "two_inherited_blocks_and_both_rotations_exactly_reproduced": true,
+  "reference_cases_sha256": "a77409533dcc554de0338753529d8780ef677f3a34e66a6f6be5a81a731c0b15",
+  "blocked_fixture_sha256": "845eb8b94e5154a4b631d0ee668c2bc05d3b8eaf2f35a422692ec4646d0da61e",
+  "commands": [
+    "cargo fmt --all -- --check",
+    "cargo clippy --workspace --all-targets --release --locked -- -D warnings",
+    "cargo test --workspace --release --locked",
+    "SPLENDOR_REFERENCE=/tmp/splendor-reference python3 -m unittest discover -s scripts -p 'test_*.py'",
+    "python3 scripts/check_data.py",
+    "results/e19/baseline-splendor verify-report results/e19/e18-original.json",
+    "cargo run --quiet --release --locked --example agent_probe -- results/e19/blocked-v2.json 83 search 128 8",
+    "cargo run --quiet --release --locked -- compare --agent-a search --agent-b strong --players 3 --games 3000 --seed 132000000 --threads 4 --iterations 128 --depth 8 --width 6 --check --output results/e19/e18-regression-final.json",
+    "cargo run --quiet --release --locked --example parity_export -- 2 92000000 1 true true",
+    "python3 scripts/check_reference.py --reference /tmp/splendor-reference --cases results/e19/reference-cases.jsonl --chains --output results/e19/reference-summary.json"
+  ],
+  "control_commands": [
+    "results/e19/baseline-splendor compare --agent-a search --agent-b strong --players 2 --games 2 --seed 1136000786 --threads 1 --iterations 128 --depth 8 --width 6 --check --output results/e19/two-control-block-786.json",
+    "results/e19/baseline-splendor compare --agent-a search --agent-b strong --players 2 --games 2 --seed 1136006349 --threads 1 --iterations 128 --depth 8 --width 6 --check --output results/e19/two-control-block-6349.json"
+  ]
+}

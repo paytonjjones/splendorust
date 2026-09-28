@@ -36,6 +36,17 @@ Blind cards use `NONE` in opponent observations, so use `reserved_counts` rather
 
 The sampler models unknown cards uniformly. It does not condition on inferred opponent preferences or bidding history. Root UCB search restricts candidates to the top `width` heuristic actions and estimates their value through fixed-depth policy rollouts. Each simulation samples a fresh world. It has no persistent tree, shared-world belief updates, or claim of game-theoretic optimality. This is an initial determinization baseline.
 
+When search has three reservations and only token takes are legal, it first
+checks a sufficient bound for a legal next turn. A take without excess tokens
+passes if the colored bank cannot be emptied in the remaining opponent turns,
+an own reserved card becomes affordable, or opponents lack enough turns both
+to empty the bank and remove every affordable market card. Each opponent can
+take at most three colored tokens or remove one market card per turn. Search
+restricts its root choices only when both passing and failing takes exist.
+This check uses public bank/market data and the actor's own cards. It also
+applies to zero-iteration search. It does not change rollout policy, guarantee
+full-game completion, or assign an outcome to a blocked game.
+
 ## Determinism and replay
 
 SplitMix64 uses explicit wrapping `u64` operations and rejection sampling for bounded values. Fisher–Yates shuffles each tier, then nobles, in a fixed order. Seed and action sequence determine every subsequent state; drawing cards does not call a hidden RNG.

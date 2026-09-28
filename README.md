@@ -35,7 +35,13 @@ Use `--help` on any command. `play --trace` prints all decisions. `--check` enab
 
 `mcts` is a CLI alias for `search`, **not** a claim that this implementation has a persistent MCTS tree. The current search is a simple measured baseline.
 
-At 128 iterations, a fresh four-player comparison against three strong opponents completed all 20,000 games and earned 38.565% win credit (95% CI 37.224%–39.906%). The three-player screen had a blocked game and failed the completion gate. These results depend on opponents and compute budget; see E18 in [EXPERIMENTS.md](EXPERIMENTS.md).
+Search checks public bank supply and affordable cards before choosing a take
+with three reservations. When a take can preserve a legal next turn, it
+excludes takes that fail this sufficient bound. This prevents the E18
+three-player block without changing the core game rules. It does not guarantee
+that all legal policies or all games terminate. See E18 and E19 in
+[EXPERIMENTS.md](EXPERIMENTS.md) for fixed-budget strength and completion results
+against strong opponents.
 
 Search options: `--iterations`, `--depth` (completed player turns), `--width`, `--rollout random|greedy|strong`, and `--evaluation score|engine`. Fixed iterations are the default. `--search-ms` adds a soft wall-clock cap and marks the report as non-reproducible. A simulation can run past the time cap. Saved action histories still replay exactly.
 
