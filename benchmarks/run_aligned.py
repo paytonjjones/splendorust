@@ -62,7 +62,7 @@ def main():
     args = parser.parse_args()
     assert args.repetitions >= 2 and args.max_cases >= 64 and args.threads >= 2
     external = json.loads((ROOT / 'benchmarks/external/seal256-data.json').read_text())
-    report = {'schema_version': 1, 'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    report = {'schema_version': 1, 'uncertainty':{'method':'percentile bootstrap of median repetition rates', 'resamples':10000, 'seed':20260928, 'coverage':0.95}, 'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'machine': {'cpu':optional(['sysctl','-n','machdep.cpu.brand_string']), 'os':platform.platform(), 'os_build':optional(['sw_vers']), 'logical_cores':os.cpu_count(), 'physical_cores':optional(['sysctl','-n','hw.physicalcpu']), 'memory_bytes':optional(['sysctl','-n','hw.memsize']), 'power':optional(['pmset','-g','batt']), 'load_at_start':os.getloadavg()},
               'binaries_sha256': {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in ('target/release/examples/aligned_worker', 'local/benchmarks/external/seal256-game')},
               'interface_patch_sha256':hashlib.sha256((ROOT/'benchmarks/external/seal256-interface.patch').read_bytes()).hexdigest(),

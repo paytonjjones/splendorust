@@ -102,7 +102,7 @@ def main():
     if args.repetitions < 2 or args.target_seconds <= 0 or args.threads < 2:
         parser.error('need >=2 repetitions, positive target duration and >=2 threads')
     rows = []
-    report = {'schema_version': 1, 'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    report = {'schema_version': 1, 'uncertainty':{'method':'percentile bootstrap of median repetition rates', 'resamples':10000, 'seed':20260928, 'coverage':0.95}, 'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'protocol': 'benchmarks/PROTOCOL.md', 'protocol_sha256':hashlib.sha256((ROOT/'benchmarks/PROTOCOL.md').read_bytes()).hexdigest(), 'command':__import__('sys').argv, 'seed': SEED, 'decision_cap': 20000, 'search_config': {'iterations':128, 'depth_turns':8, 'width':6, 'rollout':'strong', 'evaluation':'engine', 'time_budget':None, 'opponents':'Strong in all other seats', 'search_seat':0}, 'repetition_order': 'alternating 1 and N workers per native configuration',
               'machine': {'cpu': optional(['sysctl', '-n', 'machdep.cpu.brand_string']),
                           'physical_cores': optional(['sysctl', '-n', 'hw.physicalcpu']),
