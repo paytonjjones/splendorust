@@ -34,7 +34,7 @@
       "search": "MCTS iterations/max_chance_children and neural policy exist; search not built because game rules differ and full app requires libtorch",
       "confidence": "Smoke validates legal W/B/G take, normalized token/turn fields and unchanged pointer sequences for decks, markets, nobles. No whole-game equivalence claim.",
       "aligned_profile_viable": true,
-      "aligned_profile_validation": "64 fixed and64 random trajectories matched every selected key and full common per-turn state; legal-key comparison pending",
+      "aligned_profile_validation": "64 random and64 fixed shared cases passed per-turn normalized states, selected action keys and projected legal-key sets; profile-scoped evidence only",
       "aligned_profile_limits": "Subset of actual legal space; native double-take omission at hand8; overflow/blind actions removed; stop before multi-eligible noble purchase; no pass; all incomplete statuses retained"
     },
     {

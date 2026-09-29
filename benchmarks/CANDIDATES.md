@@ -18,6 +18,8 @@ data checks are retained in this repository.
 | [bouk/splendimax](https://github.com/bouk/splendimax) | `5ffcb148ee0093e3b47f612b04a1927301ff13ee` | Rust | No license file found | Release build verified. Rule differences and an upstream test failure exclude current rankings. |
 | [AverageStardust/splendor-engine](https://github.com/AverageStardust/splendor-engine) | `3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e` | Go | No license file found | Main binary and rule probe built. Runtime probe confirms invalid take generation. Excluded from current rankings. |
 | [cestpasphoto/alpha-zero-general](https://github.com/cestpasphoto/alpha-zero-general) | `846b919f781b871da2fff0a05fb4ae069d1a9d45` | Python/Numba | MIT | Original source cloned and inspected. No runtime result claimed. Optimized fork is listed separately above. |
+| [csmith/splendid](https://github.com/csmith/splendid) | `52b017c96d0b010fe228b8284b4646da505545e2` | JavaScript | MIT | Existing source/data audit rejects unchanged standard-game data. No transitions or timing measured. |
+| [ivanbravi/RinascimentoFramework](https://github.com/ivanbravi/RinascimentoFramework) | `ce31592f78572096ceedd5ced1bac4f82c5f08db` | Java | MIT | Existing source/data audit rejects default decks under every consistent suit mapping. No Java transitions or timing measured. |
 
 ## seal256: viable shared workloads
 
@@ -45,8 +47,10 @@ could qualify for multiple nobles. Incomplete outcomes remain in the result file
 This is viable **aligned adapter pipeline throughput**. It is not unrestricted
 base-game equivalence or an isolated function-cost ratio. Native chance transitions
 and Rust payment/noble phases differ; common player turns are the comparison unit.
-The native MCTS iteration and neural-policy interfaces exist, but no cross-engine
-search ranking is enabled by these adapters.
+The 64 random and 64 fixed shared validation cases passed per-turn normalized
+states, selected action keys and projected legal-key sets. This evidence remains
+profile-scoped. The native MCTS iteration and neural-policy interfaces exist, but
+no cross-engine search ranking is enabled by these adapters.
 
 Setup uses native thread-local MT19937 seeded from `std::rand`. The opening adapter
 sets its startup seed. The aligned game adapter injects common setup and consumes no
@@ -165,11 +169,21 @@ remaining-card mapping when a nonzero draw seed is supplied. It awards all eligi
 nobles and produces points-based winners at a 62-turn-per-player cap. This pinned
 source was inspected; no runtime or speed result is claimed for it.
 
-[Rinascimento](https://arxiv.org/abs/1904.01883) is a published Splendor planning
-framework. It is a useful next candidate for a Java planning baseline. This session
-has not pinned its code, verified its license, installed its runtime or measured it.
-It remains a discovery-only reference. Further public Python ISMCTS projects were
-found during search, but no install or comparable-result claim is made for them.
+The existing [csmith source audit](../docs/results/splendid-data-audit.json)
+found 89 cards with 87 shared tuples, plus 20 noble requirements with ten shared
+tuples. Its source and MIT license hashes are retained. These data differences
+exclude it as an unchanged standard-game baseline. No transitions were compared.
+
+The existing [Rinascimento source audit](../docs/results/rinascimento-data-audit.json)
+checked the pinned MIT repository, its default decks and all 120 consistent suit
+mappings. Default data contains 90 cards and ten nobles, but the best mapping
+shares only 21 card tuples with Splendorust. The default setup therefore needs a
+different comparison scope or an explicit functional-data fixture before use.
+No Java transition, installed-runtime or speed result is claimed. Its published
+[planning framework paper](https://arxiv.org/abs/1904.01883) makes it a useful
+future candidate after that setup gap is resolved. Further public Python ISMCTS
+projects were found during search, but no install or comparable-result claim is
+made for them.
 
 ## Remaining comparison work
 
