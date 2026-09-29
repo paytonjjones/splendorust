@@ -77,11 +77,23 @@ a game-throughput result.
 
 ## Other references found
 
-[Rinascimento](https://arxiv.org/abs/1904.01883) is a published Splendor planning
-framework. Its 2021 follow-up explores behavior space and rule variations. It is a
-high-value future baseline, but this audit does not claim installation, license
-verification, or speed data for it. A Go MCTS repository, optimized Numba AlphaZero,
-and the old Rust alpha-beta engine give broader coverage than a Python-only survey.
+The existing source audit checked
+[ivanbravi/RinascimentoFramework](https://github.com/ivanbravi/RinascimentoFramework)
+at `ce31592f78572096ceedd5ced1bac4f82c5f08db` and verified its MIT license.
+Its default 90-card data shares at most 21 tuples with Splendorust across all 120
+consistent suit mappings. This data gap excludes an unchanged standard-game
+baseline. No Java runtime, transitions or speed result were measured. See
+[rinascimento-data-audit.json](../../docs/results/rinascimento-data-audit.json)
+and the published [framework paper](https://arxiv.org/abs/1904.01883).
+
+The existing source audit also checked
+[csmith/splendid](https://github.com/csmith/splendid) at
+`52b017c96d0b010fe228b8284b4646da505545e2` with an MIT license. It contains
+89 cards with 87 shared tuples and 20 noble requirements with ten shared tuples.
+No transitions were compared. See
+[splendid-data-audit.json](../../docs/results/splendid-data-audit.json).
+The complete inventory and current comparison status are in
+[CANDIDATES.md](../CANDIDATES.md).
 
 ## Aligned whole-game profile
 
