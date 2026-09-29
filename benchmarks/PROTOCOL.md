@@ -181,14 +181,15 @@ simulations/s when instrumented, latency, and outcomes separately. A search spee
 claim needs the same states, search definition, and budgets; an agent-strength
 claim needs a separate valid tournament.
 
-The implemented native `search32` workload uses search in every seat at 2, 3, and 4 players: 32
+The primary native `search128_strong` workload uses Search in seat zero
+and Strong in the other seats at 2, 3, and 4 players. It uses 128
 simulations at Main decisions with more than one legal choice, width six,
 strong rollout, engine evaluation, and no time cap. The rollout horizon is eight
 completed player turns, with an additional 32-native-decision guard per rollout.
 Search itself is serial inside each game; arena workers run separate games.
 Non-Main and single-choice decisions use the deterministic fallback without
 simulations. Actual cumulative simulations are reported. The workload's native
-decisions/s includes those fallback decisions; it is not search invocations/s.
+decisions/s includes Strong opponent and fallback decisions; it is not search invocations/s.
 
 ## 3. Seed schedules and reproducibility
 
@@ -204,7 +205,7 @@ Existing Splendorust schedules are different and must stay distinct:
   output from state `(master + i) mod 2^64`; random policy RNG starts at
   `setup_seed XOR 0xd1b54a32d192ed03`. Each game appears once, without arena seat
   rotations. Search seat `j` starts at `(policy_seed + j) mod 2^64` and uses a
-  fixed 32-simulation configuration. Greedy is deterministic and uses no RNG.
+  fixed 128-simulation configuration (primary workload). Greedy is deterministic and uses no RNG.
   This applies to random, greedy, and search games. Its separate `setup`
   workload uses raw `(master + i) mod 2^64`; its opening fixture uses seed 42.
 

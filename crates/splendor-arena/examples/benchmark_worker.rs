@@ -2,7 +2,7 @@
 use rayon::prelude::*;
 use serde::Deserialize;
 use serde_json::json;
-use splendor_agents::{Agent, SearchAgent, SearchConfig, SimpleGreedyAgent};
+use splendor_agents::{Agent, SearchAgent, SearchConfig, SimpleGreedyAgent, StrongHeuristicAgent};
 use splendor_core::{Action, ActionSet, GameState, Rng};
 use std::{
     hint::black_box,
@@ -55,6 +55,8 @@ fn game(q: &Request, index: u64) -> Record {
     let mut rng = Rng::new(policy_seed);
     let mut search: Vec<_> = (0..if q.workload == "search32" {
         q.players
+    } else if q.workload == "search128_strong" {
+        1
     } else {
         0
     })
@@ -62,7 +64,7 @@ fn game(q: &Request, index: u64) -> Record {
             SearchAgent::new(
                 policy_seed.wrapping_add(u64::from(seat)),
                 SearchConfig {
-                    iterations: 32,
+                    iterations: if q.workload == "search32" { 32 } else { 128 },
                     ..SearchConfig::default()
                 },
             )
@@ -88,6 +90,12 @@ fn game(q: &Request, index: u64) -> Record {
             }
             "search32" => search[state.current_player()]
                 .select_action(&state.observe(state.current_player()), &legal),
+            "search128_strong" if state.current_player() == 0 => {
+                search[0].select_action(&state.observe(0), &legal)
+            }
+            "search128_strong" => {
+                StrongHeuristicAgent.select_action(&state.observe(state.current_player()), &legal)
+            }
             _ => unreachable!(),
         };
         state.apply_action(action).unwrap();
@@ -195,7 +203,7 @@ fn run(q: &Request) -> serde_json::Value {
         return json!({"workload":"setup","count":q.count,"seconds":start.elapsed().as_secs_f64(),"checksum":checksum,
             "timing_boundary":"setup + observation of market checksum + scheduling; not setup alone"});
     }
-    assert!(["random", "greedy", "search32"].contains(&q.workload.as_str()));
+    assert!(["random", "greedy", "search32", "search128_strong"].contains(&q.workload.as_str()));
     let start = Instant::now();
     let records: Vec<_> = (0..q.count).into_par_iter().map(|i| game(q, i)).collect();
     let seconds = start.elapsed().as_secs_f64();

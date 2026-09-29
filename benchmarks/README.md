@@ -26,7 +26,7 @@ and marks shorter windows preliminary. For a smoke run, select two repetitions,
 are not baseline evidence.
 
 Native measurements cover 2/3/4-player random play, deterministic greedy play,
-32-simulation search, setup, and checked opening copy/take at one and four workers.
+128-simulation Search against Strong, setup, and checked opening copy/take at one and four workers.
 Python compiled one/four-thread and public Python API timings remain unchecked
 references. The C++ opening adapter has a small access-only patch that exposes its
 unchanged native validator; the patch is retained in `external/`.

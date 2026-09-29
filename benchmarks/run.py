@@ -103,7 +103,7 @@ def main():
         parser.error('need >=2 repetitions, positive target duration and >=2 threads')
     rows = []
     report = {'schema_version': 1, 'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              'protocol': 'benchmarks/PROTOCOL.md', 'protocol_sha256':hashlib.sha256((ROOT/'benchmarks/PROTOCOL.md').read_bytes()).hexdigest(), 'command':__import__('sys').argv, 'seed': SEED, 'decision_cap': 20000, 'search_config': {'iterations':32, 'depth_turns':8, 'width':6, 'rollout':'strong', 'evaluation':'engine', 'time_budget':None}, 'repetition_order': 'alternating 1 and N workers per native configuration',
+              'protocol': 'benchmarks/PROTOCOL.md', 'protocol_sha256':hashlib.sha256((ROOT/'benchmarks/PROTOCOL.md').read_bytes()).hexdigest(), 'command':__import__('sys').argv, 'seed': SEED, 'decision_cap': 20000, 'search_config': {'iterations':128, 'depth_turns':8, 'width':6, 'rollout':'strong', 'evaluation':'engine', 'time_budget':None, 'opponents':'Strong in all other seats', 'search_seat':0}, 'repetition_order': 'alternating 1 and N workers per native configuration',
               'machine': {'cpu': optional(['sysctl', '-n', 'machdep.cpu.brand_string']),
                           'physical_cores': optional(['sysctl', '-n', 'hw.physicalcpu']),
                           'logical_cores': os.cpu_count(), 'os': platform.platform(),
@@ -130,10 +130,10 @@ def main():
         args.output.write_text(json.dumps(report, indent=2) + '\n')
     try:
         for workload, players, pilot_count in [('setup', 2, 10000)] + [
-            ('random', n, 10000) for n in (2, 3, 4)] + [('greedy', 2, 1000)] + [('search32', n, 20) for n in (2, 3, 4)]:
+            ('random', n, 10000) for n in (2, 3, 4)] + [('greedy', 2, 1000)] + [('search128_strong', n, 20) for n in (2, 3, 4)]:
             print(f'validate/calibrate {workload} p{players}', flush=True)
             request = {'workload': workload, 'players': players, 'seed': SEED}
-            if workload in ('random', 'greedy', 'search32'):
+            if workload in ('random', 'greedy', 'search128_strong'):
                 smoke = workers[1].run(dict(request, count=20, check=True))
                 smoke_parallel = workers[args.threads].run(dict(request, count=20, check=True))
                 assert smoke['digest'] == smoke_parallel['digest'] and smoke['decisions'] == smoke_parallel['decisions']
@@ -146,7 +146,7 @@ def main():
                     'threads': threads, 'parallelism': 'persistent Rayon thread pool', 'count': count,
                     'unit': 'cloned validated take transitions' if workload == 'opening_clone_take' else 'setups with market observation' if workload == 'setup' else 'trajectories',
                     'comparison_group': 'checked-opening-copy-take' if workload == 'opening_clone_take' else f'splendorust-only-{workload}-p{players}',
-                    'pilot': pilot, 'samples': [], 'seed_schedule': 'setup=master_seed+global_index (no extra seed mix)' if workload == 'setup' else 'setup=SplitMix64(master_seed+global_index).next_u64(); policy=setup XOR 0xd1b54a32d192ed03; search seat adds seat index'}
+                    'pilot': pilot, 'samples': [], 'seed_schedule': 'setup=master_seed+global_index (no extra seed mix)' if workload == 'setup' else 'setup=SplitMix64(master_seed+global_index).next_u64(); policy=setup XOR 0xd1b54a32d192ed03; Search uses policy seed (seat0); Strong is deterministic'}
                 workers[threads].run(dict(request, count=min(count, pilot_count))) # untimed warm-up
             rows.extend(config_rows.values())
             save()
@@ -155,9 +155,9 @@ def main():
                     config_rows[threads]['samples'].append(workers[threads].run(dict(request, count=count)))
                     save()
                     print(f'  rep{rep+1} t{threads}', flush=True)
-            if workload in ('random', 'greedy', 'search32'):
+            if workload in ('random', 'greedy', 'search128_strong'):
                 assert config_rows[1]['samples'][0]['digest'] == config_rows[args.threads]['samples'][0]['digest']
-                latency_count = 100 if workload == 'search32' else 1000
+                latency_count = 100 if workload == 'search128_strong' else 1000
                 for threads in workers:
                     config_rows[threads]['latency_probe'] = workers[threads].run(dict(request, count=latency_count, latency=True))
                     config_rows[threads]['latency_probe']['note'] = 'Separate instrumented sample; per-trajectory setup/play, excludes final digest and queue wait. Does not replace throughput timing.'
