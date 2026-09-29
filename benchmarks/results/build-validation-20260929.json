@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "source_commit": "d93212f22090bea59925e9e7fe5f318169fd5278",
+  "rust_default_tests_passed": 82,
+  "rust_all_features_tests_passed": 87,
+  "python_tests": 57,
+  "python_reference_revision": "95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b",
+  "checks": [
+    "cargo fmt --all --check",
+    "cargo clippy --workspace --all-targets --all-features --release --locked -- -D warnings",
+    "cargo test --workspace --release --locked",
+    "cargo test --workspace --release --locked --all-features",
+    "SPLENDOR_REFERENCE=local/benchmarks/external/python_roeey python3 -m unittest discover -s scripts -p test_*.py",
+    "python3 scripts/check_data.py"
+  ],
+  "status": "passed",
+  "local_log_sha256": {
+    "e22-clippy.log": "b198140e1f02f3e8420b2d28d50ba41f7a60a0f3900fe297dd2465e57ecc6137",
+    "e22-tests-default.log": "6c86db96d9693ac35760f8f9dc52c06e9810c1a1792a68caa17091c9c02db75e",
+    "e22-tests-features.log": "1c9b94d1bb11fa2c32d7223597e56c345298054cdc3ca99cac33e33b7c04d0c5",
+    "e22-python.log": "4ed4f856505277a8f2e396dab32ef83e3fb05a13c888ac8b4c8253ce55b388ce",
+    "e22-data.log": "5c71198b16d5ac800a488fa1a1d15b394bb2080ac948f60ad20b55abf161ae09"
+  }
+}

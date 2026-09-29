@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "baseline_date": "2026-09-29",
+  "files": [
+    {
+      "path": "benchmarks/results/native-20260929.json",
+      "sha256": "33e94cbf65223cb0611ac8eecfbdeb8e776df7ba6032d1cbb00d23a1520435c7",
+      "bytes": 310447
+    },
+    {
+      "path": "benchmarks/results/aligned-20260929.json",
+      "sha256": "d76e637c1f4e8ef69a42de06cfa2b2d337728db5ab42bd6d70ada75884b70d0e",
+      "bytes": 147411
+    },
+    {
+      "path": "benchmarks/results/check-20260929.json",
+      "sha256": "50a2cd37e8c9d6e944e3f09461bac7922af9120aa953bbd5f3bde6d069131894",
+      "bytes": 4219
+    },
+    {
+      "path": "benchmarks/results/build-validation-20260929.json",
+      "sha256": "1d974f1c465e8bb35320a2a7f4d5f26a7ebad52cfd34b614f424702bad7b1b01",
+      "bytes": 1186
+    },
+    {
+      "path": "benchmarks/results/aligned-20260929-fixed-8b5cd652a3f2d545-records.json.gz",
+      "sha256": "d4c5ad13859d7957429db8d94f9413024360115b394e0b530a4ffac07041ddbf",
+      "bytes": 9937520
+    },
+    {
+      "path": "benchmarks/results/aligned-20260929-random-7203c06269cdf7d5-records.json.gz",
+      "sha256": "1bde2ac8f97392b96e9f1047b0371d85e0b054db3ee4de18db4ee1dec7f13946",
+      "bytes": 21226004
+    }
+  ],
+  "rankings": [
+    {
+      "group": "aligned-random-2p",
+      "threads": 1,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "attempted trajectories/s",
+      "median_rate": 68476.44161820678,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-random-2p",
+      "threads": 1,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "attempted trajectories/s",
+      "median_rate": 36597.72395065309,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-random-2p",
+      "threads": 4,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "attempted trajectories/s",
+      "median_rate": 233593.10434363873,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-random-2p",
+      "threads": 4,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "attempted trajectories/s",
+      "median_rate": 117735.46387617159,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-fixed-2p",
+      "threads": 1,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "attempted trajectories/s",
+      "median_rate": 46081.712255236984,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-fixed-2p",
+      "threads": 1,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "attempted trajectories/s",
+      "median_rate": 28382.792526088047,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-fixed-2p",
+      "threads": 4,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "attempted trajectories/s",
+      "median_rate": 163431.3222920834,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "aligned-fixed-2p",
+      "threads": 4,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "attempted trajectories/s",
+      "median_rate": 63811.6209573602,
+      "confidence": "local repeated timing",
+      "scope": "aligned adapter pipeline within seal256-intersection-v1 only"
+    },
+    {
+      "group": "checked-opening-copy-take",
+      "threads": 1,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "checked cloned take transitions/s",
+      "median_rate": 57178993.84369261,
+      "confidence": "local repeated timing",
+      "scope": "native checked opening API; single-thread primary; different pool completion costs disclosed"
+    },
+    {
+      "group": "checked-opening-copy-take",
+      "threads": 1,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "checked cloned take transitions/s",
+      "median_rate": 4046324.4941009283,
+      "confidence": "local repeated timing",
+      "scope": "native checked opening API; single-thread primary; different pool completion costs disclosed"
+    },
+    {
+      "group": "checked-opening-copy-take",
+      "threads": 4,
+      "rank": 1,
+      "engine": "splendorust",
+      "unit": "checked cloned take transitions/s",
+      "median_rate": 219554611.48700914,
+      "confidence": "local repeated timing",
+      "scope": "native checked opening API; single-thread primary; different pool completion costs disclosed"
+    },
+    {
+      "group": "checked-opening-copy-take",
+      "threads": 4,
+      "rank": 2,
+      "engine": "seal256",
+      "unit": "checked cloned take transitions/s",
+      "median_rate": 8016622.4266776405,
+      "confidence": "preliminary",
+      "scope": "native checked opening API; single-thread primary; different pool completion costs disclosed"
+    }
+  ],
+  "notes": [
+    "Ranks apply only to the stated group, workers and build; no unrestricted game or search ranking.",
+    "Python unchecked references are unranked and independently calibrated; no paired scaling claim.",
+    "Native setup4 and checked C++ opening4 have short windows and remain preliminary."
+  ],
+  "rule_validation": "docs/results/noble-boundary/record-comparison.json",
+  "protocol": "benchmarks/PROTOCOL.md",
+  "report": "benchmarks/REPORT.md"
+}

@@ -111,7 +111,7 @@ def main():
                           'power': optional(['pmset', '-g', 'batt']), 'load_at_start': os.getloadavg()},
               'versions': {'rust': command(['rustc', '-Vv']), 'cpp': command(['clang++', '--version']), 'runner_python': platform.python_version()},
               'build': {'rust': 'cargo build --release --locked -p splendor-arena --examples --features benchmark-compat; thin LTO, codegen-units=1; no RUSTFLAGS override',
-                        'cpp': 'clang++ -O3 -DNDEBUG -std=c++17 -pthread; native target; no LTO',
+                        'cpp': 'clang++ -O3 -DNDEBUG -std=c++17 -pthread; no CPU target flag; no LTO',
                         'env': {k: os.environ.get(k) for k in ('RUSTFLAGS', 'CXXFLAGS', 'OMP_NUM_THREADS', 'NUMBA_NUM_THREADS')}},
               'data_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT / 'data').glob('*.csv')},
               'binaries_sha256': {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in ('target/release/examples/benchmark_worker', 'local/benchmarks/external/seal256-opening')},

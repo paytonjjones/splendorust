@@ -1,5 +1,10 @@
 # Performance evidence
 
+The [external benchmark report](benchmarks/REPORT.md) contains the 2026-09-29
+cross-engine baseline. Its [protocol](benchmarks/PROTOCOL.md) and
+[result files](benchmarks/results/README.md) keep the workload definitions,
+repetitions and limits separate from the historical measurements below.
+
 Measured on 2026-09-25: Apple M4 Pro, macOS 26.7, aarch64, Rust 1.98.1, LLVM 22.1.8. Release uses thin LTO and one codegen unit. Criterion adds debug symbols. These are local measurements, not portable performance guarantees.
 
 ## Core

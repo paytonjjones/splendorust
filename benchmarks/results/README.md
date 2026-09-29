@@ -3,7 +3,9 @@
 `native-20260929.json` and `aligned-20260929.json` are the baseline run files.
 Each file retains raw repetitions, commands, source and binary hashes, hardware,
 versions, timing scope, outcomes and confidence labels. `index-20260929.json`
-links the baseline files and record archives with SHA256 hashes.
+links the baseline files, result checks, build checks and record archives with
+SHA256 hashes. The summary and limits are in
+[`benchmarks/REPORT.md`](../REPORT.md).
 
 Files with `smoke-` in their name are validation runs. Their short timings are
 preliminary and do not enter the baseline ranking. Incomplete games remain in

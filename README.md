@@ -4,6 +4,10 @@ A deterministic Rust engine and experiment framework for base Splendor, with 2â€
 
 The workspace contains the full 90-card and 10-noble datasets, rule tests, random-play audits, hidden-information-safe agents, paired tournaments, replay, benchmarks, and a promotion gate. Read [VALIDATION.md](VALIDATION.md) before treating results as ground truth. In particular, the published rules leave some no-action positions unresolved; the engine reports these positions without inventing a winner.
 
+The [external benchmark report](benchmarks/REPORT.md) contains the reproducible
+baseline, workload rankings and limits. Its [protocol](benchmarks/PROTOCOL.md)
+defines the comparable rules and timing scopes.
+
 ## Run
 
 Install Rust through rustup. The repository pins Rust 1.98.1. Dependencies are locked in `Cargo.lock`.

@@ -1,0 +1,2248 @@
+{
+  "schema_version": 1,
+  "uncertainty": {
+    "method": "percentile bootstrap of median repetition rates",
+    "resamples": 10000,
+    "seed": 20260928,
+    "coverage": 0.95
+  },
+  "started_utc": "2026-09-29T15:58:47.710153+00:00",
+  "machine": {
+    "cpu": "Apple M4 Pro",
+    "os": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "os_build": "ProductName:\t\tmacOS\nProductVersion:\t\t26.7\nBuildVersion:\t\t25G229",
+    "logical_cores": 14,
+    "physical_cores": "14",
+    "memory_bytes": "51539607552",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=35455075)\t80%; AC attached; not charging present: true",
+    "load_at_start": [
+      2.40869140625,
+      3.794921875,
+      5.5283203125
+    ],
+    "load_at_finish": [
+      5.85400390625,
+      4.955078125,
+      4.81298828125
+    ]
+  },
+  "binaries_sha256": {
+    "target/release/examples/aligned_worker": "0ad0e55a6517db522819d6731dd2fd9580f8ea9e5cf1144f6b1cd961a27a6ba9",
+    "local/benchmarks/external/seal256-game": "6de882d95d84075b0105108920e28f5c24c3a18db84ffe071b6af1b466750ebb"
+  },
+  "interface_patch_sha256": "e4f17dfaf70f7f0f103c5e0529a9c6b30ec4769e36ac85876108c7b4b18926be",
+  "external_source_status": "M src/splendor.h",
+  "setup_build": {
+    "kind": "setup/build costs; existing caches may be reused",
+    "steps": [
+      {
+        "step": "splendorust release examples",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "--locked",
+          "-p",
+          "splendor-arena",
+          "--examples",
+          "--features",
+          "benchmark-compat"
+        ],
+        "wall_seconds": 6.25723145797383,
+        "stdout": "",
+        "stderr": "   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-arena)\n   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-agents)\n    Finished `release` profile [optimized] target(s) in 6.21s\n"
+      },
+      {
+        "step": "seal256",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "seal256"
+        ],
+        "wall_seconds": 6.3500271659577265,
+        "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 6.275578209082596, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+        "stderr": ""
+      },
+      {
+        "step": "splendimax",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "splendimax"
+        ],
+        "wall_seconds": 0.1236389169935137,
+        "stdout": "{\"engine\": \"splendimax\", \"commit\": \"5ffcb148ee0093e3b47f612b04a1927301ff13ee\", \"setup_build_seconds\": 0.05763462500181049, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/splendimax/target/release/splendimax-test\", \"source_patch\": \"Cargo.toml: append empty workspace table for build isolation\"}\n",
+        "stderr": "warning: Cargo.toml: `package.edition` is unspecified, defaulting to `2015` while the latest is `2024`\nwarning: `splendimax` (manifest) generated 1 warning\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:30:25\n   |\n30 |     fn apply(&mut self, &Self::Move);\n   |                         ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n   = note: `#[warn(anonymous_parameters)]` (part of `#[warn(rust_2018_compatibility)]`) on by default\n\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:31:24\n   |\n31 |     fn undo(&mut self, &Self::Move);\n   |                        ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:108:9\n    |\n108 |         try!(write!(out, \"Player: {}\\n\", self.adversary.score()));\n    |         ^^^\n    |\n    = note: `#[warn(deprecated)]` on by default\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:193:9\n    |\n193 |         try!(print_player(out, &self.adversary));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:194:9\n    |\n194 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:196:9\n    |\n196 |         try!(write!(out, \"Adversary: {}\\n\", self.player.score()));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:197:9\n    |\n197 |         try!(print_player(out, &self.player));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:199:9\n    |\n199 |         try!(write!(out, \"\\nBank\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:203:9\n    |\n203 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:207:9\n    |\n207 |         try!(write!(out, \"\\n\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:256:9\n    |\n256 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:257:9\n    |\n257 |         try!(print_cards(out, &self.cards3));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:258:9\n    |\n258 |         try!(print_cards(out, &self.cards2));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:259:9\n    |\n259 |         try!(print_cards(out, &self.cards1));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:114:17\n    |\n114 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:118:17\n    |\n118 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:122:17\n    |\n122 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:146:17\n    |\n146 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:170:17\n    |\n170 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:174:17\n    |\n174 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:112:21\n    |\n112 |                     try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:116:21\n    |\n116 |                     try!(write!(out, \"\u2503{}     {}\u2503 \", card.color.code(), card.points));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:120:21\n    |\n120 |                     try!(write!(out, \"\u2503       \u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:124:21\n    |\n124 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:144:21\n    |\n144 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:128:29\n    |\n128 | ...                   try!(write!(out, \"{}\", color.code()));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:131:33\n    |\n131 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:136:25\n    |\n136 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:138:29\n    |\n138 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:140:33\n    |\n140 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:148:21\n    |\n148 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:168:21\n    |\n168 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:152:29\n    |\n152 | ...                   try!(write!(out, \"{}\", card.cost[color]));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:155:33\n    |\n155 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:160:25\n    |\n160 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:162:29\n    |\n162 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:164:33\n    |\n164 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:172:21\n    |\n172 |                     try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:180:17\n    |\n180 |                 try!(write!(out, \"Reserved\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:181:17\n    |\n181 |                 try!(print_cards(out, &player.reserved));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:184:17\n    |\n184 |                 try!(write!(out, \"{}: {}\", color.code(), player.tokens[color]));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:189:17\n    |\n189 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:187:21\n    |\n187 |                     try!(write!(out, \" + {}\", count));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:201:13\n    |\n201 |             try!(write!(out, \"{} \", color.code()));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:205:13\n    |\n205 |             try!(write!(out, \"{} \", self.bank[color]));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:210:13\n    |\n210 |             try!(write!(out, \"\\nNobles\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:214:13\n    |\n214 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:232:13\n    |\n232 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:250:13\n    |\n250 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:254:13\n    |\n254 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:212:17\n    |\n212 |                 try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:216:17\n    |\n216 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:230:17\n    |\n230 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:220:25\n    |\n220 |                         try!(write!(out, \"{}\", color.code()));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:223:29\n    |\n223 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:228:21\n    |\n228 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:234:17\n    |\n234 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:248:17\n    |\n248 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:238:25\n    |\n238 |                         try!(write!(out, \"{}\", noble.cost[color]));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:241:29\n    |\n241 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:246:21\n    |\n246 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:252:17\n    |\n252 |                 try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                 ^^^\n\nwarning: unnecessary trailing semicolon\n   --> src/state.rs:669:66\n    |\n669 |                         let noble = player.nobles.pop().unwrap();;\n    |                                                                  ^ help: remove this semicolon\n    |\n    = note: `#[warn(redundant_semicolons)]` (part of `#[warn(unused)]`) on by default\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:109:34\n    |\n109 |         fn print_cards(out: &mut io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\n    = note: `#[warn(bare_trait_objects)]` (part of `#[warn(rust_2021_compatibility)]`) on by default\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n109 |         fn print_cards(out: &mut dyn io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:178:35\n    |\n178 |         fn print_player(out: &mut io::Write, player: &Player) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n178 |         fn print_player(out: &mut dyn io::Write, player: &Player) -> io::Result<()> {\n    |                                   +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:107:35\n    |\n107 |     pub fn print(&self, out: &mut io::Write) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n107 |     pub fn print(&self, out: &mut dyn io::Write) -> io::Result<()> {\n    |                                   +++\n\nwarning: `splendimax` (lib) generated 66 warnings (run `cargo fix --lib -p splendimax` to apply 5 suggestions)\nwarning: unused import: `splendimax::algo::state::Score`\n --> src/bin/splendimax-play.rs:6:5\n  |\n6 | use splendimax::algo::state::Score;\n  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused import: `splendimax::card::Card`\n --> src/bin/splendimax-play.rs:9:5\n  |\n9 | use splendimax::card::Card;\n  |     ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: unused import: `splendimax::color::Color`\n  --> src/bin/splendimax-play.rs:11:5\n   |\n11 | use splendimax::color::Color;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: variable does not need to be mutable\n  --> src/bin/splendimax-play.rs:16:9\n   |\n16 |     let mut stdin = io::stdin();\n   |         ----^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:20:5\n   |\n20 |     state.print(&mut stdout);\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n20 |     let _ = state.print(&mut stdout);\n   |     +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:23:13\n   |\n23 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n23 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:33:17\n   |\n33 |                 state.print(&mut stdout);\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n33 |                 let _ = state.print(&mut stdout);\n   |                 +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:38:13\n   |\n38 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n38 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-play\") generated 8 warnings (run `cargo fix --bin \"splendimax-play\" -p splendimax` to apply 4 suggestions)\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:48:13\n   |\n48 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n48 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:66:13\n   |\n66 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n66 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-test\") generated 2 warnings\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+      },
+      {
+        "step": "averagestardust",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "averagestardust"
+        ],
+        "wall_seconds": 0.3538183330092579,
+        "stdout": "?   \tsplendor\t[no test files]\n?   \tsplendor/agents\t[no test files]\n?   \tsplendor/cli\t[no test files]\n?   \tsplendor/command\t[no test files]\n?   \tsplendor/engine\t[no test files]\n{\"engine\": \"averagestardust\", \"commit\": \"3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e\", \"setup_build_seconds\": 0.28506208304315805, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/averagestardust-rule-probe\", \"source_patch\": \"none\"}\n",
+        "stderr": ""
+      },
+      {
+        "step": "Python dependencies",
+        "command": [
+          "uv",
+          "pip",
+          "install",
+          "--python",
+          "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+          "numpy==1.26.4",
+          "numba==0.62.0",
+          "llvmlite==0.45.1",
+          "colorama==0.4.6"
+        ],
+        "wall_seconds": 0.018725665984675288,
+        "stdout": "",
+        "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 3ms\n"
+      },
+      {
+        "step": "Python dependency manifest",
+        "command": [
+          "uv",
+          "pip",
+          "freeze",
+          "--python",
+          "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+        ],
+        "wall_seconds": 0.01065241708420217,
+        "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+        "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+      }
+    ],
+    "history": [
+      {
+        "kind": "setup/build costs; existing caches may be reused",
+        "steps": [
+          {
+            "step": "splendorust release examples",
+            "command": [
+              "cargo",
+              "build",
+              "--release",
+              "--locked",
+              "-p",
+              "splendor-arena",
+              "--examples",
+              "--features",
+              "splendor-core/benchmark-compat"
+            ],
+            "wall_seconds": 0.13383645797148347,
+            "stdout": "",
+            "stderr": "    Finished `release` profile [optimized] target(s) in 0.09s\n"
+          },
+          {
+            "step": "seal256",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "seal256"
+            ],
+            "wall_seconds": 8.499743167078122,
+            "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 8.407964625046588, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "splendimax",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "splendimax"
+            ],
+            "wall_seconds": 0.15283083298709244,
+            "stdout": "{\"engine\": \"splendimax\", \"commit\": \"5ffcb148ee0093e3b47f612b04a1927301ff13ee\", \"setup_build_seconds\": 0.07845783396624029, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/splendimax/target/release/splendimax-test\", \"source_patch\": \"Cargo.toml: append empty workspace table for build isolation\"}\n",
+            "stderr": "warning: Cargo.toml: `package.edition` is unspecified, defaulting to `2015` while the latest is `2024`\nwarning: `splendimax` (manifest) generated 1 warning\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:30:25\n   |\n30 |     fn apply(&mut self, &Self::Move);\n   |                         ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n   = note: `#[warn(anonymous_parameters)]` (part of `#[warn(rust_2018_compatibility)]`) on by default\n\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:31:24\n   |\n31 |     fn undo(&mut self, &Self::Move);\n   |                        ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:108:9\n    |\n108 |         try!(write!(out, \"Player: {}\\n\", self.adversary.score()));\n    |         ^^^\n    |\n    = note: `#[warn(deprecated)]` on by default\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:193:9\n    |\n193 |         try!(print_player(out, &self.adversary));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:194:9\n    |\n194 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:196:9\n    |\n196 |         try!(write!(out, \"Adversary: {}\\n\", self.player.score()));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:197:9\n    |\n197 |         try!(print_player(out, &self.player));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:199:9\n    |\n199 |         try!(write!(out, \"\\nBank\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:203:9\n    |\n203 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:207:9\n    |\n207 |         try!(write!(out, \"\\n\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:256:9\n    |\n256 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:257:9\n    |\n257 |         try!(print_cards(out, &self.cards3));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:258:9\n    |\n258 |         try!(print_cards(out, &self.cards2));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:259:9\n    |\n259 |         try!(print_cards(out, &self.cards1));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:114:17\n    |\n114 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:118:17\n    |\n118 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:122:17\n    |\n122 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:146:17\n    |\n146 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:170:17\n    |\n170 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:174:17\n    |\n174 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:112:21\n    |\n112 |                     try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:116:21\n    |\n116 |                     try!(write!(out, \"\u2503{}     {}\u2503 \", card.color.code(), card.points));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:120:21\n    |\n120 |                     try!(write!(out, \"\u2503       \u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:124:21\n    |\n124 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:144:21\n    |\n144 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:128:29\n    |\n128 | ...                   try!(write!(out, \"{}\", color.code()));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:131:33\n    |\n131 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:136:25\n    |\n136 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:138:29\n    |\n138 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:140:33\n    |\n140 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:148:21\n    |\n148 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:168:21\n    |\n168 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:152:29\n    |\n152 | ...                   try!(write!(out, \"{}\", card.cost[color]));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:155:33\n    |\n155 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:160:25\n    |\n160 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:162:29\n    |\n162 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:164:33\n    |\n164 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:172:21\n    |\n172 |                     try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:180:17\n    |\n180 |                 try!(write!(out, \"Reserved\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:181:17\n    |\n181 |                 try!(print_cards(out, &player.reserved));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:184:17\n    |\n184 |                 try!(write!(out, \"{}: {}\", color.code(), player.tokens[color]));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:189:17\n    |\n189 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:187:21\n    |\n187 |                     try!(write!(out, \" + {}\", count));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:201:13\n    |\n201 |             try!(write!(out, \"{} \", color.code()));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:205:13\n    |\n205 |             try!(write!(out, \"{} \", self.bank[color]));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:210:13\n    |\n210 |             try!(write!(out, \"\\nNobles\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:214:13\n    |\n214 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:232:13\n    |\n232 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:250:13\n    |\n250 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:254:13\n    |\n254 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:212:17\n    |\n212 |                 try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:216:17\n    |\n216 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:230:17\n    |\n230 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:220:25\n    |\n220 |                         try!(write!(out, \"{}\", color.code()));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:223:29\n    |\n223 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:228:21\n    |\n228 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:234:17\n    |\n234 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:248:17\n    |\n248 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:238:25\n    |\n238 |                         try!(write!(out, \"{}\", noble.cost[color]));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:241:29\n    |\n241 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:246:21\n    |\n246 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:252:17\n    |\n252 |                 try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                 ^^^\n\nwarning: unnecessary trailing semicolon\n   --> src/state.rs:669:66\n    |\n669 |                         let noble = player.nobles.pop().unwrap();;\n    |                                                                  ^ help: remove this semicolon\n    |\n    = note: `#[warn(redundant_semicolons)]` (part of `#[warn(unused)]`) on by default\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:109:34\n    |\n109 |         fn print_cards(out: &mut io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\n    = note: `#[warn(bare_trait_objects)]` (part of `#[warn(rust_2021_compatibility)]`) on by default\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n109 |         fn print_cards(out: &mut dyn io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:178:35\n    |\n178 |         fn print_player(out: &mut io::Write, player: &Player) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n178 |         fn print_player(out: &mut dyn io::Write, player: &Player) -> io::Result<()> {\n    |                                   +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:107:35\n    |\n107 |     pub fn print(&self, out: &mut io::Write) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n107 |     pub fn print(&self, out: &mut dyn io::Write) -> io::Result<()> {\n    |                                   +++\n\nwarning: `splendimax` (lib) generated 66 warnings (run `cargo fix --lib -p splendimax` to apply 5 suggestions)\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:48:13\n   |\n48 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n48 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:66:13\n   |\n66 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n66 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-test\") generated 2 warnings\nwarning: unused import: `splendimax::algo::state::Score`\n --> src/bin/splendimax-play.rs:6:5\n  |\n6 | use splendimax::algo::state::Score;\n  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused import: `splendimax::card::Card`\n --> src/bin/splendimax-play.rs:9:5\n  |\n9 | use splendimax::card::Card;\n  |     ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: unused import: `splendimax::color::Color`\n  --> src/bin/splendimax-play.rs:11:5\n   |\n11 | use splendimax::color::Color;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: variable does not need to be mutable\n  --> src/bin/splendimax-play.rs:16:9\n   |\n16 |     let mut stdin = io::stdin();\n   |         ----^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:20:5\n   |\n20 |     state.print(&mut stdout);\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n20 |     let _ = state.print(&mut stdout);\n   |     +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:23:13\n   |\n23 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n23 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:33:17\n   |\n33 |                 state.print(&mut stdout);\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n33 |                 let _ = state.print(&mut stdout);\n   |                 +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:38:13\n   |\n38 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n38 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-play\") generated 8 warnings (run `cargo fix --bin \"splendimax-play\" -p splendimax` to apply 4 suggestions)\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+          },
+          {
+            "step": "averagestardust",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "averagestardust"
+            ],
+            "wall_seconds": 0.41375158401206136,
+            "stdout": "?   \tsplendor\t[no test files]\n?   \tsplendor/agents\t[no test files]\n?   \tsplendor/cli\t[no test files]\n?   \tsplendor/command\t[no test files]\n?   \tsplendor/engine\t[no test files]\n{\"engine\": \"averagestardust\", \"commit\": \"3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e\", \"setup_build_seconds\": 0.3435884159989655, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/averagestardust-rule-probe\", \"source_patch\": \"none\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "Python dependencies",
+            "command": [
+              "uv",
+              "pip",
+              "install",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+              "numpy==1.26.4",
+              "numba==0.62.0",
+              "llvmlite==0.45.1",
+              "colorama==0.4.6"
+            ],
+            "wall_seconds": 0.02270533295813948,
+            "stdout": "",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 5ms\n"
+          },
+          {
+            "step": "Python dependency manifest",
+            "command": [
+              "uv",
+              "pip",
+              "freeze",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+            ],
+            "wall_seconds": 0.012417042045854032,
+            "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+          }
+        ]
+      },
+      {
+        "kind": "setup/build costs; existing caches may be reused",
+        "steps": [
+          {
+            "step": "splendorust release examples",
+            "command": [
+              "cargo",
+              "build",
+              "--release",
+              "--locked",
+              "-p",
+              "splendor-arena",
+              "--examples",
+              "--features",
+              "benchmark-compat"
+            ],
+            "wall_seconds": 4.631744791986421,
+            "stdout": "",
+            "stderr": "   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-arena)\n    Finished `release` profile [optimized] target(s) in 4.59s\n"
+          },
+          {
+            "step": "seal256",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "seal256"
+            ],
+            "wall_seconds": 8.470948999980465,
+            "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 8.385328667005524, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "Python dependencies",
+            "command": [
+              "uv",
+              "pip",
+              "install",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+              "numpy==1.26.4",
+              "numba==0.62.0",
+              "llvmlite==0.45.1",
+              "colorama==0.4.6"
+            ],
+            "wall_seconds": 0.016052499995566905,
+            "stdout": "",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 4ms\n"
+          },
+          {
+            "step": "Python dependency manifest",
+            "command": [
+              "uv",
+              "pip",
+              "freeze",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+            ],
+            "wall_seconds": 0.012972040916793048,
+            "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+          }
+        ]
+      },
+      {
+        "kind": "setup/build costs; existing caches may be reused",
+        "steps": [
+          {
+            "step": "splendorust release examples",
+            "command": [
+              "cargo",
+              "build",
+              "--release",
+              "--locked",
+              "-p",
+              "splendor-arena",
+              "--examples",
+              "--features",
+              "benchmark-compat"
+            ],
+            "wall_seconds": 6.182559082983062,
+            "stdout": "",
+            "stderr": "   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-arena)\n   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-agents)\n    Finished `release` profile [optimized] target(s) in 6.14s\n"
+          },
+          {
+            "step": "seal256",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "seal256"
+            ],
+            "wall_seconds": 6.63653641694691,
+            "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 6.513983333017677, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "splendimax",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "splendimax"
+            ],
+            "wall_seconds": 0.1313284169882536,
+            "stdout": "{\"engine\": \"splendimax\", \"commit\": \"5ffcb148ee0093e3b47f612b04a1927301ff13ee\", \"setup_build_seconds\": 0.06447641598060727, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/splendimax/target/release/splendimax-test\", \"source_patch\": \"Cargo.toml: append empty workspace table for build isolation\"}\n",
+            "stderr": "warning: Cargo.toml: `package.edition` is unspecified, defaulting to `2015` while the latest is `2024`\nwarning: `splendimax` (manifest) generated 1 warning\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:30:25\n   |\n30 |     fn apply(&mut self, &Self::Move);\n   |                         ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n   = note: `#[warn(anonymous_parameters)]` (part of `#[warn(rust_2018_compatibility)]`) on by default\n\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:31:24\n   |\n31 |     fn undo(&mut self, &Self::Move);\n   |                        ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:108:9\n    |\n108 |         try!(write!(out, \"Player: {}\\n\", self.adversary.score()));\n    |         ^^^\n    |\n    = note: `#[warn(deprecated)]` on by default\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:193:9\n    |\n193 |         try!(print_player(out, &self.adversary));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:194:9\n    |\n194 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:196:9\n    |\n196 |         try!(write!(out, \"Adversary: {}\\n\", self.player.score()));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:197:9\n    |\n197 |         try!(print_player(out, &self.player));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:199:9\n    |\n199 |         try!(write!(out, \"\\nBank\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:203:9\n    |\n203 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:207:9\n    |\n207 |         try!(write!(out, \"\\n\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:256:9\n    |\n256 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:257:9\n    |\n257 |         try!(print_cards(out, &self.cards3));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:258:9\n    |\n258 |         try!(print_cards(out, &self.cards2));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:259:9\n    |\n259 |         try!(print_cards(out, &self.cards1));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:114:17\n    |\n114 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:118:17\n    |\n118 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:122:17\n    |\n122 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:146:17\n    |\n146 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:170:17\n    |\n170 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:174:17\n    |\n174 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:112:21\n    |\n112 |                     try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:116:21\n    |\n116 |                     try!(write!(out, \"\u2503{}     {}\u2503 \", card.color.code(), card.points));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:120:21\n    |\n120 |                     try!(write!(out, \"\u2503       \u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:124:21\n    |\n124 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:144:21\n    |\n144 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:128:29\n    |\n128 | ...                   try!(write!(out, \"{}\", color.code()));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:131:33\n    |\n131 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:136:25\n    |\n136 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:138:29\n    |\n138 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:140:33\n    |\n140 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:148:21\n    |\n148 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:168:21\n    |\n168 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:152:29\n    |\n152 | ...                   try!(write!(out, \"{}\", card.cost[color]));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:155:33\n    |\n155 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:160:25\n    |\n160 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:162:29\n    |\n162 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:164:33\n    |\n164 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:172:21\n    |\n172 |                     try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:180:17\n    |\n180 |                 try!(write!(out, \"Reserved\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:181:17\n    |\n181 |                 try!(print_cards(out, &player.reserved));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:184:17\n    |\n184 |                 try!(write!(out, \"{}: {}\", color.code(), player.tokens[color]));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:189:17\n    |\n189 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:187:21\n    |\n187 |                     try!(write!(out, \" + {}\", count));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:201:13\n    |\n201 |             try!(write!(out, \"{} \", color.code()));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:205:13\n    |\n205 |             try!(write!(out, \"{} \", self.bank[color]));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:210:13\n    |\n210 |             try!(write!(out, \"\\nNobles\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:214:13\n    |\n214 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:232:13\n    |\n232 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:250:13\n    |\n250 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:254:13\n    |\n254 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:212:17\n    |\n212 |                 try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:216:17\n    |\n216 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:230:17\n    |\n230 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:220:25\n    |\n220 |                         try!(write!(out, \"{}\", color.code()));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:223:29\n    |\n223 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:228:21\n    |\n228 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:234:17\n    |\n234 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:248:17\n    |\n248 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:238:25\n    |\n238 |                         try!(write!(out, \"{}\", noble.cost[color]));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:241:29\n    |\n241 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:246:21\n    |\n246 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:252:17\n    |\n252 |                 try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                 ^^^\n\nwarning: unnecessary trailing semicolon\n   --> src/state.rs:669:66\n    |\n669 |                         let noble = player.nobles.pop().unwrap();;\n    |                                                                  ^ help: remove this semicolon\n    |\n    = note: `#[warn(redundant_semicolons)]` (part of `#[warn(unused)]`) on by default\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:109:34\n    |\n109 |         fn print_cards(out: &mut io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\n    = note: `#[warn(bare_trait_objects)]` (part of `#[warn(rust_2021_compatibility)]`) on by default\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n109 |         fn print_cards(out: &mut dyn io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:178:35\n    |\n178 |         fn print_player(out: &mut io::Write, player: &Player) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n178 |         fn print_player(out: &mut dyn io::Write, player: &Player) -> io::Result<()> {\n    |                                   +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:107:35\n    |\n107 |     pub fn print(&self, out: &mut io::Write) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n107 |     pub fn print(&self, out: &mut dyn io::Write) -> io::Result<()> {\n    |                                   +++\n\nwarning: `splendimax` (lib) generated 66 warnings (run `cargo fix --lib -p splendimax` to apply 5 suggestions)\nwarning: unused import: `splendimax::algo::state::Score`\n --> src/bin/splendimax-play.rs:6:5\n  |\n6 | use splendimax::algo::state::Score;\n  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused import: `splendimax::card::Card`\n --> src/bin/splendimax-play.rs:9:5\n  |\n9 | use splendimax::card::Card;\n  |     ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: unused import: `splendimax::color::Color`\n  --> src/bin/splendimax-play.rs:11:5\n   |\n11 | use splendimax::color::Color;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: variable does not need to be mutable\n  --> src/bin/splendimax-play.rs:16:9\n   |\n16 |     let mut stdin = io::stdin();\n   |         ----^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:20:5\n   |\n20 |     state.print(&mut stdout);\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n20 |     let _ = state.print(&mut stdout);\n   |     +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:23:13\n   |\n23 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n23 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:33:17\n   |\n33 |                 state.print(&mut stdout);\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n33 |                 let _ = state.print(&mut stdout);\n   |                 +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:38:13\n   |\n38 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n38 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-play\") generated 8 warnings (run `cargo fix --bin \"splendimax-play\" -p splendimax` to apply 4 suggestions)\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:48:13\n   |\n48 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n48 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:66:13\n   |\n66 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n66 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-test\") generated 2 warnings\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+          },
+          {
+            "step": "averagestardust",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "averagestardust"
+            ],
+            "wall_seconds": 0.41437158396001905,
+            "stdout": "?   \tsplendor\t[no test files]\n?   \tsplendor/agents\t[no test files]\n?   \tsplendor/cli\t[no test files]\n?   \tsplendor/command\t[no test files]\n?   \tsplendor/engine\t[no test files]\n{\"engine\": \"averagestardust\", \"commit\": \"3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e\", \"setup_build_seconds\": 0.34995508298743516, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/averagestardust-rule-probe\", \"source_patch\": \"none\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "Python dependencies",
+            "command": [
+              "uv",
+              "pip",
+              "install",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+              "numpy==1.26.4",
+              "numba==0.62.0",
+              "llvmlite==0.45.1",
+              "colorama==0.4.6"
+            ],
+            "wall_seconds": 0.018683957983739674,
+            "stdout": "",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 3ms\n"
+          },
+          {
+            "step": "Python dependency manifest",
+            "command": [
+              "uv",
+              "pip",
+              "freeze",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+            ],
+            "wall_seconds": 0.01103804202284664,
+            "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+          }
+        ]
+      }
+    ]
+  },
+  "versions": {
+    "rust": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8",
+    "cpp": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  },
+  "sources": {
+    "splendorust_status": "?? benchmarks/results/native-20260929.json",
+    "splendorust_commit": "16437bae7beba6777107946967b30ed01457c011",
+    "seal256_commit": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+  },
+  "build_flags": {
+    "rust": "release opt-level3, thinLTO, codegen-units1; benchmark-compat feature",
+    "cpp": "-O3 -DNDEBUG -std=c++17 -pthread",
+    "env": {
+      "RUSTFLAGS": null,
+      "CXXFLAGS": null,
+      "OMP_NUM_THREADS": null,
+      "NUMBA_NUM_THREADS": null
+    }
+  },
+  "command": [
+    "benchmarks/run_aligned.py",
+    "--output",
+    "benchmarks/results/aligned-20260929.json",
+    "--max-cases",
+    "400000"
+  ],
+  "profile": "seal256-intersection-v1",
+  "protocol": "benchmarks/PROFILES.md",
+  "profile_contract_sha256": "ef24275e9ff0afd61fa88eddb23b99c2307c244fd12cc10f211f7c8daacfa3ea",
+  "suite_source_sha256": "3e0650d8d5ba78bf025e3a0ce594dd4c0b4cfcb679f6b54ffe23a58fe960bb3c",
+  "validation": [
+    {
+      "policy": "random",
+      "cases": 64,
+      "turns": 3588,
+      "statuses": {
+        "complete": 44,
+        "profile_blocked": 16,
+        "unsupported_noble_choice": 4
+      },
+      "trace_and_legal_sets_sha256": "65afeef2ff257089dd754e71db1c03913eaa29453b6ef75ab9de61beb56b3f3e",
+      "match": true
+    },
+    {
+      "policy": "fixed",
+      "cases": 64,
+      "turns": 3719,
+      "statuses": {
+        "complete": 51,
+        "profile_blocked": 4,
+        "unsupported_noble_choice": 9
+      },
+      "trace_and_legal_sets_sha256": "2af95f9c683d97f3d71ed48f6752ed664f7ff371d5ea9e7dfad58f45abcb9877",
+      "match": true
+    }
+  ],
+  "rows": [
+    {
+      "engine": "splendorust",
+      "policy": "random",
+      "threads": 1,
+      "count": 310969,
+      "corpus_sha256": "7203c06269cdf7d531ce25fe71c73941f403b06672d3f17b2152238481493705",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004733583,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004733583,
+        "seal256": 0.009635334
+      },
+      "samples": [
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.4030635,
+          "setup_seconds": 0.115672458,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 5.7417e-05,
+          "process_wall_seconds": 6.9754582500318065,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.480836709,
+          "setup_seconds": 0.117565416,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 7.0792e-05,
+          "process_wall_seconds": 6.935895249946043,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.633571,
+          "setup_seconds": 0.120345084,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 6.9625e-05,
+          "process_wall_seconds": 7.066078957985155,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.543180458,
+          "setup_seconds": 0.1190625,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 7.0792e-05,
+          "process_wall_seconds": 7.01378995901905,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.534722458,
+          "setup_seconds": 0.1216065,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 5.5292e-05,
+          "process_wall_seconds": 7.026295291958377,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.54125525,
+          "setup_seconds": 0.123141375,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 7.3667e-05,
+          "process_wall_seconds": 7.04868837504182,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 4.571105917,
+          "setup_seconds": 0.120042125,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 5.55e-05,
+          "process_wall_seconds": 7.073200959013775,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-random-7203c06269cdf7d5-records.json.gz",
+      "records_archive_sha256": "1bde2ac8f97392b96e9f1047b0371d85e0b054db3ee4de18db4ee1dec7f13946",
+      "latency_seconds": {
+        "all": {
+          "count": 310969,
+          "p50": 1.575e-05,
+          "p95": 2.05e-05,
+          "p99": 2.2666e-05
+        },
+        "complete": {
+          "count": 198035,
+          "p50": 1.7e-05,
+          "p95": 2.1083e-05,
+          "p99": 2.3167e-05
+        },
+        "unfinished": {
+          "count": 112934,
+          "p50": 7.167e-06,
+          "p95": 1.75e-05,
+          "p99": 2.0125e-05
+        }
+      },
+      "record_set_sha256": "2ff733ac00b1dd9020d782b30366f2df16b4c265d1f552da4a6766e7b171ab9c",
+      "summary": {
+        "median_seconds": 4.54125525,
+        "duration_range_seconds": [
+          4.4030635,
+          4.633571
+        ],
+        "trajectories_per_second": 68476.44161820678,
+        "median_rate_bootstrap95": [
+          68029.27030054202,
+          69399.76173990052
+        ],
+        "completed_games_per_second": 43607.98702076921,
+        "completed_turns_per_second": 3804588.8303679912,
+        "median_setup_seconds": 0.120042125,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "random",
+      "threads": 4,
+      "count": 310969,
+      "corpus_sha256": "7203c06269cdf7d531ce25fe71c73941f403b06672d3f17b2152238481493705",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004733583,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004733583,
+        "seal256": 0.009635334
+      },
+      "samples": [
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.319990917,
+          "setup_seconds": 0.119128042,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 7.3666e-05,
+          "process_wall_seconds": 3.817540290998295,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.330311125,
+          "setup_seconds": 0.119752625,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 0.000479875,
+          "process_wall_seconds": 3.7912106660660356,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.342150292,
+          "setup_seconds": 0.11928825,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 7.5167e-05,
+          "process_wall_seconds": 3.8413626248948276,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.320141375,
+          "setup_seconds": 0.121142125,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 0.00045075,
+          "process_wall_seconds": 3.8222042499110103,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.331242208,
+          "setup_seconds": 0.122278625,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 9.7459e-05,
+          "process_wall_seconds": 3.7861887079197913,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.34286525,
+          "setup_seconds": 0.121227792,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 0.000503167,
+          "process_wall_seconds": 3.770882040960714,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 198035,
+          "count": 310969,
+          "decisions": 25583939,
+          "seconds": 1.333780625,
+          "setup_seconds": 0.120042291,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "turns": 17277609,
+          "worker_setup_seconds": 6.9458e-05,
+          "process_wall_seconds": 3.861170042073354,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-random-7203c06269cdf7d5-records.json.gz",
+      "records_archive_sha256": "1bde2ac8f97392b96e9f1047b0371d85e0b054db3ee4de18db4ee1dec7f13946",
+      "latency_seconds": {
+        "all": {
+          "count": 310969,
+          "p50": 1.8667e-05,
+          "p95": 2.4583e-05,
+          "p99": 2.7167e-05
+        },
+        "complete": {
+          "count": 198035,
+          "p50": 2.025e-05,
+          "p95": 2.525e-05,
+          "p99": 2.775e-05
+        },
+        "unfinished": {
+          "count": 112934,
+          "p50": 8.875e-06,
+          "p95": 2.0958e-05,
+          "p99": 2.4166e-05
+        }
+      },
+      "record_set_sha256": "2ff733ac00b1dd9020d782b30366f2df16b4c265d1f552da4a6766e7b171ab9c",
+      "summary": {
+        "median_seconds": 1.331242208,
+        "duration_range_seconds": [
+          1.319990917,
+          1.34286525
+        ],
+        "trajectories_per_second": 233593.10434363873,
+        "median_rate_bootstrap95": [
+          231694.61859342948,
+          235557.3470303512
+        ],
+        "completed_games_per_second": 148759.55615734204,
+        "completed_turns_per_second": 12978561.599212756,
+        "median_setup_seconds": 0.120042291,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "random",
+      "threads": 1,
+      "count": 310969,
+      "corpus_sha256": "7203c06269cdf7d531ce25fe71c73941f403b06672d3f17b2152238481493705",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004733583,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004733583,
+        "seal256": 0.009635334
+      },
+      "samples": [
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.424201625,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 8.073671186000125,
+          "per_game_setup_seconds_sum": 0.7041362169995999,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.710178292,
+          "thread_pool_startup_seconds": 3.4916e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 0.001055667,
+          "seconds": 8.424201625,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 13.958077333983965
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.569739583,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 8.2137028830001,
+          "per_game_setup_seconds_sum": 0.7223040579996531,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.728343834,
+          "thread_pool_startup_seconds": 3.825e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.4584e-05,
+          "seconds": 8.569739583,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 14.021552666905336
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.299673292,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 7.9478446109999,
+          "per_game_setup_seconds_sum": 0.7089127339995859,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.715099916,
+          "thread_pool_startup_seconds": 2.9042e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 5.7083e-05,
+          "seconds": 8.299673292,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 13.885913333040662
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.226074708,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 7.869849386000195,
+          "per_game_setup_seconds_sum": 0.7140318259995373,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.720114458,
+          "thread_pool_startup_seconds": 3.4625e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 5.1333e-05,
+          "seconds": 8.226074708,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 13.6455743330298
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.496949166,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 8.14378487299974,
+          "per_game_setup_seconds_sum": 0.7247514869995755,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.731281167,
+          "thread_pool_startup_seconds": 3.3625e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.7875e-05,
+          "seconds": 8.496949166,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 14.022514207987115
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.747376583,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 8.390555247999997,
+          "per_game_setup_seconds_sum": 0.718132808999518,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.724237334,
+          "thread_pool_startup_seconds": 3.05e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.3459e-05,
+          "seconds": 8.747376583,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 14.264808167004958
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 8.544359459,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 8.187515359999884,
+          "per_game_setup_seconds_sum": 0.7245445249995187,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.730901583,
+          "thread_pool_startup_seconds": 3.6458e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 5.3208e-05,
+          "seconds": 8.544359459,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 14.073713166988455
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-random-7203c06269cdf7d5-records.json.gz",
+      "records_archive_sha256": "1bde2ac8f97392b96e9f1047b0371d85e0b054db3ee4de18db4ee1dec7f13946",
+      "latency_seconds": {
+        "all": {
+          "count": 310969,
+          "p50": 2.9125e-05,
+          "p95": 3.7292e-05,
+          "p99": 4.0916e-05
+        },
+        "complete": {
+          "count": 198035,
+          "p50": 3.1292e-05,
+          "p95": 3.825e-05,
+          "p99": 4.175e-05
+        },
+        "unfinished": {
+          "count": 112934,
+          "p50": 1.3333e-05,
+          "p95": 3.2209e-05,
+          "p99": 3.6917e-05
+        }
+      },
+      "record_set_sha256": "2ff733ac00b1dd9020d782b30366f2df16b4c265d1f552da4a6766e7b171ab9c",
+      "summary": {
+        "median_seconds": 8.496949166,
+        "duration_range_seconds": [
+          8.226074708,
+          8.747376583
+        ],
+        "trajectories_per_second": 36597.72395065309,
+        "median_rate_bootstrap95": [
+          36286.86694481087,
+          37467.61939409603
+        ],
+        "completed_games_per_second": 23306.60053756993,
+        "completed_turns_per_second": 2033389.709936744,
+        "median_setup_seconds": 0.724237334,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "random",
+      "threads": 4,
+      "count": 310969,
+      "corpus_sha256": "7203c06269cdf7d531ce25fe71c73941f403b06672d3f17b2152238481493705",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004733583,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004733583,
+        "seal256": 0.009635334
+      },
+      "samples": [
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.632906291,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 9.933380552000209,
+          "per_game_setup_seconds_sum": 0.7136967749996289,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.719877875,
+          "thread_pool_startup_seconds": 5.4084e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 5.1208e-05,
+          "seconds": 2.632906291,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.371350707951933
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.64125175,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 9.95990571199975,
+          "per_game_setup_seconds_sum": 0.70936854599964,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.715764708,
+          "thread_pool_startup_seconds": 5.3834e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.6584e-05,
+          "seconds": 2.64125175,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.24295224994421
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.629289666,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 9.963341567000068,
+          "per_game_setup_seconds_sum": 0.7160803539995916,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.722182916,
+          "thread_pool_startup_seconds": 5.4459e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 5.175e-05,
+          "seconds": 2.629289666,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.231156833004206
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.665293792,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 10.026030081999586,
+          "per_game_setup_seconds_sum": 0.7310008269996201,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.737073458,
+          "thread_pool_startup_seconds": 5.0458e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.8958e-05,
+          "seconds": 2.665293792,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.304781791986898
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.617638542,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 9.87579880100005,
+          "per_game_setup_seconds_sum": 0.7257241019996328,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.732043833,
+          "thread_pool_startup_seconds": 5.7958e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.6917e-05,
+          "seconds": 2.617638542,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.173152167000808
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.663681625,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 10.098030641000141,
+          "per_game_setup_seconds_sum": 0.7161947139995863,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.722321083,
+          "thread_pool_startup_seconds": 4.3167e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.575e-05,
+          "seconds": 2.663681625,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.245442499988712
+        },
+        {
+          "completed": 198035,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.647758625,
+          "engine": "seal256",
+          "games": 310969,
+          "main_turns": 17277609,
+          "no_legal_action": 73,
+          "per_game_play_seconds_sum": 9.985108172999746,
+          "per_game_setup_seconds_sum": 0.7229934719995618,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 90730,
+          "repetition": 0,
+          "setup_seconds": 0.729356167,
+          "thread_pool_startup_seconds": 6.9541e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 22131,
+          "warmup_seconds": 4.6375e-05,
+          "seconds": 2.647758625,
+          "count": 310969,
+          "turns": 17277609,
+          "statuses": {
+            "complete": 198035,
+            "no_legal_action": 73,
+            "profile_blocked": 90730,
+            "unsupported_noble_choice": 22131
+          },
+          "process_wall_seconds": 8.232235333067365
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-random-7203c06269cdf7d5-records.json.gz",
+      "records_archive_sha256": "1bde2ac8f97392b96e9f1047b0371d85e0b054db3ee4de18db4ee1dec7f13946",
+      "latency_seconds": {
+        "all": {
+          "count": 310969,
+          "p50": 3.5667e-05,
+          "p95": 4.55e-05,
+          "p99": 4.9709e-05
+        },
+        "complete": {
+          "count": 198035,
+          "p50": 3.8333e-05,
+          "p95": 4.6583e-05,
+          "p99": 5.0666e-05
+        },
+        "unfinished": {
+          "count": 112934,
+          "p50": 1.7125e-05,
+          "p95": 3.9458e-05,
+          "p99": 4.4833e-05
+        }
+      },
+      "record_set_sha256": "2ff733ac00b1dd9020d782b30366f2df16b4c265d1f552da4a6766e7b171ab9c",
+      "summary": {
+        "median_seconds": 2.64125175,
+        "duration_range_seconds": [
+          2.617638542,
+          2.665293792
+        ],
+        "trajectories_per_second": 117735.46387617159,
+        "median_rate_bootstrap95": [
+          116744.05720315767,
+          118271.1072200289
+        ],
+        "completed_games_per_second": 74977.70706635594,
+        "completed_turns_per_second": 6541447.251289091,
+        "median_setup_seconds": 0.722321083,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "fixed",
+      "threads": 1,
+      "count": 207199,
+      "corpus_sha256": "8b5cd652a3f2d545ad5dc8d6774f956f790b40405e23b22a7843c5a18b1e2fd8",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.00710425,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.00710425,
+        "seal256": 0.019851375
+      },
+      "samples": [
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.384394292,
+          "setup_seconds": 0.077963875,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 5.9375e-05,
+          "process_wall_seconds": 5.954997958033346,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.496339,
+          "setup_seconds": 0.079893375,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 9.3167e-05,
+          "process_wall_seconds": 6.093000750057399,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.537678417,
+          "setup_seconds": 0.079221458,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 4.7792e-05,
+          "process_wall_seconds": 6.170327291940339,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.549984042,
+          "setup_seconds": 0.079877583,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 5.1042e-05,
+          "process_wall_seconds": 6.227454042062163,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.482795125,
+          "setup_seconds": 0.080803416,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 5.6375e-05,
+          "process_wall_seconds": 6.120087958057411,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.451316,
+          "setup_seconds": 0.08131225,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 5.5916e-05,
+          "process_wall_seconds": 6.094758999999613,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 4.532348917,
+          "setup_seconds": 0.080362625,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 5.475e-05,
+          "process_wall_seconds": 6.169090667041019,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-fixed-8b5cd652a3f2d545-records.json.gz",
+      "records_archive_sha256": "d4c5ad13859d7957429db8d94f9413024360115b394e0b530a4ffac07041ddbf",
+      "latency_seconds": {
+        "all": {
+          "count": 207199,
+          "p50": 2.2333e-05,
+          "p95": 2.4708e-05,
+          "p99": 2.6125e-05
+        },
+        "complete": {
+          "count": 165000,
+          "p50": 2.275e-05,
+          "p95": 2.4834e-05,
+          "p99": 2.6417e-05
+        },
+        "unfinished": {
+          "count": 42199,
+          "p50": 1.6417e-05,
+          "p95": 2.1333e-05,
+          "p99": 2.3583e-05
+        }
+      },
+      "record_set_sha256": "2fb0af3bc19d61855476e1559dcc48e01dbbc03de889631a3c7a89d0d717ae5e",
+      "summary": {
+        "median_seconds": 4.496339,
+        "duration_range_seconds": [
+          4.384394292,
+          4.549984042
+        ],
+        "trajectories_per_second": 46081.712255236984,
+        "median_rate_bootstrap95": [
+          45661.896009145945,
+          46547.807434924856
+        ],
+        "completed_games_per_second": 36696.52132546056,
+        "completed_turns_per_second": 2749429.480294969,
+        "median_setup_seconds": 0.079893375,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "fixed",
+      "threads": 4,
+      "count": 207199,
+      "corpus_sha256": "8b5cd652a3f2d545ad5dc8d6774f956f790b40405e23b22a7843c5a18b1e2fd8",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.00710425,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.00710425,
+        "seal256": 0.019851375
+      },
+      "samples": [
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.244814416,
+          "setup_seconds": 0.08062,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 7.3917e-05,
+          "process_wall_seconds": 2.787997583975084,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.281306375,
+          "setup_seconds": 0.0795765,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 0.000440208,
+          "process_wall_seconds": 2.905222750036046,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.267804709,
+          "setup_seconds": 0.079507666,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 6e-05,
+          "process_wall_seconds": 2.868954124976881,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.319368041,
+          "setup_seconds": 0.085539917,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 0.000442709,
+          "process_wall_seconds": 3.0056670419871807,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.242152292,
+          "setup_seconds": 0.079671708,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 6.6791e-05,
+          "process_wall_seconds": 2.8800502920057625,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.402285709,
+          "setup_seconds": 0.081489584,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 0.000435458,
+          "process_wall_seconds": 3.0378822500351816,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 165000,
+          "count": 207199,
+          "decisions": 21276050,
+          "seconds": 1.218718292,
+          "setup_seconds": 0.083767667,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "turns": 12362367,
+          "worker_setup_seconds": 8.0959e-05,
+          "process_wall_seconds": 2.8742977919755504,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-fixed-8b5cd652a3f2d545-records.json.gz",
+      "records_archive_sha256": "d4c5ad13859d7957429db8d94f9413024360115b394e0b530a4ffac07041ddbf",
+      "latency_seconds": {
+        "all": {
+          "count": 207199,
+          "p50": 2.4875e-05,
+          "p95": 2.8333e-05,
+          "p99": 2.9667e-05
+        },
+        "complete": {
+          "count": 165000,
+          "p50": 2.55e-05,
+          "p95": 2.8541e-05,
+          "p99": 2.9875e-05
+        },
+        "unfinished": {
+          "count": 42199,
+          "p50": 1.8458e-05,
+          "p95": 2.4166e-05,
+          "p99": 2.6583e-05
+        }
+      },
+      "record_set_sha256": "2fb0af3bc19d61855476e1559dcc48e01dbbc03de889631a3c7a89d0d717ae5e",
+      "summary": {
+        "median_seconds": 1.267804709,
+        "duration_range_seconds": [
+          1.218718292,
+          1.402285709
+        ],
+        "trajectories_per_second": 163431.3222920834,
+        "median_rate_bootstrap95": [
+          157044.1253397012,
+          166806.43857798394
+        ],
+        "completed_games_per_second": 130146.22743446523,
+        "completed_turns_per_second": 9751002.5891535,
+        "median_setup_seconds": 0.08062,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "fixed",
+      "threads": 1,
+      "count": 207199,
+      "corpus_sha256": "8b5cd652a3f2d545ad5dc8d6774f956f790b40405e23b22a7843c5a18b1e2fd8",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.00710425,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.00710425,
+        "seal256": 0.019851375
+      },
+      "samples": [
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 6.8179395,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 6.5802624539997145,
+          "per_game_setup_seconds_sum": 0.4767523340000788,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.480823375,
+          "thread_pool_startup_seconds": 3.8667e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.0292e-05,
+          "seconds": 6.8179395,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 10.365585082909092
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.577896458,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 7.225953142999808,
+          "per_game_setup_seconds_sum": 0.4846913480000339,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.488985417,
+          "thread_pool_startup_seconds": 3.4083e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.2709e-05,
+          "seconds": 7.577896458,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 11.436794625013135
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.509084375,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 7.22691490899995,
+          "per_game_setup_seconds_sum": 0.5036410740000438,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.507804916,
+          "thread_pool_startup_seconds": 2.2125e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 6.675e-05,
+          "seconds": 7.509084375,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 11.923274374916218
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.1150745,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 6.856048959999731,
+          "per_game_setup_seconds_sum": 0.49914029500002194,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.503469875,
+          "thread_pool_startup_seconds": 3.2625e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.475e-05,
+          "seconds": 7.1150745,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 10.838553083012812
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.410666625,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 7.121141098999751,
+          "per_game_setup_seconds_sum": 0.4959994030000481,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.500412333,
+          "thread_pool_startup_seconds": 2.9167e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 8.0709e-05,
+          "seconds": 7.410666625,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 11.211515125003643
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.300162583,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 7.0346469899999144,
+          "per_game_setup_seconds_sum": 0.49403815100004544,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.4981395,
+          "thread_pool_startup_seconds": 2.8417e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 6.9625e-05,
+          "seconds": 7.300162583,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 11.121443332987837
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 7.149462333,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 6.892120101999738,
+          "per_game_setup_seconds_sum": 0.4939157410000575,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.498044125,
+          "thread_pool_startup_seconds": 3.3584e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 6.7417e-05,
+          "seconds": 7.149462333,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 10.841524666990153
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-fixed-8b5cd652a3f2d545-records.json.gz",
+      "records_archive_sha256": "d4c5ad13859d7957429db8d94f9413024360115b394e0b530a4ffac07041ddbf",
+      "latency_seconds": {
+        "all": {
+          "count": 207199,
+          "p50": 3.3375e-05,
+          "p95": 3.7542e-05,
+          "p99": 3.9667e-05
+        },
+        "complete": {
+          "count": 165000,
+          "p50": 3.4084e-05,
+          "p95": 3.7833e-05,
+          "p99": 4.0083e-05
+        },
+        "unfinished": {
+          "count": 42199,
+          "p50": 2.5417e-05,
+          "p95": 3.2666e-05,
+          "p99": 3.5792e-05
+        }
+      },
+      "record_set_sha256": "2fb0af3bc19d61855476e1559dcc48e01dbbc03de889631a3c7a89d0d717ae5e",
+      "summary": {
+        "median_seconds": 7.300162583,
+        "duration_range_seconds": [
+          6.8179395,
+          7.577896458
+        ],
+        "trajectories_per_second": 28382.792526088047,
+        "median_rate_bootstrap95": [
+          27593.111177419687,
+          29121.12866843488
+        ],
+        "completed_games_per_second": 22602.23633706981,
+        "completed_turns_per_second": 1693437.2158763194,
+        "median_setup_seconds": 0.4981395,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "fixed",
+      "threads": 4,
+      "count": 207199,
+      "corpus_sha256": "8b5cd652a3f2d545ad5dc8d6774f956f790b40405e23b22a7843c5a18b1e2fd8",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.00710425,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.00710425,
+        "seal256": 0.019851375
+      },
+      "samples": [
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 3.247041791,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 12.509652635999764,
+          "per_game_setup_seconds_sum": 0.4774790500000492,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.481539875,
+          "thread_pool_startup_seconds": 5.8417e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.425e-05,
+          "seconds": 3.247041791,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 6.860230708960444
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 3.5163695,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 13.531927982000061,
+          "per_game_setup_seconds_sum": 0.4818793850000755,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.485943042,
+          "thread_pool_startup_seconds": 5.4458e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.7375e-05,
+          "seconds": 3.5163695,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 7.135566374985501
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.858949042,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 10.97717723999997,
+          "per_game_setup_seconds_sum": 0.5110033909999954,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.515407875,
+          "thread_pool_startup_seconds": 6.5958e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 9.1959e-05,
+          "seconds": 2.858949042,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 6.791160250082612
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.849133625,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 11.002849281000225,
+          "per_game_setup_seconds_sum": 0.5034569710000233,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.507796084,
+          "thread_pool_startup_seconds": 4.2875e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 8.3125e-05,
+          "seconds": 2.849133625,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 6.654009541030973
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 3.321061375,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 12.857484597000049,
+          "per_game_setup_seconds_sum": 0.5042517560000231,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.508397125,
+          "thread_pool_startup_seconds": 4.6041e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.1e-05,
+          "seconds": 3.321061375,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 7.204363792086951
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 3.412132792,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 13.275439703999844,
+          "per_game_setup_seconds_sum": 0.4990100540000537,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.503111417,
+          "thread_pool_startup_seconds": 4.5875e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 8.4458e-05,
+          "seconds": 3.412132792,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 7.295954208006151
+        },
+        {
+          "completed": 165000,
+          "decision_limit": 0,
+          "elapsed_seconds": 2.599781833,
+          "engine": "seal256",
+          "games": 207199,
+          "main_turns": 12362367,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 10.033096975000067,
+          "per_game_setup_seconds_sum": 0.499885923000051,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 9485,
+          "repetition": 0,
+          "setup_seconds": 0.504267542,
+          "thread_pool_startup_seconds": 4.5458e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 32714,
+          "warmup_seconds": 7.025e-05,
+          "seconds": 2.599781833,
+          "count": 207199,
+          "turns": 12362367,
+          "statuses": {
+            "complete": 165000,
+            "profile_blocked": 9485,
+            "unsupported_noble_choice": 32714
+          },
+          "process_wall_seconds": 6.3739411670248955
+        }
+      ],
+      "comparable": true,
+      "rank_scope": "aligned adapter pipeline within seal256-intersection-v1 only",
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/aligned-20260929-fixed-8b5cd652a3f2d545-records.json.gz",
+      "records_archive_sha256": "d4c5ad13859d7957429db8d94f9413024360115b394e0b530a4ffac07041ddbf",
+      "latency_seconds": {
+        "all": {
+          "count": 207199,
+          "p50": 6.525e-05,
+          "p95": 7.2917e-05,
+          "p99": 7.625e-05
+        },
+        "complete": {
+          "count": 165000,
+          "p50": 6.6625e-05,
+          "p95": 7.3375e-05,
+          "p99": 7.6708e-05
+        },
+        "unfinished": {
+          "count": 42199,
+          "p50": 4.9041e-05,
+          "p95": 6.3125e-05,
+          "p99": 6.9333e-05
+        }
+      },
+      "record_set_sha256": "2fb0af3bc19d61855476e1559dcc48e01dbbc03de889631a3c7a89d0d717ae5e",
+      "summary": {
+        "median_seconds": 3.247041791,
+        "duration_range_seconds": [
+          2.599781833,
+          3.5163695
+        ],
+        "trajectories_per_second": 63811.6209573602,
+        "median_rate_bootstrap95": [
+          60724.190009777325,
+          72723.51081813511
+        ],
+        "completed_games_per_second": 50815.48394521418,
+        "completed_turns_per_second": 3807270.67765664,
+        "median_setup_seconds": 0.504267542,
+        "repetitions": 7,
+        "timing_confidence": "local repeated timing"
+      }
+    }
+  ],
+  "notes": [
+    "Same injected card/noble setup, semantic main action keys, SplitMix64 streams and policy.",
+    "Native decisions differ: Rust payment phases and C++ chance refills. Rank common completed turns and trajectories, not native decisions.",
+    "Each measured repetition uses an identical case corpus. Alternate full engine/worker order.",
+    "Setup is serial and outside gameplay timer. Process time includes parsing, warmup, setup, gameplay, snapshots and serialization.",
+    "Incomplete profile cases stay in every throughput denominator; none gets a victory.",
+    "Per-game latency clocks are inside this workload; snapshot extraction is outside gameplay.",
+    "This profile restricts policy choices, and stops unsupported multi-noble buys. It is not all published legal play.",
+    "C++ minimal JSON record boxing is timed; Rust uses a typed record. Full snapshots and serialization are excluded."
+  ],
+  "finished_utc": "2026-09-29T16:12:29.494595+00:00"
+}
