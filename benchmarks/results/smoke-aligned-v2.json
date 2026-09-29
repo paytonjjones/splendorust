@@ -1,0 +1,1167 @@
+{
+  "schema_version": 1,
+  "started_utc": "2026-09-29T15:35:22.343069+00:00",
+  "machine": {
+    "cpu": "Apple M4 Pro",
+    "os": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "os_build": "ProductName:\t\tmacOS\nProductVersion:\t\t26.7\nBuildVersion:\t\t25G229",
+    "logical_cores": 14,
+    "load_at_start": [
+      20.88525390625,
+      10.66552734375,
+      7.06298828125
+    ],
+    "load_at_finish": [
+      19.53271484375,
+      10.5546875,
+      7.044921875
+    ]
+  },
+  "binaries_sha256": {
+    "target/release/examples/aligned_worker": "0ad0e55a6517db522819d6731dd2fd9580f8ea9e5cf1144f6b1cd961a27a6ba9",
+    "local/benchmarks/external/seal256-game": "6de882d95d84075b0105108920e28f5c24c3a18db84ffe071b6af1b466750ebb"
+  },
+  "interface_patch_sha256": "e4f17dfaf70f7f0f103c5e0529a9c6b30ec4769e36ac85876108c7b4b18926be",
+  "external_source_status": "M src/splendor.h",
+  "setup_build": {
+    "kind": "setup/build costs; existing caches may be reused",
+    "steps": [
+      {
+        "step": "splendorust release examples",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "--locked",
+          "-p",
+          "splendor-arena",
+          "--examples",
+          "--features",
+          "benchmark-compat"
+        ],
+        "wall_seconds": 6.182559082983062,
+        "stdout": "",
+        "stderr": "   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-arena)\n   Compiling splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-agents)\n    Finished `release` profile [optimized] target(s) in 6.14s\n"
+      },
+      {
+        "step": "seal256",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "seal256"
+        ],
+        "wall_seconds": 6.63653641694691,
+        "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 6.513983333017677, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+        "stderr": ""
+      },
+      {
+        "step": "splendimax",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "splendimax"
+        ],
+        "wall_seconds": 0.1313284169882536,
+        "stdout": "{\"engine\": \"splendimax\", \"commit\": \"5ffcb148ee0093e3b47f612b04a1927301ff13ee\", \"setup_build_seconds\": 0.06447641598060727, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/splendimax/target/release/splendimax-test\", \"source_patch\": \"Cargo.toml: append empty workspace table for build isolation\"}\n",
+        "stderr": "warning: Cargo.toml: `package.edition` is unspecified, defaulting to `2015` while the latest is `2024`\nwarning: `splendimax` (manifest) generated 1 warning\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:30:25\n   |\n30 |     fn apply(&mut self, &Self::Move);\n   |                         ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n   = note: `#[warn(anonymous_parameters)]` (part of `#[warn(rust_2018_compatibility)]`) on by default\n\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:31:24\n   |\n31 |     fn undo(&mut self, &Self::Move);\n   |                        ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:108:9\n    |\n108 |         try!(write!(out, \"Player: {}\\n\", self.adversary.score()));\n    |         ^^^\n    |\n    = note: `#[warn(deprecated)]` on by default\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:193:9\n    |\n193 |         try!(print_player(out, &self.adversary));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:194:9\n    |\n194 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:196:9\n    |\n196 |         try!(write!(out, \"Adversary: {}\\n\", self.player.score()));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:197:9\n    |\n197 |         try!(print_player(out, &self.player));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:199:9\n    |\n199 |         try!(write!(out, \"\\nBank\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:203:9\n    |\n203 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:207:9\n    |\n207 |         try!(write!(out, \"\\n\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:256:9\n    |\n256 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:257:9\n    |\n257 |         try!(print_cards(out, &self.cards3));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:258:9\n    |\n258 |         try!(print_cards(out, &self.cards2));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:259:9\n    |\n259 |         try!(print_cards(out, &self.cards1));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:114:17\n    |\n114 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:118:17\n    |\n118 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:122:17\n    |\n122 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:146:17\n    |\n146 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:170:17\n    |\n170 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:174:17\n    |\n174 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:112:21\n    |\n112 |                     try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:116:21\n    |\n116 |                     try!(write!(out, \"\u2503{}     {}\u2503 \", card.color.code(), card.points));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:120:21\n    |\n120 |                     try!(write!(out, \"\u2503       \u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:124:21\n    |\n124 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:144:21\n    |\n144 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:128:29\n    |\n128 | ...                   try!(write!(out, \"{}\", color.code()));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:131:33\n    |\n131 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:136:25\n    |\n136 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:138:29\n    |\n138 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:140:33\n    |\n140 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:148:21\n    |\n148 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:168:21\n    |\n168 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:152:29\n    |\n152 | ...                   try!(write!(out, \"{}\", card.cost[color]));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:155:33\n    |\n155 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:160:25\n    |\n160 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:162:29\n    |\n162 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:164:33\n    |\n164 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:172:21\n    |\n172 |                     try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:180:17\n    |\n180 |                 try!(write!(out, \"Reserved\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:181:17\n    |\n181 |                 try!(print_cards(out, &player.reserved));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:184:17\n    |\n184 |                 try!(write!(out, \"{}: {}\", color.code(), player.tokens[color]));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:189:17\n    |\n189 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:187:21\n    |\n187 |                     try!(write!(out, \" + {}\", count));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:201:13\n    |\n201 |             try!(write!(out, \"{} \", color.code()));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:205:13\n    |\n205 |             try!(write!(out, \"{} \", self.bank[color]));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:210:13\n    |\n210 |             try!(write!(out, \"\\nNobles\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:214:13\n    |\n214 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:232:13\n    |\n232 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:250:13\n    |\n250 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:254:13\n    |\n254 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:212:17\n    |\n212 |                 try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:216:17\n    |\n216 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:230:17\n    |\n230 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:220:25\n    |\n220 |                         try!(write!(out, \"{}\", color.code()));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:223:29\n    |\n223 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:228:21\n    |\n228 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:234:17\n    |\n234 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:248:17\n    |\n248 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:238:25\n    |\n238 |                         try!(write!(out, \"{}\", noble.cost[color]));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:241:29\n    |\n241 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:246:21\n    |\n246 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:252:17\n    |\n252 |                 try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                 ^^^\n\nwarning: unnecessary trailing semicolon\n   --> src/state.rs:669:66\n    |\n669 |                         let noble = player.nobles.pop().unwrap();;\n    |                                                                  ^ help: remove this semicolon\n    |\n    = note: `#[warn(redundant_semicolons)]` (part of `#[warn(unused)]`) on by default\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:109:34\n    |\n109 |         fn print_cards(out: &mut io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\n    = note: `#[warn(bare_trait_objects)]` (part of `#[warn(rust_2021_compatibility)]`) on by default\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n109 |         fn print_cards(out: &mut dyn io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:178:35\n    |\n178 |         fn print_player(out: &mut io::Write, player: &Player) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n178 |         fn print_player(out: &mut dyn io::Write, player: &Player) -> io::Result<()> {\n    |                                   +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:107:35\n    |\n107 |     pub fn print(&self, out: &mut io::Write) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n107 |     pub fn print(&self, out: &mut dyn io::Write) -> io::Result<()> {\n    |                                   +++\n\nwarning: `splendimax` (lib) generated 66 warnings (run `cargo fix --lib -p splendimax` to apply 5 suggestions)\nwarning: unused import: `splendimax::algo::state::Score`\n --> src/bin/splendimax-play.rs:6:5\n  |\n6 | use splendimax::algo::state::Score;\n  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused import: `splendimax::card::Card`\n --> src/bin/splendimax-play.rs:9:5\n  |\n9 | use splendimax::card::Card;\n  |     ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: unused import: `splendimax::color::Color`\n  --> src/bin/splendimax-play.rs:11:5\n   |\n11 | use splendimax::color::Color;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: variable does not need to be mutable\n  --> src/bin/splendimax-play.rs:16:9\n   |\n16 |     let mut stdin = io::stdin();\n   |         ----^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:20:5\n   |\n20 |     state.print(&mut stdout);\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n20 |     let _ = state.print(&mut stdout);\n   |     +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:23:13\n   |\n23 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n23 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:33:17\n   |\n33 |                 state.print(&mut stdout);\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n33 |                 let _ = state.print(&mut stdout);\n   |                 +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:38:13\n   |\n38 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n38 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-play\") generated 8 warnings (run `cargo fix --bin \"splendimax-play\" -p splendimax` to apply 4 suggestions)\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:48:13\n   |\n48 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n48 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:66:13\n   |\n66 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n66 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-test\") generated 2 warnings\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+      },
+      {
+        "step": "averagestardust",
+        "command": [
+          "python3",
+          "benchmarks/external/setup_native.py",
+          "averagestardust"
+        ],
+        "wall_seconds": 0.41437158396001905,
+        "stdout": "?   \tsplendor\t[no test files]\n?   \tsplendor/agents\t[no test files]\n?   \tsplendor/cli\t[no test files]\n?   \tsplendor/command\t[no test files]\n?   \tsplendor/engine\t[no test files]\n{\"engine\": \"averagestardust\", \"commit\": \"3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e\", \"setup_build_seconds\": 0.34995508298743516, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/averagestardust-rule-probe\", \"source_patch\": \"none\"}\n",
+        "stderr": ""
+      },
+      {
+        "step": "Python dependencies",
+        "command": [
+          "uv",
+          "pip",
+          "install",
+          "--python",
+          "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+          "numpy==1.26.4",
+          "numba==0.62.0",
+          "llvmlite==0.45.1",
+          "colorama==0.4.6"
+        ],
+        "wall_seconds": 0.018683957983739674,
+        "stdout": "",
+        "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 3ms\n"
+      },
+      {
+        "step": "Python dependency manifest",
+        "command": [
+          "uv",
+          "pip",
+          "freeze",
+          "--python",
+          "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+        ],
+        "wall_seconds": 0.01103804202284664,
+        "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+        "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+      }
+    ],
+    "history": [
+      {
+        "kind": "setup/build costs; existing caches may be reused",
+        "steps": [
+          {
+            "step": "splendorust release examples",
+            "command": [
+              "cargo",
+              "build",
+              "--release",
+              "--locked",
+              "-p",
+              "splendor-arena",
+              "--examples",
+              "--features",
+              "splendor-core/benchmark-compat"
+            ],
+            "wall_seconds": 0.13383645797148347,
+            "stdout": "",
+            "stderr": "    Finished `release` profile [optimized] target(s) in 0.09s\n"
+          },
+          {
+            "step": "seal256",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "seal256"
+            ],
+            "wall_seconds": 8.499743167078122,
+            "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 8.407964625046588, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "splendimax",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "splendimax"
+            ],
+            "wall_seconds": 0.15283083298709244,
+            "stdout": "{\"engine\": \"splendimax\", \"commit\": \"5ffcb148ee0093e3b47f612b04a1927301ff13ee\", \"setup_build_seconds\": 0.07845783396624029, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/splendimax/target/release/splendimax-test\", \"source_patch\": \"Cargo.toml: append empty workspace table for build isolation\"}\n",
+            "stderr": "warning: Cargo.toml: `package.edition` is unspecified, defaulting to `2015` while the latest is `2024`\nwarning: `splendimax` (manifest) generated 1 warning\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:30:25\n   |\n30 |     fn apply(&mut self, &Self::Move);\n   |                         ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n   = note: `#[warn(anonymous_parameters)]` (part of `#[warn(rust_2018_compatibility)]`) on by default\n\nwarning: anonymous parameters are deprecated and will be removed in the next edition\n  --> src/algo/state.rs:31:24\n   |\n31 |     fn undo(&mut self, &Self::Move);\n   |                        ^^^^^^^^^^^ help: try naming the parameter or explicitly ignoring it: `_: &Self::Move`\n   |\n   = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!\n   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2018/trait-fn-parameters.html>\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:108:9\n    |\n108 |         try!(write!(out, \"Player: {}\\n\", self.adversary.score()));\n    |         ^^^\n    |\n    = note: `#[warn(deprecated)]` on by default\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:193:9\n    |\n193 |         try!(print_player(out, &self.adversary));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:194:9\n    |\n194 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:196:9\n    |\n196 |         try!(write!(out, \"Adversary: {}\\n\", self.player.score()));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:197:9\n    |\n197 |         try!(print_player(out, &self.player));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:199:9\n    |\n199 |         try!(write!(out, \"\\nBank\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:203:9\n    |\n203 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:207:9\n    |\n207 |         try!(write!(out, \"\\n\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:256:9\n    |\n256 |         try!(write!(out, \"\\n\"));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:257:9\n    |\n257 |         try!(print_cards(out, &self.cards3));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:258:9\n    |\n258 |         try!(print_cards(out, &self.cards2));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:259:9\n    |\n259 |         try!(print_cards(out, &self.cards1));\n    |         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:114:17\n    |\n114 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:118:17\n    |\n118 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:122:17\n    |\n122 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:146:17\n    |\n146 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:170:17\n    |\n170 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:174:17\n    |\n174 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:112:21\n    |\n112 |                     try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:116:21\n    |\n116 |                     try!(write!(out, \"\u2503{}     {}\u2503 \", card.color.code(), card.points));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:120:21\n    |\n120 |                     try!(write!(out, \"\u2503       \u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:124:21\n    |\n124 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:144:21\n    |\n144 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:128:29\n    |\n128 | ...                   try!(write!(out, \"{}\", color.code()));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:131:33\n    |\n131 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:136:25\n    |\n136 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:138:29\n    |\n138 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:140:33\n    |\n140 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:148:21\n    |\n148 |                     try!(write!(out, \"\u2503\"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:168:21\n    |\n168 |                     try!(write!(out, \"\u2503 \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:152:29\n    |\n152 | ...                   try!(write!(out, \"{}\", card.cost[color]));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:155:33\n    |\n155 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:160:25\n    |\n160 |                         try!(write!(out, \" \"));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:162:29\n    |\n162 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:164:33\n    |\n164 | ...                   try!(write!(out, \"  \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:172:21\n    |\n172 |                     try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:180:17\n    |\n180 |                 try!(write!(out, \"Reserved\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:181:17\n    |\n181 |                 try!(print_cards(out, &player.reserved));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:184:17\n    |\n184 |                 try!(write!(out, \"{}: {}\", color.code(), player.tokens[color]));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:189:17\n    |\n189 |                 try!(write!(out, \"\\n\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:187:21\n    |\n187 |                     try!(write!(out, \" + {}\", count));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:201:13\n    |\n201 |             try!(write!(out, \"{} \", color.code()));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:205:13\n    |\n205 |             try!(write!(out, \"{} \", self.bank[color]));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:210:13\n    |\n210 |             try!(write!(out, \"\\nNobles\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:214:13\n    |\n214 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:232:13\n    |\n232 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:250:13\n    |\n250 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:254:13\n    |\n254 |             try!(write!(out, \"\\n\"));\n    |             ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:212:17\n    |\n212 |                 try!(write!(out, \"\u250f\u2501\u2501\u2501\u2501\u2501\u2513 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:216:17\n    |\n216 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:230:17\n    |\n230 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:220:25\n    |\n220 |                         try!(write!(out, \"{}\", color.code()));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:223:29\n    |\n223 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:228:21\n    |\n228 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:234:17\n    |\n234 |                 try!(write!(out, \"\u2503\"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:248:17\n    |\n248 |                 try!(write!(out, \"\u2503 \"));\n    |                 ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:238:25\n    |\n238 |                         try!(write!(out, \"{}\", noble.cost[color]));\n    |                         ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:241:29\n    |\n241 | ...                   try!(write!(out, \" \"));\n    |                       ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:246:21\n    |\n246 |                     try!(write!(out, \" \"));\n    |                     ^^^\n\nwarning: use of deprecated macro `try`: use the `?` operator instead\n   --> src/state.rs:252:17\n    |\n252 |                 try!(write!(out, \"\u2517\u2501\u2501\u2501\u2501\u2501\u251b \"));\n    |                 ^^^\n\nwarning: unnecessary trailing semicolon\n   --> src/state.rs:669:66\n    |\n669 |                         let noble = player.nobles.pop().unwrap();;\n    |                                                                  ^ help: remove this semicolon\n    |\n    = note: `#[warn(redundant_semicolons)]` (part of `#[warn(unused)]`) on by default\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:109:34\n    |\n109 |         fn print_cards(out: &mut io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\n    = note: `#[warn(bare_trait_objects)]` (part of `#[warn(rust_2021_compatibility)]`) on by default\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n109 |         fn print_cards(out: &mut dyn io::Write, cards: &Vec<Card>) -> io::Result<()> {\n    |                                  +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:178:35\n    |\n178 |         fn print_player(out: &mut io::Write, player: &Player) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n178 |         fn print_player(out: &mut dyn io::Write, player: &Player) -> io::Result<()> {\n    |                                   +++\n\nwarning: trait objects without an explicit `dyn` are deprecated\n   --> src/state.rs:107:35\n    |\n107 |     pub fn print(&self, out: &mut io::Write) -> io::Result<()> {\n    |                                   ^^^^^^^^^\n    |\n    = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!\n    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2021/warnings-promoted-to-error.html>\nhelp: if this is a dyn-compatible trait, use `dyn`\n    |\n107 |     pub fn print(&self, out: &mut dyn io::Write) -> io::Result<()> {\n    |                                   +++\n\nwarning: `splendimax` (lib) generated 66 warnings (run `cargo fix --lib -p splendimax` to apply 5 suggestions)\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:48:13\n   |\n48 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n48 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-test.rs:66:13\n   |\n66 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n66 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-test\") generated 2 warnings\nwarning: unused import: `splendimax::algo::state::Score`\n --> src/bin/splendimax-play.rs:6:5\n  |\n6 | use splendimax::algo::state::Score;\n  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused import: `splendimax::card::Card`\n --> src/bin/splendimax-play.rs:9:5\n  |\n9 | use splendimax::card::Card;\n  |     ^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: unused import: `splendimax::color::Color`\n  --> src/bin/splendimax-play.rs:11:5\n   |\n11 | use splendimax::color::Color;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: variable does not need to be mutable\n  --> src/bin/splendimax-play.rs:16:9\n   |\n16 |     let mut stdin = io::stdin();\n   |         ----^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:20:5\n   |\n20 |     state.print(&mut stdout);\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\n   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n20 |     let _ = state.print(&mut stdout);\n   |     +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:23:13\n   |\n23 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n23 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:33:17\n   |\n33 |                 state.print(&mut stdout);\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n33 |                 let _ = state.print(&mut stdout);\n   |                 +++++++\n\nwarning: unused `Result` that must be used\n  --> src/bin/splendimax-play.rs:38:13\n   |\n38 |             state.print(&mut stdout);\n   |             ^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: this `Result` may be an `Err` variant, which should be handled\nhelp: use `let _ = ...` to ignore the resulting value\n   |\n38 |             let _ = state.print(&mut stdout);\n   |             +++++++\n\nwarning: `splendimax` (bin \"splendimax-play\") generated 8 warnings (run `cargo fix --bin \"splendimax-play\" -p splendimax` to apply 4 suggestions)\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+          },
+          {
+            "step": "averagestardust",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "averagestardust"
+            ],
+            "wall_seconds": 0.41375158401206136,
+            "stdout": "?   \tsplendor\t[no test files]\n?   \tsplendor/agents\t[no test files]\n?   \tsplendor/cli\t[no test files]\n?   \tsplendor/command\t[no test files]\n?   \tsplendor/engine\t[no test files]\n{\"engine\": \"averagestardust\", \"commit\": \"3a85b8c8c6f050b1dcebb53820f7cf0861fcba5e\", \"setup_build_seconds\": 0.3435884159989655, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/averagestardust-rule-probe\", \"source_patch\": \"none\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "Python dependencies",
+            "command": [
+              "uv",
+              "pip",
+              "install",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+              "numpy==1.26.4",
+              "numba==0.62.0",
+              "llvmlite==0.45.1",
+              "colorama==0.4.6"
+            ],
+            "wall_seconds": 0.02270533295813948,
+            "stdout": "",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 5ms\n"
+          },
+          {
+            "step": "Python dependency manifest",
+            "command": [
+              "uv",
+              "pip",
+              "freeze",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+            ],
+            "wall_seconds": 0.012417042045854032,
+            "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+          }
+        ]
+      },
+      {
+        "kind": "setup/build costs; existing caches may be reused",
+        "steps": [
+          {
+            "step": "splendorust release examples",
+            "command": [
+              "cargo",
+              "build",
+              "--release",
+              "--locked",
+              "-p",
+              "splendor-arena",
+              "--examples",
+              "--features",
+              "benchmark-compat"
+            ],
+            "wall_seconds": 4.631744791986421,
+            "stdout": "",
+            "stderr": "   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-benchmarks/crates/splendor-arena)\n    Finished `release` profile [optimized] target(s) in 4.59s\n"
+          },
+          {
+            "step": "seal256",
+            "command": [
+              "python3",
+              "benchmarks/external/setup_native.py",
+              "seal256"
+            ],
+            "wall_seconds": 8.470948999980465,
+            "stdout": "{\"engine\": \"seal256\", \"commit\": \"263abc066c563a1c89dba4bdc408446a20ad9d1d\", \"setup_build_seconds\": 8.385328667005524, \"binary\": \"/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/seal256-opening\", \"source_patch\": \"splendor.h: expose unchanged verify_action via public access only\"}\n",
+            "stderr": ""
+          },
+          {
+            "step": "Python dependencies",
+            "command": [
+              "uv",
+              "pip",
+              "install",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python",
+              "numpy==1.26.4",
+              "numba==0.62.0",
+              "llvmlite==0.45.1",
+              "colorama==0.4.6"
+            ],
+            "wall_seconds": 0.016052499995566905,
+            "stdout": "",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\nAudited 4 packages in 4ms\n"
+          },
+          {
+            "step": "Python dependency manifest",
+            "command": [
+              "uv",
+              "pip",
+              "freeze",
+              "--python",
+              "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy/.venv/bin/python"
+            ],
+            "wall_seconds": 0.012972040916793048,
+            "stdout": "colorama==0.4.6\nllvmlite==0.45.1\nnumba==0.62.0\nnumpy==1.26.4\n",
+            "stderr": "Using Python 3.12.7 environment at: local/benchmarks/external/python_lyquentxy/.venv\n"
+          }
+        ]
+      }
+    ]
+  },
+  "versions": {
+    "rust": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8",
+    "cpp": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  },
+  "sources": {
+    "splendorust_commit": "95581e2f4de9f65dfd7c0eb94986af611757419d",
+    "seal256_commit": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+  },
+  "build_flags": {
+    "rust": "release opt-level3, thinLTO, codegen-units1; benchmark-compat feature",
+    "cpp": "-O3 -DNDEBUG -std=c++17 -pthread"
+  },
+  "command": [
+    "benchmarks/run_aligned.py",
+    "--output",
+    "benchmarks/results/smoke-aligned-v2.json",
+    "--repetitions",
+    "2",
+    "--target-seconds",
+    "0.03",
+    "--max-cases",
+    "1024"
+  ],
+  "profile": "seal256-intersection-v1",
+  "protocol": "benchmarks/PROFILES.md",
+  "profile_contract_sha256": "ef24275e9ff0afd61fa88eddb23b99c2307c244fd12cc10f211f7c8daacfa3ea",
+  "suite_source_sha256": "f0967dc9b0f0e3c5c4613dd77c93f9574c23ed1dfb7703b9c5faa9c260737252",
+  "validation": [
+    {
+      "policy": "random",
+      "cases": 64,
+      "turns": 3588,
+      "statuses": {
+        "complete": 44,
+        "profile_blocked": 16,
+        "unsupported_noble_choice": 4
+      },
+      "trace_and_legal_sets_sha256": "65afeef2ff257089dd754e71db1c03913eaa29453b6ef75ab9de61beb56b3f3e",
+      "match": true
+    },
+    {
+      "policy": "fixed",
+      "cases": 64,
+      "turns": 3719,
+      "statuses": {
+        "complete": 51,
+        "profile_blocked": 4,
+        "unsupported_noble_choice": 9
+      },
+      "trace_and_legal_sets_sha256": "2af95f9c683d97f3d71ed48f6752ed664f7ff371d5ea9e7dfad58f45abcb9877",
+      "match": true
+    }
+  ],
+  "rows": [
+    {
+      "engine": "splendorust",
+      "policy": "random",
+      "threads": 1,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004804792,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004804792,
+        "seal256": 0.009477125
+      },
+      "samples": [
+        {
+          "completed": 639,
+          "count": 1024,
+          "decisions": 82895,
+          "seconds": 0.015051708,
+          "setup_seconds": 0.000372166,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "turns": 56099,
+          "worker_setup_seconds": 3.5125e-05,
+          "process_wall_seconds": 0.03472445800434798,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 639,
+          "count": 1024,
+          "decisions": 82895,
+          "seconds": 0.014768625,
+          "setup_seconds": 0.00037,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "turns": 56099,
+          "worker_setup_seconds": 3.5583e-05,
+          "process_wall_seconds": 0.03258679201826453,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-random-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "a50b115daa1ca3786bcfa2595592339ecad2918abc6b6f55032408633ebe2b15",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 1.6416e-05,
+          "p95": 2.1375e-05,
+          "p99": 2.3459e-05
+        },
+        "complete": {
+          "count": 639,
+          "p50": 1.7584e-05,
+          "p95": 2.2125e-05,
+          "p99": 2.375e-05
+        },
+        "unfinished": {
+          "count": 385,
+          "p50": 7.75e-06,
+          "p95": 1.8084e-05,
+          "p99": 2.0084e-05
+        }
+      },
+      "record_set_sha256": "d9ee1c76962638d7d4afcacb7bf3210ec719624be677784c7b474adac1a06963",
+      "summary": {
+        "median_seconds": 0.0149101665,
+        "duration_range_seconds": [
+          0.014768625,
+          0.015051708
+        ],
+        "trajectories_per_second": 68684.16172604135,
+        "median_rate_bootstrap95": [
+          68032.14625210641,
+          69336.1771999763
+        ],
+        "completed_games_per_second": 42860.526702090254,
+        "completed_turns_per_second": 3762805.4576847595,
+        "median_setup_seconds": 0.000371083,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "random",
+      "threads": 4,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004804792,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004804792,
+        "seal256": 0.009477125
+      },
+      "samples": [
+        {
+          "completed": 639,
+          "count": 1024,
+          "decisions": 82895,
+          "seconds": 0.004687208,
+          "setup_seconds": 0.000365917,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "turns": 56099,
+          "worker_setup_seconds": 4.5584e-05,
+          "process_wall_seconds": 0.023948500049300492,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 639,
+          "count": 1024,
+          "decisions": 82895,
+          "seconds": 0.004719125,
+          "setup_seconds": 0.000368459,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "turns": 56099,
+          "worker_setup_seconds": 4.4584e-05,
+          "process_wall_seconds": 0.023631207994185388,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-random-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "a50b115daa1ca3786bcfa2595592339ecad2918abc6b6f55032408633ebe2b15",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 1.9459e-05,
+          "p95": 2.6416e-05,
+          "p99": 3.775e-05
+        },
+        "complete": {
+          "count": 639,
+          "p50": 2.1208e-05,
+          "p95": 2.7667e-05,
+          "p99": 4.625e-05
+        },
+        "unfinished": {
+          "count": 385,
+          "p50": 9.833e-06,
+          "p95": 2.25e-05,
+          "p99": 2.6541e-05
+        }
+      },
+      "record_set_sha256": "d9ee1c76962638d7d4afcacb7bf3210ec719624be677784c7b474adac1a06963",
+      "summary": {
+        "median_seconds": 0.0047031665,
+        "duration_range_seconds": [
+          0.004687208,
+          0.004719125
+        ],
+        "trajectories_per_second": 217728.16034747334,
+        "median_rate_bootstrap95": [
+          216989.3783275501,
+          218466.94236739655
+        ],
+        "completed_games_per_second": 135867.47506058152,
+        "completed_turns_per_second": 11928058.65950479,
+        "median_setup_seconds": 0.000367188,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "random",
+      "threads": 1,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004804792,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004804792,
+        "seal256": 0.009477125
+      },
+      "samples": [
+        {
+          "completed": 639,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.027158542,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 56099,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.02598394700000002,
+          "per_game_setup_seconds_sum": 0.0022576260000000017,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 310,
+          "repetition": 0,
+          "setup_seconds": 0.002282625,
+          "thread_pool_startup_seconds": 1.8958e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 75,
+          "warmup_seconds": 3.3292e-05,
+          "seconds": 0.027158542,
+          "count": 1024,
+          "turns": 56099,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "process_wall_seconds": 0.0580807919614017
+        },
+        {
+          "completed": 639,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.027357208,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 56099,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.02609766999999997,
+          "per_game_setup_seconds_sum": 0.0023322810000000007,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 310,
+          "repetition": 0,
+          "setup_seconds": 0.002361208,
+          "thread_pool_startup_seconds": 1.7667e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 75,
+          "warmup_seconds": 3.5375e-05,
+          "seconds": 0.027357208,
+          "count": 1024,
+          "turns": 56099,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "process_wall_seconds": 0.056799457990564406
+        }
+      ],
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-random-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "a50b115daa1ca3786bcfa2595592339ecad2918abc6b6f55032408633ebe2b15",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 2.8666e-05,
+          "p95": 3.6125e-05,
+          "p99": 3.8584e-05
+        },
+        "complete": {
+          "count": 639,
+          "p50": 3.0667e-05,
+          "p95": 3.6625e-05,
+          "p99": 3.9041e-05
+        },
+        "unfinished": {
+          "count": 385,
+          "p50": 1.325e-05,
+          "p95": 3.2625e-05,
+          "p99": 3.6375e-05
+        }
+      },
+      "record_set_sha256": "d9ee1c76962638d7d4afcacb7bf3210ec719624be677784c7b474adac1a06963",
+      "summary": {
+        "median_seconds": 0.027257875,
+        "duration_range_seconds": [
+          0.027158542,
+          0.027357208
+        ],
+        "trajectories_per_second": 37567.62400070958,
+        "median_rate_bootstrap95": [
+          37430.72026940761,
+          37704.527732011535
+        ],
+        "completed_games_per_second": 23443.077867630287,
+        "completed_turns_per_second": 2058111.463687311,
+        "median_setup_seconds": 0.0023219165,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "random",
+      "threads": 4,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.004804792,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.004804792,
+        "seal256": 0.009477125
+      },
+      "samples": [
+        {
+          "completed": 639,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.009186417,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 56099,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.034174925,
+          "per_game_setup_seconds_sum": 0.0022664470000000004,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 310,
+          "repetition": 0,
+          "setup_seconds": 0.002293208,
+          "thread_pool_startup_seconds": 3.8083e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 75,
+          "warmup_seconds": 3.0792e-05,
+          "seconds": 0.009186417,
+          "count": 1024,
+          "turns": 56099,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "process_wall_seconds": 0.040025874972343445
+        },
+        {
+          "completed": 639,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.009621125,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 56099,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.03494691200000004,
+          "per_game_setup_seconds_sum": 0.002251521,
+          "policy": "random",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 310,
+          "repetition": 0,
+          "setup_seconds": 0.002274458,
+          "thread_pool_startup_seconds": 3.975e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 75,
+          "warmup_seconds": 4.0959e-05,
+          "seconds": 0.009621125,
+          "count": 1024,
+          "turns": 56099,
+          "statuses": {
+            "complete": 639,
+            "profile_blocked": 310,
+            "unsupported_noble_choice": 75
+          },
+          "process_wall_seconds": 0.03968816704582423
+        }
+      ],
+      "comparison_group": "aligned-random-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-random-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "a50b115daa1ca3786bcfa2595592339ecad2918abc6b6f55032408633ebe2b15",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 3.6916e-05,
+          "p95": 4.8375e-05,
+          "p99": 5.8209e-05
+        },
+        "complete": {
+          "count": 639,
+          "p50": 3.9416e-05,
+          "p95": 5.0125e-05,
+          "p99": 7.1792e-05
+        },
+        "unfinished": {
+          "count": 385,
+          "p50": 1.8209e-05,
+          "p95": 4.0833e-05,
+          "p99": 4.875e-05
+        }
+      },
+      "record_set_sha256": "d9ee1c76962638d7d4afcacb7bf3210ec719624be677784c7b474adac1a06963",
+      "summary": {
+        "median_seconds": 0.009403771,
+        "duration_range_seconds": [
+          0.009186417,
+          0.009621125
+        ],
+        "trajectories_per_second": 108950.69090897578,
+        "median_rate_bootstrap95": [
+          106432.45982148658,
+          111468.921996465
+        ],
+        "completed_games_per_second": 67987.78465901906,
+        "completed_turns_per_second": 5968774.227834603,
+        "median_setup_seconds": 0.002283833,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "fixed",
+      "threads": 1,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.006826209,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.006826209,
+        "seal256": 0.020157584
+      },
+      "samples": [
+        {
+          "completed": 826,
+          "count": 1024,
+          "decisions": 105412,
+          "seconds": 0.022040709,
+          "setup_seconds": 0.000353083,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "turns": 61208,
+          "worker_setup_seconds": 3.4708e-05,
+          "process_wall_seconds": 0.040696916985325515,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 826,
+          "count": 1024,
+          "decisions": 105412,
+          "seconds": 0.022190333,
+          "setup_seconds": 0.000361042,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "turns": 61208,
+          "worker_setup_seconds": 3.2792e-05,
+          "process_wall_seconds": 0.040646416950039566,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-fixed-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "d9fbc85dc486efd4180809be3dcc225c8eb977d6507350960327eaca999deab6",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 2.25e-05,
+          "p95": 2.5208e-05,
+          "p99": 2.7708e-05
+        },
+        "complete": {
+          "count": 826,
+          "p50": 2.2959e-05,
+          "p95": 2.5375e-05,
+          "p99": 2.7833e-05
+        },
+        "unfinished": {
+          "count": 198,
+          "p50": 1.6833e-05,
+          "p95": 2.2541e-05,
+          "p99": 2.3875e-05
+        }
+      },
+      "record_set_sha256": "d1bcc6ee16709e024d36b352b004b51ae33173bfedbfe77163b7c1ead949e426",
+      "summary": {
+        "median_seconds": 0.022115521,
+        "duration_range_seconds": [
+          0.022040709,
+          0.022190333
+        ],
+        "trajectories_per_second": 46302.85300489016,
+        "median_rate_bootstrap95": [
+          46146.22051863755,
+          46459.485491142776
+        ],
+        "completed_games_per_second": 37349.762287147736,
+        "completed_turns_per_second": 2767680.6901594894,
+        "median_setup_seconds": 0.0003570625,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "splendorust",
+      "policy": "fixed",
+      "threads": 4,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.006826209,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.006826209,
+        "seal256": 0.020157584
+      },
+      "samples": [
+        {
+          "completed": 826,
+          "count": 1024,
+          "decisions": 105412,
+          "seconds": 0.00747375,
+          "setup_seconds": 0.000369542,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "turns": 61208,
+          "worker_setup_seconds": 4.4917e-05,
+          "process_wall_seconds": 0.02507420803885907,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        },
+        {
+          "completed": 826,
+          "count": 1024,
+          "decisions": 105412,
+          "seconds": 0.007358125,
+          "setup_seconds": 0.000355292,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "turns": 61208,
+          "worker_setup_seconds": 4.5708e-05,
+          "process_wall_seconds": 0.025859500048682094,
+          "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+        }
+      ],
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-fixed-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "d9fbc85dc486efd4180809be3dcc225c8eb977d6507350960327eaca999deab6",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 2.7e-05,
+          "p95": 5.675e-05,
+          "p99": 6.0916e-05
+        },
+        "complete": {
+          "count": 826,
+          "p50": 2.7375e-05,
+          "p95": 5.775e-05,
+          "p99": 6.2583e-05
+        },
+        "unfinished": {
+          "count": 198,
+          "p50": 2.0375e-05,
+          "p95": 4.2917e-05,
+          "p99": 5.0917e-05
+        }
+      },
+      "record_set_sha256": "d1bcc6ee16709e024d36b352b004b51ae33173bfedbfe77163b7c1ead949e426",
+      "summary": {
+        "median_seconds": 0.007415937500000001,
+        "duration_range_seconds": [
+          0.007358125,
+          0.00747375
+        ],
+        "trajectories_per_second": 138089.38322834298,
+        "median_rate_bootstrap95": [
+          137012.8784077605,
+          139165.8880489255
+        ],
+        "completed_games_per_second": 111388.5063931751,
+        "completed_turns_per_second": 8254077.117812908,
+        "median_setup_seconds": 0.00036241699999999997,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "fixed",
+      "threads": 1,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.006826209,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.006826209,
+        "seal256": 0.020157584
+      },
+      "samples": [
+        {
+          "completed": 826,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.033518125,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 61208,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.032291311999999996,
+          "per_game_setup_seconds_sum": 0.0022667110000000037,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 44,
+          "repetition": 0,
+          "setup_seconds": 0.002292667,
+          "thread_pool_startup_seconds": 1.8041e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 154,
+          "warmup_seconds": 5.8209e-05,
+          "seconds": 0.033518125,
+          "count": 1024,
+          "turns": 61208,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "process_wall_seconds": 0.06305050000082701
+        },
+        {
+          "completed": 826,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.035898083,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 61208,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.03465472900000002,
+          "per_game_setup_seconds_sum": 0.0022809130000000016,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 44,
+          "repetition": 0,
+          "setup_seconds": 0.002305,
+          "thread_pool_startup_seconds": 1.7833e-05,
+          "threads": 1,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 154,
+          "warmup_seconds": 5.6833e-05,
+          "seconds": 0.035898083,
+          "count": 1024,
+          "turns": 61208,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "process_wall_seconds": 0.06659266701899469
+        }
+      ],
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-fixed-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "d9fbc85dc486efd4180809be3dcc225c8eb977d6507350960327eaca999deab6",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 3.3e-05,
+          "p95": 3.7375e-05,
+          "p99": 3.9375e-05
+        },
+        "complete": {
+          "count": 826,
+          "p50": 3.3667e-05,
+          "p95": 3.7542e-05,
+          "p99": 3.975e-05
+        },
+        "unfinished": {
+          "count": 198,
+          "p50": 2.525e-05,
+          "p95": 3.3042e-05,
+          "p99": 3.5959e-05
+        }
+      },
+      "record_set_sha256": "d1bcc6ee16709e024d36b352b004b51ae33173bfedbfe77163b7c1ead949e426",
+      "summary": {
+        "median_seconds": 0.034708104000000004,
+        "duration_range_seconds": [
+          0.033518125,
+          0.035898083
+        ],
+        "trajectories_per_second": 29537.917497953866,
+        "median_rate_bootstrap95": [
+          28525.200078232592,
+          30550.634917675136
+        ],
+        "completed_games_per_second": 23826.48423174794,
+        "completed_turns_per_second": 1765582.8654441016,
+        "median_setup_seconds": 0.0022988335,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    },
+    {
+      "engine": "seal256",
+      "policy": "fixed",
+      "threads": 4,
+      "count": 1024,
+      "corpus_sha256": "58a16783c567f56c9112ca5a3a81bd0134610be74ba4d8a6cca47f3c2f8ae8cb",
+      "corpus_master_seed": 950000001,
+      "pilot_seconds": 0.006826209,
+      "pilot_threads": 4,
+      "pilots_seconds": {
+        "splendorust": 0.006826209,
+        "seal256": 0.020157584
+      },
+      "samples": [
+        {
+          "completed": 826,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.01926825,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 61208,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.07438613100000001,
+          "per_game_setup_seconds_sum": 0.002248196999999999,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 44,
+          "repetition": 0,
+          "setup_seconds": 0.002271708,
+          "thread_pool_startup_seconds": 3.925e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 154,
+          "warmup_seconds": 6.0875e-05,
+          "seconds": 0.01926825,
+          "count": 1024,
+          "turns": 61208,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "process_wall_seconds": 0.050129625014960766
+        },
+        {
+          "completed": 826,
+          "decision_limit": 0,
+          "elapsed_seconds": 0.020144958,
+          "engine": "seal256",
+          "games": 1024,
+          "main_turns": 61208,
+          "no_legal_action": 0,
+          "per_game_play_seconds_sum": 0.07700029300000016,
+          "per_game_setup_seconds_sum": 0.002264326999999999,
+          "policy": "fixed",
+          "profile": "seal256-intersection-v1",
+          "profile_blocked": 44,
+          "repetition": 0,
+          "setup_seconds": 0.002287333,
+          "thread_pool_startup_seconds": 3.3792e-05,
+          "threads": 4,
+          "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded",
+          "trace_enabled": false,
+          "unsupported_noble_choice": 154,
+          "warmup_seconds": 5.8833e-05,
+          "seconds": 0.020144958,
+          "count": 1024,
+          "turns": 61208,
+          "statuses": {
+            "complete": 826,
+            "profile_blocked": 44,
+            "unsupported_noble_choice": 154
+          },
+          "process_wall_seconds": 0.05040016700513661
+        }
+      ],
+      "comparison_group": "aligned-fixed-2p",
+      "profile": "seal256-intersection-v1",
+      "records_file": "benchmarks/results/smoke-aligned-v2-fixed-58a16783c567f56c-records.json.gz",
+      "records_archive_sha256": "d9fbc85dc486efd4180809be3dcc225c8eb977d6507350960327eaca999deab6",
+      "latency_seconds": {
+        "all": {
+          "count": 1024,
+          "p50": 7.6042e-05,
+          "p95": 8.4667e-05,
+          "p99": 8.8458e-05
+        },
+        "complete": {
+          "count": 826,
+          "p50": 7.7459e-05,
+          "p95": 8.5167e-05,
+          "p99": 8.9708e-05
+        },
+        "unfinished": {
+          "count": 198,
+          "p50": 5.8709e-05,
+          "p95": 7.2875e-05,
+          "p99": 8.6583e-05
+        }
+      },
+      "record_set_sha256": "d1bcc6ee16709e024d36b352b004b51ae33173bfedbfe77163b7c1ead949e426",
+      "summary": {
+        "median_seconds": 0.019706604000000003,
+        "duration_range_seconds": [
+          0.01926825,
+          0.020144958
+        ],
+        "trajectories_per_second": 51987.99966483192,
+        "median_rate_bootstrap95": [
+          50831.57780721111,
+          53144.421522452736
+        ],
+        "completed_games_per_second": 41935.63254213982,
+        "completed_turns_per_second": 3107501.4487158516,
+        "median_setup_seconds": 0.0022795205,
+        "repetitions": 2,
+        "timing_confidence": "preliminary"
+      }
+    }
+  ],
+  "notes": [
+    "Same injected card/noble setup, semantic main action keys, SplitMix64 streams and policy.",
+    "Native decisions differ: Rust payment phases and C++ chance refills. Rank common completed turns and trajectories, not native decisions.",
+    "Each measured repetition uses an identical case corpus. Alternate full engine/worker order.",
+    "Setup is serial and outside gameplay timer. Process time includes parsing, warmup, setup, gameplay, snapshots and serialization.",
+    "Incomplete profile cases stay in every throughput denominator; none gets a victory.",
+    "Per-game latency clocks are inside this workload; snapshot extraction is outside gameplay.",
+    "This profile restricts policy choices, and stops unsupported multi-noble buys. It is not all published legal play.",
+    "C++ minimal JSON record boxing is timed; Rust uses a typed record. Full snapshots and serialization are excluded."
+  ],
+  "finished_utc": "2026-09-29T15:35:24.687568+00:00"
+}

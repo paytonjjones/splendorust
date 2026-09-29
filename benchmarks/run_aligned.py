@@ -63,14 +63,14 @@ def main():
     assert args.repetitions >= 2 and args.max_cases >= 64 and args.threads >= 2
     external = json.loads((ROOT / 'benchmarks/external/seal256-data.json').read_text())
     report = {'schema_version': 1, 'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              'machine': {'cpu':optional(['sysctl','-n','machdep.cpu.brand_string']), 'os':platform.platform(), 'os_build':optional(['sw_vers']), 'logical_cores':os.cpu_count(), 'load_at_start':os.getloadavg()},
+              'machine': {'cpu':optional(['sysctl','-n','machdep.cpu.brand_string']), 'os':platform.platform(), 'os_build':optional(['sw_vers']), 'logical_cores':os.cpu_count(), 'physical_cores':optional(['sysctl','-n','hw.physicalcpu']), 'memory_bytes':optional(['sysctl','-n','hw.memsize']), 'power':optional(['pmset','-g','batt']), 'load_at_start':os.getloadavg()},
               'binaries_sha256': {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in ('target/release/examples/aligned_worker', 'local/benchmarks/external/seal256-game')},
               'interface_patch_sha256':hashlib.sha256((ROOT/'benchmarks/external/seal256-interface.patch').read_bytes()).hexdigest(),
               'external_source_status': optional(['git','-C','local/benchmarks/external/seal256','status','--short']),
               'setup_build':json.loads((ROOT/'local/benchmarks/setup-metadata.json').read_text()),
               'versions': {'rust':optional(['rustc','-Vv']), 'cpp':optional(['clang++','--version'])},
-              'sources': {'splendorust_commit':optional(['git','rev-parse','HEAD']), 'seal256_commit':optional(['git','-C','local/benchmarks/external/seal256','rev-parse','HEAD'])},
-              'build_flags': {'rust':'release opt-level3, thinLTO, codegen-units1; benchmark-compat feature', 'cpp':'-O3 -DNDEBUG -std=c++17 -pthread'},
+              'sources': {'splendorust_status':optional(['git','status','--short']), 'splendorust_commit':optional(['git','rev-parse','HEAD']), 'seal256_commit':optional(['git','-C','local/benchmarks/external/seal256','rev-parse','HEAD'])},
+              'build_flags': {'rust':'release opt-level3, thinLTO, codegen-units1; benchmark-compat feature', 'cpp':'-O3 -DNDEBUG -std=c++17 -pthread', 'env':{key:os.environ.get(key) for key in ('RUSTFLAGS','CXXFLAGS','OMP_NUM_THREADS','NUMBA_NUM_THREADS')}},
               'command':sys.argv,
  'profile': 'seal256-intersection-v1', 'protocol': 'benchmarks/PROFILES.md', 'profile_contract_sha256':hashlib.sha256((ROOT/'benchmarks/PROFILES.md').read_bytes()).hexdigest(),
               'suite_source_sha256': fingerprint(), 'validation': [], 'rows': [],

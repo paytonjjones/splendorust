@@ -75,10 +75,10 @@ def main():
     args = parser.parse_args()
     assert args.count > 0 and 0 <= args.seed <= MASK
     corpus = create(args.count, args.seed, json.loads(args.external_data.read_text()))
-    data = json.dumps(corpus, separators=(',', ':')).encode()
+    data = json.dumps(corpus, sort_keys=True, separators=(',', ':')).encode()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_bytes(data + b'\n')
-    print(json.dumps({'count': args.count, 'file': str(args.output), 'sha256': hashlib.sha256(data + b'\n').hexdigest(), 'card_data_matches': 90, 'noble_data_matches': 10}))
+    args.output.write_bytes(data)
+    print(json.dumps({'count': args.count, 'file': str(args.output), 'sha256': hashlib.sha256(data).hexdigest(), 'card_data_matches': 90, 'noble_data_matches': 10}))
 
 
 if __name__ == '__main__':
