@@ -145,7 +145,8 @@ def main():
                 config_rows[threads] = {'engine': 'splendorust', 'workload': workload, 'players': players,
                     'threads': threads, 'parallelism': 'persistent Rayon thread pool', 'count': count,
                     'unit': 'cloned validated take transitions' if workload == 'opening_clone_take' else 'setups with market observation' if workload == 'setup' else 'trajectories',
-                    'comparable': False, 'non_comparable_reason':'Native full-choice rules or AI policy have no equivalent external adapter in this suite',
+                    'category':'setup' if workload == 'setup' else 'engine' if workload == 'random' else 'AI policy/search',
+                    'comparable': False, 'non_comparable_reason':'Native-only workload; no equivalent external adapter measured',
                     'comparison_group': 'checked-opening-copy-take' if workload == 'opening_clone_take' else f'splendorust-only-{workload}-p{players}',
                     'pilot': pilot, 'samples': [], 'seed_schedule': 'setup=master_seed+global_index (no extra seed mix)' if workload == 'setup' else 'setup=SplitMix64(master_seed+global_index).next_u64(); policy=setup XOR 0xd1b54a32d192ed03; Search uses policy seed (seat0); Strong is deterministic'}
                 workers[threads].run(dict(request, count=min(count, pilot_count))) # untimed warm-up

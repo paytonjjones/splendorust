@@ -60,7 +60,10 @@ Search rollouts keep their original scoring. An independent review also checked
 last-seat noble completion before accepting the final guard.
 
 The fresh E21 screen and confirmation gates contain 70,000 completed Search/Strong
-games across two, three and four players, with fixed 128/8/6 budgets. These gates
+games across two, three and four players, with fixed 128/8/6 budgets. E22 corrects
+the last-seat noble boundary. Its same-seed reruns check that all ordered records
+remain unchanged; these reruns are not fresh holdouts. The baseline uses the
+corrected E22 source. These gates
 are conditional on their policies and seeds; they do not prove termination for
 all legal play. [Policy evidence](../docs/results/two-player-policy/README.md)
 includes the rejected E20 candidate, full reports and regression histories.
@@ -72,6 +75,9 @@ reservation, a purchase outside the take guard or a sole legal take. All eleven
 unfinished histories have no winner. They remain documented references. The
 primary search workload uses Search128 in seat zero against Strong in other seats.
 It records actual simulations and includes opponent and fallback decisions.
+Native greedy includes deterministic local scoring and Observation costs. It is
+an AI-policy baseline, distinct from common aligned fixed-policy throughput.
+Native random play uses uniform legal choices without AI evaluation or search.
 
 Optional `benchmark-compat` APIs inject complete validated setups and expose an
 explicit experimental no-action pass. The measured profile does not use that pass.
@@ -113,8 +119,10 @@ different work, even at equal iteration counts. Multihost timings, larger full
 trace gates and isolated checked-transition corpora are still needed.
 
 The next benchmark step is to extend the licensed Numba engine's adapter with
-unchanged-rule setup/draw control and a checked transition interface, then define
-and verify a named whole-game profile. Keep any upstream interface patch minimal
+verified full fixture conversion, projected choices, explicit unsupported/pre-cap
+stops and a checked transition interface. The feasibility probe already verifies
+all ninety scheduled native draws without a source patch. Then verify a named
+whole-game profile. Keep any upstream interface patch minimal
 and recorded. Separately, add late-game checked fixtures for payment, returns,
 reservations and nobles. Those fixtures can identify which engine operations
 need engineering work before making a broader speed claim.
