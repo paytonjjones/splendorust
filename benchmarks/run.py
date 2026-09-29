@@ -30,7 +30,7 @@ def optional(args):
 
 def fingerprint():
     digest = hashlib.sha256()
-    paths = list((ROOT / 'crates').rglob('*.rs')) + list((ROOT / 'benchmarks').rglob('*.py'))
+    paths = list((ROOT / 'crates').rglob('*.rs')) + list((ROOT / 'crates').rglob('Cargo.toml')) + list((ROOT / 'benchmarks').rglob('*.py'))
     paths += list((ROOT / 'benchmarks/adapters').glob('*.cpp')) + list((ROOT / 'benchmarks/adapters').glob('*.go'))
     paths += [ROOT / x for x in ('Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml')]
     for path in sorted(paths):
@@ -114,10 +114,13 @@ def main():
                         'cpp': 'clang++ -O3 -DNDEBUG -std=c++17 -pthread; native target; no LTO',
                         'env': {k: os.environ.get(k) for k in ('RUSTFLAGS', 'CXXFLAGS', 'OMP_NUM_THREADS', 'NUMBA_NUM_THREADS')}},
               'data_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT / 'data').glob('*.csv')},
+              'binaries_sha256': {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in ('target/release/examples/benchmark_worker', 'local/benchmarks/external/seal256-opening')},
+              'external_source_status': optional(['git','-C','local/benchmarks/external/seal256','status','--short']),
+              'interface_patch_sha256':hashlib.sha256((ROOT/'benchmarks/external/seal256-interface.patch').read_bytes()).hexdigest(),
               'source': {'commit': command(['git', 'rev-parse', 'HEAD']), 'status': command(['git', 'status', '--short']), 'suite_and_rust_sha256': fingerprint()},
               'rows': rows, 'failures': [],
               'limitations': ['Shared macOS host; no core affinity or frequency lock; other processes may run.',
-                              'Bootstrap intervals describe repetition noise only. No full-game cross-engine ranking is valid.',
+                              'Bootstrap intervals describe repetition noise only. Native full-choice games have no cross-engine ranking here; the separate aligned result ranks only its declared restricted profile.',
                               'Machine health and load readings do not prove an idle host.',
                               'Opening fixtures have native seeded decks; only the token transition equivalence class is compared.']}
     workers = {t: Worker(t) for t in (1, args.threads)}
@@ -127,7 +130,7 @@ def main():
         args.output.write_text(json.dumps(report, indent=2) + '\n')
     try:
         for workload, players, pilot_count in [('setup', 2, 10000)] + [
-            ('random', n, 10000) for n in (2, 3, 4)] + [('greedy', 2, 1000), ('search32', 2, 20)]:
+            ('random', n, 10000) for n in (2, 3, 4)] + [('greedy', 2, 1000)] + [('search32', n, 20) for n in (2, 3, 4)]:
             print(f'validate/calibrate {workload} p{players}', flush=True)
             request = {'workload': workload, 'players': players, 'seed': SEED}
             if workload in ('random', 'greedy', 'search32'):
@@ -145,9 +148,12 @@ def main():
                     'comparison_group': 'checked-opening-copy-take' if workload == 'opening_clone_take' else f'splendorust-only-{workload}-p{players}',
                     'pilot': pilot, 'samples': [], 'seed_schedule': 'setup=master_seed+global_index (no extra seed mix)' if workload == 'setup' else 'setup=SplitMix64(master_seed+global_index).next_u64(); policy=setup XOR 0xd1b54a32d192ed03; search seat adds seat index'}
                 workers[threads].run(dict(request, count=min(count, pilot_count))) # untimed warm-up
+            rows.extend(config_rows.values())
+            save()
             for rep in range(args.repetitions):
                 for threads in ((1, args.threads) if rep % 2 == 0 else (args.threads, 1)):
                     config_rows[threads]['samples'].append(workers[threads].run(dict(request, count=count)))
+                    save()
                     print(f'  rep{rep+1} t{threads}', flush=True)
             if workload in ('random', 'greedy', 'search32'):
                 assert config_rows[1]['samples'][0]['digest'] == config_rows[args.threads]['samples'][0]['digest']
@@ -156,7 +162,7 @@ def main():
                     config_rows[threads]['latency_probe'] = workers[threads].run(dict(request, count=latency_count, latency=True))
                     config_rows[threads]['latency_probe']['note'] = 'Separate instrumented sample; per-trajectory setup/play, excludes final digest and queue wait. Does not replace throughput timing.'
             for row in config_rows.values():
-                rows.append(summary(row))
+                summary(row)
             save()
     finally:
         for worker in workers.values():
@@ -183,6 +189,8 @@ def main():
                     'count': count, 'comparison_group': 'checked-opening-copy-take', 'unit': 'cloned validated take transitions',
                     'seed_schedule': 'opening fixture native setup seed 42' if engine == 'splendorust' else 'opening fixture native srand seed 12345; native mt19937 setup', 'pilot': pilot, 'samples': [], 'rank_scope': 'native checked opening API; single-thread primary; different pool completion costs disclosed'})
                 execute(threads, min(count, pilot_count))
+        rows.extend(configurations)
+        save()
         for rep in range(args.repetitions):
             for row in (configurations if rep % 2 == 0 else list(reversed(configurations))):
                 print(f"checked opening {row['engine']} rep{rep+1} t{row['threads']}", flush=True)
@@ -192,8 +200,9 @@ def main():
                     sample = json.loads(command([str(cpp), '--threads', str(row['threads']), '--seed', '12345', '--iterations', str(row['count'])]))
                 assert sample['checksum'] == row['count'] and sample.get('verified', False)
                 row['samples'].append(sample)
+                save()
         for row in configurations:
-            rows.append(summary(row))
+            summary(row)
         report['common_worker_startup'] = {str(t): w.startup_seconds for t, w in common_workers.items()}
         save()
     finally:
@@ -201,6 +210,9 @@ def main():
             worker.close()
     if not args.skip_python:
         py = ROOT / 'local/benchmarks/external/python_lyquentxy/.venv/bin/python'
+        if not py.exists():
+            report['failures'].append({'engine':'lyquentxy', 'status':'unsupported_setup', 'reason':'isolated Python environment is absent; run setup.py --python'})
+            save()
         if py.exists():
             for mode, threads in [('compiled', 1), ('compiled', args.threads), ('public-api', 1)]:
                 print(f'Python {mode} t{threads}', flush=True)

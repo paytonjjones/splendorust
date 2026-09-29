@@ -78,6 +78,11 @@ impl GameState {
         if !actions.is_empty() {
             return Err(RuleError::IllegalAction);
         }
+        // Match the normal v2 action contract: reject invalid passes first,
+        // then reject exhausted capacity before any turn/state mutation.
+        if self.turns == u32::MAX {
+            return Err(RuleError::TurnLimit);
+        }
         self.end_turn();
         Ok(())
     }
@@ -115,7 +120,7 @@ mod tests {
             assert_eq!(visible.market[4], 44);
             visible.check_invariants().unwrap();
         }
-        assert_eq!(ENGINE_VERSION, "splendorust-v1");
+        assert_eq!(ENGINE_VERSION, "splendorust-v2");
         assert_ne!(ENGINE_VERSION, BENCHMARK_COMPAT_ENGINE_VERSION);
     }
 
@@ -176,8 +181,7 @@ mod tests {
         }
     }
 
-    #[test]
-    fn experimental_pass_resumes_a_reachable_block_without_inventing_an_outcome() {
+    fn reachable_block() -> GameState {
         let mut found = None;
         for seed in 0..128 {
             let mut state = GameState::new(2, seed).unwrap();
@@ -199,7 +203,12 @@ mod tests {
                 break;
             }
         }
-        let mut state = found.expect("seeded corpus must reach a published-rule block");
+        found.expect("seeded corpus must reach a published-rule block")
+    }
+
+    #[test]
+    fn experimental_pass_resumes_a_reachable_block_without_inventing_an_outcome() {
+        let mut state = reachable_block();
         state.check_invariants().unwrap();
         let before = state.clone();
         let mut legal = ActionSet::new();
@@ -212,5 +221,49 @@ mod tests {
         assert_eq!(state.phase, Phase::Main);
         assert!(state.outcome().is_none());
         state.check_invariants().unwrap();
+    }
+
+    #[test]
+    fn experimental_pass_capacity_error_is_atomic_and_not_an_outcome() {
+        let mut state = reachable_block();
+        // Move the blocked player's complete record to the required seat so
+        // the counter/seat pair passes v2 invariants.
+        let current = state.current_player();
+        state.players.swap(current, 1);
+        state.current = 1;
+        state.turns = u32::MAX;
+        state.check_invariants().unwrap();
+        let mut actions = ActionSet::new();
+        state.legal_actions(&mut actions);
+        assert!(actions.is_empty());
+        let before = state.clone();
+        assert_eq!(state.apply_no_action_pass(), Err(RuleError::TurnLimit));
+        assert_eq!(state, before);
+        assert!(state.outcome().is_none());
+        state.check_invariants().unwrap();
+
+        // A pass that starts below capacity can still finish the last
+        // representable turn. Capacity alone is never a terminal result.
+        state.players.swap(0, 1);
+        state.current = 0;
+        state.turns = u32::MAX - 1;
+        state.check_invariants().unwrap();
+        state.apply_no_action_pass().unwrap();
+        assert_eq!(state.turns, u32::MAX);
+        assert_eq!(state.current, 1);
+        assert!(state.outcome().is_none());
+        state.check_invariants().unwrap();
+
+        // Invalid passes keep IllegalAction precedence at capacity too.
+        let mut opening = GameState::new(2, 42).unwrap();
+        opening.turns = u32::MAX;
+        opening.current = 1;
+        opening.check_invariants().unwrap();
+        let before = opening.clone();
+        assert_eq!(
+            opening.apply_no_action_pass(),
+            Err(RuleError::IllegalAction)
+        );
+        assert_eq!(opening, before);
     }
 }

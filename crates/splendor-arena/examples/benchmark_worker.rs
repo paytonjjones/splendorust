@@ -187,7 +187,9 @@ fn run(q: &Request) -> serde_json::Value {
             .into_par_iter()
             .map(|i| {
                 let s = GameState::new(q.players, q.seed.wrapping_add(i)).unwrap();
-                black_box(s.observe(0).market[0]) as u64
+                let observed = black_box(&s).observe(0).market[0] as u64;
+                black_box(s);
+                observed
             })
             .sum();
         return json!({"workload":"setup","count":q.count,"seconds":start.elapsed().as_secs_f64(),"checksum":checksum,

@@ -27,6 +27,16 @@ def main():
     step('splendorust release examples', ['cargo','build','--release','--locked','-p','splendor-arena','--examples','--features','benchmark-compat'])
     for engine in ['seal256'] + (['splendimax','averagestardust'] if args.references else []):
         step(engine, ['python3','benchmarks/external/setup_native.py',engine])
+    if args.references:
+        manifest = json.loads((ROOT/'benchmarks/external/python_roeey.json').read_text())
+        dest = ROOT/manifest['isolated_directory']
+        if not dest.exists():
+            step('rules reference source clone',['git','clone',manifest['url'],str(dest)])
+            step('rules reference source pin',['git','-C',str(dest),'checkout','--detach',manifest['revision']])
+        revision = subprocess.check_output(['git','-C',str(dest),'rev-parse','HEAD'],text=True).strip()
+        changes = subprocess.check_output(['git','-C',str(dest),'diff','--name-only'],text=True).strip()
+        if revision != manifest['revision'] or changes:
+            raise RuntimeError('rules reference revision or source differs from the pinned clean checkout')
     if args.python:
         manifest = json.loads((ROOT/'benchmarks/external/python_lyquentxy.json').read_text())
         dest = ROOT/manifest['isolated_directory']

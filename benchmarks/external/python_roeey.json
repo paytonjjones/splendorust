@@ -1,0 +1,53 @@
+{
+  "engine": "roeey777/Splendor-AI",
+  "url": "https://github.com/roeey777/Splendor-AI",
+  "revision": "95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b",
+  "license": "MIT",
+  "license_sha256": "d876e3287cd147c5b1a8e5ea7a0cf7a7f09d5d60b819b018bbb6abd881925ce6",
+  "isolated_directory": "local/benchmarks/external/python_roeey",
+  "setup_commands": [
+    "git clone https://github.com/roeey777/Splendor-AI.git local/benchmarks/external/python_roeey",
+    "git -C local/benchmarks/external/python_roeey checkout --detach 95f84d2e6e839c0ef09ca97bdc3b3048a792fb0b"
+  ],
+  "dependencies": "Python standard library only; no model/training/UI imports",
+  "upstream_patches": [],
+  "adapter": "benchmarks/adapters/python_roeey.py",
+  "adapter_command": "python3 benchmarks/adapters/python_roeey.py --corpus benchmarks/fixtures/aligned-smoke.json --policy random --threads 1 --trace",
+  "supported_players": [
+    2,
+    3,
+    4
+  ],
+  "adapter_supported_players": [
+    2
+  ],
+  "profile": "seal256-intersection-v1",
+  "rank_eligible": false,
+  "whole_game_comparable": false,
+  "non_comparable_reasons": [
+    "Native legal enumeration omits affordable purchase at exactly seven bonuses of that color. Adapter retains the common semantic key and stops if it is selected as unsupported_reference_bonus_cap; it never patches the cap or changes random choice weight.",
+    "Native generateSuccessor appends mandatory in-memory action_reward history, which native legal generation deep-copies. No logging-disable interface exists. This bookkeeping is timed and conflicts with the logging-excluded benchmark contract."
+  ],
+  "data_verified": "Existing Comparison helper asserts exact functional multiset equality for 90 cards and 10 nobles before import/use.",
+  "setup": "Inject ordered whole decks and nobles once; remaining deck reversed because native Board.deal pops. No state reset or per-turn draw realignment after setup.",
+  "policy": "Same semantic sorted keys, SplitMix64 rejection sampler, fixed buy/take/reserve priority. Stops before selected multi-noble buy; no forced pass or cap winner.",
+  "validation": "Selected compound action membership in already generated native legal list before unchanged Rule.update. Full card partition checked after setup and outside timed gameplay at final snapshot.",
+  "smoke": {
+    "scope": "Two 12-turn prefixes from one shared fixture, one random and one fixed; not complete games or a speed result.",
+    "matched_turns": 24,
+    "match_fields": [
+      "initial and each successor snapshot",
+      "projected legal keys",
+      "selected action keys",
+      "status",
+      "final state"
+    ],
+    "comparison": "seal256 unchanged native engine through aligned adapter"
+  },
+  "measurement": "Prepared-state native generation/projection/policy/validation/update and clock/record collection; setup, final state boxing and JSON output outside timer; native in-memory history remains enabled.",
+  "limitations": [
+    "Serial only; no multi-process benchmark.",
+    "Full-rule blind reservation, optional gold, return, pass, seven-bonus and 3/4-player winner differences remain documented in docs/PARITY.md.",
+    "Only tiny trace prefixes were run in this session. No third-engine whole-game ranking is supported."
+  ]
+}

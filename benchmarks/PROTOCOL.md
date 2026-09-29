@@ -36,9 +36,10 @@ No comparative ranking is required when no external engine passes these gates.
 
 Core feature `benchmark-compat` exposes setup injection and an explicit
 experimental no-action pass. It does not change normal `ENGINE_VERSION`,
-`Action`, `legal_actions`, or replay behavior, even when compiled in. The
-separate profile version is `splendorust-v1-benchmark-compat-v1`. Reports that
-use these hooks must record this version plus the exact profile. They are
+`Action`, `legal_actions`, or replay behavior, even when compiled in. The current
+default engine is `splendorust-v2`; the separate profile version is
+`splendorust-v2-benchmark-compat-v1`. Reports that use these hooks must record
+this version plus the exact profile. They are
 different workloads from published-rule games.
 
 `GameState::new_benchmark_setup` accepts every card ID exactly once in its own
@@ -55,6 +56,13 @@ The caller must record passes in its separate versioned corpus, retain their
 counts, and stop a full no-action cycle without awarding a stalemate winner.
 A normal final-round finish stays distinct from a blocked full cycle. A run
 with this extension cannot be presented as a published-rule result.
+
+At `turns == u32::MAX`, an otherwise permitted experimental pass returns
+`TurnLimit` without state mutation, as normal v2 actions do. Invalid passes
+still return `IllegalAction`. Counter capacity is a resource error, not a
+terminal game or winner. A pass starting at `u32::MAX - 1` can reach capacity
+through the normal end-turn path. Preserve historical v1 reports and schedules
+with their original versions; current v2 evidence does not relabel them.
 
 For a complete-game comparison, prefer the actual rules with matching explicit
 payment, return, and noble choices. An optional profile can align an ambiguous
@@ -173,7 +181,7 @@ simulations/s when instrumented, latency, and outcomes separately. A search spee
 claim needs the same states, search definition, and budgets; an agent-strength
 claim needs a separate valid tournament.
 
-The implemented native `search32` workload uses search in both seats: 32
+The implemented native `search32` workload uses search in every seat at 2, 3, and 4 players: 32
 simulations at Main decisions with more than one legal choice, width six,
 strong rollout, engine evaluation, and no time cap. The rollout horizon is eight
 completed player turns, with an additional 32-native-decision guard per rollout.

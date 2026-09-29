@@ -64,6 +64,10 @@ def main():
     external = json.loads((ROOT / 'benchmarks/external/seal256-data.json').read_text())
     report = {'schema_version': 1, 'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'machine': {'cpu':optional(['sysctl','-n','machdep.cpu.brand_string']), 'os':platform.platform(), 'os_build':optional(['sw_vers']), 'logical_cores':os.cpu_count(), 'load_at_start':os.getloadavg()},
+              'binaries_sha256': {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in ('target/release/examples/aligned_worker', 'local/benchmarks/external/seal256-game')},
+              'interface_patch_sha256':hashlib.sha256((ROOT/'benchmarks/external/seal256-interface.patch').read_bytes()).hexdigest(),
+              'external_source_status': optional(['git','-C','local/benchmarks/external/seal256','status','--short']),
+              'setup_build':json.loads((ROOT/'local/benchmarks/setup-metadata.json').read_text()),
               'versions': {'rust':optional(['rustc','-Vv']), 'cpp':optional(['clang++','--version'])},
               'sources': {'splendorust_commit':optional(['git','rev-parse','HEAD']), 'seal256_commit':optional(['git','-C','local/benchmarks/external/seal256','rev-parse','HEAD'])},
               'build_flags': {'rust':'release opt-level3, thinLTO, codegen-units1; benchmark-compat feature', 'cpp':'-O3 -DNDEBUG -std=c++17 -pthread'},
@@ -88,7 +92,7 @@ def main():
         b = run('seal256', smoke, policy, 1, True)
         ar, br = normalized_records(a, True), normalized_records(b, True)
         if ar != br:
-            failure = ROOT / f'benchmarks/results/alignment-failure-{policy}.json.gz'
+            failure = args.output.parent / f'{args.output.stem}-alignment-failure-{policy}-{time.time_ns()}.json.gz'
             failure.parent.mkdir(parents=True, exist_ok=True)
             with gzip.open(failure, 'wb') as file:
                 file.write(encode({'splendorust': ar, 'seal256': br}))
@@ -101,13 +105,14 @@ def main():
     pilot_path.write_bytes(encode(create(1024, 940000001, external)))
     import statistics
     for policy in ('random', 'fixed'):
-        pilot = run('splendorust', pilot_path, policy, 1)
+        pilots = {engine: run(engine, pilot_path, policy, args.threads) for engine in ('splendorust', 'seal256')}
+        pilot = min(pilots.values(), key=lambda sample: sample['seconds'])
         count = min(args.max_cases, max(1024, int(1024 * args.target_seconds / pilot['seconds'] * 1.15)))
         corpus = ROOT / f'local/benchmarks/aligned-{policy}.json'
         corpus.write_bytes(encode(create(count, 950000001, external)))
         corpus_hash = hashlib.sha256(corpus.read_bytes()).hexdigest()
         configs = [{'engine': engine, 'policy': policy, 'threads': threads, 'count': count, 'corpus_sha256': corpus_hash,
-                    'corpus_master_seed': 950000001, 'pilot_seconds': pilot['seconds'], 'samples': [],
+                    'corpus_master_seed': 950000001, 'pilot_seconds': pilot['seconds'], 'pilot_threads': args.threads, 'pilots_seconds':{engine:sample['seconds'] for engine,sample in pilots.items()}, 'samples': [],
                     'comparison_group': f'aligned-{policy}-2p', 'profile': report['profile']} for engine in ('splendorust', 'seal256') for threads in (1, args.threads)]
         report['rows'].extend(configs)
         expected_hash = None
@@ -122,11 +127,12 @@ def main():
                 assert digest == expected_hash, f"record mismatch in {row['engine']} t{row['threads']}"
                 assert sample['completed'] + sum(v for k,v in sample['statuses'].items() if k != 'complete') == count
                 if rep == 0:
-                    file_path = ROOT / f"benchmarks/results/aligned-{policy}-records.json.gz"
+                    file_path = args.output.parent.resolve() / f"{args.output.stem}-{policy}-{corpus_hash[:16]}-records.json.gz"
                     if row['engine'] == 'splendorust' and row['threads'] == 1:
                         with gzip.open(file_path, 'wb') as file:
                             file.write(encode(records))
-                    row['records_file'] = str(file_path.relative_to(ROOT))
+                    row['records_file'] = os.path.relpath(file_path, ROOT)
+                    row['records_archive_sha256'] = hashlib.sha256(file_path.read_bytes()).hexdigest()
                     # Direct latency percentiles from the first repetition; split outcomes.
                     row['latency_seconds'] = {}
                     for status in ('all', 'complete', 'unfinished'):
@@ -157,7 +163,7 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as error:
-        path = ROOT / 'benchmarks/results/aligned-run-failure.json'
+        path = ROOT / f'benchmarks/results/aligned-run-failure-{time.time_ns()}.json'
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({'error': str(error), 'argv': sys.argv}, indent=2) + '\n')
         raise
