@@ -279,6 +279,12 @@ as multiple threads. Do not imply process scaling is equivalent to native
 shared-memory thread scaling. Record physical and logical CPU count; hybrid
 performance/efficiency cores can affect scaling.
 
+The unchecked Python opening references currently calibrate each mode/worker
+setting independently. They measure the same repeated opening operation with
+different iteration counts. Their per-setting throughput remains an unranked
+reference, and they do not support a paired scaling claim. Matched opening and
+native game groups use equal work counts across workers.
+
 Persistent pool timing excludes worker startup and stops after all workers
 finish the assigned workload. If a harness creates a pool for each timed batch,
 label it `batch_including_pool`, retain that cost, and keep it in another group.

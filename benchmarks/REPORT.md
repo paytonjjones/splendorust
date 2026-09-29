@@ -104,7 +104,8 @@ estimates. Process wall time includes work excluded from steady-state clocks.
 
 The Numba opening reference verifies fixture results but its timed apply helper
 is unchecked. Compiled one/four-thread and public Python API measurements stay
-unranked. Import, JIT and startup costs are separate. Upstream decorators retain
+unranked. Their iteration counts are independently calibrated, so no paired
+thread-scaling claim is supported. Import, JIT and startup costs are separate. Upstream decorators retain
 their pinned optimization flags. Roeey's tiny trace prefixes match, but its
 seven-bonus cap and mandatory copied action history exclude a speed ranking.
 Splendimax and Go build; concrete transition/rule defects exclude them. Lapidary
