@@ -97,6 +97,7 @@ def check(path):
     common_groups = {}
     archives_checked = {}
     preliminary = 0
+    independently_calibrated_references = []
     outcomes = {}
     for index, row in enumerate(rows):
         label = f'row {index} {row.get("engine")} {row.get("workload", row.get("policy"))} t{row.get("threads")}'
@@ -186,6 +187,27 @@ def check(path):
             outcomes[label] = samples[0].get('statuses', {k: samples[0][k] for k in ('completed', 'blocked', 'capped') if k in samples[0]})
         group_key = (row['engine'], row.get('workload', row.get('policy')), row.get('players'), row.get('mode'))
         worker_signature = (count, signatures[0])
+        if (not aligned and row['engine'] == 'lyquentxy'
+                and row.get('workload') == 'opening_clone_take'
+                and row.get('comparison_group') == 'unchecked-opening-reference'):
+            adapter = row['adapter_report']
+            require(adapter['rank_eligible'] is False
+                    and adapter['action_validation_inside_timed_loop'] is False,
+                    label + ': unchecked reference is presented as rank eligible')
+            require(adapter['iterations'] == count and adapter['threads'] == row['threads']
+                    and adapter['mode'] == row['mode'], label + ': adapter contract differs')
+            require(all(adapter['validation'][k] is True for k in
+                        ('exact_expected_state', 'input_unchanged', 'legal_action')),
+                    label + ': opening fixture validation failed')
+            opening_hash = adapter['opening_sha256']
+            require(isinstance(opening_hash, str) and len(opening_hash) == 64,
+                    label + ': missing opening fixture hash')
+            # These unranked API-reference modes calibrate separately. Compare
+            # fixture identity and consumed output per iteration, not total work.
+            # This does not certify equal-work worker scaling.
+            worker_signature = ('independently_calibrated_unchecked_reference',
+                                signatures[0][0] // count, opening_hash)
+            independently_calibrated_references.append(label)
         prior = thread_groups.setdefault(group_key, worker_signature)
         require(prior == worker_signature, label + ': count/outcomes/checksum differ across workers')
         if aligned:
@@ -203,6 +225,7 @@ def check(path):
                         label + ': shared archive totals differ')
     return {'path': str(path), 'valid': True, 'rows': len(rows), 'preliminary_rows': preliminary,
             'archives_checked': len(archives_checked), 'outcomes': outcomes,
+            'independently_calibrated_unranked_references': independently_calibrated_references,
             'scope': 'Saved accounting, repetition summaries and deterministic evidence only; no rule or host-speed proof.'}
 
 
