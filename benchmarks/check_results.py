@@ -184,9 +184,10 @@ def check(path):
                 require(hashlib.sha256(json.dumps(evidence, sort_keys=True).encode()).hexdigest() == row['record_summary_sha256'],
                         label + ': deterministic summary hash differs')
             outcomes[label] = samples[0].get('statuses', {k: samples[0][k] for k in ('completed', 'blocked', 'capped') if k in samples[0]})
-        group_key = (row['engine'], row.get('workload', row.get('policy')), row.get('players'), row.get('mode'), count)
-        prior = thread_groups.setdefault(group_key, signatures[0])
-        require(prior == signatures[0], label + ': deterministic outcomes/checksum differ across workers')
+        group_key = (row['engine'], row.get('workload', row.get('policy')), row.get('players'), row.get('mode'))
+        worker_signature = (count, signatures[0])
+        prior = thread_groups.setdefault(group_key, worker_signature)
+        require(prior == worker_signature, label + ': count/outcomes/checksum differ across workers')
         if aligned:
             require(row['profile'] == report['profile'], label + ': profile differs')
             group_key = (row['comparison_group'], row.get('policy'))
