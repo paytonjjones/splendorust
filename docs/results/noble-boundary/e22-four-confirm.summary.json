@@ -1,0 +1,108 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "strong",
+      "strong",
+      "strong"
+    ],
+    "games": 20000,
+    "seed": 1142000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "d059908db50b9d49",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v2",
+  "seed": 1142000000,
+  "players": 4,
+  "requested_games": 20000,
+  "completed_games": 20000,
+  "incomplete_games": 0,
+  "independent_blocks": 5000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 7802,
+      "shared_wins": 1,
+      "win_share": 7802.5,
+      "win_rate": 0.390125,
+      "ci95": [
+        0.37678670917997104,
+        0.40346329082002896
+      ],
+      "average_position": 2.2144,
+      "average_score": 12.38045
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 4356,
+      "shared_wins": 80,
+      "win_share": 4396.0,
+      "win_rate": 0.2198,
+      "ci95": [
+        0.2091036984633252,
+        0.2304963015366748
+      ],
+      "average_position": 2.52575,
+      "average_score": 12.4366
+    },
+    {
+      "identity": 2,
+      "agent": "strong",
+      "wins": 3916,
+      "shared_wins": 75,
+      "win_share": 3953.5,
+      "win_rate": 0.197675,
+      "ci95": [
+        0.18731495284075575,
+        0.20803504715924423
+      ],
+      "average_position": 2.6013,
+      "average_score": 12.1805
+    },
+    {
+      "identity": 3,
+      "agent": "strong",
+      "wins": 3814,
+      "shared_wins": 68,
+      "win_share": 3848.0,
+      "win_rate": 0.1924,
+      "ci95": [
+        0.182269981918524,
+        0.20253001808147597
+      ],
+      "average_position": 2.623,
+      "average_score": 12.1558
+    }
+  ],
+  "average_turns": 105.1202,
+  "average_decisions": 166.36015,
+  "runtime_seconds": 103.750875291,
+  "games_per_second": 192.7694580301524,
+  "decisions_per_second": 32069.155953314857,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "candidate exceeds equal-seat baseline",
+  "raw_report_sha256": "eb02d8b3d812282eabcefcfa0b4546c849ae4b2041e186983138927364ad717a",
+  "record_set_sha256": "c03330779b7b7429c023ea0f260dee8e0b05e968e5f7ecd33eedf07d946f0ba7",
+  "raw_archive": "e22-four-confirm.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 20000
+  }
+}

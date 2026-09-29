@@ -483,3 +483,11 @@ observations, and every payment continuation after tested purchases. These
 are bounded policy checks. Core rules, legal enumeration, RNG, and engine
 version remain unchanged. Failed promotion evidence is retained in
 `docs/results/two-player-policy/`.
+
+
+The E22 unit regression constructs invariant-valid two-player observations with
+12 prestige and an already eligible noble, then applies the actual core take.
+From the last seat, the noble raises prestige to 15 and completes the game
+without a prior final-round flag. From the earlier seat, the next player must
+still act. Both single-noble and multiple-noble cases are checked; every
+mandatory noble choice preserves this boundary. No core rule changes.

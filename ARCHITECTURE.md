@@ -82,6 +82,8 @@ bundles. Search and Strong separately reject a take that would empty the
 colored bank into a proven block for the next actor, if another choice exists.
 That proof requires three known reservations and no affordable market or
 reserved card. Unknown blind reservations, pending token returns, and a take
-that completes an active final round prevent that proof. The check uses only
+that completes an active final round prevent that proof. A last-seat take also
+escapes the guard when an already eligible noble raises prestige to at least
+15, even if the final-round flag was false before the take. The check uses only
 Observation. It changes real policy choices. Search rollouts still use the existing
 uncertified heuristic scoring; core rules do not change.

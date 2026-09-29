@@ -424,7 +424,13 @@ fn safe_takes(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
 // Only reject a take when the next actor's lack of a legal action is public.
 // Blind reservations are unknown, so they prevent this certification.
 fn blocks_next_actor(o: &Observation, a: Action) -> bool {
-    if o.final_round && o.current + 1 == o.count {
+    let actor = &o.players[o.current as usize];
+    let noble_finishes = actor.score >= 12
+        && NOBLES
+            .iter()
+            .enumerate()
+            .any(|(n, req)| o.nobles & (1 << n) != 0 && (0..5).all(|c| actor.bonuses[c] >= req[c]));
+    if o.current + 1 == o.count && (o.final_round || noble_finishes) {
         return false;
     }
     let Action::Take(take) = a else {
@@ -592,6 +598,97 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    fn noble_finish_observation(last: bool) -> Observation {
+        let mut o = GameState::new(2, 0).unwrap().observe(0);
+        o.players = [Player::default(); 4];
+        let actor = usize::from(last);
+        let opponent = 1 - actor;
+        o.current = actor as u8;
+        o.viewer = actor as u8;
+        o.turns = 10 + actor as u32;
+        o.final_round = false;
+        o.phase = Phase::Main;
+        o.bank = [0, 1, 0, 0, 0, 5];
+        o.players[actor].tokens = [2, 2, 1, 2, 2, 0];
+        o.players[actor].bonuses = [4, 4, 0, 0, 4];
+        o.players[actor].score = 12;
+        o.players[actor].nobles = 1;
+        for id in [16, 17, 18, 19, 8, 9, 10, 11, 0, 1, 71, 73] {
+            o.players[actor].owned |= 1u128 << id;
+        }
+        o.players[opponent].tokens = [2, 1, 3, 2, 2, 0];
+        o.reserved_counts = [0; 4];
+        o.reserved_counts[opponent] = 3;
+        o.market = [3, 7, 15, 23, 40, 41, 42, 43, 70, 72, 74, 75];
+        for (r, id) in o.players[opponent].reserved.iter_mut().zip([31, 39, 44]) {
+            *r = splendor_core::Reservation {
+                card: id,
+                tier: CARDS[id as usize].tier,
+                public: true,
+            };
+        }
+        // One noble was claimed before this turn; a second remains eligible.
+        o.nobles = (1 << 4) | (1 << 1);
+        o.remaining = [0; 3];
+        let mut known = o.players[actor].owned;
+        for id in o.market {
+            known |= 1u128 << id;
+        }
+        for r in o.players[opponent].reserved {
+            known |= 1u128 << r.card;
+        }
+        for (id, card) in CARDS.iter().enumerate() {
+            if known & (1u128 << id) == 0 {
+                o.remaining[card.tier as usize] += 1;
+            }
+        }
+        o
+    }
+    #[test]
+    fn noble_threshold_take_ends_only_from_the_last_seat() {
+        let take = Action::Take([0, 1, 0, 0, 0]);
+        for last in [false, true] {
+            for multiple in [false, true] {
+                let mut o = noble_finish_observation(last);
+                if multiple {
+                    o.nobles = (1 << 4) | (1 << 9);
+                }
+                let mut state = o.determinize(&mut Rng::new(1)).unwrap();
+                state.check_invariants().unwrap();
+                assert_eq!(blocks_next_actor(&o, take), !last);
+                state.apply_action(take).unwrap();
+                state.check_invariants().unwrap();
+                let mut successors = vec![state.clone()];
+                if multiple {
+                    assert_eq!(state.phase(), Phase::Noble);
+                    let mut legal = ActionSet::new();
+                    state.legal_actions(&mut legal);
+                    assert_eq!(legal.len(), 2);
+                    successors = legal
+                        .iter()
+                        .map(|&a| {
+                            let mut next = state.clone();
+                            next.apply_action(a).unwrap();
+                            next
+                        })
+                        .collect();
+                }
+                for end in successors {
+                    end.check_invariants().unwrap();
+                    assert_eq!(end.is_terminal(), last);
+                    if last {
+                        assert_eq!(end.observe(1).players[1].score, 15);
+                        assert!(end.outcome().is_some());
+                    } else {
+                        let mut legal = ActionSet::new();
+                        end.legal_actions(&mut legal);
+                        assert!(legal.is_empty());
+                        assert_eq!(end.outcome(), None);
+                    }
+                }
+            }
+        }
+    }
     #[test]
     fn public_block_filter_never_guesses_blind_reservations() {
         let mut o = GameState::new(2, 0).unwrap().observe(0);

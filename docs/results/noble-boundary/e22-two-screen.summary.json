@@ -1,0 +1,78 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "strong"
+    ],
+    "games": 2000,
+    "seed": 140000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "d059908db50b9d49",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v2",
+  "seed": 140000000,
+  "players": 2,
+  "requested_games": 2000,
+  "completed_games": 2000,
+  "incomplete_games": 0,
+  "independent_blocks": 1000,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 1450,
+      "shared_wins": 0,
+      "win_share": 1450.0,
+      "win_rate": 0.725,
+      "ci95": [
+        0.6836475061097689,
+        0.7663524938902311
+      ],
+      "average_position": 1.275,
+      "average_score": 14.1835
+    },
+    {
+      "identity": 1,
+      "agent": "strong",
+      "wins": 550,
+      "shared_wins": 0,
+      "win_share": 550.0,
+      "win_rate": 0.275,
+      "ci95": [
+        0.23364750610976898,
+        0.31635249389023107
+      ],
+      "average_position": 1.725,
+      "average_score": 14.789
+    }
+  ],
+  "average_turns": 58.917,
+  "average_decisions": 94.1665,
+  "runtime_seconds": 10.506373458,
+  "games_per_second": 190.3606423277401,
+  "decisions_per_second": 17925.59542575514,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "candidate exceeds equal-seat baseline",
+  "raw_report_sha256": "2c4bcf06e0d13393cc4ef7b13ef9a24e75ba55058c75541ec5771816530a1251",
+  "record_set_sha256": "27c9fa8856c83853f10eab7eefc50c6b89cb9ac7a531e412f18a7243f6f840f1",
+  "raw_archive": "e22-two-screen.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 2000
+  }
+}

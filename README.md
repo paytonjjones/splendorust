@@ -71,5 +71,7 @@ Search and Strong also apply the public next-turn bound to complete token
 returns. They avoid a take that empties the colored bank and proves that the
 next actor cannot act, when another choice exists. A blind opponent reservation
 prevents this proof. The check does not reject a take that finishes an already
-active final round. E20 and E21 record the failed candidate and fresh checks.
+active final round, or that ends the game through an already eligible noble
+from the last seat. E20 and E21 record the failed candidate and fresh checks;
+E22 records the noble boundary correction.
 These policies do not guarantee termination for all setups or budgets.

@@ -1137,3 +1137,31 @@ a legal choice when no alternative exists. No guard defect is established.
 Do not invent a pass or winner, or extrapolate Search/Strong completion at
 128 iterations to self-play at 32. Use the completed Search/Strong workload
 for the primary search benchmark and retain self-play as incomplete evidence.
+
+## E22 — Preserve last-seat takes that end through a noble
+
+**Hypothesis, before implementation:** E21's next-actor block proof overlooks
+one normal terminal boundary. A last-seat actor with at least 12 prestige can
+claim an already eligible noble after a take, reach 15, and end the game even
+when `final_round` was false before the take. Multiple eligible nobles still
+require exactly one choice; every choice adds three prestige. Exempt this
+boundary from the next-actor guard. Preserve the guard for an earlier seat,
+where the next actor must still play. Do not change core rules or noble choice.
+Use invariant-valid observations and actual core transitions to test both
+seat cases and multiple eligible nobles. Keep the E21 70,000-game evidence
+under its original source identity; check whether the narrow change alters
+those ordered records before reusing their completion claim.
+
+**E22 result:** The new invariant-valid unit regression passes for both seats
+and single/multiple noble choices. All 82 release Rust tests, strict release
+workspace/all-target Clippy, and all 57 Python tests with the pinned external
+reference pass. The initial constructed test fixture had incorrect seat/turn
+parity; that fixture was corrected before simulation reruns.
+
+Reran the exact E21 screen and confirmation schedules for all three player
+counts at corrected source `d059908db50b9d49`. All 70,000 ordered game records,
+including statuses and trajectory hashes, are identical to E21 source
+`bc768d0c493a603f`; every game completes. These are reused-seed equivalence
+checks, not fresh playing-strength evidence. E21 archives remain unchanged.
+The raw reruns, gate/build manifests, paired record hashes and check logs are
+retained in `docs/results/noble-boundary/`. No performance claim is made.
