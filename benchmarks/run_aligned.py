@@ -113,6 +113,7 @@ def main():
         corpus_hash = hashlib.sha256(corpus.read_bytes()).hexdigest()
         configs = [{'engine': engine, 'policy': policy, 'threads': threads, 'count': count, 'corpus_sha256': corpus_hash,
                     'corpus_master_seed': 950000001, 'pilot_seconds': pilot['seconds'], 'pilot_threads': args.threads, 'pilots_seconds':{engine:sample['seconds'] for engine,sample in pilots.items()}, 'samples': [],
+                    'comparable':True, 'rank_scope':'aligned adapter pipeline within seal256-intersection-v1 only',
                     'comparison_group': f'aligned-{policy}-2p', 'profile': report['profile']} for engine in ('splendorust', 'seal256') for threads in (1, args.threads)]
         report['rows'].extend(configs)
         expected_hash = None

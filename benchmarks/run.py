@@ -145,6 +145,7 @@ def main():
                 config_rows[threads] = {'engine': 'splendorust', 'workload': workload, 'players': players,
                     'threads': threads, 'parallelism': 'persistent Rayon thread pool', 'count': count,
                     'unit': 'cloned validated take transitions' if workload == 'opening_clone_take' else 'setups with market observation' if workload == 'setup' else 'trajectories',
+                    'comparable': False, 'non_comparable_reason':'Native full-choice rules or AI policy have no equivalent external adapter in this suite',
                     'comparison_group': 'checked-opening-copy-take' if workload == 'opening_clone_take' else f'splendorust-only-{workload}-p{players}',
                     'pilot': pilot, 'samples': [], 'seed_schedule': 'setup=master_seed+global_index (no extra seed mix)' if workload == 'setup' else 'setup=SplitMix64(master_seed+global_index).next_u64(); policy=setup XOR 0xd1b54a32d192ed03; Search uses policy seed (seat0); Strong is deterministic'}
                 workers[threads].run(dict(request, count=min(count, pilot_count))) # untimed warm-up
@@ -186,7 +187,7 @@ def main():
             for threads in (1, args.threads):
                 configurations.append({'engine': engine, 'workload': 'opening_clone_take', 'players': 2, 'threads': threads,
                     'parallelism': 'persistent Rayon pool' if engine == 'splendorust' else 'std::thread; warmed creation excluded, release/join included',
-                    'count': count, 'comparison_group': 'checked-opening-copy-take', 'unit': 'cloned validated take transitions',
+                    'count': count, 'comparable':True, 'comparison_group': 'checked-opening-copy-take', 'unit': 'cloned validated take transitions',
                     'seed_schedule': 'opening fixture native setup seed 42' if engine == 'splendorust' else 'opening fixture native srand seed 12345; native mt19937 setup', 'pilot': pilot, 'samples': [], 'rank_scope': 'native checked opening API; single-thread primary; different pool completion costs disclosed'})
                 execute(threads, min(count, pilot_count))
         rows.extend(configurations)
@@ -220,6 +221,7 @@ def main():
                 result = json.loads(command(cmd + ['--iterations', '100000', '--repetitions', str(args.repetitions), '--target-seconds', str(args.target_seconds)]))
                 row = {'engine': 'lyquentxy', 'workload': 'opening_clone_take', 'mode': mode, 'players': 2, 'threads': threads,
                        'parallelism': 'Numba nogil threads' if mode == 'compiled' else 'single Python API caller', 'count': result['iterations'], 'comparison_group': 'unchecked-opening-reference',
+                       'comparable':False, 'non_comparable_reason':'Timed native apply is unchecked; retained as a separate reference',
                        'unit': 'cloned prevalidated take transitions', 'samples': result['repetitions'], 'adapter_report': result}
                 rows.append(summary(row))
                 save()
