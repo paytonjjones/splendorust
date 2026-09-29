@@ -76,3 +76,12 @@ validates rule legality first, then returns `TurnLimit` without mutation when
 Search stops rollouts at capacity; arena execution errors propagate to callers.
 Replay version 1 remains the JSON format, while the engine label must match v2.
 See VALIDATION.md for fixture migration and boundary evidence.
+
+The public next-turn bound also applies to Strong and to complete return
+bundles. Search and Strong separately reject a take that would empty the
+colored bank into a proven block for the next actor, if another choice exists.
+That proof requires three known reservations and no affordable market or
+reserved card. Unknown blind reservations, pending token returns, and a take
+that completes an active final round prevent that proof. The check uses only
+Observation. It changes real policy choices. Search rollouts still use the existing
+uncertified heuristic scoring; core rules do not change.

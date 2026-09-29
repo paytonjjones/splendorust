@@ -1,0 +1,78 @@
+diff --git a/crates/splendor-agents/src/lib.rs b/crates/splendor-agents/src/lib.rs
+index 56e1caa..6ac51b8 100644
+--- a/crates/splendor-agents/src/lib.rs
++++ b/crates/splendor-agents/src/lib.rs
+@@ -35,7 +35,8 @@ impl Agent for SimpleGreedyAgent {
+ }
+ impl Agent for StrongHeuristicAgent {
+     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
+-        best(o, legal, true)
++        let safe = safe_token_actions(o, legal);
++        best(o, safe.as_deref().unwrap_or(legal), true)
+     }
+ }
+ 
+@@ -388,18 +389,21 @@ fn preserves_next_turn(o: &Observation, take: [u8; 5]) -> bool {
+     if p.token_count() > 10 {
+         return false;
+     }
++    preserves_with_tokens(o, &p, bank)
++}
++fn preserves_with_tokens(o: &Observation, p: &Player, bank: usize) -> bool {
+     let opponents = usize::from(o.count - 1);
+     if bank > 3 * opponents
+         || p.reserved
+             .iter()
+-            .any(|r| r.card != NONE && deficit(&p, r.card) == 0)
++            .any(|r| r.card != NONE && deficit(p, r.card) == 0)
+     {
+         return true;
+     }
+     let affordable = o
+         .market
+         .iter()
+-        .filter(|&&id| id != NONE && deficit(&p, id) == 0)
++        .filter(|&&id| id != NONE && deficit(p, id) == 0)
+         .count();
+     affordable > opponents - bank.div_ceil(3)
+ }
+@@ -417,10 +421,38 @@ fn safe_takes(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
+     // Without a certified alternative, retain the original legal choices.
+     (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
+ }
++fn safe_token_actions(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
++    if o.phase != Phase::Return {
++        return safe_takes(o, legal);
++    }
++    if o.reserved_counts[o.current as usize] != 3 {
++        return None;
++    }
++    let safe: Vec<_> = legal
++        .iter()
++        .copied()
++        .filter(|a| {
++            let Action::Return(returned) = a else {
++                return false;
++            };
++            let mut p = o.players[o.current as usize];
++            let mut bank = 0usize;
++            for (c, &amount) in returned.iter().enumerate() {
++                p.tokens[c] -= amount;
++                if c < 5 {
++                    bank += usize::from(o.bank[c] + amount);
++                }
++            }
++            preserves_with_tokens(o, &p, bank)
++        })
++        .collect();
++    (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
++}
+ impl Agent for SearchAgent {
+     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
+         if o.phase != Phase::Main || legal.len() == 1 || o.turns == u32::MAX {
+-            return best(o, legal, true);
++            let safe = safe_token_actions(o, legal);
++            return best(o, safe.as_deref().unwrap_or(legal), true);
+         }
+         let safe = safe_takes(o, legal);
+         let legal = safe.as_deref().unwrap_or(legal);

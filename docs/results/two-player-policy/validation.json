@@ -1,0 +1,198 @@
+{
+  "date_utc": "2026-09-29T15:27:23.101115+00:00",
+  "cpu": "Apple M4 Pro",
+  "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.7\nBuildVersion:\t\t25G229",
+  "architecture": "arm64",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+  "python": "3.14.6",
+  "base_commit": "3502da435dfbec1e5358aa962e4495298b78f42f",
+  "engine": "splendorust-v2",
+  "thread_count": 4,
+  "build_profile": "release opt-level 3, thin LTO, codegen-units 1; Cargo.lock and pinned toolchain",
+  "timing_scope": "Promotion evidence on a shared machine. No comparative performance claim. Build/test and other repository work may overlap tests; gates run sequentially.",
+  "e20_patch_sha256": "4ed2866d9c38b8f21c000c98c0a95d42b1c3fff9179c834cd9b43d3b1ff36125",
+  "e20_patch_reconstructed_source": "e8aca47ca9f7bf5b",
+  "e21_source": "bc768d0c493a603f",
+  "checks": {
+    "rust_format": "passed",
+    "strict_workspace_all_target_release_clippy": "passed",
+    "release_locked_workspace_tests": 81,
+    "python_tests_with_pinned_reference": 57,
+    "python_skips": 0,
+    "static_data": "passed",
+    "original_and_new_blocks_preserved": 4
+  },
+  "promotion_reports": {
+    "two": {
+      "seed": 1140000000,
+      "completed_games": 20000,
+      "requested_games": 20000,
+      "status_counts": {
+        "complete": 20000
+      },
+      "candidate_credit": 0.729325,
+      "candidate_ci95": [
+        0.7185441805800205,
+        0.7401058194199795
+      ],
+      "raw_report_sha256": "613e3ed2a2f4fd6d15e91796b9e050acc33d2b05115f01b3e93c061e3407a636",
+      "record_set_sha256": "21f51b8fb9f6171d584e2faa6a821d1d85226ba0a5d4fd7484a535fee41f5782"
+    },
+    "three": {
+      "seed": 1141000000,
+      "completed_games": 21000,
+      "requested_games": 21000,
+      "status_counts": {
+        "complete": 21000
+      },
+      "candidate_credit": 0.5247142857142857,
+      "candidate_ci95": [
+        0.5122572250804766,
+        0.5371713463480948
+      ],
+      "raw_report_sha256": "fac2de2d63e76988ee6afd8a8d9cba3c513f9aaddf453ba203b08c7f1bb737f6",
+      "record_set_sha256": "7cc09b0a8322c1b3592c99370914477eb1b9e5bddb7da5eff7f10417367ef80e"
+    },
+    "four": {
+      "seed": 1142000000,
+      "completed_games": 20000,
+      "requested_games": 20000,
+      "status_counts": {
+        "complete": 20000
+      },
+      "candidate_credit": 0.390125,
+      "candidate_ci95": [
+        0.37678670917997104,
+        0.40346329082002896
+      ],
+      "raw_report_sha256": "a115148cce4c14266fcc396afa597fd53f0b998131a1139272c8e9c79bc7c0b0",
+      "record_set_sha256": "c03330779b7b7429c023ea0f260dee8e0b05e968e5f7ecd33eedf07d946f0ba7"
+    }
+  },
+  "evidence_sha256": {
+    "README.md": "22d0b36b0f1211c34b607f4ac001e55e9fe31ed28854af8a0c1a7d6532c58bb1",
+    "e19-original-audit.jsonl": "e11080f3b44ddf00ca238ce1bcbfcf7ef7f068a96dd3f43d372a9332eb7ef8cd",
+    "e20-failed-audit.jsonl": "5e4cf4de2883513a60b1b9dbfde591305e77bcc3eabb6b389ae93dd84d80642e",
+    "e20-gate.txt": "1ebdb79475a40858fa1c134a94a8fbeda360253a056e91d8fa640447623f402c",
+    "e20-initial-decision.json": "727d8739d8274af15d2dab1c28c6b55d8362dec3358bcd91c6e5470d32b59056",
+    "e20-initial-execution.txt": "cfeab3f35f99f64cf591038c7a81cddf328c8a91b816fbeb9afbbda87cac78f3",
+    "e20-two-build.json": "8e2c3e8af22d4f75db2c2ba8d0db852e93ad7a5bacb15e5a2f4ecc1f2704ceaa",
+    "e20-two-confirm.json.gz": "9d4c280d7e689710521163dea0a5cff35d9a055b048e107291bf711ffa3210a3",
+    "e20-two-confirm.summary.json": "571136a623878fd06f6a93609981a7c0cc7473ec405c3e561db5cf537254f2a2",
+    "e20-two-decision.json": "dcf7ed3a7f909dcdf3586fbb2c82f06da9d4fd0798341828f1935f31ece438f9",
+    "e20-two-run.json": "63fb762e412b653558615f9850edb52376c2e97be1dfb3324e3ef22619879aea",
+    "e20-two-screen.json.gz": "2c62d34219d5cc60d2c5c7b847b285a76a01b566e59995092bcf065933854c7c",
+    "e20-two-screen.summary.json": "27b441affdbf2e4bef66cb61b8643da3a2fef1afc1944c34c5fb462914d5f197",
+    "e21-clippy.txt": "e5975b8c6bb4b1a951c16a2fd974729ca8ab4b1deef0fecf495476bc7c146164",
+    "e21-data-check.txt": "5c71198b16d5ac800a488fa1a1d15b394bb2080ac948f60ad20b55abf161ae09",
+    "e21-four-build.json": "dce69719f469e98bde5381308db9aad57330b3f9d1718bea8ec0fcbae3daa6e5",
+    "e21-four-confirm.json.gz": "0c4032ff454e33d65727e15a2196782ef1c31e6c2785ade80b4052c615743534",
+    "e21-four-confirm.summary.json": "5c83a3f5c7aba811d041e9b08a1b121b0299369481b793f242fbae646f0dff51",
+    "e21-four-decision.json": "0c8e8451b3e710540c19233e70707765db0b7f2a273a252d08d74ca352c3d6c2",
+    "e21-four-gate.txt": "173d57ab2ac940ab92a46b956225481fb86b1fdf8102b9a42b1f3e6f506c5e82",
+    "e21-four-run.json": "f4c9d1f9f49b3ca83382e1c9eb2c154ac202f4449cd15665739607fbfed75256",
+    "e21-four-screen.json.gz": "a35554f3e70ce13a2fe1e4626c534006bf38f61ab1515976c29baceadb4d22f8",
+    "e21-four-screen.summary.json": "406fe9b012e84febe3187c53298bc06c6f427b9c24f97dbc7efa7644c4e78790",
+    "e21-original-choices.jsonl": "e056f33ca6d57463c7214e9f3eb2aa345581f24563100213748ad84b20ef0f3e",
+    "e21-python-full.txt": "a0f1f330312ce2627e16b4c35e93bc36e75d0a62ab382a5bce8f38efa98bd9b3",
+    "e21-python-tests.txt": "0655070e21f12ba676bae2c6b351c14f00a7667accabefa9480bba0d1abfc01e",
+    "e21-self32-2-audit.jsonl": "b7551b5a9001527acf210f4d253e4ed85604eaa3ab4d372a713f447d34ce2873",
+    "e21-self32-2-history-120-0.json.gz": "ae250c2b07b7ce2de42b56ece65505480a63f1a9050276be646f5b137d2c2e76",
+    "e21-self32-2-history-133-0.json.gz": "a520ccc43cc6905aa760d013e68affce43cc62f8c3c6c00e56c01c8cc4cfefbc",
+    "e21-self32-2-history-134-1.json.gz": "9edd1b0ef33ea0dccd48a5d918f0cf18b86acf532b1c8c953a283c2046f6536c",
+    "e21-self32-2-history-43-1.json.gz": "f89b1b8ffbf31cc0632f6d2489b4846888fa6559025c36978cfd4c3dbb2a3901",
+    "e21-self32-2-history-74-0.json.gz": "f8f4661d5c66a1a858d3fcabc605e07db6fbf2beb5b886386e676a34c83b1923",
+    "e21-self32-2-history-8-1.json.gz": "7d1c9578d05f683ed988dd1f307143726f07c9fa7304ec1bc68d2e9ecb2a2de1",
+    "e21-self32-2-history-89-0.json.gz": "89931b5a83654c3d8e4d2eb2342811ca5f7a4f5f7bd9b6c05c394d04615a65b5",
+    "e21-self32-2.json.gz": "ab1c0b24e6305398e3e049fd1b263a6f06092a564f95a3e7b1f3bfb7c3d42924",
+    "e21-self32-2.summary.json": "42c8f4f1c4ee2752a96557fc8bf6152de93da8d661f570beb3e676d87ace02d4",
+    "e21-self32-2.txt": "cda670a6f126fff06768d6aa8d841855dcac84c05265fe57bd9fbc84396c4ebe",
+    "e21-self32-3-audit.jsonl": "a2e3ae3f9758718d661deac62b5878572f228c0516ee9378772fb526b2605285",
+    "e21-self32-3-history-4-2.json.gz": "8d42d2132ffee7a9a06e6124ce401a9cbaf38465c24727fe37c1186a5ce1641a",
+    "e21-self32-3-history-66-1.json.gz": "3c0bae86f8fef5ffeae1b46d1140d5b5f46574bd81116545d8fae3f2e5462bf6",
+    "e21-self32-3.json.gz": "d8790f46cacfadfdab03c8f139d0a5a19bb9ad33b43b045e9d36f30a3fd04e0e",
+    "e21-self32-3.summary.json": "baf1623dcb6d4af73ec70cc77f7848b79ff41646e7cf8fcc9024dd133950b3e9",
+    "e21-self32-3.txt": "ca5b1a3a1f22f6707169f7570873f162e31fc4405b8ad8d3d20ed28a5907dcb3",
+    "e21-self32-4-audit.jsonl": "7bef5c692b7486e7b3b3b5a826910bdd0f433f0f37700765cb472f8bf53050a3",
+    "e21-self32-4-history-35-3.json.gz": "5f5b9a924532e0447f31f2c2181738ae8da96208fc0f4d53686e806e3732f339",
+    "e21-self32-4-history-74-2.json.gz": "2770e68df436b04cb2db414e5f888929079c5dcecdf3447093fd7e4901eaaaaf",
+    "e21-self32-4.json.gz": "c3033ebb7f43fd03f4a1fccb192a8e27cf11a967fd8d8a45b1f5f317d5178f4f",
+    "e21-self32-4.summary.json": "66312592861bada725a7c492f4ea471fb559e14e82db56548693ee506428749e",
+    "e21-self32-4.txt": "3495f4d9b610187a95cc6514c62fb319e9d466088c778187686a93af699ba924",
+    "e21-targeted.txt": "2bb368f380becf99f2e88601f09ce2d954491613fb25b761ae78eeaf9ca9e452",
+    "e21-three-build.json": "dce69719f469e98bde5381308db9aad57330b3f9d1718bea8ec0fcbae3daa6e5",
+    "e21-three-confirm.json.gz": "c050d2d3e94f087ccba40c307644a06f085dfb11797659176945de14de607942",
+    "e21-three-confirm.summary.json": "97f5aef6a5b41f3dbd21abadafa49effc11a0737216cd21dea664501db1b3d81",
+    "e21-three-decision.json": "e160f5fe5c8224d44263b4d202fd21b890b7c955059fc57ceb8c368d9e770fcb",
+    "e21-three-gate.txt": "5036eb239a87918c7645e6c05b455288cebc3a6815a2bbee944770bfeae46d4b",
+    "e21-three-run.json": "05ced8b2b6404e45dd93e3946860f4bfacab0e558bbcf41dfb089af294cf141a",
+    "e21-three-screen.json.gz": "7d3b4914cff2ffb5166585468ab64c62eafd9c64d63680bbaa9604e7d70781e2",
+    "e21-three-screen.summary.json": "f3f62cef4d27884a805b8774f6b8a48a4e09833b54a5e3de2b21e4a887962163",
+    "e21-two-build.json": "dce69719f469e98bde5381308db9aad57330b3f9d1718bea8ec0fcbae3daa6e5",
+    "e21-two-confirm.json.gz": "819c390526942626c778d5b5252893e0ca45100505441c041ac0c3676c57eb63",
+    "e21-two-confirm.summary.json": "fad0c7691cc80fb8a232590fb896d7717cddbfab492132e9c3bab744655fb433",
+    "e21-two-decision.json": "4df8fe5536d80f6e33ec83da29e71194f85e3f27040e1d5826248ff8f355e78a",
+    "e21-two-gate.txt": "34a641033e39298c8b5ebb871e2c9350ffc6886d962c1ba5286b782acdd4ec0d",
+    "e21-two-run.json": "19458b1e2ac05a8cb23c9f0775c863099d9ce07cb2e9b87b869fe1d6ab7a4d76",
+    "e21-two-screen.json.gz": "d3e5601741c301b8a7c17d93b0f9a759fbbb523fa25046f6dbb0523b3f79d8f6",
+    "e21-two-screen.summary.json": "19c0b5e923401c6bdf51a78811f413adf23e64cc2e1aa67a203930127caace61",
+    "index.json": "6788d27c5e0485ff73d113d3ed2c0a7da2df323e63417f8d20dd039d854096c1"
+  },
+  "self_play_diagnostic": {
+    "2": {
+      "seed": 143000000,
+      "games": 300,
+      "invariants_checked": true,
+      "search": {
+        "iterations": 32,
+        "depth": 8,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      },
+      "status_counts": {
+        "complete": 293,
+        "decision_limit": 7
+      },
+      "record_set_sha256": "018216bfeda39507ddc9cc172de974bbe92dd3f0e441f86aefad2b5af1a90fe3"
+    },
+    "3": {
+      "seed": 143000000,
+      "games": 300,
+      "invariants_checked": true,
+      "search": {
+        "iterations": 32,
+        "depth": 8,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      },
+      "status_counts": {
+        "complete": 298,
+        "no_legal_action": 2
+      },
+      "record_set_sha256": "5ee403900f4dda570c35f2bc0edf35c11aa1cc8f8820e479a2675592012e6fb5"
+    },
+    "4": {
+      "seed": 143000000,
+      "games": 300,
+      "invariants_checked": true,
+      "search": {
+        "iterations": 32,
+        "depth": 8,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      },
+      "status_counts": {
+        "complete": 298,
+        "no_legal_action": 2
+      },
+      "record_set_sha256": "ec6b70c6b7f9fd121b85494ffed3852c8dbeda002492306a731ddaa49a28bfac"
+    }
+  }
+}

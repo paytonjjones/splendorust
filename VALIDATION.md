@@ -466,3 +466,20 @@ turn-zero error, and no success report was created. The result, command and
 workflow hashes, and failure log are in the `reference-ci-command` files under
 `docs/results`. These are existing regression seeds, not fresh confirmation.
 Hosted Linux/macOS CI has not been run; no changes were pushed.
+
+## Two-player policy block checks
+
+The original E19 two-player blocked histories remain version-2 fixtures:
+`blocked-two-786-v2.json` and `blocked-two-6349-v2.json`. Both block Strong,
+identity 1. E20 extends the public sufficient next-turn bound to Strong and
+complete return bundles. Both recorded games complete. Each changed Strong
+take survives every complete legal opponent reply in the recorded full state.
+Two new E20 confirmation blocks also remain fixtures (`blocked-two-2310-v2.json`
+and `blocked-two-4285-v2.json`). E21 excludes takes that prove the next actor
+will have no legal action, when another action exists. No blind reservation
+identity is inferred. Tests cover mandatory returns, remaining gold,
+completion of the final round, Search budgets 0/1/128, equivalent hidden
+observations, and every payment continuation after tested purchases. These
+are bounded policy checks. Core rules, legal enumeration, RNG, and engine
+version remain unchanged. Failed promotion evidence is retained in
+`docs/results/two-player-policy/`.

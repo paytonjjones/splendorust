@@ -1055,3 +1055,85 @@ incomplete two-player run. No core rule, RNG, enumeration, or replay behavior
 changes; the engine stays v2. Compressed reports, recomputed intervals,
 record-set hashes, gate decisions/manifests, control comparisons, and final
 validation are retained under `docs/results/e19-*`.
+
+## E20 — Apply next-turn safety to Strong and token returns
+
+**Hypothesis, before implementation:** Both E19 two-player confirmation failures
+block Strong (identity 1), rather than Search. A token take followed by a return
+can leave Strong without an affordable card when Search empties the remaining
+bank. Extend E19's public sufficient next-turn bound to Strong and to complete
+return bundles. When certified alternatives exist, exclude uncertified choices.
+Use only the actor's public observation and private reservations. Preserve all
+core rules and legal actions; this is not a universal termination claim.
+
+Development seeds are the two E19 blocks, 786/rotation 1 and 6349/rotation 0.
+Retain their original complete histories and no-outcome endpoints. Check all
+opponent replies to certified root choices, repeated choices and equivalent
+hidden observations, and whole-game completion. Reserve fresh screen 138m
+(2,000 games) and confirmation 1,138m (20,000 games), Search versus Strong,
+128 iterations/depth 8/width 6, four threads, decision cap 20,000. Use the
+promotion gate and retain failures. This gate measures the combined changed
+policies against each other; it cannot isolate a strength gain for either.
+
+**E20 initial result:** Both recorded E19 games now complete. Strong first
+changes its take at decision 47 (block 786) and 31 (block 6349). Each changed
+take preserves a legal next turn against every legal opponent reply. The
+fresh 2,000-game screen completes. The 20,000-game confirmation has two
+Strong blocks, blocks 2310 and 4285, rotation 1. The gate rejects. Preserve
+this failed candidate and its full reports; do not reuse its confirmation
+as a fresh holdout. Initial gate execution also stopped on Clippy diagnostics
+before any seed-based stage; that execution failure is retained separately.
+
+## E21 — Do not take the last bank tokens into a proven opponent block
+
+**Hypothesis, before implementation:** At both E20 failures Search can buy
+but takes the last colored bank tokens, leaving Strong with no legal action.
+Exclude such a take when the actor can choose another action. Certify the
+next actor's block only from public information: exactly three reservations,
+all reservation identities known, no affordable market or reservation,
+empty colored bank after the take, and no return needed by the current actor.
+Do not infer blind reservation identities. This adds no core outcome or pass.
+Use the same check for Search and Strong. Keep all actions if every action
+would fail the check. Combine it with the E20 own-turn bound. Reserve fresh
+screen 140m / confirmation 1,140m, 2,000 / 20,000 two-player games at 128/8/6.
+
+**E21 policy boundary:** This changes Search root/non-main decisions and real
+Strong decisions. Search's internal Strong rollout still uses the existing
+`best` scoring directly. No rollout budget or rollout policy changes.
+
+**Fresh two-player gate:** All 2,000 screen games and all 20,000 confirmation
+games complete. Search earns 72.9325% win credit with 95% setup-block interval
+[71.8544%, 74.0106%]. The actual gate returns `promote` at source
+`bc768d0c493a603f`. This measures the changed policies against each other;
+it is not evidence that the safety filter increases either policy's strength.
+
+**Fresh three-player gate:** All 3,000 screen games and all 21,000 confirmation
+games complete. Search earns 52.4714% credit, with 95% interval
+[51.2257%, 53.7171%], against two changed Strong opponents. The gate returns
+`promote`. These gates do not prove full-game termination for other seeds,
+search budgets, policies, or player counts.
+
+**Fresh four-player gate:** All 4,000 screen games and all 20,000 confirmation
+games complete. Search earns 39.0125% win credit, with 95% interval
+[37.6787%, 40.3463%], against three changed Strong opponents. The gate returns
+`promote`. The three fresh gates complete 70,000 games in total, with no
+blocked or capped game. Timing is shared-machine promotion metadata; no
+comparative speed claim follows. Full reports, hashes, manifests, failed
+E20 evidence, and validation logs are in `docs/results/two-player-policy/`.
+
+**Search32 self-play diagnostic:** A separate 300-game invariant-checked run
+for each player count at seed 143m uses 32 iterations/depth 8/width 6.
+Two players complete 293 games and cap seven; all seven have a verified
+four-decision token-only cycle. Three and four players each complete 298 games
+and block two. This self-play workload is incomplete and cannot use completed
+count as if all requested games finished. The reports, all eleven unfinished
+histories, and local branch audits are retained.
+
+The three-player block 66 has an opponent blind reservation, so E21 cannot
+prove the block from public information. Block 4 ends with the sole zero-token
+payment after a free purchase; that path is outside the take-only guard.
+Both four-player blocks end with the sole legal take. E21 correctly retains
+a legal choice when no alternative exists. No guard defect is established.
+Do not invent a pass or winner, or extrapolate Search/Strong completion at
+128 iterations to self-play at 32. Use the completed Search/Strong workload
+for the primary search benchmark and retain self-play as incomplete evidence.

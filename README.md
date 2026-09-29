@@ -66,3 +66,10 @@ Current engine: `splendorust-v2`. At the `u32` turn-counter limit the core retur
 an atomic `TurnLimit` resource error, not a game outcome. Old v1 replay files
 require the matching v1 source; current versioned fixtures and migration evidence
 are documented in [VALIDATION.md](VALIDATION.md).
+
+Search and Strong also apply the public next-turn bound to complete token
+returns. They avoid a take that empties the colored bank and proves that the
+next actor cannot act, when another choice exists. A blind opponent reservation
+prevents this proof. The check does not reject a take that finishes an already
+active final round. E20 and E21 record the failed candidate and fresh checks.
+These policies do not guarantee termination for all setups or budgets.

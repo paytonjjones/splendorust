@@ -1,0 +1,84 @@
++ cargo fmt --all --check
++ cargo clippy --workspace --all-targets --locked -- -D warnings
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+    Checking cfg-if v1.0.5
+   Compiling crossbeam-utils v0.8.23
+   Compiling zerocopy v0.8.59
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling zmij v1.0.23
+   Compiling serde v1.0.229
+    Checking utf8parse v0.2.2
+    Checking is_terminal_polyfill v1.70.2
+   Compiling rayon-core v1.13.0
+    Checking anstyle-parse v1.0.0
+    Checking colorchoice v1.0.5
+    Checking either v1.18.0
+   Compiling serde_json v1.0.151
+    Checking anstyle-query v1.1.5
+    Checking anstyle v1.0.14
+   Compiling autocfg v1.5.1
+    Checking anstream v1.0.0
+    Checking strsim v0.11.1
+   Compiling num-traits v0.2.19
+    Checking memchr v2.8.3
+    Checking arrayvec v0.7.8
+    Checking clap_lex v1.1.1
+    Checking itoa v1.0.18
+   Compiling heck v0.5.0
+    Checking clap_builder v4.6.7
+    Checking once_cell v1.21.4
+    Checking regex-syntax v0.8.11
+    Checking splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust-two-player-fix/crates/splendor-core)
+    Checking ciborium-io v0.2.2
+    Checking plotters-backend v0.3.7
+    Checking plotters-svg v0.3.7
+    Checking itertools v0.10.5
+    Checking same-file v1.0.6
+    Checking cast v0.3.0
+    Checking walkdir v2.5.0
+    Checking oorandom v11.1.5
+    Checking anes v0.1.6
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust-two-player-fix/crates/splendor-arena)
+    Checking regex-automata v0.4.18
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust-two-player-fix/crates/splendor-agents)
+error: this expression creates a reference which is immediately dereferenced by the compiler
+   --> crates/splendor-agents/src/lib.rs:399:48
+    |
+399 |             .any(|r| r.card != NONE && deficit(&p, r.card) == 0)
+    |                                                ^^ help: change this to: `p`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrow
+    = note: `-D clippy::needless-borrow` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_borrow)]`
+
+error: this expression creates a reference which is immediately dereferenced by the compiler
+   --> crates/splendor-agents/src/lib.rs:406:46
+    |
+406 |         .filter(|&&id| id != NONE && deficit(&p, id) == 0)
+    |                                              ^^ help: change this to: `p`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrow
+
+error: the loop variable `c` is used to index `returned`
+   --> crates/splendor-agents/src/lib.rs:440:22
+    |
+440 |             for c in 0..6 {
+    |                      ^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_range_loop
+    = note: `-D clippy::needless-range-loop` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_range_loop)]`
+help: consider using an iterator and enumerate()
+    |
+440 -             for c in 0..6 {
+440 +             for (c, <item>) in returned.iter().enumerate().take(6) {
+    |
+
+error: could not compile `splendor-agents` (lib) due to 3 previous errors
+warning: build failed, waiting for other jobs to finish...
+reject: execution failure: Command '['cargo', 'clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings']' returned non-zero exit status 101.

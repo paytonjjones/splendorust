@@ -35,7 +35,8 @@ impl Agent for SimpleGreedyAgent {
 }
 impl Agent for StrongHeuristicAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
-        best(o, legal, true)
+        let safe = safe_choices(o, legal);
+        best(o, safe.as_deref().unwrap_or(legal), true)
     }
 }
 
@@ -388,18 +389,21 @@ fn preserves_next_turn(o: &Observation, take: [u8; 5]) -> bool {
     if p.token_count() > 10 {
         return false;
     }
+    preserves_with_tokens(o, &p, bank)
+}
+fn preserves_with_tokens(o: &Observation, p: &Player, bank: usize) -> bool {
     let opponents = usize::from(o.count - 1);
     if bank > 3 * opponents
         || p.reserved
             .iter()
-            .any(|r| r.card != NONE && deficit(&p, r.card) == 0)
+            .any(|r| r.card != NONE && deficit(p, r.card) == 0)
     {
         return true;
     }
     let affordable = o
         .market
         .iter()
-        .filter(|&&id| id != NONE && deficit(&p, id) == 0)
+        .filter(|&&id| id != NONE && deficit(p, id) == 0)
         .count();
     affordable > opponents - bank.div_ceil(3)
 }
@@ -417,12 +421,75 @@ fn safe_takes(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
     // Without a certified alternative, retain the original legal choices.
     (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
 }
+// Only reject a take when the next actor's lack of a legal action is public.
+// Blind reservations are unknown, so they prevent this certification.
+fn blocks_next_actor(o: &Observation, a: Action) -> bool {
+    if o.final_round && o.current + 1 == o.count {
+        return false;
+    }
+    let Action::Take(take) = a else {
+        return false;
+    };
+    if o.players[o.current as usize].token_count() + take.iter().sum::<u8>() > 10
+        || (0..5).any(|c| o.bank[c] != take[c])
+    {
+        return false;
+    }
+    let next = (usize::from(o.current) + 1) % usize::from(o.count);
+    let p = &o.players[next];
+    o.reserved_counts[next] == 3
+        && p.reserved.iter().all(|r| r.card != NONE)
+        && p.reserved.iter().all(|r| deficit(p, r.card) != 0)
+        && o.market.iter().all(|&id| id == NONE || deficit(p, id) != 0)
+}
+fn safe_choices(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
+    let surviving = safe_token_actions(o, legal);
+    let choices = surviving.as_deref().unwrap_or(legal);
+    let safe: Vec<_> = choices
+        .iter()
+        .copied()
+        .filter(|&a| !blocks_next_actor(o, a))
+        .collect();
+    if !safe.is_empty() && safe.len() < choices.len() {
+        Some(safe)
+    } else {
+        surviving
+    }
+}
+fn safe_token_actions(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
+    if o.phase != Phase::Return {
+        return safe_takes(o, legal);
+    }
+    if o.reserved_counts[o.current as usize] != 3 {
+        return None;
+    }
+    let safe: Vec<_> = legal
+        .iter()
+        .copied()
+        .filter(|a| {
+            let Action::Return(returned) = a else {
+                return false;
+            };
+            let mut p = o.players[o.current as usize];
+            let mut bank = 0usize;
+            for (c, &amount) in returned.iter().enumerate() {
+                p.tokens[c] -= amount;
+                if c < 5 {
+                    bank += usize::from(o.bank[c] + amount);
+                }
+            }
+            preserves_with_tokens(o, &p, bank)
+        })
+        .collect();
+    (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
+}
 impl Agent for SearchAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
         if o.phase != Phase::Main || legal.len() == 1 || o.turns == u32::MAX {
-            return best(o, legal, true);
+            let safe = safe_choices(o, legal);
+            return best(o, safe.as_deref().unwrap_or(legal), true);
         }
-        let safe = safe_takes(o, legal);
+        let safe = safe_choices(o, legal);
         let legal = safe.as_deref().unwrap_or(legal);
         if self.config.iterations == 0 {
             return best(o, legal, true);
@@ -525,6 +592,54 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
+    #[test]
+    fn public_block_filter_never_guesses_blind_reservations() {
+        let mut o = GameState::new(2, 0).unwrap().observe(0);
+        o.bank = [0, 1, 0, 0, 0, 5];
+        o.market = [NONE; 12];
+        o.players[0] = Player::default();
+        o.players[1] = Player::default();
+        o.reserved_counts[1] = 3;
+        for r in &mut o.players[1].reserved {
+            r.card = 6;
+        }
+        let take = Action::Take([0, 1, 0, 0, 0]);
+        assert!(blocks_next_actor(&o, take));
+        o.players[1].reserved[0].card = NONE;
+        assert!(!blocks_next_actor(&o, take));
+        o.players[1].reserved[0].card = 6;
+        o.players[1].tokens[2] = 3;
+        assert!(!blocks_next_actor(&o, take));
+        o.players[1].tokens[2] = 0;
+        o.market[0] = 6;
+        o.players[1].tokens[2] = 3;
+        assert!(!blocks_next_actor(&o, take));
+        o.players[1].tokens[2] = 0;
+        o.players[0].tokens = [2, 2, 2, 2, 2, 0];
+        assert!(!blocks_next_actor(&o, take)); // A mandatory return restores bank tokens.
+        o.players[0].tokens = [0; 6];
+        o.current = 1;
+        o.final_round = true;
+        assert!(!blocks_next_actor(&o, take)); // The game ends before the next actor.
+    }
+    #[test]
+    fn return_filter_uses_complete_bundles_and_keeps_uncertified_choices() {
+        let mut o = GameState::new(2, 0).unwrap().observe(0);
+        o.phase = Phase::Return;
+        o.reserved_counts[0] = 3;
+        o.players[0] = Player::default();
+        o.players[0].tokens = [8, 0, 3, 0, 0, 0];
+        o.players[0].reserved[0].card = 6;
+        o.market = [NONE; 12];
+        o.bank = [0; 6];
+        let legal = [
+            Action::Return([1, 0, 0, 0, 0, 0]),
+            Action::Return([0, 0, 1, 0, 0, 0]),
+        ];
+        assert_eq!(safe_token_actions(&o, &legal), Some(vec![legal[0]]));
+        o.players[0].reserved[0].card = NONE;
+        assert_eq!(safe_token_actions(&o, &legal), None);
+    }
     #[test]
     fn next_turn_bound_counts_depletion_and_market_removal_separately() {
         // Isolate the public-information bound: card 6 costs three green.

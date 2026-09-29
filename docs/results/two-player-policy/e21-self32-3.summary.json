@@ -1,0 +1,94 @@
+{
+  "run_config": {
+    "names": [
+      "search",
+      "search",
+      "search"
+    ],
+    "games": 300,
+    "seed": 143000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": true,
+    "search": {
+      "iterations": 32,
+      "depth": 8,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "bc768d0c493a603f",
+  "max_decisions": 20000,
+  "invariants_checked": true,
+  "engine": "splendorust-v2",
+  "seed": 143000000,
+  "players": 3,
+  "requested_games": 300,
+  "completed_games": 298,
+  "incomplete_games": 2,
+  "independent_blocks": 100,
+  "ci_method": "Two-sided 95% empirical Bernstein over setup blocks, alpha/2 per tail; missing outcomes bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "search",
+      "wins": 106,
+      "shared_wins": 5,
+      "win_share": 108.5,
+      "win_rate": 0.3640939597315436,
+      "ci95": [
+        0.18251246252425907,
+        0.5485304410729505
+      ],
+      "average_position": 1.9597315436241611,
+      "average_score": 12.302013422818792
+    },
+    {
+      "identity": 1,
+      "agent": "search",
+      "wins": 99,
+      "shared_wins": 5,
+      "win_share": 101.5,
+      "win_rate": 0.34060402684563756,
+      "ci95": [
+        0.160684912547765,
+        0.5225822597193575
+      ],
+      "average_position": 1.983221476510067,
+      "average_score": 12.080536912751677
+    },
+    {
+      "identity": 2,
+      "agent": "search",
+      "wins": 86,
+      "shared_wins": 4,
+      "win_share": 88.0,
+      "win_rate": 0.2953020134228188,
+      "ci95": [
+        0.11351279683723864,
+        0.48010273786298235
+      ],
+      "average_position": 2.0201342281879193,
+      "average_score": 12.093959731543624
+    }
+  ],
+  "average_turns": 101.52333333333333,
+  "average_decisions": 152.83666666666667,
+  "runtime_seconds": 1.130982667,
+  "games_per_second": 265.25605453863244,
+  "decisions_per_second": 40540.851188836124,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 32, depth: 8, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "reject: incomplete games",
+  "raw_report_sha256": "8b44439c81e610ded29d434d745791513886bdbbc7854a5f4815c501eb6a207c",
+  "record_set_sha256": "5ee403900f4dda570c35f2bc0edf35c11aa1cc8f8820e479a2675592012e6fb5",
+  "raw_archive": "e21-self32-3.json.gz",
+  "summary_note": "Intervals recomputed by scripts/collect_evidence.py; raw historical reports preserved unchanged.",
+  "status_counts": {
+    "complete": 298,
+    "no_legal_action": 2
+  }
+}
