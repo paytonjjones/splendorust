@@ -2259,3 +2259,44 @@ masked while legitimate teacher targets can still be used. This is a screen
 result, not the independent lineage milestone. Keep d355...600 as fixed champion.
 The full-volume control supports stronger-teacher data as a useful direction;
 it does not isolate teacher volume from every data-distribution difference.
+
+## E57 — Frozen-endpoint controls and external supporting rerun
+
+After E56 freezes its endpoint, assess it against frozen search128 at128 and
+16 NN simulations (2,000 paired games each,3420m and3430m),and against Strong
+at128 (2,000 games,3440m). Keep actual named search128 override128/depth8;
+NN uses depth16. Measure fixed-observation decision costs for search128 and
+NN16/128 with the same endpoint. The16 budget is chosen before outcomes from
+prior timing evidence; report measured cost, not exact universal compute parity.
+Native controls remain distinct from external rankings.
+
+Rerun the frozen AlphaZero profile with400 games,two-player seat rotations,
+setup master3450000,policy2500001,sampling3500001,native800/depth16,external
+iterations0 (unchanged checkpoint default),cap2000. Keep AlphaZero source,
+checkpoint,adapter and all benchmark parameters unchanged from E36 except the
+candidate weights/name and fresh setup master. Add only the native candidate
+name to the harness whitelist and model-hash provenance. Keep unsupported,
+blocked and capped outcomes unknown. Do not infer a global/SOTA rank from
+conditional completed-game credit. Native controls and external process may
+overlap the fixed-budget milestone; record shared-host timing interference.
+
+**E55 completed:** All2,000 complete,49.525% versus E54,CI[45.26%,53.79%].
+Reject by the predeclared provisional rule; retain E54. Training96.17s,gate48.73s.
+On512 development blind observations,mean policy TV is0.04675 for E54 and
+0.04650 for E55; raw value range0.22534 versus0.22447. This particular random-
+view control makes little difference to measured sensitivity and establishes
+no playing gain. It does not rule out other observation-level learning methods.
+
+**E56 screen completed:** All2,000 complete,51.15% versus E54,
+CI[47.01%,55.29%]. The strict gate retains E54; the registered provisional
+lineage advances to055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41.
+This small screen gain is unconfirmed. Freeze this endpoint before the reserved
+20,000-game3310m champion milestone. E56 used original inputs because E55 did
+not advance. No further candidate selection from milestone outcomes.
+
+E57's first native control writes all2,000 records, including four incomplete
+ones, then the CLI returns1. The first runner incorrectly expected exit2 for
+incomplete CLI comparisons. Preserve its source/plan/log, repair the runner to
+validate complete record sets on exit1, and continue the other registered
+controls. Keep the existing external process; no schedule restart or dropped
+unknown outcomes. This is execution handling, not a new experiment or result.

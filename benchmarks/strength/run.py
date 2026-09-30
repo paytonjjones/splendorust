@@ -54,6 +54,10 @@ def run(args):
         'host':platform.platform(),'python':platform.python_version(),'reproduction_command':args.reproduction,
         'harness_sha256':{str(p.relative_to(ROOT)):sha(p) for p in [Path(__file__),ROOT/'benchmarks/adapters/alphazero_strength.py',ROOT/'benchmarks/adapters/seal256_strength.cpp',ROOT/'crates/splendor-arena/examples/strength_worker.rs']},
         'limits':'Native planning rules differ from actual transitions. Unsupported actions stop a game. Iteration counts are not equal compute. RPC and conversion time are included.'}
+    if args.candidate=='flywheel-candidate':
+        model=Path(os.environ['SPLENDOR_CANDIDATE_MODEL']).resolve()
+        metadata['candidate_model_sha256']=sha(model)
+        metadata['candidate_model_path']=str(model)
     with args.output.open('w') as out:
         out.write(json.dumps(metadata)+'\n');out.flush()
         try:
@@ -129,7 +133,7 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--external',choices=['alphazero','seal256','random','strong'],required=True)
     p.add_argument('--source',type=Path,default=ROOT/'local/strength/external/alphazero')
-    p.add_argument('--candidate',choices=['search','strong','random','learned','learned-cycle','neural-v2','neural-rollout','neural-expert','neural-selfplay','transfer-rollout','transfer-native','transfer-native-rollout','transfer-pool3'],default='search')
+    p.add_argument('--candidate',choices=['search','strong','random','learned','learned-cycle','neural-v2','neural-rollout','neural-expert','neural-selfplay','transfer-rollout','transfer-native','transfer-native-rollout','transfer-pool3','flywheel-candidate'],default='search')
     p.add_argument('--players',type=int,choices=[2,3,4],default=2);p.add_argument('--games',type=int,required=True)
     p.add_argument('--depth',type=int,default=8);p.add_argument('--iterations',type=int,default=128);p.add_argument('--external-iterations',type=int,default=0)
     p.add_argument('--seed',type=int,required=True);p.add_argument('--policy-seed',type=int,default=2500001);p.add_argument('--sampling-seed',type=int,default=3500001);p.add_argument('--cap',type=int,default=2000)

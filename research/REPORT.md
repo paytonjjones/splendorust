@@ -255,3 +255,10 @@ This supports the larger stronger-teacher experiment after the small-corpus
 failures. The independent final endpoint assessment remains pending. Dev's
 one blocked game keeps37 outcome labels unknown; it does not affect screen
 completion. Models, raw gates, source snapshots and dataset hashes are saved.
+
+E55's paired multi-view control scores49.525% against E54 in2,000 complete
+games and is rejected. Its development input sensitivity changes very little.
+E56 trains from E54 with1,000 fresh800-simulation teacher games plus the5,000-
+game replay corpus. Its51.15% complete screen advances only the provisional
+lineage. The independent fixed-champion20,000-game assessment is running.
+No small-gain confirmation or external rank is claimed from these screens.
