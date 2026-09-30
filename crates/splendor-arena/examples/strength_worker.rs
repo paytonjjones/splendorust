@@ -55,6 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 agents.clear();
                 let config = SearchConfig {
                     iterations: u32::try_from(v["iterations"].as_u64().ok_or("iterations")?)?,
+                    depth: u32::try_from(v["depth"].as_u64().unwrap_or(8))?,
                     ..Default::default()
                 };
                 for (i, name) in v["seats"].as_array().ok_or("seats")?.iter().enumerate() {

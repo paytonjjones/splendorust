@@ -1347,3 +1347,291 @@ the E26 checkpoint, learning rate 0.0003, 50% expert rows and 50% E26 replay
 rows per epoch. Missing expert outcomes have no value loss; do not replace
 these with teacher estimates. Select by independent development policy plus
 value loss. This is fine-tuning, not learning from evaluation holdouts.
+
+**Compact-key check:** All 2,000 ordered E26 rollout-screen records match after
+replacing debug-string keys with fixed observation bytes. Shared-host runtime
+is 42.81s versus 59.77s; this is a single equivalence/timing pair, not a precise
+hardware speed claim. The fresh E26 gate screen at 302m completes all 2,000
+and earns 56.125%, CI [51.79%,60.46%]. Confirmation is now running unchanged.
+E27 will first use a 200-game development screen at 310m against neural-rollout,
+with both policies using 128 simulations, depth 16 and eight Strong rollout
+turns. Reserve 1310m for a future final confirmation if development qualifies.
+
+**E26 confirmation:** All 20,000 games at 1302m completed. Candidate credit is
+57.725%, with block-based 95% CI [56.5925%,58.8575%]. The unchanged strict
+promotion gate returned `promote`; source 7089d131c74a3c28 and all hashes are
+in research/e26-gate/decision.json. This supports an internal gain at 128
+simulations, not equal compute or external leadership. Run the previously
+reserved 1303m comparison against original Search128 and the unchanged external
+400-game AlphaZero schedule at 2051000. Do not use these histories to tune.
+
+**E27 result:** Independent expert development selected epoch 3; later epochs
+overfit. Development policy accuracy is 34.33%, value Brier 0.11671, and native
+inference parity error is below 0.000002504. However, the fresh 200-game playing
+screen at 310m earns only 38.75% against neural-rollout (all complete). Reject
+this candidate for promotion. Preserve the checkpoint, raw teacher histories,
+training curves and playing result. A better held-out prediction loss alone is
+not sufficient evidence of a stronger search policy. Seed 1310m remains unused.
+
+**E26 fixed-time protocol, before measurements:** Compare the selected E26
+rollout agent with the original Search algorithm at one millisecond of search
+loop time per Main decision, a ceiling of 100,000 simulations, and one arena
+thread. Search retains depth eight, width six and Strong/Engine evaluation;
+E26 retains depth sixteen and its frozen weights. Both existing implementations
+check the clock between simulations, so one simulation can exceed the budget.
+Preparation and final choice are outside that loop budget. Report actual total
+runtime as well; this is a matched search-time comparison, not a hard latency
+limit or a bitwise reproducible run. Use 2,000 development games at 320m and
+reserve 20,000 independent confirmation games at 1320m. Keep all incompletes
+and report their bounds. The named Search128 control remains unchanged.
+
+## E28 — Search policy iteration from the confirmed neural agent
+
+Hypothesis before implementation: E26 can improve its own strategic prior by
+distilling a higher-budget version of its full tree search, rather than the
+old root-only teacher. Expose normalized root visit counts and the selected
+edge's mean value without changing action selection. Generate 6,000 training
+games at master 340m and 1,000 development games at 350m, with independent policy
+streams 1040000007 and 1050000007. Use frozen E26, 256 simulations, depth sixteen,
+and eight heuristic rollout turns. This is deterministic search policy
+iteration; no claim of exploration-noise AlphaZero training is made.
+
+Warm-start E26 for 30 epochs at learning rate 0.0003, with equal sampled weight
+on new data and the original E26 replay. Use the existing mixed-replay trainer,
+which masks missing outcomes and retains observation-only teacher values.
+Select by independent development policy plus value loss. First screen is
+200 games at 360m against E26 at 128 simulations/depth sixteen; only advance
+on playing evidence. Reserve 1360m for later confirmation. No external or
+internal confirmation histories are training inputs.
+
+**E28 target validation:** All 2,000 ordered E26 development game records are
+identical after adding root training targets. The hidden-world test also checks
+identical targets, legal policy support, normalized visit probabilities and
+bounded values. Target collection does not change the policy's choices.
+
+**E26 fixed-time screen:** 1,999 of 2,000 games completed at 320m. The candidate
+earned approximately 76.01% conditional credit. Keep the one missing outcome
+in the unconditional interval. As preregistered, advance to the independent
+20,000-game 1320m confirmation. Runtime budgets are nondeterministic and this
+is not eligible for the deterministic strict promotion gate. This shared-host
+run overlaps other research jobs; both actors use the same per-decision clock
+budget, but this is not a dedicated-hardware latency claim.
+
+## E29 — Reuse observation-matched search nodes
+
+Hypothesis before implementation: keeping exact observation-matched nodes
+between real decisions can recover useful prior search work at low cost.
+Use the frozen E26 model and search settings. Retain at most 32,768 nodes
+between decisions; clear the cache at the next decision when above that limit.
+Require an exact observation key match, preserve legal root action restrictions,
+and continue fresh hidden-world sampling for every new simulation. The key
+excludes only turn count, as in the already-validated within-decision tree.
+
+This reuses finite-horizon estimates from different root depths, which can
+introduce bias. Measure actual play rather than assume benefit. Screen 200
+games at 380m against fresh-tree E26, with both at 128 simulations/depth sixteen.
+Reserve 1380m for confirmation only if development qualifies. This independent
+search experiment does not alter the frozen E28 data-generation process.
+
+**E29 screen result:** All 200 games completed. Persistent search earned
+49.75% against the fresh tree, CI [29.53%,69.97%]. No benefit is demonstrated;
+do not advance to confirmation or replace the selected E26 agent. Preserve
+this implementation as an experimental ablation and its raw failure evidence.
+Seed 1380m remains unused.
+
+**E26 versus original Search128 confirmation:** The reserved 1303m run finished
+19,999 of 20,000 games, with one incomplete game. Candidate credit among complete
+games is 83.00%; the all-requested 95% interval is [82.09%,83.91%]. The strict
+report gate rejects the incomplete game. Under the user-approved development
+rule, this is strong evidence of internal improvement with the missing outcome
+retained in the bounds. It does not establish an external ranking.
+
+**E29 regression:** The fresh-tree path retains all 2,000 ordered E26 development
+records exactly. Rust formatting, strict Clippy and release workspace tests
+pass with the cache ablation and its hidden-world/legality test.
+
+**E23 reproducibility audit:** Current value_data with independent policy seed
+arguments reproduces both original Strong-generated files byte for byte.
+The train/dev hashes match the model manifest; the policy-seed refactor did not
+change these deterministic Strong trajectories. Retain the original manifests
+and separate reproduced manifests rather than rewrite historical evidence.
+
+**E26 fixed-time confirmation:** All 20,000 games at reserved 1320m completed.
+Neural rollout earns 76.6175% against the original search algorithm under the
+matched one-millisecond search-loop allowance, 95% CI [75.60%,77.63%]. This
+confirms a gain under the stated shared-host timing protocol; it is not a
+bitwise-reproducible promotion. Actual total runtime was 1182.03 seconds.
+
+**E26 external confirmation:** Frozen AlphaZero800 wins decisively. E26 earns
+14 wins in 240 completed games, with 160 unsupported of the requested 400.
+All-requested finite-schedule bounds are [3.5%,43.5%], and the paired bootstrap
+missing envelope is [1.75%,48.5%]. Preserve all 160 incomplete records. Even
+assigning them all to E26 does not produce a winning finite-schedule score.
+There is no best-in-class claim.
+
+**E28 data and first result:** All 6,000 train and 1,000 development games
+completed, with 167,616 and 27,934 positions. Training selected its checkpoint
+using only development prediction loss. Rust parity error is 0.000002862.
+The fresh 200-game 360m screen earns 58.25% against E26, all complete. Extend
+the same development schedule to the standard 2,000-game gate; this extension
+is not a fresh holdout. If it passes, use the already reserved independent
+1360m confirmation of 20,000 games. The checkpoint stays fixed.
+
+Train and development generator manifests have different source fingerprints
+because the unused E29 ablation was added between process launches. E26's
+weights, settings and action records remain fixed. The first 128 setups from
+each dataset reproduce byte for byte with the saved generator binary, including
+all policy/value labels. Retain both fingerprints and the prefix checks.
+The setup audit reports zero intersections among all recorded train, development
+and completed final-report schedules.
+
+## E30 — Transfer the stronger pretrained network into native inference
+
+Hypothesis before implementation: the remaining external gap is largely a
+learned-policy gap. Test transfer of the frozen external version-80 network
+itself, with explicit attribution, rather than distilling only a few hundred
+of its decisions. First export and verify native Rust inference against its
+exact PyTorch checkpoint. This is reuse of an existing MIT-licensed model,
+not an original trained-from-scratch achievement. Preserve the upstream license
+and checkpoint hash. Do not change the external benchmark target.
+
+A later playing integration must receive Observation only, sample hidden cards
+from that observation, translate only legal core actions, and keep terminal
+outcomes in the published core rules. No real future deck or hidden reservation
+may reach inference. Initial parity fixtures use fresh artificial/initial board
+inputs, never benchmark confirmation positions. Do not make a playing-strength
+claim from inference parity alone.
+
+**E28 confirmation and research selection:** The existing gate advances an
+inconclusive non-regressing screen to confirmation; it does not require the
+screen to meet the final promotion threshold. It therefore ran the reserved
+1360m schedule unchanged. E28 earned 54.1677% in 19,999 complete games out of
+20,000, with conservative all-requested 95% interval [53.0486%,55.2863%].
+The strict decision is `reject: incomplete games` and remains intact. Under
+the user's preregistered incomplete-game rule, this establishes a further
+internal gain, so E28 becomes the research candidate; E26 remains the last
+strictly promoted control. Rerun the unchanged 400-game external schedule.
+Do not train on this confirmation history or reinterpret its missing outcome.
+
+**E30 parity and playing protocol:** Native encoding matches upstream exactly
+on 94 fresh game positions, including sampled opponent blind reservations and
+equal-observation hidden-world checks. On these valid game inputs, maximum raw
+logit error is 0.000006676 and maximum policy/value error is 0.000001163. The
+first absolute-logit stress check failed on artificial invalid boards (logits
+over 500, error about 0.002). Preserve that failure. A scale-aware stress check
+and 50 legal-mask patterns per input bound normalized policy/value error below
+0.001; valid-game parity remains subject to the tighter 0.0001 criterion.
+The card-group mapping is semantic; upstream deck group order differs from
+bonus-color order, and the export verifies all 90 cards before emitting data.
+
+First playing screens: 200 paired games at fresh 620m against E28, for direct
+transferred policy, PUCT128 without rollout, and PUCT128 with eight Strong
+rollout turns. Use depth sixteen. External target stays unchanged. The network
+is trained with a native 124-turn cap. For turns >=124, use Strong for real
+actions and the E23 logistic value for search leaves; do not cap the real game
+or invent a result. Sample all unknown reservations from the Observation only.
+Reserve 1620m for a later confirmation if screens qualify.
+
+**E30 preliminary screens:** Direct policy earns 19.25%, tree128 earns 50%,
+and tree128 with eight Strong rollout turns earns 64.75%, all 200-game runs
+complete. These are small screens, not promotions. A key audit found that E26
+can omit turn count because its features omit it, but the transferred network
+includes that field. Correct transfer-only keys to include the turn count
+before further evaluation; preserve these initial screens as preliminary.
+Advance the corrected rollout candidate to fresh 2,000-game development at
+621m, against E28 with both 128 simulations/depth sixteen. Compute differs.
+
+## E31 — Scale exploration to the transferred value range
+
+Hypothesis before implementation: E30 inherited E26's exploration coefficient
+1.5, while the source network was trained with cpuct 0.8 on values in [-1,1].
+For our [0,1] values, its corresponding coefficient is 0.4 and its positive
+first-play reduction 0.0593 becomes 0.02965. The upstream prior has no two-percent
+uniform mixture. Test these three settings together as one source-informed
+configuration, keeping the E30 network and legal published transitions fixed.
+This is not a claim to reproduce upstream MCTS; our information-set tree and
+rollouts still differ. Test tree and eight-turn rollout versions on fresh 200
+games at 622m against E28, 128 simulations/depth sixteen. No confirmation until
+a larger independent development screen qualifies.
+
+**E31 first screens:** Source-scaled tree128 earns 71.75% against E28 on 200
+complete games at 622m; the rollout variant earns 67.5%, also all complete.
+Advance the faster tree variant to 2,000 fresh development games at 623m and
+the standard 20-game external screen at 1951000. These are selection screens,
+not final confirmations. Reserve 1623m for subsequent internal confirmation.
+
+**E28 external result:** 233 of 400 games complete; E28 earns 19.5 credits
+(8.3691% conditional). The 167 unsupported games remain unknown, giving
+all-requested bounds [4.875%,46.625%] and bootstrap envelope [2.875%,51.75%].
+The external gap remains large. E31's small external screen at 128 simulations
+earns one win in 13 completed games, seven unsupported. Do not promote on it.
+
+## E32 — Transferred-search budget diagnostic
+
+Hypothesis before measurement: transfer128 remains below the external target
+because it has only one sixth of the target's 800 simulations. Run the same
+20-game external development schedule with transfer-native at 800 simulations,
+depth sixteen, while leaving the target at its frozen 800 simulations. Equal
+simulation counts still do not imply equal compute. This is a budget diagnostic,
+not a final ranking. Preserve all unsupported results.
+
+## E33 — Update first-play estimates from search returns
+
+Hypothesis before implementation: the source MCTS updates its parent Qs using
+every returned value, while E31 keeps the initial network estimate fixed for
+unvisited actions. With imperfect values, a fixed estimate can waste exploration
+or suppress useful alternatives. Add an opt-in running mean with one initial
+network-value pseudocount, matching the source Qs update formula, while retaining
+E31's value scale and exploration settings. Test transfer-dynamic against
+transfer-native directly on 200 fresh games at 624m, 128 simulations/depth
+sixteen. All other agents retain the existing fixed estimate.
+
+**E30/E31 larger screens:** E30 rollout128 earns 67.23% against E28 in 1,999
+complete games out of 2,000 (one incomplete, conservative interval
+[62.78%,71.67%]). E31 tree128 earns 68.80% in all 2,000 games, interval
+[64.48%,73.12%], with lower runtime (260.07s versus 469.55s). Select the E31
+search configuration for further research; final confirmation remains unused.
+
+## E34 — Bounded root world sampling
+
+Hypothesis before implementation: fresh worlds every simulation cause chance
+branches to consume too much of the small search budget. Compare a pool of
+three root worlds, sampled only from the current Observation and refreshed
+every real decision, with E31's fresh-world-per-simulation control. Cycle evenly
+through the three sampled worlds. Keep E31's fixed first-play estimate, cpuct
+0.4, reduction 0.02965, zero uniform mixture, depth sixteen and 128 simulations.
+This approximates the belief distribution and may introduce bias; it is not
+access to the real deck or an exact reproduction of upstream random universes.
+Test transfer-pool3 directly against transfer-native on 200 fresh games at 626m.
+
+## E35 — Native transfer kernel optimization
+
+Hypothesis before implementation: the profile is dominated by Norm and Dense
+inference. Replace per-element modulo/index arithmetic with fixed-size array
+chunks while retaining each accumulator's operation order and fused multiply
+adds. Require exact saved-output equality and ordered playing-record equality
+against the current build, plus upstream parity. Benchmark 30,000 calls on the
+same 94 valid inputs before and after, with no other research jobs running.
+The baseline median for 10,000 calls is 1.18426 seconds. This is an inference
+optimization, not a new trained model or a playing-strength promotion.
+
+**E35 result:** Median 10,000-call inference time fell from 1.184256s to
+0.506491s (2.34x). All 94 saved output arrays are exactly equal
+and all 200 ordered playing records match. Upstream parity remains within the
+valid-input tolerance. Use this source for subsequent experiments.
+
+**E33/E34 screens:** Dynamic first-play updates earn 46.5% against E31 on
+200 complete games; no benefit shown, do not advance. Three sampled root worlds
+earn 63.25% against E31 on 200 complete games. Advance only this sampling variant
+to 2,000 fresh development games at 627m. E32's 800-simulation external screen
+earns three wins in 12 completed games, with eight unsupported. Budget helps
+but does not close the gap in this small screen. Test the three-world variant
+at the same 800-simulation external development budget as a separate diagnostic.
+
+**E34 larger result:** All 2,000 fresh development games at 627m completed.
+Three-world search earns 62.525% against E31, conservative 95% CI
+[58.37%,66.68%]. Its external 800-simulation development screen earns 7.5
+credits in 14 completed games (53.57% conditional), with six unsupported.
+This is promising but too small for a final external claim. Preserve all
+missing outcomes. The next final candidate assessment will use the unchanged
+400-game external schedule and a fresh internal promotion gate.

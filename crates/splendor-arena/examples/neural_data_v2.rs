@@ -17,6 +17,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let iterations: u32 = a[4].parse()?;
     let policy = &a[5];
     let output = &a[6];
+    let depth: u32 = a.get(7).map(|s| s.parse()).transpose()?.unwrap_or(8);
     let mut out = BufWriter::new(std::fs::File::create(output)?);
     let start = Instant::now();
     let mut counts = [0usize; 3];
@@ -32,6 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let mut prng = Rng::new(policy_seed.wrapping_add(g as u64));
                     let config = SearchConfig {
                         iterations,
+                        depth,
                         ..Default::default()
                     };
                     let mut agents = [
@@ -114,7 +116,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     out.flush()?;
     println!(
         "{}",
-        serde_json::json!({"games":games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":seed,"policy_seed":policy_seed,"iterations":iterations,"policy":policy,"seconds":start.elapsed().as_secs_f64(),"source":env!("SPLENDOR_SOURCE_ID"),"row_bytes":1844,"format":"u64 setup, f32[322] features, f32[67] legal mask, f32[67] policy target, f32 teacher value, f32 baseline logit, f32 outcome (NaN if incomplete), little endian"})
+        serde_json::json!({"games":games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":seed,"policy_seed":policy_seed,"iterations":iterations,"depth":depth,"policy":policy,"seconds":start.elapsed().as_secs_f64(),"source":env!("SPLENDOR_SOURCE_ID"),"row_bytes":1844,"format":"u64 setup, f32[322] features, f32[67] legal mask, f32[67] policy target, f32 teacher value, f32 baseline logit, f32 outcome (NaN if incomplete), little endian"})
     );
     Ok(())
 }

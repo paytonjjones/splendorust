@@ -120,7 +120,20 @@ pub struct NeuralAgent {
     calls: u64,
     pub logistic: bool,
     pub enhanced: bool,
+    pub expert: bool,
+    pub self_play: bool,
+    pub transferred: bool,
+    pub cpuct: f64,
+    pub fpu_reduction: f64,
+    pub uniform_prior: f64,
+    pub dynamic_fpu: bool,
+    pub world_pool: usize,
     pub rollout_depth: u32,
+    pub persistent: bool,
+    cached_nodes: Vec<Node>,
+    cached_index: HashMap<[u8; 192], usize>,
+    root_policy: Option<[f32; ACTIONS]>,
+    root_value: Option<f32>,
 }
 impl NeuralAgent {
     pub fn new(seed: u64, config: SearchConfig) -> Self {
@@ -132,12 +145,52 @@ impl NeuralAgent {
             calls: 0,
             logistic: false,
             enhanced: false,
+            expert: false,
+            self_play: false,
+            transferred: false,
+            cpuct: 1.5,
+            fpu_reduction: 0.0,
+            uniform_prior: 0.02,
+            dynamic_fpu: false,
+            world_pool: 0,
             rollout_depth: 0,
+            persistent: false,
+            cached_nodes: Vec::new(),
+            cached_index: HashMap::new(),
+            root_policy: None,
+            root_value: None,
         }
+    }
+    fn tree_key(&self, o: &Observation) -> [u8; 192] {
+        let mut bytes = key(o);
+        if self.transferred {
+            // Unlike E26, the transferred network has a turn-counter input.
+            bytes[188..192].copy_from_slice(&o.turns.to_le_bytes());
+        }
+        bytes
     }
     fn leaf(&mut self, o: &Observation) -> ([f32; ACTIONS], f64) {
         self.calls += 1;
-        let (p, v) = if self.enhanced {
+        if self.transferred {
+            if o.turns >= 124 {
+                return (
+                    [0.0; ACTIONS],
+                    super::learned::predict(o, o.viewer as usize, &super::value_weights::WEIGHTS),
+                );
+            }
+            let x = super::transfer::encode(o, &mut self.rng);
+            let (policy, values) = model_transferred().infer(&x);
+            let seat = usize::from(o.viewer != o.current);
+            return (
+                super::transfer::policy_logits(&policy),
+                (f64::from(values[seat]) + 1.0) / 2.0,
+            );
+        }
+        let (p, v) = if self.self_play {
+            model_self_play().infer(&super::neural::enhanced_features(o))
+        } else if self.expert {
+            model_expert().infer(&super::neural::enhanced_features(o))
+        } else if self.enhanced {
             model_v2().infer(&super::neural::enhanced_features(o))
         } else {
             model().infer(&features(o))
@@ -167,7 +220,8 @@ impl NeuralAgent {
                 .zip(weights)
                 .map(|(&action, w)| Edge {
                     action,
-                    prior: 0.98 * w / total + 0.02 / legal.len() as f64,
+                    prior: (1.0 - self.uniform_prior) * w / total
+                        + self.uniform_prior / legal.len() as f64,
                     visits: 0,
                     sum: 0.0,
                 })
@@ -248,7 +302,7 @@ impl NeuralAgent {
             state.apply_action(action).unwrap();
             return self.simulate(state, depth - u32::from(state.turns() != old), nodes, index);
         }
-        let key = key(&o);
+        let key = self.tree_key(&o);
         let i = if let Some(&i) = index.get(&key) {
             i
         } else {
@@ -269,11 +323,12 @@ impl NeuralAgent {
                 let score = |j: usize| {
                     let e = &node.edges[j];
                     let q = if e.visits == 0 {
-                        node.value
+                        node.value - self.fpu_reduction
                     } else {
                         e.sum / f64::from(e.visits)
                     };
-                    q + 1.5 * e.prior * f64::from(node.visits + 1).sqrt() / f64::from(e.visits + 1)
+                    q + self.cpuct * e.prior * f64::from(node.visits + 1).sqrt()
+                        / f64::from(e.visits + 1)
                 };
                 score(a).total_cmp(&score(b))
             })
@@ -284,6 +339,10 @@ impl NeuralAgent {
         state.apply_action(action).unwrap();
         let values = self.simulate(state, depth - u32::from(state.turns() != old), nodes, index);
         let node = &mut nodes[i];
+        if self.dynamic_fpu {
+            node.value = (f64::from(node.visits + 1) * node.value + values[seat])
+                / f64::from(node.visits + 2);
+        }
         node.visits += 1;
         node.edges[edge].visits += 1;
         node.edges[edge].sum += values[seat];
@@ -314,15 +373,29 @@ fn key(o: &Observation) -> [u8; 192] {
     put(&o.market);
     put(&o.remaining);
     put(&o.nobles.to_le_bytes());
+    debug_assert_eq!(offset, 187);
     bytes
 }
 
 impl Agent for NeuralAgent {
+    fn policy_target(&self) -> Option<[f32; ACTIONS]> {
+        self.root_policy
+    }
+    fn value_target(&self) -> Option<f32> {
+        self.root_value
+    }
     fn work_counts(&self) -> (u64, u64) {
         (self.simulations, self.calls)
     }
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
-        if o.count != 2 || o.phase != Phase::Main || legal.len() == 1 || o.turns == u32::MAX {
+        self.root_policy = None;
+        self.root_value = None;
+        if o.count != 2
+            || o.phase != Phase::Main
+            || legal.len() == 1
+            || o.turns == u32::MAX
+            || (self.transferred && o.turns >= 124)
+        {
             let safe = safe_choices(o, legal);
             return best(o, safe.as_deref().unwrap_or(legal), true);
         }
@@ -345,10 +418,37 @@ impl Agent for NeuralAgent {
                 choices = buys;
             }
         }
-        let mut nodes = vec![self.expand(o, &choices)];
-        let mut index = HashMap::new();
-        index.insert(key(o), 0);
+        let (mut nodes, mut index) = if self.persistent && self.cached_nodes.len() <= 32_768 {
+            (
+                std::mem::take(&mut self.cached_nodes),
+                std::mem::take(&mut self.cached_index),
+            )
+        } else {
+            self.cached_nodes.clear();
+            self.cached_index.clear();
+            (Vec::new(), HashMap::new())
+        };
+        let root = if let Some(&root) = index.get(&self.tree_key(o)) {
+            // The real history can add a purchase-only cycle escape. Cached
+            // edges must obey the current legal root restrictions as well.
+            nodes[root]
+                .edges
+                .retain(|edge| choices.contains(&edge.action));
+            nodes[root].visits = nodes[root].edges.iter().map(|edge| edge.visits).sum();
+            if nodes[root].edges.is_empty() {
+                nodes[root] = self.expand(o, &choices);
+            }
+            root
+        } else {
+            let root = nodes.len();
+            nodes.push(self.expand(o, &choices));
+            index.insert(self.tree_key(o), root);
+            root
+        };
         let start = std::time::Instant::now();
+        let worlds: Vec<_> = (0..self.world_pool)
+            .map(|_| o.determinize(&mut self.rng).expect("valid observation"))
+            .collect();
         for simulation in 0..self.config.iterations {
             if simulation > 0
                 && self
@@ -358,11 +458,15 @@ impl Agent for NeuralAgent {
             {
                 break;
             }
-            let mut state = o.determinize(&mut self.rng).expect("valid observation");
+            let mut state = if worlds.is_empty() {
+                o.determinize(&mut self.rng).expect("valid observation")
+            } else {
+                worlds[simulation as usize % worlds.len()].clone()
+            };
             self.simulate(&mut state, self.config.depth.max(1), &mut nodes, &mut index);
             self.simulations += 1;
         }
-        nodes[0]
+        let selected = nodes[root]
             .edges
             .iter()
             .max_by(|a, b| {
@@ -370,8 +474,22 @@ impl Agent for NeuralAgent {
                     .cmp(&b.visits)
                     .then_with(|| a.prior.total_cmp(&b.prior))
             })
-            .unwrap()
-            .action
+            .unwrap();
+        let visits: u32 = nodes[root].edges.iter().map(|e| e.visits).sum();
+        if visits > 0 {
+            let mut policy = [0.0; ACTIONS];
+            for edge in &nodes[root].edges {
+                policy[action_index(edge.action).unwrap()] = edge.visits as f32 / visits as f32;
+            }
+            self.root_policy = Some(policy);
+            self.root_value = Some((selected.sum / f64::from(selected.visits)) as f32);
+        }
+        let action = selected.action;
+        if self.persistent {
+            self.cached_nodes = nodes;
+            self.cached_index = index;
+        }
+        action
     }
 }
 
@@ -389,9 +507,39 @@ pub fn value_v2(o: &Observation) -> f64 {
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
 }
 
+fn model_transferred() -> &'static super::transfer::Model {
+    static MODEL: OnceLock<super::transfer::Model> = OnceLock::new();
+    MODEL.get_or_init(|| super::transfer::Model::from_bytes(include_bytes!("models/e30.bin")))
+}
+
+fn model_self_play() -> &'static Model {
+    static MODEL: OnceLock<Model> = OnceLock::new();
+    MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e28.bin")))
+}
+
+fn model_expert() -> &'static Model {
+    static MODEL: OnceLock<Model> = OnceLock::new();
+    MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e27.bin")))
+}
+pub fn value_expert(o: &Observation) -> f64 {
+    let (_, v) = model_expert().infer(&super::neural::enhanced_features(o));
+    1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn transferred_keys_include_the_network_turn_input() {
+        let state = GameState::new(2, 620000007).unwrap();
+        let o = state.observe(0);
+        let mut later = o.clone();
+        later.turns = 2;
+        let mut agent = NeuralAgent::new(1, SearchConfig::default());
+        assert_eq!(agent.tree_key(&o), agent.tree_key(&later));
+        agent.transferred = true;
+        assert_ne!(agent.tree_key(&o), agent.tree_key(&later));
+    }
     #[test]
     fn compact_keys_preserve_exact_observation_identity() {
         let mut seen = HashMap::new();
@@ -416,6 +564,46 @@ mod tests {
         }
     }
     #[test]
+    fn persistent_tree_is_observation_only_and_keeps_actions_legal() {
+        let mut state = GameState::new(2, 380000007).unwrap();
+        let config = SearchConfig {
+            iterations: 8,
+            depth: 8,
+            ..Default::default()
+        };
+        let mut a = NeuralAgent::new(7, config.clone());
+        let mut b = NeuralAgent::new(7, config);
+        a.persistent = true;
+        b.persistent = true;
+        a.enhanced = true;
+        b.enhanced = true;
+        let mut rng = Rng::new(379);
+        let mut legal = ActionSet::new();
+        for _ in 0..100 {
+            state.legal_actions(&mut legal);
+            if legal.is_empty() {
+                break;
+            }
+            let observation = state.observe(state.current_player());
+            let other = observation
+                .determinize(&mut rng)
+                .unwrap()
+                .observe(state.current_player());
+            let action = a.select_action(&observation, &legal);
+            assert_eq!(action, b.select_action(&other, &legal));
+            assert_eq!(a.policy_target(), b.policy_target());
+            assert!(legal.contains(&action));
+            if observation.phase == Phase::Main && legal.len() > 1 {
+                assert!(!a.cached_nodes.is_empty());
+                // Query the same information state again to exercise cache reuse.
+                let reused = a.select_action(&observation, &legal);
+                assert_eq!(reused, b.select_action(&other, &legal));
+                assert!(legal.contains(&reused));
+            }
+            state.apply_action(action).unwrap();
+        }
+    }
+    #[test]
     fn neural_tree_choices_match_across_hidden_worlds() {
         let mut s = GameState::new(2, 492).unwrap();
         let mut rng = Rng::new(917);
@@ -437,6 +625,18 @@ mod tests {
             let mut b = NeuralAgent::new(1, config);
             let action = a.select_action(&o, &legal);
             assert_eq!(action, b.select_action(&other, &legal));
+            assert_eq!(a.policy_target(), b.policy_target());
+            assert_eq!(a.value_target(), b.value_target());
+            if let Some(policy) = a.policy_target() {
+                assert!((policy.iter().sum::<f32>() - 1.0).abs() < 1e-6);
+                for (i, weight) in policy.iter().enumerate() {
+                    assert!((0.0..=1.0).contains(weight));
+                    if *weight > 0.0 {
+                        assert!(legal.iter().any(|&action| action_index(action) == Some(i)));
+                    }
+                }
+                assert!((0.0..=1.0).contains(&a.value_target().unwrap()));
+            }
             assert!(legal.contains(&action));
             s.apply_action(legal[rng.index(legal.len())]).unwrap();
         }

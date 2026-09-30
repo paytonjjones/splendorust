@@ -1,0 +1,183 @@
+[
+  {
+    "file": "research/e30/policy-smoke.json",
+    "sha256": "019045b57fa81314f9bd887a849eec7927120ea62f55d2dae1b7b68800143060",
+    "source": "1638ba70cb210246",
+    "statuses": {
+      "complete": 200
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "transfer-policy",
+        "wins": 38,
+        "shared_wins": 1,
+        "win_share": 38.5,
+        "win_rate": 0.1925,
+        "ci95": [
+          0.0006726432728072773,
+          0.38432735672719276
+        ],
+        "average_position": 1.805,
+        "average_score": 11.955
+      },
+      {
+        "identity": 1,
+        "agent": "neural-selfplay",
+        "wins": 161,
+        "shared_wins": 1,
+        "win_share": 161.5,
+        "win_rate": 0.8075,
+        "ci95": [
+          0.6156726432728072,
+          0.9993273567271928
+        ],
+        "average_position": 1.19,
+        "average_score": 15.11
+      }
+    ],
+    "interval": [
+      0.0006726432728072496,
+      0.38432735672719276
+    ],
+    "seconds": 3.731441083,
+    "decisions_per_second": 4802.166134053898,
+    "record_set_sha256": "48394259000d7137992015443a79e97ba83eadf52fd006d628e7cc58e4f003e7"
+  },
+  {
+    "file": "research/e30/rollout-screen.json",
+    "sha256": "158343d69ccd73caf272750225efe2a849217d594f1ec9b93dcdb963401d53f0",
+    "source": "1db933338620fc69",
+    "statuses": {
+      "complete": 1999,
+      "no_legal_action": 1
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "transfer-rollout",
+        "wins": 1339,
+        "shared_wins": 10,
+        "win_share": 1344.0,
+        "win_rate": 0.6723361680840421,
+        "ci95": [
+          0.6277623962664654,
+          0.7167476321704483
+        ],
+        "average_position": 1.3251625812906453,
+        "average_score": 14.640820410205103
+      },
+      {
+        "identity": 1,
+        "agent": "neural-selfplay",
+        "wins": 650,
+        "shared_wins": 10,
+        "win_share": 655.0,
+        "win_rate": 0.327663831915958,
+        "ci95": [
+          0.2832523678295516,
+          0.37223760373353465
+        ],
+        "average_position": 1.6698349174587295,
+        "average_score": 12.301650825412706
+      }
+    ],
+    "interval": [
+      0.6277623962664655,
+      0.7167476321704481
+    ],
+    "seconds": 469.5493635,
+    "decisions_per_second": 373.80521334686034,
+    "record_set_sha256": "2ab7f75ef0866d24f9fc61bdcba0319c99ace7899f94f59bd5bf90600d0f9dc0"
+  },
+  {
+    "file": "research/e30/rollout-smoke.json",
+    "sha256": "a1286448828eca19715c77748e2e9b0f63d53b856e7f8f29623d298fda2335b5",
+    "source": "1638ba70cb210246",
+    "statuses": {
+      "complete": 200
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "transfer-rollout",
+        "wins": 129,
+        "shared_wins": 1,
+        "win_share": 129.5,
+        "win_rate": 0.6475,
+        "ci95": [
+          0.4405653666972903,
+          0.8544346333027096
+        ],
+        "average_position": 1.35,
+        "average_score": 14.465
+      },
+      {
+        "identity": 1,
+        "agent": "neural-selfplay",
+        "wins": 70,
+        "shared_wins": 1,
+        "win_share": 70.5,
+        "win_rate": 0.3525,
+        "ci95": [
+          0.14556536669729034,
+          0.5594346333027096
+        ],
+        "average_position": 1.645,
+        "average_score": 12.69
+      }
+    ],
+    "interval": [
+      0.44056536669729035,
+      0.8544346333027095
+    ],
+    "seconds": 47.694657625,
+    "decisions_per_second": 373.1025839395571,
+    "record_set_sha256": "7f1025187cde0ed716b120f8eff9ba45b2058580607f3c55bb91e419a2f7ff5f"
+  },
+  {
+    "file": "research/e30/tree-smoke.json",
+    "sha256": "a006d513b82ea236a4ccfc867c1fed6a5d638dd447becf0ac23401153ed4ab78",
+    "source": "1638ba70cb210246",
+    "statuses": {
+      "complete": 200
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "transfer",
+        "wins": 100,
+        "shared_wins": 0,
+        "win_share": 100.0,
+        "win_rate": 0.5,
+        "ci95": [
+          0.29152616673819776,
+          0.7084738332618022
+        ],
+        "average_position": 1.5,
+        "average_score": 13.995
+      },
+      {
+        "identity": 1,
+        "agent": "neural-selfplay",
+        "wins": 100,
+        "shared_wins": 0,
+        "win_share": 100.0,
+        "win_rate": 0.5,
+        "ci95": [
+          0.29152616673819776,
+          0.7084738332618022
+        ],
+        "average_position": 1.5,
+        "average_score": 13.32
+      }
+    ],
+    "interval": [
+      0.29152616673819776,
+      0.7084738332618022
+    ],
+    "seconds": 26.710892958,
+    "decisions_per_second": 654.7141657711704,
+    "record_set_sha256": "2094bc0adae16b36ae0a6d54bdc1c1c2100158ca2b281f4089774440c1cf7530"
+  }
+]

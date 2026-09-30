@@ -1,0 +1,4473 @@
+{
+  "run_config": {
+    "names": [
+      "neural-selfplay",
+      "neural-rollout"
+    ],
+    "games": 200,
+    "seed": 360000000,
+    "threads": 4,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 128,
+      "depth": 16,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "2c0376ea2f13f26b",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v2",
+  "seed": 360000000,
+  "players": 2,
+  "requested_games": 200,
+  "completed_games": 200,
+  "incomplete_games": 0,
+  "independent_blocks": 100,
+  "ci_method": "95% empirical Bernstein over independent setup blocks; rotations clustered; shared wins split; unfinished credit bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "neural-selfplay",
+      "wins": 116,
+      "shared_wins": 1,
+      "win_share": 116.5,
+      "win_rate": 0.5825,
+      "ci95": [
+        0.383352101339655,
+        0.781647898660345
+      ],
+      "average_position": 1.415,
+      "average_score": 13.915
+    },
+    {
+      "identity": 1,
+      "agent": "neural-rollout",
+      "wins": 83,
+      "shared_wins": 1,
+      "win_share": 83.5,
+      "win_rate": 0.4175,
+      "ci95": [
+        0.218352101339655,
+        0.616647898660345
+      ],
+      "average_position": 1.58,
+      "average_score": 12.945
+    }
+  ],
+  "average_turns": 54.79,
+  "average_decisions": 88.84,
+  "runtime_seconds": 6.421863125,
+  "games_per_second": 31.14360990059252,
+  "decisions_per_second": 2766.7983035686393,
+  "threads": 4,
+  "search_config": "SearchConfig { iterations: 128, depth: 16, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "records": [
+    {
+      "block": 0,
+      "rotation": 0,
+      "seed": 10484365417370448207,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "fedab38d43cf65d4"
+    },
+    {
+      "block": 0,
+      "rotation": 1,
+      "seed": 10484365417370448207,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "3eef2117ab0a807d"
+    },
+    {
+      "block": 1,
+      "rotation": 0,
+      "seed": 3996975792366648607,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "38ae3b44f5c716e0"
+    },
+    {
+      "block": 1,
+      "rotation": 1,
+      "seed": 3996975792366648607,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        8,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "fc70b5198d52aa46"
+    },
+    {
+      "block": 2,
+      "rotation": 0,
+      "seed": 5856453602738035062,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        4,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "daa2f2e039f3f7e0"
+    },
+    {
+      "block": 2,
+      "rotation": 1,
+      "seed": 5856453602738035062,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "eaa6ec5e5e58c415"
+    },
+    {
+      "block": 3,
+      "rotation": 0,
+      "seed": 11755446221999491112,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "b85dfe85486e6cb2"
+    },
+    {
+      "block": 3,
+      "rotation": 1,
+      "seed": 11755446221999491112,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "f617a89bbff459a0"
+    },
+    {
+      "block": 4,
+      "rotation": 0,
+      "seed": 9310567800934522481,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "2c0aed557faefb5c"
+    },
+    {
+      "block": 4,
+      "rotation": 1,
+      "seed": 9310567800934522481,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "1dfec283a74ab391"
+    },
+    {
+      "block": 5,
+      "rotation": 0,
+      "seed": 211762948029102502,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 84,
+      "status": "complete",
+      "trajectory_hash": "51ed758ca4290975"
+    },
+    {
+      "block": 5,
+      "rotation": 1,
+      "seed": 211762948029102502,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "d8de063901198922"
+    },
+    {
+      "block": 6,
+      "rotation": 0,
+      "seed": 16838425692575409716,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "1f8f1f2a6d065129"
+    },
+    {
+      "block": 6,
+      "rotation": 1,
+      "seed": 16838425692575409716,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "020f29d8ce029f0c"
+    },
+    {
+      "block": 7,
+      "rotation": 0,
+      "seed": 5969212567151119508,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "11e0642e34321ada"
+    },
+    {
+      "block": 7,
+      "rotation": 1,
+      "seed": 5969212567151119508,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "c92d85172e534783"
+    },
+    {
+      "block": 8,
+      "rotation": 0,
+      "seed": 4284509948648057220,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 103,
+      "status": "complete",
+      "trajectory_hash": "e08fc7e39a2c82df"
+    },
+    {
+      "block": 8,
+      "rotation": 1,
+      "seed": 4284509948648057220,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "0dafb36de24a6347"
+    },
+    {
+      "block": 9,
+      "rotation": 0,
+      "seed": 736269207162298008,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        8,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 93,
+      "status": "complete",
+      "trajectory_hash": "583c65c58a400b23"
+    },
+    {
+      "block": 9,
+      "rotation": 1,
+      "seed": 736269207162298008,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 48,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "07c7561e575d9523"
+    },
+    {
+      "block": 10,
+      "rotation": 0,
+      "seed": 6818586910323419086,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        19,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "f0ee4378476e0875"
+    },
+    {
+      "block": 10,
+      "rotation": 1,
+      "seed": 6818586910323419086,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 74,
+      "status": "complete",
+      "trajectory_hash": "97cf25a8715c21c1"
+    },
+    {
+      "block": 11,
+      "rotation": 0,
+      "seed": 9220950301436274271,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        7
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "c8ff7fa41e4e26cd"
+    },
+    {
+      "block": 11,
+      "rotation": 1,
+      "seed": 9220950301436274271,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        6,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 48,
+      "decisions": 77,
+      "status": "complete",
+      "trajectory_hash": "06c94a886d78703c"
+    },
+    {
+      "block": 12,
+      "rotation": 0,
+      "seed": 14015848741647357370,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 93,
+      "status": "complete",
+      "trajectory_hash": "5b04c6a53fb17b8d"
+    },
+    {
+      "block": 12,
+      "rotation": 1,
+      "seed": 14015848741647357370,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        7,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 80,
+      "status": "complete",
+      "trajectory_hash": "8f7759ede78a75c7"
+    },
+    {
+      "block": 13,
+      "rotation": 0,
+      "seed": 7385155486794776953,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "7d9ade8ff2f70f32"
+    },
+    {
+      "block": 13,
+      "rotation": 1,
+      "seed": 7385155486794776953,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 83,
+      "status": "complete",
+      "trajectory_hash": "1cfdc178545fdadd"
+    },
+    {
+      "block": 14,
+      "rotation": 0,
+      "seed": 15236661812957242240,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "81ec584a4ea9113f"
+    },
+    {
+      "block": 14,
+      "rotation": 1,
+      "seed": 15236661812957242240,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 64,
+      "decisions": 105,
+      "status": "complete",
+      "trajectory_hash": "600eb89f018c56d3"
+    },
+    {
+      "block": 15,
+      "rotation": 0,
+      "seed": 8529871749084393561,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "d3acd5b513d9eb13"
+    },
+    {
+      "block": 15,
+      "rotation": 1,
+      "seed": 8529871749084393561,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "c7f88007a37e54bd"
+    },
+    {
+      "block": 16,
+      "rotation": 0,
+      "seed": 6840726206075682254,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        7
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "d4a49d28957b5ca9"
+    },
+    {
+      "block": 16,
+      "rotation": 1,
+      "seed": 6840726206075682254,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 84,
+      "status": "complete",
+      "trajectory_hash": "7743f37771ef65f3"
+    },
+    {
+      "block": 17,
+      "rotation": 0,
+      "seed": 11142074208222963885,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        15
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "486b6d56e073b75a"
+    },
+    {
+      "block": 17,
+      "rotation": 1,
+      "seed": 11142074208222963885,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        18,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 96,
+      "status": "complete",
+      "trajectory_hash": "bbaa4e2d4832f3ea"
+    },
+    {
+      "block": 18,
+      "rotation": 0,
+      "seed": 15378890485636611237,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "c5f44e5ac0c9b076"
+    },
+    {
+      "block": 18,
+      "rotation": 1,
+      "seed": 15378890485636611237,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "cab128153c68ec52"
+    },
+    {
+      "block": 19,
+      "rotation": 0,
+      "seed": 1716190314270700959,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "60ff081781f4549d"
+    },
+    {
+      "block": 19,
+      "rotation": 1,
+      "seed": 1716190314270700959,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 96,
+      "status": "complete",
+      "trajectory_hash": "9e9db38b692ea964"
+    },
+    {
+      "block": 20,
+      "rotation": 0,
+      "seed": 3858818073632401288,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "6a6cc0e0d7363440"
+    },
+    {
+      "block": 20,
+      "rotation": 1,
+      "seed": 3858818073632401288,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 48,
+      "decisions": 80,
+      "status": "complete",
+      "trajectory_hash": "bcaf7307e69d030b"
+    },
+    {
+      "block": 21,
+      "rotation": 0,
+      "seed": 8416092183963134344,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        14,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "0d30e01d365261ec"
+    },
+    {
+      "block": 21,
+      "rotation": 1,
+      "seed": 8416092183963134344,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 80,
+      "status": "complete",
+      "trajectory_hash": "77f4c6b2b4d33e4b"
+    },
+    {
+      "block": 22,
+      "rotation": 0,
+      "seed": 1518820255207952729,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "2cd433151188e814"
+    },
+    {
+      "block": 22,
+      "rotation": 1,
+      "seed": 1518820255207952729,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 62,
+      "decisions": 99,
+      "status": "complete",
+      "trajectory_hash": "1dba54b48052c405"
+    },
+    {
+      "block": 23,
+      "rotation": 0,
+      "seed": 3057025086654081171,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "e8562829b0ed00ca"
+    },
+    {
+      "block": 23,
+      "rotation": 1,
+      "seed": 3057025086654081171,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "fe59936841ffb125"
+    },
+    {
+      "block": 24,
+      "rotation": 0,
+      "seed": 2333014998383813487,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "d055aa16410a4fb8"
+    },
+    {
+      "block": 24,
+      "rotation": 1,
+      "seed": 2333014998383813487,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "de4810f7edac2d8f"
+    },
+    {
+      "block": 25,
+      "rotation": 0,
+      "seed": 11575033302192456229,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "ad474070a198dd69"
+    },
+    {
+      "block": 25,
+      "rotation": 1,
+      "seed": 11575033302192456229,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        16
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "63a68158b3dc47ef"
+    },
+    {
+      "block": 26,
+      "rotation": 0,
+      "seed": 6416203906722877828,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        8
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "a95852ff3a1bdf81"
+    },
+    {
+      "block": 26,
+      "rotation": 1,
+      "seed": 6416203906722877828,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "eec10ad6b7ae671c"
+    },
+    {
+      "block": 27,
+      "rotation": 0,
+      "seed": 4269941302103447172,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "a0aaad9ec1fdb398"
+    },
+    {
+      "block": 27,
+      "rotation": 1,
+      "seed": 4269941302103447172,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "5d05fdb5f31c64b7"
+    },
+    {
+      "block": 28,
+      "rotation": 0,
+      "seed": 13197520603091314051,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        10,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "0d56bd3adf404d8a"
+    },
+    {
+      "block": 28,
+      "rotation": 1,
+      "seed": 13197520603091314051,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        6,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "279937272d3d265a"
+    },
+    {
+      "block": 29,
+      "rotation": 0,
+      "seed": 8701172182720633950,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "3c8d63a34b9cd03f"
+    },
+    {
+      "block": 29,
+      "rotation": 1,
+      "seed": 8701172182720633950,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        17
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 60,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "7e426aa3d1de2335"
+    },
+    {
+      "block": 30,
+      "rotation": 0,
+      "seed": 7982438799808724305,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 62,
+      "decisions": 101,
+      "status": "complete",
+      "trajectory_hash": "65a9523283206646"
+    },
+    {
+      "block": 30,
+      "rotation": 1,
+      "seed": 7982438799808724305,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        3,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "0782d449aed95201"
+    },
+    {
+      "block": 31,
+      "rotation": 0,
+      "seed": 4722163254999058024,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 60,
+      "decisions": 98,
+      "status": "complete",
+      "trajectory_hash": "f74c91066c9ba944"
+    },
+    {
+      "block": 31,
+      "rotation": 1,
+      "seed": 4722163254999058024,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        10,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 102,
+      "status": "complete",
+      "trajectory_hash": "6417215ac3f13648"
+    },
+    {
+      "block": 32,
+      "rotation": 0,
+      "seed": 6913780591230777210,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "4588ec5471ae274d"
+    },
+    {
+      "block": 32,
+      "rotation": 1,
+      "seed": 6913780591230777210,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 84,
+      "status": "complete",
+      "trajectory_hash": "8b6460853ce32292"
+    },
+    {
+      "block": 33,
+      "rotation": 0,
+      "seed": 7982813217736413076,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        10,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 77,
+      "status": "complete",
+      "trajectory_hash": "e6ecc61840b198cc"
+    },
+    {
+      "block": 33,
+      "rotation": 1,
+      "seed": 7982813217736413076,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        8,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 77,
+      "status": "complete",
+      "trajectory_hash": "f6895bc1b9dbe88a"
+    },
+    {
+      "block": 34,
+      "rotation": 0,
+      "seed": 8605884410260161325,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        8,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 48,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "5d1921d284d7cfb1"
+    },
+    {
+      "block": 34,
+      "rotation": 1,
+      "seed": 8605884410260161325,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 82,
+      "status": "complete",
+      "trajectory_hash": "7fbf4bbeaae3f2ac"
+    },
+    {
+      "block": 35,
+      "rotation": 0,
+      "seed": 15966637129483453774,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        16
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 60,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "84cf77711a1a65a3"
+    },
+    {
+      "block": 35,
+      "rotation": 1,
+      "seed": 15966637129483453774,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "d8688ebb43190fbe"
+    },
+    {
+      "block": 36,
+      "rotation": 0,
+      "seed": 16473551726509811821,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        8,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "077654441d0becdd"
+    },
+    {
+      "block": 36,
+      "rotation": 1,
+      "seed": 16473551726509811821,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        5,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "686bfb82d9b0fc0f"
+    },
+    {
+      "block": 37,
+      "rotation": 0,
+      "seed": 12408252746787714734,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        19,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "6197f02293165ecc"
+    },
+    {
+      "block": 37,
+      "rotation": 1,
+      "seed": 12408252746787714734,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "4d555c368cfe0a82"
+    },
+    {
+      "block": 38,
+      "rotation": 0,
+      "seed": 7130302698286723143,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        14,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "b9cf1529a504ac9f"
+    },
+    {
+      "block": 38,
+      "rotation": 1,
+      "seed": 7130302698286723143,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "b0ade4393a47279c"
+    },
+    {
+      "block": 39,
+      "rotation": 0,
+      "seed": 16353346236238506215,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "d9eaeae012270c14"
+    },
+    {
+      "block": 39,
+      "rotation": 1,
+      "seed": 16353346236238506215,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        7
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "590bc07f023459be"
+    },
+    {
+      "block": 40,
+      "rotation": 0,
+      "seed": 11571015924741717890,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        7,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "70bb39a3ef70308f"
+    },
+    {
+      "block": 40,
+      "rotation": 1,
+      "seed": 11571015924741717890,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 66,
+      "decisions": 101,
+      "status": "complete",
+      "trajectory_hash": "44e003c44a2b43ed"
+    },
+    {
+      "block": 41,
+      "rotation": 0,
+      "seed": 17898215913805921003,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "3dc58a220a4c1497"
+    },
+    {
+      "block": 41,
+      "rotation": 1,
+      "seed": 17898215913805921003,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "32fe59a59778fba9"
+    },
+    {
+      "block": 42,
+      "rotation": 0,
+      "seed": 16124570197454262541,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "d47b8de9adab8449"
+    },
+    {
+      "block": 42,
+      "rotation": 1,
+      "seed": 16124570197454262541,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 82,
+      "status": "complete",
+      "trajectory_hash": "b1adb1882569c038"
+    },
+    {
+      "block": 43,
+      "rotation": 0,
+      "seed": 9007392186178012281,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        17
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 93,
+      "status": "complete",
+      "trajectory_hash": "fcd898fb8cd75aa2"
+    },
+    {
+      "block": 43,
+      "rotation": 1,
+      "seed": 9007392186178012281,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        12,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "ecc8721c4217f42c"
+    },
+    {
+      "block": 44,
+      "rotation": 0,
+      "seed": 5791958254627853787,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        4,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "9565dd52a78352b1"
+    },
+    {
+      "block": 44,
+      "rotation": 1,
+      "seed": 5791958254627853787,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        14,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "f2f22e90536542f8"
+    },
+    {
+      "block": 45,
+      "rotation": 0,
+      "seed": 17733105816473474608,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "3e420f33ac59c12c"
+    },
+    {
+      "block": 45,
+      "rotation": 1,
+      "seed": 17733105816473474608,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "a1732e1bc8b86e7f"
+    },
+    {
+      "block": 46,
+      "rotation": 0,
+      "seed": 5387704336925449893,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "2c33461b7611ac28"
+    },
+    {
+      "block": 46,
+      "rotation": 1,
+      "seed": 5387704336925449893,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        19
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 96,
+      "status": "complete",
+      "trajectory_hash": "d53bed97af18ad9c"
+    },
+    {
+      "block": 47,
+      "rotation": 0,
+      "seed": 17297771859366565019,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        7
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "b872a251693dae11"
+    },
+    {
+      "block": 47,
+      "rotation": 1,
+      "seed": 17297771859366565019,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        8,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "3b5c0a1ecb3ca9a8"
+    },
+    {
+      "block": 48,
+      "rotation": 0,
+      "seed": 6173729368251840340,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "6804101365a080f9"
+    },
+    {
+      "block": 48,
+      "rotation": 1,
+      "seed": 6173729368251840340,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "94ac20c3bef77c43"
+    },
+    {
+      "block": 49,
+      "rotation": 0,
+      "seed": 2700652302097822595,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 60,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "a42ad6ac9e797e3c"
+    },
+    {
+      "block": 49,
+      "rotation": 1,
+      "seed": 2700652302097822595,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "3ba31aac4746e2cf"
+    },
+    {
+      "block": 50,
+      "rotation": 0,
+      "seed": 15050709413889171524,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        11,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "ab6ef20331f89298"
+    },
+    {
+      "block": 50,
+      "rotation": 1,
+      "seed": 15050709413889171524,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        18,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "2778aad7b6f5d22c"
+    },
+    {
+      "block": 51,
+      "rotation": 0,
+      "seed": 16185219535370492272,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "858a0d7932dc70d7"
+    },
+    {
+      "block": 51,
+      "rotation": 1,
+      "seed": 16185219535370492272,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        8,
+        21
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "11e17c5747af0397"
+    },
+    {
+      "block": 52,
+      "rotation": 0,
+      "seed": 698257832857688874,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "93d7132b32743fea"
+    },
+    {
+      "block": 52,
+      "rotation": 1,
+      "seed": 698257832857688874,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 66,
+      "decisions": 104,
+      "status": "complete",
+      "trajectory_hash": "ab378b2fe304bafe"
+    },
+    {
+      "block": 53,
+      "rotation": 0,
+      "seed": 3340548109961955525,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "8b8ed30da25dea12"
+    },
+    {
+      "block": 53,
+      "rotation": 1,
+      "seed": 3340548109961955525,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        12,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "9c022a892af38f44"
+    },
+    {
+      "block": 54,
+      "rotation": 0,
+      "seed": 598428525089610579,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "f8ce4e89ca6cc8ed"
+    },
+    {
+      "block": 54,
+      "rotation": 1,
+      "seed": 598428525089610579,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "bf69bd75860eb852"
+    },
+    {
+      "block": 55,
+      "rotation": 0,
+      "seed": 17117721293501476676,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 83,
+      "status": "complete",
+      "trajectory_hash": "fe38c10fb77dfffc"
+    },
+    {
+      "block": 55,
+      "rotation": 1,
+      "seed": 17117721293501476676,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "ef01abab119ce1be"
+    },
+    {
+      "block": 56,
+      "rotation": 0,
+      "seed": 9420842732050173641,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "b533a79d1ffbfb16"
+    },
+    {
+      "block": 56,
+      "rotation": 1,
+      "seed": 9420842732050173641,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "45956cd17c8e0668"
+    },
+    {
+      "block": 57,
+      "rotation": 0,
+      "seed": 13204908682209886506,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        13,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "68d65efa55fd7fb3"
+    },
+    {
+      "block": 57,
+      "rotation": 1,
+      "seed": 13204908682209886506,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        10,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 78,
+      "status": "complete",
+      "trajectory_hash": "e9dbfcbf607666d5"
+    },
+    {
+      "block": 58,
+      "rotation": 0,
+      "seed": 5295493826777067265,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "ba682d56395254e4"
+    },
+    {
+      "block": 58,
+      "rotation": 1,
+      "seed": 5295493826777067265,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        8
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "89f40dab89d4c38f"
+    },
+    {
+      "block": 59,
+      "rotation": 0,
+      "seed": 4402865429629951157,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        4
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "03a0eeb5e236a418"
+    },
+    {
+      "block": 59,
+      "rotation": 1,
+      "seed": 4402865429629951157,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 75,
+      "status": "complete",
+      "trajectory_hash": "8a2c4d68c1af2756"
+    },
+    {
+      "block": 60,
+      "rotation": 0,
+      "seed": 6699030502196083202,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        14,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "f88d9e37e3f4cc5c"
+    },
+    {
+      "block": 60,
+      "rotation": 1,
+      "seed": 6699030502196083202,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "b1a0c4cce9307655"
+    },
+    {
+      "block": 61,
+      "rotation": 0,
+      "seed": 4641276102736191857,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        19,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "fef57ae6df57fe77"
+    },
+    {
+      "block": 61,
+      "rotation": 1,
+      "seed": 4641276102736191857,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "86aa1892a0be030d"
+    },
+    {
+      "block": 62,
+      "rotation": 0,
+      "seed": 15232803816872499002,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 82,
+      "status": "complete",
+      "trajectory_hash": "1c05aba44a30144a"
+    },
+    {
+      "block": 62,
+      "rotation": 1,
+      "seed": 15232803816872499002,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "4b53aae197b603e3"
+    },
+    {
+      "block": 63,
+      "rotation": 0,
+      "seed": 15982864608397387254,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "2725370db4343de8"
+    },
+    {
+      "block": 63,
+      "rotation": 1,
+      "seed": 15982864608397387254,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        4
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 48,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "c288eb1e1a9ca60c"
+    },
+    {
+      "block": 64,
+      "rotation": 0,
+      "seed": 7305615364173922508,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 48,
+      "decisions": 78,
+      "status": "complete",
+      "trajectory_hash": "ba872f2efe11cd3d"
+    },
+    {
+      "block": 64,
+      "rotation": 1,
+      "seed": 7305615364173922508,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 84,
+      "status": "complete",
+      "trajectory_hash": "324132e2e7156d90"
+    },
+    {
+      "block": 65,
+      "rotation": 0,
+      "seed": 14155269841845220269,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "bcc2a3c387022af8"
+    },
+    {
+      "block": 65,
+      "rotation": 1,
+      "seed": 14155269841845220269,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "57c2e2ecfe18507e"
+    },
+    {
+      "block": 66,
+      "rotation": 0,
+      "seed": 10966023005361693010,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "f1771ebabd8e9595"
+    },
+    {
+      "block": 66,
+      "rotation": 1,
+      "seed": 10966023005361693010,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "1b35ad1f88f252b3"
+    },
+    {
+      "block": 67,
+      "rotation": 0,
+      "seed": 13610443671639455307,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 80,
+      "status": "complete",
+      "trajectory_hash": "23ec519dae5646ff"
+    },
+    {
+      "block": 67,
+      "rotation": 1,
+      "seed": 13610443671639455307,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "877fa959cc919231"
+    },
+    {
+      "block": 68,
+      "rotation": 0,
+      "seed": 8748068924612141128,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        11,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "7752e0e9c8f791b8"
+    },
+    {
+      "block": 68,
+      "rotation": 1,
+      "seed": 8748068924612141128,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 101,
+      "status": "complete",
+      "trajectory_hash": "afee2ba2129226bd"
+    },
+    {
+      "block": 69,
+      "rotation": 0,
+      "seed": 6617899437838158137,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "ea846844927ced1c"
+    },
+    {
+      "block": 69,
+      "rotation": 1,
+      "seed": 6617899437838158137,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "ddaf3b4671ca9d27"
+    },
+    {
+      "block": 70,
+      "rotation": 0,
+      "seed": 4227413424696442373,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        15
+      ],
+      "ranks": [
+        1,
+        1
+      ],
+      "winners": 3,
+      "turns": 58,
+      "decisions": 96,
+      "status": "complete",
+      "trajectory_hash": "e68117c607ccffc3"
+    },
+    {
+      "block": 70,
+      "rotation": 1,
+      "seed": 4227413424696442373,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        6,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "6005b03cfeeb0ffc"
+    },
+    {
+      "block": 71,
+      "rotation": 0,
+      "seed": 3444038091384598463,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "6ffc4b2b73f36066"
+    },
+    {
+      "block": 71,
+      "rotation": 1,
+      "seed": 3444038091384598463,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        12,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "3c5d4a71154865b6"
+    },
+    {
+      "block": 72,
+      "rotation": 0,
+      "seed": 1767400889796038382,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        14,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 77,
+      "status": "complete",
+      "trajectory_hash": "185a08e8f68e01d7"
+    },
+    {
+      "block": 72,
+      "rotation": 1,
+      "seed": 1767400889796038382,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 84,
+      "status": "complete",
+      "trajectory_hash": "c5e167725e8327df"
+    },
+    {
+      "block": 73,
+      "rotation": 0,
+      "seed": 9503780275294053506,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "acecf9d172a4bbb8"
+    },
+    {
+      "block": 73,
+      "rotation": 1,
+      "seed": 9503780275294053506,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        17,
+        8
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "ecc2c744f196bda0"
+    },
+    {
+      "block": 74,
+      "rotation": 0,
+      "seed": 10200944016684416817,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        8
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "c3fdd7a10843d463"
+    },
+    {
+      "block": 74,
+      "rotation": 1,
+      "seed": 10200944016684416817,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        18,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "fe1bfadfb0bd5325"
+    },
+    {
+      "block": 75,
+      "rotation": 0,
+      "seed": 17538900945110706591,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        11,
+        19
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "78aae25cd672527b"
+    },
+    {
+      "block": 75,
+      "rotation": 1,
+      "seed": 17538900945110706591,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "fc3c4260cca79660"
+    },
+    {
+      "block": 76,
+      "rotation": 0,
+      "seed": 10954735275692633339,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        10,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 93,
+      "status": "complete",
+      "trajectory_hash": "7407f265d2dffc31"
+    },
+    {
+      "block": 76,
+      "rotation": 1,
+      "seed": 10954735275692633339,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        15
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 94,
+      "status": "complete",
+      "trajectory_hash": "4d07bff91df7f6eb"
+    },
+    {
+      "block": 77,
+      "rotation": 0,
+      "seed": 17331187984794575381,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "fe6ae9674f3a6ba9"
+    },
+    {
+      "block": 77,
+      "rotation": 1,
+      "seed": 17331187984794575381,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        5
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 83,
+      "status": "complete",
+      "trajectory_hash": "ba533f6f72f50a24"
+    },
+    {
+      "block": 78,
+      "rotation": 0,
+      "seed": 1219041595667670352,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "8378cb9e99523e7c"
+    },
+    {
+      "block": 78,
+      "rotation": 1,
+      "seed": 1219041595667670352,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        12,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 98,
+      "status": "complete",
+      "trajectory_hash": "2b9ad7effff739fb"
+    },
+    {
+      "block": 79,
+      "rotation": 0,
+      "seed": 5811508847846925320,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "38499848e87abf91"
+    },
+    {
+      "block": 79,
+      "rotation": 1,
+      "seed": 5811508847846925320,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        10,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 50,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "0f7986a1d1e9e91a"
+    },
+    {
+      "block": 80,
+      "rotation": 0,
+      "seed": 7504370410787030732,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        12,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 93,
+      "status": "complete",
+      "trajectory_hash": "74b731698fd125b5"
+    },
+    {
+      "block": 80,
+      "rotation": 1,
+      "seed": 7504370410787030732,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "a328439dd7217d80"
+    },
+    {
+      "block": 81,
+      "rotation": 0,
+      "seed": 14016276032118202336,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "e765e62dfb052c04"
+    },
+    {
+      "block": 81,
+      "rotation": 1,
+      "seed": 14016276032118202336,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        18,
+        17
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 96,
+      "status": "complete",
+      "trajectory_hash": "c51d779a612a962a"
+    },
+    {
+      "block": 82,
+      "rotation": 0,
+      "seed": 4626634013831852804,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "47b0fdd722147870"
+    },
+    {
+      "block": 82,
+      "rotation": 1,
+      "seed": 4626634013831852804,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 91,
+      "status": "complete",
+      "trajectory_hash": "d48e54f758117630"
+    },
+    {
+      "block": 83,
+      "rotation": 0,
+      "seed": 1188691616607577271,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        10,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "4fb553b45345c7da"
+    },
+    {
+      "block": 83,
+      "rotation": 1,
+      "seed": 1188691616607577271,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        8,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 48,
+      "decisions": 81,
+      "status": "complete",
+      "trajectory_hash": "ee2d1eb36dd023f4"
+    },
+    {
+      "block": 84,
+      "rotation": 0,
+      "seed": 8844558923715382867,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        12,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "4d2a0c641610c7d3"
+    },
+    {
+      "block": 84,
+      "rotation": 1,
+      "seed": 8844558923715382867,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        17
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "d65c8c2dff47b73f"
+    },
+    {
+      "block": 85,
+      "rotation": 0,
+      "seed": 7291619851137643627,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "84c96d077b785a8f"
+    },
+    {
+      "block": 85,
+      "rotation": 1,
+      "seed": 7291619851137643627,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        14,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "6737b9e78a8f5197"
+    },
+    {
+      "block": 86,
+      "rotation": 0,
+      "seed": 16203734079589937550,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        4
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 83,
+      "status": "complete",
+      "trajectory_hash": "6bc39538b4b41a45"
+    },
+    {
+      "block": 86,
+      "rotation": 1,
+      "seed": 16203734079589937550,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        3,
+        18
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 97,
+      "status": "complete",
+      "trajectory_hash": "b0ed975898a31a04"
+    },
+    {
+      "block": 87,
+      "rotation": 0,
+      "seed": 11707739911109984261,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 50,
+      "decisions": 80,
+      "status": "complete",
+      "trajectory_hash": "60782960aa25cfd2"
+    },
+    {
+      "block": 87,
+      "rotation": 1,
+      "seed": 11707739911109984261,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        19,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 100,
+      "status": "complete",
+      "trajectory_hash": "b6c42584658d1415"
+    },
+    {
+      "block": 88,
+      "rotation": 0,
+      "seed": 69900067903431758,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        18,
+        10
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "46654f72d1454cab"
+    },
+    {
+      "block": 88,
+      "rotation": 1,
+      "seed": 69900067903431758,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        11,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 46,
+      "decisions": 69,
+      "status": "complete",
+      "trajectory_hash": "af217fa6f6ecd201"
+    },
+    {
+      "block": 89,
+      "rotation": 0,
+      "seed": 3551889501272019230,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        6,
+        19
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "0e1a22ad9a85e2a8"
+    },
+    {
+      "block": 89,
+      "rotation": 1,
+      "seed": 3551889501272019230,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        14,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "e8eed7f9ccb5fc7a"
+    },
+    {
+      "block": 90,
+      "rotation": 0,
+      "seed": 4344597382929459670,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "e45109e006efd0ce"
+    },
+    {
+      "block": 90,
+      "rotation": 1,
+      "seed": 4344597382929459670,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 95,
+      "status": "complete",
+      "trajectory_hash": "f3bbf73afa6f62b9"
+    },
+    {
+      "block": 91,
+      "rotation": 0,
+      "seed": 6867844743253940631,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 88,
+      "status": "complete",
+      "trajectory_hash": "52450c01c23938df"
+    },
+    {
+      "block": 91,
+      "rotation": 1,
+      "seed": 6867844743253940631,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        5,
+        19
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 46,
+      "decisions": 66,
+      "status": "complete",
+      "trajectory_hash": "07cba4ee0cdf04bc"
+    },
+    {
+      "block": 92,
+      "rotation": 0,
+      "seed": 6852356707488195217,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        17,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "013758b997d0f763"
+    },
+    {
+      "block": 92,
+      "rotation": 1,
+      "seed": 6852356707488195217,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        14
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "20fc1b2955241fbf"
+    },
+    {
+      "block": 93,
+      "rotation": 0,
+      "seed": 985548725668750659,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 60,
+      "decisions": 99,
+      "status": "complete",
+      "trajectory_hash": "09427caabc153546"
+    },
+    {
+      "block": 93,
+      "rotation": 1,
+      "seed": 985548725668750659,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        13,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 58,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "9104a1f311f933f5"
+    },
+    {
+      "block": 94,
+      "rotation": 0,
+      "seed": 6597605867823945687,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        11
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 64,
+      "decisions": 104,
+      "status": "complete",
+      "trajectory_hash": "f77098780ef78883"
+    },
+    {
+      "block": 94,
+      "rotation": 1,
+      "seed": 6597605867823945687,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        9,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 54,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "0dcaee3cb248cddb"
+    },
+    {
+      "block": 95,
+      "rotation": 0,
+      "seed": 2681013747257796244,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        6
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 83,
+      "status": "complete",
+      "trajectory_hash": "ad48f019de61c67b"
+    },
+    {
+      "block": 95,
+      "rotation": 1,
+      "seed": 2681013747257796244,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        13
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 54,
+      "decisions": 87,
+      "status": "complete",
+      "trajectory_hash": "644cc4236afd74fa"
+    },
+    {
+      "block": 96,
+      "rotation": 0,
+      "seed": 15310802759027912031,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        13,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 60,
+      "decisions": 98,
+      "status": "complete",
+      "trajectory_hash": "2b277a81703344f0"
+    },
+    {
+      "block": 96,
+      "rotation": 1,
+      "seed": 15310802759027912031,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        16,
+        16
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 58,
+      "decisions": 92,
+      "status": "complete",
+      "trajectory_hash": "d411e3391fdb1aa6"
+    },
+    {
+      "block": 97,
+      "rotation": 0,
+      "seed": 5455777946238979038,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        16,
+        8
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 48,
+      "decisions": 82,
+      "status": "complete",
+      "trajectory_hash": "b05778ebd0ac3ad2"
+    },
+    {
+      "block": 97,
+      "rotation": 1,
+      "seed": 5455777946238979038,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        9
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "55f111485deeaa77"
+    },
+    {
+      "block": 98,
+      "rotation": 0,
+      "seed": 4671364802150429003,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        10,
+        15
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 90,
+      "status": "complete",
+      "trajectory_hash": "627e68f082a7359c"
+    },
+    {
+      "block": 98,
+      "rotation": 1,
+      "seed": 4671364802150429003,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        6,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 52,
+      "decisions": 85,
+      "status": "complete",
+      "trajectory_hash": "6982d9fe5d505a6c"
+    },
+    {
+      "block": 99,
+      "rotation": 0,
+      "seed": 658474654225998590,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        12,
+        16
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "winners": 2,
+      "turns": 56,
+      "decisions": 89,
+      "status": "complete",
+      "trajectory_hash": "895f49e1356cf8ea"
+    },
+    {
+      "block": 99,
+      "rotation": 1,
+      "seed": 658474654225998590,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 52,
+      "decisions": 86,
+      "status": "complete",
+      "trajectory_hash": "b021364f9d31d7fa"
+    }
+  ]
+}

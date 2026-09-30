@@ -1,0 +1,265 @@
+{
+  "seed": 500000007,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "expert_rows": 17033,
+  "replay_rows": 395556,
+  "replay_sha256": "4375f399facdfc0a5351482f10e77e01c176c79386ecd5cacadf6715c9b06dd2",
+  "warmstart_sha256": "4eb54c5aa3db0c6f5d61042678b0dec99eadf3e0f4bc4ebf7adbee9fe8ecb471",
+  "train_rows": 412589,
+  "dev_rows": 4296,
+  "train_setups": 12200,
+  "dev_setups": 50,
+  "train_sha256": "ce2bcce2600cac65ebdb4320f1c6c5d7cff8b7eb8358018df2753df95138e974",
+  "dev_sha256": "1f0b387dc6cf2853a733b8fbc5f17188bf37650a20b97727cd27ea027f87470d",
+  "model_sha256": "b4f8560804fa9e4a6db805656a697ef2067ddd4bc2624e77cfe379d3cbd3fb9f",
+  "checkpoint_sha256": "79f35b067a14b1738b4f73472662c1f3daba541de593f83e29f56e547bf71db4",
+  "script_sha256": "9831691e2197b73bdd52f80afccfd0ae35926fcd240e556fd509faaf0d075052",
+  "parameters": 83140,
+  "architecture": "322 -> 128 ReLU -> residual [128 ReLU ->128] ReLU -> policy67 + residual value1 plus E23 logit",
+  "history": [
+    {
+      "epoch": 1,
+      "policy_loss": 2.272580295773284,
+      "policy_accuracy": 0.343311506080449,
+      "value_logloss": 0.39515661546365066,
+      "value_brier": 0.12049789921011379,
+      "seconds": 14.140619993209839
+    },
+    {
+      "epoch": 2,
+      "policy_loss": 2.216381205031535,
+      "policy_accuracy": 0.3381665107577175,
+      "value_logloss": 0.38828756255396624,
+      "value_brier": 0.11664276230343125,
+      "seconds": 18.88282799720764
+    },
+    {
+      "epoch": 3,
+      "policy_loss": 2.2015893292047912,
+      "policy_accuracy": 0.343311506080449,
+      "value_logloss": 0.3922637482497331,
+      "value_brier": 0.11670959745314956,
+      "seconds": 22.85148000717163
+    },
+    {
+      "epoch": 4,
+      "policy_loss": 2.1992513658400448,
+      "policy_accuracy": 0.3381665107577175,
+      "value_logloss": 0.3964360134243413,
+      "value_brier": 0.11755864467153795,
+      "seconds": 30.78007698059082
+    },
+    {
+      "epoch": 5,
+      "policy_loss": 2.2001565446131024,
+      "policy_accuracy": 0.34424695977549113,
+      "value_logloss": 0.4032225870754765,
+      "value_brier": 0.11927969293196733,
+      "seconds": 37.466941118240356
+    },
+    {
+      "epoch": 6,
+      "policy_loss": 2.194666477984865,
+      "policy_accuracy": 0.34939195509822263,
+      "value_logloss": 0.4083147610677622,
+      "value_brier": 0.11980743805830404,
+      "seconds": 40.79070997238159
+    },
+    {
+      "epoch": 7,
+      "policy_loss": 2.2051747449655417,
+      "policy_accuracy": 0.33863423760523853,
+      "value_logloss": 0.414393492521315,
+      "value_brier": 0.12115214566849937,
+      "seconds": 44.22849798202515
+    },
+    {
+      "epoch": 8,
+      "policy_loss": 2.1980886289848134,
+      "policy_accuracy": 0.3479887745556595,
+      "value_logloss": 0.4198990953749651,
+      "value_brier": 0.12152406918458163,
+      "seconds": 47.64398717880249
+    },
+    {
+      "epoch": 9,
+      "policy_loss": 2.2115694622328843,
+      "policy_accuracy": 0.34471468662301213,
+      "value_logloss": 0.42478485662837756,
+      "value_brier": 0.12213656036053802,
+      "seconds": 51.01053714752197
+    },
+    {
+      "epoch": 10,
+      "policy_loss": 2.2224904587605603,
+      "policy_accuracy": 0.3470533208606174,
+      "value_logloss": 0.43199747970449776,
+      "value_brier": 0.12437910500304893,
+      "seconds": 53.87658214569092
+    },
+    {
+      "epoch": 11,
+      "policy_loss": 2.2390711314216523,
+      "policy_accuracy": 0.34050514499532275,
+      "value_logloss": 0.4401516248499771,
+      "value_brier": 0.12856320337614896,
+      "seconds": 57.01080298423767
+    },
+    {
+      "epoch": 12,
+      "policy_loss": 2.2439344029654067,
+      "policy_accuracy": 0.34752104770813846,
+      "value_logloss": 0.44053734981958476,
+      "value_brier": 0.1263121864323897,
+      "seconds": 60.00693702697754
+    },
+    {
+      "epoch": 13,
+      "policy_loss": 2.2648324707716396,
+      "policy_accuracy": 0.34190832553788586,
+      "value_logloss": 0.4456598343713484,
+      "value_brier": 0.127407890057264,
+      "seconds": 62.9544620513916
+    },
+    {
+      "epoch": 14,
+      "policy_loss": 2.2847568451298854,
+      "policy_accuracy": 0.34471468662301213,
+      "value_logloss": 0.4476722525414215,
+      "value_brier": 0.1279205998232,
+      "seconds": 65.93719100952148
+    },
+    {
+      "epoch": 15,
+      "policy_loss": 2.3069611737614375,
+      "policy_accuracy": 0.3353601496725912,
+      "value_logloss": 0.4503916204567385,
+      "value_brier": 0.12875571336121372,
+      "seconds": 68.97773885726929
+    },
+    {
+      "epoch": 16,
+      "policy_loss": 2.3208213071046977,
+      "policy_accuracy": 0.333021515434986,
+      "value_logloss": 0.4631451241312084,
+      "value_brier": 0.1333221950568875,
+      "seconds": 72.08677387237549
+    },
+    {
+      "epoch": 17,
+      "policy_loss": 2.3288290025587948,
+      "policy_accuracy": 0.33208606173994387,
+      "value_logloss": 0.46816279539440264,
+      "value_brier": 0.1312087126554518,
+      "seconds": 75.49413204193115
+    },
+    {
+      "epoch": 18,
+      "policy_loss": 2.3679360513713896,
+      "policy_accuracy": 0.3292797006548176,
+      "value_logloss": 0.47499076898803305,
+      "value_brier": 0.13270956376465168,
+      "seconds": 78.32020497322083
+    },
+    {
+      "epoch": 19,
+      "policy_loss": 2.3816913858097886,
+      "policy_accuracy": 0.3316183348924228,
+      "value_logloss": 0.4817921495216718,
+      "value_brier": 0.13512313484277733,
+      "seconds": 81.53923606872559
+    },
+    {
+      "epoch": 20,
+      "policy_loss": 2.405008528364162,
+      "policy_accuracy": 0.32600561272217027,
+      "value_logloss": 0.47652787486896225,
+      "value_brier": 0.13445125834820368,
+      "seconds": 84.37150287628174
+    },
+    {
+      "epoch": 21,
+      "policy_loss": 2.423502744526591,
+      "policy_accuracy": 0.32600561272217027,
+      "value_logloss": 0.4858462524918986,
+      "value_brier": 0.13556506411276614,
+      "seconds": 87.2949640750885
+    },
+    {
+      "epoch": 22,
+      "policy_loss": 2.4382826873807844,
+      "policy_accuracy": 0.31711880261927033,
+      "value_logloss": 0.486351247973035,
+      "value_brier": 0.1364663298914245,
+      "seconds": 90.24981212615967
+    },
+    {
+      "epoch": 23,
+      "policy_loss": 2.482548370218589,
+      "policy_accuracy": 0.3166510757717493,
+      "value_logloss": 0.4831361234148633,
+      "value_brier": 0.13437048320656655,
+      "seconds": 93.51156115531921
+    },
+    {
+      "epoch": 24,
+      "policy_loss": 2.503432014258361,
+      "policy_accuracy": 0.3161833489242282,
+      "value_logloss": 0.4943859850153238,
+      "value_brier": 0.13854746247347738,
+      "seconds": 96.67992901802063
+    },
+    {
+      "epoch": 25,
+      "policy_loss": 2.5032946066503996,
+      "policy_accuracy": 0.3086997193638915,
+      "value_logloss": 0.4995260888736505,
+      "value_brier": 0.13923314925773816,
+      "seconds": 99.69280815124512
+    },
+    {
+      "epoch": 26,
+      "policy_loss": 2.545257868111078,
+      "policy_accuracy": 0.3058933582787652,
+      "value_logloss": 0.4948206130910756,
+      "value_brier": 0.13692412322755684,
+      "seconds": 102.63019108772278
+    },
+    {
+      "epoch": 27,
+      "policy_loss": 2.571708643514492,
+      "policy_accuracy": 0.30261927034611785,
+      "value_logloss": 0.494328201566604,
+      "value_brier": 0.13678564605611906,
+      "seconds": 105.81351208686829
+    },
+    {
+      "epoch": 28,
+      "policy_loss": 2.623829947775831,
+      "policy_accuracy": 0.31103835360149673,
+      "value_logloss": 0.5007750727655397,
+      "value_brier": 0.13850607389176153,
+      "seconds": 108.77932500839233
+    },
+    {
+      "epoch": 29,
+      "policy_loss": 2.6266959380389823,
+      "policy_accuracy": 0.2951356407857811,
+      "value_logloss": 0.509209200532763,
+      "value_brier": 0.14126356164009504,
+      "seconds": 111.84906506538391
+    },
+    {
+      "epoch": 30,
+      "policy_loss": 2.6414125048188657,
+      "policy_accuracy": 0.29420018709073903,
+      "value_logloss": 0.5103594529399961,
+      "value_brier": 0.13928029964808042,
+      "seconds": 114.88992595672607
+    }
+  ],
+  "selected_minimum_dev_policy_plus_value_loss": 2.5938530774545243,
+  "determinism": "Fixed seed and deterministic algorithms requested with warnings; MPS bitwise reproducibility not guaranteed."
+}

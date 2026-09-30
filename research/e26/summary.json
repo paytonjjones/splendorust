@@ -1,5 +1,50 @@
 [
   {
+    "file": "research/e26/compact-key-equivalence.json",
+    "sha256": "adeaf60ccd7cc8f6694937b99edec40aa3359c834909f16f62d70b9a324f45c3",
+    "source": "7089d131c74a3c28",
+    "statuses": {
+      "complete": 2000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 1179,
+        "shared_wins": 15,
+        "win_share": 1186.5,
+        "win_rate": 0.59325,
+        "ci95": [
+          0.5500671000438141,
+          0.636432899956186
+        ],
+        "average_position": 1.403,
+        "average_score": 15.153
+      },
+      {
+        "identity": 1,
+        "agent": "learned128",
+        "wins": 806,
+        "shared_wins": 15,
+        "win_share": 813.5,
+        "win_rate": 0.40675,
+        "ci95": [
+          0.36356710004381404,
+          0.44993289995618596
+        ],
+        "average_position": 1.5895,
+        "average_score": 11.814
+      }
+    ],
+    "interval": [
+      0.5500671000438139,
+      0.6364328999561862
+    ],
+    "seconds": 42.811974458,
+    "decisions_per_second": 4280.881746759824,
+    "record_set_sha256": "e73ffbccfca0e3c39750e7477e32a02bad02b6a97ac8b17d13b598b9643e5a80"
+  },
+  {
     "file": "research/e26/flat-smoke.json",
     "sha256": "1a6a7e0c057c0c99a36575b8cd32d51dd3ebbfb8d599a8411f91b71cccaf8d54",
     "source": "fb71e9f9279ff697",
@@ -43,6 +88,52 @@
     "seconds": 5.715330125,
     "decisions_per_second": 3647.733296945817,
     "record_set_sha256": "ce3c5fe8b14268ae7757c22a5e471e6ca597d934b2aa589ae7735d5270d0b2b6"
+  },
+  {
+    "file": "research/e26/original-search-confirmation.json",
+    "sha256": "97536c23b0808da58dc66608d04fc9f5343f6ec92e8216d656dd750ab2747db2",
+    "source": "7089d131c74a3c28",
+    "statuses": {
+      "complete": 19999,
+      "no_legal_action": 1
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 16592,
+        "shared_wins": 14,
+        "win_share": 16599.0,
+        "win_rate": 0.8299914995749788,
+        "ci95": [
+          0.8208917746935717,
+          0.8390577891287282
+        ],
+        "average_position": 1.1696584829241463,
+        "average_score": 15.896944847242363
+      },
+      {
+        "identity": 1,
+        "agent": "search128",
+        "wins": 3393,
+        "shared_wins": 14,
+        "win_share": 3400.0,
+        "win_rate": 0.17000850042502125,
+        "ci95": [
+          0.1609422108712718,
+          0.17910822530642836
+        ],
+        "average_position": 1.8296414820741036,
+        "average_score": 10.394569728486424
+      }
+    ],
+    "interval": [
+      0.8208917746935712,
+      0.8390577891287279
+    ],
+    "seconds": 486.314436708,
+    "decisions_per_second": 3742.3092193595608,
+    "record_set_sha256": "8db0f8dc9e3493345cfab58719605fc2f80807ce3852013b65cd4ba214e2ebcf"
   },
   {
     "file": "research/e26/rollout-logistic-smoke.json",
@@ -90,6 +181,51 @@
     "record_set_sha256": "2a83ced952363a89eca75d491f8d1c4bc4ecb42ea5c74867fc4bf57e768b3cff"
   },
   {
+    "file": "research/e26/rollout-screen.json",
+    "sha256": "ce3b999293b6d9ff91681f4d7c0595a2c24792be70533385da71f557fac8dd77",
+    "source": "e18488fdae7f3389",
+    "statuses": {
+      "complete": 2000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 1179,
+        "shared_wins": 15,
+        "win_share": 1186.5,
+        "win_rate": 0.59325,
+        "ci95": [
+          0.5500671000438141,
+          0.636432899956186
+        ],
+        "average_position": 1.403,
+        "average_score": 15.153
+      },
+      {
+        "identity": 1,
+        "agent": "learned128",
+        "wins": 806,
+        "shared_wins": 15,
+        "win_share": 813.5,
+        "win_rate": 0.40675,
+        "ci95": [
+          0.36356710004381404,
+          0.44993289995618596
+        ],
+        "average_position": 1.5895,
+        "average_score": 11.814
+      }
+    ],
+    "interval": [
+      0.5500671000438139,
+      0.6364328999561862
+    ],
+    "seconds": 59.770609,
+    "decisions_per_second": 3066.272923536717,
+    "record_set_sha256": "e73ffbccfca0e3c39750e7477e32a02bad02b6a97ac8b17d13b598b9643e5a80"
+  },
+  {
     "file": "research/e26/rollout-smoke.json",
     "sha256": "2ab15160521fd5f49e42bbcf314b99b11727e33fffc1f537d3c739b75811256a",
     "source": "b53fd16cc8d4e9c9",
@@ -133,6 +269,142 @@
     "seconds": 11.87827875,
     "decisions_per_second": 1550.8139173783911,
     "record_set_sha256": "db6eec0ed653745362ba0018f27d359c34d5963441dc2811bf2050b686fff68d"
+  },
+  {
+    "file": "research/e26/time-confirmation.json",
+    "sha256": "be7f2c34991975db835f0bdec8ba52842aa7f4cf0da0a4edca40eaef072f4dfe",
+    "source": "9edde9e83921ecaf",
+    "statuses": {
+      "complete": 20000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 15310,
+        "shared_wins": 27,
+        "win_share": 15323.5,
+        "win_rate": 0.766175,
+        "ci95": [
+          0.7560312199138612,
+          0.7763187800861389
+        ],
+        "average_position": 1.23315,
+        "average_score": 15.77105
+      },
+      {
+        "identity": 1,
+        "agent": "search-budget",
+        "wins": 4663,
+        "shared_wins": 27,
+        "win_share": 4676.5,
+        "win_rate": 0.233825,
+        "ci95": [
+          0.22368121991386122,
+          0.2439687800861388
+        ],
+        "average_position": 1.7655,
+        "average_score": 11.22215
+      }
+    ],
+    "interval": [
+      0.7560312199138615,
+      0.7763187800861386
+    ],
+    "seconds": 1182.034638042,
+    "decisions_per_second": 1548.162753530897,
+    "record_set_sha256": "8f7096483f7b948e5dd2d11dfaac372bc1cc7db9d6438655b893cf4b5c73daf1"
+  },
+  {
+    "file": "research/e26/time-screen.json",
+    "sha256": "44781a95d6ac3b468c59eeda2bdac348353165fff625e3e949b4f8528b38787c",
+    "source": "a2a8f50cf87ba483",
+    "statuses": {
+      "complete": 1999,
+      "decision_limit": 1
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 1519,
+        "shared_wins": 1,
+        "win_share": 1519.5,
+        "win_rate": 0.7601300650325162,
+        "ci95": [
+          0.7201425814047652,
+          0.7998559251808814
+        ],
+        "average_position": 1.2396198099049525,
+        "average_score": 15.656828414207103
+      },
+      {
+        "identity": 1,
+        "agent": "search-budget",
+        "wins": 479,
+        "shared_wins": 1,
+        "win_share": 479.5,
+        "win_rate": 0.23986993496748374,
+        "ci95": [
+          0.20014407481911856,
+          0.27985741859523483
+        ],
+        "average_position": 1.759879939969985,
+        "average_score": 11.127563781890945
+      }
+    ],
+    "interval": [
+      0.7201425814047653,
+      0.7998559251808812
+    ],
+    "seconds": 123.145988125,
+    "decisions_per_second": 1651.3408442797372,
+    "record_set_sha256": "9724baec4a9b68f40eac8e7152af13cc2986e616533cfaa8918fe90b5937e5f6"
+  },
+  {
+    "file": "research/e26/tree-screen.json",
+    "sha256": "e50d8a3d6096aa43da0af5a4d34d5e2d60c11ee5c64888b9f17e54060bb3099b",
+    "source": "e18488fdae7f3389",
+    "statuses": {
+      "complete": 2000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-v2",
+        "wins": 1151,
+        "shared_wins": 17,
+        "win_share": 1159.5,
+        "win_rate": 0.57975,
+        "ci95": [
+          0.535978523445616,
+          0.623521476554384
+        ],
+        "average_position": 1.416,
+        "average_score": 15.318
+      },
+      {
+        "identity": 1,
+        "agent": "learned128",
+        "wins": 832,
+        "shared_wins": 17,
+        "win_share": 840.5,
+        "win_rate": 0.42025,
+        "ci95": [
+          0.37647852344561605,
+          0.46402147655438397
+        ],
+        "average_position": 1.5755,
+        "average_score": 11.7805
+      }
+    ],
+    "interval": [
+      0.5359785234456159,
+      0.6235214765543841
+    ],
+    "seconds": 279.338366791,
+    "decisions_per_second": 652.8140122493024,
+    "record_set_sha256": "f59409e2aac46cb1d94ceac0c54597f5c552c012c5dc621c139e286d16634769"
   },
   {
     "file": "research/e26/tree-smoke.json",

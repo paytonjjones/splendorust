@@ -1,0 +1,105 @@
+{
+  "files": [
+    {
+      "group": "train",
+      "file": "local/research/train.jsonl",
+      "setups": 20000,
+      "sha256": "fd2a9d7f6b56245524db33426eb8cddd54d87ca1fb256b30d8a9bb5a6da3d9fb"
+    },
+    {
+      "group": "train",
+      "file": "local/research/neural-train.bin",
+      "setups": 12000,
+      "sha256": "dee273957109b8b9124474bee05744011c64ac73dfeab9653cfb15853d9e21f1"
+    },
+    {
+      "group": "train",
+      "file": "local/research/neural-v2-train.bin",
+      "setups": 12000,
+      "sha256": "4375f399facdfc0a5351482f10e77e01c176c79386ecd5cacadf6715c9b06dd2"
+    },
+    {
+      "group": "train",
+      "file": "local/research/expert-train.bin",
+      "setups": 200,
+      "sha256": "ce2bcce2600cac65ebdb4320f1c6c5d7cff8b7eb8358018df2753df95138e974"
+    },
+    {
+      "group": "train",
+      "file": "local/research/iteration-train.bin",
+      "setups": 6000,
+      "sha256": "0c1ae838a6c4f8799b3a7a5348570f0f67be9b56d461536f1c184218c0ff9228"
+    },
+    {
+      "group": "dev",
+      "file": "local/research/dev.jsonl",
+      "setups": 4000,
+      "sha256": "c33be9b576797c699f29191ca280d6e31d0dc25438011492bcb1221e068984bc"
+    },
+    {
+      "group": "dev",
+      "file": "local/research/neural-dev.bin",
+      "setups": 2000,
+      "sha256": "f6d85983d84359a920999126c54ecd40a6e24444b2ffa2cdd38b199b817d943a"
+    },
+    {
+      "group": "dev",
+      "file": "local/research/neural-v2-dev.bin",
+      "setups": 2000,
+      "sha256": "970bbb4cad75f0ca092464e41c0a318bebd95eaf0cabc2921e972886238bb1a9"
+    },
+    {
+      "group": "dev",
+      "file": "local/research/expert-dev.bin",
+      "setups": 50,
+      "sha256": "1f0b387dc6cf2853a733b8fbc5f17188bf37650a20b97727cd27ea027f87470d"
+    },
+    {
+      "group": "dev",
+      "file": "local/research/iteration-dev.bin",
+      "setups": 1000,
+      "sha256": "bf8bb20e8a7d1568e2b15c126c1b039015ada21ee309925a5443da00f3291b10"
+    },
+    {
+      "group": "final",
+      "file": "research/e24-gate/confirm.json",
+      "setups": 10000,
+      "sha256": "1e9fd571618457c790d1f5a2add770e5cab462a3019865b3b9b294cb8246c3c4"
+    },
+    {
+      "group": "final",
+      "file": "research/e26-gate/confirm.json",
+      "setups": 10000,
+      "sha256": "9be035458ed891c86f0912219960fd280ede0b90b1ff207f6caced87ddcd8d8e"
+    },
+    {
+      "group": "final",
+      "file": "research/e26/original-search-confirmation.json",
+      "setups": 10000,
+      "sha256": "97536c23b0808da58dc66608d04fc9f5343f6ec92e8216d656dd750ab2747db2"
+    },
+    {
+      "group": "final",
+      "file": "research/e25/e24-alphazero-confirmation.jsonl",
+      "setups": 200,
+      "sha256": "e03ccef064a41368567dce75863fe8e5354d962c1c8627eb6b01af3bbd880d12"
+    },
+    {
+      "group": "final",
+      "file": "research/e26/alphazero-confirmation.jsonl",
+      "setups": 200,
+      "sha256": "175854b0477866063e2c30c1566d6985baf2f864c764ed1acee9cc4edf4bb51c"
+    }
+  ],
+  "distinct_setups": {
+    "train": 50200,
+    "dev": 9050,
+    "final": 30200
+  },
+  "intersections": {
+    "train/dev": 0,
+    "train/final": 0,
+    "dev/final": 0
+  },
+  "passed": true
+}

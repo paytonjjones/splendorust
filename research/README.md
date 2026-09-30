@@ -19,8 +19,15 @@ the E24 learned-cycle control at 128 simulations. Candidate `--iterations` and
   Outcome-only value learning and one-action policy distillation failed the first
   playing screen. The checkpoint and ablations are preserved.
 - E26: enhanced features, residual correction to the logistic value, and teacher
-  root-value / soft-policy targets. In development; no final claim yet.
+  root-value / soft-policy targets with PUCT and eight-turn heuristic rollouts.
+  Passed the strict 20,000-game confirmation against learned128: all complete,
+  57.725% credit, 95% interval [56.59%,58.86%]. This is a fixed-simulation gain;
+  equal-compute and external checks remain separate.
+- E27: independent AlphaZero teacher data and mixed-replay fine-tuning. Lower
+  development prediction error did not produce stronger play: 38.75% credit
+  against E26 in 200 complete games. Rejected; all evidence retained.
 
+See `research/REPORT.md` for the current results and limitations.
 See `EXPERIMENTS.md` for hypotheses recorded before implementation and seed
 reservations. Per-experiment folders contain raw reports, checkpoints, training
 metrics, manifests, inference parity results, logs and failure evidence.
@@ -42,7 +49,8 @@ isolated training environment. Binary weights are included in the source
 fingerprint. No inference dependency or allocation was added to splendor-core.
 
 PUCT shares nodes within one real decision, keyed by the exact actor observation
-with only the turn counter removed. It samples a fresh hidden world each
+with only the turn counter removed for E25–E29. Transfer models retain the
+turn counter because it is a network input. The default samples a fresh hidden world each
 simulation. It does not retain the tree across real decisions. Q values belong
 to the actor at each node; terminal shared wins retain fractional credit.
 Unfinished simulations use a heuristic value, never a declared game outcome.
@@ -80,3 +88,55 @@ Development may proceed with incomplete games under the user-approved rule in
 EXPERIMENTS.md. Retain all requested outcomes and their conservative bounds.
 Final confirmation remains separate from training and development. No claim of
 best-in-class or SOTA performance has been established.
+
+## Additional research controls
+
+`search-budget` freezes the original depth-eight, width-six Strong/Engine
+algorithm while accepting the caller's iteration ceiling and time budget.
+It supports matched search-loop time tests without changing `search128`.
+`neural-persistent` retains exact observation-matched nodes between decisions
+(up to 32,768 at the decision boundary); it failed the first E29 screen and
+is not selected. `neural-expert` uses the rejected E27 fine-tuned checkpoint.
+
+E28 uses the optional final `depth` argument of `neural_data_v2`:
+
+```
+local/research/expert-target/release/examples/neural_data_v2 6000 340000000 1040000007 256 neural-rollout local/research/iteration-train.bin 16
+local/research/expert-target/release/examples/neural_data_v2 1000 350000000 1050000007 256 neural-rollout local/research/iteration-dev.bin 16
+local/strength/inference/bin/python research/train_expert.py local/research/iteration-train.bin local/research/iteration-dev.bin research/e28/model --epochs 30 --replay local/research/neural-v2-train.bin --warmstart research/e26/model/model.pt
+```
+
+Despite its historical filename, `train_expert.py` accepts normalized policy
+distributions and finite teacher values from native search as well as external
+expert data. Missing outcomes are masked. It samples equal counts from new and
+replay datasets. See manifests for data hashes and the selected checkpoint.
+
+## Native model transfer
+
+E30 exports the exact pretrained version-80 upstream checkpoint (SHA256 in its
+manifest) into native float32 inference. The network uses three inverted
+residual blocks, channel and seven-feature mixing, squeeze/excitation, and
+separate policy/value heads. Architecture and pretrained model attribution are
+retained in `research/e30/UPSTREAM-LICENSE` and the model directory license.
+This is transfer of an existing model, not a newly trained original network.
+
+The runtime input is a 56-by-7 board encoded from Observation and a sampled
+hidden world. It never reads the true future deck. Card-to-deck-group mappings
+are verified by all card costs, bonus and points; group order is not assumed
+to equal bonus-color order. Only native main-action logits map into the existing
+67-action space, and the core legal mask controls final choices. Payments,
+returns and noble choices remain explicit legal core decisions. At turn 124
+and later, transferred agents use Strong for real choices and the E23 logistic
+value in search; no native turn-cap outcome is introduced.
+
+`transfer-policy`, `transfer`, and `transfer-rollout` are E30 ablations.
+`transfer-native` and `transfer-native-rollout` use E31's source-informed
+exploration coefficient 0.4, first-play reduction 0.02965 and no uniform prior
+mixture. These remain experimental. Exact encoding and inference checks are
+in `transfer_inputs`, `check_transfer_inputs.py`, and `transfer_parity`.
+
+`transfer-dynamic` updates the first-play estimate from returned values; its
+first screen showed no benefit. `transfer-pool3` samples three observation-derived
+worlds per real decision and cycles through them; its larger test is in progress.
+Neither variant reads the true setup seed or future deck. E35 reduced native
+inference cost by 2.34x with exact saved-output and playing-record equality.

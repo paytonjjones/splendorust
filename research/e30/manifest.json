@@ -1,0 +1,173 @@
+{
+  "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+  "checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+  "model_sha256": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+  "script_sha256": "1f5064cfc54b808e7b1044904835160527b743a10e9374c0bafc0cfe7b9e7812",
+  "architecture": 80,
+  "torch": "2.5.1",
+  "parameters": 142406,
+  "layers": [
+    {
+      "kind": "norm",
+      "shape": [
+        56,
+        56
+      ],
+      "depthwise": false,
+      "channels": 56
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        168,
+        56
+      ],
+      "depthwise": false,
+      "channels": 168
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        7,
+        7
+      ],
+      "depthwise": true,
+      "channels": 168
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        40,
+        168
+      ]
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        168,
+        40
+      ]
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        56,
+        168
+      ],
+      "depthwise": false,
+      "channels": 56
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        168,
+        56
+      ],
+      "depthwise": false,
+      "channels": 168
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        7,
+        7
+      ],
+      "depthwise": true,
+      "channels": 168
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        40,
+        168
+      ]
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        168,
+        40
+      ]
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        56,
+        168
+      ],
+      "depthwise": false,
+      "channels": 56
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        81,
+        392
+      ]
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        81,
+        81
+      ]
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        168,
+        56
+      ],
+      "depthwise": false,
+      "channels": 168
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        7,
+        7
+      ],
+      "depthwise": true,
+      "channels": 168
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        40,
+        168
+      ]
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        168,
+        40
+      ]
+    },
+    {
+      "kind": "norm",
+      "shape": [
+        56,
+        168
+      ],
+      "depthwise": false,
+      "channels": 56
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        2,
+        392
+      ]
+    },
+    {
+      "kind": "linear",
+      "shape": [
+        2,
+        2
+      ]
+    }
+  ],
+  "fixture_seed": 616000007,
+  "scope": "Inference parity only; not training or a playing-strength result"
+}

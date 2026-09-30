@@ -9,6 +9,8 @@ use std::time::{Duration, Instant};
 pub mod learned;
 pub mod neural;
 pub mod neural_search;
+pub mod transfer;
+mod transfer_data;
 mod value_weights;
 
 pub trait Agent: Send {
@@ -363,6 +365,7 @@ pub struct SearchAgent {
     pub inference_calls: u64,
     pub neural_value: bool,
     pub enhanced_value: bool,
+    pub expert_value: bool,
     pub root_value: Option<f32>,
     pub root_policy: Option<[f32; neural::ACTIONS]>,
     pub value_weights: Option<[f64; learned::FEATURES]>,
@@ -376,6 +379,7 @@ impl SearchAgent {
             inference_calls: 0,
             neural_value: false,
             enhanced_value: false,
+            expert_value: false,
             root_value: None,
             root_policy: None,
             value_weights: None,
@@ -606,7 +610,9 @@ impl Agent for SearchAgent {
                 }
             } else if self.neural_value && o.count == 2 {
                 self.inference_calls += 1;
-                if self.enhanced_value {
+                if self.expert_value {
+                    neural_search::value_expert(&state.observe(o.current as usize))
+                } else if self.enhanced_value {
                     neural_search::value_v2(&state.observe(o.current as usize))
                 } else {
                     neural_search::value(&state.observe(o.current as usize))
@@ -694,6 +700,16 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
         "search" | "mcts" => Box::new(SearchAgent::new(seed, search.clone())),
+        // Original search algorithm with a shared wall-time budget. Freeze all
+        // algorithm settings except the caller's time and simulation ceilings.
+        "search-budget" => Box::new(SearchAgent::new(
+            seed,
+            SearchConfig {
+                iterations: search.iterations,
+                time_budget: search.time_budget,
+                ..Default::default()
+            },
+        )),
         "search128" | "search512" => {
             let config = SearchConfig {
                 iterations: if name == "search128" { 128 } else { 512 },
@@ -706,20 +722,49 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "neural-policy"
         | "neural-v2"
         | "neural-rollout"
-        | "neural-rollout-logistic" => {
+        | "neural-rollout-logistic"
+        | "neural-expert"
+        | "neural-persistent"
+        | "neural-selfplay"
+        | "transfer"
+        | "transfer-policy"
+        | "transfer-rollout"
+        | "transfer-native"
+        | "transfer-native-rollout"
+        | "transfer-dynamic"
+        | "transfer-pool3"
+        | "expert-policy" => {
             let mut config = search.clone();
-            if name == "neural-policy" {
+            if name == "neural-policy" || name == "expert-policy" || name == "transfer-policy" {
                 config.iterations = 0;
             }
             let mut agent = neural_search::NeuralAgent::new(seed, config);
             agent.logistic = name == "neural-logistic" || name == "neural-rollout-logistic";
             agent.enhanced = name == "neural-v2" || name.starts_with("neural-rollout");
-            if name.starts_with("neural-rollout") {
+            agent.expert = name == "neural-expert" || name == "expert-policy";
+            agent.persistent = name == "neural-persistent";
+            agent.self_play = name == "neural-selfplay";
+            agent.transferred = name.starts_with("transfer");
+            agent.dynamic_fpu = name == "transfer-dynamic";
+            agent.world_pool = if name == "transfer-pool3" { 3 } else { 0 };
+            if name.starts_with("transfer-native") || agent.dynamic_fpu || agent.world_pool > 0 {
+                agent.cpuct = 0.4;
+                agent.fpu_reduction = 0.02965;
+                agent.uniform_prior = 0.0;
+            }
+            agent.enhanced |= agent.persistent;
+            if name.starts_with("neural-rollout")
+                || name == "neural-expert"
+                || agent.persistent
+                || agent.self_play
+                || name == "transfer-rollout"
+                || name == "transfer-native-rollout"
+            {
                 agent.rollout_depth = 8;
             }
             Box::new(agent)
         }
-        "learned-cycle" | "learned128" | "neural-flat" | "neural-flat-v2" => {
+        "learned-cycle" | "learned128" | "neural-flat" | "neural-flat-v2" | "expert-flat" => {
             let config = if name == "learned128" {
                 SearchConfig {
                     iterations: 128,
@@ -730,7 +775,9 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             };
             let mut agent = SearchAgent::new(seed, config);
             agent.value_weights = Some(value_weights::WEIGHTS);
-            agent.neural_value = name == "neural-flat" || name == "neural-flat-v2";
+            agent.neural_value =
+                name == "neural-flat" || name == "neural-flat-v2" || name == "expert-flat";
+            agent.expert_value = name == "expert-flat";
             agent.enhanced_value = name == "neural-flat-v2";
             Box::new(LearnedCycleAgent {
                 search: agent,
@@ -1049,6 +1096,34 @@ mod tests {
         }
     }
     #[test]
+    fn timed_control_preserves_original_algorithm_settings() {
+        let mut state = splendor_core::GameState::new(2, 320000007).unwrap();
+        let mut legal = ActionSet::new();
+        let mut control = make_agent(
+            "search-budget",
+            17,
+            &SearchConfig {
+                iterations: 128,
+                depth: 16,
+                width: 20,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        let mut original = make_agent("search128", 17, &SearchConfig::default()).unwrap();
+        for _ in 0..120 {
+            state.legal_actions(&mut legal);
+            if legal.is_empty() {
+                break;
+            }
+            let observation = state.observe(state.current_player());
+            let action = control.select_action(&observation, &legal);
+            assert_eq!(action, original.select_action(&observation, &legal));
+            state.apply_action(action).unwrap();
+        }
+        assert_eq!(control.work_counts(), original.work_counts());
+    }
+    #[test]
     fn every_agent_chooses_legal_and_is_reproducible() {
         for name in [
             "random",
@@ -1058,6 +1133,18 @@ mod tests {
             "learned",
             "learned-cycle",
             "neural",
+            "neural-rollout",
+            "neural-expert",
+            "expert-policy",
+            "neural-persistent",
+            "neural-selfplay",
+            "transfer",
+            "transfer-policy",
+            "transfer-rollout",
+            "transfer-native",
+            "transfer-native-rollout",
+            "transfer-dynamic",
+            "transfer-pool3",
         ] {
             let config = SearchConfig {
                 iterations: 8,

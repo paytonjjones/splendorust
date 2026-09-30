@@ -1,0 +1,92 @@
+[
+  {
+    "file": "research/e29/fresh-tree-regression.json",
+    "sha256": "e49d3f00629fbc5d74a276d067119e1563ce150a5ab1ae0e64e16bb0c3d62c7c",
+    "source": "01c62e461f05ad68",
+    "statuses": {
+      "complete": 2000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 1179,
+        "shared_wins": 15,
+        "win_share": 1186.5,
+        "win_rate": 0.59325,
+        "ci95": [
+          0.5500671000438141,
+          0.636432899956186
+        ],
+        "average_position": 1.403,
+        "average_score": 15.153
+      },
+      {
+        "identity": 1,
+        "agent": "learned128",
+        "wins": 806,
+        "shared_wins": 15,
+        "win_share": 813.5,
+        "win_rate": 0.40675,
+        "ci95": [
+          0.36356710004381404,
+          0.44993289995618596
+        ],
+        "average_position": 1.5895,
+        "average_score": 11.814
+      }
+    ],
+    "interval": [
+      0.5500671000438139,
+      0.6364328999561862
+    ],
+    "seconds": 47.678318041,
+    "decisions_per_second": 3843.948518536206,
+    "record_set_sha256": "e73ffbccfca0e3c39750e7477e32a02bad02b6a97ac8b17d13b598b9643e5a80"
+  },
+  {
+    "file": "research/e29/smoke.json",
+    "sha256": "c23efc2ca65b33c85580570f3e3fea20a6d5aa33a04369af3a5e42c6e07bbbfc",
+    "source": "7fb95bb6866c3b09",
+    "statuses": {
+      "complete": 200
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-persistent",
+        "wins": 99,
+        "shared_wins": 1,
+        "win_share": 99.5,
+        "win_rate": 0.4975,
+        "ci95": [
+          0.29526228216143735,
+          0.6997377178385626
+        ],
+        "average_position": 1.5,
+        "average_score": 13.31
+      },
+      {
+        "identity": 1,
+        "agent": "neural-rollout",
+        "wins": 100,
+        "shared_wins": 1,
+        "win_share": 100.5,
+        "win_rate": 0.5025,
+        "ci95": [
+          0.30026228216143724,
+          0.7047377178385626
+        ],
+        "average_position": 1.495,
+        "average_score": 13.085
+      }
+    ],
+    "interval": [
+      0.29526228216143735,
+      0.6997377178385626
+    ],
+    "seconds": 8.790275125,
+    "decisions_per_second": 2011.654896865358,
+    "record_set_sha256": "e410cb75b76164a8e846d1ff891a8b1041d187f82e8fac73024c54ea79384445"
+  }
+]

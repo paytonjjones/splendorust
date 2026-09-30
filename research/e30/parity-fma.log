@@ -1,0 +1,25 @@
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Finished `release` profile [optimized] target(s) in 3.26s
+     Running `local/research/transfer-target/release/examples/transfer_parity research/e30/model.bin research/e30/parity.json`
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":13.53392219543457,"position":0}
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":12.771313667297363,"position":1}
+{"maximum_error":4.76837158203125e-6,"maximum_magnitude":12.66258716583252,"position":2}
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":12.44954776763916,"position":3}
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":14.025876998901367,"position":4}
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":12.327940940856934,"position":5}
+{"maximum_error":2.86102294921875e-6,"maximum_magnitude":13.450806617736816,"position":6}
+{"maximum_error":3.814697265625e-6,"maximum_magnitude":11.90240478515625,"position":7}
+{"maximum_error":0.00018310546875,"maximum_magnitude":296.7489929199219,"position":8}
+{"maximum_error":0.002044677734375,"maximum_magnitude":540.5943603515625,"position":9}
+{"maximum_error":0.0007476806640625,"maximum_magnitude":296.5223693847656,"position":10}
+{"maximum_error":0.00006103515625,"maximum_magnitude":316.8278503417969,"position":11}
+{"maximum_error":0.000034332275390625,"maximum_magnitude":39.51518630981445,"position":12}
+{"maximum_error":0.000213623046875,"maximum_magnitude":427.8030090332031,"position":13}
+{"maximum_error":0.00018310546875,"maximum_magnitude":338.6092529296875,"position":14}
+{"maximum_error":0.00043582916259765625,"maximum_magnitude":207.5032958984375,"position":15}
+{"maximum_absolute_error":0.002044677734375,"positions":16,"tolerance":0.001}
+
+thread 'main' (17565447) panicked at crates/splendor-arena/examples/transfer_parity.rs:40:5:
+assertion failed: maximum < 0.001
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

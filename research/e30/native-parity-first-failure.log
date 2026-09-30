@@ -1,0 +1,69 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling crossbeam-utils v0.8.23
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-epoch v0.9.21
+   Compiling utf8parse v0.2.2
+   Compiling crossbeam-deque v0.8.8
+   Compiling zerocopy v0.8.59
+   Compiling serde v1.0.229
+   Compiling zmij v1.0.23
+   Compiling rayon-core v1.13.0
+   Compiling anstyle v1.0.14
+   Compiling serde_json v1.0.151
+   Compiling anstyle-parse v1.0.0
+   Compiling colorchoice v1.0.5
+   Compiling autocfg v1.5.1
+   Compiling either v1.18.0
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling anstream v1.0.0
+   Compiling cfg-if v1.0.5
+   Compiling heck v0.5.0
+   Compiling num-traits v0.2.19
+   Compiling clap_lex v1.1.1
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling strsim v0.11.1
+   Compiling libc v0.2.189
+   Compiling clap_builder v4.6.7
+   Compiling ciborium-io v0.2.2
+   Compiling regex-syntax v0.8.11
+   Compiling arrayvec v0.7.8
+   Compiling plotters-backend v0.3.7
+   Compiling plotters-svg v0.3.7
+   Compiling regex-automata v0.4.18
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-core)
+   Compiling itertools v0.10.5
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling walkdir v2.5.0
+   Compiling regex v1.13.1
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+   Compiling syn v3.0.6
+   Compiling syn v2.0.119
+   Compiling criterion-plot v0.5.0
+   Compiling anes v0.1.6
+   Compiling once_cell v1.21.4
+   Compiling oorandom v11.1.5
+   Compiling rayon v1.12.0
+   Compiling zerocopy-derive v0.8.59
+   Compiling serde_derive v1.0.229
+   Compiling clap_derive v4.6.7
+   Compiling clap v4.6.7
+   Compiling is-terminal v0.4.17
+   Compiling plotters v0.3.7
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+    Finished `release` profile [optimized] target(s) in 16.79s
+     Running `local/research/transfer-target/release/examples/transfer_parity research/e30/model.bin research/e30/parity.json`
+{"maximum_absolute_error":0.002166748046875,"positions":16,"tolerance":0.001}
+
+thread 'main' (17563126) panicked at crates/splendor-arena/examples/transfer_parity.rs:31:5:
+assertion failed: maximum < 0.001
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

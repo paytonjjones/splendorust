@@ -46,7 +46,7 @@ def run(args):
     metadata={'schema_version':1,'ruleset':'published-base-v1','planning_profile':'published-base-native-planning-v1',
         'observation_profile':'public-observation-sampled-hidden-v1','players':args.players,'games':args.games,
         'seed':args.seed,'policy_seed':args.policy_seed,'sampling_seed':args.sampling_seed,'candidate':args.candidate,'external':args.external,'stage':args.stage,
-        'search_iterations':args.iterations,'external_iterations':args.external_iterations,
+        'search_iterations':args.iterations,'search_depth':args.depth,'external_iterations':args.external_iterations,
         'wall_budget_seconds':None,'decision_cap':args.cap,'source_id':data['source_id'],'engine':data['engine'],
         'splendorust_revision':subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip(),
         'core_binary_sha256':sha(ROOT/'target/release/examples/strength_worker'),
@@ -63,7 +63,7 @@ def run(args):
                 seats=identities[rotation:]+identities[:rotation]
                 seed=args.seed+block;agent_seed=args.policy_seed+block
                 core.call('reset',players=args.players,seed=seed,sampling_seed=args.sampling_seed+block,
-                          agent_seed=agent_seed,agent_seeds=[agent_seed+((i+rotation)%args.players) for i in range(args.players)],iterations=args.iterations,seats=seats)
+                          agent_seed=agent_seed,agent_seeds=[agent_seed+((i+rotation)%args.players) for i in range(args.players)],iterations=args.iterations,depth=args.depth,seats=seats)
                 if ext:ext.call('reset',seed=agent_seed)
                 record={'index':index,'block':block,'rotation':rotation,'setup_seed':seed,'seats':seats,
                         'status':'decision_limit','actions':[],'native_actions':[],'rewards':None,'reason':None,
@@ -129,9 +129,9 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--external',choices=['alphazero','seal256','random','strong'],required=True)
     p.add_argument('--source',type=Path,default=ROOT/'local/strength/external/alphazero')
-    p.add_argument('--candidate',choices=['search','strong','random','learned','learned-cycle'],default='search')
+    p.add_argument('--candidate',choices=['search','strong','random','learned','learned-cycle','neural-v2','neural-rollout','neural-expert','neural-selfplay','transfer-rollout','transfer-native','transfer-native-rollout','transfer-pool3'],default='search')
     p.add_argument('--players',type=int,choices=[2,3,4],default=2);p.add_argument('--games',type=int,required=True)
-    p.add_argument('--iterations',type=int,default=128);p.add_argument('--external-iterations',type=int,default=0)
+    p.add_argument('--depth',type=int,default=8);p.add_argument('--iterations',type=int,default=128);p.add_argument('--external-iterations',type=int,default=0)
     p.add_argument('--seed',type=int,required=True);p.add_argument('--policy-seed',type=int,default=2500001);p.add_argument('--sampling-seed',type=int,default=3500001);p.add_argument('--cap',type=int,default=2000)
     p.add_argument('--stage',choices=['smoke','screen','confirmation'],default='screen');p.add_argument('--output',type=Path,required=True)
     a=p.parse_args();a.source=a.source.resolve();a.output=a.output.resolve();a.reproduction='python3 benchmarks/strength/run.py '+' '.join(sys_argv for sys_argv in __import__('sys').argv[1:])

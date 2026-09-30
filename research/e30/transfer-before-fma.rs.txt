@@ -1,0 +1,221 @@
+//! Native inference for the upstream version-80 network.
+//! Architecture copyright (c) 2018 Surag Nair (MIT).
+//! See research/e30/UPSTREAM-LICENSE. No game-state input is accepted here.
+struct Reader {
+    values: Vec<f32>,
+    at: usize,
+}
+impl Reader {
+    fn take(&mut self, n: usize) -> Vec<f32> {
+        let result = self.values[self.at..self.at + n].to_vec();
+        self.at += n;
+        result
+    }
+    fn dense(&mut self, input: usize, output: usize) -> Dense {
+        Dense {
+            weights: self.take(input * output),
+            bias: self.take(output),
+            input,
+        }
+    }
+    fn norm(&mut self, input: usize, output: usize, channels: usize, depthwise: bool) -> Norm {
+        Norm {
+            weights: self.take(input * output),
+            scale: self.take(channels),
+            bias: self.take(channels),
+            input,
+            output,
+            depthwise,
+        }
+    }
+    fn block(&mut self) -> Block {
+        Block {
+            expand: self.norm(56, 168, 168, false),
+            depthwise: self.norm(7, 7, 168, true),
+            squeeze: self.dense(168, 40),
+            excite: self.dense(40, 168),
+            project: self.norm(168, 56, 56, false),
+        }
+    }
+}
+struct Dense {
+    weights: Vec<f32>,
+    bias: Vec<f32>,
+    input: usize,
+}
+impl Dense {
+    fn apply(&self, x: &[f32]) -> Vec<f32> {
+        assert_eq!(x.len(), self.input);
+        self.weights
+            .chunks_exact(self.input)
+            .zip(&self.bias)
+            .map(|(w, &b)| {
+                let mut sums = [0.0; 8];
+                for (i, (&w, &x)) in w.iter().zip(x).enumerate() {
+                    sums[i % 8] += w * x;
+                }
+                b + sums.iter().sum::<f32>()
+            })
+            .collect()
+    }
+}
+#[derive(Clone, Copy)]
+enum Activation {
+    None,
+    Relu,
+    HardSwish,
+}
+impl Activation {
+    fn apply(self, x: f32) -> f32 {
+        match self {
+            Self::None => x,
+            Self::Relu => x.max(0.0),
+            Self::HardSwish => x * (x + 3.0).clamp(0.0, 6.0) / 6.0,
+        }
+    }
+}
+struct Norm {
+    weights: Vec<f32>,
+    scale: Vec<f32>,
+    bias: Vec<f32>,
+    input: usize,
+    output: usize,
+    depthwise: bool,
+}
+impl Norm {
+    fn apply(&self, x: &[f32], activation: Activation) -> Vec<f32> {
+        if self.depthwise {
+            assert_eq!(x.len(), self.scale.len() * self.input);
+            let mut y = vec![0.0; self.scale.len() * self.output];
+            for (channel, row) in x.chunks_exact(self.input).enumerate() {
+                for (feature, weights) in self.weights.chunks_exact(self.input).enumerate() {
+                    let sum: f32 = weights.iter().zip(row).map(|(w, x)| w * x).sum();
+                    y[channel * self.output + feature] =
+                        activation.apply(sum * self.scale[channel] + self.bias[channel]);
+                }
+            }
+            y
+        } else {
+            assert_eq!(x.len(), self.input * 7);
+            let mut y = vec![0.0; self.output * 7];
+            for (channel, weights) in self.weights.chunks_exact(self.input).enumerate() {
+                let mut sums = [0.0; 7];
+                for (i, &w) in weights.iter().enumerate() {
+                    for (j, sum) in sums.iter_mut().enumerate() {
+                        *sum += w * x[i * 7 + j];
+                    }
+                }
+                for j in 0..7 {
+                    y[channel * 7 + j] =
+                        activation.apply(sums[j] * self.scale[channel] + self.bias[channel]);
+                }
+            }
+            y
+        }
+    }
+}
+struct Block {
+    expand: Norm,
+    depthwise: Norm,
+    squeeze: Dense,
+    excite: Dense,
+    project: Norm,
+}
+impl Block {
+    fn apply(&self, x: &[f32], head: bool) -> Vec<f32> {
+        let activation = if head {
+            Activation::HardSwish
+        } else {
+            Activation::Relu
+        };
+        let h = self.expand.apply(x, activation);
+        let mut h = self.depthwise.apply(&h, activation);
+        let pooled: Vec<f32> = h
+            .chunks_exact(7)
+            .map(|row| {
+                if head {
+                    row.iter().copied().fold(f32::NEG_INFINITY, f32::max)
+                } else {
+                    row.iter().sum::<f32>() / 7.0
+                }
+            })
+            .collect();
+        let squeezed: Vec<_> = self
+            .squeeze
+            .apply(&pooled)
+            .into_iter()
+            .map(|x| x.max(0.0))
+            .collect();
+        let scales = self.excite.apply(&squeezed);
+        for (row, scale) in h.chunks_exact_mut(7).zip(scales) {
+            let scale = (scale + 3.0).clamp(0.0, 6.0) / 6.0;
+            for x in row {
+                *x *= scale;
+            }
+        }
+        let mut y = self.project.apply(&h, Activation::None);
+        for (y, x) in y.iter_mut().zip(x) {
+            *y += x;
+        }
+        y
+    }
+}
+pub struct Model {
+    first: Norm,
+    trunk: Block,
+    policy_block: Block,
+    policy_hidden: Dense,
+    policy_output: Dense,
+    value_block: Block,
+    value_hidden: Dense,
+    value_output: Dense,
+}
+impl Model {
+    pub fn from_bytes(bytes: &[u8]) -> Self {
+        assert_eq!(bytes.len() % 4, 0);
+        let values = bytes
+            .chunks_exact(4)
+            .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+            .collect();
+        let mut r = Reader { values, at: 0 };
+        let model = Self {
+            first: r.norm(56, 56, 56, false),
+            trunk: r.block(),
+            policy_block: r.block(),
+            policy_hidden: r.dense(392, 81),
+            policy_output: r.dense(81, 81),
+            value_block: r.block(),
+            value_hidden: r.dense(392, 2),
+            value_output: r.dense(2, 2),
+        };
+        assert_eq!(r.at, r.values.len());
+        model
+    }
+    pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
+        let h = self
+            .trunk
+            .apply(&self.first.apply(x, Activation::None), false);
+        let policy = self.policy_block.apply(&h, true);
+        let policy: Vec<_> = self
+            .policy_hidden
+            .apply(&policy)
+            .into_iter()
+            .map(|x| x.max(0.0))
+            .collect();
+        let policy = self.policy_output.apply(&policy);
+        let value = self.value_block.apply(&h, true);
+        let value: Vec<_> = self
+            .value_hidden
+            .apply(&value)
+            .into_iter()
+            .map(|x| x.max(0.0))
+            .collect();
+        let value = self
+            .value_output
+            .apply(&value)
+            .into_iter()
+            .map(f32::tanh)
+            .collect::<Vec<_>>();
+        (policy.try_into().unwrap(), value.try_into().unwrap())
+    }
+}

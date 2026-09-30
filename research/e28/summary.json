@@ -1,0 +1,92 @@
+[
+  {
+    "file": "research/e28/smoke.json",
+    "sha256": "924d9ff7bc5c206999ce5fec4f72a496bf6997103b1499da4413954b6cacdc2f",
+    "source": "2c0376ea2f13f26b",
+    "statuses": {
+      "complete": 200
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-selfplay",
+        "wins": 116,
+        "shared_wins": 1,
+        "win_share": 116.5,
+        "win_rate": 0.5825,
+        "ci95": [
+          0.383352101339655,
+          0.781647898660345
+        ],
+        "average_position": 1.415,
+        "average_score": 13.915
+      },
+      {
+        "identity": 1,
+        "agent": "neural-rollout",
+        "wins": 83,
+        "shared_wins": 1,
+        "win_share": 83.5,
+        "win_rate": 0.4175,
+        "ci95": [
+          0.218352101339655,
+          0.616647898660345
+        ],
+        "average_position": 1.58,
+        "average_score": 12.945
+      }
+    ],
+    "interval": [
+      0.3833521013396551,
+      0.781647898660345
+    ],
+    "seconds": 6.421863125,
+    "decisions_per_second": 2766.7983035686393,
+    "record_set_sha256": "13b886170bb1b7e93d6779f8caa6d18b98bf197f4c753ef639c3a0f6bb2375f5"
+  },
+  {
+    "file": "research/e28/target-equivalence.json",
+    "sha256": "56f5778baf7595fed459de1cf801e95b9364704dd25625427773009d82e321ff",
+    "source": "aca80da469e08fc6",
+    "statuses": {
+      "complete": 2000
+    },
+    "agents": [
+      {
+        "identity": 0,
+        "agent": "neural-rollout",
+        "wins": 1179,
+        "shared_wins": 15,
+        "win_share": 1186.5,
+        "win_rate": 0.59325,
+        "ci95": [
+          0.5500671000438141,
+          0.636432899956186
+        ],
+        "average_position": 1.403,
+        "average_score": 15.153
+      },
+      {
+        "identity": 1,
+        "agent": "learned128",
+        "wins": 806,
+        "shared_wins": 15,
+        "win_share": 813.5,
+        "win_rate": 0.40675,
+        "ci95": [
+          0.36356710004381404,
+          0.44993289995618596
+        ],
+        "average_position": 1.5895,
+        "average_score": 11.814
+      }
+    ],
+    "interval": [
+      0.5500671000438139,
+      0.6364328999561862
+    ],
+    "seconds": 48.581840583,
+    "decisions_per_second": 3772.4589641037974,
+    "record_set_sha256": "e73ffbccfca0e3c39750e7477e32a02bad02b6a97ac8b17d13b598b9643e5a80"
+  }
+]
