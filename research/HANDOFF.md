@@ -1,13 +1,13 @@
 # Learning research handoff
 
-The accepted research teacher is `research/e41/cycle-0/model/model.bin` and its
-matching `model.pt`. Native SHA256:
-`d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600`.
-Its fresh 20,000-game test scored 54.71% against the bootstrap, with one blocked
-game kept as unknown. Strict promotion rejected that incomplete run; research
-selection used conservative missing-outcome bounds. E26 is the last strict
-promotion. One learning gain is established; repeated improvement is not.
-There is no established external best-in-class ranking.
+The confirmed research champion is `research/e56/model/model.bin`, with matching
+`model.pt`. Native SHA256:
+`055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41`.
+`research/CHAMPION.json` is the public pointer. Its independent 20,000-game
+check scored55.26% against the prior cycle0 champion at the same128-simulation
+budget, CI54.13–56.39%,all games complete. The strict gate promotes.
+The learning loop has now produced a second confirmed gain. E56's51.15%
+small step over E54 remains unconfirmed by itself. External rank is unestablished.
 
 | Experiment | Result | Decision |
 |---|---|---|
@@ -25,7 +25,7 @@ There is no established external best-in-class ranking.
 | E53, budget800-only small corpus | 51.55%, 2,000 complete | Reject under its registered rule |
 | E54, full-volume budget800 corpus | 56.775%, 2,000 complete; CI52.51–61.04% | Strict screen passes |
 | E55, paired multi-view control | 49.525% versus E54, 2,000 complete | Reject |
-| E56, next generation | 51.15% versus E54, 2,000 complete | Provisional advance; independent milestone running |
+| E56, next generation | 51.15% versus E54, 2,000 complete | Provisional advance;20k milestone55.26% passes |
 
 Normal cycles use one fixed 2,000-game paired gate and 14 threads on this host.
 E44 measured about 2.5x throughput versus four threads. Keep 20,000-game runs
@@ -36,16 +36,21 @@ corpus without evidence that more data increases strength per total wall time.
 
 ## Active work
 
-Architecture changes are stopped after evaluator feedback. E54 completed5,000 training and1,000 development games at800 simulations.
-Its same-architecture student passes the strict2,000-game screen at56.775%.
-The original fixed champion remains unchanged pending independent confirmation.
-The actual native generation process is controlled by this thread; its run is
-`local/research/e54/flywheel`. The1310000000 screen is complete. E55 is complete and rejected. E56 advanced provisionally after its1410000000
-screen. Its3310000000 milestone is running. E57 runs frozen-endpoint controls
-and the unchanged400-game AlphaZero supporting profile; native incomplete
-records are kept as unknown. Do not duplicate
-these seed streams. Full settings and corrected training seed800000007 are in
-`EXPERIMENTS.md`. Data and Torch remain under this worktree's ignored `local/`.
+Architecture changes are stopped. E54's5,000-game800-simulation corpus
+produced281,432 training positions and a56.775% strict2k screen gain. E55's
+paired random-view training control did not improve strength. E56's frozen
+endpoint passed its independent20k milestone. E57 native controls scored
+95.64% against Search128 and97.625% against Strong; the16-simulation student
+scored82.88% against Search128 at lower measured decision cost. Four/five
+incomplete control games remain unknown. The external400-game AlphaZero
+rerun is complete:209 complete,191 unsupported;59.81% conditional credit
+cannot establish a rank. All400 histories passed canonical replay checks.
+
+E58 is the next registered cycle:5,000 fresh800-simulation teacher games plus
+E56's1,000-game replay shard,1,000 dev games,10 epochs,2k provisional screen
+against this new confirmed champion. Seeds3510m/3520m/3530m are reserved.
+Data and Torch remain under this worktree's ignored `local/`; do not duplicate
+active seed streams. Use the confirmed E56 model for further teacher work.
 
 `--selection-rule provisional` keeps a fixed `champion.json` and a separate
 exploratory `best.json` lineage. After one fixed2,000-game screen, requested-
@@ -60,9 +65,9 @@ The eight-view diagnostic is exact when there is no opponent blind reservation.
 In the explicit blind stress cohort, mean legal-policy TV is6.3%,and11.8% of
 argmax choices differ from the mean policy. Native self-play blind frequency
 is measured during collection. Stress frequency is not ordinary-play frequency.
-All completed models and negative results remain saved. The provisional
-lineage is `research/e56/model/model.bin`, SHA055c42...f41. The fixed champion
-is unchanged. E54 and E56 checkpoints are both public and can be evaluated
+All completed models and negative results remain saved. The confirmed
+champion is `research/e56/model/model.bin`, SHA055c42...f41. Each new campaign
+keeps its starting champion fixed until an independent milestone passes. E54 and E56 checkpoints are both public and can be evaluated
 from main. The current endpoint was frozen before all final-assessment outcomes. The native arena needs no Python ML framework.
 
 ## Local data and parallel work

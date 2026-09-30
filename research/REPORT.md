@@ -1,21 +1,44 @@
 # Playing-strength research status
 
-The current research teacher is cycle 0’s trained checkpoint, used by
-`flywheel-best`. Its fresh confirmation scored 54.71% against the bootstrap
-in 19,999/20,000 complete games, CI 53.58–55.84%. Its one blocked game
-remains unknown and the strict rejection is retained. This proves one learning
-gain. The preceding teacher was `transfer-pool3`. Its fresh confirmation scored
-80.23% against E28 in 19,997 complete games out of 20,000, with conservative
-95% interval 79.24–81.22%. All three blocked games remain unknown; the strict
-gate rejected the run. E26 remains the last strict promotion. The transferred
-network is a bootstrap teacher for the new self-improvement loop, not its endpoint.
-Original `search128` remains unchanged. Learned-strength evidence is two-player
+The confirmed research champion is E56 (`research/CHAMPION.json`). It scored
+55.26% against the prior trained cycle0 champion in20,000/20,000 complete
+paired games at128 simulations, CI54.13–56.39%. The strict promotion gate
+passes. This is a second learning gain. E54 achieved the main new gain after
+receiving281,432 positions from5,000800-simulation teacher games; E56 then
+advanced provisionally after a51.15% screen over E54. The endpoint milestone
+confirms improvement over the fixed prior champion, but does not confirm the
+small E56-over-E54 difference on its own. The transferred model remains a
+bootstrap, and the architecture remains142,406 parameters.
+
+E57 endpoint controls:95.64% against frozen Search128 (1,996/2,000 complete),
+97.625% against Strong (2,000 complete). At16 NN simulations it scored82.88%
+against Search128 (1,995/2,000 complete). Unknown outcomes remain bounded.
+Across the same568 observations, median decision cost was0.835ms for NN16,
+1.137ms for Search128,and6.265ms for NN128. These shared-host timings do not
+establish universal compute equivalence. Native controls are separate from
+external rankings.
+
+The unchanged400-game AlphaZero profile rerun produced209 complete games,
+191 unsupported,and59.81% conditional credit. All-requested point bounds are
+31.25–79%; the paired bootstrap missing-outcome envelope is26.625–83%.
+All400 saved histories passed native canonical replay checks. No external
+best-in-class rank is established. See `research/e57/` for raw evidence.
+
+Full-volume teacher collection took963.50s; E54 training took95.94s and its
+2k screen48.49s. On the reused corpus, model-to-screen takes about2.4minutes;
+the20k milestone took523.34s and remains outside the inner loop. E55's random
+hidden-view control was rejected at49.525%; measured sensitivity changed
+little. Current evidence supports teacher volume rather than another
+architecture change. E58 continues with the confirmed model as800-simulation
+teacher. All negative results and prior champion files remain saved.
+Original Search128 and core rules are unchanged. Learned evidence is two-player
 only; other player counts use Strong.
 
 ## Confirmed results
 
 | Comparison | Requested / complete games | Candidate credit on complete games | Conservative 95% interval |
 |---|---:|---:|---:|
+| E56 learned endpoint vs cycle0 champion | 20,000 / 20,000 | 55.26% | 54.13–56.39% |
 | E24 learned value vs original Search128 | 20,000 / 19,999 | 79.30% | 78.33–80.27% |
 | E26 neural rollout vs E24 learned128 | 20,000 / 20,000 | 57.73% | 56.59–58.86% |
 | E26 neural rollout vs original Search128 | 20,000 / 19,999 | 83.00% | 82.09–83.91% |

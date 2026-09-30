@@ -1,0 +1,36 @@
+{
+  "workload": "568 Strong-game Main observations; Search128 retains fixed128/depth8; candidate depth16; shared-host timing",
+  "agents": {
+    "flywheel-candidate-16": {
+      "seconds_median": 0.474432625,
+      "seconds_per_decision": 0.0008352687059859155,
+      "repeats": 3,
+      "seconds": [
+        0.474432625,
+        0.4782225,
+        0.459720083
+      ]
+    },
+    "flywheel-candidate-128": {
+      "seconds_median": 3.558688167,
+      "seconds_per_decision": 0.006265296068661972,
+      "repeats": 3,
+      "seconds": [
+        3.647874875,
+        3.5166425,
+        3.558688167
+      ]
+    },
+    "search128-128": {
+      "seconds_median": 0.646016292,
+      "seconds_per_decision": 0.0011373526267605633,
+      "repeats": 3,
+      "seconds": [
+        0.809991416,
+        0.646016292,
+        0.619392917
+      ]
+    }
+  },
+  "scope": "Measured shared-host decision cost; not universal equal compute or full-game cost"
+}

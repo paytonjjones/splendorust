@@ -1,0 +1,104 @@
+{
+  "search128-nn128": {
+    "requested": 2000,
+    "complete": 1996,
+    "unknown": 4,
+    "conditional_credit": 0.9564128256513026,
+    "requested_point_bounds": [
+      0.9545,
+      0.9565
+    ],
+    "ci95": [
+      0.9304342994446231,
+      0.9803024991752128
+    ],
+    "sha256": "272e766e2dbb08ba432e49c537dc4ec855b8dd6b5997a3a3d65307a94580dd51",
+    "run_config": {
+      "names": [
+        "flywheel-candidate",
+        "search128"
+      ],
+      "games": 2000,
+      "seed": 3420000000,
+      "threads": 14,
+      "max_decisions": 20000,
+      "check": false,
+      "search": {
+        "iterations": 128,
+        "depth": 16,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      }
+    }
+  },
+  "search128-nn16": {
+    "requested": 2000,
+    "complete": 1995,
+    "unknown": 5,
+    "conditional_credit": 0.8288220551378446,
+    "requested_point_bounds": [
+      0.82675,
+      0.82925
+    ],
+    "ci95": [
+      0.7911355585032039,
+      0.8647969468512727
+    ],
+    "sha256": "da40f994db5343567053e8addcfb99ba75b1cfebc5f6a37fa1b8cc4b4c56492a",
+    "run_config": {
+      "names": [
+        "flywheel-candidate",
+        "search128"
+      ],
+      "games": 2000,
+      "seed": 3430000000,
+      "threads": 14,
+      "max_decisions": 20000,
+      "check": false,
+      "search": {
+        "iterations": 16,
+        "depth": 16,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      }
+    }
+  },
+  "strong-nn128": {
+    "requested": 2000,
+    "complete": 2000,
+    "unknown": 0,
+    "conditional_credit": 0.97625,
+    "requested_point_bounds": [
+      0.97625,
+      0.97625
+    ],
+    "ci95": [
+      0.9560812259745017,
+      0.9964187740254982
+    ],
+    "sha256": "45117e57883df7f723791a668a22979157de98218f0bdf1721551b4eba829ad3",
+    "run_config": {
+      "names": [
+        "flywheel-candidate",
+        "strong"
+      ],
+      "games": 2000,
+      "seed": 3440000000,
+      "threads": 14,
+      "max_decisions": 20000,
+      "check": false,
+      "search": {
+        "iterations": 128,
+        "depth": 16,
+        "width": 6,
+        "time_budget": null,
+        "rollout": "strong",
+        "evaluation": "engine"
+      }
+    }
+  }
+}

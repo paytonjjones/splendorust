@@ -2300,3 +2300,33 @@ incomplete CLI comparisons. Preserve its source/plan/log, repair the runner to
 validate complete record sets on exit1, and continue the other registered
 controls. Keep the existing external process; no schedule restart or dropped
 unknown outcomes. This is execution handling, not a new experiment or result.
+
+**E56 milestone completed:** Frozen055c42...f41 scores55.26% against fixed
+d355...600 at128 simulations,20,000/20,000 complete games. Independent95%
+interval54.1349–56.3851%; strict promote. This establishes a second learning
+gain; the small E56-over-E54 screen difference remains separately unconfirmed.
+`research/CHAMPION.json` now points to E56. Raw record SHA6923f6...8de.
+
+**E57 completed:** NN128/Search12895.641% (1,996 complete,4unknown),
+NN16/Search12882.882% (1,995 complete,5unknown),NN128/Strong97.625%
+(2,000 complete). Fixed568-observation medians0.835ms/1.137ms/6.265ms
+for NN16/Search128/NN128 under shared CPU load. AlphaZero209/400 complete,
+191unsupported;59.809% conditional credit. Requested bounds31.25–79%,
+paired bootstrap missing envelope26.625–83%. No external rank. All400
+histories replay correctly; external policy configuration equals E36.
+
+## E58 — Full-volume next teacher generation
+
+Hypothesis: E54 showed that5,000800-simulation teacher games can teach a
+stronger128-simulation model. Repeat that volume from the confirmed E56
+teacher, retaining only its recent1,000-game predecessor replay shard.
+Collect5,000 fresh train games(master3510000000) and1,000 dev games
+(3520000000),800 simulations,depth16,14threads. Add E56's1,000 train
+games as replay. Keep142,406-parameter bootstrap architecture, original
+inputs,loss and10epochs,batch1024,lr1e-4,MPS. Warmstart E56;training
+seed800000009. Select epoch0..10 using dev policy CE+4outcome Brier.
+Do not choose a model using arena outcomes. Fixed2,000-game paired screen
+3530000000,128simulations,depth16,14threads versus fixed E56 champion.
+Apply registered provisional requested-credit point>50.5% rule; preserve
+strict decisions and95% interval. No20k confirmation in this inner loop.
+Unknown outcomes remain unknown and cannot increase promotion credit.
