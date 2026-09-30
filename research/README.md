@@ -246,3 +246,16 @@ checks. Native inference evaluates the policy path and critic path separately;
 it does not evaluate unused heads. E52 records exact critic bytes, initial
 function identity, checkpoint reload, native parity and cost. Extra inference
 cost needs playing evidence; the E52 screen did not establish a gain.
+
+`--selection-rule provisional` permits an exploratory lineage after one fixed
+2,000-game screen when requested-schedule worst-case point credit exceeds50.5%.
+It leaves the fixed `champion.json` unchanged and preserves strict gate outputs
+and95% intervals. This point rule does not confirm improvement. Use a reserved
+independent champion assessment for claims and promotion. No naive optional
+stopping or invented missing outcomes is permitted.
+
+`--encoding-views 8` captures seven extra inputs only for opponent-blind rows,
+with a separate RNG. The original data and trajectories stay exact. Sidecars
+use a u64 primary-row index followed by7x392 float32 inputs. `--sample-encoding-views` samples one of the eight inputs per training visit, keeping masks and
+labels unchanged; an independent augmentation RNG preserves the row order.
+Dataset/sidecar hashes, source code hashes and actual blind frequency are saved.

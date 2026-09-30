@@ -22,6 +22,7 @@ There is no established external best-in-class ranking.
 | E50, matched full-network control | 50.65%, 2,000 complete | Reject |
 | E51, greedy late policy targets | 49.95%, 2,000 complete | Reject |
 | E52, independent policy features | 51.10%, 2,000 complete | Reject; critic exact |
+| E53, budget800-only small corpus | 51.55%, 2,000 complete | Reject under its registered rule |
 
 Normal cycles use one fixed 2,000-game paired gate and 14 threads on this host.
 E44 measured about 2.5x throughput versus four threads. Keep 20,000-game runs
@@ -30,19 +31,32 @@ Do not repeatedly inspect fixed 95% intervals as an early stopping rule. Select
 models from bounded playing strength, not loss. Do not grow the old low-budget
 corpus without evidence that more data increases strength per total wall time.
 
-## Next experiment
+## Active work
 
-E52 is complete and rejected. Agent2's exact CPU speed improvement is integrated
-as5d02e8c. E53 trains the same separate-encoder model from budget800 targets
-alone. It owns the fixed2,000-game screen at1280000000. Its full settings are
-registered in `EXPERIMENTS.md`. Training starts from the accepted teacher, not
-from the rejected E52 candidate. Do not duplicate or change this seed stream.
+Architecture changes are stopped after evaluator feedback. E54 collects5,000
+training and1,000 development games at800 simulations, using the accepted
+bootstrap teacher. It captures alternate inputs for opponent-blind observations.
+The actual native generation process is controlled by this thread; its run is
+`local/research/e54/flywheel`. The next screen is1310000000. E55 is the paired
+multi-view control on the same corpus, with screen1320000000. Do not duplicate
+these seed streams. Full settings and corrected training seed800000007 are in
+`EXPERIMENTS.md`. Data and Torch remain under this worktree's ignored `local/`.
 
-The native arena needs no Python ML framework. All E47–E52 models and failed
-results are preserved. E48 proves that more search produces stronger teachers;
-it does not prove that training can transfer that strength. No later student
-has confirmed a second learning gain. The driver supports policy-only training
-and greedy-visit targets as well as the existing native architectures.
+`--selection-rule provisional` keeps a fixed `champion.json` and a separate
+exploratory `best.json` lineage. After one fixed2,000-game screen, requested-
+schedule worst-case point credit above50.5% can advance the lineage. This is
+not statistical confirmation. Strict decisions and95% intervals remain saved.
+Missing outcomes remain unknown. Do not apply this new rule to completed E53
+or earlier gates. After at most three candidate generations, assess the frozen
+endpoint against the fixed champion at reserved3310000000,20,000 paired games.
+The champion changes only after independent supporting evidence.
+
+The eight-view diagnostic is exact when there is no opponent blind reservation.
+In the explicit blind stress cohort, mean legal-policy TV is6.3%,and11.8% of
+argmax choices differ from the mean policy. Native self-play blind frequency
+is measured during collection. Stress frequency is not ordinary-play frequency.
+All completed models and negative results remain saved. The accepted teacher is
+unchanged. The native arena needs no Python ML framework.
 
 ## Local data and parallel work
 

@@ -2149,3 +2149,77 @@ keeps epoch zero. No new training data or search change. Reserve one fixed
 2,000-game128-simulation gate at1280m,depth16,14 threads,51% conservative lower
 threshold. No automatic confirmation or optional stopping. Larger model cost
 still requires fixed-compute assessment if the fixed-budget screen clears.
+
+**E53 completed:** All2,000 complete,51.55% credit,CI[47.34%,55.76%].
+Reject under its registered gate. The teacher-only corpus does not establish a
+gain. Do not retroactively apply a new provisional rule to this completed run.
+The following direction follows the user's evaluator feedback: stop architecture
+changes and directly test teacher data volume and encoding noise.
+
+## E54 — Comparable-volume800 teacher data and a provisional lineage
+
+Use the existing142,406-parameter bootstrap model and accepted d355...600
+checkpoint. Collect5,000 training and1,000 development games at800 simulations,
+14 threads,depth16. Expected training positions are comparable to E40's281,778;
+record actual counts and total collection cost rather than holding teacher
+compute equal. Independent setup masters1290m(train),1300m(dev),1310m(screen).
+Teacher policy streams are setup master+3000m. No architecture/search change.
+Use the successful cycle's10 epochs,AdamW1e-4,cosine1e-5,batch1024; training
+seed1300000007. Select minimum dev policy CE+4 outcome Brier; retain epoch zero.
+Record root/outcome target construction and native parity. Run one fixed2,000
+paired-game128-simulation screen,14 threads,depth16. No optional stopping.
+
+Before these outcomes, create two tracks. The champion remains d355...600;
+all existing strict promotion decisions remain unchanged. A provisional lineage
+can accept a screen with requested-schedule worst-case credit above50.5%
+(missing outcomes contribute zero). This point rule is an exploration heuristic,
+not statistical confirmation. Preserve95% intervals, raw results and the strict
+scripts/promote.py decision separately. No incomplete game becomes a victory.
+Positive provisional choices can seed the next training generation. After at
+most three candidate generations, run an independent fixed-champion milestone
+assessment before any claim of compounded gain; do not select intermediate
+checkpoints from its outcomes. Reserve champion assessment seed3310m,20,000
+paired games for the final lineage checkpoint after those generations. A failed
+milestone leaves the champion unchanged and rejects the compounded-gain claim.
+
+First diagnose encoding variance: same public Observation, eight independent
+encoder determinizations, legal-masked policy total variation/argmax agreement,
+value range/std. Separate no-blind and opponent-blind observations. The sampler
+must include ordinary play and an explicit blind-reservation stress cohort;
+stress frequency does not estimate ordinary-play prevalence. Keep target labels
+fixed if a later multi-view training control is justified. This diagnostic
+contains no final screen observations or actual hidden-card inputs.
+
+**E54 encoding diagnostic:**896 ordinary Strong-play observations have no
+opponent blind reservation; eight encodings give exactly equal inputs/outputs.
+The explicit blind stress cohort has672 observations with opponent blind
+reservations. Mean legal-policy TV from the eight-view mean is0.0632;
+11.79% of view argmax choices differ from that mean. Mean raw value range is
+0.1323 (probability range0.0661), maximum0.4087. This is substantial conditional
+sensitivity, not evidence of its frequency in neural self-play.
+
+Capture seven extra encodings only for opponent-blind rows during E54
+collection. Use a separate encoder RNG so original data/search trajectories
+remain unchanged. Save a sidecar with base-row indices and7x392 floats, aligned
+with immutable original labels. Record actual blind-row frequency. E54 still
+trains only the original view. This enables a paired input-noise control without
+another expensive teacher run. Sidecars do not introduce true hidden-card data.
+
+## E55 — Paired multi-view training control
+
+Use the same E54 corpus, warm start,architecture,labels,optimizer,epochs,seed and
+dev selection. For each training row with captured alternatives, uniformly
+choose one of its eight encodings on each epoch visit. Keep original masks,
+root targets and outcomes. Use a separate augmentation RNG so shard/row order
+remains matched. No-blind rows stay unchanged. Development uses the original
+view for checkpoint selection; separately report eight-view output sensitivity
+before/after. No architecture or search change. Fixed2,000-game screen1320m.
+Assess against the current provisional lineage, retain the fixed champion, and
+use the same predeclared50.5% worst-case requested-schedule point rule. No
+statistical promotion claim. Final lineage milestone remains the fresh3310m
+20,000-game test after no more than three candidate generations.
+
+E54 seed correction before training or screen outcomes: the existing driver
+uses training seed800000007 for cycle0. Use that successful-cycle seed, replacing
+the earlier1300000007 entry. E55 uses the same800000007. All data/screen masters
+and other settings remain unchanged. The immutable run plan records this driver.
