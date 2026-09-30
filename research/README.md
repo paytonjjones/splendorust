@@ -147,15 +147,16 @@ inference cost by 2.34x with exact saved-output and playing-record equality.
 
 `flywheel.py` now runs collection, PyTorch training, native export and parity,
 then the paired arena gate. It uses the transferred model only as its initial
-teacher. Later teachers are selected trained checkpoints. The first run collects
-5,000, 20,000 and 75,000 training games on disjoint setup ranges, with separate
-development and confirmation ranges. Earlier training shards provide replay.
+teacher. Later teachers are selected trained checkpoints. The default run measures one cycle with 5,000 training games and separate
+development and confirmation ranges. Assess strength gain and total wall time
+before choosing the next corpus size or teacher budget. Earlier training shards
+can provide replay when an explicit multi-cycle schedule is justified.
 
 Run from the repository root with the isolated pinned Torch environment:
 
 ```sh
 local/strength/inference/bin/python research/flywheel.py \
-  --output local/research/flywheel-e40 --cycles 3 --games 5000 20000 75000 \
+  --output local/research/flywheel-next --cycles 1 --games 5000 \
   --dev-games 1000 --iterations 128 --epochs 10 --threads 4
 ```
 
@@ -182,3 +183,14 @@ no Rust rebuild is needed for a new checkpoint. The loop uses `scripts/promote.p
 without changing its strict decisions. User-authorized research selection may
 continue after missing games only if the conservative confirmation lower bound
 exceeds 51%. The missing outcomes receive no wins and the strict rejection remains.
+
+
+`--teacher-iterations` controls collection independently from `--iterations`,
+which controls arena evaluation. `--teacher-model` and `--teacher-checkpoint`
+select a trained incumbent for a new measured cycle. Runtime/checkpoint hashes
+are checked before use. Use `assess_cycle.py CYCLE --output assessment.json`
+to report games/positions per complete wall-clock, stage costs, bounded win
+credit and conditional relative Elo gain per hour. A screen is provisional.
+Do not interpret one accepted cycle as proof that repeated learning compounds.
+The earlier automatic 20k/75k follow-on collection was stopped under the new
+measurement-first objective. Its plan and existing data remain preserved.

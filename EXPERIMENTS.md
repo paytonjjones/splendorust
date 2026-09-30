@@ -1772,3 +1772,45 @@ embedded bootstrap weights match 32 ordered records; 1/4-thread generation
 matches byte for byte. First full shard: 1,000 complete games, 56,460 rows in
 106.17s. The three-cycle 100,000-game collection/training plan is active. No
 full-run trained model has yet earned a promotion.
+
+## E41 — Strength gain per complete learning iteration
+
+User steering supersedes E40's automatic 20k/75k data schedule. The driver
+was stopped after starting cycle 0's gate; its live child gate remains running.
+No cycle 1 collection starts without a measured assessment. Cycle 0's screen
+has 2,000/2,000 complete games and 55.05% credit, conservative interval
+[50.82%,59.28%]. Confirmation remains frozen at 1820m. Data generation:
+6,000 games/337,966 positions in 631.315s. Training: 92.398s. Screen: 207.124s.
+Use the confirmation to assess gain, not training loss or corpus size.
+
+Conditional next hypothesis: if cycle 0 is weak or the rate of improvement
+is low, stronger search targets may yield more strength per complete iteration
+than more 128-simulation games. Compare 256-simulation teacher self-play
+(2,500 train + 500 dev games) and 800-simulation self-play (800 train + 160 dev)
+against the existing 128 teacher (5,000 + 1,000). All begin from the same frozen
+bootstrap checkpoint. This is a roughly matched search-simulation workload,
+not a guaranteed equal wall-clock workload. Record actual teacher positions/sec,
+training time, paired-screen/confirmation time, and bounded playing gain per hour.
+Full-loop trajectories and targets may both change, which is intentional here.
+Use the same architecture, optimizer, ten epochs, temperature schedule and
+128-simulation evaluation to isolate teacher budget from evaluation compute.
+Reserve fresh ranges: 256 arm train840m/dev850m/screen860m/confirm1860m;
+800 arm train880m/dev890m/screen900m/confirm1900m. No confirmation histories
+enter training or hyperparameter selection. A useful target budget can be
+scaled only after measured playing gain. Preserve the stronger incumbent on
+rejection. Do not infer a global Elo ranking from these paired comparisons.
+
+E41 throughput calibration before collecting either full arm: generate the
+first 64 train setups at 840m with 256 simulations and at 880m with 800,
+using four threads and the unchanged bootstrap teacher. This pilot measures
+cost only while cycle 0 confirms; do not train or scale either arm until its
+assessment. Retain these prefixes and verify reproduction if reused. Record
+concurrent confirmation activity; timings are conditional on shared host load.
+
+E41 pilots completed: 256 simulations produced 3,608 positions in 13.677s
+(263.8 positions/s); 800 produced 3,594 in 42.120s (85.3 positions/s).
+Both use four threads while the four-thread cycle 0 confirmation is active.
+The proposed 3,000/960 total-game arms predict about 641/632 seconds of
+collection, close to E40's measured 631 seconds. This calibrates cost only;
+playing gain remains the deciding measurement. Both pilot files pass the
+feature/mask/target/outcome checks and are retained with hashes.

@@ -11,12 +11,15 @@ def atomic(path,value):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--cycles',type=int,default=3)
+    p.add_argument('--cycles',type=int,default=1)
     p.add_argument('--seed',type=int,default=800000000)
-    p.add_argument('--games',type=int,nargs='+',default=[5000,20000,75000])
+    p.add_argument('--games',type=int,nargs='+',default=[5000])
     p.add_argument('--dev-games',type=int,default=1000)
     p.add_argument('--shard-games',type=int,default=1000)
     p.add_argument('--iterations',type=int,default=128)
+    p.add_argument('--teacher-iterations',type=int)
+    p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
+    p.add_argument('--teacher-checkpoint',type=Path)
     p.add_argument('--epochs',type=int,default=10)
     p.add_argument('--threads',type=int,default=4)
     p.add_argument('--screen',type=int,default=2000)
@@ -24,11 +27,14 @@ def main():
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args();os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
+    a.teacher_model=a.teacher_model.resolve()
+    if a.teacher_checkpoint: a.teacher_checkpoint=a.teacher_checkpoint.resolve()
+    if a.teacher_iterations is None: a.teacher_iterations=a.iterations
     assert 1<=a.cycles<=5 and all(0<g<=100000 for g in a.games)
     assert a.shard_games>0 and a.dev_games>0
     a.output.mkdir(parents=True,exist_ok=True)
     plan={k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()}
-    plan.update(bootstrap_sha256=sha('research/e30/model.bin'),script_sha256=sha(__file__),
+    plan.update(initial_teacher_sha256=sha(a.teacher_model),initial_checkpoint_sha256=sha(a.teacher_checkpoint) if a.teacher_checkpoint else None,script_sha256=sha(__file__),
         training_script_sha256=sha(ROOT/'research/train_flywheel.py'),
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
@@ -54,13 +60,14 @@ def main():
         if result.returncode not in allowed: raise RuntimeError(f'failed {log}: exit {result.returncode}')
     binaries=a.target/'release';run(['cargo','build','--release','--locked','--bin','splendor','--example','flywheel_data','--example','transfer_parity'],a.output/'build.log')
     bestpath=a.output/'best.json'
-    if not bestpath.exists(): atomic(bestpath,dict(model=str((ROOT/'research/e30/model.bin').resolve()),checkpoint=None,model_sha256=sha('research/e30/model.bin'),status='bootstrap teacher'))
+    if not bestpath.exists(): atomic(bestpath,dict(model=str(a.teacher_model),checkpoint=str(a.teacher_checkpoint) if a.teacher_checkpoint else None,model_sha256=sha(a.teacher_model),checkpoint_sha256=sha(a.teacher_checkpoint) if a.teacher_checkpoint else None,status='initial teacher'))
     replay=[]
     for cycle in range(a.cycles):
         c=a.output/f'cycle-{cycle:03d}';c.mkdir(exist_ok=True)
         if (c/'decision.json').exists():
             replay.extend(sorted((c/'train').glob('*.bin')));continue
         best=json.loads(bestpath.read_text());assert sha(best['model'])==best['model_sha256']
+        if best['checkpoint']:assert sha(best['checkpoint'])==best['checkpoint_sha256']
         env['SPLENDOR_BEST_MODEL']=best['model']
         snapshot=c/'teacher.json'
         if snapshot.exists(): assert json.loads(snapshot.read_text())==best,'teacher changed during unfinished cycle'
@@ -73,7 +80,7 @@ def main():
                 if not receipt.exists():
                     preserve(output);preserve(meta)
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
-                         '--policy-seed',master+offset+3000000000,'--iterations',a.iterations,'--depth',16,
+                         '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations,'--depth',16,
                          '--threads',a.threads,'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256']))
                 r=json.loads(receipt.read_text());assert sha(output)==r['data_sha256'] and sha(meta)==r['manifest_sha256'] and r['teacher_sha256']==best['model_sha256']
@@ -119,7 +126,7 @@ def main():
         assert sha(best['model'])==best['model_sha256'] and sha(model/'model.bin')==m['model_sha256']
         if selected:
             atomic(bestpath,dict(model=str(model/'model.bin'),checkpoint=str(model/'model.pt'),
-                model_sha256=m['model_sha256'],status='strict promotion' if decision['decision']=='promote' else 'research selection; strict incomplete rejection retained',cycle=cycle))
+                model_sha256=m['model_sha256'],checkpoint_sha256=m['checkpoint_sha256'],status='strict promotion' if decision['decision']=='promote' else 'research selection; strict incomplete rejection retained',cycle=cycle))
         result=dict(cycle=cycle,selected=selected,strict_decision=decision,
             conservative_confirm_interval=bounds,teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],
             best_epoch=m['best_epoch'],train_rows=sum(x['rows'] for x in m['train']),dev_rows=sum(x['rows'] for x in m['dev']))

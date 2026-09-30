@@ -138,9 +138,10 @@ environment or large training datasets.
 
 ## Current priority: fast self-improvement
 
-The new loop is implemented and its first full run is active. It will collect
-100,000 training games across three cycles (5k, 20k, 75k), train in PyTorch,
-export to native Rust, check parity, and retain only arena-confirmed improvements.
+The new loop is implemented. Its first 5,000-game learning cycle is in fresh
+confirmation. Automatic 20k/75k follow-on collection was stopped under the
+measurement-first objective. Choose the next teacher budget or corpus size
+from playing gain per total wall-clock, then train, export and evaluate again.
 Each cycle uses the strongest selected checkpoint as its teacher, with earlier
 training shards as replay. Models load once per process; new weights require no
 Rust recompilation. Raw data and checkpoints remain under
@@ -159,3 +160,14 @@ The bootstrap is about 9.7x more expensive at equal simulation counts. These
 are latency measurements, not equal-compute playing results. The learning loop
 records collection rows/sec, simulations, inference calls, training time and
 evaluation time so further work can target useful iterations per wall-clock.
+
+
+Cycle 0 collected 5,000 train + 1,000 development games, all complete, with
+281,778 + 56,188 positions in 631.315 seconds. PyTorch training took 92.398
+seconds and selected epoch 9 on independent development data. Its 2,000-game
+screen completed all games and scored 55.05% against the bootstrap, conservative
+interval 50.82–59.28%. The fixed 20,000-game confirmation at 1820m remains
+live. This is a promising screen, not proof of compounded strength. The new
+assessment script includes collection, training and evaluation costs. Higher-
+budget teacher pilots measure 256/800 simulation costs; full arms wait for the
+cycle 0 assessment. Those arms retain 128-simulation arena evaluation.
