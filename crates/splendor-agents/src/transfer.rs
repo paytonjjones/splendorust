@@ -19,8 +19,25 @@ impl Reader {
         }
     }
     fn norm(&mut self, input: usize, output: usize, channels: usize, depthwise: bool) -> Norm {
+        let weights = self.take(input * output);
+        // Four output channels share each vector load. Each output retains
+        // the original input-channel FMA order. Packing is done once per model.
+        let packed = if depthwise {
+            Vec::new()
+        } else {
+            assert!(output.is_multiple_of(4));
+            (0..output / 4)
+                .flat_map(|g| {
+                    (0..input).map({
+                        let weights = &weights;
+                        move |i| std::array::from_fn(|lane| weights[(g * 4 + lane) * input + i])
+                    })
+                })
+                .collect()
+        };
         Norm {
-            weights: self.take(input * output),
+            weights,
+            packed,
             scale: self.take(channels),
             bias: self.take(channels),
             input,
@@ -83,6 +100,7 @@ impl Activation {
 }
 struct Norm {
     weights: Vec<f32>,
+    packed: Vec<[f32; 4]>,
     scale: Vec<f32>,
     bias: Vec<f32>,
     input: usize,
@@ -124,6 +142,41 @@ impl Norm {
         }
     }
 }
+impl Norm {
+    fn apply_interleaved(&self, x: &[f32], activation: Activation) -> Vec<f32> {
+        if self.depthwise {
+            return self.apply(x, activation);
+        }
+        assert_eq!(x.len(), self.input * 7);
+        let mut y = vec![0.0; self.output * 7];
+        for (group, weights) in self.packed.chunks_exact(self.input).enumerate() {
+            // The four lanes are independent dot products, not a reduction.
+            let mut sums = [[0.0; 4]; 7];
+            for (w, row) in weights.iter().zip(x.as_chunks::<7>().0) {
+                for spatial in 0..7 {
+                    for lane in 0..4 {
+                        sums[spatial][lane] = w[lane].mul_add(row[spatial], sums[spatial][lane]);
+                    }
+                }
+            }
+            for (lane, output) in y[group * 28..group * 28 + 28]
+                .as_chunks_mut::<7>()
+                .0
+                .iter_mut()
+                .enumerate()
+            {
+                let channel = group * 4 + lane;
+                for (spatial, value) in output.iter_mut().enumerate() {
+                    *value = activation.apply(
+                        sums[spatial][lane].mul_add(self.scale[channel], self.bias[channel]),
+                    );
+                }
+            }
+        }
+        y
+    }
+}
+
 struct Block {
     expand: Norm,
     depthwise: Norm,
@@ -132,13 +185,17 @@ struct Block {
     project: Norm,
 }
 impl Block {
-    fn apply(&self, x: &[f32], head: bool) -> Vec<f32> {
+    fn apply_mode(&self, x: &[f32], head: bool, interleaved: bool) -> Vec<f32> {
         let activation = if head {
             Activation::HardSwish
         } else {
             Activation::Relu
         };
-        let h = self.expand.apply(x, activation);
+        let h = if interleaved {
+            self.expand.apply_interleaved(x, activation)
+        } else {
+            self.expand.apply(x, activation)
+        };
         let mut h = self.depthwise.apply(&h, activation);
         let pooled: Vec<f32> = h
             .as_chunks::<7>()
@@ -165,7 +222,11 @@ impl Block {
                 *x *= scale;
             }
         }
-        let mut y = self.project.apply(&h, Activation::None);
+        let mut y = if interleaved {
+            self.project.apply_interleaved(&h, Activation::None)
+        } else {
+            self.project.apply(&h, Activation::None)
+        };
         for (y, x) in y.iter_mut().zip(x) {
             *y += x;
         }
@@ -226,12 +287,19 @@ impl BootstrapModel {
         model
     }
     pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
-        let mut h = self.first.apply(x, Activation::None);
+        self.infer_mode(x, false)
+    }
+    fn infer_mode(&self, x: &[f32; 392], interleaved: bool) -> ([f32; 81], [f32; 2]) {
+        let mut h = if interleaved {
+            self.first.apply_interleaved(x, Activation::None)
+        } else {
+            self.first.apply(x, Activation::None)
+        };
         for block in &self.trunk {
-            h = block.apply(&h, false);
+            h = block.apply_mode(&h, false, interleaved);
         }
 
-        let policy = self.policy_block.apply(&h, true);
+        let policy = self.policy_block.apply_mode(&h, true, interleaved);
         let policy: Vec<_> = self
             .policy_hidden
             .apply(&policy)
@@ -239,7 +307,7 @@ impl BootstrapModel {
             .map(|x| x.max(0.0))
             .collect();
         let policy = self.policy_output.apply(&policy);
-        let value = self.value_block.apply(&h, true);
+        let value = self.value_block.apply_mode(&h, true, interleaved);
         let value: Vec<_> = self
             .value_hidden
             .apply(&value)
@@ -273,13 +341,21 @@ impl Model {
         };
         Self { architecture }
     }
-    pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
+    /// Original deterministic implementation for validation and fallback.
+    pub fn infer_original(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
         match &self.architecture {
             Architecture::Bootstrap(model) => model.infer(x),
             Architecture::Gated(model) => model.infer(x),
         }
     }
+    pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
+        match &self.architecture {
+            Architecture::Bootstrap(model) => model.infer_mode(x, true),
+            Architecture::Gated(model) => model.infer(x),
+        }
+    }
 }
+
 struct GatedBlock {
     gain: Vec<f32>,
     gate: Dense,
@@ -585,6 +661,57 @@ mod tests {
         }
         bytes.pop();
         assert!(std::panic::catch_unwind(|| Model::from_bytes(&bytes)).is_err());
+    }
+    #[test]
+    fn interleaved_kernel_matches_reference_bits_on_real_observations() {
+        let original = include_bytes!("models/e30.bin");
+        let first = (56 * 56 + 56 * 2) * 4;
+        let block = 33297 * 4;
+        let mut deeper = b"SPMOBIL1".to_vec();
+        deeper.extend_from_slice(&3u32.to_le_bytes());
+        deeper.extend_from_slice(&original[..first + block]);
+        deeper.extend_from_slice(&original[first..first + block]);
+        deeper.extend_from_slice(&original[first..first + block]);
+        deeper.extend_from_slice(&original[first + block..]);
+        let models = [
+            Model::from_bytes(original),
+            Model::from_bytes(&deeper),
+            Model::from_bytes(&small_gated_bytes()),
+        ];
+        let mut inputs = 0;
+        for seed in 0..16 {
+            let mut state = GameState::new(2, 2_200_000_000 + seed).unwrap();
+            let mut rng = Rng::new(seed);
+            let mut legal = ActionSet::new();
+            for _ in 0..200 {
+                if state.is_terminal() || state.turns() >= 124 {
+                    break;
+                }
+                state.legal_actions(&mut legal);
+                if legal.is_empty() {
+                    break;
+                }
+                let observation = state.observe(state.current_player());
+                let x = encode(&observation, &mut rng);
+                for model in &models {
+                    let before = model.infer_original(&x);
+                    let after = model.infer(&x);
+                    for (a, b) in before
+                        .0
+                        .iter()
+                        .chain(&before.1)
+                        .zip(after.0.iter().chain(&after.1))
+                    {
+                        assert_eq!(a.to_bits(), b.to_bits(), "seed {seed}, input {inputs}");
+                    }
+                }
+                inputs += 1;
+                state
+                    .apply_action(StrongHeuristicAgent.select_action(&observation, &legal))
+                    .unwrap();
+            }
+        }
+        assert!(inputs > 1000);
     }
     #[test]
     fn bootstrap_dispatch_preserves_exact_inference() {
