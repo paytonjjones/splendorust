@@ -2249,3 +2249,13 @@ paired games,128 simulations,depth16,14 threads,using scripts/promote.py.
 Keep its strict decision and conservative intervals. If endpoint weights equal
 the champion, skip the self-comparison and record no learning gain. A provisional
 path with a failed final assessment does not establish compounded improvement.
+
+**E54 screen completed:** All2,000 complete,56.775% credit,CI[52.514%,61.036%].
+Strict screen promotes; provisional lineage also advances. Native SHA1264435767ffe18cee9b195bc0aaa54c568d92844ceffc8a73c3c8b950a356be.
+Architecture remains142,406-parameter bootstrap; epoch10 selected. Train corpus
+has281,432 rows from5,000 complete games, comparable to the successful cycle.
+Dev has999 complete games and one blocked game;37 unknown outcome rows remain
+masked while legitimate teacher targets can still be used. This is a screen
+result, not the independent lineage milestone. Keep d355...600 as fixed champion.
+The full-volume control supports stronger-teacher data as a useful direction;
+it does not isolate teacher volume from every data-distribution difference.

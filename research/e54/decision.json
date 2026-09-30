@@ -1,0 +1,48 @@
+{
+  "cycle": 0,
+  "selected": true,
+  "selection_rule": "provisional",
+  "provisional": {
+    "selected": true,
+    "requested_credit_bounds": [
+      0.56775,
+      0.56775
+    ],
+    "ci95": [
+      0.5251404950300801,
+      0.6103595049699199
+    ],
+    "margin": 0.005,
+    "status": "provisional exploration only; no statistical promotion",
+    "missing_outcome_rule": "unknown; worst-case zero for selection; never a declared loss/win"
+  },
+  "champion_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "strict_decision": {
+    "decision": "promote",
+    "stage": "screen",
+    "report": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e54/flywheel/cycle-000/gate/screen.json",
+    "source_id": "c47b048a8200e4ee",
+    "margin": 0.01,
+    "interval_from_records": [
+      0.5251404950300801,
+      0.6103595049699199
+    ],
+    "evidence_tools_sha256": {
+      "promote.py": "2e99f969c3fd76e3806372477014ae4bc656b6aded97d517fd86c343eb2f50ee",
+      "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9"
+    },
+    "raw_report_sha256": "f6b7a2a009c8d012be59d2d52f0258d2ea88aeca7da0ead31c00f18f86c1c47a",
+    "record_set_sha256": "ea51fd41c1a6cccc353eed41101e1c12aef51fc4a0e607781dd9ad93da16e7c3",
+    "minimum_games_per_second": 0
+  },
+  "conservative_selection_interval": [
+    0.5251404950300801,
+    0.6103595049699199
+  ],
+  "selection_stage": "screen",
+  "teacher_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "candidate_sha256": "1264435767ffe18cee9b195bc0aaa54c568d92844ceffc8a73c3c8b950a356be",
+  "best_epoch": 10,
+  "train_rows": 281432,
+  "dev_rows": 56521
+}

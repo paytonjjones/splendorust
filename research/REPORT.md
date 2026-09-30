@@ -246,3 +246,12 @@ Across512 sampled blind observations,eight encodings give mean legal-policy TV
 opponent blind reservations are invariant. This establishes conditional input
 sensitivity and its measured prevalence; causation of training failure remains
 an experimental question. The fixed champion and earlier decisions are intact.
+
+E54's comparable-volume800 teacher corpus yields a56.775% strict screen pass,
+all2,000 games complete,CI52.51–61.04%. The student uses the same bootstrap
+architecture and128 simulations as the fixed champion. Collection costs
+963.50s,training95.94s,and gate48.49s.
+This supports the larger stronger-teacher experiment after the small-corpus
+failures. The independent final endpoint assessment remains pending. Dev's
+one blocked game keeps37 outcome labels unknown; it does not affect screen
+completion. Models, raw gates, source snapshots and dataset hashes are saved.
