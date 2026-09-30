@@ -157,9 +157,9 @@ Run from the repository root with the isolated pinned Torch environment:
 ```sh
 local/strength/inference/bin/python research/flywheel.py \
   --output local/research/flywheel-next --cycles 1 --games 5000 \
-  --dev-games 1000 --iterations 128 --epochs 10 --threads 14 \
-  --teacher-model research/e41/cycle-0/model/model.bin \
-  --teacher-checkpoint research/e41/cycle-0/model/model.pt
+  --dev-games 1000 --iterations 128 --teacher-iterations 800 --epochs 10 --threads 14 \
+  --teacher-model research/e56/model/model.bin \
+  --teacher-checkpoint research/e56/model/model.pt
 ```
 
 The command starts native Rust workers. Training reads immutable memory-mapped
@@ -182,9 +182,12 @@ For direct native evaluation, set `SPLENDOR_BEST_MODEL` and
 `SPLENDOR_CANDIDATE_MODEL` to immutable exported `.bin` files and use
 `flywheel-best` / `flywheel-candidate`. Files load once per process, outside search;
 no Rust rebuild is needed for a new checkpoint. The loop uses `scripts/promote.py`
-without changing its strict decisions. User-authorized research selection may
-continue after missing games only if the conservative selection lower bound
-exceeds 51%. The missing outcomes receive no wins and the strict rejection remains.
+without changing its strict decisions. The strict rule stays the default. For a registered exploratory campaign,
+`--selection-rule provisional` keeps its initial champion fixed and advances
+a separate lineage only when requested-credit point bounds exceed50.5%.
+This is not a confidence claim. Assess a frozen endpoint against the fixed
+champion at a separate milestone before updating `research/CHAMPION.json`.
+Missing outcomes receive no wins; strict decisions and intervals remain saved.
 
 
 `--teacher-iterations` controls collection independently from `--iterations`,

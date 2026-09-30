@@ -24,9 +24,11 @@ The unchanged400-game AlphaZero profile rerun produced209 complete games,
 All400 saved histories passed native canonical replay checks. No external
 best-in-class rank is established. See `research/e57/` for raw evidence.
 
-Full-volume teacher collection took963.50s; E54 training took95.94s and its
+Full-volume teacher collection took963.50s (6,000 games and337,953 positions,
+6.23 games/s and350.75 positions/s); E54 training took95.94s and its
 2k screen48.49s. On the reused corpus, model-to-screen takes about2.4minutes;
-the20k milestone took523.34s and remains outside the inner loop. E55's random
+E56 collected2,000 fresh games in315.37s,trained in107.84s,and screened
+in about50s. The20k milestone took523.34s and remains outside the inner loop. E55's random
 hidden-view control was rejected at49.525%; measured sensitivity changed
 little. Current evidence supports teacher volume rather than another
 architecture change. E58 continues with the confirmed model as800-simulation
