@@ -1814,3 +1814,11 @@ The proposed 3,000/960 total-game arms predict about 641/632 seconds of
 collection, close to E40's measured 631 seconds. This calibrates cost only;
 playing gain remains the deciding measurement. Both pilot files pass the
 feature/mask/target/outcome checks and are retained with hashes.
+
+E41 held-out diagnostics: root-target policy KL falls from 0.39777 to
+0.34407 after cycle 0 training. Terminal Brier falls from 0.20968 to
+0.20819; search-selected value targets score 0.19806. In late positions,
+search targets score 0.13452 versus trained-network 0.16064. These are
+correlated position-level prediction scores, not playing-strength evidence
+or proof of a unique bottleneck. A residual value/target gap remains; do
+not infer that collecting more low-budget rows is necessarily the right step.
