@@ -36,7 +36,10 @@ corpus without evidence that more data increases strength per total wall time.
 
 ## Active work
 
-Architecture changes are stopped. E54's5,000-game800-simulation corpus
+Architecture changes were paused to diagnose distillation. Small experiments
+are a default, not a design limit. Reassess the paradigm after each campaign.
+If evidence shows a structural limit, test a larger model, search, or training
+change. Best-in-class strength is the goal; code size is not the goal. E54's5,000-game800-simulation corpus
 produced281,432 training positions and a56.775% strict2k screen gain. E55's
 paired random-view training control did not improve strength. E56's frozen
 endpoint passed its independent20k milestone. E57 native controls scored

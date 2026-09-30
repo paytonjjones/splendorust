@@ -2330,3 +2330,10 @@ E56 with training seed 800000009. Select epoch 0..10 using dev policy CE plus
 threads against E56. Apply the registered provisional requested-credit point
 rule (>50.5%). Keep the strict decision and 95% interval. Do not use a 20,000-
 game confirmation in this inner loop. Unknown outcomes stay unknown.
+
+**Strategy update:** Use the smallest experiment that answers a question. This
+is not a constraint on the resulting design. After each teacher campaign,
+reassess strength gain per total wall time and the remaining teacher–student
+gap. If data and optimization controls show a structural limit, pursue a
+larger architecture, search, or training change. Do not continue small tweaks
+solely to avoid a larger implementation. Best-in-class strength remains the goal.
