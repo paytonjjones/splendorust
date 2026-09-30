@@ -2337,3 +2337,32 @@ reassess strength gain per total wall time and the remaining teacher–student
 gap. If data and optimization controls show a structural limit, pursue a
 larger architecture, search, or training change. Do not continue small tweaks
 solely to avoid a larger implementation. Best-in-class strength remains the goal.
+
+## E59 — Distillation convergence control on the same corpus
+
+E56's recent train/dev policy KL is 0.566/0.583. The small gap and substantial
+remaining error do not identify capacity, optimization, or target ambiguity.
+Before a new architecture, test whether more optimization compresses the
+existing teacher targets. After E58 completes, train for 50 epochs on exactly
+its fresh 5,000-game corpus plus the same E56 replay shard and dev corpus.
+Warmstart E56, training seed 800000009, same architecture, inputs, loss, batch,
+and initial learning rate. The cosine schedule spans 50 epochs. This controls
+training budget and schedule together; it does not isolate them separately.
+Select by the same dev metric, with epoch zero retained. Compare the resulting
+model to E58's selected lineage endpoint in 2,000 paired games at 3540000000,
+128 simulations, depth 16, 14 threads. Use the same provisional point rule.
+Keep strict results, train/dev fit, and total model-to-screen time. No new data
+collection and no milestone in this control. The experiment asks whether a
+longer fit is a useful next step; it is not an architecture search.
+
+## E60 — Teacher target repeatability diagnostic
+
+Hypothesis: Part of the remaining distillation KL may come from search target
+variance across sampled hidden worlds. Keep the Observation and legal actions
+fixed. On deterministic Strong trajectories (ordinary and first-six-turn blind
+reservation stress), collect Main observations every eighth turn. For each,
+run eight independent 800-simulation E56 teachers. Measure visit-policy TV,
+argmax disagreement, and value-target range. All teachers receive Observation
+only. This measures target repeatability, not playing strength or corpus
+prevalence. High variance would support a larger change to belief aggregation
+or target construction; low variance would direct attention to fit capacity.
