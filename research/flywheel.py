@@ -18,27 +18,31 @@ def main():
     p.add_argument('--shard-games',type=int,default=1000)
     p.add_argument('--iterations',type=int,default=128)
     p.add_argument('--teacher-iterations',type=int)
+    p.add_argument('--dev-teacher-iterations',type=int)
     p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
     p.add_argument('--teacher-checkpoint',type=Path)
     p.add_argument('--epochs',type=int,default=10)
-    p.add_argument('--threads',type=int,default=4)
+    p.add_argument('--threads',type=int,default=14)
     p.add_argument('--screen',type=int,default=2000)
-    p.add_argument('--confirm',type=int,default=20000)
+    p.add_argument('--confirm',type=int,default=0,help='optional fresh confirmation; 0 keeps the fixed 2k inner-loop gate')
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args();os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
     a.teacher_model=a.teacher_model.resolve()
     if a.teacher_checkpoint: a.teacher_checkpoint=a.teacher_checkpoint.resolve()
     if a.teacher_iterations is None: a.teacher_iterations=a.iterations
+    if a.dev_teacher_iterations is None: a.dev_teacher_iterations=a.teacher_iterations
+    assert 0<a.teacher_iterations<2**32 and 0<a.dev_teacher_iterations<2**32
     assert 1<=a.cycles<=5 and all(0<g<=100000 for g in a.games)
     assert a.shard_games>0 and a.dev_games>0
+    assert a.screen>=2 and a.screen%2==0 and a.confirm>=0 and a.confirm%2==0 and a.threads>0
     a.output.mkdir(parents=True,exist_ok=True)
     plan={k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()}
     plan.update(initial_teacher_sha256=sha(a.teacher_model),initial_checkpoint_sha256=sha(a.teacher_checkpoint) if a.teacher_checkpoint else None,script_sha256=sha(__file__),
         training_script_sha256=sha(ROOT/'research/train_flywheel.py'),
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
-        incomplete_rule='strict gate preserved; confirmation research-select requires conservative lower bound >51%; no missing wins')
+        incomplete_rule='strict gate preserved; screen or explicit confirmation research-select requires conservative lower bound >51%; no missing wins')
     planpath=a.output/'plan.json'
     if planpath.exists(): assert json.loads(planpath.read_text())==plan,'changed plan; use a new output directory'
     else: atomic(planpath,plan)
@@ -80,7 +84,7 @@ def main():
                 if not receipt.exists():
                     preserve(output);preserve(meta)
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
-                         '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations,'--depth',16,
+                         '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
                          '--threads',a.threads,'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256']))
                 r=json.loads(receipt.read_text());assert sha(output)==r['data_sha256'] and sha(meta)==r['manifest_sha256'] and r['teacher_sha256']==best['model_sha256']
@@ -96,6 +100,9 @@ def main():
         m=json.loads((model/'manifest.json').read_text());assert sha(model/'model.bin')==m['model_sha256']
         env['SPLENDOR_CANDIDATE_MODEL']=str(model/'model.bin')
         run([binaries/'examples/transfer_parity',model/'model.bin',model/'parity.json','real'],c/'parity.log')
+        if m['model_sha256']==best['model_sha256']:
+            atomic(c/'decision.json',dict(cycle=cycle,selected=False,reason='identical native checkpoint; skip arena self-comparison',teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],best_epoch=m['best_epoch']))
+            replay.extend(datasets['train']);continue
         gate=c/'gate';seed=a.seed+20000000+cycle*100000000
         if not (gate/'decision.json').exists():
             preserve(gate)
@@ -109,17 +116,18 @@ def main():
         sys.path.insert(0,str(ROOT/'scripts'))
         from collect_evidence import validate_report,record_interval
         confirm=gate/'confirm.json'
-        if not confirm.exists() and decision.get('decision')=='reject: incomplete games' and (gate/'screen.json').exists():
+        if a.confirm and not confirm.exists() and decision.get('decision')=='reject: incomplete games' and (gate/'screen.json').exists():
             screen=json.loads((gate/'screen.json').read_text());validate_report(screen)
             if record_interval(screen['records'],2,0)[1]>=0.51:
                 run([binaries/'splendor','compare','--agent-a','flywheel-candidate','--agent-b','flywheel-best',
                      '--games',a.confirm,'--iterations',a.iterations,'--depth',16,'--seed',seed+1000000000,
                      '--threads',a.threads,'--output',confirm],c/'research-confirm.log')
         selected=decision.get('decision')=='promote';bounds=None
-        if confirm.exists():
-            report=json.loads(confirm.read_text());validate_report(report)
+        final=confirm if confirm.exists() else gate/'screen.json'
+        if final.exists():
+            report=json.loads(final.read_text());validate_report(report)
             bounds=record_interval(report['records'],2,0)
-            assert report['reproducible'] is True and report['seed']==seed+1000000000
+            assert report['reproducible'] is True and report['seed']==(seed+1000000000 if final==confirm else seed)
             assert report['run_config']['names']==['flywheel-candidate','flywheel-best']
             selected=selected or (decision.get('decision')=='reject: incomplete games' and bounds[0]>0.51)
         # Validate checkpoint immutability before a selection becomes current.
@@ -128,7 +136,7 @@ def main():
             atomic(bestpath,dict(model=str(model/'model.bin'),checkpoint=str(model/'model.pt'),
                 model_sha256=m['model_sha256'],checkpoint_sha256=m['checkpoint_sha256'],status='strict promotion' if decision['decision']=='promote' else 'research selection; strict incomplete rejection retained',cycle=cycle))
         result=dict(cycle=cycle,selected=selected,strict_decision=decision,
-            conservative_confirm_interval=bounds,teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],
+            conservative_selection_interval=bounds,selection_stage=final.stem,teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],
             best_epoch=m['best_epoch'],train_rows=sum(x['rows'] for x in m['train']),dev_rows=sum(x['rows'] for x in m['dev']))
         atomic(c/'decision.json',result);print(json.dumps(result),flush=True)
         replay.extend(datasets['train'])

@@ -180,6 +180,36 @@ class GateTests(unittest.TestCase):
                 with self.assertRaises(subprocess.CalledProcessError):
                     build_release(output)
 
+    def test_screen_only_decides_without_confirmation(self):
+        import pathlib
+        import tempfile
+        from unittest.mock import patch
+        from promote import main
+        for promote_candidate in [True, False]:
+            report = synthetic_report()
+            if not promote_candidate:
+                for record in report['records']:
+                    winner = record['block'] % 2
+                    record['winners'] = 1 << record['seats'].index(winner)
+                    record['ranks'] = [1 if seat == winner else 2 for seat in record['seats']]
+                    record['scores'] = [15 if seat == winner else 0 for seat in record['seats']]
+                report['agents'][0]['ci95'] = record_interval(report['records'], 2, 0)
+            def fake_compare(command, **kwargs):
+                pathlib.Path(command[command.index('--output') + 1]).write_text(json.dumps(report))
+                return SimpleNamespace(returncode=0)
+            with tempfile.TemporaryDirectory() as directory:
+                output = pathlib.Path(directory) / 'run'
+                with patch('promote.run'), patch('promote.build_release', return_value=ROOT / 'mock-splendor'), \
+                        patch('promote.subprocess.run', side_effect=fake_compare) as compare:
+                    result = main(['--candidate', 'search', '--baseline', 'strong', '--screen', '1000',
+                                   '--confirm', '0', '--seed', '42', '--output', str(output)])
+                self.assertEqual(result, 0 if promote_candidate else 2)
+                self.assertEqual(compare.call_count, 1)
+                self.assertFalse((output / 'confirm.json').exists())
+                saved = json.loads((output / 'decision.json').read_text())
+                self.assertEqual(saved['stage'], 'screen')
+                self.assertEqual(saved['decision'], 'promote' if promote_candidate else 'retain baseline: benefit not confirmed')
+
     def test_bad_screen_never_runs_confirmation(self):
         import pathlib
         import tempfile

@@ -1,0 +1,28 @@
+{
+  "output": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-e42-256",
+  "cycles": 1,
+  "seed": 940000000,
+  "games": [
+    2500
+  ],
+  "dev_games": 1000,
+  "shard_games": 1000,
+  "iterations": 128,
+  "teacher_iterations": 256,
+  "dev_teacher_iterations": 128,
+  "teacher_model": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e41/cycle-0/model/model.bin",
+  "teacher_checkpoint": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e41/cycle-0/model/model.pt",
+  "epochs": 10,
+  "threads": 4,
+  "screen": 2000,
+  "confirm": 5000,
+  "device": "mps",
+  "target": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target",
+  "initial_teacher_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "initial_checkpoint_sha256": "207ab75f2e193b31c0f7282c03fdb5de7dc55596273bde3d9c28578b80b03a93",
+  "script_sha256": "7262cb52971e4a4518dc8c37acab0be3368191c9e683e912a55da06bc0af923e",
+  "training_script_sha256": "342ab4c3b064ca8edaacdc0e6a6c449b8522de4467a49c6e378f78f83e426c7d",
+  "model_code_sha256": "025dfb2f097d8dfa056179b98bb2e27067f3266f14196393ffd4eea13e4cea6e",
+  "split_rule": "cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b",
+  "incomplete_rule": "strict gate preserved; confirmation research-select requires conservative lower bound >51%; no missing wins"
+}

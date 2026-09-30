@@ -1822,3 +1822,100 @@ search targets score 0.13452 versus trained-network 0.16064. These are
 correlated position-level prediction scores, not playing-strength evidence
 or proof of a unique bottleneck. A residual value/target gap remains; do
 not infer that collecting more low-budget rows is necessarily the right step.
+
+## E42 — Stronger targets from the first learned incumbent
+
+Cycle 0 confirms 54.7102% against its teacher, 19,999/20,000 complete,
+CI [53.5833%,55.8368%]. One no-legal-action game remains unknown. Keep the
+strict rejection and accept the checkpoint only as the research teacher under
+the existing bounded-missing rule. This proves one gain, not compounding.
+End-to-end wall time is 3039.808s (50.66min), 1.974 generated games/s and
+111.180 positions/s, including development, checks, training and both arena
+stages. Conditional relative Elo gain is 32.827, about 38.877/hour. These are
+pair-specific conversions, not global ratings.
+
+Decision before any new full collection: do not collect the scheduled 20k/75k
+low-budget games. Teacher generation and arena evaluation dominate iteration
+time; the trained value still leaves a late-game gap to search. Test stronger
+targets with small matched-cost corpora from the newly learned incumbent.
+This also tests a second actual learning iteration. E41's bootstrap pilots
+remain cost evidence; do not use them as current-incumbent training labels.
+
+Freeze teacher/student initialization d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600
+(cycle 0 epoch 9). Compare train budget256 (2,500 games) and800 (800 games).
+Both use 1,000 development games at budget128, ten training epochs and
+budget128 arena evaluation against that same frozen incumbent. Pilot costs
+predict near 631s collection per arm. This tests budget per whole learning
+iteration; trajectories and targets may both change. Actual times decide cost.
+
+Reserve 256 arm train940m/dev950m/screen960m/confirm1960m; 800 arm
+train980m/dev990m/screen1000m/confirm2000m. Screen 2,000 paired games,
+then fixed 5,000 fresh confirmation games. The shorter confirmation is
+preregistered to reduce the largest measured time cost; preserve the >51%
+conservative lower-bound requirement and strict missing-game rejection.
+Do not choose or stop from intermediate confirmation outcomes. Final model
+claims still require a fresh larger evaluation. Run arms independently with
+four threads each; record shared-host concurrency in the comparison. Select
+on actual bounded strength gain per end-to-end wall time, not loss or row count.
+If neither arm improves the incumbent, test representation/capacity or a faster
+student architecture before growing the same low-budget data corpus.
+
+**E42 completed:** Budget256 trained model: 51.89% in 5,000 complete
+confirmation games, CI [49.43696%,54.34304%]. Reject: gain not confirmed.
+Budget800 selected epoch zero; its native bytes equal the incumbent exactly.
+The 49.02% confirmation is a stochastic self-comparison, not evidence that
+an actually trained 800-target model regressed. Neither model is selected.
+The common budget128 development criterion can penalize improvements toward
+budget800 targets. This is a selection confound, not proof of a unique cause.
+Retain all raw results and checkpoints; do not grow low-budget data blindly.
+
+## E43 — Match checkpoint selection to the teacher policy
+
+Hypothesis before implementation: off-policy development targets from search128
+favor retaining the incumbent when training imitates search800. Reuse E42's
+800-game budget800 training corpus, without confirmation positions. Generate
+160 fresh budget800 development games at 1050m using the same frozen cycle0
+teacher d355...600. Retrain with the same seed/ten epochs/optimizer and save
+both the unchanged epoch-zero candidate and the best trained checkpoint.
+Select among trained epochs by held-out policy CE plus four times Brier against
+the same blended teacher/outcome value target used in training. Epoch zero is
+recorded separately; the arena decides whether the trained challenger improves.
+This is a target/selection alignment test, not permission to promote from loss.
+Reserve screen1060m (2,000 games) and confirmation2060m (5,000 games), both
+at128 simulations against the frozen cycle0 teacher. Do not reuse E42 final
+results for promotion. Equal native model hashes skip an unnecessary arena
+self-comparison. If this fails, test a faster student representation/capacity
+before additional collection with the same teacher/architecture.
+
+**E43 completed:** 5,000 complete confirmation games: 52.8% credit,
+CI [50.37%,55.23%]. Retain incumbent: lower bound does not exceed 51%.
+
+## E44 — Reduce inner-loop evaluation cost and measure CPU scaling
+
+Use one fixed 2,000-game paired gate per normal learning cycle; no outcome-based
+optional stopping. An inconclusive result retains the incumbent and proceeds
+to the next model. Explicit larger confirmations remain available for milestone
+models, external claims, or ambiguous results. Strict incomplete rejection stays;
+research selection still requires conservative lower bound above 51%.
+Sequential stopping is deferred until a valid confidence-sequence or alpha-spend
+rule is implemented; repeated fixed 95% intervals are not a stopping rule.
+
+Scaling hypothesis: more than four threads increases useful native generation
+and evaluation throughput. Run serial 256-game jobs at 4, 8, 12, and 14 threads,
+then reverse that order for a second repeat. Use incumbent d355...600, 128 search
+simulations, depth16, identical seed schedules within each repeat. Verify data
+bytes and ordered arena records across thread counts. Select the fastest measured
+thread count; preserve raw reports and source/binary hashes. No learning claim.
+
+**E44 completed:** Two serial repeats at identical schedules preserve self-play
+bytes and ordered arena records across4/8/12/14 threads. Mean games/s:
+selfplay: 4 threads 9.40, 8 threads 18.16, 12 threads 22.34, 14 threads 23.35. Best14: 2.48x versus four.
+arena: 4 threads 9.61, 8 threads 18.45, 12 threads 20.76, 14 threads 24.15. Best14: 2.51x versus four.
+Set the learning driver default to14 threads on this host. These are workload
+measurements, not strength results; raw records and binary hashes are saved.
+
+E44 verification: Python gate tests pass (30 run,29 optional reference tests
+skipped). Native32-game screen-only run saves its screen decision and creates
+no confirmation report. Format, strict workspace Clippy, and release locked
+workspace tests pass through the promotion tool. Miniature training/parity
+run verifies identical-checkpoint skipping. Neither smoke run claims strength.

@@ -35,11 +35,12 @@ def assess(cycle):
             simulation_budget=r['run_config']['search']['iterations'],reproducible=r['reproducible'])
     measured=sum(x['seconds'] for x in generation.values())+model['seconds']+evaluation_seconds
     decision=cycle/'gate/decision.json';plan=cycle.parent/'plan.json'
-    wall=decision.stat().st_mtime-plan.stat().st_mtime if decision.exists() else None
-    final=arena.get('confirm');games=sum(x['games'] for x in generation.values());positions=sum(x['positions'] for x in generation.values())
+    begin=plan if cycle.name=='cycle-000' else cycle/'teacher.json'
+    wall=decision.stat().st_mtime-begin.stat().st_mtime if decision.exists() else None
+    final=arena.get('confirm',arena.get('screen'));games=sum(x['games'] for x in generation.values());positions=sum(x['positions'] for x in generation.values())
     return dict(cycle=str(cycle),generation=generation,training_seconds=model['seconds'],best_epoch=model['best_epoch'],
         candidate_sha256=model['model_sha256'],arena=arena,strict_decision=json.loads(decision.read_text()) if decision.exists() else None,
-        confirmed=final is not None,measured_stage_seconds=measured,end_to_end_wall_seconds=wall,
+        confirmed='confirm' in arena,selection_stage='confirm' if 'confirm' in arena else 'screen',measured_stage_seconds=measured,end_to_end_wall_seconds=wall,
         generated_games_per_end_to_end_second=games/wall if wall and final else None,
         positions_per_end_to_end_second=positions/wall if wall and final else None,
         conditional_relative_elo_per_end_to_end_hour=final['relative_elo_point']/(wall/3600) if wall and final and final['relative_elo_point'] is not None else None,

@@ -126,7 +126,7 @@ def main(argv=None):
     p.add_argument('--baseline', default='greedy')
     p.add_argument('--players', type=int, choices=[2, 3, 4], default=2)
     p.add_argument('--screen', type=int, default=2000)
-    p.add_argument('--confirm', type=int, default=20000)
+    p.add_argument('--confirm', type=int, default=0, help='0: fixed screen-only inner-loop gate; use 20000 for milestone confirmation')
     p.add_argument('--seed', type=int, default=12345)
     p.add_argument('--threads', type=int, default=4)
     p.add_argument('--iterations', type=int, default=128)
@@ -135,8 +135,8 @@ def main(argv=None):
     p.add_argument('--min-games-per-second', type=float, default=0)
     p.add_argument('--output', type=pathlib.Path, default=ROOT / 'results' / 'promotion')
     args = p.parse_args(argv)
-    if args.screen < args.players or args.confirm < args.players or args.screen % args.players or args.confirm % args.players:
-        p.error('screen and confirm must be positive complete seat-rotation blocks')
+    if args.screen < args.players or (args.confirm != 0 and args.confirm < args.players) or args.screen % args.players or args.confirm % args.players:
+        p.error('screen must be positive; confirm may be zero; counts must use complete seat-rotation blocks')
     if not 0 <= args.seed < 2**64 - 1_000_000_000 - args.confirm or args.screen // args.players >= 1_000_000_000:
         p.error('seed ranges must not wrap or overlap')
     if not 0 <= args.margin < 1 or args.threads < 1 or not math.isfinite(args.min_games_per_second) or args.min_games_per_second < 0:
@@ -173,8 +173,10 @@ def execute(args):
     binary = build_release(args.output)
     run([binary, 'benchmark', '--games', 200, '--threads', args.threads])
     previous_source = None
-    for stage, games, seed in [('screen', args.screen, args.seed),
-                               ('confirm', args.confirm, args.seed + 1_000_000_000)]:
+    stages = [('screen', args.screen, args.seed)]
+    if args.confirm:
+        stages.append(('confirm', args.confirm, args.seed + 1_000_000_000))
+    for stage, games, seed in stages:
         output = args.output / f'{stage}.json'
         cmd = [binary, 'compare', '--agent-a', args.candidate, '--agent-b', args.baseline,
                '--games', games, '--players', args.players, '--seed', seed,
@@ -190,7 +192,7 @@ def execute(args):
         result = decision(report, args.players, args.margin, args.min_games_per_second)
         if proc.returncode and not report['incomplete_games']:
             raise RuntimeError(f'{stage} failed: exit {proc.returncode}')
-        if stage == 'screen' and not result.startswith('reject'):
+        if stage == 'screen' and args.confirm and not result.startswith('reject'):
             if record_interval(report['records'], args.players, 0)[1] < 1 / args.players:
                 result = 'reject: screening shows regression'
             else:

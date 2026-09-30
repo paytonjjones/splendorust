@@ -12,3 +12,5 @@ This is a Rust simulator/research project. Read README.md, VALIDATION.md, and EX
 - Use scripts/promote.py for a reproducible promotion decision. A statistical result is conditional on its stated opponents and compute budget.
 - Run benchmarks in release mode. Compare the same seeds and build settings. Use the source fingerprint and record-set hashes to identify an experiment.
 - Keep visual assets, runtime LLM calls, GUI work, and heavyweight ML frameworks out of this project.
+
+- Inner learning loop: use about 2,000 paired games; reserve 20,000 confirmations for milestones, external claims, or ambiguous results. Measure arena/self-play scaling above four threads.

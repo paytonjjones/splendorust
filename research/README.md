@@ -181,7 +181,7 @@ For direct native evaluation, set `SPLENDOR_BEST_MODEL` and
 `flywheel-best` / `flywheel-candidate`. Files load once per process, outside search;
 no Rust rebuild is needed for a new checkpoint. The loop uses `scripts/promote.py`
 without changing its strict decisions. User-authorized research selection may
-continue after missing games only if the conservative confirmation lower bound
+continue after missing games only if the conservative selection lower bound
 exceeds 51%. The missing outcomes receive no wins and the strict rejection remains.
 
 
@@ -194,3 +194,17 @@ credit and conditional relative Elo gain per hour. A screen is provisional.
 Do not interpret one accepted cycle as proof that repeated learning compounds.
 The earlier automatic 20k/75k follow-on collection was stopped under the new
 measurement-first objective. Its plan and existing data remain preserved.
+
+
+Cycle 0 is confirmed and selected for research, with its strict missing-game
+rejection retained. Start a new measured iteration with its `.bin` and `.pt`
+files via `--teacher-model` and `--teacher-checkpoint`. Use
+`--dev-teacher-iterations 128` to keep development cost/size fixed while changing
+training teacher budget. E42 compares 256/800 teaching from the same accepted
+checkpoint and identical 128-simulation evaluation. Its seed ranges and 5,000-
+game confirmation sizes are fixed before collection in `EXPERIMENTS.md`.
+
+Normal learning cycles use a fixed 2,000-game paired gate (`--confirm 0`, the
+driver default). An inconclusive gate retains the incumbent and continues. Use
+`--confirm 20000` only for milestone models, external claims, or ambiguous
+results. Do not stop early by repeatedly checking fixed 95% intervals.

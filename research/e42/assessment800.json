@@ -1,0 +1,109 @@
+{
+  "cycle": "local/research/flywheel-e42-800/cycle-000",
+  "generation": {
+    "train": {
+      "games": 800,
+      "positions": 44776,
+      "seconds": 527.717263791,
+      "games_per_second": 1.5159632911248404,
+      "positions_per_second": 84.84846540425731,
+      "complete": 800,
+      "blocked": 0,
+      "capped": 0,
+      "teacher_simulations": [
+        800
+      ],
+      "simulations": 35794400,
+      "inference_calls": 33414595
+    },
+    "dev": {
+      "games": 1000,
+      "positions": 56294,
+      "seconds": 108.059637833,
+      "games_per_second": 9.254149098162285,
+      "positions_per_second": 520.9530693319476,
+      "complete": 1000,
+      "blocked": 0,
+      "capped": 0,
+      "teacher_simulations": [
+        128
+      ],
+      "simulations": 7202816,
+      "inference_calls": 6941795
+    }
+  },
+  "training_seconds": 33.10184745909646,
+  "best_epoch": 0,
+  "candidate_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "arena": {
+    "screen": {
+      "games": 2000,
+      "complete": 2000,
+      "statuses": {
+        "complete": 2000
+      },
+      "credit": 995.5,
+      "conditional_rate": 0.49775,
+      "conservative_ci95": [
+        0.45595208878306875,
+        0.5395479112169314
+      ],
+      "relative_elo_point": -1.5634706883358318,
+      "relative_elo_ci95": [
+        -30.687175048449134,
+        27.5382272541585
+      ],
+      "seconds": 213.939449584,
+      "source": "c86c823e309f2947",
+      "simulation_budget": 128,
+      "reproducible": true
+    },
+    "confirm": {
+      "games": 5000,
+      "complete": 5000,
+      "statuses": {
+        "complete": 5000
+      },
+      "credit": 2451.0,
+      "conditional_rate": 0.4902,
+      "conservative_ci95": [
+        0.4657050983540137,
+        0.5146949016459864
+      ],
+      "relative_elo_point": -6.810609686875837,
+      "relative_elo_ci95": [
+        -23.868015052718825,
+        10.214005010976944
+      ],
+      "seconds": 525.141101,
+      "source": "c86c823e309f2947",
+      "simulation_budget": 128,
+      "reproducible": true
+    }
+  },
+  "strict_decision": {
+    "decision": "retain baseline: benefit not confirmed",
+    "stage": "confirm",
+    "report": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-e42-800/cycle-000/gate/confirm.json",
+    "source_id": "c86c823e309f2947",
+    "margin": 0.01,
+    "interval_from_records": [
+      0.4657050983540138,
+      0.5146949016459863
+    ],
+    "evidence_tools_sha256": {
+      "promote.py": "cec267d1ed937980cae256311e30ae040abda962d8fcb1d3c4f153f07ad82601",
+      "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9"
+    },
+    "raw_report_sha256": "42bb14ee21cea3eaeff125a93da905d77a13b2db3c86f9b9dc46720dc42b75e1",
+    "record_set_sha256": "0efc0a8cbe72477caa6a01444fa79107d181f5998432df4864c60fc36cb955e5",
+    "minimum_games_per_second": 0
+  },
+  "confirmed": true,
+  "measured_stage_seconds": 1407.9592996670967,
+  "end_to_end_wall_seconds": 1414.1973631381989,
+  "generated_games_per_end_to_end_second": 1.272806785614194,
+  "positions_per_end_to_end_second": 71.468101012237,
+  "conditional_relative_elo_per_end_to_end_hour": -17.337180447250653,
+  "interpretation": "Elo conversion is conditional on this opponent and compute budget. Missing outcomes bounded in interval. Screen gain is provisional. Full wall time includes checks, startup, collection, training and arena; measured stage sum excludes overhead. No global Elo or compounding claim from one cycle."
+}

@@ -1,0 +1,147 @@
+{
+  "schema": "flywheel-training-v1",
+  "architecture": 80,
+  "parameters": 142406,
+  "seed": 800000007,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-e42-800/cycle-000/train/000000.bin",
+      "sha256": "1d3e172737ebe1c4eddf68a93c48790158938689ab445fa0f3cca6135a72be46",
+      "rows": 44776,
+      "setups": 800
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-e42-800/cycle-000/dev/000000.bin",
+      "sha256": "c789a4d2b32be702c52499a55ea52b5376fa2ccea06453e5657592ba46c698da",
+      "rows": 56294,
+      "setups": 1000
+    }
+  ],
+  "train_setups": 800,
+  "dev_setups": 1000,
+  "warmstart_sha256": "207ab75f2e193b31c0f7282c03fdb5de7dc55596273bde3d9c28578b80b03a93",
+  "model_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "checkpoint_sha256": "e3be01227c6f1130028c5b7813b078513065a9390d3d34420dcf138b032639f4",
+  "script_sha256": "342ab4c3b064ca8edaacdc0e6a6c449b8522de4467a49c6e378f78f83e426c7d",
+  "model_code_sha256": "025dfb2f097d8dfa056179b98bb2e27067f3266f14196393ffd4eea13e4cea6e",
+  "initial": {
+    "policy_loss": 1.7033251711126796,
+    "policy_accuracy": 0.6512061676199951,
+    "value_brier": 0.21477286116913477,
+    "rows": 56294,
+    "outcome_rows": 56294
+  },
+  "history": [
+    {
+      "policy_loss": 1.7054480569851471,
+      "policy_accuracy": 0.6481152520694923,
+      "value_brier": 0.2151654872622554,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 1,
+      "seconds": 12.262265584082343,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7036877108767141,
+      "policy_accuracy": 0.6483284186591821,
+      "value_brier": 0.21544580618500916,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 2,
+      "seconds": 14.502231250051409,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7061733403468287,
+      "policy_accuracy": 0.6487014601911394,
+      "value_brier": 0.2152993379106961,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 3,
+      "seconds": 16.740323959034868,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7039931598817426,
+      "policy_accuracy": 0.6480974881870182,
+      "value_brier": 0.21548144264314706,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 4,
+      "seconds": 19.034393375040963,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.702419204432727,
+      "policy_accuracy": 0.6482040714818631,
+      "value_brier": 0.21538688417615554,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 5,
+      "seconds": 21.30779958399944,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.704775672782762,
+      "policy_accuracy": 0.6483817103066046,
+      "value_brier": 0.2155243919031842,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 6,
+      "seconds": 23.60848304198589,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7028329975080603,
+      "policy_accuracy": 0.648079724304544,
+      "value_brier": 0.21563159184891761,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 7,
+      "seconds": 25.938292959006503,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7035018319697703,
+      "policy_accuracy": 0.647955377127225,
+      "value_brier": 0.21565758795298942,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 8,
+      "seconds": 28.294833249994554,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.703505247266999,
+      "policy_accuracy": 0.6478310299499058,
+      "value_brier": 0.21564429052033535,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 9,
+      "seconds": 30.703666917048395,
+      "trained_rows": 44776
+    },
+    {
+      "policy_loss": 1.7036641572522715,
+      "policy_accuracy": 0.6474579884179487,
+      "value_brier": 0.2157012416858438,
+      "rows": 56294,
+      "outcome_rows": 56294,
+      "epoch": 10,
+      "seconds": 33.059718375094235,
+      "trained_rows": 44776
+    }
+  ],
+  "best_epoch": 0,
+  "selection": "minimum dev policy CE + 4*outcome Brier; unchanged epoch zero retained",
+  "seconds": 33.10184745909646,
+  "epochs": 10,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

@@ -1,6 +1,10 @@
 # Playing-strength research status
 
-The current research teacher is `transfer-pool3`. Its fresh confirmation scored
+The current research teacher is cycle 0’s trained checkpoint, used by
+`flywheel-best`. Its fresh confirmation scored 54.71% against the bootstrap
+in 19,999/20,000 complete games, CI 53.58–55.84%. Its one blocked game
+remains unknown and the strict rejection is retained. This proves one learning
+gain. The preceding teacher was `transfer-pool3`. Its fresh confirmation scored
 80.23% against E28 in 19,997 complete games out of 20,000, with conservative
 95% interval 79.24–81.22%. All three blocked games remain unknown; the strict
 gate rejected the run. E26 remains the last strict promotion. The transferred
@@ -138,7 +142,7 @@ environment or large training datasets.
 
 ## Current priority: fast self-improvement
 
-The new loop is implemented. Its first 5,000-game learning cycle is in fresh
+The new loop is implemented. Its first 5,000-game learning cycle has completed fresh
 confirmation. Automatic 20k/75k follow-on collection was stopped under the
 measurement-first objective. Choose the next teacher budget or corpus size
 from playing gain per total wall-clock, then train, export and evaluate again.
@@ -162,12 +166,31 @@ records collection rows/sec, simulations, inference calls, training time and
 evaluation time so further work can target useful iterations per wall-clock.
 
 
-Cycle 0 collected 5,000 train + 1,000 development games, all complete, with
-281,778 + 56,188 positions in 631.315 seconds. PyTorch training took 92.398
-seconds and selected epoch 9 on independent development data. Its 2,000-game
-screen completed all games and scored 55.05% against the bootstrap, conservative
-interval 50.82–59.28%. The fixed 20,000-game confirmation at 1820m remains
-live. This is a promising screen, not proof of compounded strength. The new
-assessment script includes collection, training and evaluation costs. Higher-
-budget teacher pilots measure 256/800 simulation costs; full arms wait for the
-cycle 0 assessment. Those arms retain 128-simulation arena evaluation.
+Cycle 0 collected 5,000 training and 1,000 development games, all complete,
+in 631.31 seconds. Training took 92.40 seconds. Its 20,000-game confirmation
+scored 54.71% against the bootstrap, conservative CI 53.58–55.84%, with one
+blocked game retained as unknown. It is selected for research; the strict
+incomplete-game rejection remains. Full iteration time was 3039.81 seconds,
+including 2101.84 seconds of confirmation. Conditional relative Elo gain was
+32.83 [24.94,40.74] for this pairing and compute budget, not a global rating.
+
+E42 tested a second learning iteration with budget256/800 teachers. The256
+challenger scored 51.89% in 5,000 complete games, CI 49.44–54.34%; retain the
+incumbent. The800 arm selected epoch zero with identical incumbent bytes;
+its arena result is a self-comparison. E43 aligned development targets and
+selected a trained challenger. It scored 52.80% in 5,000 complete games,
+CI 50.37–55.23%; retain the incumbent because the lower bound is below 51%.
+A second accepted gain has not been established. All checkpoints are preserved.
+
+Normal inner iterations now use one fixed 2,000-game paired gate with no
+mandatory confirmation. Inconclusive results retain the incumbent and move to
+the next model. Larger independent confirmations remain outside this loop for
+milestones, external claims, and ambiguous results. E44 measures self-play and
+arena throughput at4/8/12/14 threads before selecting a faster default.
+
+**E44 completed:** Two serial repeats at identical schedules preserve self-play
+bytes and ordered arena records across4/8/12/14 threads. Mean games/s:
+selfplay: 4 threads 9.40, 8 threads 18.16, 12 threads 22.34, 14 threads 23.35. Best14: 2.48x versus four.
+arena: 4 threads 9.61, 8 threads 18.45, 12 threads 20.76, 14 threads 24.15. Best14: 2.51x versus four.
+Set the learning driver default to14 threads on this host. These are workload
+measurements, not strength results; raw records and binary hashes are saved.
