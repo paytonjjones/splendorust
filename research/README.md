@@ -208,3 +208,16 @@ Normal learning cycles use a fixed 2,000-game paired gate (`--confirm 0`, the
 driver default). An inconclusive gate retains the incumbent and continues. Use
 `--confirm 20000` only for milestone models, external claims, or ambiguous
 results. Do not stop early by repeatedly checking fixed 95% intervals.
+
+The native loader also accepts `SPGATED1` gated residual checkpoints. Use
+`--architecture gated --selection teacher --learning-rate 0.001` with the
+learning driver to train this student. The first cross-architecture cycle
+starts from scratch. Later accepted gated checkpoints warm start normally.
+Teacher collection still uses the current model. Core rules, Observation
+encoding, policy action mapping, and tree search are shared with the bootstrap.
+
+For the semantic bit-input student, also use `--bitplanes`. Optional
+`--distill-incumbent --selection distillation` retains teacher predictions
+alongside search/outcome labels. Checkpoints record the architecture, source
+hashes and teacher checkpoint hash. E45 and E46 both failed their fresh strength
+gates; their speed gains do not authorize a model promotion.

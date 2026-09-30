@@ -194,3 +194,11 @@ selfplay: 4 threads 9.40, 8 threads 18.16, 12 threads 22.34, 14 threads 23.35. B
 arena: 4 threads 9.61, 8 threads 18.45, 12 threads 20.76, 14 threads 24.15. Best14: 2.51x versus four.
 Set the learning driver default to14 threads on this host. These are workload
 measurements, not strength results; raw records and binary hashes are saved.
+
+E45 tests a425,747-parameter gated residual student trained from scratch on
+185,354 saved stronger-search positions. Native inference is1.93x faster;
+128-simulation decisions are1.85x faster. It scores6.40% against the incumbent
+in1,999/2,000 complete games. Reject; the missing game stays unknown. E46
+decodes packed deck bytes into bits and adds frozen-teacher distillation. It
+scores33.375% in2,000 complete games, CI29.27–37.48%. Reject despite better
+held-out prediction fit. Neither result proves a faster improvement loop.

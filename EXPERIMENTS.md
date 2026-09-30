@@ -1919,3 +1919,59 @@ skipped). Native32-game screen-only run saves its screen decision and creates
 no confirmation report. Format, strict workspace Clippy, and release locked
 workspace tests pass through the promotion tool. Miniature training/parity
 run verifies identical-checkpoint skipping. Neither smoke run claims strength.
+
+## E45 — Faster gated residual student from saved search targets
+
+Hypothesis before implementation: the bootstrap's convolutional inference cost
+limits useful search iterations per second. A flat residual network can learn
+cross-card features with fewer native operations while using more parameters.
+Test a width192, three-block RMS-normalized SwiGLU student (about426k weights)
+on the same392 public/sampled-observation features and81 policy/two value outputs.
+Reuse E42 budget256 training and development data plus budget800 training rows;
+exclude every final arena trajectory. This is a new student, not a change to
+rules, information access, or tree search. Train from scratch with AdamW,
+learning rate1e-3, cosine decay to1e-4,24 epochs, batch1024, fixed seed
+1150000007. Select one checkpoint by development policy CE +4 blended-target
+Brier; save all scores, native/PyTorch parity, weights and cost measurements.
+
+Before strength evaluation, require finite exact-length exports and native
+parity on64 held-out real observations. Compare inference and total Main
+search latency against frozen incumbent d355...600 on identical inputs.
+Run one fixed2,000-game gate at128 simulations, seed1160m,14 threads. Retain
+incumbent unless bounded lower credit exceeds51%; preserve incomplete rejection.
+A speed benefit alone does not establish a playing gain. A later matched-cost
+search comparison requires a separate preregistration based on measured cost.
+
+**E45 completed:** Native parity passes (max logit error3.58e-6). Inference
+26.42us versus51.12us; full128-simulation Main decision3.60ms versus6.67ms.
+The2,000-game gate completes1,999:6.4032% credit, conservative CI[3.71%,9.15%].
+Reject severely weaker student. One missing outcome remains unknown. The
+faster architecture is retained as a prototype, never selected as incumbent.
+On64 held-out rows, teacher/student value-head MSE0.3062 and correlation0.0248;
+the teacher skill was not retained. This diagnostic is not a unique causal proof.
+
+## E46 — Preserve teacher knowledge with semantic inputs and distillation
+
+E45 receives15 packed signed deck-availability bytes as scalar inputs. Dividing
+all fields by10 gives these bytes up to12.8 magnitude, while score/token fields
+are near1. The bytes encode independent availability bits, not scalar amounts.
+This is a representation concern, not evidence that it alone caused the loss.
+
+Test the same192x3 gated student with these bytes cleared and decoded into120
+binary availability features (512 inputs total). Keep all information supplied
+by the existing sampled Observation encoder; add no real hidden information.
+Distill frozen incumbent d355...600 policy and both value heads on the saved
+E42 training corpus. Loss:20% original search/outcome objective plus80% frozen
+teacher policy CE/value MSE. Select one trained checkpoint by development
+teacher-policy KL +4 value-head MSE. Record root-target/outcome metrics too.
+This tests combined knowledge retention and representation; no isolated causal
+claim. Keep185,354 training and56,040 development positions, no new training
+games; AdamW1e-3,24 epochs, batch1024, seed1170000007. Save teacher/script hashes.
+Require native parity and measured cost. Fixed2,000-game128-simulation gate at
+1180m,14 threads, no automatic confirmation; same51% bounded threshold.
+
+**E46 completed:** All2,000 games complete;33.375% credit, CI[29.27%,37.48%].
+Reject. Native parity max logit error6.36e-6; median inference29.66us.
+Distillation reduces held-out teacher value MSE to0.0281 and policy KL to0.2055,
+but does not preserve playing strength. This is direct evidence that lower
+held-out distillation error alone is insufficient. Keep the frozen incumbent.

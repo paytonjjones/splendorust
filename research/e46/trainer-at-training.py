@@ -28,26 +28,16 @@ def main():
     assert not tids & dids,'train/development setup overlap'
     for r in train+dev: check_rows(r)
     if a.architecture=='gated':
-        from gated_model import Gated,load_state,export as native_export
+        from gated_model import Gated,export as native_export
         model=Gated(bitplanes=a.bitplanes)
         if a.warmstart:
-            load_state(model,a.warmstart)
+            model.load_state_dict(torch.load(a.warmstart,map_location='cpu',weights_only=True)['state_dict'],strict=True)
         forward=lambda model,x:model(x)
     else:
         model=bootstrap(a.warmstart)
         forward=raw;native_export=export
     model=model.to(a.device)
-    teacher_model=None;teacher_forward=raw
-    if a.distill_teacher:
-        payload=torch.load(a.distill_teacher,map_location='cpu',weights_only=True)
-        if payload.get('architecture')=='gated':
-            from gated_model import Gated,load_state
-            width,inputs=payload['state_dict']['stem.weight'].shape
-            blocks=1+max(int(k.split('.')[1]) for k in payload['state_dict'] if k.startswith('blocks.'))
-            teacher_model=load_state(Gated(width,blocks,bitplanes=inputs==512),a.distill_teacher)
-            teacher_forward=lambda model,x:model(x)
-        else:teacher_model=bootstrap(a.distill_teacher)
-        teacher_model=teacher_model.to(a.device).eval()
+    teacher_model=bootstrap(a.distill_teacher).to(a.device).eval() if a.distill_teacher else None
     optimizer=torch.optim.AdamW(model.parameters(),lr=a.learning_rate,weight_decay=1e-4)
     scheduler=torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max=a.epochs,eta_min=a.learning_rate/10)
     def tensors(b):
@@ -61,7 +51,7 @@ def main():
         target=2*target[valid]-1
         vl=((values[valid,0]-target)**2+(values[valid,1]+target)**2).mean()/2 if valid.any() else values.sum()*0
         if teacher_model is not None:
-            with torch.no_grad(): tl,tv=teacher_forward(teacher_model,x);tp=tl.masked_fill(mask==0,-1e9).softmax(-1)
+            with torch.no_grad(): tl,tv=raw(teacher_model,x);tp=tl.masked_fill(mask==0,-1e9).softmax(-1)
             dl=-(tp*logp).sum(-1).mean()+((values-tv)**2).mean()
             return 0.2*(pl+vl)+0.8*dl
         return pl+vl
@@ -76,7 +66,7 @@ def main():
                     valid=torch.isfinite(outcome);prob=(v[:,0]+1)/2
                     tot[2]+=((prob[valid]-outcome[valid])**2).sum().item();nv+=valid.sum().item();n+=len(b)
                     if teacher_model is not None:
-                        tl,tv=teacher_forward(teacher_model,x);tlp=tl.masked_fill(mask==0,-1e9).log_softmax(-1)
+                        tl,tv=raw(teacher_model,x);tlp=tl.masked_fill(mask==0,-1e9).log_softmax(-1)
                         tot[4]+=(tlp.exp()*(tlp-logp)).sum().item()
                         tot[5]+=((v-tv)**2).mean(-1).sum().item()
                     ht=torch.isfinite(teacher);tv=ht|valid
@@ -109,9 +99,7 @@ def main():
         history.append(metrics);print(json.dumps(metrics),flush=True)
         score=score_for(metrics)
         if score<best: best=score;best_epoch=epoch;save(epoch)
-    if a.architecture=='gated':load_state(model,a.output/'model.pt',a.device)
-    else:model.load_state_dict(torch.load(a.output/'model.pt',map_location=a.device,weights_only=True)['state_dict'])
-    model.cpu().eval()
+    model.load_state_dict(torch.load(a.output/'model.pt',map_location=a.device,weights_only=True)['state_dict']);model.cpu().eval()
     native_export(model,a.output/'model.bin')
     fixture=np.array(dev[0]['x'][:64],copy=True)
     with torch.no_grad(): logits,v=forward(model,torch.from_numpy(fixture))

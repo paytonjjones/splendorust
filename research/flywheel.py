@@ -22,14 +22,23 @@ def main():
     p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
     p.add_argument('--teacher-checkpoint',type=Path)
     p.add_argument('--epochs',type=int,default=10)
+    p.add_argument('--architecture',choices=['bootstrap','gated'],default='bootstrap')
+    p.add_argument('--selection',choices=['outcome','teacher','distillation'],default='outcome')
+    p.add_argument('--learning-rate',type=float)
+    p.add_argument('--bitplanes',action='store_true')
+    p.add_argument('--distill-incumbent',action='store_true')
     p.add_argument('--threads',type=int,default=14)
     p.add_argument('--screen',type=int,default=2000)
     p.add_argument('--confirm',type=int,default=0,help='optional fresh confirmation; 0 keeps the fixed 2k inner-loop gate')
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
-    a=p.parse_args();os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
+    a=p.parse_args()
+    if a.bitplanes and a.architecture!='gated':p.error('bitplanes requires a gated student')
+    if a.selection=='distillation' and not a.distill_incumbent:p.error('distillation selection requires --distill-incumbent')
+    os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
     a.teacher_model=a.teacher_model.resolve()
     if a.teacher_checkpoint: a.teacher_checkpoint=a.teacher_checkpoint.resolve()
+    if a.learning_rate is None:a.learning_rate=0.001 if a.architecture=='gated' else 0.0001
     if a.teacher_iterations is None: a.teacher_iterations=a.iterations
     if a.dev_teacher_iterations is None: a.dev_teacher_iterations=a.teacher_iterations
     assert 0<a.teacher_iterations<2**32 and 0<a.dev_teacher_iterations<2**32
@@ -41,6 +50,7 @@ def main():
     plan.update(initial_teacher_sha256=sha(a.teacher_model),initial_checkpoint_sha256=sha(a.teacher_checkpoint) if a.teacher_checkpoint else None,script_sha256=sha(__file__),
         training_script_sha256=sha(ROOT/'research/train_flywheel.py'),
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
+        gated_code_sha256=sha(ROOT/'research/gated_model.py') if a.architecture=='gated' else None,
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
         incomplete_rule='strict gate preserved; screen or explicit confirmation research-select requires conservative lower bound >51%; no missing wins')
     planpath=a.output/'plan.json'
@@ -94,8 +104,18 @@ def main():
         if not (model/'manifest.json').exists():
             preserve(model)
             command=[sys.executable,ROOT/'research/train_flywheel.py','--train',*replay,*datasets['train'],
-                '--dev',*datasets['dev'],'--output',model,'--epochs',a.epochs,'--device',a.device,'--seed',800000007+cycle]
-            if best['checkpoint']:command+=['--warmstart',best['checkpoint']]
+                '--dev',*datasets['dev'],'--output',model,'--epochs',a.epochs,'--device',a.device,'--seed',800000007+cycle,
+                '--architecture',a.architecture,'--selection',a.selection,'--learning-rate',a.learning_rate]
+            # Cross-architecture students start from scratch; same-architecture cycles warm start.
+            with Path(best['model']).open('rb') as f:teacher_magic=f.read(8)
+            teacher_gated=teacher_magic in [b'SPGATED1',b'SPGATED2']
+            compatible=teacher_gated==(a.architecture=='gated') and (not teacher_gated or (teacher_magic==b'SPGATED2')==a.bitplanes)
+            if best['checkpoint'] and compatible:
+                command+=['--warmstart',best['checkpoint']]
+            if a.bitplanes:command+=['--bitplanes']
+            if a.distill_incumbent:
+                assert best['checkpoint'],'distillation needs the incumbent PyTorch checkpoint'
+                command+=['--distill-teacher',best['checkpoint']]
             run(command,c/'training.log')
         m=json.loads((model/'manifest.json').read_text());assert sha(model/'model.bin')==m['model_sha256']
         env['SPLENDOR_CANDIDATE_MODEL']=str(model/'model.bin')
