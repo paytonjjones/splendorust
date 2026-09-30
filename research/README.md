@@ -137,6 +137,48 @@ in `transfer_inputs`, `check_transfer_inputs.py`, and `transfer_parity`.
 
 `transfer-dynamic` updates the first-play estimate from returned values; its
 first screen showed no benefit. `transfer-pool3` samples three observation-derived
-worlds per real decision and cycles through them; its larger test is in progress.
+worlds per real decision and cycles through them; its fresh 20,000-game test confirms a research gain while retaining three
+blocked outcomes and the strict rejection.
 Neither variant reads the true setup seed or future deck. E35 reduced native
 inference cost by 2.34x with exact saved-output and playing-record equality.
+
+
+## Self-improvement loop
+
+`flywheel.py` now runs collection, PyTorch training, native export and parity,
+then the paired arena gate. It uses the transferred model only as its initial
+teacher. Later teachers are selected trained checkpoints. The first run collects
+5,000, 20,000 and 75,000 training games on disjoint setup ranges, with separate
+development and confirmation ranges. Earlier training shards provide replay.
+
+Run from the repository root with the isolated pinned Torch environment:
+
+```sh
+local/strength/inference/bin/python research/flywheel.py \
+  --output local/research/flywheel-e40 --cycles 3 --games 5000 20000 75000 \
+  --dev-games 1000 --iterations 128 --epochs 10 --threads 4
+```
+
+The command starts native Rust workers. Training reads immutable memory-mapped
+shards in small batches; it does not put the full corpus on the GPU. The native
+architecture and input encoding match version 80 for bootstrap weight reuse.
+All Main positions below turn 124 are recorded. Root visits give policy labels;
+root selected-edge means and actual terminal credit give value labels. First-six-
+turn visit sampling provides opening diversity. Feature encoding uses a separate
+RNG and the actor Observation only. Incomplete outcomes are NaN and masked.
+The 2,232-byte little-endian row layout is in each shard manifest.
+
+`best.json` identifies the current immutable native checkpoint and its SHA256.
+`plan.json` fixes scripts/settings/seed ranges. Stage logs, receipts and events
+record data/model hashes, source IDs, work counters and times. Re-run the same
+command to resume completed stages. Interrupted stage artifacts are retained as
+numbered attempts. Changed scripts/settings require a new run directory.
+A completed miniature two-cycle check verifies the wiring, not playing strength.
+
+For direct native evaluation, set `SPLENDOR_BEST_MODEL` and
+`SPLENDOR_CANDIDATE_MODEL` to immutable exported `.bin` files and use
+`flywheel-best` / `flywheel-candidate`. Files load once per process, outside search;
+no Rust rebuild is needed for a new checkpoint. The loop uses `scripts/promote.py`
+without changing its strict decisions. User-authorized research selection may
+continue after missing games only if the conservative confirmation lower bound
+exceeds 51%. The missing outcomes receive no wins and the strict rejection remains.

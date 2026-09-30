@@ -123,6 +123,7 @@ pub struct NeuralAgent {
     pub expert: bool,
     pub self_play: bool,
     pub transferred: bool,
+    pub external_model: Option<&'static super::transfer::Model>,
     pub cpuct: f64,
     pub fpu_reduction: f64,
     pub uniform_prior: f64,
@@ -148,6 +149,7 @@ impl NeuralAgent {
             expert: false,
             self_play: false,
             transferred: false,
+            external_model: None,
             cpuct: 1.5,
             fpu_reduction: 0.0,
             uniform_prior: 0.02,
@@ -179,7 +181,10 @@ impl NeuralAgent {
                 );
             }
             let x = super::transfer::encode(o, &mut self.rng);
-            let (policy, values) = model_transferred().infer(&x);
+            let (policy, values) = self
+                .external_model
+                .unwrap_or_else(model_transferred)
+                .infer(&x);
             let seat = usize::from(o.viewer != o.current);
             return (
                 super::transfer::policy_logits(&policy),
@@ -524,6 +529,23 @@ fn model_expert() -> &'static Model {
 pub fn value_expert(o: &Observation) -> f64 {
     let (_, v) = model_expert().infer(&super::neural::enhanced_features(o));
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
+}
+
+/// Immutable checkpoint handles are cached once per process, outside search.
+/// The loop records file hashes and does not replace a running process's model.
+pub fn flywheel_model(candidate: bool) -> &'static super::transfer::Model {
+    static BEST: OnceLock<super::transfer::Model> = OnceLock::new();
+    static CANDIDATE: OnceLock<super::transfer::Model> = OnceLock::new();
+    let (cache, variable) = if candidate {
+        (&CANDIDATE, "SPLENDOR_CANDIDATE_MODEL")
+    } else {
+        (&BEST, "SPLENDOR_BEST_MODEL")
+    };
+    cache.get_or_init(|| {
+        let path = std::env::var(variable).expect("flywheel checkpoint path is required");
+        let bytes = std::fs::read(path).expect("read flywheel checkpoint");
+        super::transfer::Model::from_bytes(&bytes)
+    })
 }
 
 #[cfg(test)]

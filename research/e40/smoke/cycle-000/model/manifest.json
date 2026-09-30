@@ -1,0 +1,73 @@
+{
+  "schema": "flywheel-training-v1",
+  "architecture": 80,
+  "parameters": 142406,
+  "seed": 800000007,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-smoke-2/cycle-000/train/000000.bin",
+      "sha256": "708e6d5c3cb44101f19cfacf73c0694b4f718b59410eebc06d71f9d8dfd0f299",
+      "rows": 1846,
+      "setups": 32
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-smoke-2/cycle-000/train/000032.bin",
+      "sha256": "a9287aa6cca7223cd2c4b2a74972ee2a7c8bcc2b5069ebee7490d30aaf174f88",
+      "rows": 1816,
+      "setups": 32
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-smoke-2/cycle-000/dev/000000.bin",
+      "sha256": "da300b8063cd486abc80874f9ac27ba558c7ff5a508b0a95622e1931fa500f67",
+      "rows": 874,
+      "setups": 16
+    }
+  ],
+  "train_setups": 64,
+  "dev_setups": 16,
+  "warmstart_sha256": null,
+  "model_sha256": "8df1c1a0d2b8993604090733c4b42236a49aa4b60872bf856e3a8f113fe1b7bb",
+  "checkpoint_sha256": "050b70a001f264904aa21638c00de850b0c423e64d99b08ef40853c6248af0f8",
+  "script_sha256": "342ab4c3b064ca8edaacdc0e6a6c449b8522de4467a49c6e378f78f83e426c7d",
+  "model_code_sha256": "025dfb2f097d8dfa056179b98bb2e27067f3266f14196393ffd4eea13e4cea6e",
+  "initial": {
+    "policy_loss": 1.5404734316897883,
+    "policy_accuracy": 0.7562929061784897,
+    "value_brier": 0.2128945357193936,
+    "rows": 874,
+    "outcome_rows": 874
+  },
+  "history": [
+    {
+      "policy_loss": 1.5039118367419908,
+      "policy_accuracy": 0.7437070938215103,
+      "value_brier": 0.2112289882633724,
+      "rows": 874,
+      "outcome_rows": 874,
+      "epoch": 1,
+      "seconds": 1.2210080829681829,
+      "trained_rows": 3662
+    },
+    {
+      "policy_loss": 1.4946654994100401,
+      "policy_accuracy": 0.7356979405034325,
+      "value_brier": 0.21060707912837887,
+      "rows": 874,
+      "outcome_rows": 874,
+      "epoch": 2,
+      "seconds": 1.382135207997635,
+      "trained_rows": 3662
+    }
+  ],
+  "best_epoch": 2,
+  "selection": "minimum dev policy CE + 4*outcome Brier; unchanged epoch zero retained",
+  "seconds": 1.4396480829454958,
+  "epochs": 2,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

@@ -1,0 +1,25 @@
+{
+  "output": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-e40",
+  "cycles": 3,
+  "seed": 800000000,
+  "games": [
+    5000,
+    20000,
+    75000
+  ],
+  "dev_games": 1000,
+  "shard_games": 1000,
+  "iterations": 128,
+  "epochs": 10,
+  "threads": 4,
+  "screen": 2000,
+  "confirm": 20000,
+  "device": "mps",
+  "target": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target",
+  "bootstrap_sha256": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+  "script_sha256": "cf7fd1b9a91304be426fd0a93091e7a19a7c0952ac857ba5e9b8d08af48e26c5",
+  "training_script_sha256": "342ab4c3b064ca8edaacdc0e6a6c449b8522de4467a49c6e378f78f83e426c7d",
+  "model_code_sha256": "025dfb2f097d8dfa056179b98bb2e27067f3266f14196393ffd4eea13e4cea6e",
+  "split_rule": "cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b",
+  "incomplete_rule": "strict gate preserved; confirmation research-select requires conservative lower bound >51%; no missing wins"
+}

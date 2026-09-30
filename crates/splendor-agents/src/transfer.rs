@@ -184,7 +184,19 @@ pub struct Model {
 }
 impl Model {
     pub fn from_bytes(bytes: &[u8]) -> Self {
-        assert_eq!(bytes.len() % 4, 0);
+        assert_eq!(
+            bytes.len(),
+            include_bytes!("models/e30.bin").len(),
+            "version-80 model byte length"
+        );
+        assert!(
+            bytes
+                .as_chunks::<4>()
+                .0
+                .iter()
+                .all(|b| f32::from_le_bytes(*b).is_finite()),
+            "nonfinite model weights"
+        );
         let values = bytes
             .as_chunks::<4>()
             .0

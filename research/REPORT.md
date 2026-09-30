@@ -1,12 +1,12 @@
 # Playing-strength research status
 
-The strongest completed development candidate is `transfer-pool3`; its final
-confirmation is running. The last confirmed research candidate is
-`neural-selfplay`: a native Rust policy/value network with information-set PUCT, 128 simulations, depth 16 and eight heuristic
-rollout turns. Its checkpoint is E28. E26 `neural-rollout` remains the last
-agent to pass the strict no-incomplete-games promotion gate. Original `search128` remains available
-and unchanged. This is a two-player result; other player counts use the Strong
-fallback and have no learned-strength claim.
+The current research teacher is `transfer-pool3`. Its fresh confirmation scored
+80.23% against E28 in 19,997 complete games out of 20,000, with conservative
+95% interval 79.24–81.22%. All three blocked games remain unknown; the strict
+gate rejected the run. E26 remains the last strict promotion. The transferred
+network is a bootstrap teacher for the new self-improvement loop, not its endpoint.
+Original `search128` remains unchanged. Learned-strength evidence is two-player
+only; other player counts use Strong.
 
 ## Confirmed results
 
@@ -16,6 +16,7 @@ fallback and have no learned-strength claim.
 | E26 neural rollout vs E24 learned128 | 20,000 / 20,000 | 57.73% | 56.59–58.86% |
 | E26 neural rollout vs original Search128 | 20,000 / 19,999 | 83.00% | 82.09–83.91% |
 | E28 self-play model vs E26 neural rollout | 20,000 / 19,999 | 54.17% | 53.05–55.29% |
+| E36 bootstrap teacher vs E28 self-play model | 20,000 / 19,997 | 80.23% | 79.24–81.22% |
 
 These comparisons use fixed simulation counts. Neural tree search costs more per
 simulation than original root-only search. The E26 versus learned128 comparison
@@ -64,13 +65,15 @@ E31 earned 68.80% against E28 in 2,000 complete development games. The
 three-world sampling variant then earned 62.52% against E31 in 2,000 complete
 development games, interval 58.37–66.68%. At 800 simulations its small external
 screen earned 7.5 credits in 14 complete games out of 20, with six unsupported. Native inference now runs
-2.34x faster with identical saved outputs and playing records. No transfer
-agent has a final confirmation or an external leadership claim yet.
+2.34x faster with identical saved outputs and playing records. The transfer candidate now has a fresh internal confirmation. Its external
+rerun earned 93.5 credits in 202 complete games out of 400 (46.29% conditional),
+with 198 unsupported. Finite-schedule bounds are 23.38–72.88%; the paired
+bootstrap missing-outcome envelope is 19.13–77.25%. This does not establish
+external leadership.
 
 E36's fresh internal screen completed all 2,000 games. At 128 simulations,
 `transfer-pool3` earned 81.55% against E28, conservative interval
-77.85–85.25%. The reserved 20,000-game confirmation and 400-game external
-comparison are running. E37 tested depth 64 against depth 16 at 800
+77.85–85.25%. Both reserved assessments are complete, with all raw records retained. E37 tested depth 64 against depth 16 at 800
 simulations: 51.25% in 200 complete games, interval 30.38–72.12%. No gain
 was shown; retain depth 16. E38 tested eight sampled worlds against three
 on independent development seeds: 47.25% in 200 complete games, with no
@@ -127,7 +130,32 @@ target/release/splendor compare --agent-a transfer-pool3 --agent-b neural-selfpl
   --output local/research/review-comparison.json
 ```
 
-This command repeats the completed screen; it must not guide new tuning. A 400-game external run and final
-internal confirmation are still required before selecting it as the final agent.
+This command repeats the completed screen; it must not guide new tuning. Its completed internal confirmation justifies its use as the research teacher;
+its strict incomplete rejection and uncertain external rank remain intact.
 The committed binary weights permit evaluation without the Python training
 environment or large training datasets.
+
+
+## Current priority: fast self-improvement
+
+The new loop is implemented and its first full run is active. It will collect
+100,000 training games across three cycles (5k, 20k, 75k), train in PyTorch,
+export to native Rust, check parity, and retain only arena-confirmed improvements.
+Each cycle uses the strongest selected checkpoint as its teacher, with earlier
+training shards as replay. Models load once per process; new weights require no
+Rust recompilation. Raw data and checkpoints remain under
+`local/research/flywheel-e40`; the run plan, receipts and stage logs identify them.
+
+Two miniature cycles verified training/export/parity/rejection and incumbent
+retention. They provide no strength claim. Native trained-model logits agree
+with PyTorch within 0.000010 on 128 held-out positions. A repeated completed run
+skipped data/training/gates. Runtime-loaded bootstrap weights produce the same
+32 ordered playing records as the embedded model. The data writer reproduces
+identical bytes with one and four threads. Rust and Python checks pass.
+
+E39 measures total Main decision time on the same fixed observation workload:
+median Search128 0.707 ms, neural rollout128 2.327 ms, bootstrap128 6.843 ms.
+The bootstrap is about 9.7x more expensive at equal simulation counts. These
+are latency measurements, not equal-compute playing results. The learning loop
+records collection rows/sec, simulations, inference calls, training time and
+evaluation time so further work can target useful iterations per wall-clock.

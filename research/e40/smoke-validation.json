@@ -1,0 +1,90 @@
+{
+  "completed_cycles": 2,
+  "incumbent_retained": true,
+  "cycle_decisions": [
+    {
+      "cycle": 0,
+      "selected": false,
+      "strict_decision": {
+        "decision": "retain baseline: benefit not confirmed",
+        "stage": "confirm",
+        "report": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-smoke-2/cycle-000/gate/confirm.json",
+        "source_id": "c86c823e309f2947",
+        "margin": 0.01,
+        "interval_from_records": [
+          0.10426998990664416,
+          0.9457300100933559
+        ],
+        "evidence_tools_sha256": {
+          "promote.py": "cec267d1ed937980cae256311e30ae040abda962d8fcb1d3c4f153f07ad82601",
+          "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9"
+        },
+        "raw_report_sha256": "e3bd02636a3ea91664cd8a1351e2b3628b236026a24b9d332d38a4b287cf05b7",
+        "record_set_sha256": "043df89681d65e79459040bf1a88d3e41aa014f94d53cb3ed45b9ef7613338cf",
+        "minimum_games_per_second": 0
+      },
+      "conservative_confirm_interval": [
+        0.10426998990664416,
+        0.9457300100933559
+      ],
+      "teacher_sha256": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+      "candidate_sha256": "8df1c1a0d2b8993604090733c4b42236a49aa4b60872bf856e3a8f113fe1b7bb",
+      "best_epoch": 2,
+      "train_rows": 3662,
+      "dev_rows": 874
+    },
+    {
+      "cycle": 1,
+      "selected": false,
+      "strict_decision": {
+        "decision": "retain baseline: benefit not confirmed",
+        "stage": "confirm",
+        "report": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-smoke-2/cycle-001/gate/confirm.json",
+        "source_id": "c86c823e309f2947",
+        "margin": 0.01,
+        "interval_from_records": [
+          0.04716418465368061,
+          0.8903358153463194
+        ],
+        "evidence_tools_sha256": {
+          "promote.py": "cec267d1ed937980cae256311e30ae040abda962d8fcb1d3c4f153f07ad82601",
+          "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9"
+        },
+        "raw_report_sha256": "de10b47d38c1c8c4863d95c974a79c41e5ecf8af9ddfd5a503c061c45cf8e81a",
+        "record_set_sha256": "28abd4b36ad60891a6974cb37d313131de83a48efc8cd8f1c3046cd5c96e660a",
+        "minimum_games_per_second": 0
+      },
+      "conservative_confirm_interval": [
+        0.04716418465368061,
+        0.8903358153463194
+      ],
+      "teacher_sha256": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+      "candidate_sha256": "b3ba7afd8c2b6999e4742e6aa3f5d416a1382601cd6656e2350ea0763530e0fc",
+      "best_epoch": 2,
+      "train_rows": 7246,
+      "dev_rows": 900
+    }
+  ],
+  "parity": [
+    {
+      "all_inputs_max_logit_error": 8.58306884765625e-06,
+      "masked_policy_and_value_max_error": 1.3709068298339844e-06,
+      "output_tolerance": 0.001,
+      "positions": 64,
+      "real_initial_board_max_logit_error": 8.58306884765625e-06,
+      "real_logit_tolerance": 0.0001,
+      "stress_logit_tolerance": "0.001 + 0.00001 * abs(expected)"
+    },
+    {
+      "all_inputs_max_logit_error": 9.5367431640625e-06,
+      "masked_policy_and_value_max_error": 1.4007091522216797e-06,
+      "output_tolerance": 0.001,
+      "positions": 64,
+      "real_initial_board_max_logit_error": 9.5367431640625e-06,
+      "real_logit_tolerance": 0.0001,
+      "stress_logit_tolerance": "0.001 + 0.00001 * abs(expected)"
+    }
+  ],
+  "data_repeat": "8 games: exact binary equality with 1 and 4 threads",
+  "scope": "Wiring and rejection handling only, not strength evidence"
+}

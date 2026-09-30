@@ -20,7 +20,7 @@ def dataset(path):
     path = Path(path)
     if path.suffix == '.bin':
         stride = row_bytes.get(str(path), 1844)
-        if stride not in (1444, 1844) or path.stat().st_size % stride:
+        if stride not in (1444, 1844, 2232) or path.stat().st_size % stride:
             raise ValueError(f'incomplete or unsupported binary dataset: {path}')
         rows = np.memmap(path, mode='r', dtype=np.dtype([('setup', '<u8'), ('rest', f'V{stride - 8}')]))
         return set(map(int, np.unique(rows['setup'])))

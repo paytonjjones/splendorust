@@ -1697,3 +1697,78 @@ conservative interval [26.89%,67.61%]. No gain shown; retain three worlds.
 at 128 simulations earned 81.55% against E28, conservative interval
 [77.85%,85.25%]. The script advanced to the reserved confirmation. Do not
 use that final schedule to guide the independent E37/E38 experiments.
+
+## E40 — Reusable self-improvement loop
+
+User direction: stop separate search ablations and focus on useful learning
+iterations per wall-clock. Hypothesis before implementation: the current
+three-world bootstrap search can teach a stronger native policy/value network
+through repeated search distillation and self-play, without rebuilding Rust
+for each checkpoint. Retain the bootstrap architecture for the first pass to
+reuse its weights and fast inference. Larger architectures are allowed when
+measured iteration cost supports them; no architecture is selected on loss alone.
+
+Build a restartable sharded loop: immutable best checkpoint -> independent
+self-play shards -> bounded-memory PyTorch training -> exact native export ->
+PyTorch/Rust parity -> paired arena screen -> reserved confirmation -> retain
+or reject. Preserve the best model on rejection. Store raw data, model hashes,
+source identities, times and every stage decision. No runtime Python or core
+rule changes. Checkpoint loading must occur once per process, outside search.
+
+First generation uses 128-simulation best search, depth 16, three sampled
+worlds and all Main observations below the network's turn-124 domain. For the
+first six total turns, sample legal root-visit probabilities for diversity;
+later choose the normal search action. Labels are full root visit targets,
+root selected-edge value and actual terminal credit. Incomplete games retain
+policy/value teacher supervision but mask terminal outcome. Do not invent
+wins or stop the data pipeline on a blocked game. Teacher features are encoded
+only from the actor Observation with a separate encoding RNG stream.
+
+Reserve train masters 800m..800100000 (100,000 games in 1,000-game shards),
+development 810m (1,000 games), first arena screen 820m (2,000 games), first
+confirmation 1820m (20,000 games). Begin with five training shards to verify
+one full learning cycle; expand collection after checks. Never train or tune
+on confirmation histories. Future cycles receive disjoint master ranges.
+
+E40 full run schedule: cycle 0 uses 5,000 train games at 800m; cycle 1
+uses 20,000 at 900m; cycle 2 uses 75,000 at 1000m. Each cycle has 1,000
+development games at train+10m, a 2,000-game screen at train+20m and a
+20,000-game confirmation at screen+1b. Training includes earlier train
+shards as replay. This supplies 100,000 distinct training setups while
+allowing a complete small learning iteration before the largest collection.
+The loop uses the best selected checkpoint as the next teacher. Selection
+requires a confirmed conservative lower bound above 51%; strict incomplete
+rejections remain unchanged and any allowed selection is marked research-only.
+
+E40 wiring checks use 16-simulation miniature cycles at train masters 1200m
+and 1300m with 64 training/16 dev games and 40/80 arena games. These are
+workflow checks, not strength evidence. The first check caught a Clippy
+item-order error; its failed gate/logs are retained. The repaired check will
+verify two train/export/parity/gate cycles and unchanged incumbent retention.
+Teacher rows from an unsearched forced action have a one-hot legal policy
+and a missing teacher value; the real terminal label remains valid when
+complete. Training uses masked policy cross-entropy plus [-1,1] value MSE
+against equal outcome/teacher credit when both exist. Native eval omits
+dropout. The existing inverted residual architecture retains its upstream
+MIT attribution. Epoch zero competes with trained epochs on independent dev
+policy CE plus four times terminal Brier; loss alone cannot promote a model.
+
+**E36 completed:** 19,997/20,000 complete; three no-legal-action outcomes
+remain unknown. Credit 80.2345%, conservative interval [79.2445%,81.2154%].
+The strict decision is reject: incomplete games. Select as a research teacher
+under the user-approved bounded missing-outcome policy. External: 202 complete,
+198 unsupported, 93.5 credits, 46.2871% conditional; full-schedule bounds
+[23.375%,72.875%]. No external leadership claim.
+
+**E39 completed:** Three fixed workload repetitions give median total Main
+decision times: original128 0.7074ms, E26 rollout128 2.3270ms, transferred128
+6.8433ms. Equal simulations are not equal compute. Use these recorded costs
+and new pipeline stage timings to direct throughput work.
+
+**E40 validated and running:** Two complete miniature cycles passed native
+parity and rejected their unconfirmed candidates while retaining the bootstrap.
+The resume check skipped all completed data/training/gate stages. Loaded versus
+embedded bootstrap weights match 32 ordered records; 1/4-thread generation
+matches byte for byte. First full shard: 1,000 complete games, 56,460 rows in
+106.17s. The three-cycle 100,000-game collection/training plan is active. No
+full-run trained model has yet earned a promotion.

@@ -735,6 +735,8 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "transfer-pool3"
         | "transfer-deep"
         | "transfer-pool8"
+        | "flywheel-best"
+        | "flywheel-candidate"
         | "expert-policy" => {
             let mut config = search.clone();
             if name == "neural-policy" || name == "expert-policy" || name == "transfer-policy" {
@@ -749,11 +751,18 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             agent.expert = name == "neural-expert" || name == "expert-policy";
             agent.persistent = name == "neural-persistent";
             agent.self_play = name == "neural-selfplay";
-            agent.transferred = name.starts_with("transfer");
+            agent.transferred = name.starts_with("transfer") || name.starts_with("flywheel-");
+            if name.starts_with("flywheel-") {
+                agent.external_model =
+                    Some(neural_search::flywheel_model(name == "flywheel-candidate"));
+            }
             agent.dynamic_fpu = name == "transfer-dynamic";
             agent.world_pool = if name == "transfer-pool8" {
                 8
-            } else if name == "transfer-pool3" || name == "transfer-deep" {
+            } else if name == "transfer-pool3"
+                || name == "transfer-deep"
+                || name.starts_with("flywheel-")
+            {
                 3
             } else {
                 0
