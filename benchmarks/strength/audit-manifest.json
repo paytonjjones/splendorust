@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "splendorust_revision": "3d1a3396e1c8cd1908b7187cb7fc90b9b4fc24c7",
+  "host": "Darwin arm64",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "agents": [
+    {
+      "id": "alphazero_family",
+      "url": "https://github.com/lyquentxy/splendor",
+      "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+      "models": [
+        {
+          "path": "splendor/pretrained_2players.pt",
+          "sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+          "bytes": 629177,
+          "upstream_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+          "identical_to_upstream": true
+        },
+        {
+          "path": "splendor/pretrained_3players.pt",
+          "sha256": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655",
+          "bytes": 942841,
+          "upstream_sha256": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655",
+          "identical_to_upstream": true
+        },
+        {
+          "path": "splendor/pretrained_4players.pt",
+          "sha256": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+          "bytes": 1315641,
+          "upstream_sha256": "198ab4edb52e06c8d0f41d45ba0fd94176c0c9f0d173223b545e12d85c262406",
+          "identical_to_upstream": false
+        }
+      ],
+      "family_upstream_url": "https://github.com/cestpasphoto/alpha-zero-general",
+      "family_upstream_revision": "846b919f781b871da2fff0a05fb4ae069d1a9d45",
+      "binary_sha256": null,
+      "build_status": "not built; observation adaptation needs approval"
+    },
+    {
+      "id": "schuber6",
+      "url": "https://github.com/schuber6/Splendor-Bot",
+      "revision": "1a3713b95889e05f70c00e806698a6e8d59078f1",
+      "models": [
+        {
+          "path": "Saved Weights/Score291GT1",
+          "sha256": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95",
+          "bytes": 9556
+        },
+        {
+          "path": "Saved Weights/Score307GT1",
+          "sha256": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95",
+          "bytes": 9556
+        },
+        {
+          "path": "Saved Weights/SolvedGT0",
+          "sha256": "2e0a35872dff9402d6a8c452aa80cf6588b5e21b79d87cce9a7d8ac111726823",
+          "bytes": 9556
+        }
+      ],
+      "binary_sha256": null,
+      "build_status": "not built; four-card checkpoint contract requires audit"
+    },
+    {
+      "id": "seal256",
+      "url": "https://github.com/seal256/splendor",
+      "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d",
+      "binary_sha256": "2003373b480053b6de8a5e6742d5c37578ad5b2cb2751242db856f9d41538b57",
+      "checkpoint_sha256": null,
+      "configuration": {
+        "iterations": 500,
+        "max_chance_children": 100,
+        "other_parameters": "upstream MCTSParams defaults"
+      },
+      "ruleset": "seal256-native-v1",
+      "observation_profile": "seal256-native-state-v1",
+      "build_command": "bash benchmarks/strength/build_seal256.sh SEAL256_SOURCE_DIR local/strength/seal256-native-strength",
+      "source_patch": "public access for unchanged verify_action only"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "failures": [
+    {
+      "target": "AlphaZero runtime",
+      "attempt": "Python 3.12 with onnxruntime==1.16.3",
+      "error": "No matching cp312 wheel; upstream runtime only provides cp38/cp39/cp310/cp311 wheels.",
+      "resolution": "Use CPython 3.11.13 with pinned dependencies."
+    },
+    {
+      "target": "AlphaZero startup",
+      "error": "ModuleNotFoundError: No module named torchvision",
+      "resolution": "Pin and install torchvision==0.20.1 with torch==2.5.1."
+    },
+    {
+      "target": "AlphaZero temperature adapter",
+      "error": "Used six per-player rounds instead of six total native turns.",
+      "resolution": "Use total turn counter plus one, as Arena.py does. Preserve rejected-temperature JSONL."
+    },
+    {
+      "target": "External seed boundary",
+      "error": "Policy seed was a reversible XOR of setup seed.",
+      "resolution": "Independent master seed streams; reject earlier comparisons; rerun with fresh setup seeds."
+    },
+    {
+      "target": "Seal256 historical screen classification",
+      "error": "One legacy MCTS500 game labeled complete had zero total reward.",
+      "resolution": "Preserve original raw/summary and audit as native_no_winner, without credit."
+    },
+    {
+      "target": "Schuber6 full-game integration",
+      "error": "All saved weights have a four-card 46/30/26 contract; no unchanged full-game multiplayer checkpoint.",
+      "resolution": "Load weights unchanged, record inference proof, report full-game unsupported."
+    },
+    {
+      "target": "Seal256 setup pairing",
+      "error": "Upstream random_shuffle uses persistent thread-local mt19937. Repeated srand does not reset it, so legacy rotations used different initial setups.",
+      "resolution": "Retain legacy as unpaired; construct one state per setup block, copy it for both rotations, save exact initial fixtures, use independent policy seeds, and rerun native confirmation."
+    }
+  ],
+  "qualification": "Dependency errors were observed in tool output; failed startup logs were later overwritten by the corrected smoke. These error records do not claim independent archived logs."
+}

@@ -1,0 +1,510 @@
+{
+  "build_manifest": {
+    "pins": {
+      "alphazero": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "schuber6": {
+        "url": "https://github.com/schuber6/Splendor-Bot.git",
+        "revision": "1a3713b95889e05f70c00e806698a6e8d59078f1"
+      },
+      "seal256": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      }
+    },
+    "binaries": {
+      "target/release/examples/strength_worker": "f32f4bd31249af8a39f9060b590a0e792e49067b7eda5975807ae2e9622d504a",
+      "local/strength/inference/bin/python": "8b31e2ec4f6e1936213232c4d3c78f8656f5cdb95072ec2343d7483b384e6ccf",
+      "local/strength/seal256-native-strength": "f2b9b8785dd40f9cfb179c2f3308ed872fc7620d414c06c55844145729f72cd4",
+      "local/strength/seal256-adapter": "24e8603df9d760622ab9050c57dae0d7a3d0141945936690f25116f46e550e8e",
+      "target/release/examples/strength_replay": "cf76eae4c33b0100c9d80022c7806e4c9c3ff117d41cd20216604c11a2a98ff8",
+      "local/strength/seal256-replay": "e3847e46704e497cc52bba72f66a0fc60e4c7a272e5ae531cd6b280586d2b447"
+    },
+    "checkpoints": {
+      "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+      "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+      "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655",
+      "local/strength/external/schuber6/Saved Weights/SolvedGT0": "2e0a35872dff9402d6a8c452aa80cf6588b5e21b79d87cce9a7d8ac111726823",
+      "local/strength/external/schuber6/Saved Weights/Score291GT1": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95",
+      "local/strength/external/schuber6/Saved Weights/Score307GT1": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95"
+    },
+    "compiler": [
+      "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+      "Target: arm64-apple-darwin25.6.0",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "rust": [
+      "rustc 1.98.1 (48a229cea 2026-09-01)",
+      "binary: rustc",
+      "commit-hash: 48a229ceaefd4985c50990b14116b6d856af0985",
+      "commit-date: 2026-09-01",
+      "host: aarch64-apple-darwin",
+      "release: 1.98.1",
+      "LLVM version: 22.1.8"
+    ],
+    "python": "Python 3.11.13",
+    "requirements_sha256": "4cbdc68d1a47603524edd688907b187d5fa081dcf994729f23c1e8785551a116",
+    "source_patch": "seal256: public access for unchanged verify_action only",
+    "harness_sources": {
+      "benchmarks/adapters/seal256_native_strength.cpp": "4cd5b0325a66e26252e61298c9fad59b893f3d05a91119ff22b36027a22c3637",
+      "benchmarks/adapters/seal256_strength.cpp": "d101ac75412a4b07b5f4d239dea14b0f36ceb8d78aeb41f7e828c06668766a36",
+      "benchmarks/adapters/schuber6_strength.py": "d6ffb75a0b9baf66bffc0dd16aa616f668323eb63327afbd165b07118720bee8",
+      "benchmarks/adapters/alphazero_strength.py": "04311f759e2c150a45a4979bc39f649efc610249563b4a5f32e9844287c7d3d9",
+      "benchmarks/strength/run.py": "fbb4d84225ae49fdd5a89c8f302f32955fdee1eb1a375b3c1915ba72e135f5f2",
+      "benchmarks/strength/test_strength.py": "b3e83fac890623de81beb2cadd75e6a2ca8b800bdc1ccc8d5f07ea4f13979c69",
+      "benchmarks/strength/summarize.py": "ee746d84b1a70b62c913ec924d06ee70619020fdde96b3f34b98c4e7454c498f",
+      "benchmarks/strength/verify_native.py": "cd2bbfe67b9cb04f4bc1afb1d349fbe0b1fc8431b8ff9f5be5fbd4300e0f6577",
+      "benchmarks/strength/summarize_native.py": "38f72b77007be409714ec6a0ddb540c19c2bb623ae968701c51a8d69c4aa5f00",
+      "benchmarks/strength/setup.py": "8e3d83530eb0a1e9b202e4c3baad175e3dcbcaee632cb5e9e88c3831b931da74",
+      "benchmarks/strength/make_report.py": "f061957c81f0e16475712d0d5781ef0ac25e789df0c41d0dc210beb589ea92d3",
+      "benchmarks/strength/verify.py": "9d5042e0f52b343ef9fa04c4382a6883582c8b97f6a2fe8968ff67cc591b6e91",
+      "benchmarks/strength/run_suite.py": "612d369546806a452be973641891c1e1249aea222fd29720301bbfd121ff3284",
+      "crates/splendor-arena/examples/strength_replay.rs": "d3937083c351f315be09eb4eb8a7296715820dcf08a88889004337c0e5e230c9",
+      "crates/splendor-arena/examples/strength_worker.rs": "6b75dc3af5a3c181ca3b10449adfae54437cd0670899f4806ba07cf578cd8f6c",
+      "benchmarks/adapters/seal256_replay.cpp": "3d5c0d8a22be88e05e14ccd27f103c1d5687d5baceaca54ab294de053c23fa0f"
+    },
+    "host": "Darwin MFPJ771FCVG3H 25.6.0 Darwin Kernel Version 25.6.0: Tue Aug 18 17:48:46 PDT 2026; root:xnu-12377.161.15.700.19~2/RELEASE_ARM64_T6041 arm64",
+    "host_cpu": "Apple M4 Pro",
+    "reproduction_command": "python3 benchmarks/strength/setup.py",
+    "historical_native_binary": {
+      "path": "81f0/splendorust/local/benchmarks/strength/seal256-native-strength",
+      "sha256": "2003373b480053b6de8a5e6742d5c37578ad5b2cb2751242db856f9d41538b57",
+      "qualification": "Retained binary artifact. Historical summaries did not record a binary hash; linkage to historical execution cannot be proved retroactively."
+    },
+    "runtime_libraries": {
+      "lib/python3.11/site-packages/onnxruntime/capi/onnxruntime_pybind11_state.so": "785823bbee7b5b0c91a8f5c10055ba4391977dd186775f0bd1633997b8c12203",
+      "lib/python3.11/site-packages/torch/lib/libtorch_cpu.dylib": "ae81dfb470dc3d1f44e9e5d2f5176b4e71d719b7ff05285ffbbe5d7c2c5de794"
+    }
+  },
+  "runs": [
+    {
+      "raw": "benchmarks/strength/results/alphazero-determinism-repeat.jsonl",
+      "sha256": "03cbcf63c9de55b96e7212929cc352f8d71112ba945e2dce7ac0eb24504bf24d",
+      "summary": "benchmarks/strength/results/alphazero-determinism-repeat.summary.json",
+      "summary_sha256": "e93e39337c7272d1512c4989043cb0811807c886ca01a801c25613689cd07173",
+      "games": 4,
+      "statuses": {
+        "complete": 3,
+        "unsupported": 1
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-four-confirmation.jsonl",
+      "sha256": "67aca6e93dfd3847f23d1c830cb18a4b5c01b3aa40fa98950b52f6d744f4db93",
+      "summary": "benchmarks/strength/results/alphazero-four-confirmation.summary.json",
+      "summary_sha256": "c1641c71f140842b77b8d9056dfb6693dbeb4ae26d214e0321e9cad2daf74ec8",
+      "games": 120,
+      "statuses": {
+        "unsupported": 117,
+        "complete": 3
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-four-screen.jsonl",
+      "sha256": "1468f619bae425fb62c964f0c024bdb120ab6400f46594aad8b3bf40ebd83626",
+      "summary": "benchmarks/strength/results/alphazero-four-screen.summary.json",
+      "summary_sha256": "b729f397068705b3de5957d4f1c2cdf7b37425b6cc2d97c45e80e094a9c575e3",
+      "games": 20,
+      "statuses": {
+        "unsupported": 19,
+        "complete": 1
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-three-confirmation.jsonl",
+      "sha256": "80d313ad91f861e54c60194a2f547d0663ec5eaf45c7085eb5a858b5e5e96f12",
+      "summary": "benchmarks/strength/results/alphazero-three-confirmation.summary.json",
+      "summary_sha256": "8b6c1cf8864b7bc2be99a531468d9137e6383eb9af3104504b699385ed7f33c1",
+      "games": 120,
+      "statuses": {
+        "unsupported": 115,
+        "complete": 5
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-three-screen.jsonl",
+      "sha256": "96339fab83dda7d65add41a41dd0d482991c7f04e7416b435a7218d75b121c09",
+      "summary": "benchmarks/strength/results/alphazero-three-screen.summary.json",
+      "summary_sha256": "aa2752e72cda864dcf18a20741b5fef4c4142bc1f0d9714555570b2c876dc332",
+      "games": 21,
+      "statuses": {
+        "unsupported": 20,
+        "complete": 1
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-two-confirmation.jsonl",
+      "sha256": "ed8f589a41598bf86615f1e5255a1812d28a6ac36bccf24a7a66c883a0f0eb71",
+      "summary": "benchmarks/strength/results/alphazero-two-confirmation.summary.json",
+      "summary_sha256": "63cb590afd17c87136f0146cb8dea6de312347beacf7c216d11ab3e91d0460e1",
+      "games": 400,
+      "statuses": {
+        "complete": 211,
+        "unsupported": 185,
+        "no_legal_action": 4
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/alphazero-two-screen.jsonl",
+      "sha256": "77bfd4ea2130caedcf240d19430c9506682fcf0c0fccd357ae30d34d4a0e552c",
+      "summary": "benchmarks/strength/results/alphazero-two-screen.summary.json",
+      "summary_sha256": "609295f8e52a69a040bd4a6d1ad96d4ea9958ec3b9f2e18db860733cf42f64c4",
+      "games": 20,
+      "statuses": {
+        "complete": 9,
+        "unsupported": 10,
+        "no_legal_action": 1
+      },
+      "external_source": {
+        "url": "https://github.com/lyquentxy/splendor.git",
+        "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+      },
+      "checkpoint_hashes": {
+        "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+        "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655"
+      },
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/seal256-cross-confirmation.jsonl",
+      "sha256": "494ab3dcb6313ba9e498dd976164313285c7bb7eea1dafdecb3475ebfd16e05d",
+      "summary": "benchmarks/strength/results/seal256-cross-confirmation.summary.json",
+      "summary_sha256": "d081bb65fa1d88bbe7bd946d7b1960d0e75e6137563a1de2b0b5f292623b5a14",
+      "games": 200,
+      "statuses": {
+        "unsupported": 191,
+        "complete": 9
+      },
+      "external_source": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      },
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/seal256-cross-screen.jsonl",
+      "sha256": "1eba06da5d038ca5b382d595ac3eca8be22bfb226b3e167be0cf6df0a56e18a3",
+      "summary": "benchmarks/strength/results/seal256-cross-screen.summary.json",
+      "summary_sha256": "f58cf464c73585dd7fdf73c2fc896d51cb8b314ce391eebb5d12190671f5446d",
+      "games": 20,
+      "statuses": {
+        "unsupported": 20
+      },
+      "external_source": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      },
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/seal256-mcts2000-screen.jsonl",
+      "sha256": "c5ccd10fbc60b28496d9b3b2fd7d6f65761031270b850971e0f6de8faf3ed788",
+      "summary": "benchmarks/strength/results/seal256-mcts2000-screen.summary.json",
+      "summary_sha256": "bc67ff6129ebec17517ec99138b01f299ac7840c9f9e934894e4dae0a39ab531",
+      "games": 100,
+      "statuses": {
+        "complete": 100
+      },
+      "external_source": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      },
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/seal256-mcts500-screen.jsonl",
+      "sha256": "08f6becf3547bf63c1f720e5e2f2a49ff5147212c74804c819e140d1cccd1ac3",
+      "summary": "benchmarks/strength/results/seal256-mcts500-screen.summary.json",
+      "summary_sha256": "daf97310aac8b1063a8e38ddab037ee422e01e24b2baa0450b672b13d9542233",
+      "games": 100,
+      "statuses": {
+        "complete": 99,
+        "native_no_winner": 1
+      },
+      "external_source": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      },
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/seal256-native-confirmation.jsonl",
+      "sha256": "eaff5ee6bc04f8596f6b82e9cc007c3ac27ab1a2406b10f3d7c970353fa5fdfb",
+      "summary": "benchmarks/strength/results/seal256-native-confirmation.summary.json",
+      "summary_sha256": "b9b6387c57ec8a60c5685c31d1daa95091d964108c89724467df4371c855fee6",
+      "games": 400,
+      "statuses": {
+        "complete": 395,
+        "native_no_winner": 5
+      },
+      "external_source": {
+        "url": "https://github.com/seal256/splendor.git",
+        "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+      },
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/search-random-confirmation.jsonl",
+      "sha256": "2daf19bae4788c9967c200be33f310948748a4a73ea08fcec49247f19b1f826a",
+      "summary": "benchmarks/strength/results/search-random-confirmation.summary.json",
+      "summary_sha256": "d4d42476c3638e77e470ebb78421616dfe5f94548af92f39939a9f3d37047302",
+      "games": 200,
+      "statuses": {
+        "complete": 198,
+        "no_legal_action": 2
+      },
+      "external_source": null,
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/search-strong-confirmation.jsonl",
+      "sha256": "18421ae47d59dace077b6da781d7a1c474ffe6fc1b34ae7c4c00859983ffa553",
+      "summary": "benchmarks/strength/results/search-strong-confirmation.summary.json",
+      "summary_sha256": "32910f57d7f330720b25dce2a3a2c8e29f404cf450ba010e7acfd13554111b36",
+      "games": 1000,
+      "statuses": {
+        "complete": 1000
+      },
+      "external_source": null,
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    },
+    {
+      "raw": "benchmarks/strength/results/search-strong-screen.jsonl",
+      "sha256": "acb41bc143ea6fc9286ac074751d2d7e99723551da02140b05b5bb654792a0f3",
+      "summary": "benchmarks/strength/results/search-strong-screen.summary.json",
+      "summary_sha256": "51edd7fae6c6f39a6686e870c8ea854a5a4f03efa39931755a36a29606a830a2",
+      "games": 200,
+      "statuses": {
+        "complete": 200
+      },
+      "external_source": null,
+      "checkpoint_hashes": {},
+      "build_manifest_sha256": "ad1cb8065c65f6d338928293ba6dd2a7c7d518a10f8ea5c6922dc86ab8711dbf"
+    }
+  ],
+  "excluded_runs": [
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-four-confirmation.jsonl",
+      "sha256": "c3474f8b577e356c5e6f73d04a52f4a8fd296aa89a93da7ea902632ef3a1e575",
+      "requested": 120,
+      "recorded": 120,
+      "statuses": {
+        "unsupported": 118,
+        "complete": 2
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-four-screen.jsonl",
+      "sha256": "fa378d3ae1b0a8ec096480d1ba1967223807156c0897b74215fbb8d56e3d9c66",
+      "requested": 20,
+      "recorded": 20,
+      "statuses": {
+        "unsupported": 20
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-smoke.jsonl",
+      "sha256": "47dbe858042786e0f89e26926710d6957e6dcb4cc5e4d0bcfd122961647ed29c",
+      "requested": 2,
+      "recorded": 2,
+      "statuses": {
+        "complete": 2
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-three-confirmation.jsonl",
+      "sha256": "45e9f7759cce510f3564c6eb144a408759b1deeaa81cf48f4ec17ce5bca8d608",
+      "requested": 120,
+      "recorded": 120,
+      "statuses": {
+        "unsupported": 115,
+        "complete": 5
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-three-screen.jsonl",
+      "sha256": "2cb7e594838a7db9dc4bbf0c84e85b66350057c4eacc6ea7feb55f55b68e8e2f",
+      "requested": 21,
+      "recorded": 21,
+      "statuses": {
+        "unsupported": 21
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-two-confirmation.jsonl",
+      "sha256": "356e36a91bbf5ae7915bc0a96848aed11156ad165bdfc0ad95f1d5c4d2c97ea7",
+      "requested": 400,
+      "recorded": 400,
+      "statuses": {
+        "complete": 224,
+        "unsupported": 176
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/alphazero-two-screen.jsonl",
+      "sha256": "49a7511db3581bb67b3aa51fbf5ee83365bd5a48ba32f629eeb885a1b3390870",
+      "requested": 20,
+      "recorded": 20,
+      "statuses": {
+        "unsupported": 11,
+        "complete": 9
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/seal256-cross-confirmation.jsonl",
+      "sha256": "956e2484c7fbc679750a5de3fae0196ad184ba9a19f1d6d631a4b10e84e9387b",
+      "requested": 200,
+      "recorded": 200,
+      "statuses": {
+        "unsupported": 190,
+        "complete": 10
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/seal256-cross-screen.jsonl",
+      "sha256": "690d9352aedf6bc629980a5656d3c0a5fdf446f825d3ba94703f2d214dd6e82b",
+      "requested": 20,
+      "recorded": 20,
+      "statuses": {
+        "unsupported": 19,
+        "complete": 1
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/seal256-cross-smoke.jsonl",
+      "sha256": "7cada4faeb62889233835f98176512d1c8c99a767906a01866ff78152ff581c7",
+      "requested": 2,
+      "recorded": 2,
+      "statuses": {
+        "unsupported": 2
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/search-random-confirmation.jsonl",
+      "sha256": "48a23312d3b32f296f267afaaffda29ba20c2d8b49e9137172a89a75dcb28ecf",
+      "requested": 200,
+      "recorded": 200,
+      "statuses": {
+        "complete": 199,
+        "no_legal_action": 1
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/search-strong-confirmation.jsonl",
+      "sha256": "da64e08cecf89902ea0d8a46b4f0ca42c8e74c39ac2ec2d31d9bf2559e368c64",
+      "requested": 1000,
+      "recorded": 1000,
+      "statuses": {
+        "complete": 1000
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-seed-coupling/search-strong-screen.jsonl",
+      "sha256": "c8e960b78df27a9e0eacda0ee298f5ecf72fa0c57427e701b80dfd73d2fd3c2d",
+      "requested": 200,
+      "recorded": 200,
+      "statuses": {
+        "complete": 200
+      },
+      "exclusion": "policy RNG seed was a reversible function of the setup seed"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-native-unpaired/seal256-native-confirmation.jsonl",
+      "sha256": "c38d4d3a7f31b22c68e28204ed88c4770ed5eb79f03ad26cb632a4f7c81dec33",
+      "requested": 400,
+      "recorded": 400,
+      "exclusion": "upstream persistent shuffle RNG prevented paired initial setups"
+    },
+    {
+      "path": "benchmarks/strength/results/rejected-temperature-alphazero-two-screen.jsonl",
+      "sha256": "472e9e738f32e66dac0fe9c35b46019f78665c0aef1930701486b6d701af791e",
+      "requested": 20,
+      "recorded": 20,
+      "exclusion": "early temperature used rounds instead of total turns"
+    }
+  ],
+  "report_scope": "Native controls and approved observation adapters; no independent-opponent ranking with unsupported games."
+}

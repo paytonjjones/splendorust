@@ -1,0 +1,134 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "ruleset": "published-base-v1",
+    "planning_profile": "published-base-native-planning-v1",
+    "observation_profile": "public-observation-sampled-hidden-v1",
+    "players": 2,
+    "games": 2,
+    "seed": 940000,
+    "candidate": "search",
+    "external": "alphazero",
+    "stage": "smoke",
+    "search_iterations": 128,
+    "external_iterations": 16,
+    "wall_budget_seconds": null,
+    "decision_cap": 2000,
+    "source_id": "0a98e2c847af1bc7",
+    "engine": "splendorust-v2",
+    "splendorust_revision": "3d1a3396e1c8cd1908b7187cb7fc90b9b4fc24c7",
+    "core_binary_sha256": "8565ef7ec897e0db79f21011303961b32ba60aed834d310604fd8f6ff305eb7c",
+    "external_command": [
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/benchmarks/adapters/alphazero_strength.py",
+      "--root",
+      "/Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy",
+      "--players",
+      "2",
+      "--simulations",
+      "16"
+    ],
+    "external_config": {
+      "ready": true,
+      "config": {
+        "numMCTSSims": 16,
+        "fpu": 0.0593,
+        "universes": 3,
+        "cpuct": 0.8,
+        "prob_fullMCTS": 1.0,
+        "forced_playouts": false,
+        "no_mem_optim": false
+      },
+      "checkpoint_keys": [
+        "arenaCompare",
+        "batch_size",
+        "checkpoint",
+        "cpuct",
+        "debug",
+        "dirichletAlpha",
+        "dropout",
+        "epochs",
+        "forced_playouts",
+        "forget_examples",
+        "fpu",
+        "full_model",
+        "learn_rate",
+        "load_folder_file",
+        "load_model",
+        "maxlenOfQueue",
+        "nn_version",
+        "no_compression",
+        "no_mem_optim",
+        "numEps",
+        "numIters",
+        "numItersHistory",
+        "numMCTSSims",
+        "parallel_inferences",
+        "prob_fullMCTS",
+        "profile",
+        "q_weight",
+        "ratio_fullMCTS",
+        "state_dict",
+        "stop_after_N_fail",
+        "tempThreshold",
+        "temperature",
+        "universes",
+        "updateThreshold",
+        "useray"
+      ],
+      "architecture_version": 80,
+      "inference": "upstream ONNX export, CPU"
+    },
+    "host": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "reproduction_command": "python3 benchmarks/strength/run.py --external alphazero --source /Users/payton.jones/dev/splendorust-benchmarks/local/benchmarks/external/python_lyquentxy --games 2 --seed 940000 --external-iterations 16 --stage smoke --output benchmarks/strength/results/alphazero-smoke.jsonl",
+    "limits": "Native planning rules differ from actual transitions. Unsupported actions stop a game. Iteration counts are not equal compute. RPC and conversion time are included."
+  },
+  "raw_sha256": "47dbe858042786e0f89e26926710d6957e6dcb4cc5e4d0bcfd122961647ed29c",
+  "games": 2,
+  "setup_blocks": 1,
+  "statuses": {
+    "complete": 2
+  },
+  "incomplete_games": 0,
+  "candidate_credit_total": 1.0,
+  "candidate_credit_conditional_rate": 0.5,
+  "all_requested_credit_bounds": [
+    0.5,
+    0.5
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.5,
+    0.5
+  ],
+  "per_seat": {
+    "0": {
+      "games": 1,
+      "complete": 1,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    },
+    "1": {
+      "games": 1,
+      "complete": 1,
+      "wins": 1,
+      "shared_wins": 0,
+      "credit": 1.0
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 940000,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    }
+  ],
+  "reasons": {},
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules."
+}

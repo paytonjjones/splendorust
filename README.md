@@ -8,6 +8,10 @@ The [external benchmark report](benchmarks/REPORT.md) contains the reproducible
 baseline, workload rankings and limits. Its [protocol](benchmarks/PROTOCOL.md)
 defines the comparable rules and timing scopes.
 
+The [playing-strength report](benchmarks/strength/REPORT.md) records the fixed
+external opponents, approved observation adapters, native controls and unsupported
+games. Its results are separate from simulator-speed measurements.
+
 ## Run
 
 Install Rust through rustup. The repository pins Rust 1.98.1. Dependencies are locked in `Cargo.lock`.

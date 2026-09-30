@@ -1,0 +1,159 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "ruleset": "published-base-v1",
+    "planning_profile": "published-base-native-planning-v1",
+    "observation_profile": "public-observation-sampled-hidden-v1",
+    "players": 2,
+    "games": 4,
+    "seed": 2051000,
+    "policy_seed": 2500001,
+    "sampling_seed": 3500001,
+    "candidate": "search",
+    "external": "alphazero",
+    "stage": "smoke",
+    "search_iterations": 128,
+    "external_iterations": 0,
+    "wall_budget_seconds": null,
+    "decision_cap": 2000,
+    "source_id": "aa6ac0511b831e34",
+    "engine": "splendorust-v2",
+    "splendorust_revision": "3d1a3396e1c8cd1908b7187cb7fc90b9b4fc24c7",
+    "core_binary_sha256": "f32f4bd31249af8a39f9060b590a0e792e49067b7eda5975807ae2e9622d504a",
+    "external_command": [
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/benchmarks/adapters/alphazero_strength.py",
+      "--root",
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/external/alphazero",
+      "--players",
+      "2",
+      "--simulations",
+      "0"
+    ],
+    "external_config": {
+      "ready": true,
+      "config": {
+        "numMCTSSims": 800,
+        "fpu": 0.0593,
+        "universes": 3,
+        "cpuct": 0.8,
+        "prob_fullMCTS": 1.0,
+        "forced_playouts": false,
+        "no_mem_optim": false
+      },
+      "checkpoint_keys": [
+        "arenaCompare",
+        "batch_size",
+        "checkpoint",
+        "cpuct",
+        "debug",
+        "dirichletAlpha",
+        "dropout",
+        "epochs",
+        "forced_playouts",
+        "forget_examples",
+        "fpu",
+        "full_model",
+        "learn_rate",
+        "load_folder_file",
+        "load_model",
+        "maxlenOfQueue",
+        "nn_version",
+        "no_compression",
+        "no_mem_optim",
+        "numEps",
+        "numIters",
+        "numItersHistory",
+        "numMCTSSims",
+        "parallel_inferences",
+        "prob_fullMCTS",
+        "profile",
+        "q_weight",
+        "ratio_fullMCTS",
+        "state_dict",
+        "stop_after_N_fail",
+        "tempThreshold",
+        "temperature",
+        "universes",
+        "updateThreshold",
+        "useray"
+      ],
+      "architecture_version": 80,
+      "inference": "upstream ONNX export, CPU"
+    },
+    "host": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "reproduction_command": "python3 benchmarks/strength/run.py --external alphazero --games 4 --seed 2051000 --stage smoke --output benchmarks/strength/results/alphazero-determinism-repeat.jsonl",
+    "harness_sha256": {
+      "benchmarks/strength/run.py": "fbb4d84225ae49fdd5a89c8f302f32955fdee1eb1a375b3c1915ba72e135f5f2",
+      "benchmarks/adapters/alphazero_strength.py": "04311f759e2c150a45a4979bc39f649efc610249563b4a5f32e9844287c7d3d9",
+      "benchmarks/adapters/seal256_strength.cpp": "d101ac75412a4b07b5f4d239dea14b0f36ceb8d78aeb41f7e828c06668766a36",
+      "crates/splendor-arena/examples/strength_worker.rs": "6b75dc3af5a3c181ca3b10449adfae54437cd0670899f4806ba07cf578cd8f6c"
+    },
+    "limits": "Native planning rules differ from actual transitions. Unsupported actions stop a game. Iteration counts are not equal compute. RPC and conversion time are included."
+  },
+  "raw_sha256": "03cbcf63c9de55b96e7212929cc352f8d71112ba945e2dce7ac0eb24504bf24d",
+  "pairing_verified": true,
+  "games": 4,
+  "setup_blocks": 2,
+  "statuses": {
+    "complete": 3,
+    "unsupported": 1
+  },
+  "incomplete_games": 1,
+  "invalid_games": 0,
+  "unsupported_games": 1,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 0.0,
+  "candidate_credit_conditional_rate": 0.0,
+  "all_requested_credit_bounds": [
+    0,
+    0.25
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.0,
+    0.5
+  ],
+  "per_seat": {
+    "0": {
+      "games": 2,
+      "complete": 2,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    },
+    "1": {
+      "games": 2,
+      "complete": 1,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 2051000,
+      "credits": [
+        0,
+        null
+      ],
+      "lower": 0,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2051001,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  "reasons": {
+    "native action outside published legal set": 1
+  },
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules."
+}

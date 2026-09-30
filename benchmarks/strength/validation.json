@@ -1,0 +1,30 @@
+{
+  "fmt": {
+    "command": "cargo fmt --all -- --check",
+    "log": "benchmarks/strength/validation/fmt.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "success": true
+  },
+  "clippy": {
+    "command": "cargo clippy --workspace --all-targets --all-features --release --locked -- -D warnings",
+    "log": "benchmarks/strength/validation/clippy.log",
+    "sha256": "63f1cbc0c59fdef9844cbc9a57756d2e1958bea92f9f618906721e29a4216569",
+    "success": true
+  },
+  "rust-tests": {
+    "command": "cargo test --workspace --all-features --release --locked",
+    "log": "benchmarks/strength/validation/rust-tests.log",
+    "sha256": "218fb065cdcafec69ad3c6428a35f3f47565f3c9d8dbb758f132cc50a0862855",
+    "success": true,
+    "passed": 88,
+    "original_stdout_sha256": "4ba49acac8107163389917c1575c1ab9261e29a3bd3e9e05760e1df3125a4627",
+    "archive_format": "Trailing blank output lines removed; original stdout hash retained."
+  },
+  "python-tests": {
+    "command": "python3 -m unittest discover -s benchmarks/strength -p test_*.py",
+    "log": "benchmarks/strength/validation/python-tests.log",
+    "sha256": "62f4decbacb2e031de4e76f2bc96caa7cf3ec498967ced4083e0885df723cc1e",
+    "success": true,
+    "passed": 7
+  }
+}

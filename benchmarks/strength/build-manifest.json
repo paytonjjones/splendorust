@@ -1,0 +1,80 @@
+{
+  "pins": {
+    "alphazero": {
+      "url": "https://github.com/lyquentxy/splendor.git",
+      "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
+    },
+    "schuber6": {
+      "url": "https://github.com/schuber6/Splendor-Bot.git",
+      "revision": "1a3713b95889e05f70c00e806698a6e8d59078f1"
+    },
+    "seal256": {
+      "url": "https://github.com/seal256/splendor.git",
+      "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d"
+    }
+  },
+  "binaries": {
+    "target/release/examples/strength_worker": "f32f4bd31249af8a39f9060b590a0e792e49067b7eda5975807ae2e9622d504a",
+    "local/strength/inference/bin/python": "8b31e2ec4f6e1936213232c4d3c78f8656f5cdb95072ec2343d7483b384e6ccf",
+    "local/strength/seal256-native-strength": "f2b9b8785dd40f9cfb179c2f3308ed872fc7620d414c06c55844145729f72cd4",
+    "local/strength/seal256-adapter": "24e8603df9d760622ab9050c57dae0d7a3d0141945936690f25116f46e550e8e",
+    "target/release/examples/strength_replay": "cf76eae4c33b0100c9d80022c7806e4c9c3ff117d41cd20216604c11a2a98ff8",
+    "local/strength/seal256-replay": "e3847e46704e497cc52bba72f66a0fc60e4c7a272e5ae531cd6b280586d2b447"
+  },
+  "checkpoints": {
+    "local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "local/strength/external/alphazero/splendor/pretrained_4players.pt": "2089ffa5a4fd0bd479909e22615e401dbef91b52380634aa66055186824a851a",
+    "local/strength/external/alphazero/splendor/pretrained_3players.pt": "b1f40aef2b727c0d7859a476326c77e1cbd31d69734a641bdede318a2b796655",
+    "local/strength/external/schuber6/Saved Weights/SolvedGT0": "2e0a35872dff9402d6a8c452aa80cf6588b5e21b79d87cce9a7d8ac111726823",
+    "local/strength/external/schuber6/Saved Weights/Score291GT1": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95",
+    "local/strength/external/schuber6/Saved Weights/Score307GT1": "ad9fcf107e34d3a9b460371c8dfaf3e94926ee580a08cc63173855828326ae95"
+  },
+  "compiler": [
+    "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+    "Target: arm64-apple-darwin25.6.0",
+    "Thread model: posix",
+    "InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  ],
+  "rust": [
+    "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "binary: rustc",
+    "commit-hash: 48a229ceaefd4985c50990b14116b6d856af0985",
+    "commit-date: 2026-09-01",
+    "host: aarch64-apple-darwin",
+    "release: 1.98.1",
+    "LLVM version: 22.1.8"
+  ],
+  "python": "Python 3.11.13",
+  "requirements_sha256": "4cbdc68d1a47603524edd688907b187d5fa081dcf994729f23c1e8785551a116",
+  "source_patch": "seal256: public access for unchanged verify_action only",
+  "harness_sources": {
+    "benchmarks/adapters/seal256_native_strength.cpp": "4cd5b0325a66e26252e61298c9fad59b893f3d05a91119ff22b36027a22c3637",
+    "benchmarks/adapters/seal256_strength.cpp": "d101ac75412a4b07b5f4d239dea14b0f36ceb8d78aeb41f7e828c06668766a36",
+    "benchmarks/adapters/schuber6_strength.py": "d6ffb75a0b9baf66bffc0dd16aa616f668323eb63327afbd165b07118720bee8",
+    "benchmarks/adapters/alphazero_strength.py": "04311f759e2c150a45a4979bc39f649efc610249563b4a5f32e9844287c7d3d9",
+    "benchmarks/strength/run.py": "fbb4d84225ae49fdd5a89c8f302f32955fdee1eb1a375b3c1915ba72e135f5f2",
+    "benchmarks/strength/test_strength.py": "b3e83fac890623de81beb2cadd75e6a2ca8b800bdc1ccc8d5f07ea4f13979c69",
+    "benchmarks/strength/summarize.py": "ee746d84b1a70b62c913ec924d06ee70619020fdde96b3f34b98c4e7454c498f",
+    "benchmarks/strength/verify_native.py": "cd2bbfe67b9cb04f4bc1afb1d349fbe0b1fc8431b8ff9f5be5fbd4300e0f6577",
+    "benchmarks/strength/summarize_native.py": "38f72b77007be409714ec6a0ddb540c19c2bb623ae968701c51a8d69c4aa5f00",
+    "benchmarks/strength/setup.py": "8e3d83530eb0a1e9b202e4c3baad175e3dcbcaee632cb5e9e88c3831b931da74",
+    "benchmarks/strength/make_report.py": "f061957c81f0e16475712d0d5781ef0ac25e789df0c41d0dc210beb589ea92d3",
+    "benchmarks/strength/verify.py": "9d5042e0f52b343ef9fa04c4382a6883582c8b97f6a2fe8968ff67cc591b6e91",
+    "benchmarks/strength/run_suite.py": "612d369546806a452be973641891c1e1249aea222fd29720301bbfd121ff3284",
+    "crates/splendor-arena/examples/strength_replay.rs": "d3937083c351f315be09eb4eb8a7296715820dcf08a88889004337c0e5e230c9",
+    "crates/splendor-arena/examples/strength_worker.rs": "6b75dc3af5a3c181ca3b10449adfae54437cd0670899f4806ba07cf578cd8f6c",
+    "benchmarks/adapters/seal256_replay.cpp": "3d5c0d8a22be88e05e14ccd27f103c1d5687d5baceaca54ab294de053c23fa0f"
+  },
+  "host": "Darwin MFPJ771FCVG3H 25.6.0 Darwin Kernel Version 25.6.0: Tue Aug 18 17:48:46 PDT 2026; root:xnu-12377.161.15.700.19~2/RELEASE_ARM64_T6041 arm64",
+  "host_cpu": "Apple M4 Pro",
+  "reproduction_command": "python3 benchmarks/strength/setup.py",
+  "historical_native_binary": {
+    "path": "81f0/splendorust/local/benchmarks/strength/seal256-native-strength",
+    "sha256": "2003373b480053b6de8a5e6742d5c37578ad5b2cb2751242db856f9d41538b57",
+    "qualification": "Retained binary artifact. Historical summaries did not record a binary hash; linkage to historical execution cannot be proved retroactively."
+  },
+  "runtime_libraries": {
+    "lib/python3.11/site-packages/onnxruntime/capi/onnxruntime_pybind11_state.so": "785823bbee7b5b0c91a8f5c10055ba4391977dd186775f0bd1633997b8c12203",
+    "lib/python3.11/site-packages/torch/lib/libtorch_cpu.dylib": "ae81dfb470dc3d1f44e9e5d2f5176b4e71d719b7ff05285ffbbe5d7c2c5de794"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "engine": "seal256_native",
+    "full_seat_rotation": true,
+    "games": 100,
+    "iterations": 2000,
+    "max_chance_children": 100,
+    "policy": "upstream MCTSAgent versus upstream RandomAgent",
+    "ruleset": "pinned seal256 native rules",
+    "schema_version": 1,
+    "seed": 920000,
+    "status_semantics": "native terminal only; no SplendoRust no_legal_action mapping"
+  },
+  "raw_sha256": "c5ccd10fbc60b28496d9b3b2fd7d6f65761031270b850971e0f6de8faf3ed788",
+  "pairing_verified": false,
+  "games": 100,
+  "setup_blocks": null,
+  "statuses": {
+    "complete": 100
+  },
+  "incomplete_games": 0,
+  "invalid_games": 0,
+  "unsupported_games": 0,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 93.0,
+  "candidate_credit_conditional_rate": 0.93,
+  "all_requested_credit_bounds": [
+    0.93,
+    0.93
+  ],
+  "paired_bootstrap95_missing_envelope": null,
+  "per_seat": {
+    "0": {
+      "games": 50,
+      "complete": 50,
+      "wins": 48,
+      "shared_wins": 0,
+      "credit": 48.0
+    },
+    "1": {
+      "games": 50,
+      "complete": 50,
+      "wins": 45,
+      "shared_wins": 0,
+      "credit": 45.0
+    }
+  },
+  "block_credits": [],
+  "reasons": {},
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules."
+}

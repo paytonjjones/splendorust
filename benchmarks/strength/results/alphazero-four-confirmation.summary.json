@@ -1,0 +1,485 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "ruleset": "published-base-v1",
+    "planning_profile": "published-base-native-planning-v1",
+    "observation_profile": "public-observation-sampled-hidden-v1",
+    "players": 4,
+    "games": 120,
+    "seed": 2053000,
+    "policy_seed": 2500001,
+    "sampling_seed": 3500001,
+    "candidate": "search",
+    "external": "alphazero",
+    "stage": "confirmation",
+    "search_iterations": 128,
+    "external_iterations": 0,
+    "wall_budget_seconds": null,
+    "decision_cap": 2000,
+    "source_id": "aa6ac0511b831e34",
+    "engine": "splendorust-v2",
+    "splendorust_revision": "3d1a3396e1c8cd1908b7187cb7fc90b9b4fc24c7",
+    "core_binary_sha256": "f32f4bd31249af8a39f9060b590a0e792e49067b7eda5975807ae2e9622d504a",
+    "external_command": [
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/benchmarks/adapters/alphazero_strength.py",
+      "--root",
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/external/alphazero",
+      "--players",
+      "4",
+      "--simulations",
+      "0"
+    ],
+    "external_config": {
+      "ready": true,
+      "config": {
+        "numMCTSSims": 400,
+        "fpu": 0.1,
+        "universes": 1,
+        "cpuct": 1.0,
+        "prob_fullMCTS": 1.0,
+        "forced_playouts": false,
+        "no_mem_optim": false
+      },
+      "checkpoint_keys": [
+        "arenaCompare",
+        "batch_size",
+        "checkpoint",
+        "cpuct",
+        "dirichletAlpha",
+        "dropout",
+        "epochs",
+        "forced_playouts",
+        "forget_examples",
+        "fpu",
+        "full_model",
+        "learn_rate",
+        "load_folder_file",
+        "load_model",
+        "maxlenOfQueue",
+        "nn_version",
+        "no_compression",
+        "no_mem_optim",
+        "numEps",
+        "numIters",
+        "numItersHistory",
+        "numMCTSSims",
+        "parallel_inferences",
+        "prob_fullMCTS",
+        "profile",
+        "q_weight",
+        "ratio_fullMCTS",
+        "state_dict",
+        "stop_after_N_fail",
+        "tempThreshold",
+        "temperature",
+        "updateThreshold"
+      ],
+      "architecture_version": 80,
+      "inference": "upstream ONNX export, CPU"
+    },
+    "host": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "reproduction_command": "python3 benchmarks/strength/run.py --external alphazero --players 4 --games 120 --seed 2053000 --stage confirmation --output benchmarks/strength/results/alphazero-four-confirmation.jsonl",
+    "harness_sha256": {
+      "benchmarks/strength/run.py": "fbb4d84225ae49fdd5a89c8f302f32955fdee1eb1a375b3c1915ba72e135f5f2",
+      "benchmarks/adapters/alphazero_strength.py": "04311f759e2c150a45a4979bc39f649efc610249563b4a5f32e9844287c7d3d9",
+      "benchmarks/adapters/seal256_strength.cpp": "d101ac75412a4b07b5f4d239dea14b0f36ceb8d78aeb41f7e828c06668766a36",
+      "crates/splendor-arena/examples/strength_worker.rs": "6b75dc3af5a3c181ca3b10449adfae54437cd0670899f4806ba07cf578cd8f6c"
+    },
+    "limits": "Native planning rules differ from actual transitions. Unsupported actions stop a game. Iteration counts are not equal compute. RPC and conversion time are included."
+  },
+  "raw_sha256": "67aca6e93dfd3847f23d1c830cb18a4b5c01b3aa40fa98950b52f6d744f4db93",
+  "pairing_verified": true,
+  "games": 120,
+  "setup_blocks": 30,
+  "statuses": {
+    "unsupported": 117,
+    "complete": 3
+  },
+  "incomplete_games": 117,
+  "invalid_games": 0,
+  "unsupported_games": 117,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 1.0,
+  "candidate_credit_conditional_rate": 0.3333333333333333,
+  "all_requested_credit_bounds": [
+    0.008333333333333333,
+    0.9833333333333333
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.0,
+    1.0
+  ],
+  "per_seat": {
+    "0": {
+      "games": 30,
+      "complete": 1,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    },
+    "1": {
+      "games": 30,
+      "complete": 0,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    },
+    "2": {
+      "games": 30,
+      "complete": 2,
+      "wins": 1,
+      "shared_wins": 0,
+      "credit": 1.0
+    },
+    "3": {
+      "games": 30,
+      "complete": 0,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 2053000,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053001,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053002,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053003,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053004,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053005,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053006,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053007,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053008,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053009,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053010,
+      "credits": [
+        null,
+        null,
+        0,
+        null
+      ],
+      "lower": 0,
+      "upper": 0.75
+    },
+    {
+      "setup_seed": 2053011,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053012,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053013,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053014,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053015,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053016,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053017,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053018,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053019,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053020,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053021,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053022,
+      "credits": [
+        0,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 0.75
+    },
+    {
+      "setup_seed": 2053023,
+      "credits": [
+        null,
+        null,
+        1.0,
+        null
+      ],
+      "lower": 0.25,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 2053024,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053025,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053026,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053027,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053028,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 2053029,
+      "credits": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    }
+  ],
+  "reasons": {
+    "native action outside published legal set": 105,
+    "native_pass": 2,
+    "native policy has no canonical Return choice": 5,
+    "native_voluntary_return": 5
+  },
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules."
+}

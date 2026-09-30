@@ -1,0 +1,174 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "ruleset": "published-base-v1",
+    "planning_profile": "published-base-native-planning-v1",
+    "observation_profile": "public-observation-sampled-hidden-v1",
+    "players": 2,
+    "games": 20,
+    "seed": 1954000,
+    "policy_seed": 2500001,
+    "sampling_seed": 3500001,
+    "candidate": "search",
+    "external": "seal256",
+    "stage": "screen",
+    "search_iterations": 128,
+    "external_iterations": 500,
+    "wall_budget_seconds": null,
+    "decision_cap": 2000,
+    "source_id": "aa6ac0511b831e34",
+    "engine": "splendorust-v2",
+    "splendorust_revision": "3d1a3396e1c8cd1908b7187cb7fc90b9b4fc24c7",
+    "core_binary_sha256": "f32f4bd31249af8a39f9060b590a0e792e49067b7eda5975807ae2e9622d504a",
+    "external_command": [
+      "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/seal256-adapter",
+      "500"
+    ],
+    "external_config": null,
+    "host": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "reproduction_command": "python3 benchmarks/strength/run.py --external seal256 --games 20 --seed 1954000 --external-iterations 500 --stage screen --output benchmarks/strength/results/seal256-cross-screen.jsonl",
+    "harness_sha256": {
+      "benchmarks/strength/run.py": "fbb4d84225ae49fdd5a89c8f302f32955fdee1eb1a375b3c1915ba72e135f5f2",
+      "benchmarks/adapters/alphazero_strength.py": "04311f759e2c150a45a4979bc39f649efc610249563b4a5f32e9844287c7d3d9",
+      "benchmarks/adapters/seal256_strength.cpp": "d101ac75412a4b07b5f4d239dea14b0f36ceb8d78aeb41f7e828c06668766a36",
+      "crates/splendor-arena/examples/strength_worker.rs": "6b75dc3af5a3c181ca3b10449adfae54437cd0670899f4806ba07cf578cd8f6c"
+    },
+    "limits": "Native planning rules differ from actual transitions. Unsupported actions stop a game. Iteration counts are not equal compute. RPC and conversion time are included."
+  },
+  "raw_sha256": "1eba06da5d038ca5b382d595ac3eca8be22bfb226b3e167be0cf6df0a56e18a3",
+  "pairing_verified": true,
+  "games": 20,
+  "setup_blocks": 10,
+  "statuses": {
+    "unsupported": 20
+  },
+  "incomplete_games": 20,
+  "invalid_games": 0,
+  "unsupported_games": 20,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 0.0,
+  "candidate_credit_conditional_rate": null,
+  "all_requested_credit_bounds": [
+    0,
+    1
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.0,
+    1.0
+  ],
+  "per_seat": {
+    "0": {
+      "games": 10,
+      "complete": 0,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    },
+    "1": {
+      "games": 10,
+      "complete": 0,
+      "wins": 0,
+      "shared_wins": 0,
+      "credit": 0.0
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 1954000,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954001,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954002,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954003,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954004,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954005,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954006,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954007,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954008,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    },
+    {
+      "setup_seed": 1954009,
+      "credits": [
+        null,
+        null
+      ],
+      "lower": 0,
+      "upper": 1
+    }
+  ],
+  "reasons": {
+    "native policy has no canonical Return choice": 20
+  },
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules."
+}
