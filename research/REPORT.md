@@ -203,8 +203,23 @@ decodes packed deck bytes into bits and adds frozen-teacher distillation. It
 scores33.375% in2,000 complete games, CI29.27–37.48%. Reject despite better
 held-out prediction fit. Neither result proves a faster improvement loop.
 
-E47 preserves the incumbent function at initialization and adds two residual
-trunk blocks. The 209,000-parameter model trains on the saved higher-budget
-corpus and selects epoch 13. Native parity passes. Its 2,000-game strength gate
-is pending; the checkpoint is experimental and has not replaced the teacher.
-The current handoff and next reproducible command are in [HANDOFF.md](HANDOFF.md).
+E47 adds two teacher-initialized residual blocks. It scores51.225% in2,000
+complete games,CI46.89–55.56%,and increases inference cost. Reject.
+
+E48 uses the same frozen model at256 and800 simulations against128. Results
+are60.20% and70.625%,with2,000 complete games each and lower bounds56.02% and
+66.62%. More search makes stronger teachers. These controls use more compute;
+they are not training gains or matched-compute improvements.
+
+E49 freezes the value function and trains the policy head. Its54.5% screen is
+ambiguous; fresh5,000-game confirmation scores51.68%,CI49.26–54.10%. Reject.
+E50's matched full-network control scores50.65% in2,000 complete games. Reject.
+E51 retains the frozen critic but concentrates late targets on maximal visits.
+It scores49.95% in2,000 complete games,CI45.65–54.25%. Reject. Training plus gate
+takes148.07s with reused data; initial collection and validation are separate.
+
+All models, source snapshots and raw results remain available. The incumbent
+is unchanged. Repeated learning gain and external leadership remain unproved.
+The next proposed test gives policy and value separate feature encoders, so
+policy features can adapt without changing the accepted critic. Added native
+cost must be measured. The current handoff is in [HANDOFF.md](HANDOFF.md).

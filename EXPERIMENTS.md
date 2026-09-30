@@ -1999,3 +1999,106 @@ expensive even if strength rises. Fixed2,000-game128-simulation gate,1200m,
 identity check is exact on64 PyTorch inputs; native initial/trained parity
 checks pass. The reserved1200m gate has not run. Do not promote from its
 development scores or treat this pending experiment as a strength result.
+
+**E47 completed:** All2,000 games complete,51.225% credit, CI[46.89%,55.56%].
+Retain incumbent. Gate100.73s; model inference83.24us versus incumbent51.12us.
+Added capacity does not establish a gain and costs more per inference.
+
+## E48 — Check actual strength of the proposed search teachers
+
+Before more collection, measure whether the current learned model becomes a
+stronger player at256/800 simulations versus128. Same d355...600 weights and
+same algorithm; only fixed simulation budgets differ. Add explicit named budget
+profiles (flywheel-best128/256/800) so report/replay names preserve the override.
+Verify actual simulations on Main observations and hidden-world invariance.
+Run2,000 paired games per arm:256 screen1210m,800 screen1220m,14 threads,depth16.
+No automatic confirmation or intermediate stopping. Serial arenas; any offline
+GPU training that overlaps is recorded. Report strength and elapsed compute.
+If neither higher-budget teacher is measurably stronger, further distillation
+of these targets is not justified by current playing evidence.
+
+## E49 — Preserve the value function while training the search policy
+
+Hypothesis: updating the critic from noisy selected-edge/outcome labels can
+offset policy improvement. Freeze first layer, trunk, and complete value head,
+including normalization running statistics. Train only the incumbent's policy
+head against the saved185,354 E42 root-visit targets. No tree-search change and
+no new training data. Frozen values must remain bit-identical on64 held-out
+inputs before/after CPU export; native parity must also pass.
+Use E43 budget800 dev rows, min policy CE selection,20 epochs, AdamW1e-4,
+batch1024,seed1230000007. Preserve epoch zero. Fixed2,000-game128-simulation
+screen1240m,14 threads. Keep the51% conservative threshold; record collection
+reuse, training and gate time. No automatic confirmation and no model selection
+from loss. This is a value-retention control, not evidence of a unique cause.
+
+**E48 completed:**256 versus128:60.20%, all2,000 complete, CI[56.02%,64.38%],
+144.07s.800 versus128:70.625%, all2,000 complete, CI[66.62%,74.63%],332.49s.
+These are higher-compute teacher controls, not learned-model promotions or
+matched-compute improvements.256 had some offline E49 GPU training overlap;
+800 did not. Named profiles and actual-budget/Observation probes are saved.
+Stronger search targets are supported by playing evidence; training/transfer
+remains the limiting step demonstrated by the failed student trials.
+
+**E49 screen completed:**54.5%, all2,000 complete, CI[50.31%,58.69%],85.55s.
+Retain on screen alone. Training91.13s, epoch17 selected. Native first/trunk and
+value-head byte ranges are exactly unchanged; policy bytes changed. CPU values
+are bit-identical on64 held-out rows and native parity passes. The signal is
+promising but ambiguous around the51% promotion threshold.
+
+Before any additional outcomes: freeze candidate cde5849353068e7b11a583a39fe38a36d8499886ed5f6ee84ec6fb55c41b9a07
+and incumbent d355...600. Reserve one fresh5,000-game confirmation at2240m,
+128 simulations,depth16,14 threads. Do not inspect intermediate outcomes or
+extend this run based on them. Use the existing strict decision and conservative
+missing-outcome bounds with51% threshold. A result is conditional on this pair
+and budget; larger external/milestone claims remain separate from the hot loop.
+
+## E50 — Matched full-network control for E49
+
+Before E49 confirmation outcomes: train the original142,406-parameter network
+with all parameters and normalization statistics trainable, using exactly
+E49's warm start,185,354 training rows,8,946 development rows,seed1230000007,
+20 epochs,AdamW1e-4,cosine1e-5,batch1024. Use the same dev policy CE +4 blended-
+target Brier criterion. E49's Brier is constant because its critic is frozen.
+This removes corpus/epoch/seed confounds from interpreting E49's mode change.
+The optimizer/forward path necessarily differs in whether shared features and
+critic update; no unique attribution between those subcomponents is claimed.
+GPU training may overlap E49 confirmation; record that shared-host load.
+Run one fresh2,000-game128-simulation gate at1250m,14 threads, after earlier
+arenas finish. No automatic confirmation. Keep the same51% bounded threshold.
+
+**E49 confirmation completed:** All5,000 complete,51.68% credit,
+CI[49.258%,54.102%],427.95s. Reject the proposed gain; keep incumbent.
+The earlier54.5% screen did not repeat with sufficient confidence. Confirmation
+and E50 GPU training overlapped; timing is conditional on shared-host load.
+
+**E50 completed:** All2,000 complete,50.65% credit,CI[46.39%,54.91%],104.80s.
+Reject. Training382.75s with E49 arena overlap; native parity passes.
+Both matched training modes fail to establish a second learning gain.
+
+## E51 — Concentrate late-game policy targets on maximal visits
+
+Hypothesis: soft visit labels can dilute imitation of the stronger teacher's
+late-game choices. Keep E49's frozen critic and policy-head training settings,
+data, seed and development split. After six total turns, replace each root
+visit distribution with equal mass on actions tied for maximal visits; keep
+opening distributions soft. This is a greedy-visit target, not an exact replay
+of the chosen move: the teacher breaks visit ties with priors, which the stored
+rows do not preserve. Do not change data, search or native inference.
+Twenty epochs,AdamW1e-4,batch1024,seed1230000007. Keep epoch zero. Require target
+mass/legal-mask/tie tests, exact frozen critic and native parity. Reserve one
+fresh2,000-game128-simulation gate at1260m,depth16,14 threads,51% conservative
+threshold. No automatic confirmation or optional stopping.
+
+**E51 completed:** All2,000 complete,49.95% credit,CI[45.65%,54.25%],76.69s.
+Reject. Training71.38s,epoch9 selected. Target semantics and native parity pass;
+first/trunk146,180 bytes and value-tail136,356 bytes remain exactly unchanged.
+Training plus gate takes148.07s with reused data, excluding initial collection
+and validation. This target change does not establish a second learning gain.
+
+The next substantive hypothesis is independent policy/value feature learning:
+allow the policy encoder to adapt while preserving the incumbent value encoder.
+E49/E51 freeze shared features; E50 changes the critic when shared features
+change. Separate encoders would remove that constraint. This is a proposed
+experiment, not a result or a registered run. Measure added native inference
+cost and fixed-compute strength before any selection. Do not collect more of
+the same corpus merely because these controls failed.

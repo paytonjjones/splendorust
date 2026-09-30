@@ -229,3 +229,10 @@ bootstrap architecture. Later warm starts preserve their stored depth when
 this option is omitted. Native `SPMOBIL1` exports record depth in the header.
 E47 is trained and passes native parity; its fresh strength gate is pending.
 Use [HANDOFF.md](HANDOFF.md) for the current checkpoint and next command.
+
+Offline target controls: `--policy-only` freezes the bootstrap trunk and value
+head, including running statistics. `--greedy-targets` keeps soft root visits
+for turns0–5, then shares target mass across maximal-visit actions. Both options
+work in the trainer and cycle driver. Saved datasets remain unchanged. E49–E51
+record the hypotheses and arena decisions; these options do not establish a
+strength gain by themselves.

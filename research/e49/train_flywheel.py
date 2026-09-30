@@ -7,12 +7,6 @@ import numpy as np
 import torch
 from flywheel_model import bootstrap,raw,export,open_rows,check_rows,sha
 
-def greedy_visit_targets(x, policy):
-    """Keep opening exploration; share late target mass across maximal visits."""
-    maxima=(policy==policy.max(dim=-1,keepdim=True).values).to(policy.dtype)
-    greedy=maxima/maxima.sum(dim=-1,keepdim=True)
-    return torch.where((x[:,6]>=6).unsqueeze(-1),greedy,policy)
-
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--train',nargs='+',required=True);p.add_argument('--dev',nargs='+',required=True)
@@ -27,10 +21,8 @@ def main():
     p.add_argument('--distill-teacher')
     p.add_argument('--trunk-blocks',type=int)
     p.add_argument('--policy-only',action='store_true')
-    p.add_argument('--greedy-targets',action='store_true')
     a=p.parse_args()
     if a.policy_only and a.architecture!='bootstrap':p.error('policy-only requires the bootstrap architecture')
-    if a.policy_only and a.distill_teacher:p.error('policy-only uses root policy targets; do not combine with distillation')
     if a.selection=='distillation' and not a.distill_teacher:p.error('distillation selection requires --distill-teacher')
     a.output.mkdir(parents=True,exist_ok=False)
     torch.manual_seed(a.seed);rng=np.random.default_rng(a.seed);torch.set_num_threads(4)
@@ -68,9 +60,7 @@ def main():
     optimizer=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=a.learning_rate,weight_decay=1e-4)
     scheduler=torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max=a.epochs,eta_min=a.learning_rate/10)
     def tensors(b):
-        values=[torch.from_numpy(np.array(b[k],copy=True)).to(a.device) for k in ['x','mask','policy','teacher','outcome']]
-        if a.greedy_targets:values[2]=greedy_visit_targets(values[0],values[2])
-        return values
+        return [torch.from_numpy(np.array(b[k],copy=True)).to(a.device) for k in ['x','mask','policy','teacher','outcome']]
     def loss(b):
         x,mask,policy,teacher,outcome=tensors(b);logits,values=forward(model,x)
         logp=logits.masked_fill(mask==0,-1e9).log_softmax(-1)
@@ -147,7 +137,7 @@ def main():
     if fixed_values is not None:assert torch.equal(fixed_values,v),'frozen critic changed'
     (a.output/'parity.json').write_text(json.dumps(dict(x=fixture.tolist(),logits=logits.tolist(),values=v.tolist())))
     manifest=dict(schema='flywheel-training-v1',trunk_blocks=a.trunk_blocks if a.architecture=='bootstrap' else None,architecture=80 if a.architecture=='bootstrap' else 'gated-rms-swiglu-192x3-v2' if a.bitplanes else 'gated-rms-swiglu-192x3-v1',distill_teacher_sha256=sha(a.distill_teacher) if a.distill_teacher else None,learning_rate=a.learning_rate,parameters=sum(v.numel() for v in model.parameters()),
-        greedy_targets=a.greedy_targets,policy_only=a.policy_only,frozen_value_exact=torch.equal(fixed_values,v) if fixed_values is not None else None,trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),seed=a.seed,device=a.device,torch=torch.__version__,numpy=np.__version__,train=tfiles,dev=dfiles,
+        policy_only=a.policy_only,frozen_value_exact=torch.equal(fixed_values,v) if fixed_values is not None else None,trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),seed=a.seed,device=a.device,torch=torch.__version__,numpy=np.__version__,train=tfiles,dev=dfiles,
         train_setups=len(tids),dev_setups=len(dids),warmstart_sha256=sha(a.warmstart) if a.warmstart else None,
         model_sha256=sha(a.output/'model.bin'),checkpoint_sha256=sha(a.output/'model.pt'),script_sha256=sha(__file__),
         model_code_sha256=sha(Path(__file__).with_name('flywheel_model.py')),gated_code_sha256=sha(Path(__file__).with_name('gated_model.py')) if a.architecture=='gated' else None,initial=initial,history=history,

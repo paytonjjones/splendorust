@@ -736,6 +736,9 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "transfer-deep"
         | "transfer-pool8"
         | "flywheel-best"
+        | "flywheel-best128"
+        | "flywheel-best256"
+        | "flywheel-best800"
         | "flywheel-candidate"
         | "expert-policy" => {
             let mut config = search.clone();
@@ -745,6 +748,12 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             if name == "transfer-deep" {
                 config.depth = 64;
             }
+            config.iterations = match name {
+                "flywheel-best128" => 128,
+                "flywheel-best256" => 256,
+                "flywheel-best800" => 800,
+                _ => config.iterations,
+            };
             let mut agent = neural_search::NeuralAgent::new(seed, config);
             agent.logistic = name == "neural-logistic" || name == "neural-rollout-logistic";
             agent.enhanced = name == "neural-v2" || name.starts_with("neural-rollout");

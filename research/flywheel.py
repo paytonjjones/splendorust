@@ -28,12 +28,15 @@ def main():
     p.add_argument('--bitplanes',action='store_true')
     p.add_argument('--distill-incumbent',action='store_true')
     p.add_argument('--trunk-blocks',type=int)
+    p.add_argument('--policy-only',action='store_true')
+    p.add_argument('--greedy-targets',action='store_true')
     p.add_argument('--threads',type=int,default=14)
     p.add_argument('--screen',type=int,default=2000)
     p.add_argument('--confirm',type=int,default=0,help='optional fresh confirmation; 0 keeps the fixed 2k inner-loop gate')
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args()
+    if a.policy_only and (a.architecture!='bootstrap' or a.distill_incumbent):p.error('policy-only requires bootstrap and no distillation')
     if a.bitplanes and a.architecture!='gated':p.error('bitplanes requires a gated student')
     if a.selection=='distillation' and not a.distill_incumbent:p.error('distillation selection requires --distill-incumbent')
     os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
@@ -115,6 +118,8 @@ def main():
             if best['checkpoint'] and compatible:
                 command+=['--warmstart',best['checkpoint']]
             if a.bitplanes:command+=['--bitplanes']
+            if a.policy_only:command+=['--policy-only']
+            if a.greedy_targets:command+=['--greedy-targets']
             if a.distill_incumbent:
                 assert best['checkpoint'],'distillation needs the incumbent PyTorch checkpoint'
                 command+=['--distill-teacher',best['checkpoint']]
