@@ -22,7 +22,7 @@ def main():
     p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
     p.add_argument('--teacher-checkpoint',type=Path)
     p.add_argument('--epochs',type=int,default=10)
-    p.add_argument('--architecture',choices=['bootstrap','gated'],default='bootstrap')
+    p.add_argument('--architecture',choices=['bootstrap','gated','split-bootstrap'],default='bootstrap')
     p.add_argument('--selection',choices=['outcome','teacher','distillation'],default='outcome')
     p.add_argument('--learning-rate',type=float)
     p.add_argument('--bitplanes',action='store_true')
@@ -36,6 +36,7 @@ def main():
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args()
+    if a.trunk_blocks is not None and a.architecture!='bootstrap':p.error('trunk-blocks requires bootstrap')
     if a.policy_only and (a.architecture!='bootstrap' or a.distill_incumbent):p.error('policy-only requires bootstrap and no distillation')
     if a.bitplanes and a.architecture!='gated':p.error('bitplanes requires a gated student')
     if a.selection=='distillation' and not a.distill_incumbent:p.error('distillation selection requires --distill-incumbent')
@@ -54,6 +55,7 @@ def main():
     plan.update(initial_teacher_sha256=sha(a.teacher_model),initial_checkpoint_sha256=sha(a.teacher_checkpoint) if a.teacher_checkpoint else None,script_sha256=sha(__file__),
         training_script_sha256=sha(ROOT/'research/train_flywheel.py'),
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
+        split_code_sha256=sha(ROOT/'research/split_model.py') if a.architecture=='split-bootstrap' else None,
         gated_code_sha256=sha(ROOT/'research/gated_model.py') if a.architecture=='gated' else None,
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
         incomplete_rule='strict gate preserved; screen or explicit confirmation research-select requires conservative lower bound >51%; no missing wins')
@@ -114,7 +116,7 @@ def main():
             # Cross-architecture students start from scratch; same-architecture cycles warm start.
             with Path(best['model']).open('rb') as f:teacher_magic=f.read(8)
             teacher_gated=teacher_magic in [b'SPGATED1',b'SPGATED2']
-            compatible=teacher_gated==(a.architecture=='gated') and (not teacher_gated or (teacher_magic==b'SPGATED2')==a.bitplanes)
+            compatible=(not teacher_gated and a.architecture=='split-bootstrap') or (teacher_magic!=b'SPDUAL01' and teacher_gated==(a.architecture=='gated') and (not teacher_gated or (teacher_magic==b'SPGATED2')==a.bitplanes))
             if best['checkpoint'] and compatible:
                 command+=['--warmstart',best['checkpoint']]
             if a.bitplanes:command+=['--bitplanes']
@@ -127,8 +129,9 @@ def main():
         m=json.loads((model/'manifest.json').read_text());assert sha(model/'model.bin')==m['model_sha256']
         env['SPLENDOR_CANDIDATE_MODEL']=str(model/'model.bin')
         run([binaries/'examples/transfer_parity',model/'model.bin',model/'parity.json','real'],c/'parity.log')
-        if m['model_sha256']==best['model_sha256']:
-            atomic(c/'decision.json',dict(cycle=cycle,selected=False,reason='identical native checkpoint; skip arena self-comparison',teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],best_epoch=m['best_epoch']))
+        split_identity=a.architecture=='split-bootstrap' and m['best_epoch']==0 and best['checkpoint'] and m['warmstart_sha256']==sha(best['checkpoint'])
+        if m['model_sha256']==best['model_sha256'] or split_identity:
+            atomic(c/'decision.json',dict(cycle=cycle,selected=False,reason='unchanged incumbent function; skip arena self-comparison',teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],best_epoch=m['best_epoch']))
             replay.extend(datasets['train']);continue
         gate=c/'gate';seed=a.seed+20000000+cycle*100000000
         if not (gate/'decision.json').exists():

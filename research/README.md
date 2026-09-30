@@ -236,3 +236,13 @@ for turns0–5, then shares target mass across maximal-visit actions. Both optio
 work in the trainer and cycle driver. Saved datasets remain unchanged. E49–E51
 record the hypotheses and arena decisions; these options do not establish a
 strength gain by themselves.
+
+`--architecture split-bootstrap` trains independent policy features with a
+frozen bootstrap critic. It accepts a bootstrap or split checkpoint. Both
+encoders receive the same392 observation-derived floats. Native `SPDUAL01`
+uses an8-byte magic, two little-endian u32 payload lengths, then policy and
+critic bootstrap payloads. Each payload gets the existing depth/finite/size
+checks. Native inference evaluates the policy path and critic path separately;
+it does not evaluate unused heads. E52 records exact critic bytes, initial
+function identity, checkpoint reload, native parity and cost. Extra inference
+cost needs playing evidence; the E52 screen did not establish a gain.

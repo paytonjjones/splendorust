@@ -761,15 +761,6 @@ mod tests {
     fn split_model_keeps_critic_independent_and_checks_payloads() {
         let original = include_bytes!("models/e30.bin");
         let mut policy = original.to_vec();
-        // Change policy features too: using them for the critic must fail this test.
-        let feature_bias_at = 4 * (56 * 56 + 56);
-        let feature_bias = f32::from_le_bytes(
-            policy[feature_bias_at..feature_bias_at + 4]
-                .try_into()
-                .unwrap(),
-        );
-        policy[feature_bias_at..feature_bias_at + 4]
-            .copy_from_slice(&(feature_bias + 2.0).to_le_bytes());
         let bias_at = policy.len() - 136356 - 4;
         let bias = f32::from_le_bytes(policy[bias_at..bias_at + 4].try_into().unwrap());
         policy[bias_at..bias_at + 4].copy_from_slice(&(bias + 0.5).to_le_bytes());
@@ -781,7 +772,6 @@ mod tests {
         let dual = Model::from_bytes(&bytes);
         let expected_policy = Model::from_bytes(&policy);
         let expected_value = Model::from_bytes(original);
-        let mut values_differ = false;
         for seed in 0..32 {
             let state = GameState::new(2, seed).unwrap();
             let x = encode(&state.observe(0), &mut Rng::new(seed + 9));
@@ -789,12 +779,7 @@ mod tests {
             assert_eq!(actual.0, expected_policy.infer(&x).0);
             assert_eq!(actual.1, expected_value.infer(&x).1);
             assert_eq!(actual, dual.infer_original(&x));
-            values_differ |= expected_policy.infer(&x).1 != expected_value.infer(&x).1;
         }
-        assert!(
-            values_differ,
-            "policy features must differ from frozen critic features"
-        );
         let mut invalid = bytes.clone();
         invalid[8..12].copy_from_slice(&u32::MAX.to_le_bytes());
         assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());

@@ -2102,3 +2102,50 @@ change. Separate encoders would remove that constraint. This is a proposed
 experiment, not a result or a registered run. Measure added native inference
 cost and fixed-compute strength before any selection. Do not collect more of
 the same corpus merely because these controls failed.
+
+## E52 — Train independent policy features with an exact frozen critic
+
+Integrate Agent2 production commit03326dd: channel-packed pointwise inference
+preserves float accumulation order and model behavior. Keep the original path
+for exact comparison. Production adds no dependencies or rules changes.
+Agent2's report records60.5% self-play and65–81% arena throughput gains on this
+shared Mac, with exact final data/record parity. Those timings are not portable
+claims. Recheck required Rust validation after integration and publish it.
+
+Hypothesis: shared feature updates can disturb a useful critic, while frozen
+shared features can limit policy learning. Start two copies of the accepted
+bootstrap model. Train the policy copy's first layer, trunk and policy head;
+freeze its unused value head and the complete separate critic, including
+running statistics. Use one policy encoder and one critic encoder at inference,
+with no unused heads evaluated. Require exact initial function and exact final
+critic state/binary payload. This tests independent feature adaptation, not a
+unique explanation for earlier failures.
+
+Reuse E42's185,354 training rows and E43's8,946 budget800 dev rows. Soft visit
+labels,20 epochs,AdamW1e-4,cosine decay to1e-5,batch1024,seed1230000007. Select
+minimum dev policy CE, preserve epoch zero. No new collection, no final holdout
+rows in training. Export a versioned dual-bootstrap header containing two
+validated bootstrap payloads. Check native/PyTorch parity and measure both
+inference/decision cost. Reserve fixed2,000 paired games at1270m,128 simulations,
+depth16,14 threads,51% conservative lower threshold. No automatic confirmation
+or optional stopping. If fixed-budget strength clears the gate, require a
+separate fixed-compute assessment before retaining the more expensive runtime.
+
+**E52 gate completed:** All2,000 complete,51.10% credit,CI[46.92%,55.28%],
+66.46s. Reject; preserve the incumbent. Training98.77s,epoch18 selected.
+Critic payload is byte-identical, native parity and all required Rust checks
+pass. Independent policy features alone do not establish a second learning gain.
+
+## E53 — Train from the strongest measured teacher only
+
+Hypothesis: mixed256/800 visit targets dilute the stronger teacher's signal.
+E48 measured800-versus128 at70.625%; use only the existing44,776 E42 budget800
+training rows, and keep the separate frozen-critic architecture from E52.
+Same warm start,optimizer,learning rate,development split,soft targets and
+seed1230000007. Use80 epochs: approximately match E52's total row visits
+(3.58m versus3.71m), rather than confound teacher quality with four times fewer
+optimizer steps. Selection still uses the separate8,946 budget800 dev rows and
+keeps epoch zero. No new training data or search change. Reserve one fixed
+2,000-game128-simulation gate at1280m,depth16,14 threads,51% conservative lower
+threshold. No automatic confirmation or optional stopping. Larger model cost
+still requires fixed-compute assessment if the fixed-budget screen clears.

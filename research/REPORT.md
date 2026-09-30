@@ -223,3 +223,13 @@ is unchanged. Repeated learning gain and external leadership remain unproved.
 The next proposed test gives policy and value separate feature encoders, so
 policy features can adapt without changing the accepted critic. Added native
 cost must be measured. The current handoff is in [HANDOFF.md](HANDOFF.md).
+
+Agent2's03326dd CPU kernel is integrated as5d02e8c. Its shared-Mac confirmation
+reports60.5% self-play and65–81% arena throughput gains, with exact data and
+record parity. The production commit includes no batching or accelerator code.
+E52 then trains independent policy features with an exact frozen critic. It
+scores51.10% in2,000 complete games,CI46.92–55.28%; reject. Training98.77s and
+gate66.46s. On the same saved inputs, median inference is39.57us
+versus31.25us;128-simulation decision cost is1.273x.
+The timing uses the faster kernel on both models and is conditional on this host.
+E53 now tests budget800 targets alone; no result is available yet.

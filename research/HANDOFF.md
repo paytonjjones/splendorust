@@ -21,6 +21,7 @@ There is no established external best-in-class ranking.
 | E49, policy head with frozen critic | 51.68%, fresh 5,000 complete | Reject after ambiguous screen |
 | E50, matched full-network control | 50.65%, 2,000 complete | Reject |
 | E51, greedy late policy targets | 49.95%, 2,000 complete | Reject |
+| E52, independent policy features | 51.10%, 2,000 complete | Reject; critic exact |
 
 Normal cycles use one fixed 2,000-game paired gate and 14 threads on this host.
 E44 measured about 2.5x throughput versus four threads. Keep 20,000-game runs
@@ -31,13 +32,13 @@ corpus without evidence that more data increases strength per total wall time.
 
 ## Next experiment
 
-No E47–E51 job remains active. All reserved gates are complete. This thread
-proposes independent policy/value feature encoders: train policy features while
-keeping the incumbent value function exact. No E52 seed or settings are
-registered yet. Register the hypothesis and full settings before changing the
-agent. Measure native latency and fixed-compute strength.
+E52 is complete and rejected. Agent2's exact CPU speed improvement is integrated
+as5d02e8c. E53 trains the same separate-encoder model from budget800 targets
+alone. It owns the fixed2,000-game screen at1280000000. Its full settings are
+registered in `EXPERIMENTS.md`. Training starts from the accepted teacher, not
+from the rejected E52 candidate. Do not duplicate or change this seed stream.
 
-The native arena needs no Python ML framework. All E47–E51 models and failed
+The native arena needs no Python ML framework. All E47–E52 models and failed
 results are preserved. E48 proves that more search produces stronger teachers;
 it does not prove that training can transfer that strength. No later student
 has confirmed a second learning gain. The driver supports policy-only training
