@@ -1165,3 +1165,185 @@ including statuses and trajectory hashes, are identical to E21 source
 checks, not fresh playing-strength evidence. E21 archives remain unchanged.
 The raw reruns, gate/build manifests, paired record hashes and check logs are
 retained in `docs/results/noble-boundary/`. No performance claim is made.
+
+## E23 — Observation-only learned leaf value
+
+Hypothesis before implementation: a small logistic outcome model using public
+engine progress and card affordability can improve root search at 128 simulations.
+Freeze Search at commit 4448c19. Keep its selection and leaf evaluation unchanged.
+First use completed Strong self-play outcomes; record and exclude incomplete
+labels explicitly, without assigning outcomes. Split by setup seed. Training:
+210000000; development: 220000000. Internal screens start at 230000000.
+Reserve 1230000000 for confirmation; do not read it during development.
+Use a linear model first to bound inference cost. Candidate features must come
+only from Observation. Keep the core unchanged. Outcome prediction quality is
+not a promotion criterion. Use the existing promotion gate for retained changes.
+
+**E23 first result:** Strong self-play generated 570,406 training positions from
+20,000 setups and 114,012 development positions from 4,000 distinct setups. All
+games completed. Development Brier loss is 0.20296 versus 0.23420 for the old
+engine leaf and 0.25 for constant 0.5. This is outcome prediction, not strength.
+The 2,000-game screen at 232m completed 1,981 games and capped 19. Conditional
+win credit is 78.12%; conservative 95% bounds including missing outcomes are
+[73.58%, 82.05%]. Reject promotion because the run is incomplete. Preserve the
+checkpoint and reports. The 200-game smoke cap is a verified four-decision
+token cycle: the learned actor has five legal purchases but repeatedly takes.
+This resembles the documented rollout/real-policy mismatch in E11/E16.
+Search's 2,000 baseline records match the frozen executable exactly.
+
+## E24 — Learned value with observed-cycle escape
+
+Hypothesis before implementation: E23's strength gain can survive a narrow
+observation-history purchase fallback that prevents its repeated token cycles.
+Keep the E23 checkpoint fixed. Store the last 16 Main observations, ignoring
+only completed-turn count. If the same observation returns and purchases exist,
+search among the legal purchases. No inferred hidden state, core rule, or
+outcome changes. Unlike E11, test this with the learned evaluator. First repeat
+the E23 development screen to diagnose completion changes. Then run the actual
+promotion gate at fresh seed 234m, with confirmation at 1234m. Confirmation
+remains unused unless the screen qualifies. Do not change frozen Search128.
+
+**E24 result: strength gain, promotion rejected.** All 2,000 reused E23
+setups complete with 78.125% candidate credit. The fresh gate screen at 234m
+also completes all 2,000 games, earning 78.65%. The reserved 20,000-game
+confirmation at 1234m completes 19,999 games. Conditional credit is 79.304%;
+conservative bounds including the missing outcome are [78.333%, 80.272%].
+Runtime is 203.13 seconds with four threads. The gate rejects the incomplete
+confirmation. Keep this candidate experimental, not a promoted default. Do not
+tune it from the confirmation positions. The source is c27623ac64a24f4a; raw
+reports, tool hashes, build identity and rejection are in research/e24-gate.
+This is strong internal evidence, but does not establish best-in-class play.
+Run the frozen external two-player schedule as supporting evidence and measure
+fixed-observation decision costs before any compute comparison.
+
+## Revised development policy (user instruction, 2026-09-29)
+
+Preregister before further experiments: development screens may proceed with
+blocked or capped games. Keep every requested game in reports. Do not fabricate
+wins, delete incomplete records, or call conditional win rate an unconditional
+one. Report complete/blocked/capped counts and conservative missing-outcome
+bounds. A candidate may advance when its lower conservative bound exceeds the
+control, even if the strict existing promotion script rejects incompleteness.
+Preserve that rejection. Final evaluation will report all missing outcomes and
+will distinguish measured strength from the strict completion gate. This rule
+applies prospectively; E23/E24 gate records stay unchanged. Do not tune on final
+confirmation seeds or individual confirmation positions.
+
+## E25 — Residual neural policy/value and information-set PUCT
+
+Hypothesis before implementation: a nonlinear observation encoder with shared
+policy/value representation, trained from E24 self-play, will improve planning
+beyond the linear leaf. Use a residual MLP with 128-wide hidden layers, a
+67-action main-policy head and a scalar outcome head. Train with masked policy
+cross entropy and outcome value loss. Policy targets are teacher choices;
+record this as distillation, not AlphaZero visit-target self-play. Keep setup
+splits independent. Generate 12,000 training games at 250m, 2,000 development
+games at 260m, with independent policy streams 950000007/960000007. Use the
+E24 learned-cycle teacher at 128 simulations. Incomplete games retain policy
+labels but no value labels. Use 2,000-decision data caps and no invented winner.
+
+Runtime is native Rust float32 inference; PyTorch/MPS training is isolated in
+the research environment. Encode relative player state, known reservations,
+market cards, bank, remaining deck sizes, nobles and final-round state. Never
+encode actual future decks, opponent blind card IDs or setup RNG state. Test
+Rust/Python inference parity. Then use observation-keyed PUCT with fresh root
+hidden-world sampling and explicit real outcomes. Keep all core rules intact.
+Development screening seeds start at 270m; reserve 1270m for final confirmation.
+Do not open those confirmation positions during development.
+
+**E25 initial result:** 12,000 teacher games yield 395,371 positions, with two
+blocked games retaining masked value labels. Development has 2,000 complete
+games and 65,824 positions. The 79,044-parameter residual network is trained
+for 20 epochs on MPS; choose the minimum development policy+value loss only.
+Rust/PyTorch maximum absolute inference difference is 0.000002862 on 16 saved
+observations. The 200-game PUCT128/depth16 screen at 270m completes, but wins
+only 34.5% against Search128. Do not advance this candidate to confirmation.
+Before scaling, isolate failure sources: same neural priors with the E23
+logistic value; old flat search with the neural leaf; neural policy without
+search. Use the same development setup schedule, retaining every outcome.
+
+**E25 component checks:** On the same 200 development games, PUCT with neural
+priors and the old logistic leaf earns 38.25%; flat search with the neural leaf
+gets 57.5%; the neural policy alone gets 13.82% on 199 completed games (one cap).
+All intervals are wide. These checks do not isolate a confirmed population
+ranking, but show that replacing the leaf alone does not recover E24's strength.
+Shallow tree leaves and weak distilled priors both warrant better training.
+
+## E26 — Search-value distillation and residual correction
+
+Hypothesis before implementation: outcome-only supervision is too noisy for
+short-horizon tree leaves, and a global dense encoder learns affordability
+slowly. Add the 32 explicit E23 relative progress/affordability features to the
+290 raw features. Keep the 128-wide residual network and predict a correction
+to the E23 logistic logit. Train policy targets from the teacher's sampled
+root-action means, softmax temperature 0.1, rather than only its selected action.
+Train value against a 50/50 mixture of teacher root value and actual outcome;
+for incomplete games, use only the observation-level teacher value. This is
+teacher distillation, not a fabricated game outcome. Preserve the missing
+outcome mask and count. Use independent training seeds 280m and development
+290m, policy streams 980000007/990000007, 12,000/2,000 games. Reserve internal
+confirmation seed 1300m; development screens start at 300m. Keep E25 failures.
+
+**E26 first screens:** Both 200-game runs at 300m complete. Neural PUCT128 at
+maximum depth 16 earns 41.0% against learned128; the enhanced neural leaf in
+flat Search128 earns 42.5%. Neither establishes an improvement. Inference
+parity maximum error is 0.000001908. Preserve both failures and do not use the
+reserved 1300m confirmation. Next distinguish insufficient tree budget from
+short-horizon leaf mismatch: PUCT1024, and PUCT128 with eight Strong rollout
+turns at new leaves, with neural versus logistic leaf evaluation. Keep model
+weights fixed. These development tests may have unequal compute; report it.
+
+**E26 budget/rollout checks:** PUCT1024 wins 57.0% against learned128 on 200
+complete development games, versus 41.0% at 128 simulations. PUCT128 with eight
+Strong rollout turns gets 53.75% using the enhanced neural leaf and 51.0% using
+the old logistic leaf. No small-screen result is a promotion. Native matrix
+products were changed to eight independent float32 accumulators. On 20,000
+inferences, median runtime fell from 0.4575s to 0.1044s. Maximum PyTorch parity
+error remains 0.000003815. Floating-point summation order changed, so rerun
+playing screens under the new source instead of assuming trajectory identity.
+Advance PUCT1024 and rollout128 to fresh 2,000-game development screens at 301m.
+
+**E24 frozen external result:** The unchanged 400-game two-player AlphaZero
+schedule completes 212 games and marks 188 unsupported. E24 wins eight complete
+games (3.774% conditional), with finite-schedule credit bounds [2%,49%] and
+paired bootstrap missing envelope [0.75%,54.25%]. This is not a demonstrated
+external improvement over Search's six wins in 211 complete games. AlphaZero
+parameters and checkpoint are unchanged. Policy timing includes IPC and shared
+host work; it is not a dedicated fixed-compute comparison. Keep the full raw
+records and unsupported distribution in research/e25/e24-alphazero-*.
+
+## E27 — Independent external teacher data
+
+Hypothesis before data generation: self-distillation from our weak strategic
+policy preserves its blind spots. Train from the stronger frozen AlphaZero
+policy on NEW setups, not the benchmark's screen or confirmation schedules.
+Generate 400 training games at setup seed 500m and 100 development games at
+600m, with separate policy/sampling streams 700000003/800000003 and
+710000003/810000003. Preserve all valid policy decisions before an unsupported
+endpoint; give no outcome label to an unfinished game. Use only redacted acting
+observations as inputs. This is research data generation, not an external
+ranking or a new claim that the adapters implement identical games. Do not
+alter AlphaZero to improve the result. Frozen benchmark holdouts remain excluded.
+
+**E26 larger screens:** Under the faster matrix kernel, PUCT1024 completes all
+2,000 games at 301m and earns 57.975% against learned128, CI [53.60%,62.35%].
+PUCT128 with eight Strong rollout turns completes all 2,000 and earns 59.325%,
+CI [55.01%,63.64%], at much lower cost (59.77s versus 279.34s). Select the
+rollout candidate for fresh confirmation; this is not an equal-compute gain.
+Reserve gate screen 302m / confirmation 1302m, 2,000 / 20,000 games against
+learned128, 128 simulations, depth cap 16. Reserve 1303m separately for a
+20,000-game final comparison against original Search128. Do not tune using
+these confirmation positions. The earlier reserved 1300m remains untouched.
+A profile shows substantial debug-string allocation/hashing in tree lookup.
+Replace keys with fixed bytes containing every Main observation field except
+turn count, and require exact record equivalence before using the new build.
+
+**E27 data:** Training has 400 games, 227 complete and 173 unsupported; the
+17,033 redacted main positions include 8,479 expert policy labels. Both actors
+can provide value labels from the 227 verified terminal histories (12,074 rows).
+Opponent policy rows have zero policy weight. Development has 100 independent
+games, 56 complete, and 4,296 positions. Preregister 30 fine-tuning epochs from
+the E26 checkpoint, learning rate 0.0003, 50% expert rows and 50% E26 replay
+rows per epoch. Missing expert outcomes have no value loss; do not replace
+these with teacher estimates. Select by independent development policy plus
+value loss. This is fine-tuning, not learning from evaluation holdouts.

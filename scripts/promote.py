@@ -105,7 +105,7 @@ def validate_stage(report, args, games, seed, previous_source):
         'names': [args.candidate] + [args.baseline] * (args.players - 1),
         'games': games, 'seed': seed, 'threads': args.threads,
         'max_decisions': 20000, 'check': False,
-        'search': {'iterations': args.iterations, 'depth': 8, 'width': 6,
+        'search': {'iterations': args.iterations, 'depth': getattr(args, 'depth', 8), 'width': 6,
                    'time_budget': None, 'rollout': 'strong', 'evaluation': 'engine'},
     }
     if report.get('run_config') != expected:
@@ -130,6 +130,7 @@ def main(argv=None):
     p.add_argument('--seed', type=int, default=12345)
     p.add_argument('--threads', type=int, default=4)
     p.add_argument('--iterations', type=int, default=128)
+    p.add_argument('--depth', type=int, default=8)
     p.add_argument('--margin', type=float, default=0.01)
     p.add_argument('--min-games-per-second', type=float, default=0)
     p.add_argument('--output', type=pathlib.Path, default=ROOT / 'results' / 'promotion')
@@ -140,8 +141,8 @@ def main(argv=None):
         p.error('seed ranges must not wrap or overlap')
     if not 0 <= args.margin < 1 or args.threads < 1 or not math.isfinite(args.min_games_per_second) or args.min_games_per_second < 0:
         p.error('invalid margin, threads, or speed floor')
-    if not 0 <= args.iterations < 2**32:
-        p.error('iterations must fit an unsigned 32-bit count')
+    if not 0 <= args.iterations < 2**32 or not 0 <= args.depth < 2**32:
+        p.error('iterations and depth must fit unsigned 32-bit counts')
     args.output = args.output.resolve()
     try:
         args.output.mkdir(parents=True, exist_ok=False)
@@ -178,7 +179,7 @@ def execute(args):
         cmd = [binary, 'compare', '--agent-a', args.candidate, '--agent-b', args.baseline,
                '--games', games, '--players', args.players, '--seed', seed,
                '--threads', args.threads, '--iterations', args.iterations,
-               '--depth', 8, '--width', 6, '--rollout', 'strong', '--evaluation', 'engine',
+               '--depth', args.depth, '--width', 6, '--rollout', 'strong', '--evaluation', 'engine',
                '--max-decisions', 20000, '--output', output]
         proc = subprocess.run(list(map(str, cmd)), cwd=ROOT)
         if not output.exists():

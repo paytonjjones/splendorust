@@ -1,0 +1,30 @@
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+    Finished `release` profile [optimized] target(s) in 2.94s
+     Running unittests src/lib.rs (target/release/deps/splendor_agents-b3c226b755997fb5)
+
+running 16 tests
+test learned::tests::pairwise_value_is_symmetric_and_finite ... ok
+test neural::tests::hidden_world_and_blind_ids_do_not_enter_features ... ok
+test learned::tests::features_do_not_depend_on_sampled_hidden_world ... ok
+test tests::next_turn_bound_counts_depletion_and_market_removal_separately ... ok
+test tests::public_block_filter_never_guesses_blind_reservations ... ok
+test tests::return_filter_uses_complete_bundles_and_keeps_uncertified_choices ... ok
+test tests::noble_threshold_take_ends_only_from_the_last_seat ... ok
+test tests::search_stops_at_counter_capacity_without_panicking ... ok
+test tests::search_cannot_distinguish_unknown_decks ... ok
+test tests::take_filter_keeps_uncertified_choices_without_a_safe_alternative ... ok
+test neural::tests::main_action_indices_are_unique_on_real_positions ... ok
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... ok
+test neural_search::tests::compact_keys_preserve_exact_observation_identity ... ok
+test neural_search::tests::neural_tree_choices_match_across_hidden_worlds ... ok
+test tests::every_agent_chooses_legal_and_is_reproducible ... ok
+test tests::cached_scores_equal_uncached_scores_for_every_legal_action ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests splendor_agents
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

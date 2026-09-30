@@ -129,7 +129,7 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--external',choices=['alphazero','seal256','random','strong'],required=True)
     p.add_argument('--source',type=Path,default=ROOT/'local/strength/external/alphazero')
-    p.add_argument('--candidate',choices=['search','strong','random'],default='search')
+    p.add_argument('--candidate',choices=['search','strong','random','learned','learned-cycle'],default='search')
     p.add_argument('--players',type=int,choices=[2,3,4],default=2);p.add_argument('--games',type=int,required=True)
     p.add_argument('--iterations',type=int,default=128);p.add_argument('--external-iterations',type=int,default=0)
     p.add_argument('--seed',type=int,required=True);p.add_argument('--policy-seed',type=int,default=2500001);p.add_argument('--sampling-seed',type=int,default=3500001);p.add_argument('--cap',type=int,default=2000)

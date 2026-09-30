@@ -38,6 +38,16 @@ def stage_args():
 
 
 class GateTests(unittest.TestCase):
+    def test_stage_checks_requested_nondefault_depth(self):
+        report = synthetic_report()
+        args = stage_args()
+        args.depth = 16
+        report['run_config']['search']['depth'] = 16
+        validate_stage(report, args, 1000, 42, None)
+        args.depth = 8
+        with self.assertRaises(ValueError):
+            validate_stage(report, args, 1000, 42, None)
+
     def test_standalone_decision_requires_current_engine_and_source_identity(self):
         for engine, source in [('splendorust-v1', 'old-source'),
                                ('future-engine', 'source'),

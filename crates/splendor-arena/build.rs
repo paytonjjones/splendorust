@@ -10,7 +10,7 @@ fn collect(path: &Path, out: &mut Vec<PathBuf>) {
         }
     } else if path
         .extension()
-        .is_some_and(|x| x == "rs" || x == "toml" || x == "lock")
+        .is_some_and(|x| x == "rs" || x == "toml" || x == "lock" || x == "bin")
     {
         out.push(path.to_path_buf());
     }

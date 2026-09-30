@@ -6,7 +6,22 @@ use splendor_core::{
 };
 use std::time::{Duration, Instant};
 
+pub mod learned;
+pub mod neural;
+pub mod neural_search;
+mod value_weights;
+
 pub trait Agent: Send {
+    fn policy_target(&self) -> Option<[f32; neural::ACTIONS]> {
+        None
+    }
+    fn value_target(&self) -> Option<f32> {
+        None
+    }
+    /// Actual search simulations and learned leaf calls, for research timing.
+    fn work_counts(&self) -> (u64, u64) {
+        (0, 0)
+    }
     fn select_action(&mut self, observation: &Observation, legal: &[Action]) -> Action;
 }
 pub struct RandomAgent {
@@ -345,6 +360,12 @@ pub struct SearchAgent {
     rng: Rng,
     pub config: SearchConfig,
     pub simulations: u64,
+    pub inference_calls: u64,
+    pub neural_value: bool,
+    pub enhanced_value: bool,
+    pub root_value: Option<f32>,
+    pub root_policy: Option<[f32; neural::ACTIONS]>,
+    pub value_weights: Option<[f64; learned::FEATURES]>,
 }
 impl SearchAgent {
     pub fn new(seed: u64, config: SearchConfig) -> Self {
@@ -352,6 +373,12 @@ impl SearchAgent {
             rng: Rng::new(seed),
             config,
             simulations: 0,
+            inference_calls: 0,
+            neural_value: false,
+            enhanced_value: false,
+            root_value: None,
+            root_policy: None,
+            value_weights: None,
         }
     }
 }
@@ -490,7 +517,18 @@ fn safe_token_actions(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> 
     (!safe.is_empty() && safe.len() < legal.len()).then_some(safe)
 }
 impl Agent for SearchAgent {
+    fn policy_target(&self) -> Option<[f32; neural::ACTIONS]> {
+        self.root_policy
+    }
+    fn value_target(&self) -> Option<f32> {
+        self.root_value
+    }
+    fn work_counts(&self) -> (u64, u64) {
+        (self.simulations, self.inference_calls)
+    }
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
+        self.root_value = None;
+        self.root_policy = None;
         if o.phase != Phase::Main || legal.len() == 1 || o.turns == u32::MAX {
             let safe = safe_choices(o, legal);
             return best(o, safe.as_deref().unwrap_or(legal), true);
@@ -566,6 +604,20 @@ impl Agent for SearchAgent {
                 } else {
                     0.0
                 }
+            } else if self.neural_value && o.count == 2 {
+                self.inference_calls += 1;
+                if self.enhanced_value {
+                    neural_search::value_v2(&state.observe(o.current as usize))
+                } else {
+                    neural_search::value(&state.observe(o.current as usize))
+                }
+            } else if let Some(weights) = &self.value_weights {
+                self.inference_calls += 1;
+                learned::predict(
+                    &state.observe(o.current as usize),
+                    o.current as usize,
+                    weights,
+                )
             } else {
                 evaluation(
                     &state.observe(o.current as usize),
@@ -581,7 +633,59 @@ impl Agent for SearchAgent {
             .filter(|&i| visits[i] > 0)
             .max_by(|&a, &b| (sums[a] / visits[a] as f64).total_cmp(&(sums[b] / visits[b] as f64)))
             .unwrap_or(0);
+        self.root_value = Some((sums[j] / f64::from(visits[j])) as f32);
+        let mut policy = [0f32; neural::ACTIONS];
+        let max = sums[j] / f64::from(visits[j]);
+        let mut total = 0.0;
+        for (i, &action) in candidates.iter().enumerate() {
+            if visits[i] > 0 {
+                let w = ((sums[i] / f64::from(visits[i]) - max) / 0.1).exp() as f32;
+                policy[neural::action_index(action).unwrap()] = w;
+                total += w;
+            }
+        }
+        policy.iter_mut().for_each(|p| *p /= total);
+        self.root_policy = Some(policy);
         candidates[j]
+    }
+}
+/// Experimental E24 policy memory. It never declares a game outcome.
+struct LearnedCycleAgent {
+    search: SearchAgent,
+    history: std::collections::VecDeque<Observation>,
+}
+impl Agent for LearnedCycleAgent {
+    fn policy_target(&self) -> Option<[f32; neural::ACTIONS]> {
+        self.search.policy_target()
+    }
+    fn value_target(&self) -> Option<f32> {
+        self.search.value_target()
+    }
+    fn work_counts(&self) -> (u64, u64) {
+        self.search.work_counts()
+    }
+    fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
+        if o.phase != Phase::Main {
+            return self.search.select_action(o, legal);
+        }
+        let mut normalized = o.clone();
+        normalized.turns = 0;
+        let repeated = self.history.contains(&normalized);
+        if self.history.len() == 16 {
+            self.history.pop_front();
+        }
+        self.history.push_back(normalized);
+        if repeated {
+            let buys: Vec<_> = legal
+                .iter()
+                .copied()
+                .filter(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
+                .collect();
+            if !buys.is_empty() {
+                return self.search.select_action(o, &buys);
+            }
+        }
+        self.search.select_action(o, legal)
     }
 }
 pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dyn Agent>, String> {
@@ -590,6 +694,54 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
         "strong" | "strong-heuristic" => Box::new(StrongHeuristicAgent),
         "search" | "mcts" => Box::new(SearchAgent::new(seed, search.clone())),
+        "search128" | "search512" => {
+            let config = SearchConfig {
+                iterations: if name == "search128" { 128 } else { 512 },
+                ..Default::default()
+            };
+            Box::new(SearchAgent::new(seed, config))
+        }
+        "neural" => Box::new(neural_search::NeuralAgent::new(seed, search.clone())),
+        "neural-logistic"
+        | "neural-policy"
+        | "neural-v2"
+        | "neural-rollout"
+        | "neural-rollout-logistic" => {
+            let mut config = search.clone();
+            if name == "neural-policy" {
+                config.iterations = 0;
+            }
+            let mut agent = neural_search::NeuralAgent::new(seed, config);
+            agent.logistic = name == "neural-logistic" || name == "neural-rollout-logistic";
+            agent.enhanced = name == "neural-v2" || name.starts_with("neural-rollout");
+            if name.starts_with("neural-rollout") {
+                agent.rollout_depth = 8;
+            }
+            Box::new(agent)
+        }
+        "learned-cycle" | "learned128" | "neural-flat" | "neural-flat-v2" => {
+            let config = if name == "learned128" {
+                SearchConfig {
+                    iterations: 128,
+                    ..Default::default()
+                }
+            } else {
+                search.clone()
+            };
+            let mut agent = SearchAgent::new(seed, config);
+            agent.value_weights = Some(value_weights::WEIGHTS);
+            agent.neural_value = name == "neural-flat" || name == "neural-flat-v2";
+            agent.enhanced_value = name == "neural-flat-v2";
+            Box::new(LearnedCycleAgent {
+                search: agent,
+                history: std::collections::VecDeque::new(),
+            })
+        }
+        "learned" => {
+            let mut agent = SearchAgent::new(seed, search.clone());
+            agent.value_weights = Some(value_weights::WEIGHTS);
+            Box::new(agent)
+        }
         _ => return Err(format!("unknown agent: {name}")),
     })
 }
@@ -898,7 +1050,15 @@ mod tests {
     }
     #[test]
     fn every_agent_chooses_legal_and_is_reproducible() {
-        for name in ["random", "greedy", "strong", "search"] {
+        for name in [
+            "random",
+            "greedy",
+            "strong",
+            "search",
+            "learned",
+            "learned-cycle",
+            "neural",
+        ] {
             let config = SearchConfig {
                 iterations: 8,
                 depth: 2,
