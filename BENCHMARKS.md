@@ -7,6 +7,17 @@ repetitions and limits separate from the historical measurements below.
 
 Measured on 2026-09-25: Apple M4 Pro, macOS 26.7, aarch64, Rust 1.98.1, LLVM 22.1.8. Release uses thin LTO and one codegen unit. Criterion adds debug symbols. These are local measurements, not portable performance guarantees.
 
+## Native neural throughput
+
+The [2026-09-30 report](research/throughput/REPORT.md) records CPU scaling,
+independent-game batching, Apple backend probes, and the selected exact CPU
+kernel. On the shared M4 Pro, fresh fixed-budget self-play throughput increased
+60.5%; two arena pairs increased 65.2% and 81.3%. Saved self-play bytes and
+arena records match the base. The historical experiment commit was `03326dd`;
+current main contains the equivalent patch as `5d02e8c` (identical stable patch
+ID), without the research tools. These results are conditional on the frozen models,
+budgets, and shared-host load specified in that report.
+
 ## Core
 
 Criterion, 20 samples, one-second warm-up and measurement windows:

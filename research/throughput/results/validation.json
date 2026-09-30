@@ -1,0 +1,19 @@
+{
+  "commit": "03326dd230da44035a145db1e1dc531cd7152aef",
+  "rust_tests_passed": 101,
+  "commands": [
+    "cargo fmt --all --check",
+    "cargo clippy --workspace --all-targets --release --locked -- -D warnings",
+    "cargo test --workspace --release --locked"
+  ],
+  "logs": {
+    "final-clippy-pass.log": "f41502e5c823e8b81ca7ae7f9ebdbdeebec9022649752ebb8050bf30c3618cc5",
+    "final-tests-pass.log": "b75f4fb0385829315f46212d0df2e29c5f3bd57f24cd52343c11304bf5fda6b0",
+    "final-build-pass.log": "e9465e2daa6c260d2a8f270e4884b0ade4c25aba2031fff6d58d372560c1cb95"
+  },
+  "binaries": {
+    "local/throughput/final/release/splendor": "78940c8af397bd97a0a876fa613d22fab03db87ca0a7e106d61023cc9d64d822",
+    "local/throughput/final/release/examples/flywheel_data": "1b693b556ddb38a2e251b11f7b2e68ec136e276aff0f267858bfd0faec44de17",
+    "local/throughput/final/release/examples/transfer_throughput": "a723228f4e047daa2b8faa948a857533bd2f2856cc4664620d58c4bd4575bcf0"
+  }
+}
