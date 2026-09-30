@@ -2223,3 +2223,29 @@ E54 seed correction before training or screen outcomes: the existing driver
 uses training seed800000007 for cycle0. Use that successful-cycle seed, replacing
 the earlier1300000007 entry. E55 uses the same800000007. All data/screen masters
 and other settings remain unchanged. The immutable run plan records this driver.
+
+**E54 teacher-observation diagnostic:** First1,000 completed800-simulation games
+contain56,280 rows;10,412 (18.50%) have an opponent blind reservation. One
+random blind observation from each of512 sampled games has mean eight-view
+policy TV0.0503,argmax disagreement8.45%,and mean raw value range0.2298
+(probability range0.1149). This supports the paired multi-view control on actual
+teacher inputs. It does not prove that encoding noise causes playing failures.
+
+## E56 — Third candidate generation from the provisional teacher
+
+After E54/E55 complete, freeze the resulting lineage checkpoint. Collect1,000
+fresh train games at1390m and1,000 fresh dev games at1400m,800 simulations,
+14 threads,depth16,with extra encoding views. Train from that lineage with
+E54's5,000 original train games replayed alongside the1,000 fresh games.
+Keep architecture,loss,epochs10,learning rate1e-4 and batch1024. Seed800000008.
+Use multi-view sampling only if E55 advances the lineage; otherwise use original
+inputs. Select on the fresh dev corpus using policy CE+4 outcome Brier. Keep
+epoch zero. Fixed2,000-game128-simulation screen1410m against the parent lineage,
+same provisional50.5% requested-credit point rule. This is the third candidate
+attempt; no extra candidate selection from the milestone outcome.
+
+Freeze the resulting endpoint and assess against d355...600 at3310m,20,000
+paired games,128 simulations,depth16,14 threads,using scripts/promote.py.
+Keep its strict decision and conservative intervals. If endpoint weights equal
+the champion, skip the self-comparison and record no learning gain. A provisional
+path with a failed final assessment does not establish compounded improvement.

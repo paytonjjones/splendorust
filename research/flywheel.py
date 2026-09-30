@@ -94,7 +94,7 @@ def main():
     for cycle in range(a.cycles):
         c=a.output/f'cycle-{cycle:03d}';c.mkdir(exist_ok=True)
         if (c/'decision.json').exists():
-            replay.extend(sorted((c/'train').glob('*.bin')));continue
+            replay.extend(sorted(p for p in (c/'train').glob('*.bin') if not p.name.endswith('.views.bin')));continue
         best=json.loads(bestpath.read_text());assert sha(best['model'])==best['model_sha256']
         if best['checkpoint']:assert sha(best['checkpoint'])==best['checkpoint_sha256']
         env['SPLENDOR_BEST_MODEL']=best['model']

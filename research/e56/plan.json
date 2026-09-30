@@ -1,0 +1,24 @@
+{
+  "schema": "lineage-generation-v1",
+  "train_seed": 1390000000,
+  "dev_seed": 1400000000,
+  "screen_seed": 1410000000,
+  "milestone_seed": 3310000000,
+  "milestone_games": 20000,
+  "training_seed": 800000008,
+  "epochs": 10,
+  "teacher_iterations": 800,
+  "screen_iterations": 128,
+  "threads": 14,
+  "champion_sha256": "d355838dd48742c39e2e51f092586c23616d974e413521fc056b0ceab7d00600",
+  "script_sha256": "e7edbe4f956b878243741b45fe79f604dde37b342445551e10d555f7eeeced2f",
+  "training_scripts_sha256": {
+    "train_flywheel.py": "01036bb11e9e5d8201fb3f39c59b2caf316f68328da6ba41f10783e0a964e524",
+    "flywheel_model.py": "a756ea5d23652cea3f6e1a6fa0f02a0a6508e86340e5236ce2e853090ae8aa62",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4"
+  },
+  "rule": "provisional worst-case requested point >50.5%; final strict champion gate",
+  "replay": "E54 five original train shards",
+  "augmentation": "only if E55 selected"
+}

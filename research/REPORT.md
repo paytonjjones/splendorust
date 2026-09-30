@@ -233,3 +233,16 @@ gate66.46s. On the same saved inputs, median inference is39.57us
 versus31.25us;128-simulation decision cost is1.273x.
 The timing uses the faster kernel on both models and is conditional on this host.
 E53 now tests budget800 targets alone; no result is available yet.
+
+Evaluator feedback changed the next work: stop architecture changes, separate
+exploratory lineage selection from fixed-champion confirmation, and collect a
+comparable-volume800-simulation teacher corpus. E54 now collects5,000 training
+and1,000 development games. E55 is the paired multi-view input control.
+The original data and search trajectories remain exact when sidecars are saved.
+
+In the first1,000 teacher games,18.5% of rows have an opponent blind reservation.
+Across512 sampled blind observations,eight encodings give mean legal-policy TV
+5.03%,argmax disagreement8.45%,and mean raw value range0.230. Inputs without
+opponent blind reservations are invariant. This establishes conditional input
+sensitivity and its measured prevalence; causation of training failure remains
+an experimental question. The fixed champion and earlier decisions are intact.
