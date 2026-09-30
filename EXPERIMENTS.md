@@ -1635,3 +1635,65 @@ credits in 14 completed games (53.57% conditional), with six unsupported.
 This is promising but too small for a final external claim. Preserve all
 missing outcomes. The next final candidate assessment will use the unchanged
 400-game external schedule and a fresh internal promotion gate.
+
+## E36 — Final assessment of the three-world candidate
+
+The completed development evidence selects transfer-pool3. Freeze the E30
+checkpoint, cpuct 0.4, first-play reduction 0.02965, zero uniform mixture, three
+fresh root worlds per real decision, depth sixteen and the E35 inference kernel.
+Run the existing strict promotion script against E28 at 128 simulations: fresh
+screen 628m (2,000 games), independent confirmation 1628m (20,000 games).
+Preserve strict incomplete rejection. If a published-rule gap stops the screen,
+continue the reserved confirmation only as a research measurement under the
+user-approved incomplete policy, with all missing outcomes bounded.
+
+Also rerun the unchanged 400-game external schedule at 2051000, with candidate
+and frozen AlphaZero target both at 800 simulations. This comparison has equal
+simulation counts, not a guaranteed equal-compute workload. The candidate was
+selected on development data; keep all requested records and unsupported counts.
+The already-used external schedule supports comparison with earlier agents,
+while any final leadership claim will need fresh external confirmation.
+
+## E37 — Deeper planning with the bounded world pool
+
+Hypothesis before implementation: after chance branching is reduced to three
+root worlds, the depth-sixteen cap may truncate useful terminal planning at
+higher simulation budgets. Compare depth 64 with depth 16 directly, both using
+three worlds, the same transferred checkpoint, native-scaled exploration and
+800 simulations. Use 200 fresh paired games at 640m. The `transfer-deep` alias
+fixes depth 64; the control `transfer-pool3` retains the run's depth 16. This
+is a separate development experiment while E36's fixed candidate confirms.
+Build it in an alternate target directory to preserve E36's executable between
+its screen and confirmation stages. Do not tune from E36 final histories.
+
+**E37 result:** All 200 games completed. Depth 64 earned 51.25%, with
+conservative interval [30.38%,72.12%]. No gain shown; retain depth 16 and
+do not advance this variant. Raw records and validation logs are retained.
+
+## E38 — More sampled hidden worlds
+
+Hypothesis before implementation: the successful three-world pool reduces
+chance branching but may overfit a few sampled hidden states. Test eight worlds
+against three with the frozen transferred checkpoint, depth 16 and 800
+simulations. Use 200 fresh paired development games at 641m. Only the world
+count changes. This test does not use E36 confirmation histories. If the
+screen shows no clear gain, retain three worlds.
+
+## E39 — Total decision cost of the transferred model
+
+Measurement hypothesis before implementation: fixed simulation counts do not
+measure equal compute. Extend the fixed observation benchmark with transfer
+budgets 16, 32, 64, 128, 256 and 800. Use the unchanged 568 Strong-game Main
+observations and reverse the order on the second of three repetitions. Measure
+all preparation and action selection, simulations and inference calls. Run
+after E36 and E38 processes finish to reduce shared-host interference. Use
+these costs to select a later matched-compute development budget; do not claim
+strength from a latency result or tune from final game histories.
+
+**E38 result:** All 200 games completed. Eight worlds earned 47.25%, with
+conservative interval [26.89%,67.61%]. No gain shown; retain three worlds.
+
+**E36 screen:** All 2,000 games completed. The frozen three-world candidate
+at 128 simulations earned 81.55% against E28, conservative interval
+[77.85%,85.25%]. The script advanced to the reserved confirmation. Do not
+use that final schedule to guide the independent E37/E38 experiments.

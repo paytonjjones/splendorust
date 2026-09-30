@@ -33,6 +33,12 @@ fn main() {
         ("neural-rollout", 64),
         ("neural-rollout", 128),
         ("neural-rollout", 256),
+        ("transfer-pool3", 16),
+        ("transfer-pool3", 32),
+        ("transfer-pool3", 64),
+        ("transfer-pool3", 128),
+        ("transfer-pool3", 256),
+        ("transfer-pool3", 800),
     ];
     for repeat in 0..3 {
         let mut order = settings.to_vec();

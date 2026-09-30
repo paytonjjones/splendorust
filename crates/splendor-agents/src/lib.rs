@@ -733,10 +733,15 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "transfer-native-rollout"
         | "transfer-dynamic"
         | "transfer-pool3"
+        | "transfer-deep"
+        | "transfer-pool8"
         | "expert-policy" => {
             let mut config = search.clone();
             if name == "neural-policy" || name == "expert-policy" || name == "transfer-policy" {
                 config.iterations = 0;
+            }
+            if name == "transfer-deep" {
+                config.depth = 64;
             }
             let mut agent = neural_search::NeuralAgent::new(seed, config);
             agent.logistic = name == "neural-logistic" || name == "neural-rollout-logistic";
@@ -746,7 +751,13 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             agent.self_play = name == "neural-selfplay";
             agent.transferred = name.starts_with("transfer");
             agent.dynamic_fpu = name == "transfer-dynamic";
-            agent.world_pool = if name == "transfer-pool3" { 3 } else { 0 };
+            agent.world_pool = if name == "transfer-pool8" {
+                8
+            } else if name == "transfer-pool3" || name == "transfer-deep" {
+                3
+            } else {
+                0
+            };
             if name.starts_with("transfer-native") || agent.dynamic_fpu || agent.world_pool > 0 {
                 agent.cpuct = 0.4;
                 agent.fpu_reduction = 0.02965;

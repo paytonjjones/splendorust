@@ -1,7 +1,8 @@
 # Playing-strength research status
 
-The selected research candidate is `neural-selfplay`: a native Rust policy/value
-network with information-set PUCT, 128 simulations, depth 16 and eight heuristic
+The strongest completed development candidate is `transfer-pool3`; its final
+confirmation is running. The last confirmed research candidate is
+`neural-selfplay`: a native Rust policy/value network with information-set PUCT, 128 simulations, depth 16 and eight heuristic
 rollout turns. Its checkpoint is E28. E26 `neural-rollout` remains the last
 agent to pass the strict no-incomplete-games promotion gate. Original `search128` remains available
 and unchanged. This is a two-player result; other player counts use the Strong
@@ -55,8 +56,8 @@ agree within 0.000007. The first absolute-logit check failed on artificial extre
 inputs; the failure and subsequent normalized-output checks are preserved.
 
 Transferred policy alone is weak. Adding search and eight heuristic rollout
-turns scored 64.75% against E28 in a preliminary 200-game screen. A larger fresh
-screen is running after a transfer-only key correction: this network uses the
+turns scored 64.75% against E28 in a preliminary 200-game screen. After a transfer-only key correction, 1,999 of 2,000 fresh games completed
+and the candidate scored 67.23% among complete games: this network uses the
 turn count, so its tree key must retain that field. E31 separately tests the
 source network's exploration parameters after scaling from [-1,1] to [0,1].
 E31 earned 68.80% against E28 in 2,000 complete development games. The
@@ -66,6 +67,15 @@ screen earned 7.5 credits in 14 complete games out of 20, with six unsupported. 
 2.34x faster with identical saved outputs and playing records. No transfer
 agent has a final confirmation or an external leadership claim yet.
 
+E36's fresh internal screen completed all 2,000 games. At 128 simulations,
+`transfer-pool3` earned 81.55% against E28, conservative interval
+77.85–85.25%. The reserved 20,000-game confirmation and 400-game external
+comparison are running. E37 tested depth 64 against depth 16 at 800
+simulations: 51.25% in 200 complete games, interval 30.38–72.12%. No gain
+was shown; retain depth 16. E38 tested eight sampled worlds against three
+on independent development seeds: 47.25% in 200 complete games, with no
+gain shown. Retain three worlds. These tests do not change E36's candidate.
+
 ## Rejected experiments retained
 
 - E23 learned leaf without cycle handling: strong conditional score but repeated
@@ -73,6 +83,11 @@ agent has a final confirmation or an external leadership claim yet.
 - E25 first residual network: weaker play than original Search128.
 - E27 external-teacher fine-tuning: better prediction scores but only 38.75%
   against E26 in 200 complete games; later epochs overfit.
+- E38 eight sampled worlds: 47.25% against three worlds in 200 complete
+  games; no gain shown.
+- E33 dynamic first-play estimates: 46.5% against the fixed estimate control
+  in 200 complete games; no gain shown.
+- E37 depth 64: 51.25% against depth 16 in 200 complete games; no gain shown.
 - E29 persistent observation-matched tree: 49.75% against E26 in 200 complete
   games. No demonstrated benefit; not selected.
 
@@ -112,7 +127,7 @@ target/release/splendor compare --agent-a transfer-pool3 --agent-b neural-selfpl
   --output local/research/review-comparison.json
 ```
 
-This command is a development comparison. A 400-game external run and final
+This command repeats the completed screen; it must not guide new tuning. A 400-game external run and final
 internal confirmation are still required before selecting it as the final agent.
 The committed binary weights permit evaluation without the Python training
 environment or large training datasets.
