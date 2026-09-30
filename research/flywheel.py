@@ -27,6 +27,7 @@ def main():
     p.add_argument('--learning-rate',type=float)
     p.add_argument('--bitplanes',action='store_true')
     p.add_argument('--distill-incumbent',action='store_true')
+    p.add_argument('--trunk-blocks',type=int)
     p.add_argument('--threads',type=int,default=14)
     p.add_argument('--screen',type=int,default=2000)
     p.add_argument('--confirm',type=int,default=0,help='optional fresh confirmation; 0 keeps the fixed 2k inner-loop gate')
@@ -106,6 +107,7 @@ def main():
             command=[sys.executable,ROOT/'research/train_flywheel.py','--train',*replay,*datasets['train'],
                 '--dev',*datasets['dev'],'--output',model,'--epochs',a.epochs,'--device',a.device,'--seed',800000007+cycle,
                 '--architecture',a.architecture,'--selection',a.selection,'--learning-rate',a.learning_rate]
+            if a.trunk_blocks is not None:command+=['--trunk-blocks',a.trunk_blocks]
             # Cross-architecture students start from scratch; same-architecture cycles warm start.
             with Path(best['model']).open('rb') as f:teacher_magic=f.read(8)
             teacher_gated=teacher_magic in [b'SPGATED1',b'SPGATED2']

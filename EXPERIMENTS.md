@@ -1975,3 +1975,27 @@ Reject. Native parity max logit error6.36e-6; median inference29.66us.
 Distillation reduces held-out teacher value MSE to0.0281 and policy KL to0.2055,
 but does not preserve playing strength. This is direct evidence that lower
 held-out distillation error alone is insufficient. Keep the frozen incumbent.
+
+## E47 — Add trainable capacity without discarding the incumbent function
+
+E45/E46 show that a faster random-start architecture loses too much teacher
+skill. Test a deeper teacher-initialized network instead. Copy frozen d355...600
+and add two residual trunk blocks (three total), with new projection norm scale
+and bias zero. Require exact initial policy/value equality on64 held-out inputs
+and native parity before training. This preserves the learned function while
+adding66,594 trainable parameters; it tests capacity without random-start loss.
+
+Reuse the same185,354 E42 train positions. Use E43's separate budget800
+8,946-position development corpus to select by policy CE +4 blended-target
+Brier. No final arena positions enter training/selection. Twenty epochs,
+AdamW1e-4, cosine decay to1e-5, batch1024, seed1190000007. Keep epoch zero and
+allow it to win selection; if it wins, skip playing the functionally identical
+candidate. Native export needs a versioned header for the new trunk depth.
+Measure total decision cost as well as strength: more parameters may be too
+expensive even if strength rises. Fixed2,000-game128-simulation gate,1200m,
+14 threads, conservative lower bound above51%; no automatic confirmation.
+
+**E47 handoff:** Training completed in181.49s, selected epoch13. Initial
+identity check is exact on64 PyTorch inputs; native initial/trained parity
+checks pass. The reserved1200m gate has not run. Do not promote from its
+development scores or treat this pending experiment as a strength result.

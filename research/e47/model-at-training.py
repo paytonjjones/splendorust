@@ -37,7 +37,7 @@ def bootstrap(warmstart=None):
     m=p['full_model'].cpu();m.load_state_dict(p['state_dict'],strict=True)
     if warmstart:
         payload=torch.load(warmstart,map_location='cpu',weights_only=True)
-        expand_trunk(m,payload.get('trunk_blocks') or 1)
+        expand_trunk(m,payload.get('trunk_blocks',1))
         m.load_state_dict(payload['state_dict'],strict=True)
     return m
 

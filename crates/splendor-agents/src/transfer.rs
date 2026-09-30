@@ -174,7 +174,7 @@ impl Block {
 }
 struct BootstrapModel {
     first: Norm,
-    trunk: Block,
+    trunk: Vec<Block>,
     policy_block: Block,
     policy_hidden: Dense,
     policy_output: Dense,
@@ -184,9 +184,17 @@ struct BootstrapModel {
 }
 impl BootstrapModel {
     pub fn from_bytes(bytes: &[u8]) -> Self {
+        let (bytes, depth) = if bytes.starts_with(b"SPMOBIL1") {
+            assert!(bytes.len() >= 12, "mobile model header");
+            let depth = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
+            assert!((2..=8).contains(&depth), "mobile trunk depth");
+            (&bytes[12..], depth)
+        } else {
+            (bytes, 1)
+        };
         assert_eq!(
             bytes.len(),
-            include_bytes!("models/e30.bin").len(),
+            include_bytes!("models/e30.bin").len() + 4 * 33297 * (depth - 1),
             "version-80 model byte length"
         );
         assert!(
@@ -206,7 +214,7 @@ impl BootstrapModel {
         let mut r = Reader { values, at: 0 };
         let model = Self {
             first: r.norm(56, 56, 56, false),
-            trunk: r.block(),
+            trunk: (0..depth).map(|_| r.block()).collect(),
             policy_block: r.block(),
             policy_hidden: r.dense(392, 81),
             policy_output: r.dense(81, 81),
@@ -218,9 +226,11 @@ impl BootstrapModel {
         model
     }
     pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
-        let h = self
-            .trunk
-            .apply(&self.first.apply(x, Activation::None), false);
+        let mut h = self.first.apply(x, Activation::None);
+        for block in &self.trunk {
+            h = block.apply(&h, false);
+        }
+
         let policy = self.policy_block.apply(&h, true);
         let policy: Vec<_> = self
             .policy_hidden
@@ -549,6 +559,30 @@ mod tests {
         let (p, v) = Model::from_bytes(&bytes).infer(&x);
         assert_eq!(p, [0.0; 81]);
         assert_eq!(v, [0.0; 2]);
+        bytes.pop();
+        assert!(std::panic::catch_unwind(|| Model::from_bytes(&bytes)).is_err());
+    }
+    #[test]
+    fn deeper_identity_trunk_preserves_bootstrap_and_checks_header() {
+        let original = include_bytes!("models/e30.bin");
+        let split = 4 * (56 * 56 + 2 * 56 + 33297);
+        let mut bytes = b"SPMOBIL1".to_vec();
+        bytes.extend_from_slice(&3u32.to_le_bytes());
+        bytes.extend_from_slice(&original[..split]);
+        bytes.resize(bytes.len() + 2 * 4 * 33297, 0);
+        bytes.extend_from_slice(&original[split..]);
+        let before = Model::from_bytes(original);
+        let after = Model::from_bytes(&bytes);
+        for seed in [0, 1, 1190000007] {
+            let state = GameState::new(2, seed).unwrap();
+            let x = encode(&state.observe(0), &mut Rng::new(17));
+            assert_eq!(before.infer(&x), after.infer(&x));
+        }
+        for depth in [0u32, 1, 9, u32::MAX] {
+            let mut invalid = bytes.clone();
+            invalid[8..12].copy_from_slice(&depth.to_le_bytes());
+            assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());
+        }
         bytes.pop();
         assert!(std::panic::catch_unwind(|| Model::from_bytes(&bytes)).is_err());
     }

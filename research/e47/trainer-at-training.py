@@ -19,7 +19,7 @@ def main():
     p.add_argument('--learning-rate',type=float,default=1e-4)
     p.add_argument('--bitplanes',action='store_true')
     p.add_argument('--distill-teacher')
-    p.add_argument('--trunk-blocks',type=int)
+    p.add_argument('--trunk-blocks',type=int,default=1)
     a=p.parse_args()
     if a.selection=='distillation' and not a.distill_teacher:p.error('distillation selection requires --distill-teacher')
     a.output.mkdir(parents=True,exist_ok=False)
@@ -37,7 +37,6 @@ def main():
     else:
         model=bootstrap(a.warmstart)
         from flywheel_model import expand_trunk
-        if a.trunk_blocks is None:a.trunk_blocks=len(model.trunk)
         expand_trunk(model,a.trunk_blocks)
         forward=raw;native_export=export
     model=model.to(a.device)

@@ -148,7 +148,7 @@ inference cost by 2.34x with exact saved-output and playing-record equality.
 `flywheel.py` now runs collection, PyTorch training, native export and parity,
 then the paired arena gate. It uses the transferred model only as its initial
 teacher. Later teachers are selected trained checkpoints. The default run measures one cycle with 5,000 training games and separate
-development and confirmation ranges. Assess strength gain and total wall time
+development and gate ranges. Assess strength gain and total wall time
 before choosing the next corpus size or teacher budget. Earlier training shards
 can provide replay when an explicit multi-cycle schedule is justified.
 
@@ -157,7 +157,9 @@ Run from the repository root with the isolated pinned Torch environment:
 ```sh
 local/strength/inference/bin/python research/flywheel.py \
   --output local/research/flywheel-next --cycles 1 --games 5000 \
-  --dev-games 1000 --iterations 128 --epochs 10 --threads 4
+  --dev-games 1000 --iterations 128 --epochs 10 --threads 14 \
+  --teacher-model research/e41/cycle-0/model/model.bin \
+  --teacher-checkpoint research/e41/cycle-0/model/model.pt
 ```
 
 The command starts native Rust workers. Training reads immutable memory-mapped
@@ -221,3 +223,9 @@ For the semantic bit-input student, also use `--bitplanes`. Optional
 alongside search/outcome labels. Checkpoints record the architecture, source
 hashes and teacher checkpoint hash. E45 and E46 both failed their fresh strength
 gates; their speed gains do not authorize a model promotion.
+
+`--trunk-blocks 3` adds two identity-initialized residual blocks to the
+bootstrap architecture. Later warm starts preserve their stored depth when
+this option is omitted. Native `SPMOBIL1` exports record depth in the header.
+E47 is trained and passes native parity; its fresh strength gate is pending.
+Use [HANDOFF.md](HANDOFF.md) for the current checkpoint and next command.

@@ -185,8 +185,8 @@ A second accepted gain has not been established. All checkpoints are preserved.
 Normal inner iterations now use one fixed 2,000-game paired gate with no
 mandatory confirmation. Inconclusive results retain the incumbent and move to
 the next model. Larger independent confirmations remain outside this loop for
-milestones, external claims, and ambiguous results. E44 measures self-play and
-arena throughput at4/8/12/14 threads before selecting a faster default.
+milestones, external claims, and ambiguous results. E44 measured self-play and
+arena throughput at 4/8/12/14 threads and selected 14 as the driver default.
 
 **E44 completed:** Two serial repeats at identical schedules preserve self-play
 bytes and ordered arena records across4/8/12/14 threads. Mean games/s:
@@ -202,3 +202,9 @@ in1,999/2,000 complete games. Reject; the missing game stays unknown. E46
 decodes packed deck bytes into bits and adds frozen-teacher distillation. It
 scores33.375% in2,000 complete games, CI29.27–37.48%. Reject despite better
 held-out prediction fit. Neither result proves a faster improvement loop.
+
+E47 preserves the incumbent function at initialization and adds two residual
+trunk blocks. The 209,000-parameter model trains on the saved higher-budget
+corpus and selects epoch 13. Native parity passes. Its 2,000-game strength gate
+is pending; the checkpoint is experimental and has not replaced the teacher.
+The current handoff and next reproducible command are in [HANDOFF.md](HANDOFF.md).
