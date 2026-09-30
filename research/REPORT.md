@@ -1,40 +1,40 @@
 # Playing-strength research status
 
 The confirmed research champion is E56 (`research/CHAMPION.json`). It scored
-55.26% against the prior trained cycle0 champion in20,000/20,000 complete
-paired games at128 simulations, CI54.13–56.39%. The strict promotion gate
-passes. This is a second learning gain. E54 achieved the main new gain after
-receiving281,432 positions from5,000800-simulation teacher games; E56 then
-advanced provisionally after a51.15% screen over E54. The endpoint milestone
-confirms improvement over the fixed prior champion, but does not confirm the
-small E56-over-E54 difference on its own. The transferred model remains a
-bootstrap, and the architecture remains142,406 parameters.
+55.26% against the prior trained cycle 0 champion in 20,000 complete paired
+games at 128 simulations. The 95% interval is 54.13–56.39%. The strict gate
+passes. This establishes a second learning gain. E54 achieved the main gain
+with 281,432 positions from 5,000 games by an 800-simulation teacher. E56 then
+advanced after a provisional 51.15% screen over E54. The independent milestone
+confirms the endpoint's gain over the fixed prior champion. It does not confirm
+the small E56-over-E54 difference by itself. The transferred model remains a
+bootstrap. The architecture still has 142,406 parameters.
 
-E57 endpoint controls:95.64% against frozen Search128 (1,996/2,000 complete),
-97.625% against Strong (2,000 complete). At16 NN simulations it scored82.88%
-against Search128 (1,995/2,000 complete). Unknown outcomes remain bounded.
-Across the same568 observations, median decision cost was0.835ms for NN16,
-1.137ms for Search128,and6.265ms for NN128. These shared-host timings do not
-establish universal compute equivalence. Native controls are separate from
-external rankings.
+E57 endpoint controls scored 95.64% against frozen Search128 (1,996 of 2,000
+complete games) and 97.625% against Strong (2,000 complete games). At 16 NN
+simulations, it scored 82.88% against Search128 (1,995 complete games).
+Incomplete outcomes remain unknown. On the same 568 observations, median
+decision cost was 0.835 ms for NN16, 1.137 ms for Search128, and 6.265 ms for
+NN128. Shared host timings do not establish universal compute equivalence.
+Native controls remain separate from external rankings.
 
-The unchanged400-game AlphaZero profile rerun produced209 complete games,
-191 unsupported,and59.81% conditional credit. All-requested point bounds are
-31.25–79%; the paired bootstrap missing-outcome envelope is26.625–83%.
-All400 saved histories passed native canonical replay checks. No external
-best-in-class rank is established. See `research/e57/` for raw evidence.
+The unchanged 400-game AlphaZero profile produced 209 complete games, 191
+unsupported games, and 59.81% conditional credit. All-requested point bounds
+are 31.25–79%. The paired bootstrap missing-outcome envelope is 26.625–83%.
+All 400 saved histories passed canonical replay checks. No external rank is
+established. `research/e57/` contains the raw evidence.
 
-Full-volume teacher collection took963.50s (6,000 games and337,953 positions,
-6.23 games/s and350.75 positions/s); E54 training took95.94s and its
-2k screen48.49s. On the reused corpus, model-to-screen takes about2.4minutes;
-E56 collected2,000 fresh games in315.37s,trained in107.84s,and screened
-in about50s. The20k milestone took523.34s and remains outside the inner loop. E55's random
-hidden-view control was rejected at49.525%; measured sensitivity changed
-little. Current evidence supports teacher volume rather than another
-architecture change. E58 continues with the confirmed model as800-simulation
-teacher. All negative results and prior champion files remain saved.
-Original Search128 and core rules are unchanged. Learned evidence is two-player
-only; other player counts use Strong.
+E54 teacher collection took 963.50 s for 6,000 games and 337,953 positions:
+6.23 games/s and 350.75 positions/s. Training took 95.94 s and the 2,000-game
+screen took 48.49 s. With a saved corpus, model-to-screen takes about 2.4
+minutes. E56 collected 2,000 fresh games in 315.37 s, trained in 107.84 s,
+and screened in 46.15 s. Its 20,000-game milestone took 523.34 s and stays
+outside the inner loop. E55's random hidden-view control was rejected at
+49.525%; measured sensitivity changed little. Current evidence supports more
+strong-teacher data. E58 uses the confirmed model as an 800-simulation teacher.
+All negative results and prior champion files remain saved. Original Search128
+and core rules are unchanged. Learned evidence is for two players only; other
+player counts use Strong.
 
 ## Confirmed results
 

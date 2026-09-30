@@ -2317,16 +2317,16 @@ histories replay correctly; external policy configuration equals E36.
 
 ## E58 — Full-volume next teacher generation
 
-Hypothesis: E54 showed that5,000800-simulation teacher games can teach a
-stronger128-simulation model. Repeat that volume from the confirmed E56
-teacher, retaining only its recent1,000-game predecessor replay shard.
-Collect5,000 fresh train games(master3510000000) and1,000 dev games
-(3520000000),800 simulations,depth16,14threads. Add E56's1,000 train
-games as replay. Keep142,406-parameter bootstrap architecture, original
-inputs,loss and10epochs,batch1024,lr1e-4,MPS. Warmstart E56;training
-seed800000009. Select epoch0..10 using dev policy CE+4outcome Brier.
-Do not choose a model using arena outcomes. Fixed2,000-game paired screen
-3530000000,128simulations,depth16,14threads versus fixed E56 champion.
-Apply registered provisional requested-credit point>50.5% rule; preserve
-strict decisions and95% interval. No20k confirmation in this inner loop.
-Unknown outcomes remain unknown and cannot increase promotion credit.
+Hypothesis: E54 showed that 5,000 games from an 800-simulation teacher can
+teach a stronger 128-simulation model. Repeat that volume with the confirmed
+E56 teacher. Keep its recent 1,000-game predecessor replay shard. Collect
+5,000 fresh train games (master 3510000000) and 1,000 dev games (3520000000),
+with 800 simulations, depth 16, and 14 threads. Add E56's 1,000 training games
+as replay. Keep the 142,406-parameter bootstrap architecture, original inputs,
+loss, and 10 epochs. Use batch 1024, learning rate 1e-4, and MPS. Warmstart
+E56 with training seed 800000009. Select epoch 0..10 using dev policy CE plus
+4 times outcome Brier. Do not select a model with arena outcomes. Use a fixed
+2,000-game paired screen at 3530000000, 128 simulations, depth 16, and 14
+threads against E56. Apply the registered provisional requested-credit point
+rule (>50.5%). Keep the strict decision and 95% interval. Do not use a 20,000-
+game confirmation in this inner loop. Unknown outcomes stay unknown.
