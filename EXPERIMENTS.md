@@ -2830,3 +2830,7 @@ Four E88 Gumbel200 votes versus one Gumbel800 teacher, 2,000 paired games at 480
 ## E94 — External-teacher data boundary pilot
 
 Eight fresh unchanged AlphaZero800 native self-play games produce 440 public-input rows. All transitions replay; all 102 blind rows pass exact eight-encoding public-feature invariance. Pilot data is excluded from training. The external teacher retains private inputs only for offline labels; the learner receives public observations and metadata. See research/e94/REPORT.md and PREREGISTRATION.md.
+
+## E95 — External teacher and public inference at every node
+
+Hypothesis: replace weak internal supervision with unchanged AlphaZero800 expert labels, at comparable corpus volume, and remove sampled hidden-card input noise at every node. Collect5,000 train/1,000 dev native games; mix fixed canonical replay. Use E81 warmstart with a small public-input expansion and a public rules flag. Require fresh native and canonical2,000-game screens. See research/e95/PREREGISTRATION.md. No result or promotion yet.

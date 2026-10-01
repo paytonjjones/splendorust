@@ -42,7 +42,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .collect::<Vec<_>>()
                 .try_into()
                 .unwrap();
-            model.infer_with_context(&x, &context)
+            model.infer_with_profile(
+                &x,
+                &context,
+                data["native_profiles"][i].as_bool().unwrap_or(false),
+            )
         } else {
             model.infer(&x)
         };

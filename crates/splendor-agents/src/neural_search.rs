@@ -604,7 +604,7 @@ impl NeuralAgent {
                 context[slot + 3] = f32::from(r.tier + 1) / 3.0;
                 context[6] += context[slot] / 3.0;
             }
-            model.infer_with_context(&x, &context)
+            model.infer_with_profile(&x, &context, true)
         } else {
             if model.has_correction() {
                 self.correction_calls += 1;

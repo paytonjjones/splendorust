@@ -1,0 +1,59 @@
+{
+  "stage": "validation-parallel",
+  "games": 2,
+  "workers": 2,
+  "shard_games": 1,
+  "seconds": 18.00506549992133,
+  "receipts": [
+    {
+      "games": 1,
+      "completed": 1,
+      "offset": 0,
+      "master": 4869000000,
+      "rows": 58,
+      "public_encoding_invariance_checks": 2,
+      "replay_transitions": 58,
+      "data_sha256": "6fa08f811cd5b3280744782ccc360b893a95a0ef9ae29405d9d29f8a35325f8d",
+      "context_sha256": "c1931e384e6bda1ba0af298958c2a165e3a7ed844ee886e6dcb5fb53d14117aa",
+      "histories_sha256": "1d4d3c277a211bf2c651c9ccf27499ff43509cda945241608d06bc738e477635",
+      "teacher_config": {
+        "numMCTSSims": 800,
+        "fpu": 0.0593,
+        "universes": 3,
+        "cpuct": 0.8,
+        "prob_fullMCTS": 1.0,
+        "forced_playouts": false,
+        "no_mem_optim": false
+      },
+      "seconds": 16.81447495892644,
+      "learner_inputs": "Public observation sampling and public reservation metadata only; privileged teacher information appears only in labels",
+      "training_eligible": true,
+      "scope": "Teacher corpus only; no model strength claim"
+    },
+    {
+      "games": 1,
+      "completed": 1,
+      "offset": 1,
+      "master": 4869000000,
+      "rows": 50,
+      "public_encoding_invariance_checks": 2,
+      "replay_transitions": 50,
+      "data_sha256": "5e1b32c4a55d6ceab7cb9491d351b6024cfea6b1cc0d9c0109b2f1eb5427d3f7",
+      "context_sha256": "c1576a7baf8a6247926c0e2f66b7af12965920a52db3508b69d7a6382fc691b9",
+      "histories_sha256": "e452acb67af6297a5a2f4296332aa3d64179a08d191a89201b71eaa64bb2469f",
+      "teacher_config": {
+        "numMCTSSims": 800,
+        "fpu": 0.0593,
+        "universes": 3,
+        "cpuct": 0.8,
+        "prob_fullMCTS": 1.0,
+        "forced_playouts": false,
+        "no_mem_optim": false
+      },
+      "seconds": 16.405948041006923,
+      "learner_inputs": "Public observation sampling and public reservation metadata only; privileged teacher information appears only in labels",
+      "training_eligible": true,
+      "scope": "Teacher corpus only; no model strength claim"
+    }
+  ]
+}

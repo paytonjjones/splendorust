@@ -1,0 +1,37 @@
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error[E0599]: no method named `apply` found for struct `GameState` in the current scope
+    --> crates/splendor-agents/src/transfer.rs:1133:14
+     |
+1132 | /         state
+1133 | |             .apply(Action::ReserveDeck { tier: 0 }, &mut Rng::new(91))
+     | |             -^^^^^ method not found in `GameState`
+     | |_____________|
+     |
+     |
+     = help: items from traits can only be used if the trait is implemented and in scope
+note: `Environment` defines an item `apply`, perhaps you need to implement it
+    --> crates/splendor-agents/src/environment.rs:7:1
+     |
+   7 | pub trait Environment {
+     | ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0559]: variant `splendor_core::Action::ReserveDeck` has no field named `tier`
+    --> crates/splendor-agents/src/transfer.rs:1133:42
+     |
+1133 |             .apply(Action::ReserveDeck { tier: 0 }, &mut Rng::new(91))
+     |                                          ^^^^ field does not exist
+     |
+    ::: crates/splendor-core/src/lib.rs:23:5
+     |
+  23 |     ReserveDeck(u8),
+     |     ----------- `splendor_core::Action::ReserveDeck` defined here
+     |
+help: `splendor_core::Action::ReserveDeck` is a tuple variant, use the appropriate syntax
+     |
+1133 -             .apply(Action::ReserveDeck { tier: 0 }, &mut Rng::new(91))
+1133 +             .apply(Action::ReserveDeck(/* u8 */), &mut Rng::new(91))
+     |
+
+Some errors have detailed explanations: E0559, E0599.
+For more information about an error, try `rustc --explain E0559`.
+error: could not compile `splendor-agents` (lib test) due to 2 previous errors

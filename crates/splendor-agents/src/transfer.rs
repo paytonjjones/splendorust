@@ -256,6 +256,11 @@ impl BootstrapModel {
                 "public context fields"
             );
             (&bytes[16..], depth, 57)
+        } else if bytes.starts_with(b"SPPUB751") {
+            assert!(bytes.len() >= 12, "public model header");
+            let depth = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
+            assert!((1..=8).contains(&depth), "public trunk depth");
+            (&bytes[12..], depth, 75)
         } else if bytes.starts_with(b"SPMOBIL1") {
             assert!(bytes.len() >= 12, "mobile model header");
             let depth = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
@@ -489,10 +494,30 @@ impl Model {
     }
     pub fn needs_public_context(&self) -> bool {
         matches!(&self.architecture, Architecture::Attention(_))
-            || matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 57)
+            || matches!(&self.architecture, Architecture::Bootstrap(model) if matches!(model.first.input, 57 | 75))
             || matches!(&self.architecture, Architecture::Residual(model) if model.public_belief)
     }
     pub fn infer_with_context(&self, x: &[f32; 392], context: &[f32; 7]) -> ([f32; 81], [f32; 2]) {
+        self.infer_with_profile(x, context, false)
+    }
+    /// Public rules identity; no private game information enters this input.
+    pub fn infer_with_profile(
+        &self,
+        x: &[f32; 392],
+        context: &[f32; 7],
+        native_rules: bool,
+    ) -> ([f32; 81], [f32; 2]) {
+        if let Architecture::Bootstrap(model) = &self.architecture
+            && model.first.input == 75
+        {
+            let (mean, public) = crate::belief::moments(x, context);
+            let mut input = [0.0; 525];
+            input[..392].copy_from_slice(&mean);
+            input[392..519].copy_from_slice(&public[392..]);
+            input[519] = f32::from(native_rules);
+            let h = model.features(&input, true);
+            return (model.policy(&h, true), model.value(&h, true));
+        }
         if let Architecture::Attention(model) = &self.architecture {
             return model.infer(x, context);
         }
@@ -1087,6 +1112,53 @@ mod tests {
             );
             assert_eq!(before, a.work_counts());
         }
+    }
+    #[test]
+    fn public_projection_identity_and_hidden_world_invariance() {
+        use splendor_core::{Action, GameState, Rng};
+        let original = include_bytes!("models/e30.bin");
+        let mut bytes = b"SPPUB751".to_vec();
+        bytes.extend(1u32.to_le_bytes());
+        for row in original[..56 * 56 * 4].as_chunks::<{ 56 * 4 }>().0 {
+            bytes.extend(row);
+            bytes.extend([0; 19 * 4]);
+        }
+        bytes.extend(&original[56 * 56 * 4..]);
+        let old = Model::from_bytes(original);
+        let new = Model::from_bytes(&bytes);
+        assert!(new.needs_public_context());
+        assert!(!new.has_correction());
+        let mut state = GameState::new(2, 81).unwrap();
+        state.apply_action(Action::ReserveDeck(0)).unwrap();
+        let o = state.observe(state.current_player());
+        let context = public_context(&o);
+        assert_eq!(context[0], 1.0);
+        let mut expected = None;
+        for seed in 0..16 {
+            let x = encode(&o, &mut Rng::new(1000 + seed));
+            let mean = crate::belief::moments(&x, &context).0;
+            let prediction = new.infer_with_context(&x, &context);
+            assert_eq!(prediction, old.infer(&mean));
+            assert_eq!(prediction, new.infer_with_profile(&x, &context, true));
+            if let Some(previous) = expected {
+                assert_eq!(prediction, previous);
+            }
+            expected = Some(prediction);
+        }
+        let x = encode(&o, &mut Rng::new(1000));
+        assert!(std::panic::catch_unwind(|| new.infer(&x)).is_err());
+        // Spatial feature index519 is column74, lane1 of the first layer.
+        let at = 12 + 74 * 4;
+        bytes[at..at + 4].copy_from_slice(&1f32.to_le_bytes());
+        let changed = Model::from_bytes(&bytes);
+        assert_ne!(
+            changed.infer_with_profile(&x, &context, false),
+            changed.infer_with_profile(&x, &context, true)
+        );
+        let mut bad = bytes.clone();
+        bad[8..12].copy_from_slice(&0u32.to_le_bytes());
+        assert!(std::panic::catch_unwind(|| Model::from_bytes(&bad)).is_err());
+        assert!(std::panic::catch_unwind(|| Model::from_bytes(&bytes[..bytes.len() - 4])).is_err());
     }
     #[test]
     fn information_projection_identity_and_payload_checks() {
