@@ -1,0 +1,2389 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "engine": "alphazero_native",
+    "ruleset": "alphazero-native-32a27ac-v1",
+    "planning_profile": "alphazero-native-32a27ac-v1",
+    "observation_profile": "native-public-history-v1",
+    "players": 2,
+    "games": 400,
+    "candidate": "champion",
+    "external": "alphazero",
+    "master": 4190000000,
+    "offset_block": 0,
+    "iterations": 800,
+    "depth": 16,
+    "world_pool": 3,
+    "cpuct": 0.4,
+    "fpu_reduction": 0.02965,
+    "uniform_prior": 0,
+    "external_config": {
+      "numMCTSSims": 800,
+      "fpu": 0.0593,
+      "universes": 3,
+      "cpuct": 0.8,
+      "prob_fullMCTS": 1.0,
+      "forced_playouts": false,
+      "no_mem_optim": false
+    },
+    "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+    "model_path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin",
+    "policy_binary_sha256": "746bb15fb65a7ba4e74917c54cae65f171cacd2c1d10993c1f0aefa83d9184f7",
+    "source_id": "16600b9ba704e942",
+    "engine_version": "splendorust-v2",
+    "revision": "9c354b6181904c915db41a607df03ec0a1dbf496",
+    "source_sha256": {
+      "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+      "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+      "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+      "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+      "crates/splendor-agents/src/neural_search.rs": "f789688c56ccc573f087d7e666ef0fa8e49d99ac37b76d25741b24ce931fcb5c",
+      "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+      "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+    },
+    "reproduction_command": [
+      "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+      "--games",
+      "100",
+      "--master",
+      "4190000000",
+      "--offset-block",
+      "0",
+      "--iterations",
+      "800",
+      "--output",
+      "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-00.jsonl",
+      "--model",
+      "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+    ],
+    "host": "macOS-26.7-arm64-arm-64bit",
+    "startup_seconds": 42.31969687284436,
+    "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+    "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+    "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute.",
+    "workers": 4,
+    "wall_seconds": 412.78458708291873,
+    "shard_metadata": [
+      {
+        "schema_version": 1,
+        "engine": "alphazero_native",
+        "ruleset": "alphazero-native-32a27ac-v1",
+        "planning_profile": "alphazero-native-32a27ac-v1",
+        "observation_profile": "native-public-history-v1",
+        "players": 2,
+        "games": 100,
+        "candidate": "champion",
+        "external": "alphazero",
+        "master": 4190000000,
+        "offset_block": 0,
+        "iterations": 800,
+        "depth": 16,
+        "world_pool": 3,
+        "cpuct": 0.4,
+        "fpu_reduction": 0.02965,
+        "uniform_prior": 0,
+        "external_config": {
+          "numMCTSSims": 800,
+          "fpu": 0.0593,
+          "universes": 3,
+          "cpuct": 0.8,
+          "prob_fullMCTS": 1.0,
+          "forced_playouts": false,
+          "no_mem_optim": false
+        },
+        "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+        "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+        "model_path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin",
+        "policy_binary_sha256": "746bb15fb65a7ba4e74917c54cae65f171cacd2c1d10993c1f0aefa83d9184f7",
+        "source_id": "16600b9ba704e942",
+        "engine_version": "splendorust-v2",
+        "revision": "9c354b6181904c915db41a607df03ec0a1dbf496",
+        "source_sha256": {
+          "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+          "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+          "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+          "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+          "crates/splendor-agents/src/neural_search.rs": "f789688c56ccc573f087d7e666ef0fa8e49d99ac37b76d25741b24ce931fcb5c",
+          "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+          "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+        },
+        "reproduction_command": [
+          "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+          "--games",
+          "100",
+          "--master",
+          "4190000000",
+          "--offset-block",
+          "0",
+          "--iterations",
+          "800",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-00.jsonl",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+        ],
+        "host": "macOS-26.7-arm64-arm-64bit",
+        "startup_seconds": 10.158824958023615,
+        "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+        "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+        "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute."
+      },
+      {
+        "schema_version": 1,
+        "engine": "alphazero_native",
+        "ruleset": "alphazero-native-32a27ac-v1",
+        "planning_profile": "alphazero-native-32a27ac-v1",
+        "observation_profile": "native-public-history-v1",
+        "players": 2,
+        "games": 100,
+        "candidate": "champion",
+        "external": "alphazero",
+        "master": 4190000000,
+        "offset_block": 50,
+        "iterations": 800,
+        "depth": 16,
+        "world_pool": 3,
+        "cpuct": 0.4,
+        "fpu_reduction": 0.02965,
+        "uniform_prior": 0,
+        "external_config": {
+          "numMCTSSims": 800,
+          "fpu": 0.0593,
+          "universes": 3,
+          "cpuct": 0.8,
+          "prob_fullMCTS": 1.0,
+          "forced_playouts": false,
+          "no_mem_optim": false
+        },
+        "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+        "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+        "model_path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin",
+        "policy_binary_sha256": "746bb15fb65a7ba4e74917c54cae65f171cacd2c1d10993c1f0aefa83d9184f7",
+        "source_id": "16600b9ba704e942",
+        "engine_version": "splendorust-v2",
+        "revision": "9c354b6181904c915db41a607df03ec0a1dbf496",
+        "source_sha256": {
+          "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+          "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+          "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+          "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+          "crates/splendor-agents/src/neural_search.rs": "f789688c56ccc573f087d7e666ef0fa8e49d99ac37b76d25741b24ce931fcb5c",
+          "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+          "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+        },
+        "reproduction_command": [
+          "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+          "--games",
+          "100",
+          "--master",
+          "4190000000",
+          "--offset-block",
+          "50",
+          "--iterations",
+          "800",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-01.jsonl",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+        ],
+        "host": "macOS-26.7-arm64-arm-64bit",
+        "startup_seconds": 10.663447457947768,
+        "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+        "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+        "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute."
+      },
+      {
+        "schema_version": 1,
+        "engine": "alphazero_native",
+        "ruleset": "alphazero-native-32a27ac-v1",
+        "planning_profile": "alphazero-native-32a27ac-v1",
+        "observation_profile": "native-public-history-v1",
+        "players": 2,
+        "games": 100,
+        "candidate": "champion",
+        "external": "alphazero",
+        "master": 4190000000,
+        "offset_block": 100,
+        "iterations": 800,
+        "depth": 16,
+        "world_pool": 3,
+        "cpuct": 0.4,
+        "fpu_reduction": 0.02965,
+        "uniform_prior": 0,
+        "external_config": {
+          "numMCTSSims": 800,
+          "fpu": 0.0593,
+          "universes": 3,
+          "cpuct": 0.8,
+          "prob_fullMCTS": 1.0,
+          "forced_playouts": false,
+          "no_mem_optim": false
+        },
+        "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+        "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+        "model_path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin",
+        "policy_binary_sha256": "746bb15fb65a7ba4e74917c54cae65f171cacd2c1d10993c1f0aefa83d9184f7",
+        "source_id": "16600b9ba704e942",
+        "engine_version": "splendorust-v2",
+        "revision": "9c354b6181904c915db41a607df03ec0a1dbf496",
+        "source_sha256": {
+          "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+          "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+          "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+          "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+          "crates/splendor-agents/src/neural_search.rs": "f789688c56ccc573f087d7e666ef0fa8e49d99ac37b76d25741b24ce931fcb5c",
+          "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+          "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+        },
+        "reproduction_command": [
+          "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+          "--games",
+          "100",
+          "--master",
+          "4190000000",
+          "--offset-block",
+          "100",
+          "--iterations",
+          "800",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-02.jsonl",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+        ],
+        "host": "macOS-26.7-arm64-arm-64bit",
+        "startup_seconds": 10.798072290956043,
+        "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+        "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+        "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute."
+      },
+      {
+        "schema_version": 1,
+        "engine": "alphazero_native",
+        "ruleset": "alphazero-native-32a27ac-v1",
+        "planning_profile": "alphazero-native-32a27ac-v1",
+        "observation_profile": "native-public-history-v1",
+        "players": 2,
+        "games": 100,
+        "candidate": "champion",
+        "external": "alphazero",
+        "master": 4190000000,
+        "offset_block": 150,
+        "iterations": 800,
+        "depth": 16,
+        "world_pool": 3,
+        "cpuct": 0.4,
+        "fpu_reduction": 0.02965,
+        "uniform_prior": 0,
+        "external_config": {
+          "numMCTSSims": 800,
+          "fpu": 0.0593,
+          "universes": 3,
+          "cpuct": 0.8,
+          "prob_fullMCTS": 1.0,
+          "forced_playouts": false,
+          "no_mem_optim": false
+        },
+        "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+        "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+        "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+        "model_path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin",
+        "policy_binary_sha256": "746bb15fb65a7ba4e74917c54cae65f171cacd2c1d10993c1f0aefa83d9184f7",
+        "source_id": "16600b9ba704e942",
+        "engine_version": "splendorust-v2",
+        "revision": "9c354b6181904c915db41a607df03ec0a1dbf496",
+        "source_sha256": {
+          "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+          "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+          "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+          "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+          "crates/splendor-agents/src/neural_search.rs": "f789688c56ccc573f087d7e666ef0fa8e49d99ac37b76d25741b24ce931fcb5c",
+          "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+          "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+        },
+        "reproduction_command": [
+          "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+          "--games",
+          "100",
+          "--master",
+          "4190000000",
+          "--offset-block",
+          "150",
+          "--iterations",
+          "800",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-03.jsonl",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+        ],
+        "host": "macOS-26.7-arm64-arm-64bit",
+        "startup_seconds": 10.699352165916935,
+        "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+        "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+        "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute."
+      }
+    ],
+    "reproduction_commands": [
+      [
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/local/strength/inference/bin/python",
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+        "--games",
+        "100",
+        "--master",
+        "4190000000",
+        "--offset-block",
+        "0",
+        "--iterations",
+        "800",
+        "--output",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-00.jsonl",
+        "--model",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+      ],
+      [
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/local/strength/inference/bin/python",
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+        "--games",
+        "100",
+        "--master",
+        "4190000000",
+        "--offset-block",
+        "50",
+        "--iterations",
+        "800",
+        "--output",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-01.jsonl",
+        "--model",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+      ],
+      [
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/local/strength/inference/bin/python",
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+        "--games",
+        "100",
+        "--master",
+        "4190000000",
+        "--offset-block",
+        "100",
+        "--iterations",
+        "800",
+        "--output",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-02.jsonl",
+        "--model",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+      ],
+      [
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/local/strength/inference/bin/python",
+        "/Users/payton.jones/.codex/worktrees/90ce/splendorust/benchmarks/strength/native/run.py",
+        "--games",
+        "100",
+        "--master",
+        "4190000000",
+        "--offset-block",
+        "150",
+        "--iterations",
+        "800",
+        "--output",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e65/arena/shard-03.jsonl",
+        "--model",
+        "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e56/model/model.bin"
+      ]
+    ]
+  },
+  "raw_sha256": "87980361992ffa1738b2aa95f09440d6f16a6d9586f4ee66dee76d04fb4e3e49",
+  "pairing_verified": true,
+  "games": 400,
+  "setup_blocks": 200,
+  "statuses": {
+    "complete": 400
+  },
+  "incomplete_games": 0,
+  "invalid_games": 0,
+  "unsupported_games": 0,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 153.0,
+  "candidate_credit_conditional_rate": 0.3825,
+  "all_requested_credit_bounds": [
+    0.3825,
+    0.3825
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.3375,
+    0.4275
+  ],
+  "per_seat": {
+    "0": {
+      "games": 200,
+      "complete": 200,
+      "wins": 78,
+      "shared_wins": 2,
+      "credit": 79.0
+    },
+    "1": {
+      "games": 200,
+      "complete": 200,
+      "wins": 74,
+      "shared_wins": 0,
+      "credit": 74.0
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 2621176485817767976,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 5562453846797388765,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 601354090651473266,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7150105683958601320,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 12859172456662766248,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 14721583347660433575,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 4152627426011816851,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5902483261594291972,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 18381790208770773806,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 16938823660758657995,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14779851652288555167,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 707870236455977882,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7519383292156899106,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12306137348352477276,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 13873809141873246757,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 12660587695893608395,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14362983563368060888,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 5916294435522435952,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14881698843736619785,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 8554617392587120374,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 5153861818058133667,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 837647069742706364,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 3270057620692382573,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 945694701736905502,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 672941714952941101,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 15202200689392115472,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 16078190731877545920,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2591887936029567513,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 5590468923689980150,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2041937629727788561,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7776141369122863653,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 6474189511153327786,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 15117328397133227520,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7043720907388491794,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7332346429779037118,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 18183854257891053900,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 5204095490662991649,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7799854304795136791,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16230524848948752201,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17475578481490299987,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7596161408129049605,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 10266031768895099438,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7090643687857472570,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7160889865171329564,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 10849426090210392095,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 15056603298138921182,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 2027441789768068810,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 2863017722089031350,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14703901399118469182,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 138184573659145331,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12717850510832576733,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 3344906631638936429,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 177400150942619171,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 3452195622729914947,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7690867592687146212,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 13521540129397263470,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2169995406748255195,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 17748942929481269905,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 10922115635961845104,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 6851028676972069462,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5973657858739438101,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 9799755092972792873,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 13658141715815782801,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 8047457178445506890,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7728095044205633230,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 13773214129240196127,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16821525139058968883,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 4105309978408691287,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 10516839685181736340,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 1153126060277028894,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 12956326727448779502,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 16672930352018979325,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 1614862331622740647,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14798847853820046755,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 2309705766058955631,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 11488695628803860988,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 16462459944162299766,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 3628848850357234997,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2732937512295007909,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 10690308863344937101,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 15969726007801059045,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 13874325786810092831,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4260200482977537672,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 404400231691407804,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9092835415789339941,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2431852184994794059,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 18320876041277643319,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 1161294901963881233,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12246782775063671509,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9005389973179283016,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 8971255476867155067,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 8781496315071846223,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 11346359585383091387,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12860729635316423666,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 15255423435882036231,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 10164747140741626811,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 10068363776147432826,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2932407323065026032,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 9744983476740113366,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5640459547011946084,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 12057471571104287453,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4210511017901492887,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 2469225383170341252,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9766837486381112018,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16812586536811602633,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 10244447925431884980,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 267446148975524578,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 6025953014117018104,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9974855274357072144,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 13277332065715844195,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 13216356641255705508,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 17717082073878377790,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16240824869466783499,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 8491524719169514500,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 707227042140520214,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 6930972101017250192,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 16346780790187245624,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16783689202317455303,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 3738680041670933362,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 195080171314031145,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7716280698228611146,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17862414635066810362,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 18218266504790594498,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 2047911592467119129,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 6316687251305164868,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 17563791133027439983,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 8543020422167298104,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 13302842502487691336,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 18208748340448034783,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9864179484365621045,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 12269805055681952846,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 510825945348712035,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 1748861655265194592,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4841644518713548343,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 9981161323615195876,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16126325506152038461,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 16997228735019215454,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 8154141503672270060,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 17745032149832044644,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 11446127815189172336,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 6757662132672328001,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 15632262257522444985,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 16668379416876340187,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 1644256702321907117,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4059247676953689840,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5353268056780420629,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 13269059336489585495,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12998070326979066002,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5977783440879820520,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 3045409335629113690,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 11139559925365781791,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 3889239543150509498,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12298722434195316740,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 8616917400889377979,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 15349224908575831657,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 10353808253248998326,
+      "credits": [
+        0.5,
+        1.0
+      ],
+      "lower": 0.75,
+      "upper": 0.75
+    },
+    {
+      "setup_seed": 16085175638993998607,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 14715788207831621538,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 14698162713643983918,
+      "credits": [
+        0.5,
+        1.0
+      ],
+      "lower": 0.75,
+      "upper": 0.75
+    },
+    {
+      "setup_seed": 1380552649249908820,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 7542761724017767343,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 670443103257351580,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 18366794393782397151,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7728111769426413220,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 15629535500381468410,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 9771707843601352072,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12048399458219093568,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 17649322896427583914,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 10971892384034703660,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17625200322183173448,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5957886908710275359,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 772521707130035271,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 11180226957274957116,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7945989979947999590,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 17245928160308934111,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 4364801810113415977,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5114094253727677601,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5455129417613472528,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17581901460564203603,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 12670123212499599852,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 1408221711446820887,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 6713548108077253490,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 1921728752405982573,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 5207507443455895909,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 15134852258962972379,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 15674181295687956861,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4710848271072301480,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 11252705790910262898,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 67039333619876423,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 10078689635523282460,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 12492008047994236014,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 11266998897497557006,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 18410845883095288727,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12627833999530108265,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17241605198640913411,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 17997623446029605931,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 5187823732703232057,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 10627435749106801848,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 3156360682408359886,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 1881856722222942191,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  "reasons": {},
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules.",
+  "completion_rate": 1.0,
+  "conservative_hoeffding95_missing_envelope": [
+    0.2864677208680079,
+    0.4785322791319921
+  ],
+  "terminal_categories": {
+    "native_score": 400
+  },
+  "elapsed_game_seconds": 1557.6523000486195,
+  "wall_seconds": 412.78458708291873,
+  "policy_seconds": {
+    "champion": 411.7373426336562,
+    "alphazero": 1083.388111588196
+  },
+  "simulations": 8912800,
+  "inferences": 8560345,
+  "actions_by_identity": {
+    "champion": {
+      "0": 579,
+      "1": 531,
+      "2": 615,
+      "3": 540,
+      "4": 236,
+      "5": 258,
+      "6": 264,
+      "7": 247,
+      "8": 54,
+      "9": 44,
+      "10": 49,
+      "11": 58,
+      "12": 185,
+      "13": 167,
+      "14": 182,
+      "15": 190,
+      "16": 150,
+      "17": 155,
+      "18": 157,
+      "19": 158,
+      "20": 126,
+      "21": 121,
+      "22": 157,
+      "23": 153,
+      "24": 222,
+      "25": 71,
+      "26": 78,
+      "27": 740,
+      "28": 443,
+      "29": 219,
+      "30": 4,
+      "31": 4,
+      "32": 7,
+      "33": 5,
+      "34": 6,
+      "35": 22,
+      "36": 20,
+      "37": 28,
+      "38": 29,
+      "39": 29,
+      "40": 39,
+      "41": 30,
+      "42": 24,
+      "43": 24,
+      "44": 35,
+      "45": 310,
+      "46": 363,
+      "47": 345,
+      "48": 389,
+      "49": 381,
+      "50": 424,
+      "51": 329,
+      "52": 373,
+      "53": 323,
+      "54": 359,
+      "55": 15,
+      "56": 17,
+      "57": 16,
+      "58": 24,
+      "59": 16,
+      "60": 1,
+      "80": 1
+    },
+    "alphazero": {
+      "0": 516,
+      "1": 536,
+      "2": 533,
+      "3": 523,
+      "4": 266,
+      "5": 265,
+      "6": 271,
+      "7": 260,
+      "8": 51,
+      "9": 60,
+      "10": 57,
+      "11": 53,
+      "12": 157,
+      "13": 139,
+      "14": 165,
+      "15": 156,
+      "16": 125,
+      "17": 137,
+      "18": 136,
+      "19": 152,
+      "20": 103,
+      "21": 156,
+      "22": 152,
+      "23": 142,
+      "24": 198,
+      "25": 130,
+      "26": 115,
+      "27": 853,
+      "28": 436,
+      "29": 179,
+      "30": 10,
+      "31": 3,
+      "32": 6,
+      "33": 5,
+      "34": 6,
+      "35": 28,
+      "36": 20,
+      "37": 26,
+      "38": 21,
+      "39": 38,
+      "40": 16,
+      "41": 23,
+      "42": 22,
+      "43": 27,
+      "44": 21,
+      "45": 395,
+      "46": 300,
+      "47": 323,
+      "48": 479,
+      "49": 411,
+      "50": 412,
+      "51": 376,
+      "52": 383,
+      "53": 301,
+      "54": 385,
+      "55": 17,
+      "56": 20,
+      "57": 15,
+      "58": 14,
+      "59": 11,
+      "60": 2,
+      "64": 1,
+      "80": 2
+    }
+  },
+  "source_sha256": "526436c16e9cfa64e367a2762590bcde83e5d29a908da24c6b3a1bdeda13403a",
+  "conclusion_scope": "Frozen models and fixed search budgets in AlphaZero native rules. Unchanged AlphaZero has true private reservation/deck-membership information; SplendoRust uses public observations. Native cap outcomes are legitimate native results. No canonical or equal-compute rank."
+}

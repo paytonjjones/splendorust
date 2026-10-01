@@ -2503,3 +2503,24 @@ files; do not change its running protocol. Preserve the native rule differences,
 private-information asymmetry,raw records,hashes,and full replay validation.
 This is a budget diagnostic,not a model promotion or a broad ranking claim.
 The evaluator separately reserves4150m for its later2,000-game800 stage.
+
+E64 scores49.475% in2,000 complete games,CI45.31–53.64%; retain E59.
+It selects epoch6 and uses336,941 train rows. Collection costs233.65s train
+and265.37s dev;training218.30s;screen83.31s. These shared-host times
+include the evaluator and E65 overlap; total809.07s is not an isolated speed
+comparison. All fresh collection games complete.
+E65 scores38.25% in400 complete native games at800 versus external800,
+paired interval33.75–42.75%. All400 histories replay exactly. Candidate
+policy time totals411.74s versus external1083.39s on the same full-turn games.
+This profile has different rules and information; it does not establish a
+canonical rank. It shows that equal simulation counts are not equal cost.
+
+## E66 — Native measured-cost diagnostic
+
+Keep the E65 model and external configuration fixed. Before fresh outcomes,
+choose candidate budget `128 * floor(800 * E65 external policy seconds /
+candidate policy seconds / 128)`,giving2048. Run400 paired native games,
+master4200000000,four workers,with the same replay/hash requirements. Record
+realized policy time; a predicted cost budget alone is not an equal-cost claim.
+This is a fresh native-profile pilot. The independent evaluator retains its
+separate reserved4150m800-simulation stage. No champion or lineage changes.
