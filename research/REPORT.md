@@ -38,8 +38,11 @@ E59 tested 50 epochs on the same corpus and advanced provisionally at
 51.3% over E58 (2,000 complete games,CI47.11–55.49%). It selected epoch7
 and barely changed fit KL. Keep10epochs as the normal training budget. E60 found 24.1% mean pairwise
 teacher policy TV on 62 fixed observations. E61 tests two-teacher averaged
-targets with all E58 trajectories and inputs held fixed. Its corpus generation
-is active. These controls will guide the next structural change.
+targets with all E58 trajectories and inputs held fixed. Its completed screen scored48.825% over E58; reject. The frozen E59
+lineage scored51.705% over E56 in20,000 complete games,CI50.58–52.83%.
+This supports a small zero-margin gain, but retains the strict1% rejection.
+E56 remains champion. Next,E62/E63 test a modern residual correction
+branch while keeping the base model fixed. Capacity is a hypothesis.
 All negative results and prior champion files remain saved. Original Search128
 and core rules are unchanged. Learned evidence is for two players only; other
 player counts use Strong.

@@ -55,10 +55,13 @@ E59 completed a 50-epoch control and advanced provisionally at51.3% over
 E58 in2,000 complete games. It selected epoch7; fit KL barely changed.
 Keep10epochs as the normal budget. `research/LINEAGE.json` points to E59.
 The3540m screen is complete; do not reuse it. E60 found 24.1% mean pairwise
-teacher policy TV on 62 fixed observations. E61 is collecting two-teacher
-averaged targets for the exact E58 trajectories; it has no strength result yet.
-Its3560m control and optional3570m lineage screens are reserved. The frozen
-endpoint milestone against E56 uses3580m after E58/E59/E61.
+teacher policy TV on 62 fixed observations. E61 completed its paired two-teacher control at48.825% versus E58 and was
+rejected. The3580m E59 endpoint milestone scored51.705% over E56 in
+20,000 complete games,CI50.58–52.83%. It supports a small gain at zero
+margin but does not pass the strict1% margin. Keep E56 champion,E59 lineage.
+E62/E63 now test a modern residual correction branch over the fixed E59
+base. Initial function identity and fixed-base integrity are required; record
+real inference cost and both fixed-node and measured-cost screens.
 Data and Torch remain under this worktree's ignored `local/`; do not duplicate
 active seed streams. Use the confirmed E56 model for further teacher work.
 

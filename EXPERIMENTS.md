@@ -2426,3 +2426,40 @@ provisional model step is unconfirmed. The E61 target control continues.
 E60's finite-replicate KL dispersion is0.1630 for single searches and
 0.07913 for pairs averaged from the same eight-search set. This is a probe
 cohort statistic,not a population noise floor or model-capacity estimate.
+
+**E61 completed:** All280,951 training rows preserve original trajectories,
+inputs,masks,and outcomes. Two-teacher labels scored48.825% over E58 in
+2,000 complete games,CI44.59–53.06%. Reject;retain E59 lineage. Collection
+1818.29s,training103.73s,screen49.84s. The two-teacher control gave no
+playing gain and does not justify its additional data-generation cost.
+
+Frozen E59 endpoint milestone:51.705% over E56,20,000 complete games,
+95% interval50.578–52.832%. This supports a small positive gain at zero
+margin,but does not pass the registered strict1% benefit threshold. Keep
+E56 as champion and E59 as the supported research lineage. No retroactive
+threshold change. Corpus,negative model,raw results and all work are preserved.
+
+## E62/E63 — Modern residual correction over a fixed learned base
+
+Full-volume data produced a gain, but50epochs did not materially reduce fit
+KL, and paired teacher averaging did not improve strength. Test additional
+capacity while preserving the learned prior. Build a fixed E59 bootstrap base
+plus a trainable512-input RMSNorm/SwiGLU192-wide,three-block branch. The
+branch has zero-initialized policy and value output heads. Add its policy
+correction to base logits,and value correction to the base pre-tanh value.
+Initial outputs must equal the base exactly; base parameters and BN buffers
+remain fixed after training. The branch receives only the same legitimate
+Observation encoding, with packed deck bytes expanded into bit planes.
+This is a capacity/representation test,not proof that capacity is the cause.
+
+E62 checks malformed checkpoints,native/PyTorch parity,fixed-base integrity,
+initial function identity,legal searches,and actual inference/decision cost.
+E63 uses the E58 five-game-thousand corpus plus E56 replay and E58 dev,
+warm E59 base,20epochs,seed800000011,batch1024,lr1e-4,and existing loss
+and dev selection. Keep epoch zero. Measure2,000 paired games at128
+simulations against E59 (master3610000000). A second2k screen3620000000
+uses the largest multiple-of-eight candidate budget with measured median
+fixed-observation decision cost at most1.05times E59's128-simulation cost.
+Choose this budget from timing before any arena outcomes. Preserve both
+fixed-node and measured-cost results. Higher-cost gains alone do not show a
+faster improvement loop. E56 stays the champion until a later milestone.
