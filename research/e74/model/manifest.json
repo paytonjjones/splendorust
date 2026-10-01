@@ -1,0 +1,231 @@
+{
+  "schema": "flywheel-training-v1",
+  "input_rows": 56,
+  "public_context": false,
+  "train_context_files": null,
+  "dev_context_files": null,
+  "trunk_blocks": 1,
+  "architecture": 80,
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 142406,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 142406,
+  "seed": 800000014,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/004000.bin",
+      "sha256": "4b8a35c45b2065d5bb168506a20f09d8ee9c99d8e8f216b1fcec9e3b5675a014",
+      "rows": 55832,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/000000.bin",
+      "sha256": "aee15eec0241bc6ffb8463c2376d8ca57bf9fd06ffe6fda8ee187bfa0a2cb767",
+      "rows": 55572,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/001000.bin",
+      "sha256": "18b621c1ebe296ef285af356daf2fb76699ec244a19ffd46da35fff051d3ae24",
+      "rows": 55598,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/002000.bin",
+      "sha256": "afd9e2e8274c2ceed6d2a3c54e3f93abae8311dbe6b2ec6337b68ee6b9995cea",
+      "rows": 55524,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/003000.bin",
+      "sha256": "c0ae0e3e03e71616b567b89703113f31d5a8b529516e330cf3b5e82a7d2ec8b9",
+      "rows": 55534,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/004000.bin",
+      "sha256": "b74c12993e773c4dfba1da8dcc1f3ea7e2825f78b16d23938319b258f49eea2a",
+      "rows": 55560,
+      "setups": 1000
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/dev.bin",
+      "sha256": "086d99a7c004d7b58bac1972cc662e7aed785715d233485a5f2320193283eca2",
+      "rows": 55476,
+      "setups": 1000
+    }
+  ],
+  "train_setups": 6000,
+  "dev_setups": 1000,
+  "warmstart_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "model_sha256": "9bf25b1459dc8a93539ccad90b832e071a4cf9f436d82ea3dd1f3fba50f9d726",
+  "checkpoint_sha256": "cb8426868d24d10bee809ec69fe9491efea22650ad93ce186d41e1ff8ce6b6d0",
+  "script_sha256": "7639ac2828beb3da7d90b860facd04b4f95859e66bd3da6650626a7829682638",
+  "split_code_sha256": null,
+  "model_code_sha256": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+  "gated_code_sha256": null,
+  "residual_code_sha256": null,
+  "fixed_base_exact": null,
+  "base_model_sha256": null,
+  "initial": {
+    "policy_loss": 1.9952295858812397,
+    "policy_accuracy": 0.38991636022784626,
+    "value_brier": 0.21604013370791994,
+    "teacher_target_brier": 0.06364312337998727,
+    "rows": 55476,
+    "outcome_rows": 55476,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.9567377688829897,
+      "policy_accuracy": 0.39125027038719445,
+      "value_brier": 0.21592878829479664,
+      "teacher_target_brier": 0.0635935686224084,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 14.681861042045057,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.974799694534644,
+      "policy_accuracy": 0.39038503136491454,
+      "value_brier": 0.21575630375573798,
+      "teacher_target_brier": 0.06374990014371845,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 2,
+      "seconds": 25.11727633397095,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9509916075185878,
+      "policy_accuracy": 0.390871728314947,
+      "value_brier": 0.21600129635454865,
+      "teacher_target_brier": 0.06374460315642459,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 3,
+      "seconds": 35.49070179206319,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9501553320301939,
+      "policy_accuracy": 0.39134039945201526,
+      "value_brier": 0.2156428691157955,
+      "teacher_target_brier": 0.0634836395211962,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 4,
+      "seconds": 45.85548037500121,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9491354334250397,
+      "policy_accuracy": 0.3907815992501262,
+      "value_brier": 0.21589163240353937,
+      "teacher_target_brier": 0.06368457317799255,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 5,
+      "seconds": 56.12524075002875,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9485093362312997,
+      "policy_accuracy": 0.3922056384742952,
+      "value_brier": 0.2156419211488097,
+      "teacher_target_brier": 0.06351979669835936,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 6,
+      "seconds": 66.54701383400243,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9481213010116425,
+      "policy_accuracy": 0.3913764510779436,
+      "value_brier": 0.21578381130145066,
+      "teacher_target_brier": 0.06373514779429401,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 7,
+      "seconds": 76.95549641700927,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9471962601666288,
+      "policy_accuracy": 0.3917910447761194,
+      "value_brier": 0.21566409419700144,
+      "teacher_target_brier": 0.06355268219982128,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 8,
+      "seconds": 87.33936891704798,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9593091597939734,
+      "policy_accuracy": 0.39180907058908354,
+      "value_brier": 0.21573266454244608,
+      "teacher_target_brier": 0.06352862418535955,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 9,
+      "seconds": 97.75816450000275,
+      "trained_rows": 333620
+    },
+    {
+      "policy_loss": 1.9556775778989732,
+      "policy_accuracy": 0.3914665801427644,
+      "value_brier": 0.21570301571630848,
+      "teacher_target_brier": 0.06351203476310817,
+      "rows": 55476,
+      "outcome_rows": 55476,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 10,
+      "seconds": 108.13350720901508,
+      "trained_rows": 333620
+    }
+  ],
+  "best_epoch": 8,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.8593901207129195,
+  "trained_only": false,
+  "seconds": 108.17115299997386,
+  "epochs": 10,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

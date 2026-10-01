@@ -2675,3 +2675,18 @@ Record all incomplete games and reject strict incomplete promotions; provisional
 requested-credit point>50.5% only. Champion E56 stays fixed. Preserve all raw
 labels, work counts, source hashes, timings and failed checks. This is a full
 new policy-improvement cycle,not a coefficient sweep or a public-rank claim.
+
+E74 completed:5,000 train and1,000 dev games all complete;277,788 fresh training
+positions plus55,832 replay=333,620. Selected epoch8; train/dev policyKL1.4744/
+1.4971,argmax agreement40.07%/39.18%,dev target entropy.4501. Fresh2k Gumbel128
+screen50.025% vsparent,CI45.70–54.35%; retainE68/E56 pointers. Entire cycle1273.10s.
+The new operator supplies a search-only provisional gain but no learned gain yet.
+
+## E76 — Verify the current Gumbel teacher's strength
+
+Before another capacity change,compare frozen E68 Gumbel800 to Gumbel128 over
+2,000 fresh paired games,master4490m,14threads,depth16,root noise0. Same network
+and operator,only the simulation budget differs. The candidate name explicitly
+fixes800; baseline CLI fixes128. Preserve raw statuses,hashes and paired intervals.
+This measures whether the proposed teacher has useful strength to distill;
+no model or champion promotion and no coefficient/architecture sweep.
