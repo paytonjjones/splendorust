@@ -1,0 +1,391 @@
+{
+  "schema": "flywheel-training-v1",
+  "input_rows": 56,
+  "public_context": true,
+  "train_context_files": [
+    {
+      "path": "local/research/e86/data/e82-train-000000.context.bin",
+      "sha256": "6fd1b187df6bcf1e54e8eb8954c43377e4f41e025f0ee52accba799d699e1fa7"
+    },
+    {
+      "path": "local/research/e86/data/e82-train-001000.context.bin",
+      "sha256": "d774a79b54dd4703cf7e0cc674b34cc898eaec066e4f11def72cddae095bbcd6"
+    },
+    {
+      "path": "local/research/e86/data/e82-train-002000.context.bin",
+      "sha256": "f3939f427d4d01534958754806b30635c6c10e3ccd0911c3be78ec87eb16dfe1"
+    },
+    {
+      "path": "local/research/e86/data/e82-train-003000.context.bin",
+      "sha256": "9cfd0c19c464d4b537a9f1ecc9e492df81bc9fabb8e87504e57598d074a8ee9d"
+    },
+    {
+      "path": "local/research/e86/data/e82-train-004000.context.bin",
+      "sha256": "9ce25b93f2fd515a4d5ee8975df337956def4727514bf05e300b3bb15ce61720"
+    },
+    {
+      "path": "local/research/e86/data/e81-replay.context.bin",
+      "sha256": "1e914ca52cd29e7c432829d6dbe1507627bb8b75735fcefdeb6803cf81a96221"
+    }
+  ],
+  "dev_context_files": [
+    {
+      "path": "local/research/e86/data/e82-dev.context.bin",
+      "sha256": "c9ef5a546f05b802b0b7ce5f264e16bee0e691ef92af89c19ec4dbadee8d63f2"
+    }
+  ],
+  "trunk_blocks": null,
+  "architecture": "residual-rms-swiglu-192x3-v1",
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 592537,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 450131,
+  "seed": 800000018,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "local/research/e86/data/e82-train-000000.bin",
+      "sha256": "4149719784e27b23fc938156daccad4726895cc3fce2f8b06815dba7d617e36b",
+      "rows": 55534,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e86/data/e82-train-001000.bin",
+      "sha256": "c241b42c0fb198c93aeccba76d7f508de850e9fec7b678fd226f3adb13214542",
+      "rows": 55522,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e86/data/e82-train-002000.bin",
+      "sha256": "b3d97fd7dd941045106350871cb6dc6b699ee8fadd6bc2677e2d6bc564f4a61d",
+      "rows": 55758,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e86/data/e82-train-003000.bin",
+      "sha256": "5d12c01be64c7aa663d8ecc2b7d1792abdeda10579f89887f8e43f48bd6943b2",
+      "rows": 55344,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e86/data/e82-train-004000.bin",
+      "sha256": "24eec0275129bef9bbf58dc5707ac29de32211b811f656626cdd3a5bace39356",
+      "rows": 55394,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e86/data/e81-replay.bin",
+      "sha256": "23f117eabbf79b64bb5b5ac669d1df68fa1c23d7a9310f97eefd5ee0e6a1b1e0",
+      "rows": 55560,
+      "setups": 1000
+    }
+  ],
+  "dev": [
+    {
+      "path": "local/research/e86/data/e82-dev.bin",
+      "sha256": "4bf0526e986336f871db5b1e51b552ba7b52ff13342fefd2d38ecc9950e445e6",
+      "rows": 55636,
+      "setups": 1000
+    }
+  ],
+  "train_setups": 6000,
+  "dev_setups": 1000,
+  "warmstart_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
+  "model_sha256": "b177a5da0130dab2139c5c826a1252e702fbe6e04090cd21b9faba7822cbb1b9",
+  "checkpoint_sha256": "2044d1a70e122ee6c5e1b30faea284da438e9e42a1a5ed135caae3292d681249",
+  "script_sha256": "68c23c19d157bb98fb01f53f8573ffeeed955669f73c68c7aa0156d03b657717",
+  "split_code_sha256": null,
+  "model_code_sha256": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+  "gated_code_sha256": "32d767e7c3e06b4e23a30b8335b2c89867ab9d3f2b50e987d29d736fb9836239",
+  "residual_code_sha256": "4d3a18040c47e88295a17d9f82a2b0c86f926c95005c747bd07abfb9d96d0ebd",
+  "fixed_base_exact": true,
+  "base_model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "initial": {
+    "policy_loss": 1.650714269521912,
+    "policy_accuracy": 0.44489179667840967,
+    "value_brier": 0.2135714926497857,
+    "teacher_target_brier": 0.0625986594558662,
+    "rows": 55636,
+    "outcome_rows": 55636,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.6471652467637017,
+      "policy_accuracy": 0.4466532460996477,
+      "value_brier": 0.2135944422678598,
+      "teacher_target_brier": 0.06257580048107673,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 12.707461416954175,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6437855868003912,
+      "policy_accuracy": 0.4460960529153785,
+      "value_brier": 0.2136765154425045,
+      "teacher_target_brier": 0.06265465485920235,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 2,
+      "seconds": 22.112243167008273,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6410011940405604,
+      "policy_accuracy": 0.4449277446257819,
+      "value_brier": 0.21451171610612327,
+      "teacher_target_brier": 0.06332123981508467,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 3,
+      "seconds": 31.61960600002203,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6468401124556409,
+      "policy_accuracy": 0.4437953842835574,
+      "value_brier": 0.2149081663838896,
+      "teacher_target_brier": 0.06381379789225845,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 4,
+      "seconds": 41.057704207953066,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6581195466805863,
+      "policy_accuracy": 0.4402005895463369,
+      "value_brier": 0.2189487833287322,
+      "teacher_target_brier": 0.06757217763491696,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 5,
+      "seconds": 50.51224645797629,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6666322494617638,
+      "policy_accuracy": 0.4391221511251708,
+      "value_brier": 0.22202149167034455,
+      "teacher_target_brier": 0.07055635607913667,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 6,
+      "seconds": 59.87349495803937,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.688119383528159,
+      "policy_accuracy": 0.43621036738802216,
+      "value_brier": 0.22605229678816674,
+      "teacher_target_brier": 0.07479702090195418,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 7,
+      "seconds": 69.2936785829952,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7049338505110225,
+      "policy_accuracy": 0.4337838809403983,
+      "value_brier": 0.2283589917585469,
+      "teacher_target_brier": 0.0773222859718805,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 8,
+      "seconds": 78.7097798329778,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7186898062767222,
+      "policy_accuracy": 0.4305845136242721,
+      "value_brier": 0.23356296946035812,
+      "teacher_target_brier": 0.08259662857456085,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 9,
+      "seconds": 88.11453804199118,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7405285430388204,
+      "policy_accuracy": 0.4252102954921274,
+      "value_brier": 0.23688862604707173,
+      "teacher_target_brier": 0.08571971925810484,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 10,
+      "seconds": 97.43003233300988,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.756722103796047,
+      "policy_accuracy": 0.4261449421238047,
+      "value_brier": 0.2389913984476016,
+      "teacher_target_brier": 0.08828772582503172,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 11,
+      "seconds": 106.3434573749546,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7698196739149057,
+      "policy_accuracy": 0.42549787907110503,
+      "value_brier": 0.24044046738633007,
+      "teacher_target_brier": 0.08973856745020613,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 12,
+      "seconds": 115.19869558303617,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7839758062064413,
+      "policy_accuracy": 0.419171040333597,
+      "value_brier": 0.24237305283743574,
+      "teacher_target_brier": 0.09131922033810326,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 13,
+      "seconds": 124.15251316700596,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.7957397423637993,
+      "policy_accuracy": 0.4207886979653462,
+      "value_brier": 0.2424877366135847,
+      "teacher_target_brier": 0.09210584833719855,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 14,
+      "seconds": 133.08894670801237,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.8063855589108924,
+      "policy_accuracy": 0.4194945718599468,
+      "value_brier": 0.2428856137345838,
+      "teacher_target_brier": 0.09239574537689299,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 15,
+      "seconds": 141.93886691704392,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.816503434959772,
+      "policy_accuracy": 0.4180386799913725,
+      "value_brier": 0.2442747360592614,
+      "teacher_target_brier": 0.09386443707831373,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 16,
+      "seconds": 150.71012554201297,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.82288541004637,
+      "policy_accuracy": 0.41699618951757855,
+      "value_brier": 0.2440635746426479,
+      "teacher_target_brier": 0.09373776596774736,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 17,
+      "seconds": 159.61261637497228,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.828369328219574,
+      "policy_accuracy": 0.41748148680710334,
+      "value_brier": 0.2440496196907269,
+      "teacher_target_brier": 0.09373490905871423,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 18,
+      "seconds": 168.56838441698346,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.8335551981082954,
+      "policy_accuracy": 0.4169782155438924,
+      "value_brier": 0.24422636723928048,
+      "teacher_target_brier": 0.09385113438778978,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 19,
+      "seconds": 177.51778762496542,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.83801102122291,
+      "policy_accuracy": 0.41602559493852903,
+      "value_brier": 0.24647569858639612,
+      "teacher_target_brier": 0.09578000051591799,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 20,
+      "seconds": 186.47549958294258,
+      "trained_rows": 333112
+    }
+  ],
+  "best_epoch": 2,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.5050002401210545,
+  "trained_only": false,
+  "seconds": 186.53678408300038,
+  "epochs": 20,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

@@ -2788,3 +2788,5 @@ E85 result: retain E81. Public moments were exactly invariant and Python/Rust/ba
 ## E86 — Learned public-belief root model
 
 Hypothesis and fixed design are in research/e86/PREREGISTRATION.md. Recover public metadata from exact frozen actor replay of the E82 corpus and E81 replay shard, preserving all teacher labels. Train a192x3 gated root correction on519 invariant public features with frozen E81 base/leaf inference. Require native parity, frozen base checks and a<=1.15 root cost ratio before a2,000 paired-game screen at4670000000. No architecture sweep.
+
+E86 result: retain E81. A519-feature public root correction with frozen E81 leaf network scored48.15% in2,000 complete games. Native initial/trained parity passes, all118 tests/strict Clippy pass, cost median ratio1.0130.333,112 training rows reused exact original labels; best epoch2, later development fit degraded. See research/e86/REPORT.md.
