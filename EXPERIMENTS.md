@@ -2690,3 +2690,6 @@ and operator,only the simulation budget differs. The candidate name explicitly
 fixes800; baseline CLI fixes128. Preserve raw statuses,hashes and paired intervals.
 This measures whether the proposed teacher has useful strength to distill;
 no model or champion promotion and no coefficient/architecture sweep.
+
+E76 Gumbel800 beatsGumbel128 with frozen E68:68.825% over2,000 complete games,
+CI64.80–72.85%,169.53s. The teacher is useful; no model/champion change.
