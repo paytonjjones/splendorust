@@ -458,16 +458,6 @@ impl Model {
             Architecture::Residual(model) => model.infer(x, false),
         }
     }
-    pub fn has_correction(&self) -> bool {
-        matches!(self.architecture, Architecture::Residual(_))
-    }
-    /// Fast frozen evaluator used below a large root correction.
-    pub fn infer_base(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
-        match &self.architecture {
-            Architecture::Residual(model) => model.base.infer_mode(x, true),
-            _ => self.infer(x),
-        }
-    }
     pub fn needs_public_context(&self) -> bool {
         matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 57)
     }

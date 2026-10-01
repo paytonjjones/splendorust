@@ -2710,3 +2710,25 @@ Legacy934 and noisy-Gumbel910 training rows remain byte exact. Native PUCT
 matches1,448 frozen-worker decisions and work counts. Differential validation
 covers9,204 positions/312,879 branches andall81 native action encodings.
 Explicit Gumbel worker/schedule mode added; default/frozen benchmark unchanged.
+
+## E77/E78 — Root-only modern capacity with fast leaf inference
+
+E76 confirms a68.825% teacher,while E74's333k-row fit cannot compress a gain.
+E63 previously lost at matched cost because its larger network ran at every
+leaf. Change the allocation of neural capacity: a frozen fast E68 base at
+search leaves plus a larger learned correction evaluated once at each root.
+Use the existing RMSNorm/SwiGLU residual format; choose width384,six blocks
+instead of192/three. No search-coefficient or architecture sweep. Initialize
+correction heads at zero and retain exact base function.
+
+E77 verifies root-only call counts,function identity,gradient/checkpoint/native
+parity,legal play,legacy byte parity and measured decision cost. E78 trains on
+exact E74 data/replay/dev,baseE68,20epochs,seed800000015,batch1024,lr1e-4,
+outcome selection. Frozen base must remain exact. Fresh2k Gumbel128 screen
+master4510m compares root candidate against E68. Record real cost and avoid
+an equal-compute claim. If root cost exceeds1.15x baseline,do not promote it
+for the fast loop without a separately registered cost-budget test. E56 stays
+champion. This tests a structural capacity/compute allocation,not another
+small search parameter or large-every-leaf model.
+
+E77 validation passed: 3.04M total / 2.89M trainable parameters, exact initial E68 function and checkpoint reload, native parity, 16 complete games with 1,312 identical decisions/targets/work counts, correction once per root, legacy corpus byte identity, 113 release tests and strict Clippy. Initial fixed-observation median decision cost is 1.04249x E68 Gumbel128 (568 observations, three alternating repeats, shared host). E78 training is active on the unchanged 333,620-row E74/replay set. No strength claim or promotion yet.

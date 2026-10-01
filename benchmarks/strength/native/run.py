@@ -18,7 +18,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--games',type=int,required=True)
     p.add_argument('--master',type=int,required=True);p.add_argument('--offset-block',type=int,default=0)
     p.add_argument('--search',choices=['puct','gumbel'],default='puct');p.add_argument('--iterations',type=int,default=128);p.add_argument('--depth',type=int,default=16)
-    p.add_argument('--model',type=Path,default=ROOT/'research/e56/model/model.bin')
+    p.add_argument('--root-only',action='store_true');p.add_argument('--model',type=Path,default=ROOT/'research/e56/model/model.bin')
     p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     if a.games<=0 or a.games%2 or a.offset_block<0:p.error('require full two-seat blocks')
     if a.output.exists():p.error('output already exists')
@@ -32,7 +32,7 @@ def main():
         rpc=RPC([ROOT/'target/release/examples/native_policy_worker',a.model])
         metadata=dict(schema_version=1,engine='alphazero_native',ruleset=PROFILE,planning_profile=PROFILE,
             observation_profile='native-public-history-v1',players=2,games=a.games,candidate='champion',external='alphazero',
-            master=a.master,offset_block=a.offset_block,iterations=a.iterations,depth=a.depth,world_pool=3,search=a.search,search_profile='native-public-gumbel-v1' if a.search=='gumbel' else 'native-public-puct-v1',gumbel_config=dict(max_considered=16,cvisit=50,cscale=.1,root_noise=0) if a.search=='gumbel' else None,
+            master=a.master,offset_block=a.offset_block,iterations=a.iterations,depth=a.depth,world_pool=3,root_only=a.root_only,search=a.search,search_profile='native-public-gumbel-v1' if a.search=='gumbel' else 'native-public-puct-v1',gumbel_config=dict(max_considered=16,cvisit=50,cscale=.1,root_noise=0) if a.search=='gumbel' else None,
             cpuct=.4,fpu_reduction=.02965,uniform_prior=0,external_config=dict(u.config),
             upstream_revision=PIN,upstream_checkpoint_sha256=sha(SOURCE/'splendor/pretrained_2players.pt'),
             model_sha256=sha(a.model),model_path=str(a.model),policy_binary_sha256=sha(ROOT/'target/release/examples/native_policy_worker'),
@@ -54,7 +54,7 @@ def main():
                         state=initial.copy();seat=0;t=Tracker(u,state)
                         splendor_seed=stream(a.master,'policy',block,0)
                         alpha_seed=stream(a.master,'policy',block,1)
-                        rpc.call(op='reset',seed=splendor_seed,iterations=a.iterations,depth=a.depth,search=a.search)
+                        rpc.call(op='reset',seed=splendor_seed,iterations=a.iterations,depth=a.depth,search=a.search,root_only=a.root_only)
                         u.reset_policy(alpha_seed)
                         seats=['champion','alphazero'] if rotation==0 else ['alphazero','champion']
                         record=dict(index=2*block+rotation,block=block,rotation=rotation,setup_seed=setup_seed,seats=seats,

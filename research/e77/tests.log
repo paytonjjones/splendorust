@@ -1,0 +1,21 @@
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+error[E0609]: no field `inference_calls` on type `neural_search::NeuralAgent`
+    --> crates/splendor-agents/src/neural_search.rs:1017:31
+     |
+1017 |                     assert!(a.inference_calls > 1);
+     |                               ^^^^^^^^^^^^^^^ unknown field
+     |
+     = note: available fields are: `rng`, `config`, `history`, `simulations`, `calls` ... and 22 others
+
+error[E0609]: no field `inference_calls` on type `neural_search::NeuralAgent`
+    --> crates/splendor-agents/src/neural_search.rs:1019:54
+     |
+1019 |                     assert_eq!(a.correction_calls, a.inference_calls);
+     |                                                      ^^^^^^^^^^^^^^^ unknown field
+     |
+     = note: available fields are: `rng`, `config`, `history`, `simulations`, `calls` ... and 22 others
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `splendor-agents` (lib test) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

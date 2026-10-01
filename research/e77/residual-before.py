@@ -7,7 +7,7 @@ from flywheel_model import bootstrap,expand_trunk,export as export_base
 from gated_model import Gated,export as export_delta
 
 class Residual(nn.Module):
-    def __init__(self,warmstart,width=192,blocks=3):
+    def __init__(self,warmstart):
         super().__init__()
         payload=torch.load(warmstart,map_location='cpu',weights_only=True)
         if payload.get('architecture')=='residual':
@@ -16,7 +16,7 @@ class Residual(nn.Module):
             self.load_state_dict(payload['state_dict'],strict=True)
         else:
             self.base=bootstrap(warmstart)
-            self.delta=Gated(width,blocks,bitplanes=True)
+            self.delta=Gated(bitplanes=True)
             nn.init.zeros_(self.delta.head.weight);nn.init.zeros_(self.delta.head.bias)
         self.base.requires_grad_(False);self.base.eval()
     def train(self,mode=True):

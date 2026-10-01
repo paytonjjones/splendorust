@@ -9,7 +9,7 @@ from pathlib import Path
 from upstream import ROOT, sha
 PYTHON=ROOT/'local/strength/inference/bin/python'
 
-def run_schedule(directory,games,master,workers,iterations=128,model=None,search="puct"):
+def run_schedule(directory,games,master,workers,iterations=128,model=None,search="puct",root_only=False):
     if games<=0 or games%2 or workers<1 or games//2<workers:raise ValueError('invalid paired schedule')
     directory.mkdir(parents=True,exist_ok=False)
     blocks=games//2;assignments=[];offset=0
@@ -18,9 +18,10 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
         command=[str(PYTHON),str(Path(__file__).with_name('run.py')),'--games',str(2*count),'--master',str(master),
             '--offset-block',str(offset),'--iterations',str(iterations),'--output',str(directory/f'shard-{worker:02}.jsonl')]
         command+=['--search',search]
+        if root_only:command+=['--root-only']
         if model:command+=['--model',str(model)]
         assignments.append(command);offset+=count
-    plan=dict(games=games,master=master,workers=workers,iterations=iterations,search=search,commands=assignments,
+    plan=dict(games=games,master=master,workers=workers,iterations=iterations,root_only=root_only,search=search,commands=assignments,
         schedule_sha256=sha(__file__),run_sha256=sha(Path(__file__).with_name('run.py')))
     (directory/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')
     def execute(item):
@@ -40,7 +41,7 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
         meta,*part=map(json.loads,(directory/f'shard-{worker:02}.jsonl').read_text().splitlines())
         assert len(part)==meta['games']
         metas.append(meta);rows+=part
-    for key in ['model_sha256','policy_binary_sha256','source_id','external_config','upstream_revision','upstream_checkpoint_sha256','iterations','depth','master','source_sha256','search','search_profile','gumbel_config']:
+    for key in ['model_sha256','policy_binary_sha256','source_id','external_config','upstream_revision','upstream_checkpoint_sha256','iterations','depth','master','source_sha256','root_only','search','search_profile','gumbel_config']:
         assert all(m[key]==metas[0][key] for m in metas),('shard metadata differs',key)
     rows.sort(key=lambda r:r['index'])
     assert [r['index'] for r in rows]==list(range(games))
@@ -53,6 +54,6 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
 def main():
     p=argparse.ArgumentParser();p.add_argument('--games',type=int,required=True);p.add_argument('--master',type=int,required=True)
     p.add_argument('--workers',type=int,default=4);p.add_argument('--iterations',type=int,default=128)
-    p.add_argument('--search',choices=['puct','gumbel'],default='puct');p.add_argument('--model',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    print(json.dumps(run_schedule(a.output.resolve(),a.games,a.master,a.workers,a.iterations,a.model,a.search)),flush=True)
+    p.add_argument('--root-only',action='store_true');p.add_argument('--search',choices=['puct','gumbel'],default='puct');p.add_argument('--model',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    print(json.dumps(run_schedule(a.output.resolve(),a.games,a.master,a.workers,a.iterations,a.model,a.search,a.root_only)),flush=True)
 if __name__=='__main__':main()

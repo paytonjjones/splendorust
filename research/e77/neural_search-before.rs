@@ -195,9 +195,6 @@ pub struct NeuralAgent {
     pub rollout_depth: u32,
     pub persistent: bool,
     /// Gumbel planning with completed-Q policy targets (E72).
-    pub root_only: bool,
-    root_evaluation: bool,
-    pub correction_calls: u64,
     pub gumbel: bool,
     pub gumbel_noise: f64,
     cached_nodes: Vec<Node>,
@@ -226,9 +223,6 @@ impl NeuralAgent {
             world_pool: 0,
             rollout_depth: 0,
             persistent: false,
-            root_only: false,
-            root_evaluation: false,
-            correction_calls: 0,
             gumbel: false,
             gumbel_noise: 0.0,
             cached_nodes: Vec::new(),
@@ -258,12 +252,7 @@ impl NeuralAgent {
             let model = self.external_model.unwrap_or_else(model_transferred);
             let (policy, values) = if model.needs_public_context() {
                 model.infer_with_context(&x, &super::transfer::public_context(o))
-            } else if self.root_only && !self.root_evaluation {
-                model.infer_base(&x)
             } else {
-                if model.has_correction() {
-                    self.correction_calls += 1;
-                }
                 model.infer(&x)
             };
             let seat = usize::from(o.viewer != o.current);
@@ -288,20 +277,6 @@ impl NeuralAgent {
             );
         }
         (p, 1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp()))
-    }
-    fn expand_root_environment<E: crate::environment::Environment>(
-        &mut self,
-        o: &E::Observation,
-        legal: &[E::Action],
-    ) -> Node<E::Action>
-    where
-        Self: crate::environment::PolicyValue<E>,
-    {
-        assert!(!self.root_evaluation);
-        self.root_evaluation = true;
-        let node = self.expand_environment::<E>(o, legal);
-        self.root_evaluation = false;
-        node
     }
     fn expand_environment<E: crate::environment::Environment>(
         &mut self,
@@ -577,12 +552,7 @@ impl NeuralAgent {
                 context[6] += context[slot] / 3.0;
             }
             model.infer_with_context(&x, &context)
-        } else if self.root_only && !self.root_evaluation {
-            model.infer_base(&x)
         } else {
-            if model.has_correction() {
-                self.correction_calls += 1;
-            }
             model.infer(&x)
         };
         let seat = usize::from(o.viewer != o.current);
@@ -603,8 +573,7 @@ impl NeuralAgent {
             return legal[0];
         }
         let choices = <Self as crate::environment::PolicyValue<E>>::choices(o, legal);
-        let mut nodes =
-            vec![self.expand_root_environment::<E>(o, choices.as_deref().unwrap_or(legal))];
+        let mut nodes = vec![self.expand_environment::<E>(o, choices.as_deref().unwrap_or(legal))];
         let mut index = HashMap::from([(E::key(o, self.transferred), 0usize)]);
         let worlds: Vec<_> = (0..self.world_pool)
             .map(|_| E::determinize(o, &mut self.rng))
@@ -726,13 +695,12 @@ impl Agent for NeuralAgent {
                 .retain(|edge| choices.contains(&edge.action));
             nodes[root].visits = nodes[root].edges.iter().map(|edge| edge.visits).sum();
             if nodes[root].edges.is_empty() {
-                nodes[root] =
-                    self.expand_root_environment::<crate::environment::Canonical>(o, &choices);
+                nodes[root] = self.expand_environment::<crate::environment::Canonical>(o, &choices);
             }
             root
         } else {
             let root = nodes.len();
-            nodes.push(self.expand_root_environment::<crate::environment::Canonical>(o, &choices));
+            nodes.push(self.expand_environment::<crate::environment::Canonical>(o, &choices));
             index.insert(self.tree_key(o), root);
             root
         };
@@ -982,43 +950,6 @@ mod tests {
                 }
                 let v = agents[0].root_value.unwrap();
                 assert!(v.is_finite() && (0.0..=1.0).contains(&v));
-            }
-        }
-    }
-    #[test]
-    fn correction_runs_once_at_root_and_base_runs_at_leaves() {
-        let model = Box::leak(Box::new(super::super::transfer::Model::from_bytes(
-            include_bytes!("../../../research/e63/model/model.bin"),
-        )));
-        let state = GameState::new(2, 4500000000).unwrap();
-        let mut legal = ActionSet::new();
-        state.legal_actions(&mut legal);
-        let o = state.observe(0);
-        for gumbel in [false, true] {
-            for root_only in [false, true] {
-                let mut a = NeuralAgent::new(
-                    77,
-                    SearchConfig {
-                        iterations: 16,
-                        depth: 4,
-                        ..Default::default()
-                    },
-                );
-                a.transferred = true;
-                a.external_model = Some(model);
-                a.gumbel = gumbel;
-                a.root_only = root_only;
-                a.world_pool = 3;
-                let action = a.select_action(&o, &legal);
-                assert!(legal.contains(&action));
-                assert_eq!(a.simulations, 16);
-                if root_only {
-                    assert_eq!(a.correction_calls, 1);
-                    assert!(a.calls > 1);
-                } else {
-                    assert_eq!(a.correction_calls, a.calls);
-                    assert!(a.correction_calls > 1);
-                }
             }
         }
     }

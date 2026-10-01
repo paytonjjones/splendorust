@@ -32,6 +32,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 agent.cpuct = 0.4;
                 agent.fpu_reduction = 0.02965;
                 agent.uniform_prior = 0.;
+                agent.root_only = v["root_only"].as_bool().unwrap_or(false);
                 match v["search"].as_str().unwrap_or("puct") {
                     "puct" => {}
                     "gumbel" => {
