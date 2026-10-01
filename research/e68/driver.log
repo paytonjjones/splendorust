@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e68/run.py", line 36, in <module>
+    report=json.loads((OUT/'gate/screen.json').read_text());assert report['seed']==4230000000 and report['requested_games']==2000
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/payton.jones/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/payton.jones/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e68/gate/screen.json'

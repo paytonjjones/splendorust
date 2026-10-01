@@ -2565,3 +2565,56 @@ All labels pass legality/probability checks and role work counts are separate.
 All102 Rust tests and strict Clippy pass. The student sample has910 rows
 versus934 teacher-trajectory rows across the same16 setups. Source and hashes
 are preserved. E68 proceeds with the registered comparable-volume campaign.
+
+## E69 — Public-information identifiability diagnostic
+
+Code inspection shows that the392-feature encoder fills opponent blind slots
+from a sampled world but omits the reservation public/unknown flag. Test whether
+a valid unknown-card observation and a valid public-card observation can encode
+exactly the same vector when the public card equals the first world's sampled
+card. The richer Observation retains publicness and tier; the model may lack
+information available to its search-label teacher. This is a representation
+hypothesis,not a claimed cause or a playing-strength improvement.
+
+Use fixed Strong trajectories with early blind reservations and at most32
+observations. Construct the public counterpart from an independently sampled
+belief world,never the real private card. Check both observations through core
+determinization and equal actor legal sets. Compare exact feature vectors and
+native model outputs. Query eight800-simulation E59 teachers per information
+condition with paired seeds and save labels/values. Report finite target
+variation separately from the exact encoding collision. No model or encoder
+changes occur; E68 continues with its registered source and data.
+
+E68 scores50.725% in2,000 complete games,CI46.42–55.03%; advance only
+provisionally. It selects epoch10,334,810 training rows and55,860 dev rows.
+Train collection1403.33s,dev285.79s,training124.91s,screen75.06s,shared host.
+A new diagnostic example failed Clippy before screen play; preserve that
+failed gate and resume the unused4230m seed after the fix. E56 stays champion.
+
+E69 finds17 valid information-condition pairs with identical392-float inputs,
+identical network outputs and actor legal sets. Public counterpart cards come
+only from sampled belief worlds. Mean eight-teacher policy TV is13.49%,with
+2/17 mean-argmax switches and0.02323 mean value difference. These finite
+stress contrasts do not establish prevalence or playing strength. The exact
+input collision shows omitted publicness/tier information. Larger networks on
+the same input cannot distinguish the conditions.
+
+## E70/E71 — Explicit public-information input with matched saved labels
+
+Add one seven-field input row:three opponent unknown flags,three retained tiers
+(present tier+1 divided by3; empty0),and opponent unknown count divided by3.
+Expand only the first bootstrap input projection56 to57 rows. Initialize its
+56 new weights at zero. Keep all other dimensions and native inference; verify
+initial function identity/parity and measure real cost. Metadata comes only
+from Observation. Do not change canonical rules or search budgets.
+
+Reconstruct exact public context for saved E68 train/dev and E64 replay by
+rerunning the frozen E59 actor with the same setup/policy/encoder/exploration
+streams. E68 requires only128-simulation actors,not new800-simulation teacher
+queries. E64 replay requires its original800 actor. Assert all saved setup,
+input,mask and outcome fields exactly; reuse teacher labels without change.
+Then E71 repeats E68's full data,initial E59 base,10epochs,seed800000013,
+batch1024,lr1e-4,and selection with context as the sole planned input change.
+Compare against provisional E68 in2,000 fresh128-simulation games,master4270m.
+E56 stays champion. This tests information representation at nearly unchanged
+model size and per-node work,not another search-coefficient tweak.

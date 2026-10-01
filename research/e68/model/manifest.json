@@ -1,0 +1,227 @@
+{
+  "schema": "flywheel-training-v1",
+  "trunk_blocks": 1,
+  "architecture": 80,
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 142406,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 142406,
+  "seed": 800000013,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e64/train.bin",
+      "sha256": "b98b1a890e8ae5096a9aaa63a07da2635d1f3561401bcdc326e3e70e181e17ea",
+      "rows": 55990,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/000000.bin",
+      "sha256": "fbf073ef56f58bb1db414ca50da04b690a3a5799083237ca1405e71efef7e93a",
+      "rows": 55810,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/001000.bin",
+      "sha256": "e11698753dc7304a52be2c93036e27cd6d09a248e8903567dd0f3d7a0914989e",
+      "rows": 55904,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/002000.bin",
+      "sha256": "fdf048a74cb3a2cd475f49550e553314e97c028391e1c240754455945568a216",
+      "rows": 55622,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/003000.bin",
+      "sha256": "cb5641067f7d7dc7b91704bbb5e7a6146246316a913965d7b13c6ad715bf9421",
+      "rows": 55652,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/004000.bin",
+      "sha256": "4b8a35c45b2065d5bb168506a20f09d8ee9c99d8e8f216b1fcec9e3b5675a014",
+      "rows": 55832,
+      "setups": 1000
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/dev.bin",
+      "sha256": "6c00b465458744829549ffa7d699864904635005f09e867061f4847036090d6a",
+      "rows": 55860,
+      "setups": 1000
+    }
+  ],
+  "train_setups": 6000,
+  "dev_setups": 1000,
+  "warmstart_sha256": "6ca9e5df2de8b21217a6529ac20b35c5e5a0163e9fb18edd1618dab913dc6ffd",
+  "model_sha256": "d199a3878d7feebb443cb8e01e4afee502e05f2e9ba34c7a042a6bb3b62b86f2",
+  "checkpoint_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "script_sha256": "e16e21d9a29f3b1695cd916e66506364d622a4e5dcb7c77c2d3f9692a6f8a668",
+  "split_code_sha256": null,
+  "model_code_sha256": "a756ea5d23652cea3f6e1a6fa0f02a0a6508e86340e5236ce2e853090ae8aa62",
+  "gated_code_sha256": null,
+  "residual_code_sha256": null,
+  "fixed_base_exact": null,
+  "base_model_sha256": null,
+  "initial": {
+    "policy_loss": 1.7751577244153212,
+    "policy_accuracy": 0.5364661654135339,
+    "value_brier": 0.21549981018569023,
+    "teacher_target_brier": 0.06302387368666242,
+    "rows": 55860,
+    "outcome_rows": 55860,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.7703823385979598,
+      "policy_accuracy": 0.5373612602935911,
+      "value_brier": 0.21485277497550725,
+      "teacher_target_brier": 0.0625736234523556,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 16.80487662507221,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7701945096243679,
+      "policy_accuracy": 0.537844611528822,
+      "value_brier": 0.21431848325910338,
+      "teacher_target_brier": 0.06239759470457848,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 2,
+      "seconds": 28.880051749991253,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7688122042865255,
+      "policy_accuracy": 0.5385069817400644,
+      "value_brier": 0.21461927589446553,
+      "teacher_target_brier": 0.06274196933428106,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 3,
+      "seconds": 40.888239708030596,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7681245939730745,
+      "policy_accuracy": 0.5397243107769424,
+      "value_brier": 0.21469367847108003,
+      "teacher_target_brier": 0.06255747255270003,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 4,
+      "seconds": 52.71792829106562,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7675639359105073,
+      "policy_accuracy": 0.5381489437880416,
+      "value_brier": 0.21462710852098857,
+      "teacher_target_brier": 0.0625183584183892,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 5,
+      "seconds": 64.57393070799299,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7666472241394502,
+      "policy_accuracy": 0.5390082348728965,
+      "value_brier": 0.21484590783752594,
+      "teacher_target_brier": 0.06264636483279513,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 6,
+      "seconds": 76.73965662508272,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7671582542607915,
+      "policy_accuracy": 0.540297171500179,
+      "value_brier": 0.21439666884627515,
+      "teacher_target_brier": 0.06248199170608056,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 7,
+      "seconds": 88.82956941600423,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7661967003341221,
+      "policy_accuracy": 0.5395452918009309,
+      "value_brier": 0.2145240958514625,
+      "teacher_target_brier": 0.06254829836284392,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 8,
+      "seconds": 100.8296389579773,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.7656279173624632,
+      "policy_accuracy": 0.5401002506265664,
+      "value_brier": 0.21472803205305047,
+      "teacher_target_brier": 0.06260974746086757,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 9,
+      "seconds": 112.90615850000177,
+      "trained_rows": 334810
+    },
+    {
+      "policy_loss": 1.765576945467743,
+      "policy_accuracy": 0.5396885069817401,
+      "value_brier": 0.2146623337606013,
+      "teacher_target_brier": 0.06261831878378021,
+      "rows": 55860,
+      "outcome_rows": 55860,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 10,
+      "seconds": 124.85391133301891,
+      "trained_rows": 334810
+    }
+  ],
+  "best_epoch": 10,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.637156965158082,
+  "trained_only": false,
+  "seconds": 124.91339400003199,
+  "epochs": 10,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

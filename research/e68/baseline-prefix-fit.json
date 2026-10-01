@@ -1,0 +1,58 @@
+{
+  "schema": "distillation-fit-diagnostic-v1",
+  "checkpoint_sha256": "6ca9e5df2de8b21217a6529ac20b35c5e5a0163e9fb18edd1618dab913dc6ffd",
+  "script_sha256": "cc15c9ccc49195449563948086ea8e27819e30a36b504ef84d86a33e10667917",
+  "train_files": [
+    {
+      "path": "local/research/e68/train/000000.bin",
+      "sha256": "fbf073ef56f58bb1db414ca50da04b690a3a5799083237ca1405e71efef7e93a",
+      "rows": 55810,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e68/train/001000.bin",
+      "sha256": "e11698753dc7304a52be2c93036e27cd6d09a248e8903567dd0f3d7a0914989e",
+      "rows": 55904,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e68/train/002000.bin",
+      "sha256": "fdf048a74cb3a2cd475f49550e553314e97c028391e1c240754455945568a216",
+      "rows": 55622,
+      "setups": 1000
+    }
+  ],
+  "dev_files": [
+    {
+      "path": "local/research/e64/dev.bin",
+      "sha256": "71741fd5de5d57cab02cc2b29cc8bf641f8fc0a814bef203ddf9ad35d4cfe3b8",
+      "rows": 56072,
+      "setups": 1000
+    }
+  ],
+  "train": {
+    "rows": 167336,
+    "policy_ce": 1.771186126477006,
+    "target_entropy": 1.1527789854926989,
+    "policy_kl": 0.618407140984307,
+    "argmax_agreement": 0.5413957546493283,
+    "target_max_probability": 0.6302471431712664,
+    "target_probability_of_student_argmax": 0.42991693242020124,
+    "value_brier": 0.21258029845645746,
+    "mean_policy_tv": 0.3790977713470962
+  },
+  "dev": {
+    "rows": 56072,
+    "policy_ce": 1.7231692296323533,
+    "target_entropy": 1.1491869407911786,
+    "policy_kl": 0.5739822888411746,
+    "argmax_agreement": 0.5643815094878014,
+    "target_max_probability": 0.6284328454706533,
+    "target_probability_of_student_argmax": 0.4439991888263151,
+    "value_brier": 0.21584333756422755,
+    "mean_policy_tv": 0.36524267328637594
+  },
+  "device": "mps",
+  "scope": "Policy/label fit on observation encodings. A small train/dev gap alone does not distinguish capacity, optimization, or target ambiguity.",
+  "seconds": 6.770898082992062
+}

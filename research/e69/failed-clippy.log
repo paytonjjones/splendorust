@@ -1,0 +1,12 @@
+    Checking splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+error: using `contains()` instead of `iter().any()` is more efficient
+  --> crates/splendor-arena/examples/transfer_information.rs:68:33
+   |
+68 |                         assert!(legal.iter().any(|&a| a == action));
+   |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `legal.contains(&action)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_contains
+   = note: `-D clippy::manual-contains` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_contains)]`
+
+error: could not compile `splendor-arena` (example "transfer_information") due to 1 previous error
