@@ -1,0 +1,34 @@
+{
+  "schema": "student-state-distillation-v1",
+  "train_seed": 4210000000,
+  "dev_seed": 4220000000,
+  "screen_seed": 4230000000,
+  "train_games": 5000,
+  "dev_games": 1000,
+  "shard_games": 1000,
+  "actor_iterations": 128,
+  "teacher_iterations": 800,
+  "teacher_replicates": 1,
+  "screen_iterations": 128,
+  "training_seed": 800000013,
+  "epochs": 10,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "threads": 14,
+  "base_sha256": "76d45006d332dcd80635150f23917c321245f49cfb10a8e77654d3096505a918",
+  "base_checkpoint_sha256": "6ca9e5df2de8b21217a6529ac20b35c5e5a0163e9fb18edd1618dab913dc6ffd",
+  "champion_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+  "replay": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e64/train.bin",
+    "sha256": "b98b1a890e8ae5096a9aaa63a07da2635d1f3561401bcdc326e3e70e181e17ea"
+  },
+  "collector_code_sha256": "94bdf11ee2a9ba5d041199b4c62303ca35adbb7c669e6b4d3dbee4f5c8cd15d2",
+  "script_sha256": "3cf033511f4a0f673941cbd740046536c6a6f7debb733ad2b230fec1abc70411",
+  "training_scripts_sha256": {
+    "train_flywheel.py": "e16e21d9a29f3b1695cd916e66506364d622a4e5dcb7c77c2d3f9692a6f8a668",
+    "flywheel_model.py": "a756ea5d23652cea3f6e1a6fa0f02a0a6508e86340e5236ce2e853090ae8aa62",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa"
+  },
+  "rule": "provisional worst-case requested point >50.5%; strict decisions preserved; no champion change"
+}

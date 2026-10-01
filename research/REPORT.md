@@ -43,9 +43,13 @@ lineage scored51.705% over E56 in20,000 complete games,CI50.58–52.83%.
 This supports a small zero-margin gain, but retains the strict1% rejection.
 E56 remains champion. E62 validation passes. E63 scores51.20% at128 simulations but41.525%
 at the measured-cost64-simulation budget,2,000 complete games each. Keep
-E59 for the fast loop. E64 collects1,000 fresh train and1,000 dev games from
-the supported E59 lineage at800 simulations,then trains the fast bootstrap
-student with the full E58 replay corpus. Screen once at128 simulations.
+E59 for the fast loop. E64 finishes at49.475% in2,000 complete games;
+retain E59. E65/E66 native AlphaZero pilots at800/2048 simulations score
+38.25%/40.375%,400 complete replay-verified games each. E66 realized policy
+time exceeds external cost by17.5%; no equal-cost or canonical rank claim.
+E67 validates independent teacher queries on student trajectories. E68 now
+collects5,000 train and1,000 dev games with E59 actor128/teacher800,then
+trains with E64 replay and screens once at128 on fresh4230m seeds.
 All negative results and prior champion files remain saved. Original Search128
 and core rules are unchanged. Learned evidence is for two players only; other
 player counts use Strong.

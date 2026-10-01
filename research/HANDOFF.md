@@ -61,11 +61,15 @@ rejected. The3580m E59 endpoint milestone scored51.705% over E56 in
 margin but does not pass the strict1% margin. Keep E56 champion,E59 lineage.
 E62 validation passes. E63 scores51.20% at128 simulations but41.525%
 at the measured-cost64-simulation budget,2,000 complete games each. Keep
-E59 for the fast loop. E64 collects1,000 fresh train and1,000 dev games from
-the supported E59 lineage at800 simulations,then trains the fast bootstrap
-student with the full E58 replay corpus. Screen once at128 simulations.
+E59 for the fast loop. E64 finishes at49.475% in2,000 complete games;
+retain E59. E65/E66 native AlphaZero pilots at800/2048 simulations score
+38.25%/40.375%,400 complete replay-verified games each. E66 realized policy
+time exceeds external cost by17.5%; no equal-cost or canonical rank claim.
+E67 validates independent teacher queries on student trajectories. E68 now
+collects5,000 train and1,000 dev games with E59 actor128/teacher800,then
+trains with E64 replay and screens once at128 on fresh4230m seeds.
 Data and Torch remain under this worktree's ignored `local/`; do not duplicate
-active seed streams. E64 uses E59 as the research teacher; E56 stays the confirmed champion.
+active seed streams. E68 uses E59 for actor and teacher; E56 stays the confirmed champion.
 
 `--selection-rule provisional` keeps a fixed `champion.json` and a separate
 exploratory `best.json` lineage. After one fixed2,000-game screen, requested-
@@ -74,7 +78,7 @@ not statistical confirmation. Strict decisions and95% intervals remain saved.
 Missing outcomes remain unknown. Do not apply this new rule to completed E53
 or earlier gates. After at most three candidate generations, assess the frozen
 endpoint against the fixed champion in20,000 paired games. The prior3310m
-assessment is complete; 3580m is complete. E64 reserves3650m; do not reuse prior screens.
+assessment is complete; 3580m is complete. 3650m is complete. E68 reserves4230m; do not reuse prior screens.
 The champion changes only after independent supporting evidence.
 
 The eight-view diagnostic is exact when there is no opponent blind reservation.
