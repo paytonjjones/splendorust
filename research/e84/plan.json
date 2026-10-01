@@ -1,0 +1,70 @@
+{
+  "baseline_model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "label_source": "E81 verified noise0 teacher actions",
+  "cost_precheck": {
+    "median_ratio": 1.042486097531166,
+    "root_seconds": 2.558886375,
+    "base_seconds": 2.4546,
+    "repeats": 3,
+    "decisions": 568,
+    "initial_model": true,
+    "shared_host": true,
+    "limit": 1.15,
+    "passes": true
+  },
+  "schema": "root-residual-capacity-v1",
+  "base_sha256": "d199a3878d7feebb443cb8e01e4afee502e05f2e9ba34c7a042a6bb3b62b86f2",
+  "base_checkpoint_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/004000.bin",
+      "sha256": "4b8a35c45b2065d5bb168506a20f09d8ee9c99d8e8f216b1fcec9e3b5675a014"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/000000.bin",
+      "sha256": "3b726be658a81fcc244dcce43c95344d4e34fa576265279032919ce572e2e161"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/001000.bin",
+      "sha256": "47c1cd6217fdb68439dfa671fa6d6d78654951cd9b2331d85bdcd50a9bbb7ac6"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/002000.bin",
+      "sha256": "cc8e8f9afce9bde5a9c8098eb7ca409ed3c523ade007d7b5fc237ecdc690f8cc"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/003000.bin",
+      "sha256": "16fe4ff375ec3c67d82f304f352b0ed6e3f5a8a2d10afc0ec6bbbde593421132"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/004000.bin",
+      "sha256": "23f117eabbf79b64bb5b5ac669d1df68fa1c23d7a9310f97eefd5ee0e6a1b1e0"
+    }
+  ],
+  "dev": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/dev.bin",
+    "sha256": "3be69c9ab70b6174e7ea9d1e7efd10840fafa59c4fa49baccd4853b36e735143"
+  },
+  "epochs": 20,
+  "training_seed": 800000015,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "residual_width": 384,
+  "residual_blocks": 6,
+  "screen_seed": 4610000000,
+  "games": 2000,
+  "threads": 14,
+  "iterations": 128,
+  "depth": 16,
+  "candidate": "flywheel-root-gumbel-candidate",
+  "baseline": "flywheel-gumbel",
+  "budget_rule": "root correction once; frozen E68 leaves; if median decision cost exceeds 1.15x, require separate cost-matched screen before fast-loop selection",
+  "script_sha256": "53766fb6f2f5a3106caf2bda9a8639f66e91dae925356f343c6b493a169827cc",
+  "source_sha256": {
+    "train_flywheel.py": "e7aab1fd9886ebe706ac0a31d98346477294b706fd92c69bd7d9b1f8e064f446",
+    "flywheel_model.py": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+    "gated_model.py": "32d767e7c3e06b4e23a30b8335b2c89867ab9d3f2b50e987d29d736fb9836239",
+    "residual_model.py": "428624e4a889bde62bc36361980d14cc10f45cc436ce87dcc9e70ad676ef5c4d",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4"
+  }
+}

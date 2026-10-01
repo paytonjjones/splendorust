@@ -1,0 +1,58 @@
+{
+  "credit": 0.548625,
+  "ci95": [
+    0.5372028047686535,
+    0.5600471952313466
+  ],
+  "games": 20000,
+  "complete": 20000,
+  "seconds": 1266.953862208,
+  "decision": {
+    "decision": "promote",
+    "stage": "screen",
+    "report": "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e83/gate/screen.json",
+    "source_id": "3b2ba2eded15092f",
+    "margin": 0.01,
+    "interval_from_records": [
+      0.5372028047686535,
+      0.5600471952313466
+    ],
+    "evidence_tools_sha256": {
+      "promote.py": "2e99f969c3fd76e3806372477014ae4bc656b6aded97d517fd86c343eb2f50ee",
+      "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9"
+    },
+    "raw_report_sha256": "7fa6e027233fbc9ab4800abb070c4369859026fa19b72436c6cc4c14b4195e10",
+    "record_set_sha256": "854f1159ccf983df86373671d402ae12083f8571abbd814f95faf35c0b756f3c",
+    "minimum_games_per_second": 0
+  },
+  "champion": {
+    "schema": "confirmed-research-champion-v1",
+    "model": "research/e81/model/model.bin",
+    "checkpoint": "research/e81/model/model.pt",
+    "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
+    "previous_model": "research/e56/model/model.bin",
+    "previous_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+    "previous_champion": "research/e83/previous-champion.json",
+    "decision": "research/e83/gate/decision.json",
+    "games": 20000,
+    "complete": 20000,
+    "credit": 0.548625,
+    "ci95": [
+      0.5372028047686535,
+      0.5600471952313466
+    ],
+    "iterations": 128,
+    "depth": 16,
+    "search_agent": "flywheel-gumbel",
+    "baseline_search_agent": "flywheel-best",
+    "search_config": {
+      "world_pool": 3,
+      "gumbel_max_considered": 16,
+      "gumbel_cvisit": 50,
+      "gumbel_cscale": 0.1,
+      "gumbel_root_noise": 0
+    },
+    "scope": "Combined model/search endpoint in canonical SplendoRust v2, two players, fixed128 simulations/depth16; external best-in-class rank remains unestablished"
+  }
+}

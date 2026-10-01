@@ -1,0 +1,231 @@
+{
+  "schema": "flywheel-training-v1",
+  "input_rows": 56,
+  "public_context": false,
+  "train_context_files": null,
+  "dev_context_files": null,
+  "trunk_blocks": 1,
+  "architecture": 80,
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 142406,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 142406,
+  "seed": 800000017,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/train/004000.bin",
+      "sha256": "23f117eabbf79b64bb5b5ac669d1df68fa1c23d7a9310f97eefd5ee0e6a1b1e0",
+      "rows": 55560,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/000000.bin",
+      "sha256": "4149719784e27b23fc938156daccad4726895cc3fce2f8b06815dba7d617e36b",
+      "rows": 55534,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/001000.bin",
+      "sha256": "c241b42c0fb198c93aeccba76d7f508de850e9fec7b678fd226f3adb13214542",
+      "rows": 55522,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/002000.bin",
+      "sha256": "b3d97fd7dd941045106350871cb6dc6b699ee8fadd6bc2677e2d6bc564f4a61d",
+      "rows": 55758,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/003000.bin",
+      "sha256": "5d12c01be64c7aa663d8ecc2b7d1792abdeda10579f89887f8e43f48bd6943b2",
+      "rows": 55344,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/004000.bin",
+      "sha256": "24eec0275129bef9bbf58dc5707ac29de32211b811f656626cdd3a5bace39356",
+      "rows": 55394,
+      "setups": 1000
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/dev.bin",
+      "sha256": "4bf0526e986336f871db5b1e51b552ba7b52ff13342fefd2d38ecc9950e445e6",
+      "rows": 55636,
+      "setups": 1000
+    }
+  ],
+  "train_setups": 6000,
+  "dev_setups": 1000,
+  "warmstart_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
+  "model_sha256": "5e30f6cd1779e65c64f294e95da55239748e785dd821759aab100e7793e2853b",
+  "checkpoint_sha256": "a70a5eeb36df8092e844690a1791fbc529b6627a55a9ac46e522dd0d430deeab",
+  "script_sha256": "e7aab1fd9886ebe706ac0a31d98346477294b706fd92c69bd7d9b1f8e064f446",
+  "split_code_sha256": null,
+  "model_code_sha256": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+  "gated_code_sha256": null,
+  "residual_code_sha256": null,
+  "fixed_base_exact": null,
+  "base_model_sha256": null,
+  "initial": {
+    "policy_loss": 1.6536899593802237,
+    "policy_accuracy": 0.44437055144151266,
+    "value_brier": 0.21381578123863462,
+    "teacher_target_brier": 0.06289522357655168,
+    "rows": 55636,
+    "outcome_rows": 55636,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.6460463987160263,
+      "policy_accuracy": 0.4466172981522755,
+      "value_brier": 0.2136349807970734,
+      "teacher_target_brier": 0.06273691391428932,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 14.11780370795168,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6422818330834297,
+      "policy_accuracy": 0.44552088575742327,
+      "value_brier": 0.21337808209547537,
+      "teacher_target_brier": 0.0627373885230763,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 2,
+      "seconds": 24.536783832940273,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6434989861730995,
+      "policy_accuracy": 0.4458084693364009,
+      "value_brier": 0.2134733686200994,
+      "teacher_target_brier": 0.06279559210515981,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 3,
+      "seconds": 34.966902415966615,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6416925952353805,
+      "policy_accuracy": 0.4473182831260335,
+      "value_brier": 0.2135429716922728,
+      "teacher_target_brier": 0.06282295194413713,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 4,
+      "seconds": 45.30976404098328,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6412737996738145,
+      "policy_accuracy": 0.4453231720468761,
+      "value_brier": 0.21330282005745035,
+      "teacher_target_brier": 0.06271911930734501,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 5,
+      "seconds": 55.5551277078921,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.639010172742525,
+      "policy_accuracy": 0.44719246531023077,
+      "value_brier": 0.21361556996962539,
+      "teacher_target_brier": 0.06286831945662992,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 6,
+      "seconds": 65.87933829089161,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.638216295543311,
+      "policy_accuracy": 0.44632971457329784,
+      "value_brier": 0.2134485889950151,
+      "teacher_target_brier": 0.0627574133525017,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 7,
+      "seconds": 76.29576758295298,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6377941090178374,
+      "policy_accuracy": 0.44632971457329784,
+      "value_brier": 0.21352066933033118,
+      "teacher_target_brier": 0.0628176627507773,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 8,
+      "seconds": 86.65009337489028,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.637700648523438,
+      "policy_accuracy": 0.44832482565245524,
+      "value_brier": 0.21350993077514482,
+      "teacher_target_brier": 0.06285287286729763,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 9,
+      "seconds": 97.01656520797405,
+      "trained_rows": 333112
+    },
+    {
+      "policy_loss": 1.6364021868989953,
+      "policy_accuracy": 0.4473182831260335,
+      "value_brier": 0.21346919464082806,
+      "teacher_target_brier": 0.06279220439810235,
+      "rows": 55636,
+      "outcome_rows": 55636,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 10,
+      "seconds": 107.40751912491396,
+      "trained_rows": 333112
+    }
+  ],
+  "best_epoch": 10,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.5089530843347623,
+  "trained_only": false,
+  "seconds": 107.45588120794855,
+  "epochs": 10,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

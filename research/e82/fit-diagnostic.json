@@ -1,0 +1,71 @@
+{
+  "schema": "distillation-fit-diagnostic-v1",
+  "checkpoint_sha256": "a70a5eeb36df8092e844690a1791fbc529b6627a55a9ac46e522dd0d430deeab",
+  "script_sha256": "631e56b08b9ddc480b530c7533a125c27ccdf52750890045862ac0671080a1d0",
+  "train_files": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/000000.bin",
+      "sha256": "4149719784e27b23fc938156daccad4726895cc3fce2f8b06815dba7d617e36b",
+      "rows": 55534,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/001000.bin",
+      "sha256": "c241b42c0fb198c93aeccba76d7f508de850e9fec7b678fd226f3adb13214542",
+      "rows": 55522,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/002000.bin",
+      "sha256": "b3d97fd7dd941045106350871cb6dc6b699ee8fadd6bc2677e2d6bc564f4a61d",
+      "rows": 55758,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/003000.bin",
+      "sha256": "5d12c01be64c7aa663d8ecc2b7d1792abdeda10579f89887f8e43f48bd6943b2",
+      "rows": 55344,
+      "setups": 1000
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/004000.bin",
+      "sha256": "24eec0275129bef9bbf58dc5707ac29de32211b811f656626cdd3a5bace39356",
+      "rows": 55394,
+      "setups": 1000
+    }
+  ],
+  "dev_files": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/dev.bin",
+      "sha256": "4bf0526e986336f871db5b1e51b552ba7b52ff13342fefd2d38ecc9950e445e6",
+      "rows": 55636,
+      "setups": 1000
+    }
+  ],
+  "train": {
+    "rows": 277552,
+    "policy_ce": 1.6079264865276441,
+    "target_entropy": 0.0,
+    "policy_kl": 1.6079264865276441,
+    "argmax_agreement": 0.4578889721565689,
+    "target_max_probability": 1.0,
+    "target_probability_of_student_argmax": 0.4578889721565689,
+    "value_brier": 0.2081142859190364,
+    "mean_policy_tv": 0.6759392477946919
+  },
+  "dev": {
+    "rows": 55636,
+    "policy_ce": 1.6364022022576155,
+    "target_entropy": 0.0,
+    "policy_kl": 1.6364022022576155,
+    "argmax_agreement": 0.4473182831260335,
+    "target_max_probability": 1.0,
+    "target_probability_of_student_argmax": 0.4473182831260335,
+    "value_brier": 0.21346919464082806,
+    "mean_policy_tv": 0.6813095414207415
+  },
+  "context_files": [],
+  "device": "mps",
+  "scope": "Policy/label fit on observation encodings. A small train/dev gap alone does not distinguish capacity, optimization, or target ambiguity.",
+  "seconds": 4.242467458010651
+}

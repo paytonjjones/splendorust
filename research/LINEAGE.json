@@ -3,7 +3,7 @@
   "checkpoint": "research/e81/model/model.pt",
   "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
   "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
-  "status": "Provisional research only; E56 is the confirmed champion",
+  "status": "E81 model/search is confirmed by E83; next research generation remains separate",
   "schema": "provisional-research-lineage-v1",
   "champion": "research/CHAMPION.json",
   "decision": "research/e81/decision.json",
@@ -17,9 +17,10 @@
   ],
   "search_agent": "flywheel-gumbel",
   "search_decision": "research/e73/decision.json",
-  "search_status": "Provisional search gain only; E56 champion unchanged",
+  "search_status": "Combined E81/Gumbel endpoint confirmed by E83; no isolated search contribution claim",
   "teacher_agent": "flywheel-gumbel",
   "teacher_action_targets": true,
   "teacher_iterations": 800,
-  "actor_iterations": 128
+  "actor_iterations": 128,
+  "champion_decision": "research/e83/gate/decision.json"
 }
