@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Record the immutable information experiment before outcome runs."""
 import json
+import importlib.metadata
 import platform
 import subprocess
 from pathlib import Path
@@ -27,7 +28,7 @@ def main():
         host=platform.platform(),machine=platform.machine(),
         rustc=subprocess.check_output(['rustc','-Vv'],text=True),
         python=__import__('sys').version,
-        packages=subprocess.check_output([__import__('sys').executable,'-m','pip','freeze'],text=True).splitlines(),
+        packages=sorted(f"{d.metadata['Name']}=={d.version}" for d in importlib.metadata.distributions()),
         upstream_revision=PIN,upstream_files={name:sha(SOURCE/name) for name in upstream_files if name},
         files={str(p.relative_to(ROOT)):sha(p) for p in sorted(set(files))},
         endpoint=dict(model='research/e81/model/model.bin',search='gumbel',iterations=128,depth=16,world_pool=3,
