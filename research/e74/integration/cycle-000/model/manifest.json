@@ -1,0 +1,94 @@
+{
+  "schema": "flywheel-training-v1",
+  "input_rows": 57,
+  "public_context": true,
+  "train_context_files": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/integration/cycle-000/train/000000.context.bin",
+      "sha256": "f1074626699604dfa9b9248e21a393c993c0f55a9f7e9e771629ed808b2e4eee"
+    }
+  ],
+  "dev_context_files": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/integration/cycle-000/dev/000000.context.bin",
+      "sha256": "a6a640286c2bed8bbd812564ada48f3b20f2ee13a3f3788f538a70fa6f573133"
+    }
+  ],
+  "trunk_blocks": 1,
+  "architecture": 80,
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 142462,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 142462,
+  "seed": 800000007,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/integration/cycle-000/train/000000.bin",
+      "sha256": "d067769dc44b58b5b7e44f87204016ac049e95c3cb88032883f7e018651f299f",
+      "rows": 442,
+      "setups": 8
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/integration/cycle-000/dev/000000.bin",
+      "sha256": "f6bd1ba793b4df5bfe5addc688306decd5433eb4e0b0c9ba9db1bcaf245e0214",
+      "rows": 444,
+      "setups": 8
+    }
+  ],
+  "train_setups": 8,
+  "dev_setups": 8,
+  "warmstart_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "model_sha256": "32d394410dc5b6fbce3f0fb2041124a6514336459d649d52c10070c38a6ed756",
+  "checkpoint_sha256": "42c38afe953dd86817a48bfc0f0d125ed0103b06485bf33713f6620def606a97",
+  "script_sha256": "7639ac2828beb3da7d90b860facd04b4f95859e66bd3da6650626a7829682638",
+  "split_code_sha256": null,
+  "model_code_sha256": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+  "gated_code_sha256": null,
+  "residual_code_sha256": null,
+  "fixed_base_exact": null,
+  "base_model_sha256": null,
+  "initial": {
+    "policy_loss": 1.69525366430884,
+    "policy_accuracy": 0.527027027027027,
+    "value_brier": 0.23381894773191159,
+    "teacher_target_brier": 0.06539894653870179,
+    "rows": 444,
+    "outcome_rows": 444,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.697579048775338,
+      "policy_accuracy": 0.5292792792792793,
+      "value_brier": 0.23384881234383798,
+      "teacher_target_brier": 0.06547343623530757,
+      "rows": 444,
+      "outcome_rows": 444,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 1.1457891250029206,
+      "trained_rows": 442
+    }
+  ],
+  "best_epoch": 0,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.6305294552364864,
+  "trained_only": false,
+  "seconds": 1.1868636660510674,
+  "epochs": 1,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

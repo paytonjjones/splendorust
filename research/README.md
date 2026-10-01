@@ -302,3 +302,8 @@ noise0. `flywheel-gumbel-noisy` uses noise1 for teacher exploration. Both use
 completed-Q targets instead of visits. Collection supports `--teacher-agent`
 and `--actor-agent`; a separate actor name requires `--actor-iterations`.
 E73 is a frozen-model screen, not proof of a learned gain or public rank.
+
+Use `--search-agent gumbel` to screen each trained candidate and its parent with
+Gumbel; it selects `flywheel-gumbel-candidate` (SPLENDOR_CANDIDATE_MODEL) against
+`flywheel-gumbel` (SPLENDOR_BEST_MODEL). An epoch-zero public-input expansion
+has the same function and is skipped even when the native header hash differs.

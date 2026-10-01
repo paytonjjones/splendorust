@@ -2659,3 +2659,19 @@ serial/parallel labels byte exact. Fixed568-observation cost ratio1.0169.
 E73 Gumbel128 scored52.825% against PUCT128 with frozen E68 over2,000 complete
 paired games (CI48.54–57.11%). Provisional search profile accepted; strict
 promotion retains baseline and E56 champion. Next test must demonstrate learning.
+
+## E74 — Full-volume Gumbel teacher learning cycle
+
+E73 supplies a provisional search gain with almost unchanged decision cost.
+Test learning from its completed-Q targets at comparable data volume: frozen
+E68 model,5,000 fresh train games (master4300m),1,000 dev games (4310m),
+Gumbel128 deployment actor with noise0 and independent Gumbel800 teacher with
+noise1. Opening exploration remains the collector's first-six-turn sampling.
+Replay only the last E68 1,000-game shard; warm E68,10epochs,seed800000014,
+batch1024,lr1e-4,outcome selection. Keep the bootstrap architecture unchanged.
+Use2,000 fresh paired games (4320m) at128 with Gumbel for both candidate and
+frozen E68. Thus the gate isolates model learning after the search change.
+Record all incomplete games and reject strict incomplete promotions; provisional
+requested-credit point>50.5% only. Champion E56 stays fixed. Preserve all raw
+labels, work counts, source hashes, timings and failed checks. This is a full
+new policy-improvement cycle,not a coefficient sweep or a public-rank claim.

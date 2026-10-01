@@ -18,6 +18,7 @@ def main():
     p.add_argument('--shard-games',type=int,default=1000)
     p.add_argument('--iterations',type=int,default=128)
     p.add_argument('--teacher-iterations',type=int)
+    p.add_argument('--search-agent',choices=['puct','gumbel'],default='puct')
     p.add_argument('--teacher-agent',choices=['flywheel-best','flywheel-gumbel','flywheel-gumbel-noisy'],default='flywheel-best')
     p.add_argument('--actor-agent',choices=['flywheel-best','flywheel-gumbel','flywheel-gumbel-noisy'])
     p.add_argument('--actor-iterations',type=int,help='separate student actor budget; teacher iterations label its visited states')
@@ -44,6 +45,8 @@ def main():
     p.add_argument('--device',default='mps')
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args()
+    candidate_name="flywheel-gumbel-candidate" if a.search_agent=="gumbel" else "flywheel-candidate"
+    baseline_name="flywheel-gumbel" if a.search_agent=="gumbel" else "flywheel-best"
     if a.sample_encoding_views and a.encoding_views!=8:p.error('view sampling requires --encoding-views 8')
     if a.actor_agent and a.actor_iterations is None:p.error('separate actor requires --actor-iterations')
     if a.architecture=='residual' and not a.teacher_checkpoint:p.error('residual requires a learned teacher checkpoint')
@@ -156,13 +159,14 @@ def main():
         env['SPLENDOR_CANDIDATE_MODEL']=str(model/'model.bin')
         run([binaries/'examples/transfer_parity',model/'model.bin',model/'parity.json','real'],c/'parity.log')
         split_identity=a.architecture in ['split-bootstrap','residual'] and m['best_epoch']==0 and best['checkpoint'] and m['warmstart_sha256']==sha(best['checkpoint'])
-        if m['model_sha256']==best['model_sha256'] or split_identity:
+        context_identity=a.public_context and a.architecture=='bootstrap' and a.trunk_blocks is None and m['best_epoch']==0 and best['checkpoint'] and m['warmstart_sha256']==sha(best['checkpoint']) and Path(best['model']).read_bytes()[:8]!=b'SPINFO57'
+        if m['model_sha256']==best['model_sha256'] or split_identity or context_identity:
             atomic(c/'decision.json',dict(cycle=cycle,selected=False,reason='unchanged incumbent function; skip arena self-comparison',teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],best_epoch=m['best_epoch']))
             replay.extend(datasets['train']);continue
         gate=c/'gate';seed=a.seed+20000000+cycle*100000000
         if not (gate/'decision.json').exists():
             preserve(gate)
-            run([sys.executable,ROOT/'scripts/promote.py','--candidate','flywheel-candidate','--baseline','flywheel-best',
+            run([sys.executable,ROOT/'scripts/promote.py','--candidate',candidate_name,'--baseline',baseline_name,
                 '--iterations',a.iterations,'--depth',16,'--screen',a.screen,'--confirm',a.confirm,
                 '--seed',seed,'--threads',a.threads,'--output',gate],c/'gate.log',(0,2))
         decision=json.loads((gate/'decision.json').read_text())
@@ -175,7 +179,7 @@ def main():
         if a.confirm and not confirm.exists() and decision.get('decision')=='reject: incomplete games' and (gate/'screen.json').exists():
             screen=json.loads((gate/'screen.json').read_text());validate_report(screen)
             if record_interval(screen['records'],2,0)[1]>=0.51:
-                run([binaries/'splendor','compare','--agent-a','flywheel-candidate','--agent-b','flywheel-best',
+                run([binaries/'splendor','compare','--agent-a',candidate_name,'--agent-b',baseline_name,
                      '--games',a.confirm,'--iterations',a.iterations,'--depth',16,'--seed',seed+1000000000,
                      '--threads',a.threads,'--output',confirm],c/'research-confirm.log')
         selected=decision.get('decision')=='promote';bounds=None;provisional=None
@@ -184,7 +188,7 @@ def main():
             report=json.loads(final.read_text());validate_report(report)
             bounds=record_interval(report['records'],2,0)
             assert report['reproducible'] is True and report['seed']==(seed+1000000000 if final==confirm else seed)
-            assert report['run_config']['names']==['flywheel-candidate','flywheel-best']
+            assert report['run_config']['names']==[candidate_name,baseline_name]
             selected=selected or (decision.get('decision')=='reject: incomplete games' and bounds[0]>0.51)
         if a.selection_rule=='provisional':
             from lineage import provisional_decision
@@ -195,7 +199,7 @@ def main():
         if selected:
             atomic(bestpath,dict(model=str(model/'model.bin'),checkpoint=str(model/'model.pt'),
                 model_sha256=m['model_sha256'],checkpoint_sha256=m['checkpoint_sha256'],status='provisional lineage; no champion promotion' if a.selection_rule=='provisional' else 'strict promotion' if decision['decision']=='promote' else 'research selection; strict incomplete rejection retained',cycle=cycle))
-        result=dict(cycle=cycle,selected=selected,selection_rule=a.selection_rule,provisional=provisional,champion_sha256=champion['model_sha256'],strict_decision=decision,
+        result=dict(cycle=cycle,selected=selected,search_agent=a.search_agent,selection_rule=a.selection_rule,provisional=provisional,champion_sha256=champion['model_sha256'],strict_decision=decision,
             conservative_selection_interval=bounds,selection_stage=final.stem,teacher_sha256=best['model_sha256'],candidate_sha256=m['model_sha256'],
             best_epoch=m['best_epoch'],train_rows=sum(x['rows'] for x in m['train']),dev_rows=sum(x['rows'] for x in m['dev']))
         atomic(c/'decision.json',result);print(json.dumps(result),flush=True)

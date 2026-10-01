@@ -741,6 +741,7 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "flywheel-best800"
         | "flywheel-gumbel"
         | "flywheel-gumbel-noisy"
+        | "flywheel-gumbel-candidate"
         | "flywheel-candidate"
         | "expert-policy" => {
             let mut config = search.clone();
@@ -764,8 +765,10 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             agent.self_play = name == "neural-selfplay";
             agent.transferred = name.starts_with("transfer") || name.starts_with("flywheel-");
             if name.starts_with("flywheel-") {
-                agent.external_model =
-                    Some(neural_search::flywheel_model(name == "flywheel-candidate"));
+                agent.external_model = Some(neural_search::flywheel_model(matches!(
+                    name,
+                    "flywheel-candidate" | "flywheel-gumbel-candidate"
+                )));
             }
             agent.gumbel = name.starts_with("flywheel-gumbel");
             if agent.gumbel {
