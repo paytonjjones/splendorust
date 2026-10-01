@@ -1049,49 +1049,52 @@ mod tests {
         }
     }
     #[test]
-    fn learned_belief_model_uses_only_root_correction() {
-        let model = Box::leak(Box::new(super::super::transfer::Model::from_bytes(
-            include_bytes!("../../../research/e86/initial/model.bin"),
-        )));
-        let base = super::super::transfer::Model::from_bytes(include_bytes!(
-            "../../../research/e81/model/model.bin"
-        ));
-        let mut state = GameState::new(2, 4670000000).unwrap();
-        state
-            .apply_action(splendor_core::Action::ReserveDeck(0))
-            .unwrap();
-        let mut legal = ActionSet::new();
-        state.legal_actions(&mut legal);
-        let o = state.observe(state.current_player());
-        let context = super::super::transfer::public_context(&o);
-        assert!(context[6] > 0.0);
-        let mut expected = None;
-        for sample in 0..8 {
-            let x = super::super::transfer::encode(&o, &mut Rng::new(sample));
-            assert_eq!(model.infer_base(&x), base.infer(&x));
-            let prediction = model.infer_with_context(&x, &context);
-            if let Some(old) = expected {
-                assert_eq!(prediction, old);
+    fn learned_public_models_use_only_root_correction() {
+        for bytes in [
+            include_bytes!("../../../research/e86/initial/model.bin").as_slice(),
+            include_bytes!("../../../research/e88/initial/probe.bin").as_slice(),
+        ] {
+            let model = Box::leak(Box::new(super::super::transfer::Model::from_bytes(bytes)));
+            let base = super::super::transfer::Model::from_bytes(include_bytes!(
+                "../../../research/e81/model/model.bin"
+            ));
+            let mut state = GameState::new(2, 4670000000).unwrap();
+            state
+                .apply_action(splendor_core::Action::ReserveDeck(0))
+                .unwrap();
+            let mut legal = ActionSet::new();
+            state.legal_actions(&mut legal);
+            let o = state.observe(state.current_player());
+            let context = super::super::transfer::public_context(&o);
+            assert!(context[6] > 0.0);
+            let mut expected = None;
+            for sample in 0..8 {
+                let x = super::super::transfer::encode(&o, &mut Rng::new(sample));
+                assert_eq!(model.infer_base(&x), base.infer(&x));
+                let prediction = model.infer_with_context(&x, &context);
+                if let Some(old) = expected {
+                    assert_eq!(prediction, old);
+                }
+                expected = Some(prediction);
             }
-            expected = Some(prediction);
+            let mut a = NeuralAgent::new(
+                86,
+                SearchConfig {
+                    iterations: 16,
+                    depth: 4,
+                    ..Default::default()
+                },
+            );
+            a.transferred = true;
+            a.external_model = Some(model);
+            a.gumbel = true;
+            a.root_only = true;
+            a.world_pool = 3;
+            assert!(legal.contains(&a.select_action(&o, &legal)));
+            assert_eq!(a.simulations, 16);
+            assert_eq!(a.correction_calls, 1);
+            assert!(a.calls > 1);
         }
-        let mut a = NeuralAgent::new(
-            86,
-            SearchConfig {
-                iterations: 16,
-                depth: 4,
-                ..Default::default()
-            },
-        );
-        a.transferred = true;
-        a.external_model = Some(model);
-        a.gumbel = true;
-        a.root_only = true;
-        a.world_pool = 3;
-        assert!(legal.contains(&a.select_action(&o, &legal)));
-        assert_eq!(a.simulations, 16);
-        assert_eq!(a.correction_calls, 1);
-        assert!(a.calls > 1);
     }
     #[test]
     fn belief_transform_runs_only_at_the_root() {

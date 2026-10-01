@@ -1,0 +1,27 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error: using `chunks_exact` with a constant chunk size
+  --> crates/splendor-agents/src/transfer/attention.rs:74:18
+   |
+74 |                 .chunks_exact(7)
+   |                  ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<7>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+   = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/splendor-agents/src/transfer/attention.rs:77:65
+   |
+77 |         for (token, position) in h.iter_mut().zip(self.position.chunks_exact(WIDTH)) {
+   |                                                                 ^^^^^^^^^^^^^^^^^^^
+   |
+help: consider using `as_chunks::<WIDTH>()` instead
+  --> crates/splendor-agents/src/transfer/attention.rs:77:65
+   |
+77 |         for (token, position) in h.iter_mut().zip(self.position.chunks_exact(WIDTH)) {
+   |                                                                 ^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: could not compile `splendor-agents` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

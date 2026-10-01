@@ -1,6 +1,7 @@
 //! Native inference for the upstream version-80 network.
 //! Architecture copyright (c) 2018 Surag Nair (MIT).
 //! See research/e30/UPSTREAM-LICENSE. No game-state input is accepted here.
+mod attention;
 struct Reader {
     values: Vec<f32>,
     at: usize,
@@ -366,6 +367,7 @@ pub struct Model {
     architecture: Architecture,
 }
 enum Architecture {
+    Attention(Box<attention::AttentionModel>),
     Bootstrap(Box<BootstrapModel>),
     Gated(GatedModel),
     Split(Box<SplitModel>),
@@ -448,7 +450,9 @@ impl ResidualModel {
 }
 impl Model {
     pub fn from_bytes(bytes: &[u8]) -> Self {
-        let architecture = if bytes.starts_with(b"SPRESID1") || bytes.starts_with(b"SPBELF01") {
+        let architecture = if bytes.starts_with(b"SPATTN01") {
+            Architecture::Attention(Box::new(attention::AttentionModel::from_bytes(bytes)))
+        } else if bytes.starts_with(b"SPRESID1") || bytes.starts_with(b"SPBELF01") {
             Architecture::Residual(Box::new(ResidualModel::from_bytes(bytes)))
         } else if bytes.starts_with(b"SPDUAL01") {
             Architecture::Split(Box::new(SplitModel::from_bytes(bytes)))
@@ -466,23 +470,32 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, false),
             Architecture::Residual(model) => model.infer(x, false),
+            Architecture::Attention(_) => panic!("attention model requires public context"),
         }
     }
     pub fn has_correction(&self) -> bool {
-        matches!(self.architecture, Architecture::Residual(_))
+        matches!(
+            self.architecture,
+            Architecture::Residual(_) | Architecture::Attention(_)
+        )
     }
     /// Fast frozen evaluator used below a large root correction.
     pub fn infer_base(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
         match &self.architecture {
             Architecture::Residual(model) => model.base.infer_mode(x, true),
+            Architecture::Attention(model) => model.base.infer_mode(x, true),
             _ => self.infer(x),
         }
     }
     pub fn needs_public_context(&self) -> bool {
-        matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 57)
+        matches!(&self.architecture, Architecture::Attention(_))
+            || matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 57)
             || matches!(&self.architecture, Architecture::Residual(model) if model.public_belief)
     }
     pub fn infer_with_context(&self, x: &[f32; 392], context: &[f32; 7]) -> ([f32; 81], [f32; 2]) {
+        if let Architecture::Attention(model) = &self.architecture {
+            return model.infer(x, context);
+        }
         if let Architecture::Residual(model) = &self.architecture
             && model.public_belief
         {
@@ -513,6 +526,7 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, true),
             Architecture::Residual(model) => model.infer(x, true),
+            Architecture::Attention(_) => panic!("attention model requires public context"),
         }
     }
 }

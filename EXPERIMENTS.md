@@ -2796,3 +2796,9 @@ E86 result: retain E81. A519-feature public root correction with frozen E81 leaf
 Hypothesis: off-policy800-simulation labels with128-simulation actor terminal outcomes can give inconsistent continuation targets. Run frozen E81 Gumbel800 for whole games, with corrected selected-action labels,5,000 train and1,000 development games, fixed E82 replay and the unchanged bootstrap training recipe. Fresh seeds and fixed128-simulation paired arena in research/e87/PREREGISTRATION.md. No capacity/encoding sweep; preserve public-context sidecars for future analysis.
 
 E87 result: retain E81. Strong-policy full-game self-play produced278,646 fresh training positions;334,040 with replay. All6,000 collection games and2,000 arena games completed. Student score49.075%;118 tests/strict Clippy and native parity pass. Ten training epochs108.36s, entire cycle1,099.46s. Better held-out metrics did not yield a strength gain. See research/e87/REPORT.md.
+
+## E88 — Structured attention at the public root
+
+Hypothesis: flat root corrections do not learn relational card/player decisions. Test a64-channel,4-head,2-block pre-RMSNorm attention branch over56 public board rows and one public card-membership/context token. Preserve frozen E81 sampled-input leaf inference. Reuse E87 strong-policy data, exact public means, and a fixed20-epoch recipe; require native parity and<=1.15 root cost before2,000 paired Gumbel128 games at4720000000. Full preregistration: research/e88/PREREGISTRATION.md.
+
+E88 result: select provisional lineage at 51.05% in 2,000 complete games. Strict gate retains E81; no champion change. Native parity, 118 release tests, strict Clippy and 1.128695 root-cost ratio pass. Twenty epochs took 504.04s; selected epoch 5. See research/e88/REPORT.md.

@@ -1,26 +1,27 @@
 {
-  "model": "research/e81/model/model.bin",
-  "checkpoint": "research/e81/model/model.pt",
-  "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
-  "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
-  "status": "E81 model/search is confirmed by E83; next research generation remains separate",
+  "model": "research/e88/model/model.bin",
+  "checkpoint": "research/e88/model/model.pt",
+  "model_sha256": "095020d9adb9f1d60978a19ac754fe21477d700e54c0afcac3cbee28c31b4331",
+  "checkpoint_sha256": "15ea01c96428a972377c1939bff514782b199916273170f6ed5d8f296e686378",
+  "status": "E88 provisional exploration only; E81 remains confirmed champion",
   "schema": "provisional-research-lineage-v1",
   "champion": "research/CHAMPION.json",
-  "decision": "research/e81/decision.json",
+  "decision": "research/e88/decision.json",
   "requested_credit_bounds": [
-    0.52,
-    0.52
+    0.5105,
+    0.5105
   ],
   "ci95": [
-    0.4772718119962065,
-    0.5627281880037935
+    0.46824233413284244,
+    0.5527576658671575
   ],
-  "search_agent": "flywheel-gumbel",
+  "search_agent": "flywheel-root-gumbel-best",
   "search_decision": "research/e73/decision.json",
   "search_status": "Combined E81/Gumbel endpoint confirmed by E83; no isolated search contribution claim",
-  "teacher_agent": "flywheel-gumbel",
+  "teacher_agent": "flywheel-root-gumbel-best",
   "teacher_action_targets": true,
   "teacher_iterations": 800,
-  "actor_iterations": 128,
-  "champion_decision": "research/e83/gate/decision.json"
+  "actor_iterations": 800,
+  "champion_decision": "research/e83/gate/decision.json",
+  "parent": "research/e81/model/model.bin"
 }
