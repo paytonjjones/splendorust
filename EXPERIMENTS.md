@@ -2790,3 +2790,7 @@ E85 result: retain E81. Public moments were exactly invariant and Python/Rust/ba
 Hypothesis and fixed design are in research/e86/PREREGISTRATION.md. Recover public metadata from exact frozen actor replay of the E82 corpus and E81 replay shard, preserving all teacher labels. Train a192x3 gated root correction on519 invariant public features with frozen E81 base/leaf inference. Require native parity, frozen base checks and a<=1.15 root cost ratio before a2,000 paired-game screen at4670000000. No architecture sweep.
 
 E86 result: retain E81. A519-feature public root correction with frozen E81 leaf network scored48.15% in2,000 complete games. Native initial/trained parity passes, all118 tests/strict Clippy pass, cost median ratio1.0130.333,112 training rows reused exact original labels; best epoch2, later development fit degraded. See research/e86/REPORT.md.
+
+## E87 — Strong-policy full-game self-play
+
+Hypothesis: off-policy800-simulation labels with128-simulation actor terminal outcomes can give inconsistent continuation targets. Run frozen E81 Gumbel800 for whole games, with corrected selected-action labels,5,000 train and1,000 development games, fixed E82 replay and the unchanged bootstrap training recipe. Fresh seeds and fixed128-simulation paired arena in research/e87/PREREGISTRATION.md. No capacity/encoding sweep; preserve public-context sidecars for future analysis.

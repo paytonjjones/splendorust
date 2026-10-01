@@ -1,0 +1,40 @@
+{
+  "schema": "strong-full-game-selfplay-v1",
+  "actor_agent": "flywheel-gumbel",
+  "teacher_agent": "flywheel-gumbel",
+  "teacher_action_targets": true,
+  "screen_candidate": "flywheel-gumbel-candidate",
+  "screen_baseline": "flywheel-gumbel",
+  "train_seed": 4680000000,
+  "dev_seed": 4690000000,
+  "screen_seed": 4700000000,
+  "train_games": 5000,
+  "dev_games": 1000,
+  "shard_games": 1000,
+  "actor_iterations": 800,
+  "teacher_iterations": 800,
+  "teacher_replicates": 1,
+  "screen_iterations": 128,
+  "training_seed": 800000019,
+  "epochs": 10,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "threads": 14,
+  "base_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "base_checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
+  "champion_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "replay": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e82/train/004000.bin",
+    "sha256": "24eec0275129bef9bbf58dc5707ac29de32211b811f656626cdd3a5bace39356"
+  },
+  "collector_code_sha256": "2348c4d15770e0f4edd1e53959287aa85f248d39e8c9386451e797b0ab8d5acb",
+  "script_sha256": "2480fc327af3507149202b072700e6ad3586e480d888d9aea6a99c94298df650",
+  "training_scripts_sha256": {
+    "train_flywheel.py": "e7aab1fd9886ebe706ac0a31d98346477294b706fd92c69bd7d9b1f8e064f446",
+    "flywheel_model.py": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa"
+  },
+  "rule": "provisional worst-case requested point >50.5%; strict decisions preserved; no champion change",
+  "collector_binary_sha256": "b99776a9b5b9559e7f5ae94dad4c3c3dd99c73a2fc5c36683d6e3b3eef9f47c0"
+}
