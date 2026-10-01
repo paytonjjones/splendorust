@@ -8,7 +8,9 @@ BASE=Path(__file__).resolve().parent
 LABEL={'control':'Control','blind-alpha':'Blind AlphaZero','privileged-sr':'Privileged SplendoRust'}
 
 def pct(x): return f'{100*x:.3f}%'
-def interval(bounds): return pct(bounds[0]) if bounds[0]==bounds[1] else f'{pct(bounds[0])} to {pct(bounds[1])}'
+def interval(bounds):
+    if bounds is None: return 'Undefined (no positive control gap)'
+    return pct(bounds[0]) if bounds[0]==bounds[1] else f'{pct(bounds[0])} to {pct(bounds[1])}'
 def pp(bounds):
     if bounds[0]==bounds[1]: return f'{100*bounds[0]:+.3f}'
     return f'{100*bounds[0]:+.3f} to {100*bounds[1]:+.3f}'
@@ -18,8 +20,12 @@ def main():
     confirm=json.loads((BASE/'confirmation/summary.json').read_text())
     freeze=json.loads((BASE/'freeze.json').read_text())
     audit=json.loads((BASE/'final-audit.json').read_text());assert audit['status']=='passed'
+    control=confirm['arms']['control']['credit_bounds'][0]
+    blind=confirm['contrasts']['blind-alpha']
+    privileged=confirm['contrasts']['privileged-sr']
     lines=['# AlphaZero information fairness','',
         'Status: complete. All six schedules have passed full native replay and the final hash audit.', '',
+        f"Control SplendoRust win credit is {pct(control)}. Blind AlphaZero changes that credit by {pp(blind['delta_credit_bounds'])} percentage points; privileged SplendoRust changes it by {pp(privileged['delta_credit_bounds'])} percentage points. The separate estimates of the control gap removed are {interval(blind['control_gap_reduced_fraction_bounds'])} and {interval(privileged['control_gap_reduced_fraction_bounds'])}. The paired uncertainty intervals are below. These two estimates must not be added.", '',
         'The experiment uses the current E81/Gumbel128 endpoint from E92. It changes the information supplied to one agent at a time. The native referee, game rules, models, weights and search budgets stay fixed. The existing canonical and native benchmarks remain unchanged.', '',
         '| Arm | SplendoRust input | AlphaZero input |','|---|---|---|',
         '| Control | Public history and own private cards | True unordered card partition |',
@@ -77,7 +83,7 @@ def main():
     for arm in ARMS:
         r=confirm['arms'][arm]
         lines.append(f"| {LABEL[arm]} | {r['wall_seconds']:.2f} | {r['policy_seconds']['champion']:.2f} | {r['policy_seconds']['alphazero']:.2f} | {r['simulations']:,} | {r['inferences']:,} |")
-    lines+=['','Policy times are summed elapsed decision times across concurrent games. They are not isolated CPU times. Wall time includes worker startup and excludes later replay and archive checks. Fixed simulation counts are not equal compute. Other research processes shared this host during confirmation. Host details and process-load snapshots are saved with the freeze, [host-load-start.json](host-load-start.json), and [host-load-confirmation-start.json](host-load-confirmation-start.json). These times are not isolated throughput measurements.', '',
+    lines+=['','Policy times are summed elapsed decision times across concurrent games. They are not isolated CPU times. Wall time includes worker startup and excludes later replay and archive checks. Fixed simulation counts are not equal compute. Other research processes shared this host during confirmation. Host details and process-load snapshots are saved with the freeze, [host-load-start.json](host-load-start.json), [host-load-confirmation-start.json](host-load-confirmation-start.json), and [host-load-confirmation-restart.json](host-load-confirmation-restart.json). These times are not isolated throughput measurements.', '',
         '## Audit and reproduction','',
         'See [README.md](README.md) for the workers and commands. Each arm retains its exact schedule, execution log, replay result and raw-record hashes. Lossless gzip chunks preserve the exact merged history; `archives.json` defines their order and hashes and the recovery of each original shard. `restore.py` restores an exact JSONL copy. The original raw files remain ignored in the execution worktree.', '',
         'The report summaries are [screen/summary.json](screen/summary.json) and [confirmation/summary.json](confirmation/summary.json). [final-audit.json](final-audit.json) checks frozen source/binary/model/upstream hashes, every lossless archive, all replay counts and exact statistical summary reruns. `artifact-manifest.json` identifies the final saved report, commands, logs and evidence. No default policy is promoted by this experiment.', '',
