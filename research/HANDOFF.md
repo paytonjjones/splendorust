@@ -59,11 +59,13 @@ teacher policy TV on 62 fixed observations. E61 completed its paired two-teacher
 rejected. The3580m E59 endpoint milestone scored51.705% over E56 in
 20,000 complete games,CI50.58–52.83%. It supports a small gain at zero
 margin but does not pass the strict1% margin. Keep E56 champion,E59 lineage.
-E62/E63 now test a modern residual correction branch over the fixed E59
-base. Initial function identity and fixed-base integrity are required; record
-real inference cost and both fixed-node and measured-cost screens.
+E62 validation passes. E63 scores51.20% at128 simulations but41.525%
+at the measured-cost64-simulation budget,2,000 complete games each. Keep
+E59 for the fast loop. E64 collects1,000 fresh train and1,000 dev games from
+the supported E59 lineage at800 simulations,then trains the fast bootstrap
+student with the full E58 replay corpus. Screen once at128 simulations.
 Data and Torch remain under this worktree's ignored `local/`; do not duplicate
-active seed streams. Use the confirmed E56 model for further teacher work.
+active seed streams. E64 uses E59 as the research teacher; E56 stays the confirmed champion.
 
 `--selection-rule provisional` keeps a fixed `champion.json` and a separate
 exploratory `best.json` lineage. After one fixed2,000-game screen, requested-
@@ -72,7 +74,7 @@ not statistical confirmation. Strict decisions and95% intervals remain saved.
 Missing outcomes remain unknown. Do not apply this new rule to completed E53
 or earlier gates. After at most three candidate generations, assess the frozen
 endpoint against the fixed champion in20,000 paired games. The prior3310m
-assessment is complete; the current campaign reserves3580m.
+assessment is complete; 3580m is complete. E64 reserves3650m; do not reuse prior screens.
 The champion changes only after independent supporting evidence.
 
 The eight-view diagnostic is exact when there is no opponent blind reservation.

@@ -1,0 +1,24 @@
+{
+  "schema": "lineage-generation-v1",
+  "train_seed": 3630000000,
+  "dev_seed": 3640000000,
+  "screen_seed": 3650000000,
+  "train_games": 1000,
+  "dev_games": 1000,
+  "training_seed": 800000012,
+  "epochs": 10,
+  "teacher_iterations": 800,
+  "screen_iterations": 128,
+  "threads": 14,
+  "champion_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+  "script_sha256": "3154009c5539e0f05d770f5d43be3e56676de2118dd557a90d23617003fa4e1c",
+  "training_scripts_sha256": {
+    "train_flywheel.py": "e16e21d9a29f3b1695cd916e66506364d622a4e5dcb7c77c2d3f9692a6f8a668",
+    "flywheel_model.py": "a756ea5d23652cea3f6e1a6fa0f02a0a6508e86340e5236ce2e853090ae8aa62",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4"
+  },
+  "rule": "provisional worst-case requested point >50.5%; final strict champion gate",
+  "replay": "E58 full5000-game train shard; fresh1000 from E59",
+  "augmentation": false
+}

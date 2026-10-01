@@ -41,8 +41,11 @@ teacher policy TV on 62 fixed observations. E61 tests two-teacher averaged
 targets with all E58 trajectories and inputs held fixed. Its completed screen scored48.825% over E58; reject. The frozen E59
 lineage scored51.705% over E56 in20,000 complete games,CI50.58–52.83%.
 This supports a small zero-margin gain, but retains the strict1% rejection.
-E56 remains champion. Next,E62/E63 test a modern residual correction
-branch while keeping the base model fixed. Capacity is a hypothesis.
+E56 remains champion. E62 validation passes. E63 scores51.20% at128 simulations but41.525%
+at the measured-cost64-simulation budget,2,000 complete games each. Keep
+E59 for the fast loop. E64 collects1,000 fresh train and1,000 dev games from
+the supported E59 lineage at800 simulations,then trains the fast bootstrap
+student with the full E58 replay corpus. Screen once at128 simulations.
 All negative results and prior champion files remain saved. Original Search128
 and core rules are unchanged. Learned evidence is for two players only; other
 player counts use Strong.
