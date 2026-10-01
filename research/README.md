@@ -309,3 +309,5 @@ Gumbel; it selects `flywheel-gumbel-candidate` (SPLENDOR_CANDIDATE_MODEL) agains
 has the same function and is skipped even when the native header hash differs.
 
 The unchanged AlphaZero native baseline is preserved with all158 artifact hashes and46 lossless archives. See [benchmark integration](../benchmarks/strength/native/INTEGRATION.md). E56 scored23.395% at128 simulations and37.775% at800 under native rules with AlphaZero's information advantage. Use fresh native-profile milestone tests, hashes and replay; do not pool this transfer baseline with canonical results or treat800-search strength as a learned gain. Keep20,000 confirmations outside the2,000-game inner loop.
+
+External target is critical: E92 records current E81 Gumbel128 at 27.325% against unchanged native AlphaZero800. This triggers a supervision/representation pivot. Do not treat internal lineage gains as dominance. E94 proves the public-input external-teacher data interface; new models need fresh native and canonical checks.

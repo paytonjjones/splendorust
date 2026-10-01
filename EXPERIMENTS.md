@@ -2820,3 +2820,13 @@ Hypothesis: independent chosen-action noise can hurt teacher quality. Four E88 r
 ## E92 — Current champion against unchanged AlphaZero
 
 Freeze E81 from CHAMPION.json and its Gumbel128 endpoint. Test 2,000 fresh native-profile paired games at 4810000000 against unchanged AlphaZero800, using eight workers. Preserve private-information asymmetry and native referee, validate all replay, and keep canonical evidence separate. Weak external performance triggers a training-paradigm reassessment. See research/e92/PREREGISTRATION.md.
+
+E92 result: E81 Gumbel128 scores 27.325% against unchanged native AlphaZero800 in 2,000 complete paired games, conservative 95% interval 23.0303–31.6197%. All 111,034 transitions replay. Preflight tests rebuilt worker binaries; actual arena hashes and repeated post-build tests/differential checks pass the completion audit. Trigger the preregistered supervision pivot; no external dominance. See research/e92/REPORT.md.
+
+## E93 — Fixed-budget consensus
+
+Four E88 Gumbel200 votes versus one Gumbel800 teacher, 2,000 paired games at 4800000000, all complete. Consensus loses at 45.025%, paired 95% interval 40.7761–49.2739%. Reject; no expensive consensus corpus. See research/e93/REPORT.md.
+
+## E94 — External-teacher data boundary pilot
+
+Eight fresh unchanged AlphaZero800 native self-play games produce 440 public-input rows. All transitions replay; all 102 blind rows pass exact eight-encoding public-feature invariance. Pilot data is excluded from training. The external teacher retains private inputs only for offline labels; the learner receives public observations and metadata. See research/e94/REPORT.md and PREREGISTRATION.md.

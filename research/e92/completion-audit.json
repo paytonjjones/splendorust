@@ -1,0 +1,24 @@
+{
+  "scope": "All inputs/settings unchanged except two preflight worker hashes after cargo test rebuilt examples before arena startup; all eight actual arena shards use one identical post-test policy build",
+  "changed_preflight_binaries": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/target/release/examples/native_policy_worker",
+      "preflight_sha256": "7d9cfc76186d54f4423a129bea3292523054ffcb8eb4ac45490451c056bc165b",
+      "actual_sha256": "5f6ff7995822a645ecaea4479743f3d9ac208dd8283d04345a79dc00fae5e90a"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/target/release/examples/native_rules_probe",
+      "preflight_sha256": "6b9d694830eac4b0c8da3226c88b880286c05eb7d13e022932cde852c8c0a3af",
+      "actual_sha256": "c9098fe7a3ec753ad1b1eb3d6914f9cf7dbf0a29cef54c1d643d12c84cb0cf5a"
+    }
+  ],
+  "actual_policy_sha256": "5f6ff7995822a645ecaea4479743f3d9ac208dd8283d04345a79dc00fae5e90a",
+  "source_model_upstream_settings_unchanged": true,
+  "all_shard_builds_match": true,
+  "completed": 2000,
+  "replay_transitions": 111034,
+  "post_build_native_tests": 8,
+  "post_build_differential_branches": 312879,
+  "interpretation": "Post-run guard failure retained. Actual benchmark endpoint is the post-test build identified in metadata; preflight binary hashes are not the arena build. No policy/outcome changes or rerun.",
+  "raw_sha256": "014d2747e27b24fd49befdf0abfdefa0097e42d25dd0d67a33c53e836d83948c"
+}

@@ -1,0 +1,11 @@
+/Users/payton.jones/.codex/worktrees/2311/splendorust/local/strength/external/alphazero/GenericNNetWrapper.py:213: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filepath, map_location='cpu')
+{"completed_games": 1, "rows": 54, "seconds": 41.151564250001684}
+{"completed_games": 2, "rows": 110, "seconds": 50.370024667005055}
+{"completed_games": 3, "rows": 170, "seconds": 60.19744245801121}
+{"completed_games": 4, "rows": 228, "seconds": 69.85831366700586}
+{"completed_games": 5, "rows": 278, "seconds": 79.82626191701274}
+{"completed_games": 6, "rows": 334, "seconds": 91.6746581250336}
+{"completed_games": 7, "rows": 388, "seconds": 100.9008554579923}
+{"completed_games": 8, "rows": 440, "seconds": 109.49008916702587}
+{"games": 8, "completed": 8, "rows": 440, "public_encoding_invariance_checks": 64, "replay_transitions": 440, "data_sha256": "ae7bef5a2a3d411395f88f65cc7639e33b60f4ddc7eebcdcc76d225a450e43be", "context_sha256": "f76617e6f8aa72521e53f57862dcd6cb7434adc392f8a990ecaed17311ca59e7", "histories_sha256": "57b50bbe23ad03855ec690433fa84353dbdbfb9b3b98ba570317cafe322a8bad", "teacher_config": {"numMCTSSims": 800, "fpu": 0.0593, "universes": 3, "cpuct": 0.8, "prob_fullMCTS": 1.0, "forced_playouts": false, "no_mem_optim": false}, "seconds": 109.64329262496904, "learner_inputs": "Public observation sampling and public reservation metadata only; privileged teacher information appears only in labels", "training_eligible": false, "scope": "Data path pilot only; no model train or external strength claim"}

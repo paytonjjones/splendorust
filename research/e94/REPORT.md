@@ -1,0 +1,9 @@
+# E94: external-teacher data boundary passes
+
+The eight-game pilot completes with 440 labeled positions. Every action is legal and one-hot, all feature/context values are finite, and all 440 transitions replay against the unchanged native referee. The first 64 observation checks and all 102 blind-row checks produce exactly invariant public means/features across eight independent sampled encodings. The blind cohort covers all three tiers and one or two unknown reservations.
+
+The teacher uses the pinned unchanged AlphaZero network and two independent 800-simulation search trees, with the registered native search settings. It retains its native private-information input. Learner feature rows come only from Tracker's redacted acting-player public observation passed to the native policy worker's sample operation. The seven context fields contain public reservation flags, tiers and counts. The setup ID is split/audit metadata, never a feature. Teacher privilege is confined to labels.
+
+The pilot uses the root-average value returned by getActionProb, mapped to credit, and actual terminal win credit. It is not a chosen-action value estimate. A full data run must state its value-target definition explicitly. The data path took 109.64 seconds under shared-host load, including startup and replay. Dataset, context and history bytes, hashes, seeds, sources and teacher settings are preserved.
+
+This establishes the data interface, not model strength. The pilot is excluded from training. E92 confirms that the current endpoint is weak against the critical external target; the next experiment will train from fresh stronger external-teacher data with a public belief representation, an explicit native/canonical rule feature, and fresh checks in both profiles. AlphaZero stays unchanged as the evaluator.
