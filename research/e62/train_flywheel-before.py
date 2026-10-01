@@ -21,7 +21,7 @@ def main():
     p.add_argument('--device',default='mps');p.add_argument('--seed',type=int,default=800000007)
     p.add_argument('--selection',choices=['outcome','teacher','distillation'],default='outcome')
     p.add_argument('--trained-only',action='store_true')
-    p.add_argument('--architecture',choices=['bootstrap','gated','split-bootstrap','residual'],default='bootstrap')
+    p.add_argument('--architecture',choices=['bootstrap','gated','split-bootstrap'],default='bootstrap')
     p.add_argument('--learning-rate',type=float,default=1e-4)
     p.add_argument('--bitplanes',action='store_true')
     p.add_argument('--distill-teacher')
@@ -30,7 +30,6 @@ def main():
     p.add_argument('--greedy-targets',action='store_true')
     p.add_argument('--sample-encoding-views',action='store_true')
     a=p.parse_args()
-    if a.architecture=='residual' and not a.warmstart:p.error('residual requires a learned base checkpoint')
     if a.trunk_blocks is not None and a.architecture!='bootstrap':p.error('trunk-blocks requires bootstrap')
     if a.policy_only and a.architecture!='bootstrap':p.error('policy-only requires the bootstrap architecture')
     if a.policy_only and a.distill_teacher:p.error('policy-only uses root policy targets; do not combine with distillation')
@@ -46,11 +45,7 @@ def main():
         from encoding_views import open_views,sample_views
         view_groups,view_files=open_views(a.train,train)
         augmentation_rng=np.random.default_rng(a.seed ^ 0x6a09e667)
-    if a.architecture=='residual':
-        from residual_model import Residual,export as export_residual
-        model=Residual(a.warmstart);forward=lambda model,x:model(x);native_export=export_residual
-        base_state={k:v.clone() for k,v in model.base.state_dict().items()}
-    elif a.architecture=='split-bootstrap':
+    if a.architecture=='split-bootstrap':
         from split_model import SplitBootstrap,export_split
         model=SplitBootstrap(a.warmstart)
         forward=lambda model,x:model(x)
@@ -74,11 +69,7 @@ def main():
     teacher_model=None;teacher_forward=raw
     if a.distill_teacher:
         payload=torch.load(a.distill_teacher,map_location='cpu',weights_only=True)
-        if payload.get('architecture')=='residual':
-            from residual_model import Residual
-            teacher_model=Residual(a.distill_teacher)
-            teacher_forward=lambda model,x:model(x)
-        elif payload.get('architecture')=='split-bootstrap':
+        if payload.get('architecture')=='split-bootstrap':
             from split_model import SplitBootstrap
             teacher_model=SplitBootstrap(a.distill_teacher)
             teacher_forward=lambda model,x:model(x)
@@ -139,7 +130,7 @@ def main():
     initial=evaluate();print(json.dumps(dict(stage='initial',**initial)),flush=True)
     # Keep the unchanged incumbent if all trained epochs reduce held-out quality.
     def save(epoch):
-        torch.save({'state_dict':{k:v.detach().cpu() for k,v in model.state_dict().items()},'epoch':epoch,'seed':a.seed,'architecture':a.architecture,'trunk_blocks':a.trunk_blocks if a.architecture=='bootstrap' else None,'policy_trunk_blocks':len(model.policy.trunk) if a.architecture=='split-bootstrap' else None,'critic_trunk_blocks':len(model.critic.trunk) if a.architecture=='split-bootstrap' else None,**(model.metadata() if a.architecture=='residual' else {})},a.output/'model.pt')
+        torch.save({'state_dict':{k:v.detach().cpu() for k,v in model.state_dict().items()},'epoch':epoch,'seed':a.seed,'architecture':a.architecture,'trunk_blocks':a.trunk_blocks if a.architecture=='bootstrap' else None,'policy_trunk_blocks':len(model.policy.trunk) if a.architecture=='split-bootstrap' else None,'critic_trunk_blocks':len(model.critic.trunk) if a.architecture=='split-bootstrap' else None},a.output/'model.pt')
     metric='teacher_target_brier' if a.selection=='teacher' else 'value_brier'
     def score_for(metrics):
         return metrics['distillation_policy_kl']+4*metrics['distillation_value_mse'] if a.selection=='distillation' else metrics['policy_loss']+4*metrics[metric]
@@ -168,17 +159,16 @@ def main():
     if a.architecture=='gated':load_state(model,a.output/'model.pt',a.device)
     else:model.load_state_dict(torch.load(a.output/'model.pt',map_location=a.device,weights_only=True)['state_dict'])
     model.cpu().eval()
-    if a.architecture=='residual':assert all(torch.equal(v,model.base.state_dict()[k]) for k,v in base_state.items()),'fixed base changed'
     native_export(model,a.output/'model.bin')
     fixture=np.array(dev[0]['x'][:64],copy=True)
     with torch.no_grad(): logits,v=forward(model,torch.from_numpy(fixture))
     if fixed_values is not None:assert torch.equal(fixed_values,v),'frozen critic changed'
     (a.output/'parity.json').write_text(json.dumps(dict(x=fixture.tolist(),logits=logits.tolist(),values=v.tolist())))
-    manifest=dict(schema='flywheel-training-v1',trunk_blocks=a.trunk_blocks if a.architecture=='bootstrap' else None,architecture='residual-rms-swiglu-192x3-v1' if a.architecture=='residual' else 80 if a.architecture=='bootstrap' else 'split-bootstrap' if a.architecture=='split-bootstrap' else 'gated-rms-swiglu-192x3-v2' if a.bitplanes else 'gated-rms-swiglu-192x3-v1',distill_teacher_sha256=sha(a.distill_teacher) if a.distill_teacher else None,learning_rate=a.learning_rate,parameters=sum(v.numel() for v in model.parameters()),
+    manifest=dict(schema='flywheel-training-v1',trunk_blocks=a.trunk_blocks if a.architecture=='bootstrap' else None,architecture=80 if a.architecture=='bootstrap' else 'split-bootstrap' if a.architecture=='split-bootstrap' else 'gated-rms-swiglu-192x3-v2' if a.bitplanes else 'gated-rms-swiglu-192x3-v1',distill_teacher_sha256=sha(a.distill_teacher) if a.distill_teacher else None,learning_rate=a.learning_rate,parameters=sum(v.numel() for v in model.parameters()),
         sample_encoding_views=a.sample_encoding_views,encoding_views_files=view_files,encoding_views_code_sha256=sha(Path(__file__).with_name('encoding_views.py')) if a.sample_encoding_views else None,greedy_targets=a.greedy_targets,policy_only=a.policy_only,frozen_value_exact=torch.equal(fixed_values,v) if fixed_values is not None else None,trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),seed=a.seed,device=a.device,torch=torch.__version__,numpy=np.__version__,train=tfiles,dev=dfiles,
         train_setups=len(tids),dev_setups=len(dids),warmstart_sha256=sha(a.warmstart) if a.warmstart else None,
         model_sha256=sha(a.output/'model.bin'),checkpoint_sha256=sha(a.output/'model.pt'),script_sha256=sha(__file__),
-        split_code_sha256=sha(Path(__file__).with_name('split_model.py')) if a.architecture=='split-bootstrap' else None,model_code_sha256=sha(Path(__file__).with_name('flywheel_model.py')),gated_code_sha256=sha(Path(__file__).with_name('gated_model.py')) if a.architecture in ['gated','residual'] else None,residual_code_sha256=sha(Path(__file__).with_name('residual_model.py')) if a.architecture=='residual' else None,fixed_base_exact=True if a.architecture=='residual' else None,base_model_sha256=sha(a.output/'base.bin') if a.architecture=='residual' else None,initial=initial,history=history,
+        split_code_sha256=sha(Path(__file__).with_name('split_model.py')) if a.architecture=='split-bootstrap' else None,model_code_sha256=sha(Path(__file__).with_name('flywheel_model.py')),gated_code_sha256=sha(Path(__file__).with_name('gated_model.py')) if a.architecture=='gated' else None,initial=initial,history=history,
         best_epoch=best_epoch,selection=f'minimum dev {a.selection} score; trained_only={a.trained_only}',initial_score=initial_score,trained_only=a.trained_only,
         seconds=time.monotonic()-start,epochs=a.epochs,batch_size=a.batch_size,
         determinism='fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed')

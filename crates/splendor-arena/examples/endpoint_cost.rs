@@ -3,6 +3,7 @@ use splendor_agents::{SearchConfig, make_agent};
 use splendor_core::{ActionSet, GameState, Phase};
 use std::{hint::black_box, time::Instant};
 fn main() {
+    let budget_sweep = std::env::args().any(|arg| arg == "--budget-sweep");
     let mut positions = Vec::new();
     for seed in 0..10 {
         let mut state = GameState::new(2, 240000000 + seed).unwrap();
@@ -28,6 +29,10 @@ fn main() {
             ("flywheel-candidate", 16),
             ("flywheel-candidate", 128),
         ];
+        if budget_sweep {
+            settings = vec![("flywheel-best128", 128)];
+            settings.extend((8..=128).step_by(8).map(|n| ("flywheel-candidate", n)));
+        }
         if repeat == 1 {
             settings.reverse();
         }
@@ -45,7 +50,7 @@ fn main() {
             let (simulations, inference_calls) = agent.work_counts();
             println!(
                 "{}",
-                serde_json::json!({"agent":name,"iterations":iterations,"repeat":repeat,"decisions":positions.len(),"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source_id":env!("SPLENDOR_SOURCE_ID"),"workload":"568 Strong-game Main observations; Search128 retains fixed128/depth8; candidate depth16; shared-host timing"})
+                serde_json::json!({"agent":name,"iterations":iterations,"repeat":repeat,"decisions":positions.len(),"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source_id":env!("SPLENDOR_SOURCE_ID"),"budget_sweep":budget_sweep,"workload":"Strong-game Main observations; Search128 retains fixed128/depth8; learned agents depth16; shared-host timing"})
             );
         }
     }

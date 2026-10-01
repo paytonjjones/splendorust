@@ -2454,7 +2454,7 @@ This is a capacity/representation test,not proof that capacity is the cause.
 
 E62 checks malformed checkpoints,native/PyTorch parity,fixed-base integrity,
 initial function identity,legal searches,and actual inference/decision cost.
-E63 uses the E58 five-game-thousand corpus plus E56 replay and E58 dev,
+E63 uses the E58 5,000-game corpus plus E56 replay and E58 dev,
 warm E59 base,20epochs,seed800000011,batch1024,lr1e-4,and existing loss
 and dev selection. Keep epoch zero. Measure2,000 paired games at128
 simulations against E59 (master3610000000). A second2k screen3620000000

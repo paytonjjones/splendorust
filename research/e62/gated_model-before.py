@@ -27,7 +27,7 @@ class Gated(nn.Module):
         scale=torch.full((392,),0.1);scale[6]=1/124
         self.register_buffer('scale',scale)
         self.register_buffer('packed_indices',torch.tensor([7*row+color for row in [26,28,30] for color in range(5)]),persistent=False)
-    def forward_raw(self,x):
+    def forward(self,x):
         features=x*self.scale
         if self.bitplanes:
             # Bit extraction by integer-valued remainder avoids MPS int64 kernels.
@@ -38,10 +38,7 @@ class Gated(nn.Module):
         h=torch.nn.functional.silu(self.stem(features))
         for block in self.blocks:h=block(h)
         y=self.head(self.norm(h))
-        return y[:,:81],y[:,81:]
-    def forward(self,x):
-        pi,value=self.forward_raw(x)
-        return pi,value.tanh()
+        return y[:,:81],y[:,81:].tanh()
 
 def export(model,path):
     expected=torch.full((392,),0.1);expected[6]=1/124

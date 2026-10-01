@@ -332,21 +332,6 @@ impl BootstrapModel {
             .collect::<Vec<_>>();
         value.try_into().unwrap()
     }
-    fn value_raw(&self, h: &[f32], interleaved: bool) -> [f32; 2] {
-        let value = self.value_block.apply_mode(h, true, interleaved);
-        let value: Vec<_> = self
-            .value_hidden
-            .apply(&value)
-            .into_iter()
-            .map(|x| x.max(0.0))
-            .collect();
-        let value = self
-            .value_output
-            .apply(&value)
-            .into_iter()
-            .collect::<Vec<_>>();
-        value.try_into().unwrap()
-    }
 }
 
 /// Native checkpoint dispatch. Both architectures use the same observation encoder.
@@ -357,7 +342,6 @@ enum Architecture {
     Bootstrap(Box<BootstrapModel>),
     Gated(GatedModel),
     Split(Box<SplitModel>),
-    Residual(Box<ResidualModel>),
 }
 struct SplitModel {
     policy: BootstrapModel,
@@ -388,47 +372,9 @@ impl SplitModel {
         )
     }
 }
-struct ResidualModel {
-    base: BootstrapModel,
-    delta: GatedModel,
-}
-impl ResidualModel {
-    fn from_bytes(bytes: &[u8]) -> Self {
-        assert!(bytes.len() >= 16, "residual model header");
-        let base_len = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
-        let delta_len = u32::from_le_bytes(bytes[12..16].try_into().unwrap()) as usize;
-        let end = 16usize.checked_add(base_len).unwrap();
-        assert_eq!(
-            end.checked_add(delta_len).unwrap(),
-            bytes.len(),
-            "residual model lengths"
-        );
-        let delta = &bytes[end..];
-        assert!(
-            delta.starts_with(b"SPGATED1") || delta.starts_with(b"SPGATED2"),
-            "residual correction format"
-        );
-        Self {
-            base: BootstrapModel::from_bytes(&bytes[16..end]),
-            delta: GatedModel::from_bytes(delta),
-        }
-    }
-    fn infer(&self, x: &[f32; 392], interleaved: bool) -> ([f32; 81], [f32; 2]) {
-        let h = self.base.features(x, interleaved);
-        let mut pi = self.base.policy(&h, interleaved);
-        let value = self.base.value_raw(&h, interleaved);
-        let (dp, dv) = self.delta.infer_raw(x);
-        for (p, d) in pi.iter_mut().zip(dp) {
-            *p += d;
-        }
-        (pi, std::array::from_fn(|i| (value[i] + dv[i]).tanh()))
-    }
-}
 impl Model {
     pub fn from_bytes(bytes: &[u8]) -> Self {
-        let architecture = if bytes.starts_with(b"SPRESID1") {
-            Architecture::Residual(Box::new(ResidualModel::from_bytes(bytes)))
-        } else if bytes.starts_with(b"SPDUAL01") {
+        let architecture = if bytes.starts_with(b"SPDUAL01") {
             Architecture::Split(Box::new(SplitModel::from_bytes(bytes)))
         } else if bytes.starts_with(b"SPGATED1") || bytes.starts_with(b"SPGATED2") {
             Architecture::Gated(GatedModel::from_bytes(bytes))
@@ -443,7 +389,6 @@ impl Model {
             Architecture::Bootstrap(model) => model.infer(x),
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, false),
-            Architecture::Residual(model) => model.infer(x, false),
         }
     }
     pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
@@ -451,7 +396,6 @@ impl Model {
             Architecture::Bootstrap(model) => model.infer_mode(x, true),
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, true),
-            Architecture::Residual(model) => model.infer(x, true),
         }
     }
 }
@@ -549,10 +493,6 @@ impl GatedModel {
         }
     }
     fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
-        let (pi, value) = self.infer_raw(x);
-        (pi, value.map(f32::tanh))
-    }
-    fn infer_raw(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
         let features = gated_features(x, self.bitplanes);
         let mut h: Vec<_> = self.stem.apply(&features).into_iter().map(silu).collect();
         for b in &self.blocks {
@@ -567,7 +507,7 @@ impl GatedModel {
             }
         }
         let y = self.head.apply(&rms_norm(&h, &self.gain));
-        (y[..81].try_into().unwrap(), [y[81], y[82]])
+        (y[..81].try_into().unwrap(), [y[81].tanh(), y[82].tanh()])
     }
 }
 
@@ -865,66 +805,6 @@ mod tests {
         invalid[16..20].copy_from_slice(&f32::NAN.to_le_bytes());
         assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());
         assert!(std::panic::catch_unwind(|| Model::from_bytes(b"SPDUAL01")).is_err());
-    }
-    #[test]
-    fn residual_identity_corrections_and_payload_checks() {
-        let base = include_bytes!("models/e30.bin");
-        let mut delta = small_gated_bytes();
-        let head = delta.len() - 4 * (83 * 32 + 83);
-        delta[head..].fill(0);
-        let wrap = |d: &[u8]| {
-            let mut b = b"SPRESID1".to_vec();
-            b.extend_from_slice(&(base.len() as u32).to_le_bytes());
-            b.extend_from_slice(&(d.len() as u32).to_le_bytes());
-            b.extend_from_slice(base);
-            b.extend_from_slice(d);
-            b
-        };
-        let identity = Model::from_bytes(&wrap(&delta));
-        let original = Model::from_bytes(base);
-        let raw_base = BootstrapModel::from_bytes(base);
-        for seed in 0..32 {
-            let state = GameState::new(2, seed).unwrap();
-            let x = encode(&state.observe(0), &mut Rng::new(seed + 31));
-            let before = original.infer(&x);
-            let after = identity.infer(&x);
-            for (a, b) in before
-                .0
-                .into_iter()
-                .chain(before.1)
-                .zip(after.0.into_iter().chain(after.1))
-            {
-                assert_eq!(a.to_bits(), b.to_bits());
-            }
-            assert_eq!(after, identity.infer_original(&x));
-        }
-        let bias = delta.len() - 4 * 83;
-        delta[bias + 7 * 4..bias + 8 * 4].copy_from_slice(&(-0.5f32).to_le_bytes());
-        delta[bias + 81 * 4..bias + 82 * 4].copy_from_slice(&0.25f32.to_le_bytes());
-        delta[bias + 82 * 4..bias + 83 * 4].copy_from_slice(&(-0.15f32).to_le_bytes());
-        let corrected_bytes = wrap(&delta);
-        let corrected = Model::from_bytes(&corrected_bytes);
-        let state = GameState::new(2, 3610000000).unwrap();
-        let x = encode(&state.observe(0), &mut Rng::new(17));
-        let mut expected = original.infer(&x);
-        expected.0[7] -= 0.5;
-        let value = raw_base.value_raw(&raw_base.features(&x, true), true);
-        expected.1 = [(value[0] + 0.25).tanh(), (value[1] - 0.15).tanh()];
-        assert_eq!(corrected.infer(&x), expected);
-        for offset in [8, 12] {
-            let mut invalid = corrected_bytes.clone();
-            invalid[offset..offset + 4].copy_from_slice(&u32::MAX.to_le_bytes());
-            assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());
-        }
-        let mut invalid = corrected_bytes.clone();
-        invalid.pop();
-        assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());
-        for offset in [16, 16 + base.len() + 16] {
-            let mut invalid = corrected_bytes.clone();
-            invalid[offset..offset + 4].copy_from_slice(&f32::NAN.to_le_bytes());
-            assert!(std::panic::catch_unwind(|| Model::from_bytes(&invalid)).is_err());
-        }
-        assert!(std::panic::catch_unwind(|| Model::from_bytes(b"SPRESID1")).is_err());
     }
     #[test]
     fn bootstrap_dispatch_preserves_exact_inference() {
