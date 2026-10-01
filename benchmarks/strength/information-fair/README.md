@@ -86,3 +86,10 @@ Paired intervals resample whole blocks. Fractions of the control gap removed
 are separate counterfactual estimates; they cannot be added. Native turn-cap
 outcomes and unknown-outcome sensitivity are reported separately. These are
 fixed-budget native-rule comparisons, not equal-compute or canonical rankings.
+
+`complete.py` runs the frozen protocol and then archives, audits and reports
+the complete schedules. It also checks all completed games from the retained
+interrupted control run against the full repeated control schedule. This
+driver does not change any outcome code or benchmark setting. The interrupted
+records and logs remain under `interrupted/control`; only the full repeated
+schedule contributes to the final comparison.

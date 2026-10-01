@@ -32,9 +32,11 @@ def main():
         f"Frozen implementation revision: `{freeze['revision']}`. Full settings and file hashes are in [freeze.json](freeze.json). The hypothesis and seed plan preceded outcome runs in [PREREGISTRATION.md](PREREGISTRATION.md).", '',
         '| Item | Fixed value |','|---|---|',
         '| SplendoRust model | E81, `research/e81/model/model.bin` |',
+        f"| SplendoRust model SHA256 | `{freeze['files']['research/e81/model/model.bin']}` |",
         '| SplendoRust search | Gumbel128, depth16, worlds3, 16 root candidates, c_visit50, c_scale0.1, noise0 |',
         '| SplendoRust PUCT terms | cpuct0.4, FPU reduction0.02965, uniform prior0 |',
         '| AlphaZero source | `lyquentxy/splendor`, `32a27ac1f85d5de2766cc5f60c2bf04e557f7836` |',
+        f"| AlphaZero checkpoint SHA256 | `{freeze['upstream_files']['splendor/pretrained_2players.pt']}` |",
         '| AlphaZero search | 800 simulations, cpuct0.8, FPU0.0593, three universes, full search, no forced playouts, normal memory cleanup |',
         '| AlphaZero selection | Upstream pit argmax; temperature0.5 for first six total turns, then0 |',
         '| Screen | 2,000 games per arm, master4900000000, eight workers |',
@@ -75,10 +77,11 @@ def main():
     for arm in ARMS:
         r=confirm['arms'][arm]
         lines.append(f"| {LABEL[arm]} | {r['wall_seconds']:.2f} | {r['policy_seconds']['champion']:.2f} | {r['policy_seconds']['alphazero']:.2f} | {r['simulations']:,} | {r['inferences']:,} |")
-    lines+=['','Policy times are summed elapsed decision times across concurrent games. They are not isolated CPU times. Wall time includes worker startup and excludes later replay and archive checks. Fixed simulation counts are not equal compute. Host details and a process-load snapshot are saved with the freeze and [host-load-start.json](host-load-start.json).', '',
+    lines+=['','Policy times are summed elapsed decision times across concurrent games. They are not isolated CPU times. Wall time includes worker startup and excludes later replay and archive checks. Fixed simulation counts are not equal compute. Other research processes shared this host during confirmation. Host details and process-load snapshots are saved with the freeze, [host-load-start.json](host-load-start.json), and [host-load-confirmation-start.json](host-load-confirmation-start.json). These times are not isolated throughput measurements.', '',
         '## Audit and reproduction','',
         'See [README.md](README.md) for the workers and commands. Each arm retains its exact schedule, execution log, replay result and raw-record hashes. Lossless gzip chunks preserve the exact merged history; `archives.json` defines their order and hashes and the recovery of each original shard. `restore.py` restores an exact JSONL copy. The original raw files remain ignored in the execution worktree.', '',
-        'The report summaries are [screen/summary.json](screen/summary.json) and [confirmation/summary.json](confirmation/summary.json). [final-audit.json](final-audit.json) checks frozen source/binary/model/upstream hashes, every lossless archive, all replay counts and exact statistical summary reruns. `artifact-manifest.json` identifies the final saved report, commands, logs and evidence. No default policy is promoted by this experiment.', '']
+        'The report summaries are [screen/summary.json](screen/summary.json) and [confirmation/summary.json](confirmation/summary.json). [final-audit.json](final-audit.json) checks frozen source/binary/model/upstream hashes, every lossless archive, all replay counts and exact statistical summary reruns. `artifact-manifest.json` identifies the final saved report, commands, logs and evidence. No default policy is promoted by this experiment.', '',
+        'The first confirmation control process stopped after 4,180 complete games. Its exit result was unavailable when work resumed. Every partial record and log is retained in [interrupted/control/interruption.json](interrupted/control/interruption.json) and lossless shard archives. The full original control schedule was repeated with the same frozen settings and seeds. [interruption-verification.json](interruption-verification.json) checks that all 4,180 repeated games match in every non-timing field. The repeated full schedule is used once in the comparison. No setting or result was selected from the interrupted run.', '']
     (BASE/'REPORT.md').write_text('\n'.join(lines))
     print('Wrote REPORT.md')
 
