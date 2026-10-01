@@ -157,3 +157,60 @@ parameters. Native rules, referee, unchanged upstream800 agent, public wire
 input and declared information asymmetry stay the same. Old archived results
 retain their original frozen revision and binary hash. E75 verifies PUCT worker
 parity before using the new mode; a new mode requires new seeds and records.
+
+Completed histories are also stored as deterministic lossless `.jsonl.gz`
+archives to keep large raw records out of Git. `archive-index.json` records both
+compressed and exact uncompressed SHA256 hashes. Before using the commands above
+on an archived result, restore its raw file:
+
+```sh
+gzip -dc confirmation/games.jsonl.gz > confirmation/games.jsonl
+```
+
+The original raw files remain in the execution worktree. Their ignored status
+does not remove them. Shard logs, plans, metadata, model/source hashes, summaries
+and replay evidence remain beside the archives. `archive.py` verifies every
+archive by decompression before it writes the index.
+
+Reproduce the two final schedules into new directories, so the checked-in
+records stay intact:
+
+```sh
+local/strength/inference/bin/python benchmarks/strength/native/schedule.py \
+  --games 20000 --master 4120000000 --iterations 128 --workers 8 \
+  --output local/strength/native-reproduction/confirmation
+local/strength/inference/bin/python benchmarks/strength/native/schedule.py \
+  --games 2000 --master 4150000000 --iterations 800 --workers 8 \
+  --output local/strength/native-reproduction/higher-search
+```
+
+Then run `replay.py` and `summarize.py` on each new `games.jsonl` as shown above.
+`protocol.py` is the exact execution driver used here. It uses the registered
+schedule directories and refuses to overwrite them. `finalize.py` runs only
+after all three stages are complete. It generates the final report, lossless
+archives, integrity audit and artifact manifest.
+
+To build the immutable reference for canonical parity in a fresh ignored
+directory:
+
+```sh
+mkdir -p local/strength/baseline local/strength/native-reproduction
+git archive d9d4e4d Cargo.toml Cargo.lock rust-toolchain.toml crates \
+  | tar -x -C local/strength/baseline
+cargo build --release --locked \
+  --manifest-path local/strength/baseline/Cargo.toml \
+  -p splendor-arena --example strength_worker
+local/strength/inference/bin/python benchmarks/strength/native/canonical_parity.py \
+  --output local/strength/native-reproduction/canonical-parity.json
+```
+
+`audit_partial.py` checks the saved records from the interrupted development
+trial through the same replay code. It uses a temporary header with the saved
+record count. The original raw header, requested game count and incomplete
+schedule status remain unchanged. This audit does not make that trial eligible
+for strength results.
+
+`audit_results.py` without `--runtime` checks the saved source, model, archive
+and replay evidence. `--runtime` also checks the original built binaries and
+ignored upstream checkout against the freeze. Binary hashes identify the exact
+captured build; source and model hashes identify a rebuild on another host.
