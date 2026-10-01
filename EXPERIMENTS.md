@@ -2489,3 +2489,17 @@ Use14threads and the existing unknown-label rule for blocked games. Require
 requested-credit worst-case point above50.5% for provisional advancement;
 retain strict results and fixed E56 champion. This reuses a full-volume corpus
 while keeping fresh collection bounded,as in the successful E56 generation.
+
+## E65 — Native external search-budget diagnostic
+
+The evaluator's completed `alphazero-native-32a27ac-v1` screen scores E56
+at23.2% in2,000 complete games with candidate128 versus unchanged external800
+simulations. This uses AlphaZero native rules,not canonical rules. Its source
+is9c354b6 in the evaluator worktree; the independent20k run is still active.
+Test the frozen E56 model at800 simulations against the same unchanged
+external800 configuration on400 fresh paired games,master4190000000,
+four workers. Use the existing committed native harness and independent output
+files; do not change its running protocol. Preserve the native rule differences,
+private-information asymmetry,raw records,hashes,and full replay validation.
+This is a budget diagnostic,not a model promotion or a broad ranking claim.
+The evaluator separately reserves4150m for its later2,000-game800 stage.
