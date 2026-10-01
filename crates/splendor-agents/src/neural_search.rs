@@ -4,7 +4,7 @@ use super::{
     neural::{ACTIONS, INPUTS, action_index, features},
     safe_choices,
 };
-use splendor_core::{Action, ActionSet, GameState, Observation, Phase, Rng};
+use splendor_core::{Action, Observation, Phase, Rng};
 use std::{
     collections::{HashMap, VecDeque},
     sync::OnceLock,
@@ -101,18 +101,19 @@ fn model() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e25.bin")))
 }
-struct Edge {
-    action: Action,
+struct Edge<A = Action> {
+    action: A,
     prior: f64,
     visits: u32,
     sum: f64,
 }
-struct Node {
-    edges: Vec<Edge>,
+struct Node<A = Action> {
+    edges: Vec<Edge<A>>,
     visits: u32,
     value: f64,
 }
-impl Node {
+const SEARCH_ACTION_CAPACITY: usize = 81;
+impl<A> Node<A> {
     /// Appendix D mixed value; unvisited actions have no invented empirical Q.
     fn mixed_value(&self) -> f64 {
         let n: u32 = self.edges.iter().map(|e| e.visits).sum();
@@ -133,8 +134,8 @@ impl Node {
             .sum();
         (self.value + f64::from(n) * weighted) / f64::from(n + 1)
     }
-    fn completed_scores(&self) -> [f64; ACTIONS] {
-        let mut scores = [0.0; ACTIONS];
+    fn completed_scores(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
+        let mut scores = [0.0; SEARCH_ACTION_CAPACITY];
         let mixed = self.mixed_value();
         let mut lo = f64::INFINITY;
         let mut hi = f64::NEG_INFINITY;
@@ -156,7 +157,7 @@ impl Node {
         }
         scores
     }
-    fn improved_policy(&self) -> [f64; ACTIONS] {
+    fn improved_policy(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
         let mut policy = self.completed_scores();
         let max = policy[..self.edges.len()]
             .iter()
@@ -238,7 +239,7 @@ impl NeuralAgent {
         }
         bytes
     }
-    fn leaf(&mut self, o: &Observation) -> ([f32; ACTIONS], f64) {
+    pub(super) fn leaf(&mut self, o: &Observation) -> ([f32; ACTIONS], f64) {
         self.calls += 1;
         if self.transferred {
             if o.turns >= 124 {
@@ -277,15 +278,23 @@ impl NeuralAgent {
         }
         (p, 1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp()))
     }
-    fn expand(&mut self, o: &Observation, legal: &[Action]) -> Node {
-        let (logits, value) = self.leaf(o);
+    fn expand_environment<E: crate::environment::Environment>(
+        &mut self,
+        o: &E::Observation,
+        legal: &[E::Action],
+    ) -> Node<E::Action>
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
+        let (policy, value) = <Self as crate::environment::PolicyValue<E>>::evaluate(self, o);
+        let logits = policy.as_ref();
         let max = legal
             .iter()
-            .map(|&a| logits[action_index(a).unwrap()])
+            .map(|&a| logits[E::action_index(a)])
             .fold(f32::NEG_INFINITY, f32::max);
         let weights: Vec<_> = legal
             .iter()
-            .map(|&a| f64::from((logits[action_index(a).unwrap()] - max).exp()))
+            .map(|&a| f64::from((logits[E::action_index(a)] - max).exp()))
             .collect();
         let total: f64 = weights.iter().sum();
         Node {
@@ -304,50 +313,58 @@ impl NeuralAgent {
             value,
         }
     }
-    fn rollout(&mut self, state: &GameState) -> [f64; 2] {
-        let seat = state.current_player();
+    fn rollout_environment<E: crate::environment::Environment>(
+        &mut self,
+        state: &E::State,
+    ) -> [f64; 2]
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
+        let seat = E::current(state);
         let mut s = state.clone();
-        let start = s.turns();
-        let mut legal = ActionSet::new();
+        let start = E::turns(&s);
         for _ in 0..self.rollout_depth * 4 {
-            if s.is_terminal()
-                || s.turns() == u32::MAX
-                || (s.turns() - start >= self.rollout_depth && s.phase() == Phase::Main)
+            if E::rewards(&s).is_some()
+                || E::turns(&s) == u32::MAX
+                || (E::turns(&s) - start >= self.rollout_depth && E::main(&s))
             {
                 break;
             }
-            s.legal_actions(&mut legal);
+            let actions = E::legal(&s);
+            let legal = actions.as_ref();
             if legal.is_empty() {
                 break;
             }
-            let o = s.observe(s.current_player());
-            s.apply_action(best(&o, &legal, true)).unwrap();
+            let o = E::observe(&s, E::current(&s));
+            E::apply(
+                &mut s,
+                <Self as crate::environment::PolicyValue<E>>::rollout_action(self, &o, legal),
+                &mut self.rng,
+            );
         }
-        if let Some(outcome) = s.outcome() {
-            return std::array::from_fn(|p| {
-                if outcome.winners & (1 << p) != 0 {
-                    1.0 / f64::from(outcome.winners.count_ones())
-                } else {
-                    0.0
-                }
-            });
+        if let Some(r) = E::rewards(&s) {
+            return r;
         }
-        let (_, v) = self.leaf(&s.observe(seat));
+        let (_, v) =
+            <Self as crate::environment::PolicyValue<E>>::evaluate(self, &E::observe(&s, seat));
         let mut values = [1.0 - v; 2];
         values[seat] = v;
         values
     }
-    fn gumbel_root(
+    fn gumbel_root<E: crate::environment::Environment>(
         &mut self,
-        o: &Observation,
+        o: &E::Observation,
         root: usize,
-        nodes: &mut Vec<Node>,
-        index: &mut HashMap<[u8; 192], usize>,
-        worlds: &[GameState],
-    ) -> usize {
+        nodes: &mut Vec<Node<E::Action>>,
+        index: &mut HashMap<E::Key, usize>,
+        worlds: &[E::State],
+    ) -> usize
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
         assert!(!self.persistent, "Gumbel requires a fresh root budget");
         let budget = self.config.iterations as usize;
-        let mut noise = [0.0; ACTIONS];
+        let mut noise = [0.0; SEARCH_ACTION_CAPACITY];
         for v in &mut noise[..nodes[root].edges.len()] {
             if self.gumbel_noise > 0.0 {
                 let u = ((self.rng.next_u64() >> 11) as f64 + 0.5) / (1u64 << 53) as f64;
@@ -381,15 +398,15 @@ impl NeuralAgent {
             for turn in 0..allocation {
                 let edge = active[turn % active.len()];
                 let mut state = if worlds.is_empty() {
-                    o.determinize(&mut self.rng).expect("valid observation")
+                    E::determinize(o, &mut self.rng)
                 } else {
                     worlds[simulation % worlds.len()].clone()
                 };
-                let seat = state.current_player();
-                let old = state.turns();
-                state.apply_action(nodes[root].edges[edge].action).unwrap();
-                let depth = self.config.depth.max(1) - u32::from(state.turns() != old);
-                let values = self.simulate(&mut state, depth, nodes, index);
+                let seat = E::current(&state);
+                let old = E::turns(&state);
+                E::apply(&mut state, nodes[root].edges[edge].action, &mut self.rng);
+                let depth = self.config.depth.max(1) - u32::from(E::turns(&state) != old);
+                let values = self.simulate_environment::<E>(&mut state, depth, nodes, index);
                 nodes[root].visits += 1;
                 nodes[root].edges[edge].visits += 1;
                 nodes[root].edges[edge].sum += values[seat];
@@ -405,59 +422,65 @@ impl NeuralAgent {
         }
         active[0]
     }
-    fn simulate(
+    fn simulate_environment<E: crate::environment::Environment>(
         &mut self,
-        state: &mut GameState,
+        state: &mut E::State,
         depth: u32,
-        nodes: &mut Vec<Node>,
-        index: &mut HashMap<[u8; 192], usize>,
-    ) -> [f64; 2] {
-        if let Some(outcome) = state.outcome() {
-            return std::array::from_fn(|seat| {
-                if outcome.winners & (1 << seat) != 0 {
-                    1.0 / f64::from(outcome.winners.count_ones())
-                } else {
-                    0.0
-                }
-            });
+        nodes: &mut Vec<Node<E::Action>>,
+        index: &mut HashMap<E::Key, usize>,
+    ) -> [f64; 2]
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
+        if let Some(r) = E::rewards(state) {
+            return r;
         }
-        let seat = state.current_player();
-        let o = state.observe(seat);
-        if depth == 0 || state.turns() == u32::MAX {
-            let (_, v) = self.leaf(&o);
-            let mut result = [1.0 - v; 2];
-            result[seat] = v;
-            return result;
+        let seat = E::current(state);
+        let o = E::observe(state, seat);
+        if depth == 0 || E::turns(state) == u32::MAX {
+            let (_, v) = <Self as crate::environment::PolicyValue<E>>::evaluate(self, &o);
+            let mut r = [1.0 - v; 2];
+            r[seat] = v;
+            return r;
         }
-        let mut legal = ActionSet::new();
-        state.legal_actions(&mut legal);
+        let actions = E::legal(state);
+        let legal = actions.as_ref();
         if legal.is_empty() {
-            let (_, v) = self.leaf(&o);
-            let mut result = [1.0 - v; 2];
-            result[seat] = v;
-            return result;
+            let (_, v) = <Self as crate::environment::PolicyValue<E>>::evaluate(self, &o);
+            let mut r = [1.0 - v; 2];
+            r[seat] = v;
+            return r;
         }
-        if state.phase() != Phase::Main {
-            let safe = safe_choices(&o, &legal);
-            let action = best(&o, safe.as_deref().unwrap_or(&legal), true);
-            let old = state.turns();
-            state.apply_action(action).unwrap();
-            return self.simulate(state, depth - u32::from(state.turns() != old), nodes, index);
+        if !E::main(state) {
+            let choices = <Self as crate::environment::PolicyValue<E>>::choices(&o, legal);
+            let action = <Self as crate::environment::PolicyValue<E>>::rollout_action(
+                self,
+                &o,
+                choices.as_deref().unwrap_or(legal),
+            );
+            let old = E::turns(state);
+            E::apply(state, action, &mut self.rng);
+            return self.simulate_environment::<E>(
+                state,
+                depth - u32::from(E::turns(state) != old),
+                nodes,
+                index,
+            );
         }
-        let key = self.tree_key(&o);
+        let key = E::key(&o, self.transferred);
         let i = if let Some(&i) = index.get(&key) {
             i
         } else {
-            let safe = safe_choices(&o, &legal);
-            let mut node = self.expand(&o, safe.as_deref().unwrap_or(&legal));
+            let choices = <Self as crate::environment::PolicyValue<E>>::choices(&o, legal);
+            let mut node = self.expand_environment::<E>(&o, choices.as_deref().unwrap_or(legal));
             if self.rollout_depth > 0 {
-                node.value = self.rollout(state)[seat];
+                node.value = self.rollout_environment::<E>(state)[seat];
             }
-            let mut result = [1.0 - node.value; 2];
-            result[seat] = node.value;
+            let mut r = [1.0 - node.value; 2];
+            r[seat] = node.value;
             index.insert(key, nodes.len());
             nodes.push(node);
-            return result;
+            return r;
         };
         let node = &nodes[i];
         let edge = if self.gumbel {
@@ -489,9 +512,14 @@ impl NeuralAgent {
         };
         let action = node.edges[edge].action;
         debug_assert!(legal.contains(&action));
-        let old = state.turns();
-        state.apply_action(action).unwrap();
-        let values = self.simulate(state, depth - u32::from(state.turns() != old), nodes, index);
+        let old = E::turns(state);
+        E::apply(state, action, &mut self.rng);
+        let values = self.simulate_environment::<E>(
+            state,
+            depth - u32::from(E::turns(state) != old),
+            nodes,
+            index,
+        );
         let node = &mut nodes[i];
         if self.dynamic_fpu {
             node.value = (f64::from(node.visits + 1) * node.value + values[seat])
@@ -502,8 +530,85 @@ impl NeuralAgent {
         node.edges[edge].sum += values[seat];
         values
     }
+    pub(super) fn native_leaf(
+        &mut self,
+        o: &crate::native_environment::Observation,
+    ) -> ([f32; 81], f64) {
+        self.calls += 1;
+        let x = o
+            .determinize(&mut self.rng)
+            .expect("valid native observation")
+            .model_features();
+        let model = self
+            .external_model
+            .expect("native environment requires frozen model");
+        let (policy, values) = if model.needs_public_context() {
+            let opponent = 1 - usize::from(o.current);
+            let mut context = [0.0; 7];
+            for slot in 0..usize::from(o.players[opponent].reserved_count) {
+                let r = o.players[opponent].reserved[slot];
+                context[slot] = f32::from(!r.public);
+                context[slot + 3] = f32::from(r.tier + 1) / 3.0;
+                context[6] += context[slot] / 3.0;
+            }
+            model.infer_with_context(&x, &context)
+        } else {
+            model.infer(&x)
+        };
+        let seat = usize::from(o.viewer != o.current);
+        (policy, (f64::from(values[seat]) + 1.0) / 2.0)
+    }
+    /// Run the same PUCT kernel in an explicit non-canonical environment.
+    /// The caller supplies only a public observation and its legal action set.
+    pub fn select_environment<E: crate::environment::Environment>(
+        &mut self,
+        o: &E::Observation,
+        legal: &[E::Action],
+    ) -> E::Action
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
+        assert!(!legal.is_empty());
+        if legal.len() == 1 {
+            return legal[0];
+        }
+        let choices = <Self as crate::environment::PolicyValue<E>>::choices(o, legal);
+        let mut nodes = vec![self.expand_environment::<E>(o, choices.as_deref().unwrap_or(legal))];
+        let mut index = HashMap::from([(E::key(o, self.transferred), 0usize)]);
+        let worlds: Vec<_> = (0..self.world_pool)
+            .map(|_| E::determinize(o, &mut self.rng))
+            .collect();
+        if self.gumbel {
+            let selected = self.gumbel_root::<E>(o, 0, &mut nodes, &mut index, &worlds);
+            return nodes[0].edges[selected].action;
+        }
+        for simulation in 0..self.config.iterations {
+            let mut state = if worlds.is_empty() {
+                E::determinize(o, &mut self.rng)
+            } else {
+                worlds[simulation as usize % worlds.len()].clone()
+            };
+            self.simulate_environment::<E>(
+                &mut state,
+                self.config.depth.max(1),
+                &mut nodes,
+                &mut index,
+            );
+            self.simulations += 1;
+        }
+        nodes[0]
+            .edges
+            .iter()
+            .max_by(|a, b| {
+                a.visits
+                    .cmp(&b.visits)
+                    .then_with(|| a.prior.total_cmp(&b.prior))
+            })
+            .unwrap()
+            .action
+    }
 }
-fn key(o: &Observation) -> [u8; 192] {
+pub(super) fn key(o: &Observation) -> [u8; 192] {
     debug_assert_eq!(o.phase, Phase::Main);
     let mut bytes = [0u8; 192];
     let mut offset = 0;
@@ -590,12 +695,12 @@ impl Agent for NeuralAgent {
                 .retain(|edge| choices.contains(&edge.action));
             nodes[root].visits = nodes[root].edges.iter().map(|edge| edge.visits).sum();
             if nodes[root].edges.is_empty() {
-                nodes[root] = self.expand(o, &choices);
+                nodes[root] = self.expand_environment::<crate::environment::Canonical>(o, &choices);
             }
             root
         } else {
             let root = nodes.len();
-            nodes.push(self.expand(o, &choices));
+            nodes.push(self.expand_environment::<crate::environment::Canonical>(o, &choices));
             index.insert(self.tree_key(o), root);
             root
         };
@@ -604,7 +709,9 @@ impl Agent for NeuralAgent {
             .map(|_| o.determinize(&mut self.rng).expect("valid observation"))
             .collect();
         let gumbel_selected = if self.gumbel {
-            Some(self.gumbel_root(o, root, &mut nodes, &mut index, &worlds))
+            Some(self.gumbel_root::<crate::environment::Canonical>(
+                o, root, &mut nodes, &mut index, &worlds,
+            ))
         } else {
             None
         };
@@ -623,7 +730,12 @@ impl Agent for NeuralAgent {
                 } else {
                     worlds[simulation as usize % worlds.len()].clone()
                 };
-                self.simulate(&mut state, self.config.depth.max(1), &mut nodes, &mut index);
+                self.simulate_environment::<crate::environment::Canonical>(
+                    &mut state,
+                    self.config.depth.max(1),
+                    &mut nodes,
+                    &mut index,
+                );
                 self.simulations += 1;
             }
         }
@@ -715,9 +827,40 @@ pub fn flywheel_model(candidate: bool) -> &'static super::transfer::Model {
     })
 }
 
+impl crate::environment::PolicyValue<crate::environment::Canonical> for NeuralAgent {
+    type Policy = [f32; 67];
+    fn evaluate(&mut self, o: &Observation) -> (Self::Policy, f64) {
+        self.leaf(o)
+    }
+    fn choices(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
+        safe_choices(o, legal)
+    }
+    fn rollout_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
+        best(o, legal, true)
+    }
+}
+impl crate::environment::PolicyValue<crate::environment::AlphaZeroNative> for NeuralAgent {
+    type Policy = [f32; 81];
+    fn evaluate(&mut self, o: &crate::native_environment::Observation) -> (Self::Policy, f64) {
+        self.native_leaf(o)
+    }
+    fn choices(_: &crate::native_environment::Observation, _: &[u8]) -> Option<Vec<u8>> {
+        None
+    }
+    fn rollout_action(&mut self, o: &crate::native_environment::Observation, legal: &[u8]) -> u8 {
+        let (policy, _) = self.native_leaf(o);
+        legal
+            .iter()
+            .copied()
+            .max_by(|&a, &b| policy[a as usize].total_cmp(&policy[b as usize]))
+            .unwrap()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use splendor_core::{ActionSet, GameState};
     #[test]
     fn completed_q_policy_and_mixed_value() {
         let mut node = Node {

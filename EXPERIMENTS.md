@@ -2675,3 +2675,20 @@ Record all incomplete games and reject strict incomplete promotions; provisional
 requested-credit point>50.5% only. Champion E56 stays fixed. Preserve all raw
 labels, work counts, source hashes, timings and failed checks. This is a full
 new policy-improvement cycle,not a coefficient sweep or a public-rank claim.
+
+## E75 — Shared environment integration for current Gumbel evaluation
+
+Import evaluator commit9c354b6 in an isolated checkout. Resolve the shared
+search kernel with the current Gumbel and public-input paths. Preserve native
+profile rules and unchanged upstream agent. Before merging, require exact
+canonical PUCT and noisy-Gumbel collector bytes, model parity and native worker
+PUCT output parity with the frozen evaluator binary. Add an explicit Gumbel
+worker option; no silent change to benchmark defaults or old frozen records.
+This is evaluation infrastructure,not a new learning/strength claim. Active E74
+collector remains in its original checkout. Record failed checks and sources.
+
+E75 passed112 release tests,strictClippy,and8 native information checks.
+Legacy934 and noisy-Gumbel910 training rows remain byte exact. Native PUCT
+matches1,448 frozen-worker decisions and work counts. Differential validation
+covers9,204 positions/312,879 branches andall81 native action encodings.
+Explicit Gumbel worker/schedule mode added; default/frozen benchmark unchanged.

@@ -6,7 +6,9 @@ use splendor_core::{
 };
 use std::time::{Duration, Instant};
 
+pub mod environment;
 pub mod learned;
+pub mod native_environment;
 pub mod neural;
 pub mod neural_search;
 pub mod transfer;
@@ -742,6 +744,7 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "flywheel-gumbel"
         | "flywheel-gumbel-noisy"
         | "flywheel-gumbel-candidate"
+        | "flywheel-gumbel800"
         | "flywheel-candidate"
         | "expert-policy" => {
             let mut config = search.clone();
@@ -754,7 +757,7 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             config.iterations = match name {
                 "flywheel-best128" => 128,
                 "flywheel-best256" => 256,
-                "flywheel-best800" => 800,
+                "flywheel-best800" | "flywheel-gumbel800" => 800,
                 _ => config.iterations,
             };
             let mut agent = neural_search::NeuralAgent::new(seed, config);
