@@ -1,0 +1,418 @@
+{
+  "schema_version": 2,
+  "metadata": {
+    "schema_version": 1,
+    "engine": "alphazero_native",
+    "ruleset": "alphazero-native-32a27ac-v1",
+    "planning_profile": "alphazero-native-32a27ac-v1",
+    "observation_profile": "native-public-history-v1",
+    "players": 2,
+    "games": 40,
+    "candidate": "champion",
+    "external": "alphazero",
+    "master": 4100000000,
+    "offset_block": 0,
+    "iterations": 128,
+    "depth": 16,
+    "world_pool": 3,
+    "cpuct": 0.4,
+    "fpu_reduction": 0.02965,
+    "uniform_prior": 0,
+    "external_config": {
+      "numMCTSSims": 800,
+      "fpu": 0.0593,
+      "universes": 3,
+      "cpuct": 0.8,
+      "prob_fullMCTS": 1.0,
+      "forced_playouts": false,
+      "no_mem_optim": false
+    },
+    "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+    "model_path": "/Users/payton.jones/.codex/worktrees/90ce/splendorust/research/e56/model/model.bin",
+    "policy_binary_sha256": "02cef0509bbb1e9f5beb459abfcda918ba4d13c1c19b8d2af2fe2d4b99d0e4fb",
+    "source_id": "5970ecf25183c589",
+    "engine_version": "splendorust-v2",
+    "revision": "d9d4e4d8de4229aaa458db4230a8e8ed73d65d67",
+    "source_sha256": {
+      "benchmarks/strength/native/run.py": "f45fb221724e6525ad898a50abeee70a35a5e14307e89b1ea63ca417b3478835",
+      "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+      "crates/splendor-agents/src/environment.rs": "66a27ce36908a17e7388290c7bd0b313096bceee9004981e4ce250c87642ee6a",
+      "crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+      "crates/splendor-agents/src/neural_search.rs": "750562efe87fa14d0976b7ed32c487fb26fa95a21f79c5790f15f60dde7479ce",
+      "crates/splendor-arena/examples/native_policy_worker.rs": "3ac5079f5053ac3747664ec78c3200a9bedff9e45f981bb7fdbd9f1571cf0fdd",
+      "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+    },
+    "reproduction_command": [
+      "benchmarks/strength/native/run.py",
+      "--games",
+      "40",
+      "--master",
+      "4100000000",
+      "--output",
+      "benchmarks/strength/native/smoke.jsonl"
+    ],
+    "host": "macOS-26.7-arm64-arm-64bit",
+    "startup_seconds": 13.150993207935244,
+    "streams": "SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64",
+    "alpha_information": "Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.",
+    "limits": "Native rules and native score-cap wins, not canonical rank. Fixed simulations are not equal compute."
+  },
+  "raw_sha256": "f3c1da5f9b24dbd064c74873212f4ca80b7397ba36e40d0b8442160229b78bdb",
+  "pairing_verified": true,
+  "games": 40,
+  "setup_blocks": 20,
+  "statuses": {
+    "complete": 40
+  },
+  "incomplete_games": 0,
+  "invalid_games": 0,
+  "unsupported_games": 0,
+  "blocked_games": 0,
+  "capped_games": 0,
+  "candidate_credit_total": 14.5,
+  "candidate_credit_conditional_rate": 0.3625,
+  "all_requested_credit_bounds": [
+    0.3625,
+    0.3625
+  ],
+  "paired_bootstrap95_missing_envelope": [
+    0.2125,
+    0.525
+  ],
+  "per_seat": {
+    "0": {
+      "games": 20,
+      "complete": 20,
+      "wins": 8,
+      "shared_wins": 0,
+      "credit": 8.0
+    },
+    "1": {
+      "games": 20,
+      "complete": 20,
+      "wins": 6,
+      "shared_wins": 1,
+      "credit": 6.5
+    }
+  },
+  "block_credits": [
+    {
+      "setup_seed": 17972664214829909216,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 4913297980194671244,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 17105867926193656918,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 11579666625905933829,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 14008384809524751376,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 9657882931301423160,
+      "credits": [
+        0,
+        0.5
+      ],
+      "lower": 0.25,
+      "upper": 0.25
+    },
+    {
+      "setup_seed": 14151595765651916607,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 16925355999097557207,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 5127291288785365562,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 12108389078936699427,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 14385605128819447790,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 9179415007665338146,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 6632076300489355432,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 7881826394716165035,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 9547280795663209688,
+      "credits": [
+        0,
+        1.0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 11579132134933386186,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 14152930167870731079,
+      "credits": [
+        1.0,
+        1.0
+      ],
+      "lower": 1.0,
+      "upper": 1.0
+    },
+    {
+      "setup_seed": 15868858012442851852,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    },
+    {
+      "setup_seed": 12493244807986600023,
+      "credits": [
+        0,
+        0
+      ],
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "setup_seed": 11168801348970923935,
+      "credits": [
+        1.0,
+        0
+      ],
+      "lower": 0.5,
+      "upper": 0.5
+    }
+  ],
+  "reasons": {},
+  "interpretation": "Only complete games receive win credit. Resample whole setup blocks. Every missing outcome is bounded [0,1]. Conditional results do not rank unfinished schedules.",
+  "completion_rate": 1.0,
+  "conservative_hoeffding95_missing_envelope": [
+    0.05881926904584739,
+    0.6661807309541525
+  ],
+  "terminal_categories": {
+    "native_score": 40
+  },
+  "elapsed_game_seconds": 145.29860157868825,
+  "wall_seconds": null,
+  "policy_seconds": {
+    "champion": 11.788544255075976,
+    "alphazero": 122.1837492804043
+  },
+  "simulations": 142592,
+  "inferences": 139325,
+  "actions_by_identity": {
+    "champion": {
+      "0": 56,
+      "1": 68,
+      "2": 47,
+      "3": 66,
+      "4": 23,
+      "5": 34,
+      "6": 21,
+      "7": 23,
+      "8": 2,
+      "9": 7,
+      "10": 2,
+      "11": 1,
+      "12": 14,
+      "13": 19,
+      "14": 15,
+      "15": 21,
+      "16": 12,
+      "17": 10,
+      "18": 12,
+      "19": 10,
+      "20": 16,
+      "21": 12,
+      "22": 22,
+      "23": 12,
+      "24": 25,
+      "25": 10,
+      "26": 17,
+      "27": 90,
+      "28": 44,
+      "29": 14,
+      "34": 1,
+      "35": 1,
+      "37": 3,
+      "38": 2,
+      "39": 3,
+      "40": 2,
+      "41": 1,
+      "42": 1,
+      "43": 1,
+      "44": 2,
+      "45": 32,
+      "46": 33,
+      "47": 34,
+      "48": 33,
+      "49": 45,
+      "50": 40,
+      "51": 32,
+      "52": 36,
+      "53": 35,
+      "54": 45,
+      "55": 1,
+      "56": 2,
+      "57": 2,
+      "58": 1,
+      "59": 1
+    },
+    "alphazero": {
+      "0": 61,
+      "1": 66,
+      "2": 53,
+      "3": 52,
+      "4": 40,
+      "5": 26,
+      "6": 30,
+      "7": 31,
+      "8": 2,
+      "9": 7,
+      "10": 11,
+      "11": 6,
+      "12": 10,
+      "13": 12,
+      "14": 15,
+      "15": 17,
+      "16": 18,
+      "17": 12,
+      "18": 12,
+      "19": 10,
+      "20": 7,
+      "21": 19,
+      "22": 16,
+      "23": 18,
+      "24": 16,
+      "25": 12,
+      "26": 6,
+      "27": 81,
+      "28": 29,
+      "29": 19,
+      "30": 1,
+      "33": 1,
+      "36": 3,
+      "37": 1,
+      "38": 3,
+      "39": 2,
+      "40": 1,
+      "41": 2,
+      "43": 2,
+      "44": 1,
+      "45": 45,
+      "46": 31,
+      "47": 32,
+      "48": 55,
+      "49": 32,
+      "50": 30,
+      "51": 49,
+      "52": 31,
+      "53": 34,
+      "54": 38,
+      "55": 2,
+      "56": 1,
+      "57": 1,
+      "58": 1,
+      "59": 1
+    }
+  },
+  "source_sha256": "526436c16e9cfa64e367a2762590bcde83e5d29a908da24c6b3a1bdeda13403a",
+  "conclusion_scope": "Frozen models and fixed search budgets in AlphaZero native rules. Unchanged AlphaZero has true private reservation/deck-membership information; SplendoRust uses public observations. Native cap outcomes are legitimate native results. No canonical or equal-compute rank."
+}

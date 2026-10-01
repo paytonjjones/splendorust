@@ -6,7 +6,9 @@ use splendor_core::{
 };
 use std::time::{Duration, Instant};
 
+pub mod environment;
 pub mod learned;
+pub mod native_environment;
 pub mod neural;
 pub mod neural_search;
 pub mod transfer;
