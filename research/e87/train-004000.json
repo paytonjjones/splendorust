@@ -1,0 +1,7035 @@
+{
+  "actor_agent": "flywheel-gumbel",
+  "actor_iterations": 800,
+  "additional_label_inference_calls": 0,
+  "additional_label_simulations": 0,
+  "blocked": 0,
+  "capped": 0,
+  "complete": 1000,
+  "context_format": "f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3",
+  "depth": 16,
+  "encoding_views": 1,
+  "format": "u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)",
+  "games": 1000,
+  "inference_calls": 41429119,
+  "iterations": 800,
+  "label_scope": "Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling",
+  "policy_seed": 7680004000,
+  "public_context": true,
+  "records": [
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 8274426987719505225,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 52,
+      "setup": 4110446278706589599,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 4020890424864161343,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 6114943413566802108,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 13345519052328769709,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 11243559527446523591,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 52,
+      "setup": 1624913926298640243,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 5775313559925372577,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 52,
+      "setup": 14616169452184484760,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 4060321824717233416,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 16766071076296591664,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 50,
+      "setup": 7453781270161820325,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 10485832632062958025,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 52,
+      "setup": 13993598158078759161,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 10906005791221627238,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 58,
+      "setup": 5289447467416021335,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 62,
+      "setup": 1037158226086419526,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 60,
+      "setup": 1916031919195445030,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 14279099417350351584,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 43,
+      "rows": 66,
+      "setup": 13489324640250825580,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 52,
+      "setup": 18430998134032969719,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 60,
+      "setup": 15031770647822208322,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 50,
+      "setup": 12374887737441139752,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 9264363486850209086,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 14148169550536998037,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 58,
+      "setup": 16427771594250103130,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 58,
+      "setup": 7650907664173461096,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 17725734074001880739,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 54,
+      "setup": 1628224283054509232,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 6391815917896385809,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 13497208922178934793,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 64,
+      "setup": 3417959600302553966,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 68,
+      "setup": 3822964976248656926,
+      "status": "complete",
+      "turns": 68
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 54,
+      "setup": 3033485756810018992,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 64,
+      "setup": 9078230187685192187,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 60,
+      "setup": 8603854937267661992,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 56,
+      "setup": 14579261704478867813,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 54,
+      "setup": 1478570351642399736,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 12964893443856248993,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 16094583642003094028,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 52,
+      "setup": 17575468224939605032,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 15352993095641360160,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 16531834497413572322,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 17485058498950912534,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 50,
+      "setup": 17748698036909460250,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 15900033267356080566,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 62,
+      "setup": 13120940032286155681,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 7449994721833291003,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 50,
+      "setup": 7804659932206545523,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 8162862859604513953,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 54,
+      "setup": 3828470069895993498,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 50,
+      "setup": 6499346618634399177,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 12956552118596352109,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 60,
+      "setup": 8796152753059022348,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 58,
+      "setup": 7949339426821340763,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 17377794195909648855,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 62,
+      "setup": 15714705918346082740,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 18384848520714068250,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 14019748870740512987,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 15473816317028888493,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 52,
+      "setup": 16399496788440003298,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 58,
+      "setup": 7815079351081504454,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 786209555314401430,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 52,
+      "setup": 6862583195891364444,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 10606382255585763006,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 56,
+      "setup": 14931767269010246074,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 56,
+      "setup": 4912039465769742184,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 11365165915866431516,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 3942816539996335454,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 17618909455711354912,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 7799513812267416329,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 6147039406496846455,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 46,
+      "setup": 10790588291650970873,
+      "status": "complete",
+      "turns": 46
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 64,
+      "setup": 15688678918009799196,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 13533102564311425963,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 247185595597237915,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 2865669708994031184,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 58,
+      "setup": 14299266189473491805,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 6449606334310129449,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 16769675062863391277,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 14403310176607293089,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 4367307514147922,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 62,
+      "setup": 6872589243893226952,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 62,
+      "setup": 15517526282475251897,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 56,
+      "setup": 3502662086281618500,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 387906427144225225,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 5777980782792181019,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 62,
+      "setup": 5280400148979261087,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 12692885093414472949,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 58,
+      "setup": 3414358918426668476,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 54,
+      "setup": 2639518745136220446,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 4186766802716723968,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 13168777468490101897,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 44,
+      "rows": 58,
+      "setup": 657783222448112903,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 3161716519368111986,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 811466958137657673,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 58,
+      "setup": 16025092482304239455,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 60,
+      "setup": 5333028619324406831,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 13509812525583830089,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 52,
+      "setup": 8219436902914791516,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 17420499595415649054,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 6268843459622489528,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 56,
+      "setup": 5399693101496150016,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 4078073030420207191,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 56,
+      "setup": 8619993044491213693,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 12678212399504779587,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 48,
+      "setup": 16594497461275606502,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 56,
+      "setup": 14938076106081156019,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 56,
+      "setup": 1228746937035150582,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 54,
+      "setup": 17200690380552560280,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 11120414403508733013,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 1148237069805778558,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 56,
+      "setup": 11622081788746635260,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 3090839795528972086,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 6961253091869449626,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 8844238688811934442,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 58,
+      "setup": 1819475505631375527,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 2912472488411210771,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 17352448371124649249,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 5826178976743401816,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 60,
+      "setup": 6884458386793541084,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 46,
+      "setup": 15080126192049420965,
+      "status": "complete",
+      "turns": 46
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 54,
+      "setup": 11830358683472216525,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 2944868389699126722,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 62,
+      "setup": 8477285505795692000,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 62,
+      "setup": 7503143772302583586,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 6107653801497343460,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 60,
+      "setup": 6553809073242360417,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 14790544085432902023,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 6781766652460077010,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 7599196286603818737,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 62,
+      "setup": 17140001799071784069,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 15204769288537532356,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 8572244731245015628,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 17585808170729147145,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 5747459013484413369,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 13199564669527558872,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 15116914226026666262,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 60,
+      "setup": 3506393488880647097,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 56,
+      "setup": 5965670113767493665,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 1731991520075178714,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 17947143092868489641,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 2940180237392276279,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 4031369105294772261,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 17081034978130082930,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 54,
+      "setup": 7291442275959455866,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 15185418098660047884,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 56,
+      "setup": 18225114034332904000,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 54,
+      "setup": 1196058805946005626,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 58,
+      "setup": 10286470466601949482,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 6597459938431198702,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 10452403803104912039,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 8887508952996814149,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 17316996626719312566,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 62,
+      "setup": 9198790015256253006,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 3987427610580929753,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 17366088594659354213,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 50,
+      "setup": 1221334344805056879,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 6802593239096083958,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 7674822446620482921,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 8726126089879040283,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 60,
+      "setup": 15020327620502061633,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 7392048157233408740,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 50,
+      "setup": 4049313310194790020,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 6323187181237021112,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 60,
+      "setup": 4216081059176358296,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 15285540877215057687,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 10248472383511462528,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 12723820072902505130,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 54,
+      "setup": 9491036119388486357,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 12941971447266482802,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 17405371610879837833,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 50,
+      "setup": 12834271996738877498,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 9674959929270757856,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 58,
+      "setup": 13116632387754496057,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 56,
+      "setup": 2078492335343013358,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 6074200504404991670,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 58,
+      "setup": 13821356167841876968,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 54,
+      "setup": 14393106669624875171,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 6878872599511461069,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 56,
+      "setup": 7172598222418547826,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 5242658873437197392,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 39,
+      "rows": 56,
+      "setup": 8364150271465910011,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 7076707614576832490,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 5667494033057932162,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 14596055440559963849,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 58,
+      "setup": 7417302536110716173,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 13734487502561769022,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 13801614695429088715,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 60,
+      "setup": 13518350407333261861,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 15598013745051431875,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 2212997934771001043,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 56,
+      "setup": 15571856278421568796,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 11842169985933966107,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 1820525806312228148,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 60,
+      "setup": 3822565728547381726,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 60,
+      "setup": 13988595380519441776,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 62,
+      "setup": 6784377031875930147,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 7240264386847089913,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 14760976825488496712,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 58,
+      "setup": 4154326463660914934,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 3121646656960141026,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 58,
+      "setup": 5142086405224256438,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 2583474836243338953,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 58,
+      "setup": 9992783537086145344,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 9591936167862118500,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 13506654523461712084,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 4199895543184603088,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 50,
+      "setup": 15354348175649522331,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 11768579469879822833,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 50,
+      "setup": 6509852800363906482,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 56,
+      "setup": 11674801254202988851,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 9423714690437171221,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 2886349486726385475,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 52,
+      "setup": 7720986550308667944,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 6715333650066896463,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 54,
+      "setup": 13221361975152355698,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 13206930450498912275,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 39,
+      "rows": 58,
+      "setup": 17653024950321889991,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 17372019716516681297,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 60,
+      "setup": 12489941722840470558,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 13229268194695449052,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 8202469490227812484,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 6072980795140791176,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 3829719538543825945,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 15710232780590325642,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 60,
+      "setup": 2215364352329519510,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 1140904226732486981,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 2429953256840995689,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 424541596812671738,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 6947509482903949775,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 50,
+      "setup": 16637148523036652781,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 72,
+      "setup": 5963054040788915231,
+      "status": "complete",
+      "turns": 72
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 56,
+      "setup": 3173061421420829331,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 56,
+      "setup": 7862152508668258126,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 60,
+      "setup": 4760792981191683794,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 2774915711442585381,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 60,
+      "setup": 16581717880269932342,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 58,
+      "setup": 2215739099141951031,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 58,
+      "setup": 17495510091132801213,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 16754083646628655287,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 2032429293085332958,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 60,
+      "setup": 16337151811398645609,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 40,
+      "rows": 62,
+      "setup": 4565258255434519004,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 17678638889449216203,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 16341238345268270102,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 62,
+      "setup": 15442816852165755377,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 3347337602244760778,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 62,
+      "setup": 5557694094964865514,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 9664660584597648100,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 7288320889058335166,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 5793447802052954945,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 12636062528314727432,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 2210530909922102454,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 763464104710583721,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 56,
+      "setup": 17067880636101453596,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 62,
+      "setup": 7627107271549975395,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 12867573910224621561,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 43,
+      "rows": 60,
+      "setup": 238956732645409209,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 56,
+      "setup": 8952249139418293473,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 52,
+      "setup": 10128329250285698834,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 58,
+      "setup": 11039205239068129031,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 3795348174881515727,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 54,
+      "setup": 8148607998403287287,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 13633126003298719629,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 10936081617267418932,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 14844088311913626781,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 60,
+      "setup": 15564487052159915508,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 60,
+      "setup": 5793854081833839315,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 8142454284190902610,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 18198842254636207071,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 10903969117794169582,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 56,
+      "setup": 13826121856416027506,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 54,
+      "setup": 1001774992422954842,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 8887625410082711177,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 60,
+      "setup": 11511603152661453081,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 50,
+      "setup": 17165557356102893191,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 9058183171719629600,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 60,
+      "setup": 15112734457776772939,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 18080964486878472140,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 12004672316314953859,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 50,
+      "setup": 6784725154582536038,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 6972358986615372536,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 60,
+      "setup": 6828137596154742386,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 17610033859863250857,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 17198393306283422903,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 15898417350416085834,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 58,
+      "setup": 5028044175501184197,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 3045287765484649877,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 3666876768238219636,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 50,
+      "setup": 617089605079427020,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 17071249227691851238,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 50,
+      "setup": 8225360581568137480,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 58,
+      "setup": 246948896638131278,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 52,
+      "setup": 16304855759703745349,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 18004427989380335706,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 14450856988143985655,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 50,
+      "setup": 479216886044442017,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 50,
+      "setup": 1235041687731188284,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 2728073631245151432,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 56,
+      "setup": 6365504966731798932,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 54,
+      "setup": 17879494844407428970,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 17226092637153234484,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 60,
+      "setup": 18240870018190515333,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 56,
+      "setup": 7651806159992799444,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 46,
+      "setup": 8418758158075744073,
+      "status": "complete",
+      "turns": 46
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 52,
+      "setup": 17348054226435628550,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 54,
+      "setup": 6137778334322506218,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 2979256555302620581,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 14663665406835194586,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 6243244391089292151,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 2655047445049025846,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 2560182266230153127,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 15331492036869745159,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 60,
+      "setup": 8471945704086330550,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 9190138355372472649,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 6454632377144023006,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 60,
+      "setup": 17493261854219827887,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 54,
+      "setup": 2876758850061785568,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 52,
+      "setup": 8255740834706145931,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 58,
+      "setup": 12222694237977699782,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 48,
+      "setup": 13617135346337918443,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 60,
+      "setup": 2553033128214116830,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 16896186335957414273,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 4199746583259142129,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 56,
+      "setup": 14904067895757708086,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 3929637177927533922,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 58,
+      "setup": 3583490116382038163,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 10856893329969797998,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 4416812105131177898,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 8111798994600722197,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 11970600197384176558,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 64,
+      "setup": 12667869946508420094,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 58,
+      "setup": 18180861949027203098,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 60,
+      "setup": 10643592025903631855,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 41,
+      "rows": 60,
+      "setup": 15134631531622424188,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 52,
+      "setup": 7397672848267349332,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 58,
+      "setup": 7830972272952581071,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 50,
+      "setup": 14195316306412275492,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 12101253190557070814,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 5437681691230624636,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 60,
+      "setup": 18113056162497122529,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 8069996212727023197,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 54,
+      "setup": 16084490883363455362,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 10469469686344727614,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 3471499996692491289,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 60,
+      "setup": 7390242719194092217,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 15454741842296018449,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 8279408716006600201,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 52,
+      "setup": 6865312612517697397,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 66,
+      "setup": 14463748620663761317,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 6387027151203103812,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 58,
+      "setup": 2527285989574170669,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 4170174237387295121,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 17416029596271564207,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 54,
+      "rows": 62,
+      "setup": 15912589037645594788,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 64,
+      "setup": 17564924276484540686,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 2737927256439123555,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 9886224588435512868,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 50,
+      "setup": 9331432924872728691,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 15391452731702248486,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 12620116469658035692,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 14378752015181372862,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 52,
+      "setup": 10192693519697090763,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 17189618220887375668,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 4624330015265835131,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 62,
+      "setup": 9825199824002195081,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 3953157034541853755,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 3116920962573807666,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 60,
+      "setup": 10017256346350856880,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 54,
+      "setup": 9647016169877026954,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 58,
+      "setup": 6708465914002323989,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 58,
+      "setup": 7126782595262510469,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 60,
+      "setup": 10812146669797327504,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 60,
+      "setup": 17087011521184781294,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 62,
+      "setup": 10655216999240700357,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 7147824436638906433,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 2428379372898884512,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 17671419808518901420,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 62,
+      "setup": 16308700105495357404,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 54,
+      "setup": 9264671195659879469,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 16605820184359117044,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 7513161075889940992,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 60,
+      "setup": 10905375399531514213,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 58,
+      "setup": 13023855034976563308,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 12057792622021092405,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 54,
+      "setup": 1994996437797501040,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 48,
+      "setup": 2175758685857948865,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 14352271323386726148,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 5615646836809832795,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 52,
+      "setup": 14562320621063707107,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 56,
+      "setup": 7516419703368988659,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 13828409204693854967,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 60,
+      "setup": 27924361539587192,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 14877711725677273109,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 5267559570715696759,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 58,
+      "setup": 17655855463827535063,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 14707606114684533354,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 12064333815696332499,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 4902471883566515240,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 17290032260180396777,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 52,
+      "setup": 11331293882824529745,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 10110116302573117274,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 6873341034372123330,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 54,
+      "setup": 510019500762770235,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 10612442320040183020,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 58,
+      "setup": 10839939024780137927,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 5046122464518317369,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 54,
+      "setup": 8333593545573107327,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 788956445704943157,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 50,
+      "setup": 9713685618702764188,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 9261215364063698632,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 54,
+      "setup": 11756066785465949263,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 58,
+      "setup": 2212347876271230443,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 14539274159999184453,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 7238829834031918250,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 2724349719835746778,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 54,
+      "setup": 13448111332456422417,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 4284425364180485396,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 2648127413819877591,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 6984241794440115309,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 15997211965339433010,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 56,
+      "setup": 340139215949100987,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 14770253689244225797,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 10901035734330155881,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 50,
+      "setup": 1975985431193595149,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 10121884684041754896,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 13347998748640553249,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 2246917167280319563,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 6561995039742806233,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 15086644422929259238,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 4821469103856046825,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 6808753394289031801,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 11557458795948489644,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 58,
+      "setup": 6246410823476342104,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 13315822524597030324,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 66,
+      "setup": 11169587567094603809,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 14618635312943028299,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 60,
+      "setup": 11910074032872983797,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 18319661026383659701,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 17179695288778120729,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 10104961773521471882,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 1607247206217978367,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 10661331918987653921,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 50,
+      "setup": 5822121785765821981,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 12130566526177779485,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 11946907350086149917,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 56,
+      "setup": 2666598803378979000,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 58,
+      "setup": 17949458695649999746,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 5473258503033393977,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 6391588042788647524,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 60,
+      "setup": 7095080279107724382,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 10364056726932195615,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 58,
+      "setup": 332792452313439473,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 11998817074472996768,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 58,
+      "setup": 7341127807734413360,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 50,
+      "setup": 13600059007548214013,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 9486312721240086634,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 14541332551637812917,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 60,
+      "setup": 4121228536655732054,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 6558714408776565611,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 11077386978228190130,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 16768354907556751089,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 48,
+      "setup": 3405747953041232137,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 1448667459974844120,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 58,
+      "setup": 17729746125663164289,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 60,
+      "setup": 8977104105257286913,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 13009455772530893080,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 7436815235477438154,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 16922309131848995900,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 54,
+      "setup": 15004415397507460116,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 60,
+      "setup": 16337186570385605639,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 50,
+      "setup": 12308113134160498701,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 10014754335463612198,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 60,
+      "setup": 2990887104948876683,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 11703308356095030425,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 56,
+      "setup": 3181703541580726314,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 3555374681048576520,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 58,
+      "setup": 17594688767980836618,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 40,
+      "rows": 56,
+      "setup": 4308643835238200337,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 5383242399589970460,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 56,
+      "setup": 8729214062884893820,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 60,
+      "setup": 12401190694643791526,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 52,
+      "setup": 18255901962529933369,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 3663210187083958386,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 796323975127192016,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 10559157648401366334,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 10513429712191619459,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 64,
+      "setup": 10040252658829604819,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 633917094969635183,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 11482364143257863456,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 5531171136396071437,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 5071296591376771886,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 60,
+      "setup": 16267946899558762920,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 12475129329262794167,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 54,
+      "setup": 7566611947069749350,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 4231683868936044550,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 60,
+      "setup": 13026273824864701745,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 41,
+      "rows": 64,
+      "setup": 7599664773116456441,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 896794309682042959,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 48,
+      "setup": 835944883233622681,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 14967066162729635942,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 50,
+      "setup": 2511487338427826069,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 1306859792803295788,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 54,
+      "setup": 10959628603657928619,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 17200587696663150428,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 2943523466223628970,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 58,
+      "setup": 7026119748702798002,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 5816293458533635596,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 52,
+      "setup": 13928956864266037049,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 52,
+      "setup": 11067685407207769041,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 12592043964276687022,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 62,
+      "setup": 16634770709894868653,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 34,
+      "rows": 56,
+      "setup": 10854093203452630975,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 44,
+      "rows": 60,
+      "setup": 14382162281176271974,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 50,
+      "setup": 3351422216281127065,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 38,
+      "rows": 60,
+      "setup": 8405270047311005762,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 56,
+      "setup": 2143681541999563921,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 3223335708392936723,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 58,
+      "setup": 4037824283278610086,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 52,
+      "setup": 1440876648292965093,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 52,
+      "setup": 1057525020577710026,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 7746712439623782980,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 56,
+      "setup": 16012937740810792364,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 4602400081340176842,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 16082307965571670398,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 17256956426029021180,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 11766277189465282036,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 58,
+      "setup": 11384916944436064893,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 56,
+      "setup": 455553415397692012,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 50,
+      "setup": 6543382522551061475,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 11697089410042626281,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 58,
+      "setup": 15634662148995142305,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 7291979903657674841,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 52,
+      "setup": 16140169490652627847,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 54,
+      "setup": 15416806964714807375,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 8700108397829879267,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 3715589845222001236,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 50,
+      "setup": 11899792140361381309,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 58,
+      "setup": 2271077495868394166,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 56250871486519863,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 58,
+      "setup": 3279817422415797037,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 17525323099642492205,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 1936184171000565215,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 56,
+      "setup": 17059754618148555194,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 10330180956144750927,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 58,
+      "setup": 8573812455057022618,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 9949802050622418888,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 66,
+      "setup": 1578170581547305337,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 60,
+      "setup": 12895984728053856017,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 6765537864803033278,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 8503559886231058237,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 56,
+      "setup": 14766430451387679159,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 7235947342552695419,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 13121107982795090967,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 60,
+      "setup": 8229215378249868129,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 10205399217243826539,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 64,
+      "setup": 9227868672361190104,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 12534603868333536647,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 3222380654552327796,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 15336179606648166450,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 54,
+      "setup": 16816714706562523089,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 54,
+      "setup": 14422526509373944065,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 18011467224082338809,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 52,
+      "setup": 177493058268270518,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 58,
+      "setup": 1076941673287307557,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 720993967279530789,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 54,
+      "setup": 178525001824062414,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 54,
+      "setup": 9237961238922101186,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 16287960719221308006,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 18150484004100959068,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 52,
+      "setup": 12813836762003415919,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 5869202999024002701,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 1163354698214260659,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 60,
+      "setup": 1803918960096410632,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 64,
+      "setup": 16442759941246771283,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 64,
+      "setup": 12911326284840247781,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 56,
+      "setup": 9343049553264023291,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 7039887375972511812,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 2677809642291754180,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 6176680346607362986,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 48,
+      "setup": 15904733115584724933,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 60,
+      "setup": 8448729681947274599,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 4465893737798763080,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 38,
+      "rows": 60,
+      "setup": 11197539622632929253,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 56,
+      "setup": 9716790463225501549,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 15897431083190028063,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 52,
+      "setup": 8203172038749128691,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 52,
+      "rows": 58,
+      "setup": 1806612375394531310,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 50,
+      "setup": 3258692730530008901,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 15038282765130445073,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 58,
+      "setup": 4749483311786298098,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 1161018377064495652,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 2023377769768522215,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 17513558527838871449,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 4794674899408705598,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 38,
+      "rows": 54,
+      "setup": 15295478881849366984,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 12060562615020127565,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 60,
+      "setup": 2310548282966357927,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 58,
+      "setup": 8742753834032579258,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 6359658570742394678,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 5549215699230294623,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 62,
+      "setup": 5381943064016835048,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 62,
+      "setup": 12889057682273648697,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 5937724165497412859,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 50,
+      "setup": 15582864664443952604,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 9590877509342339575,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 17965040032021199492,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 3028398489787579045,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 700638094778624375,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 7452237978033416194,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 38,
+      "rows": 54,
+      "setup": 1924575421883393312,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 15174528630392463120,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 52,
+      "setup": 7701036499572177645,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 15079193121701267213,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 16118555192073427978,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 60,
+      "setup": 12206541216393914223,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 721364742019439105,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 17042297685793340368,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 54,
+      "setup": 9663924610984506320,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 50,
+      "setup": 6310923724371567182,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 41,
+      "rows": 64,
+      "setup": 6259409645373501330,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 1927139981188055269,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 56,
+      "setup": 5450940548082095335,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 12836445900999502501,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 2859035105694859636,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 17317485428479739250,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 56,
+      "setup": 9623016529058944579,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 7569235893937765598,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 64,
+      "setup": 7910888035906829861,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 48,
+      "setup": 13410409014220142210,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 58,
+      "setup": 2656767426764658647,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 48,
+      "setup": 7735928508025337270,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 60,
+      "setup": 5946930870041038961,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 60,
+      "setup": 13844671199846655717,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 8910134693090669121,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 6859546582521414426,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 64,
+      "setup": 12804592800377109292,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 56,
+      "setup": 1136094227535428579,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 3855681530667653705,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 9544995584538171814,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 12145030266536882535,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 52,
+      "setup": 179568855522960541,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 54,
+      "setup": 16996397018772609579,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 60,
+      "setup": 11299115936932946149,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 5581889759232765946,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 58,
+      "setup": 10656167816274455639,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 60,
+      "setup": 2083917006753535609,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 2193673217335121512,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 50,
+      "setup": 6512907351273592814,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 2118220642323930807,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 8917007225715224718,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 47,
+      "rows": 58,
+      "setup": 3865446614719244777,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 17228537790509010303,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 1244862790185186803,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 9106907220785832191,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 54,
+      "setup": 7281952885810319234,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 50,
+      "setup": 16781253523364946466,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 54,
+      "setup": 6255271366207850637,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 39,
+      "rows": 54,
+      "setup": 6040619681159528876,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 2634962293961479947,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 62,
+      "setup": 7732116654598608713,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 16295513610862422335,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 52,
+      "setup": 2783775972278943112,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 58,
+      "setup": 10966090070305352360,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 17778749355057599924,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 2613686723703697115,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 50,
+      "setup": 3381677991663869564,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 6635218851218483559,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 56,
+      "setup": 4552997960202816004,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 50,
+      "setup": 3081522578658216489,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 6025070069499387537,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 9342699543299725113,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 60,
+      "setup": 14003754780624196760,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 6772334576221374611,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 4117034110712185588,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 66,
+      "setup": 5815554570661355338,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 58,
+      "setup": 12193073548231313806,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 50,
+      "setup": 8427629544246718449,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 64,
+      "setup": 3933603940071603899,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 11446774268919309057,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 16964806865013276014,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 60,
+      "setup": 3879270667230077361,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 638737955197992021,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 62,
+      "setup": 13943989484124485333,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 18342665603120844539,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 11511261933505818326,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 2308926984586120598,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 62,
+      "setup": 926699428976409827,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 64,
+      "setup": 13497647232996448982,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 52,
+      "setup": 5612967339447141193,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 60,
+      "setup": 5546837085434346304,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 46,
+      "setup": 12213246363171771455,
+      "status": "complete",
+      "turns": 46
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 15306208971514956288,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 7160219217063916606,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 44,
+      "setup": 12393701002128939163,
+      "status": "complete",
+      "turns": 44
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 48,
+      "setup": 8446853442903838143,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 50,
+      "setup": 14265549229399651870,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 62,
+      "setup": 13716626972271529364,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 62,
+      "setup": 3948222623259002923,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 39,
+      "rows": 54,
+      "setup": 8365975794652730262,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 11400248024938183371,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 60,
+      "setup": 651329885175060788,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 58,
+      "setup": 7308656963618223776,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 9699579574350738891,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 405113605257710686,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 56,
+      "setup": 5709215751982669847,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 7933286631186204883,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 7982551251091313854,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 60,
+      "setup": 4864942241535007039,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 13111853724438667253,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 58,
+      "setup": 8676275038796023502,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 58,
+      "setup": 2881193656854058160,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 17319419644803211841,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 10628768600500097854,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 60,
+      "setup": 10049684420564883505,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 52,
+      "setup": 6849387515375419978,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 58,
+      "setup": 12018090136117603565,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 62,
+      "setup": 7131329456490483813,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 72,
+      "setup": 12298951364836296010,
+      "status": "complete",
+      "turns": 72
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 50,
+      "setup": 13652303522778945645,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 54,
+      "setup": 17880020040150982181,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 54,
+      "setup": 2302773893947460270,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 3457186532562579311,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 13974092094582943729,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 60,
+      "setup": 8418393375553419300,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 56,
+      "setup": 15048836345663633595,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 4999197331443164848,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 8732870762949553973,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 14829765431923864805,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 52,
+      "setup": 18067197911552109810,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 8268909052071012933,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 16282266422069039868,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 58,
+      "setup": 3549664155794117710,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 60,
+      "setup": 9252443860523008308,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 58,
+      "setup": 5272989447104993667,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 60,
+      "setup": 9940671863381428330,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 56,
+      "setup": 1477892657240223989,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 7245917292731053536,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 6444000022422659198,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 58,
+      "setup": 10601528564179369788,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 3957740129884605264,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 64,
+      "setup": 17509075872326773862,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 58,
+      "setup": 8318025004430348598,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 3492693607177106254,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 56,
+      "setup": 979873816466884431,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 2996029591894788238,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 60,
+      "setup": 14933835599834489161,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 52,
+      "setup": 8310332514214380673,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 4498439794141753353,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 50,
+      "setup": 12142603763763667238,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 6912181049664985292,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 62,
+      "setup": 17851773075739086070,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 58,
+      "setup": 1442658560973590595,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 46,
+      "setup": 4229075808858700936,
+      "status": "complete",
+      "turns": 46
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 56,
+      "setup": 13237858281238241409,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 5897246716826676287,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 12081523084096009684,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 3552746600247587777,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 11091618581966608780,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 2912003428720664295,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 16129979078053710068,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 16489552396440086671,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 50,
+      "setup": 14582251884242280498,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 58,
+      "setup": 9542171792252473408,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 58,
+      "setup": 2870708416747009670,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 62,
+      "setup": 11239371776434207598,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 13551944368877424668,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 16156408896102403531,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 6657707432645992824,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 18275501622051098747,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 56,
+      "setup": 8078479283310127317,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 2575339892799505128,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 404549889112120793,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 62,
+      "setup": 11158763066947027420,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 62,
+      "setup": 11346512207787971836,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 62,
+      "setup": 15851353576927882288,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 655270234990685077,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 56,
+      "setup": 9700548022927267643,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 50,
+      "setup": 2596974534392611954,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 44,
+      "rows": 60,
+      "setup": 8636309647902877553,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 10183604091136983643,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 17659671352877348119,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 58,
+      "setup": 7440367510884683484,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 262901393720711394,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 16216614737580391936,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 53,
+      "rows": 58,
+      "setup": 9860637034855694459,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 1788533298926355945,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 56,
+      "setup": 13885284397843734428,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 2518619940528955275,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 52,
+      "setup": 1374371521049559381,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 2476859931449773097,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 58,
+      "setup": 15928226891160198447,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 8398309300220770272,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 54,
+      "setup": 14842396046499170903,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 43,
+      "rows": 58,
+      "setup": 2364189787369741415,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 3898903522246924471,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 14791671155178758014,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 2636377178884671151,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 50,
+      "setup": 18431567388634146432,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 16993087176907138604,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 42,
+      "rows": 60,
+      "setup": 17606436832419916104,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 9099122972231110602,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 8126308333890136591,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 50,
+      "setup": 8150768713990169455,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 60,
+      "setup": 10659861166977757808,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 62,
+      "setup": 3739805679472508138,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 58,
+      "setup": 1425409605898961643,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 8370992067364026859,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 8779732796717325321,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 48,
+      "setup": 5089816700877081279,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 52,
+      "setup": 14237025290858236089,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 52,
+      "setup": 12012230573369844383,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 6411959787954157875,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 13187156583332657920,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 3128802649766587366,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 54,
+      "setup": 16014206275445871057,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 11271095275460402628,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 2691713374430279713,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 11835719511499682982,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 11342718228829707522,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 1068502712588549704,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 1309426283681599099,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 60,
+      "setup": 5198918982723920295,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 2689150510186300342,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 52,
+      "setup": 6811967376561012125,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 54,
+      "setup": 10167546228537050762,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 12003341025518723667,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 56,
+      "setup": 14419521380909259236,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 4463614144964329677,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 56,
+      "setup": 10691917696571777009,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 6907973548881997996,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 60,
+      "setup": 325696271828124136,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 54,
+      "setup": 17672370939028476069,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 4729738499882271719,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 62,
+      "setup": 15330143614947828828,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 56,
+      "setup": 12838313525115755806,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 56,
+      "setup": 5588059822637613561,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 50,
+      "setup": 16058992719137570660,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 64,
+      "setup": 10749955675226394042,
+      "status": "complete",
+      "turns": 64
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 54,
+      "setup": 2241786104565974075,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 56,
+      "setup": 7771452264162605504,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 54,
+      "setup": 4872486879112557910,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 50,
+      "setup": 763861434056272590,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 58,
+      "setup": 8870522024496863331,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 56,
+      "setup": 191873093360658722,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 54,
+      "setup": 10821322200787316489,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 41,
+      "rows": 56,
+      "setup": 17084163003099419797,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 9434079973102008295,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 14957399359071822712,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 58,
+      "setup": 11764884020701785152,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 58,
+      "setup": 16507749774422667872,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 14581951426665584449,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 52,
+      "setup": 18280553194614810296,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 5309839323113688355,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 25,
+      "rows": 52,
+      "setup": 8688169154771390826,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 3976275323607051569,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 52,
+      "setup": 7530479004472627038,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 11567859170311963009,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 52,
+      "setup": 16608788687136693965,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 16769623786454723291,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 62,
+      "setup": 416730774489892028,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 58,
+      "setup": 13697977747953310962,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 52,
+      "setup": 11560585538264403637,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 8493208100172910351,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 52,
+      "setup": 17820868213612737755,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 60,
+      "setup": 7843276339064112775,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 4542002455035277469,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 56,
+      "setup": 12316879468594342273,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 50,
+      "setup": 5101414770288815340,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 9262777644661235314,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 60,
+      "setup": 17713183917769910983,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 18418750064816484636,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 54,
+      "setup": 16997307876703310883,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 56,
+      "setup": 15362300819459549765,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 54,
+      "setup": 1752430528694646167,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 14376206666183827874,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 58,
+      "setup": 4849459129445901988,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 58,
+      "setup": 4481355127838991335,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 50,
+      "setup": 14815152944587744193,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 39,
+      "rows": 66,
+      "setup": 4454019801425260099,
+      "status": "complete",
+      "turns": 66
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 16252283013727574308,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 50,
+      "setup": 12410147500947503654,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 17503526610901429280,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 60,
+      "setup": 363194432852880917,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 56,
+      "setup": 9268375208296142354,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 13736803401173585992,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 52,
+      "setup": 3642493505958639600,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 54,
+      "setup": 2356168428086522175,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 6526113266006859250,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 16988986818856386012,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 50,
+      "setup": 13142480247955593454,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 43,
+      "rows": 52,
+      "setup": 2096458405664970286,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 50,
+      "rows": 60,
+      "setup": 10197469012663488878,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 52,
+      "setup": 12791425586735211240,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 56,
+      "setup": 3705477672752543704,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 11662190718401402119,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 12785038526313529501,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 17779783405244634985,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 54,
+      "setup": 6672501852558458564,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 48,
+      "setup": 18143301115850036002,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 54,
+      "setup": 13791500372556612419,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 11755011748511419194,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 3115436019136941747,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 615729763658196384,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 52,
+      "setup": 2681551494464742646,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 56,
+      "setup": 16754521057766363805,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 60,
+      "setup": 10956329078657038667,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 13954255363709640988,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 60,
+      "setup": 12080167456092037546,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 10156264513647742011,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 54,
+      "setup": 11312839433451002526,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 56,
+      "setup": 5374639084907612936,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 15460487412119091371,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 58,
+      "setup": 10359858946894003330,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 56,
+      "setup": 6745831557932740622,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 54,
+      "setup": 12118581507071674752,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 48,
+      "setup": 10088748606260137252,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 52,
+      "setup": 8397583056304259156,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 12392864437024003927,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 54,
+      "setup": 179552987730525586,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 43,
+      "rows": 58,
+      "setup": 129496357612060175,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 56,
+      "setup": 12155119731062480367,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 2,
+      "rows": 52,
+      "setup": 1764408875247186813,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 60,
+      "setup": 13735502278220937167,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 54,
+      "setup": 15954754749783432531,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 58,
+      "setup": 18283288180952705721,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 48,
+      "setup": 17631688211487982597,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 4229617020943416430,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 56,
+      "setup": 17403573605265961039,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 18439198071432871991,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 58,
+      "setup": 18083025921290267297,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 54,
+      "setup": 10922767442319900338,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 48,
+      "setup": 5520643399803120085,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 50,
+      "setup": 13543490405572333521,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 52,
+      "setup": 8726328548403341836,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 54,
+      "setup": 1643464785415724156,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 58,
+      "setup": 16516401395807846369,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 54,
+      "setup": 14154565175340357514,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 56,
+      "setup": 3788744334732354423,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 60,
+      "setup": 15031202596941457800,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 58,
+      "setup": 4595501349745198342,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 54,
+      "setup": 16205224514241377036,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 35,
+      "rows": 52,
+      "setup": 8132460092593859414,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 54,
+      "setup": 10095045436515146657,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 41,
+      "rows": 58,
+      "setup": 1837323419282305854,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 58,
+      "setup": 12511612867347451401,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 60,
+      "setup": 3808505016287793968,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 56,
+      "setup": 14647327838978631857,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 17,
+      "rows": 56,
+      "setup": 12630596656396321653,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 56,
+      "setup": 14585730252252593696,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 48,
+      "setup": 6805562372697900143,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 13339252667342287271,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 14588354084232838502,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 52,
+      "setup": 6878900266501023132,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 56,
+      "setup": 1080566867675289899,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 42,
+      "rows": 62,
+      "setup": 16444839406630107794,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 360342211882181640,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 54,
+      "setup": 6820680635594251932,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 38,
+      "rows": 56,
+      "setup": 17226995259369024424,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 54,
+      "setup": 14403683237406673629,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 5,
+      "rows": 56,
+      "setup": 8784913387565035789,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 52,
+      "setup": 4350528436518953527,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 52,
+      "setup": 12113751568029196273,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 16120433119218952440,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 13,
+      "rows": 54,
+      "setup": 3537848568762019189,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 58,
+      "setup": 15132546711276819057,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 54,
+      "setup": 14477856130212950907,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 54,
+      "setup": 16782023583530597765,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 8,
+      "rows": 50,
+      "setup": 2212426960722087739,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 6,
+      "rows": 54,
+      "setup": 6892528127057646859,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 5250157506275384777,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 13871600557593348183,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 15170693997465041355,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 37,
+      "rows": 52,
+      "setup": 5731018279184591235,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 18159726455458673269,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 58,
+      "setup": 16300733739951500173,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 52,
+      "setup": 5250572392491709051,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 54,
+      "setup": 13356573383542712476,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 12,
+      "rows": 56,
+      "setup": 11369483497426087648,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 9,
+      "rows": 48,
+      "setup": 11334413105086177616,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 36,
+      "rows": 56,
+      "setup": 5749246806791302133,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 48,
+      "setup": 6743591442444766779,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 58,
+      "setup": 11258738768722164755,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 50,
+      "setup": 5780679133643231425,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 52,
+      "setup": 18036352078728892814,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 21,
+      "rows": 60,
+      "setup": 11544541088888890339,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 20,
+      "rows": 58,
+      "setup": 4657617029282421165,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 56,
+      "setup": 10514579296246782498,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 31,
+      "rows": 58,
+      "setup": 12051984460814314530,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 50,
+      "setup": 16947563435072342459,
+      "status": "complete",
+      "turns": 50
+    },
+    {
+      "opponent_blind_rows": 32,
+      "rows": 58,
+      "setup": 6457394114177411660,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 54,
+      "setup": 3371849642617993321,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 58,
+      "setup": 14828530591119761751,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 24,
+      "rows": 62,
+      "setup": 5117032932502425356,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 14,
+      "rows": 60,
+      "setup": 13517770431074879260,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 10,
+      "rows": 52,
+      "setup": 6787651145937061954,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 58,
+      "setup": 13251279874724899185,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 4087329822191043466,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 27,
+      "rows": 60,
+      "setup": 4174161942917446656,
+      "status": "complete",
+      "turns": 60
+    }
+  ],
+  "row_bytes": 2232,
+  "rows": 55792,
+  "schema": "flywheel-v1",
+  "seconds": 157.514478,
+  "seed": 4680004000,
+  "separate_actor": false,
+  "simulations": 44588800,
+  "source": "d2500868216112bf",
+  "teacher_action_targets": true,
+  "teacher_agent": "flywheel-gumbel",
+  "teacher_replicates": 1,
+  "temperature_total_turns": 6,
+  "threads": 14,
+  "views_format": "u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged"
+}
