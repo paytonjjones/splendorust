@@ -1,0 +1,91 @@
+{
+  "actor_agent": "flywheel-gumbel",
+  "actor_iterations": 128,
+  "additional_label_inference_calls": 337349,
+  "additional_label_simulations": 363200,
+  "blocked": 0,
+  "capped": 0,
+  "complete": 8,
+  "context_format": "f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3",
+  "depth": 16,
+  "encoding_views": 1,
+  "format": "u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)",
+  "games": 8,
+  "inference_calls": 393548,
+  "iterations": 800,
+  "label_scope": "Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling",
+  "policy_seed": 7560000000,
+  "public_context": false,
+  "records": [
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 15098290970910349049,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 11,
+      "rows": 58,
+      "setup": 4287694810193353801,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 4,
+      "rows": 56,
+      "setup": 14049023606363671492,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 58,
+      "setup": 12220617698831314004,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 3198042317042860021,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 33,
+      "rows": 60,
+      "setup": 17502930901707758204,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 19,
+      "rows": 58,
+      "setup": 14530134433230927685,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 23,
+      "rows": 56,
+      "setup": 8570068048107766719,
+      "status": "complete",
+      "turns": 56
+    }
+  ],
+  "row_bytes": 2232,
+  "rows": 454,
+  "schema": "flywheel-v1",
+  "seconds": 3.806933667,
+  "seed": 4560000000,
+  "separate_actor": true,
+  "simulations": 421312,
+  "source": "3b2ba2eded15092f",
+  "teacher_action_targets": true,
+  "teacher_agent": "flywheel-gumbel",
+  "teacher_replicates": 1,
+  "temperature_total_turns": 6,
+  "threads": 14,
+  "views_format": "u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged"
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "flywheel-training-v1",
+  "input_rows": 56,
+  "public_context": false,
+  "train_context_files": null,
+  "dev_context_files": null,
+  "trunk_blocks": 1,
+  "architecture": 80,
+  "distill_teacher_sha256": null,
+  "learning_rate": 0.0001,
+  "parameters": 142406,
+  "sample_encoding_views": false,
+  "encoding_views_files": null,
+  "encoding_views_code_sha256": null,
+  "greedy_targets": false,
+  "policy_only": false,
+  "frozen_value_exact": null,
+  "trainable_parameters": 142406,
+  "seed": 800000007,
+  "device": "mps",
+  "torch": "2.5.1",
+  "numpy": "1.26.4",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/integration/cycle-000/train/000000.bin",
+      "sha256": "bc220966852585e1032bdaed8a069a40f083e62c892c148f9141e928ec511f25",
+      "rows": 454,
+      "setups": 8
+    }
+  ],
+  "dev": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e81/integration/cycle-000/dev/000000.bin",
+      "sha256": "91c7a502f465814da0d13b91b08182a6efdba6ad99352f403f7d70041e5c1487",
+      "rows": 444,
+      "setups": 8
+    }
+  ],
+  "train_setups": 8,
+  "dev_setups": 8,
+  "warmstart_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "model_sha256": "8cf42cb0c25c232e9c844cebff6e9bc0dde5e4f7a46ae434b5e81b0817bd744f",
+  "checkpoint_sha256": "83d0ad71ce9a7fd347233bf5b77d685571850b3fab1aeebd8e25deaa7f2461ba",
+  "script_sha256": "e7aab1fd9886ebe706ac0a31d98346477294b706fd92c69bd7d9b1f8e064f446",
+  "split_code_sha256": null,
+  "model_code_sha256": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+  "gated_code_sha256": null,
+  "residual_code_sha256": null,
+  "fixed_base_exact": null,
+  "base_model_sha256": null,
+  "initial": {
+    "policy_loss": 1.7756438384184967,
+    "policy_accuracy": 0.4166666666666667,
+    "value_brier": 0.18667123124406143,
+    "teacher_target_brier": 0.056314794866888375,
+    "rows": 444,
+    "outcome_rows": 444,
+    "distillation_policy_kl": null,
+    "distillation_value_mse": null
+  },
+  "history": [
+    {
+      "policy_loss": 1.7754266412408501,
+      "policy_accuracy": 0.41216216216216217,
+      "value_brier": 0.18533246152035826,
+      "teacher_target_brier": 0.05562446353671787,
+      "rows": 444,
+      "outcome_rows": 444,
+      "distillation_policy_kl": null,
+      "distillation_value_mse": null,
+      "epoch": 1,
+      "seconds": 2.0348597089760005,
+      "trained_rows": 454
+    }
+  ],
+  "best_epoch": 1,
+  "selection": "minimum dev outcome score; trained_only=False",
+  "initial_score": 2.5223287633947424,
+  "trained_only": false,
+  "seconds": 2.1497770419809967,
+  "epochs": 1,
+  "batch_size": 1024,
+  "determinism": "fixed seeds; deterministic algorithms requested; MPS bitwise repeatability not guaranteed"
+}

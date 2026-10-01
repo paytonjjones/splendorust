@@ -1,21 +1,25 @@
 {
-  "model": "research/e68/model/model.bin",
-  "checkpoint": "research/e68/model/model.pt",
-  "model_sha256": "d199a3878d7feebb443cb8e01e4afee502e05f2e9ba34c7a042a6bb3b62b86f2",
-  "checkpoint_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "model": "research/e81/model/model.bin",
+  "checkpoint": "research/e81/model/model.pt",
+  "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
   "status": "Provisional research only; E56 is the confirmed champion",
   "schema": "provisional-research-lineage-v1",
   "champion": "research/CHAMPION.json",
-  "decision": "research/e68/decision.json",
+  "decision": "research/e81/decision.json",
   "requested_credit_bounds": [
-    0.50725,
-    0.50725
+    0.52,
+    0.52
   ],
   "ci95": [
-    0.46416469695891205,
-    0.5503353030410879
+    0.4772718119962065,
+    0.5627281880037935
   ],
   "search_agent": "flywheel-gumbel",
   "search_decision": "research/e73/decision.json",
-  "search_status": "Provisional search gain only; E56 champion unchanged"
+  "search_status": "Provisional search gain only; E56 champion unchanged",
+  "teacher_agent": "flywheel-gumbel",
+  "teacher_action_targets": true,
+  "teacher_iterations": 800,
+  "actor_iterations": 128
 }

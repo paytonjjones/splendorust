@@ -83,3 +83,5 @@ active final round, or that ends the game through an already eligible noble
 from the last seat. E20 and E21 record the failed candidate and fresh checks;
 E22 records the noble boundary correction.
 These policies do not guarantee termination for all setups or budgets.
+
+The current research endpoint and search mode are in `research/LINEAGE.json`; the confirmed endpoint is in `research/CHAMPION.json`. The restarted offline loop can use `--teacher-action-targets --teacher-agent flywheel-gumbel --actor-agent flywheel-gumbel --actor-iterations 128 --teacher-iterations 800 --dev-teacher-iterations 800 --search-agent gumbel` to learn verified no-noise teacher actions. This label mode is explicit; old collection defaults remain reproducible. E80 records why the exported Gumbel policy distribution can be weaker than the teacher choice. E81 records the first provisional learning gain with repaired labels.

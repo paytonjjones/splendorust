@@ -36,7 +36,6 @@ def main():
     p.add_argument('--policy-only',action='store_true')
     p.add_argument('--greedy-targets',action='store_true')
     p.add_argument('--encoding-views',type=int,choices=[1,8],default=1)
-    p.add_argument('--teacher-action-targets',action='store_true',help='label verified teacher choices instead of exported root distributions')
     p.add_argument('--teacher-replicates',type=int,choices=[1,2,4,8],default=1)
     p.add_argument('--sample-encoding-views',action='store_true')
     p.add_argument('--selection-rule',choices=['strict','provisional'],default='strict')
@@ -125,7 +124,7 @@ def main():
                     preserve(output);preserve(meta);preserve(output.with_suffix('.context.bin'));preserve(output.with_suffix('.views.bin'))
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
                          '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
-                         '--threads',a.threads,'--teacher-agent',a.teacher_agent,*(['--actor-agent',a.actor_agent] if a.actor_agent else []),'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*(['--teacher-action-targets'] if a.teacher_action_targets else []),*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),*(['--public-context'] if a.public_context else []),'--output',output],output.with_suffix('.log'))
+                         '--threads',a.threads,'--teacher-agent',a.teacher_agent,*(['--actor-agent',a.actor_agent] if a.actor_agent else []),'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),*(['--public-context'] if a.public_context else []),'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None,context_sha256=sha(output.with_suffix('.context.bin')) if a.public_context else None))
                 r=json.loads(receipt.read_text())
                 if a.public_context:assert sha(output.with_suffix('.context.bin'))==r['context_sha256']
