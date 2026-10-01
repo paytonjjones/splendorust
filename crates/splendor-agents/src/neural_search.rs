@@ -571,13 +571,17 @@ impl NeuralAgent {
         o: &crate::native_environment::Observation,
     ) -> ([f32; 81], f64) {
         self.calls += 1;
-        let mut x = o
-            .determinize(&mut self.rng)
-            .expect("valid native observation")
-            .model_features();
         let model = self
             .external_model
             .expect("native environment requires frozen model");
+        let world = o
+            .determinize(&mut self.rng)
+            .expect("valid native observation");
+        let mut x = if model.uses_native_noble_order() {
+            world.features()
+        } else {
+            world.model_features()
+        };
         if self.belief_root && self.root_evaluation {
             let opponent = 1 - usize::from(o.current);
             let mut context = [0.0; 7];
@@ -1047,6 +1051,62 @@ mod tests {
                 }
             }
         }
+    }
+    #[test]
+    fn public_native_leaf_preserves_teacher_noble_order() {
+        use crate::native_environment::{Observation as NativeObservation, Player};
+        let original = include_bytes!("../../../research/e81/model/model.bin");
+        let mut bytes = b"SPPUB751".to_vec();
+        bytes.extend(1u32.to_le_bytes());
+        for row in original[..56 * 56 * 4].as_chunks::<{ 56 * 4 }>().0 {
+            bytes.extend(row);
+            bytes.extend([0; 19 * 4]);
+        }
+        bytes.extend(&original[56 * 56 * 4..]);
+        let model = Box::leak(Box::new(crate::transfer::Model::from_bytes(&bytes)));
+        assert!(model.uses_native_noble_order());
+        let canonical = GameState::new(2, 95).unwrap().observe(0);
+        let ids: Vec<_> = (0..10)
+            .filter(|id| canonical.nobles & (1 << id) != 0)
+            .collect();
+        let native = NativeObservation {
+            viewer: 0,
+            current: 0,
+            turns: 0,
+            bank: canonical.bank,
+            market: canonical.market,
+            remaining: canonical.remaining,
+            noble_ids: [ids[2], ids[0], ids[1]],
+            nobles: 7,
+            players: [Player::default(), Player::default()],
+        };
+        let world = native.determinize(&mut Rng::new(99)).unwrap();
+        assert_ne!(world.features(), world.model_features());
+        let (policy, value) = model.infer_with_profile(&world.features(), &[0.0; 7], true);
+        let mut agent = NeuralAgent::new(99, SearchConfig::default());
+        agent.external_model = Some(model);
+        assert_eq!(
+            agent.native_leaf(&native),
+            (policy, (f64::from(value[0]) + 1.0) / 2.0)
+        );
+        let mut canonical_agent = NeuralAgent::new(
+            99,
+            SearchConfig {
+                iterations: 16,
+                depth: 4,
+                ..Default::default()
+            },
+        );
+        canonical_agent.transferred = true;
+        canonical_agent.external_model = Some(model);
+        canonical_agent.gumbel = true;
+        canonical_agent.world_pool = 3;
+        let state = GameState::new(2, 95).unwrap();
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        assert!(legal.contains(&canonical_agent.select_action(&canonical, &legal)));
+        assert_eq!(canonical_agent.simulations, 16);
+        assert!(canonical_agent.calls > 1);
     }
     #[test]
     fn learned_public_models_use_only_root_correction() {

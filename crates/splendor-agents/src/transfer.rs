@@ -492,6 +492,11 @@ impl Model {
             _ => self.infer(x),
         }
     }
+    /// Public models retain native noble slot order, which affects native rules.
+    /// Legacy transferred models keep their frozen sorted-noble feature contract.
+    pub fn uses_native_noble_order(&self) -> bool {
+        matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 75)
+    }
     pub fn needs_public_context(&self) -> bool {
         matches!(&self.architecture, Architecture::Attention(_))
             || matches!(&self.architecture, Architecture::Bootstrap(model) if matches!(model.first.input, 57 | 75))
