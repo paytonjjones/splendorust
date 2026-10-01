@@ -249,11 +249,10 @@ E51 retains the frozen critic but concentrates late targets on maximal visits.
 It scores49.95% in2,000 complete games,CI45.65–54.25%. Reject. Training plus gate
 takes148.07s with reused data; initial collection and validation are separate.
 
-All models, source snapshots and raw results remain available. The incumbent
-is unchanged. Repeated learning gain and external leadership remain unproved.
-The next proposed test gives policy and value separate feature encoders, so
-policy features can adapt without changing the accepted critic. Added native
-cost must be measured. The current handoff is in [HANDOFF.md](HANDOFF.md).
+All models, source snapshots and raw results remain available. At E51, the incumbent
+was unchanged and repeated gain was unproved. E52 then tested separate
+policy/value feature encoders. The current status is at the top of this report
+and in [HANDOFF.md](HANDOFF.md).
 
 Agent2's03326dd CPU kernel is integrated as5d02e8c. Its shared-Mac confirmation
 reports60.5% self-play and65–81% arena throughput gains, with exact data and
@@ -263,11 +262,12 @@ scores51.10% in2,000 complete games,CI46.92–55.28%; reject. Training98.77s and
 gate66.46s. On the same saved inputs, median inference is39.57us
 versus31.25us;128-simulation decision cost is1.273x.
 The timing uses the faster kernel on both models and is conditional on this host.
-E53 now tests budget800 targets alone; no result is available yet.
+E53 tested the small budget800-only corpus: 51.55% over 2,000 complete
+games, CI47.34–55.76%. Reject under its registered rule.
 
 Evaluator feedback changed the next work: stop architecture changes, separate
 exploratory lineage selection from fixed-champion confirmation, and collect a
-comparable-volume800-simulation teacher corpus. E54 now collects5,000 training
+comparable-volume800-simulation teacher corpus. E54 collected5,000 training
 and1,000 development games. E55 is the paired multi-view input control.
 The original data and search trajectories remain exact when sidecars are saved.
 
@@ -283,7 +283,7 @@ all2,000 games complete,CI52.51–61.04%. The student uses the same bootstrap
 architecture and128 simulations as the fixed champion. Collection costs
 963.50s,training95.94s,and gate48.49s.
 This supports the larger stronger-teacher experiment after the small-corpus
-failures. The independent final endpoint assessment remains pending. Dev's
+failures. The independent E56 endpoint assessment later passed (see below). Dev's
 one blocked game keeps37 outcome labels unknown; it does not affect screen
 completion. Models, raw gates, source snapshots and dataset hashes are saved.
 
@@ -291,5 +291,6 @@ E55's paired multi-view control scores49.525% against E54 in2,000 complete
 games and is rejected. Its development input sensitivity changes very little.
 E56 trains from E54 with1,000 fresh800-simulation teacher games plus the5,000-
 game replay corpus. Its51.15% complete screen advances only the provisional
-lineage. The independent fixed-champion20,000-game assessment is running.
-No small-gain confirmation or external rank is claimed from these screens.
+lineage. The independent fixed-champion20,000-game assessment passed at55.26%,
+all games complete,CI54.13–56.39%. Strict promotion accepts E56.
+Small screen increments and external rank remain separately unconfirmed.

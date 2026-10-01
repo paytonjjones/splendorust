@@ -53,9 +53,10 @@ E58 completed its 5,000-game teacher corpus and advanced provisionally at
 51.8% over E56 in 2,000 complete games. E56 stays the confirmed champion.
 E59 is training a 50-epoch convergence control on the same corpus. Its
 3540m screen is reserved; do not duplicate it. E60 found 24.1% mean pairwise
-teacher policy TV on 62 fixed observations. A new teacher-aggregation mode
-is available, with exact original-data and trajectory checks. It has no
-playing-strength result yet.
+teacher policy TV on 62 fixed observations. E61 is collecting two-teacher
+averaged targets for the exact E58 trajectories; it has no strength result yet.
+Its3560m control and optional3570m lineage screens are reserved. The frozen
+endpoint milestone against E56 uses3580m after E58/E59/E61.
 Data and Torch remain under this worktree's ignored `local/`; do not duplicate
 active seed streams. Use the confirmed E56 model for further teacher work.
 
@@ -65,7 +66,8 @@ schedule worst-case point credit above50.5% can advance the lineage. This is
 not statistical confirmation. Strict decisions and95% intervals remain saved.
 Missing outcomes remain unknown. Do not apply this new rule to completed E53
 or earlier gates. After at most three candidate generations, assess the frozen
-endpoint against the fixed champion at reserved3310000000,20,000 paired games.
+endpoint against the fixed champion in20,000 paired games. The prior3310m
+assessment is complete; the current campaign reserves3580m.
 The champion changes only after independent supporting evidence.
 
 The eight-view diagnostic is exact when there is no opponent blind reservation.
