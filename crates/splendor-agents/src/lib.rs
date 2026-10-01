@@ -12,6 +12,8 @@ pub mod learned;
 pub mod native_environment;
 pub mod neural;
 pub mod neural_search;
+#[cfg(feature = "information-benchmark")]
+pub mod privileged_environment;
 pub mod transfer;
 mod transfer_data;
 mod value_weights;

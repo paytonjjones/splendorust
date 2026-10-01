@@ -24,6 +24,7 @@ name = "block_audit"
 test = true
 
 [features]
+information-benchmark = ["splendor-agents/information-benchmark"]
 environment-validation = ["splendor-agents/environment-validation"]
 benchmark-compat = ["splendor-core/benchmark-compat"]
 
@@ -38,3 +39,7 @@ test = true
 [[example]]
 name = "native_rules_probe"
 required-features = ["environment-validation"]
+
+[[example]]
+name = "privileged_native_worker"
+required-features = ["information-benchmark"]

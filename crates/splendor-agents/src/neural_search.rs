@@ -570,13 +570,20 @@ impl NeuralAgent {
         &mut self,
         o: &crate::native_environment::Observation,
     ) -> ([f32; 81], f64) {
+        let world = o
+            .determinize(&mut self.rng)
+            .expect("valid native observation");
+        self.native_world_leaf(o, &world)
+    }
+    fn native_world_leaf(
+        &mut self,
+        o: &crate::native_environment::Observation,
+        world: &crate::native_environment::State,
+    ) -> ([f32; 81], f64) {
         self.calls += 1;
         let model = self
             .external_model
             .expect("native environment requires frozen model");
-        let world = o
-            .determinize(&mut self.rng)
-            .expect("valid native observation");
         let mut x = if model.uses_native_noble_order() {
             world.features()
         } else {
@@ -919,6 +926,36 @@ impl crate::environment::PolicyValue<crate::environment::AlphaZeroNative> for Ne
     }
 }
 
+#[cfg(feature = "information-benchmark")]
+impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNative>
+    for NeuralAgent
+{
+    type Policy = [f32; 81];
+    fn evaluate(&mut self, o: &crate::privileged_environment::Observation) -> (Self::Policy, f64) {
+        self.native_world_leaf(
+            &o.observation,
+            &o.state().expect("validated privileged partition"),
+        )
+    }
+    fn choices(_: &crate::privileged_environment::Observation, _: &[u8]) -> Option<Vec<u8>> {
+        None
+    }
+    fn rollout_action(
+        &mut self,
+        o: &crate::privileged_environment::Observation,
+        legal: &[u8],
+    ) -> u8 {
+        let (policy, _) = <Self as crate::environment::PolicyValue<
+            crate::privileged_environment::PrivilegedNative,
+        >>::evaluate(self, o);
+        legal
+            .iter()
+            .copied()
+            .max_by(|&a, &b| policy[a as usize].total_cmp(&policy[b as usize]))
+            .unwrap()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1050,6 +1087,53 @@ mod tests {
                     assert!(a.correction_calls > 1);
                 }
             }
+        }
+    }
+    #[cfg(feature = "information-benchmark")]
+    #[test]
+    fn privileged_native_leaf_uses_exact_partition_at_every_actor() {
+        use crate::environment::{Environment, PolicyValue};
+        use crate::native_environment::{Observation as NativeObservation, Player};
+        use crate::privileged_environment::PrivilegedNative;
+        let c = GameState::new(2, 96).unwrap().observe(0);
+        let ids: Vec<_> = (0..10).filter(|id| c.nobles & (1 << id) != 0).collect();
+        let native = NativeObservation {
+            viewer: 0,
+            current: 0,
+            turns: 0,
+            bank: c.bank,
+            market: c.market,
+            remaining: c.remaining,
+            noble_ids: [ids[2], ids[0], ids[1]],
+            nobles: 7,
+            players: [Player::default(), Player::default()],
+        };
+        let model = Box::leak(Box::new(crate::transfer::Model::from_bytes(
+            include_bytes!("../../../research/e81/model/model.bin"),
+        )));
+        let mut world = native.determinize(&mut Rng::new(123)).unwrap();
+        let mut agent = NeuralAgent::new(987, SearchConfig::default());
+        agent.external_model = Some(model);
+        // Both actors have blind reservations; simulated chance changes the
+        // partition. Every evaluation must use exactly that simulated state.
+        for action in [24, 25, 80, 80] {
+            world.apply(action, &mut Rng::new(456), None).unwrap();
+            let o = PrivilegedNative::observe(&world, world.current_player());
+            assert_eq!(
+                PrivilegedNative::determinize(&o, &mut Rng::new(1)).features(),
+                world.features()
+            );
+            assert_eq!(
+                PrivilegedNative::determinize(&o, &mut Rng::new(2)).features(),
+                world.features()
+            );
+            let (p, v) = model.infer(&world.model_features());
+            let expected = (p, (f64::from(v[0]) + 1.0) / 2.0);
+            assert_eq!(
+                <NeuralAgent as PolicyValue<PrivilegedNative>>::evaluate(&mut agent, &o),
+                expected
+            );
+            assert_eq!(agent.native_world_leaf(&o.observation, &world), expected);
         }
     }
     #[test]

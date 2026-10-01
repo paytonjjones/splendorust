@@ -231,6 +231,13 @@ impl State {
     /// Full hidden fixtures are accepted only by the explicit validation build.
     #[cfg(feature = "environment-validation")]
     pub fn from_fixture(public: Observation, decks: [u128; 3]) -> Result<Self, &'static str> {
+        Self::from_partition(public, decks)
+    }
+    #[cfg(any(feature = "environment-validation", feature = "information-benchmark"))]
+    pub(crate) fn from_partition(
+        public: Observation,
+        decks: [u128; 3],
+    ) -> Result<Self, &'static str> {
         let s = Self { public, decks };
         for viewer in 0..2 {
             s.observe(viewer).validate()?;
@@ -267,6 +274,13 @@ impl State {
             return Err("fixture incomplete card partition");
         }
         Ok(s)
+    }
+
+    #[cfg(feature = "information-benchmark")]
+    pub(crate) fn partition(&self, viewer: u8) -> (Observation, [u128; 3]) {
+        let mut o = self.public.clone();
+        o.viewer = viewer;
+        (o, self.decks)
     }
 
     pub fn observe(&self, viewer: u8) -> Observation {

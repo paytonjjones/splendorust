@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "rust_tests_all_features": 126,
+  "python_information_statistics_tests": 9,
+  "python_existing_native_tests": 8,
+  "python_existing_diagnostic_tests": 7,
+  "differential_positions": 9204,
+  "differential_legal_successors": 312879,
+  "differential_complete_games": 100,
+  "public_worker_parity": "24 decisions PUCT/Gumbel against immutable 2f627b0 worker, including blind reservations",
+  "control_runner_parity": "8 whole games; all original non-timing fields match",
+  "validation_logs": {
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clippy-final.log": "4c371ac3c316b9ba0a84ec5c7bb4b3f380ab86d530c86cbec45d22a1c2019a87",
+    "tests-final-all-features-fixed.log": "7c7a539b56075c253db71f52a5550291816649dcdbd1f1af96c4877086d9952a",
+    "tests-default.log": "593935884610cd4f52cf08ef19f3b3557ddf601af000284869536b4e28de443b",
+    "build-final.log": "5e6e5c87b4660810a2d93e5a9ec683c1a512173f10fea5c8a37eb3d2cf57067f",
+    "tests-final-python.log": "762c60f037356286137c0e8e43b6580a8c3eba06162c68d4abe4ea9fb72d8402",
+    "native-tests.log": "643289bbe7d3131cedd1cada2e16c2882c3aa28af2e763a4bc6a523c79e79616",
+    "diagnostic-tests.log": "16fa6f32870a985dd2cc666e1f84fb61f9c2e7455c456d1920beeae7dace3a88",
+    "differential.log": "119c2957dfb3b608f56926c61319cc41d585ec7da51708b54d4827464ecec253"
+  },
+  "development_failures": [
+    {
+      "check": "Clippy",
+      "reason": "Unused native_wire::write in new privileged worker",
+      "correction": "Include public observation in sample audit response; fixed Clippy passed",
+      "log": "clippy.log"
+    },
+    {
+      "check": "Rust exact-partition regression",
+      "reason": "Test compared stored viewer metadata instead of actor-relative features",
+      "correction": "Compare exact feature arrays and neural output at each actor; final test passed",
+      "log": "tests-final-all-features.log"
+    },
+    {
+      "check": "Smoke replay",
+      "reason": "Local state digest variable shadowed digest function",
+      "correction": "Rename state_digest; all 16 smoke/control games replayed"
+    }
+  ],
+  "scope": "Information intervention only. Canonical core, native rules, original benchmark files, checkpoints and budgets unchanged. No policy promotion."
+}
