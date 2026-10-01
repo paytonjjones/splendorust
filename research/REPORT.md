@@ -34,7 +34,9 @@ outside the inner loop. E55's random hidden-view control was rejected at
 strong-teacher data. E58 used the confirmed model as an 800-simulation teacher and advanced
 provisionally at 51.8% over E56 in 2,000 complete games. Its 95% interval
 is 47.49–56.11%; this is not a confirmed gain. E56 stays the champion.
-E59 tests 50 epochs on the same corpus. E60 found 24.1% mean pairwise
+E59 tested 50 epochs on the same corpus and advanced provisionally at
+51.3% over E58 (2,000 complete games,CI47.11–55.49%). It selected epoch7
+and barely changed fit KL. Keep10epochs as the normal training budget. E60 found 24.1% mean pairwise
 teacher policy TV on 62 fixed observations. E61 tests two-teacher averaged
 targets with all E58 trajectories and inputs held fixed. Its corpus generation
 is active. These controls will guide the next structural change.

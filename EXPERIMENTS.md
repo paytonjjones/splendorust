@@ -2415,3 +2415,14 @@ results. E56 stays the fixed champion. After these three attempts(E58,E59,E61),
 freeze the endpoint and use the reserved3580000000,20,000-game milestone
 against E56. No candidate selection from this milestone. The milestone sits
 outside the inner model screens. Do not call an incomplete milestone a victory.
+
+**E59 completed:**2,000 complete games,51.3% over E58;95% interval
+47.11–55.49%. Provisional advance;strict retain. Selected epoch7 of50,
+training827.44s under overlap with teacher collection. Train/dev KL0.5721/
+0.5850,nearly unchanged from E58's0.5730/0.5843. This does not establish
+a useful fit gain from50epochs. Keep the normal10-epoch budget. The
+provisional model step is unconfirmed. The E61 target control continues.
+
+E60's finite-replicate KL dispersion is0.1630 for single searches and
+0.07913 for pairs averaged from the same eight-search set. This is a probe
+cohort statistic,not a population noise floor or model-capacity estimate.

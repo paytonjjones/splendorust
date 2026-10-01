@@ -12,7 +12,9 @@
       "argmax_disagreement": 0.24596774193548387,
       "mean_value_range": 0.06710892050496993,
       "mean_value_std": 0.021312914976566365,
-      "max_value_range": 0.5044017136096954
+      "max_value_range": 0.5044017136096954,
+      "mean_kl_to_eight_search_mean": 0.20408622379066324,
+      "two_search_mean_kl_to_eight_search_mean": 0.10147501337438943
     },
     "blind_stress": {
       "observations": 31,
@@ -21,7 +23,9 @@
       "argmax_disagreement": 0.20161290322580644,
       "mean_value_range": 0.04339127771316036,
       "mean_value_std": 0.013939849540641655,
-      "max_value_range": 0.1230810284614563
+      "max_value_range": 0.1230810284614563,
+      "mean_kl_to_eight_search_mean": 0.12194496303002002,
+      "two_search_mean_kl_to_eight_search_mean": 0.056780932020262534
     },
     "all": {
       "observations": 62,
@@ -30,8 +34,11 @@
       "argmax_disagreement": 0.22379032258064516,
       "mean_value_range": 0.05525009910906515,
       "mean_value_std": 0.017626382258604016,
-      "max_value_range": 0.5044017136096954
+      "max_value_range": 0.5044017136096954,
+      "mean_kl_to_eight_search_mean": 0.16301559341034164,
+      "two_search_mean_kl_to_eight_search_mean": 0.07912797269732598
     }
   },
-  "scope": "Fixed Strong observations; ordinary and blind stress cohorts; not self-play prevalence or playing strength"
+  "scope": "Fixed Strong observations; ordinary and blind stress cohorts; not self-play prevalence or playing strength",
+  "kl_scope": "Empirical finite-replicate dispersion on this cohort; not a population noise floor or a capacity estimate. Two-search averages are pairs from the same eight-search mean."
 }
