@@ -739,8 +739,6 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "flywheel-best128"
         | "flywheel-best256"
         | "flywheel-best800"
-        | "flywheel-gumbel"
-        | "flywheel-gumbel-noisy"
         | "flywheel-candidate"
         | "expert-policy" => {
             let mut config = search.clone();
@@ -767,18 +765,6 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
                 agent.external_model =
                     Some(neural_search::flywheel_model(name == "flywheel-candidate"));
             }
-            agent.gumbel = name.starts_with("flywheel-gumbel");
-            if agent.gumbel {
-                assert!(
-                    search.time_budget.is_none(),
-                    "Gumbel uses a fixed simulation budget"
-                );
-            }
-            agent.gumbel_noise = if name == "flywheel-gumbel-noisy" {
-                1.0
-            } else {
-                0.0
-            };
             agent.dynamic_fpu = name == "transfer-dynamic";
             agent.world_pool = if name == "transfer-pool8" {
                 8

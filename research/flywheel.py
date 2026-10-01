@@ -18,6 +18,8 @@ def main():
     p.add_argument('--shard-games',type=int,default=1000)
     p.add_argument('--iterations',type=int,default=128)
     p.add_argument('--teacher-iterations',type=int)
+    p.add_argument('--teacher-agent',choices=['flywheel-best','flywheel-gumbel','flywheel-gumbel-noisy'],default='flywheel-best')
+    p.add_argument('--actor-agent',choices=['flywheel-best','flywheel-gumbel','flywheel-gumbel-noisy'])
     p.add_argument('--actor-iterations',type=int,help='separate student actor budget; teacher iterations label its visited states')
     p.add_argument('--dev-teacher-iterations',type=int)
     p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
@@ -43,6 +45,7 @@ def main():
     p.add_argument('--target',type=Path,default=Path('local/research/flywheel-target'))
     a=p.parse_args()
     if a.sample_encoding_views and a.encoding_views!=8:p.error('view sampling requires --encoding-views 8')
+    if a.actor_agent and a.actor_iterations is None:p.error('separate actor requires --actor-iterations')
     if a.architecture=='residual' and not a.teacher_checkpoint:p.error('residual requires a learned teacher checkpoint')
     if a.trunk_blocks is not None and a.architecture!='bootstrap':p.error('trunk-blocks requires bootstrap')
     if a.policy_only and (a.architecture!='bootstrap' or a.distill_incumbent):p.error('policy-only requires bootstrap and no distillation')
@@ -118,7 +121,7 @@ def main():
                     preserve(output);preserve(meta);preserve(output.with_suffix('.context.bin'));preserve(output.with_suffix('.views.bin'))
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
                          '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
-                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),*(['--public-context'] if a.public_context else []),'--output',output],output.with_suffix('.log'))
+                         '--threads',a.threads,'--teacher-agent',a.teacher_agent,*(['--actor-agent',a.actor_agent] if a.actor_agent else []),'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),*(['--public-context'] if a.public_context else []),'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None,context_sha256=sha(output.with_suffix('.context.bin')) if a.public_context else None))
                 r=json.loads(receipt.read_text())
                 if a.public_context:assert sha(output.with_suffix('.context.bin'))==r['context_sha256']

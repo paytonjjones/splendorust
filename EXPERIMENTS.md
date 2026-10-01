@@ -2627,3 +2627,35 @@ E71 matched-data candidate49.70% against E68 over2,000 complete paired games,
 CI45.37–54.03%; retain E68. DevKL.61236786→.61235504, negligible change.
 The omission is real but this correction did not resolve the learning plateau.
 No champion change. Preserve the candidate and input infrastructure.
+
+## E72/E73 — Gumbel planning and value-based policy targets
+
+Reassessment: full-volume strong teachers, student-visited states, repeated
+teachers, longer fitting, residual capacity and explicit public context have
+not produced reliable compounding gains. Test a different policy improvement
+operator before another architecture. Implement Gumbel top-k/sequential halving
+at the root, mixed-value completed Q targets, and deterministic improved-policy
+allocation inside the tree. Reference: Danihelka et al., ICLR2022,
+https://openreview.net/forum?id=bERaNdoegnO and Google DeepMind mctx qtransforms.
+
+Use up to16 considered actions, c_visit50, c_scale0.1, completed-value range
+normalization as in mctx defaults. Root noise0 for evaluation,1 for collection.
+Preserve old agent names/default algorithms and exact legacy collection.
+Observation-only determinizations, three worlds, depth16, payment/return/noble
+handling and repetition guards stay unchanged. This is an adaptation to hidden
+information; the paper's exact-value guarantee is not a Splendor guarantee.
+
+E72 tests exact budget use, legal normalized targets including unvisited actions,
+mixed-value formulas, deterministic seeds and serial/parallel collection. E73
+screens the frozen E68 network with the new search at128 against old search128:
+2,000 paired games, fresh master4290m,14threads. Record actual decision cost and
+all incomplete statuses. Provisional research rule is point>50.5%; E56 remains
+champion. Subsequent training must test the new labels, not claim learning from
+this search-only screen. No coefficient sweep is planned.
+
+E72 passed105 release tests,strictClippy and35 Python checks (29 optional skips).
+Legacy934 rows byte exact;910 student-actor states unchanged by the new teacher;
+serial/parallel labels byte exact. Fixed568-observation cost ratio1.0169.
+E73 Gumbel128 scored52.825% against PUCT128 with frozen E68 over2,000 complete
+paired games (CI48.54–57.11%). Provisional search profile accepted; strict
+promotion retains baseline and E56 champion. Next test must demonstrate learning.

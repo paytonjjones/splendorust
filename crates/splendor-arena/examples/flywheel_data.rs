@@ -20,6 +20,10 @@ struct Args {
     iterations: u32,
     #[arg(long)]
     actor_iterations: Option<u32>,
+    #[arg(long, default_value = "flywheel-best")]
+    teacher_agent: String,
+    #[arg(long)]
+    actor_agent: Option<String>,
     #[arg(long, default_value_t = 16)]
     depth: u32,
     #[arg(long, default_value_t = 4)]
@@ -36,6 +40,18 @@ struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let a = Args::parse();
     assert!(a.games > 0 && a.threads > 0);
+    assert!(
+        a.actor_agent.is_none() || a.actor_iterations.is_some(),
+        "separate actor name requires separate actor budget"
+    );
+    assert!(matches!(
+        a.teacher_agent.as_str(),
+        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy"
+    ));
+    assert!(a.actor_agent.as_deref().is_none_or(|name| matches!(
+        name,
+        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy"
+    )));
     assert!(matches!(a.encoding_views, 1 | 8));
     assert!((1..=8).contains(&a.teacher_replicates));
     let native_ids = transfer::policy_logits(&std::array::from_fn(|i| i as f32));
@@ -70,13 +86,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut prng=Rng::new(a.policy_seed.wrapping_add(g as u64));
             let config=SearchConfig {iterations:a.iterations,depth:a.depth,..Default::default()};
             let actor_config=SearchConfig {iterations:a.actor_iterations.unwrap_or(a.iterations),..config.clone()};
-            let mut agents=[make_agent("flywheel-best",prng.next_u64(),&actor_config).unwrap(),make_agent("flywheel-best",prng.next_u64(),&actor_config).unwrap()];
+            let mut agents=[make_agent(a.actor_agent.as_deref().unwrap_or(&a.teacher_agent),prng.next_u64(),&actor_config).unwrap(),make_agent(a.actor_agent.as_deref().unwrap_or(&a.teacher_agent),prng.next_u64(),&actor_config).unwrap()];
             let mut encoder=Rng::new(prng.next_u64());
             let mut exploration=Rng::new(prng.next_u64());
             let mut view_encoder=Rng::new(prng.next_u64());
             // Independent label RNG. It never changes trajectory or encoder RNG.
             let mut target_rng=Rng::new(a.policy_seed.wrapping_add(g as u64).wrapping_add(0x9e3779b97f4a7c15));
-            let mut replicas: [Vec<_>;2]=std::array::from_fn(|_| ((if a.actor_iterations.is_some() {0} else {1})..a.teacher_replicates).map(|_|make_agent("flywheel-best",target_rng.next_u64(),&config).unwrap()).collect());
+            let mut replicas: [Vec<_>;2]=std::array::from_fn(|_| ((if a.actor_iterations.is_some() {0} else {1})..a.teacher_replicates).map(|_|make_agent(&a.teacher_agent,target_rng.next_u64(),&config).unwrap()).collect());
             let mut view_groups=Vec::new();
             let mut blind_rows=0usize;
             let mut state=GameState::new(2,setup).unwrap();
@@ -196,7 +212,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         drop(writer);
         std::fs::rename(context_tmp, a.output.with_extension("context.bin"))?;
     }
-    let manifest = serde_json::json!({"schema":"flywheel-v1","public_context":a.public_context,"context_format":"f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
+    let manifest = serde_json::json!({"schema":"flywheel-v1","teacher_agent":a.teacher_agent,"actor_agent":a.actor_agent.as_deref().unwrap_or(&a.teacher_agent),"public_context":a.public_context,"context_format":"f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
     std::fs::write(
         a.output.with_extension("json"),
         serde_json::to_vec_pretty(&manifest)?,

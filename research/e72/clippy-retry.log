@@ -1,0 +1,23 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error[E0599]: no variant, associated function, or constant named `ReserveBlind` found for enum `splendor_core::Action` in the current scope
+   --> crates/splendor-agents/src/neural_search.rs:726:37
+    |
+726 |                     action: Action::ReserveBlind(0),
+    |                                     ^^^^^^^^^^^^ variant, associated function, or constant not found in `splendor_core::Action`
+
+error[E0599]: no variant, associated function, or constant named `ReserveBlind` found for enum `splendor_core::Action` in the current scope
+   --> crates/splendor-agents/src/neural_search.rs:732:37
+    |
+732 |                     action: Action::ReserveBlind(1),
+    |                                     ^^^^^^^^^^^^ variant, associated function, or constant not found in `splendor_core::Action`
+
+error[E0599]: no variant, associated function, or constant named `ReserveBlind` found for enum `splendor_core::Action` in the current scope
+   --> crates/splendor-agents/src/neural_search.rs:738:37
+    |
+738 |                     action: Action::ReserveBlind(2),
+    |                                     ^^^^^^^^^^^^ variant, associated function, or constant not found in `splendor_core::Action`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `splendor-agents` (lib test) due to 3 previous errors
+warning: build failed, waiting for other jobs to finish...

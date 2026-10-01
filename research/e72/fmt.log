@@ -1,0 +1,14 @@
+error: `<` is interpreted as a start of generic arguments for `usize`, not a comparison
+   --> /Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/neural_search.rs:328:92
+    |
+328 |         while considered>1 && budget/(usize::BITS-(considered-1).leading_zeros()) as usize < considered { considered-=1; }
+    |                                                                                            ^ ------------ interpreted as generic arguments
+    |                                                                                            |
+    |                                                                                            not interpreted as comparison
+    |
+help: try comparing the cast value
+    |
+328 |         while considered>1 && budget/((usize::BITS-(considered-1).leading_zeros()) as usize) < considered { considered-=1; }
+    |                                      +                                                     +
+
+Error writing files: failed to resolve mod `neural_search`: cannot parse /Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/neural_search.rs

@@ -112,68 +112,6 @@ struct Node {
     visits: u32,
     value: f64,
 }
-impl Node {
-    /// Appendix D mixed value; unvisited actions have no invented empirical Q.
-    fn mixed_value(&self) -> f64 {
-        let n: u32 = self.edges.iter().map(|e| e.visits).sum();
-        if n == 0 {
-            return self.value;
-        }
-        let mass: f64 = self
-            .edges
-            .iter()
-            .filter(|e| e.visits > 0)
-            .map(|e| e.prior.max(f64::MIN_POSITIVE))
-            .sum();
-        let weighted: f64 = self
-            .edges
-            .iter()
-            .filter(|e| e.visits > 0)
-            .map(|e| e.prior.max(f64::MIN_POSITIVE) * e.sum / f64::from(e.visits) / mass)
-            .sum();
-        (self.value + f64::from(n) * weighted) / f64::from(n + 1)
-    }
-    fn completed_scores(&self) -> [f64; ACTIONS] {
-        let mut scores = [0.0; ACTIONS];
-        let mixed = self.mixed_value();
-        let mut lo = f64::INFINITY;
-        let mut hi = f64::NEG_INFINITY;
-        let mut max_visits = 0;
-        for (i, e) in self.edges.iter().enumerate() {
-            let q = if e.visits == 0 {
-                mixed
-            } else {
-                e.sum / f64::from(e.visits)
-            };
-            scores[i] = q;
-            lo = lo.min(q);
-            hi = hi.max(q);
-            max_visits = max_visits.max(e.visits);
-        }
-        let scale = (50.0 + f64::from(max_visits)) * 0.1 / (hi - lo).max(1e-8);
-        for (i, e) in self.edges.iter().enumerate() {
-            scores[i] = e.prior.max(f64::MIN_POSITIVE).ln() + scale * (scores[i] - lo);
-        }
-        scores
-    }
-    fn improved_policy(&self) -> [f64; ACTIONS] {
-        let mut policy = self.completed_scores();
-        let max = policy[..self.edges.len()]
-            .iter()
-            .copied()
-            .fold(f64::NEG_INFINITY, f64::max);
-        let mut total = 0.0;
-        for v in &mut policy[..self.edges.len()] {
-            *v = (*v - max).exp();
-            total += *v;
-        }
-        for v in &mut policy[..self.edges.len()] {
-            *v /= total;
-        }
-        policy
-    }
-}
-
 pub struct NeuralAgent {
     rng: Rng,
     config: SearchConfig,
@@ -193,9 +131,6 @@ pub struct NeuralAgent {
     pub world_pool: usize,
     pub rollout_depth: u32,
     pub persistent: bool,
-    /// Gumbel planning with completed-Q policy targets (E72).
-    pub gumbel: bool,
-    pub gumbel_noise: f64,
     cached_nodes: Vec<Node>,
     cached_index: HashMap<[u8; 192], usize>,
     root_policy: Option<[f32; ACTIONS]>,
@@ -222,8 +157,6 @@ impl NeuralAgent {
             world_pool: 0,
             rollout_depth: 0,
             persistent: false,
-            gumbel: false,
-            gumbel_noise: 0.0,
             cached_nodes: Vec::new(),
             cached_index: HashMap::new(),
             root_policy: None,
@@ -337,74 +270,6 @@ impl NeuralAgent {
         values[seat] = v;
         values
     }
-    fn gumbel_root(
-        &mut self,
-        o: &Observation,
-        root: usize,
-        nodes: &mut Vec<Node>,
-        index: &mut HashMap<[u8; 192], usize>,
-        worlds: &[GameState],
-    ) -> usize {
-        assert!(!self.persistent, "Gumbel requires a fresh root budget");
-        let budget = self.config.iterations as usize;
-        let mut noise = [0.0; ACTIONS];
-        for v in &mut noise[..nodes[root].edges.len()] {
-            if self.gumbel_noise > 0.0 {
-                let u = ((self.rng.next_u64() >> 11) as f64 + 0.5) / (1u64 << 53) as f64;
-                *v = -(-u.ln()).ln() * self.gumbel_noise;
-            }
-        }
-        let mut active: Vec<_> = (0..nodes[root].edges.len()).collect();
-        active.sort_by(|&a, &b| {
-            (noise[b] + nodes[root].edges[b].prior.max(f64::MIN_POSITIVE).ln())
-                .total_cmp(&(noise[a] + nodes[root].edges[a].prior.max(f64::MIN_POSITIVE).ln()))
-        });
-        if budget == 0 {
-            return active[0];
-        }
-        let mut considered = active.len().min(16).min(budget);
-        while considered > 1
-            && budget / ((usize::BITS - (considered - 1).leading_zeros()) as usize) < considered
-        {
-            considered -= 1;
-        }
-        active.truncate(considered);
-        let mut remaining = budget;
-        let mut simulation = 0usize;
-        while remaining > 0 {
-            let phases = if active.len() == 1 {
-                1
-            } else {
-                (usize::BITS - (active.len() - 1).leading_zeros()) as usize
-            };
-            let allocation = remaining / phases;
-            for turn in 0..allocation {
-                let edge = active[turn % active.len()];
-                let mut state = if worlds.is_empty() {
-                    o.determinize(&mut self.rng).expect("valid observation")
-                } else {
-                    worlds[simulation % worlds.len()].clone()
-                };
-                let seat = state.current_player();
-                let old = state.turns();
-                state.apply_action(nodes[root].edges[edge].action).unwrap();
-                let depth = self.config.depth.max(1) - u32::from(state.turns() != old);
-                let values = self.simulate(&mut state, depth, nodes, index);
-                nodes[root].visits += 1;
-                nodes[root].edges[edge].visits += 1;
-                nodes[root].edges[edge].sum += values[seat];
-                self.simulations += 1;
-                simulation += 1;
-            }
-            remaining -= allocation;
-            let scores = nodes[root].completed_scores();
-            active.sort_by(|&a, &b| (noise[b] + scores[b]).total_cmp(&(noise[a] + scores[a])));
-            if active.len() > 1 {
-                active.truncate(active.len().div_ceil(2));
-            }
-        }
-        active[0]
-    }
     fn simulate(
         &mut self,
         state: &mut GameState,
@@ -460,33 +325,21 @@ impl NeuralAgent {
             return result;
         };
         let node = &nodes[i];
-        let edge = if self.gumbel {
-            let policy = node.improved_policy();
-            (0..node.edges.len())
-                .max_by(|&a, &b| {
-                    let score = |j: usize| {
-                        policy[j] - f64::from(node.edges[j].visits) / f64::from(node.visits + 1)
+        let edge = (0..node.edges.len())
+            .max_by(|&a, &b| {
+                let score = |j: usize| {
+                    let e = &node.edges[j];
+                    let q = if e.visits == 0 {
+                        node.value - self.fpu_reduction
+                    } else {
+                        e.sum / f64::from(e.visits)
                     };
-                    score(a).total_cmp(&score(b))
-                })
-                .unwrap()
-        } else {
-            (0..node.edges.len())
-                .max_by(|&a, &b| {
-                    let score = |j: usize| {
-                        let e = &node.edges[j];
-                        let q = if e.visits == 0 {
-                            node.value - self.fpu_reduction
-                        } else {
-                            e.sum / f64::from(e.visits)
-                        };
-                        q + self.cpuct * e.prior * f64::from(node.visits + 1).sqrt()
-                            / f64::from(e.visits + 1)
-                    };
-                    score(a).total_cmp(&score(b))
-                })
-                .unwrap()
-        };
+                    q + self.cpuct * e.prior * f64::from(node.visits + 1).sqrt()
+                        / f64::from(e.visits + 1)
+                };
+                score(a).total_cmp(&score(b))
+            })
+            .unwrap();
         let action = node.edges[edge].action;
         debug_assert!(legal.contains(&action));
         let old = state.turns();
@@ -603,55 +456,37 @@ impl Agent for NeuralAgent {
         let worlds: Vec<_> = (0..self.world_pool)
             .map(|_| o.determinize(&mut self.rng).expect("valid observation"))
             .collect();
-        let gumbel_selected = if self.gumbel {
-            Some(self.gumbel_root(o, root, &mut nodes, &mut index, &worlds))
-        } else {
-            None
-        };
-        if !self.gumbel {
-            for simulation in 0..self.config.iterations {
-                if simulation > 0
-                    && self
-                        .config
-                        .time_budget
-                        .is_some_and(|t| start.elapsed() >= t)
-                {
-                    break;
-                }
-                let mut state = if worlds.is_empty() {
-                    o.determinize(&mut self.rng).expect("valid observation")
-                } else {
-                    worlds[simulation as usize % worlds.len()].clone()
-                };
-                self.simulate(&mut state, self.config.depth.max(1), &mut nodes, &mut index);
-                self.simulations += 1;
+        for simulation in 0..self.config.iterations {
+            if simulation > 0
+                && self
+                    .config
+                    .time_budget
+                    .is_some_and(|t| start.elapsed() >= t)
+            {
+                break;
             }
+            let mut state = if worlds.is_empty() {
+                o.determinize(&mut self.rng).expect("valid observation")
+            } else {
+                worlds[simulation as usize % worlds.len()].clone()
+            };
+            self.simulate(&mut state, self.config.depth.max(1), &mut nodes, &mut index);
+            self.simulations += 1;
         }
-        let selected = if let Some(i) = gumbel_selected {
-            &nodes[root].edges[i]
-        } else {
-            nodes[root]
-                .edges
-                .iter()
-                .max_by(|a, b| {
-                    a.visits
-                        .cmp(&b.visits)
-                        .then_with(|| a.prior.total_cmp(&b.prior))
-                })
-                .unwrap()
-        };
+        let selected = nodes[root]
+            .edges
+            .iter()
+            .max_by(|a, b| {
+                a.visits
+                    .cmp(&b.visits)
+                    .then_with(|| a.prior.total_cmp(&b.prior))
+            })
+            .unwrap();
         let visits: u32 = nodes[root].edges.iter().map(|e| e.visits).sum();
         if visits > 0 {
             let mut policy = [0.0; ACTIONS];
-            let improved = if self.gumbel {
-                Some(nodes[root].improved_policy())
-            } else {
-                None
-            };
-            for (i, edge) in nodes[root].edges.iter().enumerate() {
-                policy[action_index(edge.action).unwrap()] = improved
-                    .as_ref()
-                    .map_or(edge.visits as f32 / visits as f32, |p| p[i] as f32);
+            for edge in &nodes[root].edges {
+                policy[action_index(edge.action).unwrap()] = edge.visits as f32 / visits as f32;
             }
             self.root_policy = Some(policy);
             self.root_value = Some((selected.sum / f64::from(selected.visits)) as f32);
@@ -718,98 +553,6 @@ pub fn flywheel_model(candidate: bool) -> &'static super::transfer::Model {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn completed_q_policy_and_mixed_value() {
-        let mut node = Node {
-            edges: vec![
-                Edge {
-                    action: Action::BuyVisible(0),
-                    prior: 0.6,
-                    visits: 2,
-                    sum: 1.6,
-                },
-                Edge {
-                    action: Action::BuyVisible(1),
-                    prior: 0.3,
-                    visits: 1,
-                    sum: 0.2,
-                },
-                Edge {
-                    action: Action::BuyVisible(2),
-                    prior: 0.1,
-                    visits: 0,
-                    sum: 0.0,
-                },
-            ],
-            visits: 3,
-            value: 0.4,
-        };
-        let weighted = (0.6 * 0.8 + 0.3 * 0.2) / 0.9;
-        assert!((node.mixed_value() - (0.4 + 3.0 * weighted) / 4.0).abs() < 1e-12);
-        let p = node.improved_policy();
-        assert!((p[..3].iter().sum::<f64>() - 1.0).abs() < 1e-12);
-        assert!(p[2] > 0.0 && p[0] > p[1]);
-        for e in &mut node.edges {
-            e.visits = 1;
-            e.sum = 0.5;
-        }
-        let p = node.improved_policy();
-        for (i, e) in node.edges.iter().enumerate() {
-            assert!((p[i] - e.prior).abs() < 1e-12);
-        }
-        node.edges[0].sum = 0.9;
-        node.edges[1].sum = 0.1;
-        node.edges[2].sum = 0.4;
-        let p = node.improved_policy();
-        let original: f64 = node.edges.iter().map(|e| e.prior * e.sum).sum();
-        let improved: f64 = node
-            .edges
-            .iter()
-            .enumerate()
-            .map(|(i, e)| p[i] * e.sum)
-            .sum();
-        assert!(improved >= original);
-    }
-    #[test]
-    fn gumbel_exact_budget_legal_targets_and_seed_identity() {
-        for budget in [0, 1, 2, 3, 7, 8, 16, 128] {
-            let state = GameState::new(2, 4290000000).unwrap();
-            let mut legal = ActionSet::new();
-            state.legal_actions(&mut legal);
-            let o = state.observe(0);
-            let config = SearchConfig {
-                iterations: budget,
-                depth: 4,
-                ..Default::default()
-            };
-            let mut agents = std::array::from_fn::<_, 2, _>(|_| {
-                let mut a = NeuralAgent::new(72, config.clone());
-                a.transferred = true;
-                a.gumbel = true;
-                a.gumbel_noise = 1.0;
-                a.world_pool = 3;
-                a.uniform_prior = 0.0;
-                a
-            });
-            let actions = agents.each_mut().map(|a| a.select_action(&o, &legal));
-            assert_eq!(actions[0], actions[1]);
-            assert!(legal.contains(&actions[0]));
-            assert_eq!(agents[0].simulations, u64::from(budget));
-            assert_eq!(agents[0].root_policy, agents[1].root_policy);
-            if budget > 0 {
-                let p = agents[0].root_policy.unwrap();
-                assert!(p.iter().all(|v| v.is_finite() && *v >= 0.0));
-                assert!((p.iter().sum::<f32>() - 1.0).abs() < 1e-5);
-                for (i, v) in p.iter().enumerate() {
-                    if *v > 0.0 {
-                        assert!(legal.iter().any(|a| action_index(*a) == Some(i)));
-                    }
-                }
-                let v = agents[0].root_value.unwrap();
-                assert!(v.is_finite() && (0.0..=1.0).contains(&v));
-            }
-        }
-    }
     #[test]
     fn transferred_keys_include_the_network_turn_input() {
         let state = GameState::new(2, 620000007).unwrap();

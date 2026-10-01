@@ -296,3 +296,9 @@ unchanged 2232-byte training row). The runner records its hash; SPINFO57 teacher
 and warm starts enable context automatically. Only full bootstrap students are
 supported. Old corpora need exact reconstruction; missing sidecars fail. E70
 validates compatibility; E71 retains E68 after a negative matched-data screen.
+
+Provisional Gumbel search: `flywheel-gumbel` loads SPLENDOR_BEST_MODEL and uses
+noise0. `flywheel-gumbel-noisy` uses noise1 for teacher exploration. Both use
+completed-Q targets instead of visits. Collection supports `--teacher-agent`
+and `--actor-agent`; a separate actor name requires `--actor-iterations`.
+E73 is a frozen-model screen, not proof of a learned gain or public rank.

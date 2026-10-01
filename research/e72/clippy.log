@@ -1,0 +1,26 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error: `<` is interpreted as a start of generic arguments for `usize`, not a comparison
+   --> crates/splendor-agents/src/neural_search.rs:328:92
+    |
+328 |         while considered>1 && budget/(usize::BITS-(considered-1).leading_zeros()) as usize < considered { considered-=1; }
+    |                                                                                            ^ ------------ interpreted as generic arguments
+    |                                                                                            |
+    |                                                                                            not interpreted as comparison
+    |
+help: try comparing the cast value
+    |
+328 |         while considered>1 && budget/((usize::BITS-(considered-1).leading_zeros()) as usize) < considered { considered-=1; }
+    |                                      +                                                     +
+
+error[E0502]: cannot borrow `state` as immutable because it is also borrowed as mutable
+   --> crates/splendor-agents/src/neural_search.rs:340:88
+    |
+340 |                 let values=self.simulate(&mut state,self.config.depth.max(1)-u32::from(state.turns()!=old),nodes,index);
+    |                                 -------- ---------- mutable borrow occurs here         ^^^^^ immutable borrow occurs here
+    |                                 |
+    |                                 mutable borrow later used by call
+
+For more information about this error, try `rustc --explain E0502`.
+error: could not compile `splendor-agents` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
