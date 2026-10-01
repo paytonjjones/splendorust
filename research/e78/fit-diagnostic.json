@@ -1,0 +1,71 @@
+{
+  "schema": "distillation-fit-diagnostic-v1",
+  "checkpoint_sha256": "6c48c8871566eb8339b34fb1d441e13e75f91fc9e8a50e55e95d2d91bf813ce8",
+  "script_sha256": "631e56b08b9ddc480b530c7533a125c27ccdf52750890045862ac0671080a1d0",
+  "train_files": [
+    {
+      "path": "local/research/e74/train/000000.bin",
+      "sha256": "aee15eec0241bc6ffb8463c2376d8ca57bf9fd06ffe6fda8ee187bfa0a2cb767",
+      "rows": 55572,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e74/train/001000.bin",
+      "sha256": "18b621c1ebe296ef285af356daf2fb76699ec244a19ffd46da35fff051d3ae24",
+      "rows": 55598,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e74/train/002000.bin",
+      "sha256": "afd9e2e8274c2ceed6d2a3c54e3f93abae8311dbe6b2ec6337b68ee6b9995cea",
+      "rows": 55524,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e74/train/003000.bin",
+      "sha256": "c0ae0e3e03e71616b567b89703113f31d5a8b529516e330cf3b5e82a7d2ec8b9",
+      "rows": 55534,
+      "setups": 1000
+    },
+    {
+      "path": "local/research/e74/train/004000.bin",
+      "sha256": "b74c12993e773c4dfba1da8dcc1f3ea7e2825f78b16d23938319b258f49eea2a",
+      "rows": 55560,
+      "setups": 1000
+    }
+  ],
+  "dev_files": [
+    {
+      "path": "local/research/e74/dev.bin",
+      "sha256": "086d99a7c004d7b58bac1972cc662e7aed785715d233485a5f2320193283eca2",
+      "rows": 55476,
+      "setups": 1000
+    }
+  ],
+  "train": {
+    "rows": 277788,
+    "policy_ce": 1.8748273974040217,
+    "target_entropy": 0.44975748023271084,
+    "policy_kl": 1.4250699171713108,
+    "argmax_agreement": 0.41480553515630625,
+    "target_max_probability": 0.8312965436021369,
+    "target_probability_of_student_argmax": 0.3967824040532828,
+    "value_brier": 0.21424541820543866,
+    "mean_policy_tv": 0.6213130606244374
+  },
+  "dev": {
+    "rows": 55476,
+    "policy_ce": 1.9683667842428483,
+    "target_entropy": 0.45014435525187696,
+    "policy_kl": 1.5182224289909714,
+    "argmax_agreement": 0.3908176508760545,
+    "target_max_probability": 0.8312155767373821,
+    "target_probability_of_student_argmax": 0.3750003908490024,
+    "value_brier": 0.21612730555032736,
+    "mean_policy_tv": 0.6335409268810974
+  },
+  "context_files": [],
+  "device": "mps",
+  "scope": "Policy/label fit on observation encodings. A small train/dev gap alone does not distinguish capacity, optimization, or target ambiguity.",
+  "seconds": 5.369530500029214
+}

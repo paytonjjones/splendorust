@@ -1,0 +1,44 @@
+warning: unused import: `Agent`
+ --> research/e80/compare.rs:1:23
+  |
+1 | use splendor_agents::{Agent,make_agent,SearchConfig,neural::action_index};
+  |                       ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0507]: cannot move out of `config`, a captured variable in an `Fn` closure
+   --> research/e80/compare.rs:10:30
+    |
+  6 | ...nt::now();let config=SearchConfig{iterations:800,depth:16,..Default::default()};
+    |                  ------ ---------------------------------------------------------- move occurs because `config` has type `SearchConfig`, which does not implement the `Copy` trait
+    |                  |
+    |                  captured outer variable
+...
+  9 | ...nstall(||setups.par_iter().enumerate().flat_map_iter(|(block,&setup)|{
+    |                                                         ---------------- captured by this `Fn` closure
+ 10 | ...o_iter().map(move |rotation|{
+    |                 ^^^^^^^^^^^^^^^ `config` is moved here
+ 11 | ...eState::new(2,setup).unwrap();let mut agents=[make_agent("flywheel-gumbel",4531000000+block as u64*2,&config).unwrap(),make_agen...
+    |                                                                                                          ------ variable moved due to use in closure
+    |
+help: `Fn` and `FnMut` closures require captured values to be able to be consumed multiple times, but `FnOnce` closures may consume them only once
+   --> /Users/payton.jones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rayon-1.12.0/src/iter/mod.rs:903:12
+    |
+903 |         F: Fn(Self::Item) -> SI + Sync + Send,
+    |            ^^^^^^^^^^^^^^^^^^^^
+help: consider cloning the value before moving it into the closure
+    |
+ 10 ~   [0usize,1].into_iter().map({
+ 11 +   let value = config.clone();
+ 12 ~   move |rotation|{
+ 13 ~    let mut s=GameState::new(2,setup).unwrap();let mut agents=[make_agent("flywheel-gumbel",4531000000+block as u64*2,&value).unwrap(),make_agent("flywheel-gumbel",4531000001+block as u64*2,&config).unwrap()];
+ 14 |    let mut legal=ActionSet::new();let mut count=0;let mut agreement=0;let mut mass=0.;let mut blocked=false;
+...
+ 26 |    serde_json::json!({"block":block,"rotation":rotation,"setup":setup,"status":if outcome.is_some(){"complete"}else if blocked{"blocked"}else{"capped"},"policy_argmax_credit":credit,"turns":s.turns(),"teacher_decisions":count,"selected_argmax_agreements":agreement,"selected_target_probability_sum":mass,"simulations":agents.iter().map(|a|a.work_counts().0).sum::<u64>(),"inferences":agents.iter().map(|a|a.work_counts().1).sum::<u64>()})
+ 27 ~   }
+ 28 ~   })
+    |
+
+error: aborting due to 1 previous error; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0507`.

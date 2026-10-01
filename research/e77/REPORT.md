@@ -9,3 +9,5 @@ Three alternating timing runs over 568 fixed Strong-game observations measured a
 Initial native hash: `a2ba3e95b5311f5da932d637da81dd91dcbb77571ab01b4eacea677076a8ac90`.
 
 The initial test compile failed due to an incorrect counter name. The corrected test suite passed; both logs remain. Standalone timing compilation required Rust thin LTO to match the release dependencies. No rule, card, RNG or replay changes were made. E78 trains this structure on the fixed E74 corpus and uses fresh paired screening seeds. No strength gain is claimed by these checks.
+
+Native Gumbel root-only identity also passed across720 decisions in8 complete native-profile games. All8 native information tests passed. The first test invocation lacked native worker paths; ignored local worker links were corrected, and previous workers were preserved under local/research/e77/previous-workers. Both attempts remain.
