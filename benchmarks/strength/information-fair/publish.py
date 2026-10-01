@@ -20,7 +20,11 @@ def status(step,**details):
 
 def command(args):
     print('RUN',*map(str,args),flush=True)
-    return subprocess.check_output(list(map(str,args)),cwd=ROOT,stderr=subprocess.STDOUT,text=True)
+    try:
+        return subprocess.check_output(list(map(str,args)),cwd=ROOT,stderr=subprocess.STDOUT,text=True)
+    except subprocess.CalledProcessError as error:
+        print(error.output,flush=True)
+        raise
 
 
 def check_artifacts():
