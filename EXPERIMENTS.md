@@ -2806,3 +2806,5 @@ E88 result: select provisional lineage at 51.05% in 2,000 complete games. Strict
 ## E89 — Compound the public-root lineage
 
 Hypothesis: E88 can compress its own stronger 800-simulation policy into the same 128-simulation model. Generate 5,000 fresh full games and 1,000 development games, retain one fixed E87 replay shard, and continue the E88 attention checkpoint for ten epochs. Screen 2,000 paired games against E88; retain E81 as champion. See research/e89/PREREGISTRATION.md.
+
+E89 result: reject at 47.6% in 2,000 complete paired games against E88. Retain E88 provisional / E81 champion. All 6,000 collection games completed; 334,260 train and 55,782 dev positions. Native parity, 118 tests, strict Clippy and legacy bytes pass. Full shared-host cycle 1,849.94s; selected epoch 3 of 10. Next diagnose independent teacher-action stability. See research/e89/REPORT.md.

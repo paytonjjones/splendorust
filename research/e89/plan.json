@@ -1,0 +1,32 @@
+{
+  "schema": "attention-lineage-fullgame-v1",
+  "parent_sha256": "095020d9adb9f1d60978a19ac754fe21477d700e54c0afcac3cbee28c31b4331",
+  "parent_checkpoint_sha256": "15ea01c96428a972377c1939bff514782b199916273170f6ed5d8f296e686378",
+  "champion_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "collector_sha256": "b02514babb9c7410c9ef3d896f87e618cdcdda6e85006d054178a91039c1af91",
+  "collector_source_sha256": "972e63f14cd7b2abc0aea3938f729435d5bcd5e94f0e9354445a18c201e4f7d8",
+  "actor_agent": "flywheel-root-gumbel-best",
+  "teacher_agent": "flywheel-root-gumbel-best",
+  "actor_iterations": 800,
+  "teacher_iterations": 800,
+  "teacher_action_targets": true,
+  "threads": 14,
+  "depth": 16,
+  "train_games": 5000,
+  "dev_games": 1000,
+  "train_seed": 4730000000,
+  "dev_seed": 4740000000,
+  "screen_seed": 4750000000,
+  "champion_check_seed": 4760000000,
+  "training_seed": 800000021,
+  "epochs": 10,
+  "replay_source": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e87/train/004000.bin",
+  "replay_sha256": "107af8d89e248b1f327ee3d5b00b1d7f84acf2df1b79fa30d2a562003c8b428a",
+  "scripts": {
+    "run.py": "0f664fa59833944b45e025d870e8a88820e91ac51d8ad0aae8787b16b8ab775c",
+    "train.py": "41ad9c0e1ef2315bf29d26fad8fa5b9cfdd49038d2fa980bbcce1b46a5ab12c3",
+    "attention_model.py": "1f5f2a59a32aeae0827a2c23eef2ca76ec3eb8cf64318e0f09a0624dbdbdee8c"
+  },
+  "frozen_public_features_sha256": "6d4ba81a599af29397716c882a4a7587127969228ece6d419a509ffb143c3d87",
+  "selection": "worst-case requested credit >50.5%; champion unchanged"
+}
