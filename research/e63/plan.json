@@ -1,0 +1,38 @@
+{
+  "schema": "residual-capacity-v1",
+  "base_sha256": "76d45006d332dcd80635150f23917c321245f49cfb10a8e77654d3096505a918",
+  "base_checkpoint_sha256": "6ca9e5df2de8b21217a6529ac20b35c5e5a0163e9fb18edd1618dab913dc6ffd",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e56/train.bin",
+      "sha256": "209dafe9c1fe26007c3ff9a33f65df220b996f3423f7b1e6d921f6e527b571a5"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e58/train.bin",
+      "sha256": "7e060b30f2765470aa95b277dfc02ddac88f0f466fa8e72ef2d1ebe74ff73312"
+    }
+  ],
+  "dev": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e58/dev.bin",
+    "sha256": "2ca7195ced691ee793d4d21d125185b992fe8ad9d9793a7967bf3a7ebdcff73b"
+  },
+  "epochs": 20,
+  "training_seed": 800000011,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "screen_seeds": [
+    3610000000,
+    3620000000
+  ],
+  "games": 2000,
+  "threads": 14,
+  "budget_rule": "largest multiple of eight with median decision cost <= 1.05 * E59 NN128; selected before outcomes",
+  "script_sha256": "f68218353a181ea5bfd68286255a3db8a2d7dd83618acdaca69ea68a8135700c",
+  "source_sha256": {
+    "train_flywheel.py": "e16e21d9a29f3b1695cd916e66506364d622a4e5dcb7c77c2d3f9692a6f8a668",
+    "flywheel_model.py": "a756ea5d23652cea3f6e1a6fa0f02a0a6508e86340e5236ce2e853090ae8aa62",
+    "gated_model.py": "32d767e7c3e06b4e23a30b8335b2c89867ab9d3f2b50e987d29d736fb9836239",
+    "residual_model.py": "512e42e8e9ba175472bd37c9e3b5a3bebb76e56c46f15e355942ca72ff915c1e",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4"
+  }
+}

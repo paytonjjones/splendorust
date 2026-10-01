@@ -11,7 +11,13 @@ def main():
     p.add_argument('--checkpoint',required=True);p.add_argument('--output',required=True)
     p.add_argument('--device',default='mps');a=p.parse_args();torch.set_num_threads(2)
     train,ts,tf=open_rows(a.train);dev,ds,df=open_rows(a.dev);assert not ts&ds
-    model=bootstrap(a.checkpoint).to(a.device).eval();start=time.monotonic()
+    payload=torch.load(a.checkpoint,map_location='cpu',weights_only=True)
+    forward=raw
+    if payload.get('architecture')=='residual':
+        from residual_model import Residual
+        model=Residual(a.checkpoint);forward=lambda model,x:model(x)
+    else:model=bootstrap(a.checkpoint)
+    model=model.to(a.device).eval();start=time.monotonic()
     def evaluate(shards):
         total=np.zeros(7);count=0;valid_outcomes=0
         with torch.no_grad():
@@ -21,7 +27,7 @@ def main():
                     mask=torch.from_numpy(np.array(b['mask'],copy=True)).to(a.device)
                     target=torch.from_numpy(np.array(b['policy'],copy=True)).to(a.device)
                     assert torch.isfinite(target).all() and torch.allclose(target.sum(-1),torch.ones(len(b),device=a.device),atol=1e-5)
-                    logits,value=raw(model,x);lp=logits.masked_fill(mask==0,-1e9).log_softmax(-1)
+                    logits,value=forward(model,x);lp=logits.masked_fill(mask==0,-1e9).log_softmax(-1)
                     entropy=-(target*target.clamp_min(1e-30).log()).sum(-1)
                     ce=-(target*lp).sum(-1);chosen=lp.argmax(-1)
                     max_target=target.max(-1).values;greedy_target=target.gather(1,chosen[:,None])[:,0]

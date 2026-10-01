@@ -269,3 +269,17 @@ The first teacher still selects all trajectory and opening actions. Additional
 label simulations and inference calls are reported separately. The default
 is1; its training bytes match the original collector exactly. This mode has
 passed trajectory/input/label-mask checks, but has no strength result yet.
+
+The `residual` architecture keeps a learned bootstrap base fixed and trains a
+512-input RMSNorm/SwiGLU correction branch. It requires a learned checkpoint.
+Use `--architecture residual --teacher-model research/e59/model/model.bin
+--teacher-checkpoint research/e59/model/model.pt` with the flywheel runner.
+The correction heads start at zero. The trainer checks that all base weights
+and normalization buffers stay unchanged and exports an `SPRESID1` native file.
+Existing residual checkpoints can continue training. PyTorch stays offline.
+
+Use `endpoint_cost --budget-sweep` with `SPLENDOR_BEST_MODEL` and
+`SPLENDOR_CANDIDATE_MODEL` to measure candidate budgets from 8 to 128 in steps
+of eight against a fixed 128-simulation baseline. Three runs alternate order
+on the same 568 observations. Select the cost budget before arena outcomes.
+The sweep is a host-specific cost measurement, not a playing-strength result.
