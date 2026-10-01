@@ -14,3 +14,5 @@ This is a Rust simulator/research project. Read README.md, VALIDATION.md, and EX
 - Keep visual assets, runtime LLM calls, GUI work, and heavyweight ML frameworks out of this project.
 
 - Inner learning loop: use about 2,000 paired games; reserve 20,000 confirmations for milestones, external claims, or ambiguous results. Measure arena/self-play scaling above four threads.
+
+- GitHub Actions is disabled at the user's request. Keep it disabled during research work. Run required checks locally.

@@ -2802,3 +2802,7 @@ E87 result: retain E81. Strong-policy full-game self-play produced278,646 fresh 
 Hypothesis: flat root corrections do not learn relational card/player decisions. Test a64-channel,4-head,2-block pre-RMSNorm attention branch over56 public board rows and one public card-membership/context token. Preserve frozen E81 sampled-input leaf inference. Reuse E87 strong-policy data, exact public means, and a fixed20-epoch recipe; require native parity and<=1.15 root cost before2,000 paired Gumbel128 games at4720000000. Full preregistration: research/e88/PREREGISTRATION.md.
 
 E88 result: select provisional lineage at 51.05% in 2,000 complete games. Strict gate retains E81; no champion change. Native parity, 118 release tests, strict Clippy and 1.128695 root-cost ratio pass. Twenty epochs took 504.04s; selected epoch 5. See research/e88/REPORT.md.
+
+## E89 — Compound the public-root lineage
+
+Hypothesis: E88 can compress its own stronger 800-simulation policy into the same 128-simulation model. Generate 5,000 fresh full games and 1,000 development games, retain one fixed E87 replay shard, and continue the E88 attention checkpoint for ten epochs. Screen 2,000 paired games against E88; retain E81 as champion. See research/e89/PREREGISTRATION.md.

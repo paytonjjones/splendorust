@@ -48,11 +48,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
     assert!(matches!(
         a.teacher_agent.as_str(),
-        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy"
+        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy" | "flywheel-root-gumbel-best"
     ));
     assert!(a.actor_agent.as_deref().is_none_or(|name| matches!(
         name,
-        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy"
+        "flywheel-best" | "flywheel-gumbel" | "flywheel-gumbel-noisy" | "flywheel-root-gumbel-best"
     )));
     assert!(matches!(a.encoding_views, 1 | 8));
     assert!((1..=8).contains(&a.teacher_replicates));
