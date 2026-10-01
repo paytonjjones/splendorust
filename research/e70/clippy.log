@@ -1,0 +1,28 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error: this `if` statement can be collapsed
+   --> crates/splendor-agents/src/transfer.rs:465:9
+    |
+465 | /         if let Architecture::Bootstrap(model) = &self.architecture {
+466 | |             if model.first.input == 57 {
+467 | |                 let mut input = [0.0; 399];
+468 | |                 input[..392].copy_from_slice(x);
+...   |
+473 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+465 ~         if let Architecture::Bootstrap(model) = &self.architecture
+466 ~             && model.first.input == 57 {
+467 |                 let mut input = [0.0; 399];
+...
+471 |                 return (model.policy(&h, true), model.value(&h, true));
+472 ~             }
+    |
+
+error: could not compile `splendor-agents` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

@@ -1,0 +1,34 @@
+usage: train_flywheel.py [-h] --train TRAIN [TRAIN ...] --dev DEV [DEV ...]
+                         --output OUTPUT [--warmstart WARMSTART]
+                         [--epochs EPOCHS] [--batch-size BATCH_SIZE]
+                         [--device DEVICE] [--seed SEED]
+                         [--selection {outcome,teacher,distillation}]
+                         [--trained-only]
+                         [--architecture {bootstrap,gated,split-bootstrap,residual}]
+                         [--learning-rate LEARNING_RATE] [--bitplanes]
+                         [--public-context]
+                         [--distill-teacher DISTILL_TEACHER]
+                         [--trunk-blocks TRUNK_BLOCKS] [--policy-only]
+                         [--greedy-targets] [--sample-encoding-views]
+
+options:
+  -h, --help            show this help message and exit
+  --train TRAIN [TRAIN ...]
+  --dev DEV [DEV ...]
+  --output OUTPUT
+  --warmstart WARMSTART
+  --epochs EPOCHS
+  --batch-size BATCH_SIZE
+  --device DEVICE
+  --seed SEED
+  --selection {outcome,teacher,distillation}
+  --trained-only
+  --architecture {bootstrap,gated,split-bootstrap,residual}
+  --learning-rate LEARNING_RATE
+  --bitplanes
+  --public-context
+  --distill-teacher DISTILL_TEACHER
+  --trunk-blocks TRUNK_BLOCKS
+  --policy-only
+  --greedy-targets
+  --sample-encoding-views

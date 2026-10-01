@@ -24,15 +24,12 @@ def main():
     p.add_argument('--architecture',choices=['bootstrap','gated','split-bootstrap','residual'],default='bootstrap')
     p.add_argument('--learning-rate',type=float,default=1e-4)
     p.add_argument('--bitplanes',action='store_true')
-    p.add_argument('--public-context',action='store_true')
     p.add_argument('--distill-teacher')
     p.add_argument('--trunk-blocks',type=int)
     p.add_argument('--policy-only',action='store_true')
     p.add_argument('--greedy-targets',action='store_true')
     p.add_argument('--sample-encoding-views',action='store_true')
     a=p.parse_args()
-    if a.warmstart and torch.load(a.warmstart,map_location='cpu',weights_only=True).get('input_rows',56)==57:a.public_context=True
-    if a.public_context and (a.architecture!='bootstrap' or a.policy_only or a.distill_teacher):p.error('public context requires full bootstrap training')
     if a.architecture=='residual' and not a.warmstart:p.error('residual requires a learned base checkpoint')
     if a.trunk_blocks is not None and a.architecture!='bootstrap':p.error('trunk-blocks requires bootstrap')
     if a.policy_only and a.architecture!='bootstrap':p.error('policy-only requires the bootstrap architecture')
@@ -44,16 +41,6 @@ def main():
     train,tids,tfiles=open_rows(a.train);dev,dids,dfiles=open_rows(a.dev)
     assert not tids & dids,'train/development setup overlap'
     for r in train+dev: check_rows(r)
-    def context_files(paths,rows):
-        groups=[];files=[]
-        for name,r in zip(paths,rows):
-            path=Path(name).with_suffix('.context.bin');assert path.stat().st_size==len(r)*28
-            c=np.memmap(path,mode='r',dtype='<f4',shape=(len(r),7));assert np.isfinite(c).all() and ((c>=0)&(c<=1)).all()
-            groups.append(c);files.append(dict(path=str(path),sha256=sha(path)))
-        return groups,files
-    if a.public_context:
-        train_context,train_context_files=context_files(a.train,train)
-        dev_context,dev_context_files=context_files(a.dev,dev)
     view_files=None
     if a.sample_encoding_views:
         from encoding_views import open_views,sample_views
@@ -76,9 +63,6 @@ def main():
         forward=lambda model,x:model(x)
     else:
         model=bootstrap(a.warmstart)
-        if a.public_context:
-            from flywheel_model import expand_inputs
-            expand_inputs(model,57)
         from flywheel_model import expand_trunk
         if a.trunk_blocks is None:a.trunk_blocks=len(model.trunk)
         expand_trunk(model,a.trunk_blocks)
@@ -108,13 +92,12 @@ def main():
         teacher_model=teacher_model.to(a.device).eval()
     optimizer=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=a.learning_rate,weight_decay=1e-4)
     scheduler=torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max=a.epochs,eta_min=a.learning_rate/10)
-    def tensors(b,context=None):
+    def tensors(b):
         values=[torch.from_numpy(np.array(b[k],copy=True)).to(a.device) for k in ['x','mask','policy','teacher','outcome']]
-        if context is not None:values[0]=torch.cat([values[0],torch.from_numpy(np.array(context,copy=True)).to(a.device)],dim=-1)
         if a.greedy_targets:values[2]=greedy_visit_targets(values[0],values[2])
         return values
-    def loss(b,context=None):
-        x,mask,policy,teacher,outcome=tensors(b,context);logits,values=forward(model,x)
+    def loss(b):
+        x,mask,policy,teacher,outcome=tensors(b);logits,values=forward(model,x)
         logp=logits.masked_fill(mask==0,-1e9).log_softmax(-1)
         pl=-(policy*logp).sum(-1).mean()
         ht=torch.isfinite(teacher);ho=torch.isfinite(outcome);valid=ht|ho
@@ -130,9 +113,9 @@ def main():
     def evaluate():
         model.eval();tot=np.zeros(6);n=0;nv=0;nt=0
         with torch.no_grad():
-            for dev_index,r in enumerate(dev):
+            for r in dev:
                 for i in range(0,len(r),a.batch_size):
-                    b=r[i:i+a.batch_size];x,mask,policy,teacher,outcome=tensors(b,dev_context[dev_index][i:i+a.batch_size] if a.public_context else None)
+                    b=r[i:i+a.batch_size];x,mask,policy,teacher,outcome=tensors(b)
                     logits,v=forward(model,x);logp=logits.masked_fill(mask==0,-1e9).log_softmax(-1)
                     tot[0]+=-(policy*logp).sum().item();tot[1]+=(logp.argmax(-1)==policy.argmax(-1)).sum().item()
                     valid=torch.isfinite(outcome);prob=(v[:,0]+1)/2
@@ -156,7 +139,7 @@ def main():
     initial=evaluate();print(json.dumps(dict(stage='initial',**initial)),flush=True)
     # Keep the unchanged incumbent if all trained epochs reduce held-out quality.
     def save(epoch):
-        torch.save({'state_dict':{k:v.detach().cpu() for k,v in model.state_dict().items()},'epoch':epoch,'seed':a.seed,'architecture':a.architecture,'input_rows':getattr(model,'input_rows',56),'trunk_blocks':a.trunk_blocks if a.architecture=='bootstrap' else None,'policy_trunk_blocks':len(model.policy.trunk) if a.architecture=='split-bootstrap' else None,'critic_trunk_blocks':len(model.critic.trunk) if a.architecture=='split-bootstrap' else None,**(model.metadata() if a.architecture=='residual' else {})},a.output/'model.pt')
+        torch.save({'state_dict':{k:v.detach().cpu() for k,v in model.state_dict().items()},'epoch':epoch,'seed':a.seed,'architecture':a.architecture,'trunk_blocks':a.trunk_blocks if a.architecture=='bootstrap' else None,'policy_trunk_blocks':len(model.policy.trunk) if a.architecture=='split-bootstrap' else None,'critic_trunk_blocks':len(model.critic.trunk) if a.architecture=='split-bootstrap' else None,**(model.metadata() if a.architecture=='residual' else {})},a.output/'model.pt')
     metric='teacher_target_brier' if a.selection=='teacher' else 'value_brier'
     def score_for(metrics):
         return metrics['distillation_policy_kl']+4*metrics['distillation_value_mse'] if a.selection=='distillation' else metrics['policy_loss']+4*metrics[metric]
@@ -176,7 +159,7 @@ def main():
                 indices=order[i:i+a.batch_size];b=np.array(r[indices],copy=True)
                 if a.sample_encoding_views:b['x']=sample_views(b['x'],indices,view_groups[j],augmentation_rng)
                 optimizer.zero_grad(set_to_none=True)
-                l=loss(b,train_context[j][indices] if a.public_context else None);assert torch.isfinite(l).item(),'nonfinite training loss'
+                l=loss(b);assert torch.isfinite(l).item(),'nonfinite training loss'
                 l.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),5);optimizer.step();trained+=len(b)
         scheduler.step();metrics=evaluate();metrics.update(epoch=epoch,seconds=time.monotonic()-start,trained_rows=trained)
         history.append(metrics);print(json.dumps(metrics),flush=True)
@@ -188,12 +171,10 @@ def main():
     if a.architecture=='residual':assert all(torch.equal(v,model.base.state_dict()[k]) for k,v in base_state.items()),'fixed base changed'
     native_export(model,a.output/'model.bin')
     fixture=np.array(dev[0]['x'][:64],copy=True)
-    fixture_context=np.array(dev_context[0][:64],copy=True) if a.public_context else None
-    model_input=torch.from_numpy(np.concatenate([fixture,fixture_context],axis=-1) if a.public_context else fixture)
-    with torch.no_grad(): logits,v=forward(model,model_input)
+    with torch.no_grad(): logits,v=forward(model,torch.from_numpy(fixture))
     if fixed_values is not None:assert torch.equal(fixed_values,v),'frozen critic changed'
-    (a.output/'parity.json').write_text(json.dumps(dict(x=fixture.tolist(),context=fixture_context.tolist() if a.public_context else None,logits=logits.tolist(),values=v.tolist())))
-    manifest=dict(schema='flywheel-training-v1',input_rows=getattr(model,'input_rows',56),public_context=a.public_context,train_context_files=train_context_files if a.public_context else None,dev_context_files=dev_context_files if a.public_context else None,trunk_blocks=a.trunk_blocks if a.architecture=='bootstrap' else None,architecture='residual-rms-swiglu-192x3-v1' if a.architecture=='residual' else 80 if a.architecture=='bootstrap' else 'split-bootstrap' if a.architecture=='split-bootstrap' else 'gated-rms-swiglu-192x3-v2' if a.bitplanes else 'gated-rms-swiglu-192x3-v1',distill_teacher_sha256=sha(a.distill_teacher) if a.distill_teacher else None,learning_rate=a.learning_rate,parameters=sum(v.numel() for v in model.parameters()),
+    (a.output/'parity.json').write_text(json.dumps(dict(x=fixture.tolist(),logits=logits.tolist(),values=v.tolist())))
+    manifest=dict(schema='flywheel-training-v1',trunk_blocks=a.trunk_blocks if a.architecture=='bootstrap' else None,architecture='residual-rms-swiglu-192x3-v1' if a.architecture=='residual' else 80 if a.architecture=='bootstrap' else 'split-bootstrap' if a.architecture=='split-bootstrap' else 'gated-rms-swiglu-192x3-v2' if a.bitplanes else 'gated-rms-swiglu-192x3-v1',distill_teacher_sha256=sha(a.distill_teacher) if a.distill_teacher else None,learning_rate=a.learning_rate,parameters=sum(v.numel() for v in model.parameters()),
         sample_encoding_views=a.sample_encoding_views,encoding_views_files=view_files,encoding_views_code_sha256=sha(Path(__file__).with_name('encoding_views.py')) if a.sample_encoding_views else None,greedy_targets=a.greedy_targets,policy_only=a.policy_only,frozen_value_exact=torch.equal(fixed_values,v) if fixed_values is not None else None,trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),seed=a.seed,device=a.device,torch=torch.__version__,numpy=np.__version__,train=tfiles,dev=dfiles,
         train_setups=len(tids),dev_setups=len(dids),warmstart_sha256=sha(a.warmstart) if a.warmstart else None,
         model_sha256=sha(a.output/'model.bin'),checkpoint_sha256=sha(a.output/'model.pt'),script_sha256=sha(__file__),

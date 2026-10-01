@@ -245,29 +245,17 @@ struct BootstrapModel {
 }
 impl BootstrapModel {
     pub fn from_bytes(bytes: &[u8]) -> Self {
-        let (bytes, depth, inputs) = if bytes.starts_with(b"SPINFO57") {
-            assert!(bytes.len() >= 16, "information model header");
-            let depth = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
-            assert!((1..=8).contains(&depth), "information trunk depth");
-            assert_eq!(
-                u32::from_le_bytes(bytes[12..16].try_into().unwrap()),
-                7,
-                "public context fields"
-            );
-            (&bytes[16..], depth, 57)
-        } else if bytes.starts_with(b"SPMOBIL1") {
+        let (bytes, depth) = if bytes.starts_with(b"SPMOBIL1") {
             assert!(bytes.len() >= 12, "mobile model header");
             let depth = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
             assert!((2..=8).contains(&depth), "mobile trunk depth");
-            (&bytes[12..], depth, 56)
+            (&bytes[12..], depth)
         } else {
-            (bytes, 1, 56)
+            (bytes, 1)
         };
         assert_eq!(
             bytes.len(),
-            include_bytes!("models/e30.bin").len()
-                + 4 * 33297 * (depth - 1)
-                + 4 * 56 * (inputs - 56),
+            include_bytes!("models/e30.bin").len() + 4 * 33297 * (depth - 1),
             "version-80 model byte length"
         );
         assert!(
@@ -286,7 +274,7 @@ impl BootstrapModel {
             .collect();
         let mut r = Reader { values, at: 0 };
         let model = Self {
-            first: r.norm(inputs, 56, 56, false),
+            first: r.norm(56, 56, 56, false),
             trunk: (0..depth).map(|_| r.block()).collect(),
             policy_block: r.block(),
             policy_hidden: r.dense(392, 81),
@@ -305,7 +293,7 @@ impl BootstrapModel {
         let h = self.features(x, interleaved);
         (self.policy(&h, interleaved), self.value(&h, interleaved))
     }
-    fn features(&self, x: &[f32], interleaved: bool) -> Vec<f32> {
+    fn features(&self, x: &[f32; 392], interleaved: bool) -> Vec<f32> {
         let mut h = if interleaved {
             self.first.apply_interleaved(x, Activation::None)
         } else {
@@ -458,21 +446,6 @@ impl Model {
             Architecture::Residual(model) => model.infer(x, false),
         }
     }
-    pub fn needs_public_context(&self) -> bool {
-        matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 57)
-    }
-    pub fn infer_with_context(&self, x: &[f32; 392], context: &[f32; 7]) -> ([f32; 81], [f32; 2]) {
-        if let Architecture::Bootstrap(model) = &self.architecture
-            && model.first.input == 57
-        {
-            let mut input = [0.0; 399];
-            input[..392].copy_from_slice(x);
-            input[392..].copy_from_slice(context);
-            let h = model.features(&input, true);
-            return (model.policy(&h, true), model.value(&h, true));
-        }
-        self.infer(x)
-    }
     pub fn infer(&self, x: &[f32; 392]) -> ([f32; 81], [f32; 2]) {
         match &self.architecture {
             Architecture::Bootstrap(model) => model.infer_mode(x, true),
@@ -596,20 +569,6 @@ impl GatedModel {
         let y = self.head.apply(&rms_norm(&h, &self.gain));
         (y[..81].try_into().unwrap(), [y[81], y[82]])
     }
-}
-
-/// Public reservation metadata omitted by the legacy sampled-world encoding.
-pub fn public_context(o: &splendor_core::Observation) -> [f32; 7] {
-    assert_eq!(o.count, 2);
-    let opponent = 1 - usize::from(o.current);
-    let mut context = [0.0; 7];
-    for slot in 0..usize::from(o.reserved_counts[opponent]) {
-        let r = o.players[opponent].reserved[slot];
-        context[slot] = f32::from(!r.public);
-        context[slot + 3] = f32::from(r.tier + 1) / 3.0;
-        context[6] += context[slot] / 3.0;
-    }
-    context
 }
 
 /// Encode a sampled information set, never a supplied hidden GameState.
@@ -1029,50 +988,5 @@ mod tests {
             );
             assert_eq!(before, a.work_counts());
         }
-    }
-    #[test]
-    fn information_projection_identity_and_payload_checks() {
-        let original = include_bytes!("models/e30.bin");
-        let mut bytes = b"SPINFO57".to_vec();
-        bytes.extend(1u32.to_le_bytes());
-        bytes.extend(7u32.to_le_bytes());
-        for row in original[..56 * 56 * 4].as_chunks::<{ 56 * 4 }>().0 {
-            bytes.extend(row);
-            bytes.extend(0f32.to_le_bytes());
-        }
-        bytes.extend(&original[56 * 56 * 4..]);
-        let old = Model::from_bytes(original);
-        let new = Model::from_bytes(&bytes);
-        assert!(!old.needs_public_context());
-        assert!(new.needs_public_context());
-        let context = [1.0, 0.0, 1.0, 1.0 / 3.0, 2.0 / 3.0, 1.0, 2.0 / 3.0];
-        for seed in 0..32 {
-            let state = splendor_core::GameState::new(2, seed).unwrap();
-            let x = encode(&state.observe(0), &mut splendor_core::Rng::new(1000 + seed));
-            assert_eq!(old.infer(&x), new.infer_with_context(&x, &context));
-            assert_eq!(old.infer(&x), old.infer_with_context(&x, &context));
-        }
-        let x = encode(
-            &splendor_core::GameState::new(2, 0).unwrap().observe(0),
-            &mut splendor_core::Rng::new(1000),
-        );
-        assert!(std::panic::catch_unwind(|| new.infer(&x)).is_err());
-        let weight_offset = 16 + 56 * 4;
-        let mut changed = bytes.clone();
-        changed[weight_offset..weight_offset + 4].copy_from_slice(&1f32.to_le_bytes());
-        let changed = Model::from_bytes(&changed);
-        assert_ne!(
-            changed.infer_with_context(&x, &context),
-            changed.infer_with_context(&x, &[0.0; 7])
-        );
-        for offset in [8, 12] {
-            let mut bad = bytes.clone();
-            bad[offset..offset + 4].copy_from_slice(&0u32.to_le_bytes());
-            assert!(std::panic::catch_unwind(|| Model::from_bytes(&bad)).is_err());
-        }
-        let mut bad = bytes.clone();
-        bad[weight_offset..weight_offset + 4].copy_from_slice(&f32::NAN.to_le_bytes());
-        assert!(std::panic::catch_unwind(|| Model::from_bytes(&bad)).is_err());
-        assert!(std::panic::catch_unwind(|| Model::from_bytes(&bytes[..bytes.len() - 4])).is_err());
     }
 }

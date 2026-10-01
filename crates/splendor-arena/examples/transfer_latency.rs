@@ -19,10 +19,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .unwrap()
         })
         .collect();
+    let contexts: Option<Vec<[f32; 7]>> = data["context"].as_array().map(|rows| {
+        rows.iter()
+            .map(|row| {
+                row.as_array()
+                    .unwrap()
+                    .iter()
+                    .map(|v| v.as_f64().unwrap() as f32)
+                    .collect::<Vec<_>>()
+                    .try_into()
+                    .unwrap()
+            })
+            .collect()
+    });
+    let infer = |i: usize| match &contexts {
+        Some(c) => model.infer_with_context(&xs[i], &c[i]),
+        None => model.infer(&xs[i]),
+    };
     let outputs: Vec<_> = xs
         .iter()
-        .map(|x| {
-            let (p, v) = model.infer(x);
+        .enumerate()
+        .map(|(i, _)| {
+            let (p, v) = infer(i);
             serde_json::json!({"policy":p.as_slice(),"value":v})
         })
         .collect();
@@ -30,7 +48,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for repeat in 0..3 {
         let start = Instant::now();
         for i in 0..10000 {
-            black_box(model.infer(black_box(&xs[i % xs.len()])));
+            black_box(infer(black_box(i % xs.len())));
         }
         println!(
             "{}",

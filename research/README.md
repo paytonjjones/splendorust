@@ -289,3 +289,10 @@ by the cheaper student. Only actor policy controls moves and opening sampling.
 Independent teacher agents query the same actor observations for labels. The
 native collector uses `--iterations 800 --actor-iterations 128`. Its manifest
 separates actor and label work. Omit the actor flag to retain teacher self-play.
+
+Public reservation context: `--public-context` appends seven Observation fields
+and exports SPINFO57. The collector writes a `.context.bin` sidecar (f32[7] per
+unchanged 2232-byte training row). The runner records its hash; SPINFO57 teachers
+and warm starts enable context automatically. Only full bootstrap students are
+supported. Old corpora need exact reconstruction; missing sidecars fail. E70
+validates compatibility; E71 retains E68 after a negative matched-data screen.

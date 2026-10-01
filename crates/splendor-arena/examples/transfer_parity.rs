@@ -33,7 +33,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .collect::<Vec<_>>()
             .try_into()
             .unwrap();
-        let (policy, value) = model.infer(&x);
+        let (policy, value) = if let Some(rows) = data["context"].as_array() {
+            let context: [f32; 7] = rows[i]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|v| v.as_f64().unwrap() as f32)
+                .collect::<Vec<_>>()
+                .try_into()
+                .unwrap();
+            model.infer_with_context(&x, &context)
+        } else {
+            model.infer(&x)
+        };
         let expected_policy: Vec<_> = data["logits"][i]
             .as_array()
             .unwrap()

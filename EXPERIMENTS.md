@@ -2618,3 +2618,12 @@ batch1024,lr1e-4,and selection with context as the sole planned input change.
 Compare against provisional E68 in2,000 fresh128-simulation games,master4270m.
 E56 stays champion. This tests information representation at nearly unchanged
 model size and per-node work,not another search-coefficient tweak.
+
+E70 completed: exact public-context reconstruction for all seven datasets,
+initial-function identity, context gradients, checkpoint/native parity, legacy
+collection byte parity, 16 complete checked games, 103 release tests and strict
+Clippy passed. Fixed-fixture shared-host inference ratio1.0194.
+E71 matched-data candidate49.70% against E68 over2,000 complete paired games,
+CI45.37–54.03%; retain E68. DevKL.61236786→.61235504, negligible change.
+The omission is real but this correction did not resolve the learning plateau.
+No champion change. Preserve the candidate and input infrastructure.

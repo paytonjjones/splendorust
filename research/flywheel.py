@@ -26,6 +26,7 @@ def main():
     p.add_argument('--architecture',choices=['bootstrap','gated','split-bootstrap','residual'],default='bootstrap')
     p.add_argument('--selection',choices=['outcome','teacher','distillation'],default='outcome')
     p.add_argument('--learning-rate',type=float)
+    p.add_argument('--public-context',action='store_true')
     p.add_argument('--bitplanes',action='store_true')
     p.add_argument('--distill-incumbent',action='store_true')
     p.add_argument('--trunk-blocks',type=int)
@@ -50,6 +51,8 @@ def main():
     os.chdir(ROOT);a.output=a.output.resolve();a.target=a.target.resolve()
     a.teacher_model=a.teacher_model.resolve()
     if a.teacher_checkpoint: a.teacher_checkpoint=a.teacher_checkpoint.resolve()
+    if a.teacher_model.read_bytes()[:8]==b'SPINFO57':a.public_context=True
+    if a.public_context and (a.architecture!='bootstrap' or a.policy_only or a.distill_incumbent):p.error('public context requires a full bootstrap student and no incumbent distillation')
     if a.learning_rate is None:a.learning_rate=0.001 if a.architecture=='gated' else 0.0001
     if a.teacher_iterations is None: a.teacher_iterations=a.iterations
     if a.dev_teacher_iterations is None: a.dev_teacher_iterations=a.teacher_iterations
@@ -99,7 +102,7 @@ def main():
     for cycle in range(a.cycles):
         c=a.output/f'cycle-{cycle:03d}';c.mkdir(exist_ok=True)
         if (c/'decision.json').exists():
-            replay.extend(sorted(p for p in (c/'train').glob('*.bin') if not p.name.endswith('.views.bin')));continue
+            replay.extend(sorted(p for p in (c/'train').glob('*.bin') if not p.name.endswith(('.views.bin','.context.bin'))));continue
         best=json.loads(bestpath.read_text());assert sha(best['model'])==best['model_sha256']
         if best['checkpoint']:assert sha(best['checkpoint'])==best['checkpoint_sha256']
         env['SPLENDOR_BEST_MODEL']=best['model']
@@ -112,12 +115,13 @@ def main():
             for offset in range(0,games,a.shard_games):
                 output=folder/f'{offset:06d}.bin';meta=output.with_suffix('.json');receipt=output.with_suffix('.receipt.json')
                 if not receipt.exists():
-                    preserve(output);preserve(meta)
+                    preserve(output);preserve(meta);preserve(output.with_suffix('.context.bin'));preserve(output.with_suffix('.views.bin'))
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
                          '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
-                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),'--output',output],output.with_suffix('.log'))
-                    atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None))
+                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),*(['--public-context'] if a.public_context else []),'--output',output],output.with_suffix('.log'))
+                    atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None,context_sha256=sha(output.with_suffix('.context.bin')) if a.public_context else None))
                 r=json.loads(receipt.read_text())
+                if a.public_context:assert sha(output.with_suffix('.context.bin'))==r['context_sha256']
                 if a.encoding_views==8:assert sha(output.with_suffix('.views.bin'))==r['views_sha256']
                 assert sha(output)==r['data_sha256'] and sha(meta)==r['manifest_sha256'] and r['teacher_sha256']==best['model_sha256']
                 paths.append(output)
@@ -136,6 +140,7 @@ def main():
             compatible=(a.architecture=='residual' and not teacher_gated and teacher_magic!=b'SPDUAL01') or (not teacher_residual and ((not teacher_gated and a.architecture=='split-bootstrap') or (teacher_magic!=b'SPDUAL01' and teacher_gated==(a.architecture=='gated') and (not teacher_gated or (teacher_magic==b'SPGATED2')==a.bitplanes))))
             if best['checkpoint'] and compatible:
                 command+=['--warmstart',best['checkpoint']]
+            if a.public_context:command+=['--public-context']
             if a.bitplanes:command+=['--bitplanes']
             if a.policy_only:command+=['--policy-only']
             if a.greedy_targets:command+=['--greedy-targets']

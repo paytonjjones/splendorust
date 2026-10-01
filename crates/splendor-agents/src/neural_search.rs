@@ -181,10 +181,12 @@ impl NeuralAgent {
                 );
             }
             let x = super::transfer::encode(o, &mut self.rng);
-            let (policy, values) = self
-                .external_model
-                .unwrap_or_else(model_transferred)
-                .infer(&x);
+            let model = self.external_model.unwrap_or_else(model_transferred);
+            let (policy, values) = if model.needs_public_context() {
+                model.infer_with_context(&x, &super::transfer::public_context(o))
+            } else {
+                model.infer(&x)
+            };
             let seat = usize::from(o.viewer != o.current);
             return (
                 super::transfer::policy_logits(&policy),

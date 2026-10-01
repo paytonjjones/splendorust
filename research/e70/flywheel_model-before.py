@@ -27,19 +27,6 @@ def expand_trunk(model,depth):
     model.trunk=torch.nn.Sequential(*blocks)
     return model
 
-def expand_inputs(model,rows):
-    assert rows in [56,57]
-    old=model.first_layer.linear
-    if old.in_features==rows:
-        model.input_rows=rows;return model
-    assert old.in_features==56 and rows==57
-    layer=copy.deepcopy(old);layer.in_features=57
-    layer.weight=torch.nn.Parameter(old.weight.new_zeros((56,57)))
-    with torch.no_grad():
-        layer.weight.zero_();layer.weight[:,:56].copy_(old.weight)
-    model.first_layer.linear=layer;model.input_rows=57
-    return model
-
 def bootstrap(warmstart=None):
     root=Path('local/strength/external/alphazero').resolve()
     sys.path.insert(0,str(root))
@@ -47,16 +34,15 @@ def bootstrap(warmstart=None):
     assert sha(source)=='6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07'
     p=torch.load(source,map_location='cpu',weights_only=False)
     assert p['nn_version']==80
-    m=p['full_model'].cpu();m.load_state_dict(p['state_dict'],strict=True);m.input_rows=56
+    m=p['full_model'].cpu();m.load_state_dict(p['state_dict'],strict=True)
     if warmstart:
         payload=torch.load(warmstart,map_location='cpu',weights_only=True)
         expand_trunk(m,payload.get('trunk_blocks') or 1)
-        expand_inputs(m,payload.get('input_rows',56))
         m.load_state_dict(payload['state_dict'],strict=True)
     return m
 
 def raw(model,x):
-    h=model.trunk(model.first_layer(x.reshape(-1,getattr(model,'input_rows',56),7)))
+    h=model.trunk(model.first_layer(x.reshape(-1,56,7)))
     return model.output_layers_PI(h),model.output_layers_V(h).tanh()
 
 def export(model,path):
@@ -76,11 +62,9 @@ def export(model,path):
     x=np.concatenate(values)
     assert np.isfinite(x).all()
     depth=len(model.trunk)
-    rows=getattr(model,'input_rows',56)
-    assert x.size*4==Path('research/e30/model.bin').stat().st_size+4*33297*(depth-1)+4*56*(rows-56)
+    assert x.size*4==Path('research/e30/model.bin').stat().st_size+4*33297*(depth-1)
     with open(path,'wb') as f:
-        if rows==57:f.write(b'SPINFO57'+struct.pack('<II',depth,7))
-        elif depth>1:f.write(b'SPMOBIL1'+struct.pack('<I',depth))
+        if depth>1:f.write(b'SPMOBIL1'+struct.pack('<I',depth))
         f.write(x.tobytes())
 
 def open_rows(paths):

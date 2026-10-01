@@ -1,0 +1,61 @@
+{
+  "schema": "matched-public-information-distillation-v1",
+  "train": [
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e64/train.bin",
+      "sha256": "b98b1a890e8ae5096a9aaa63a07da2635d1f3561401bcdc326e3e70e181e17ea",
+      "context_sha256": "857b7297cce2d38b7a007ba45b8ac8deb45b30dd7b9c4b7de2fd60acfb47d74e"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/000000.bin",
+      "sha256": "fbf073ef56f58bb1db414ca50da04b690a3a5799083237ca1405e71efef7e93a",
+      "context_sha256": "d62f8f83f8ddcda2a5ca7e63d0a4a54cbcfa85e40ccc62a389874197ca0b6c6f"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/001000.bin",
+      "sha256": "e11698753dc7304a52be2c93036e27cd6d09a248e8903567dd0f3d7a0914989e",
+      "context_sha256": "9cf693dac74d12a51bf7dd11a03b6b98677680296b41fc62775b047de4285da1"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/002000.bin",
+      "sha256": "fdf048a74cb3a2cd475f49550e553314e97c028391e1c240754455945568a216",
+      "context_sha256": "21f0ed8cd61521080a26fa9fdfa51b2998d3c7559c7df444ccb75f8a1aa4f3ac"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/003000.bin",
+      "sha256": "cb5641067f7d7dc7b91704bbb5e7a6146246316a913965d7b13c6ad715bf9421",
+      "context_sha256": "5f4b220fadf4dc02aa17a860a4ebebd448b8fb3ec92f4737e5e564850d86fdca"
+    },
+    {
+      "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/004000.bin",
+      "sha256": "4b8a35c45b2065d5bb168506a20f09d8ee9c99d8e8f216b1fcec9e3b5675a014",
+      "context_sha256": "7476d097c23364d0a7df2794bbbe9b0e5b22603dbf4221543379b4ca3a0f7b7d"
+    }
+  ],
+  "dev": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/dev.bin",
+    "sha256": "6c00b465458744829549ffa7d699864904635005f09e867061f4847036090d6a",
+    "context_sha256": "063644a080412c9d35e051f05ea5d4c330591b37b0f7042fc34114390f7883c5"
+  },
+  "base_sha256": "76d45006d332dcd80635150f23917c321245f49cfb10a8e77654d3096505a918",
+  "base_checkpoint_sha256": "6ca9e5df2de8b21217a6529ac20b35c5e5a0163e9fb18edd1618dab913dc6ffd",
+  "parent_sha256": "d199a3878d7feebb443cb8e01e4afee502e05f2e9ba34c7a042a6bb3b62b86f2",
+  "champion_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+  "training_seed": 800000013,
+  "screen_seed": 4270000000,
+  "epochs": 10,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "screen_games": 2000,
+  "screen_iterations": 128,
+  "threads": 14,
+  "scripts": {
+    "train_flywheel.py": "7639ac2828beb3da7d90b860facd04b4f95859e66bd3da6650626a7829682638",
+    "flywheel_model.py": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4",
+    "distillation_fit.py": "631e56b08b9ddc480b530c7533a125c27ccdf52750890045862ac0671080a1d0",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa"
+  },
+  "script_sha256": "fc32b908a1de4edecc27cbcbf350c1543417c02c122e661320fff1c2b9f2ffb7",
+  "rule": "Identical E68 labels, datasets, initialization, training seed and optimizer; only append public context. Provisional requested-credit point >50.5%; champion unchanged."
+}

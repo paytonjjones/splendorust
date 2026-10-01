@@ -1,0 +1,55 @@
+usage: flywheel.py [-h] --output OUTPUT [--cycles CYCLES] [--seed SEED]
+                   [--games GAMES [GAMES ...]] [--dev-games DEV_GAMES]
+                   [--shard-games SHARD_GAMES] [--iterations ITERATIONS]
+                   [--teacher-iterations TEACHER_ITERATIONS]
+                   [--actor-iterations ACTOR_ITERATIONS]
+                   [--dev-teacher-iterations DEV_TEACHER_ITERATIONS]
+                   [--teacher-model TEACHER_MODEL]
+                   [--teacher-checkpoint TEACHER_CHECKPOINT] [--epochs EPOCHS]
+                   [--architecture {bootstrap,gated,split-bootstrap,residual}]
+                   [--selection {outcome,teacher,distillation}]
+                   [--learning-rate LEARNING_RATE] [--public-context]
+                   [--bitplanes] [--distill-incumbent]
+                   [--trunk-blocks TRUNK_BLOCKS] [--policy-only]
+                   [--greedy-targets] [--encoding-views {1,8}]
+                   [--teacher-replicates {1,2,4,8}] [--sample-encoding-views]
+                   [--selection-rule {strict,provisional}] [--threads THREADS]
+                   [--screen SCREEN] [--confirm CONFIRM] [--device DEVICE]
+                   [--target TARGET]
+
+options:
+  -h, --help            show this help message and exit
+  --output OUTPUT
+  --cycles CYCLES
+  --seed SEED
+  --games GAMES [GAMES ...]
+  --dev-games DEV_GAMES
+  --shard-games SHARD_GAMES
+  --iterations ITERATIONS
+  --teacher-iterations TEACHER_ITERATIONS
+  --actor-iterations ACTOR_ITERATIONS
+                        separate student actor budget; teacher iterations
+                        label its visited states
+  --dev-teacher-iterations DEV_TEACHER_ITERATIONS
+  --teacher-model TEACHER_MODEL
+  --teacher-checkpoint TEACHER_CHECKPOINT
+  --epochs EPOCHS
+  --architecture {bootstrap,gated,split-bootstrap,residual}
+  --selection {outcome,teacher,distillation}
+  --learning-rate LEARNING_RATE
+  --public-context
+  --bitplanes
+  --distill-incumbent
+  --trunk-blocks TRUNK_BLOCKS
+  --policy-only
+  --greedy-targets
+  --encoding-views {1,8}
+  --teacher-replicates {1,2,4,8}
+  --sample-encoding-views
+  --selection-rule {strict,provisional}
+  --threads THREADS
+  --screen SCREEN
+  --confirm CONFIRM     optional fresh confirmation; 0 keeps the fixed 2k
+                        inner-loop gate
+  --device DEVICE
+  --target TARGET

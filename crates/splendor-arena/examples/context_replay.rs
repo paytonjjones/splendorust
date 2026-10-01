@@ -1,4 +1,4 @@
-//! Sharded self-play supervision. Inputs come only from the acting Observation.
+//! Reconstruct public context while proving saved actor-state parity.
 use clap::Parser;
 use rayon::prelude::*;
 use splendor_agents::{SearchConfig, make_agent, neural::action_index, transfer};
@@ -29,12 +29,17 @@ struct Args {
     #[arg(long, default_value_t = 1)]
     teacher_replicates: usize,
     #[arg(long)]
-    output: PathBuf,
+    verify_base: PathBuf,
     #[arg(long)]
-    public_context: bool,
+    output: PathBuf,
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let a = Args::parse();
+    assert!(a.actor_iterations.is_none() && a.teacher_replicates == 1);
+    let original = std::fs::read(&a.verify_base)?;
+    assert!(original.len().is_multiple_of(2232));
+    let context_path = a.output.with_extension("context.bin");
+    let mut context_out = BufWriter::new(std::fs::File::create(&context_path)?);
     assert!(a.games > 0 && a.threads > 0);
     assert!(matches!(a.encoding_views, 1 | 8));
     assert!((1..=8).contains(&a.teacher_replicates));
@@ -45,12 +50,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let views_tmp = a.output.with_extension("views.bin.partial");
     let mut views_out = if a.encoding_views == 8 {
         Some(BufWriter::new(std::fs::File::create(&views_tmp)?))
-    } else {
-        None
-    };
-    let context_tmp = a.output.with_extension("context.bin.partial");
-    let mut context_out = if a.public_context {
-        Some(BufWriter::new(std::fs::File::create(&context_tmp)?))
     } else {
         None
     };
@@ -82,7 +81,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut state=GameState::new(2,setup).unwrap();
             let mut legal=ActionSet::new();
             let mut samples=Vec::new();
-            let mut contexts=Vec::new();
             for _ in 0..2000 {
                 state.legal_actions(&mut legal);
                 if legal.is_empty() {break;}
@@ -130,8 +128,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             view_groups.push((samples.len(),alternatives));
                         }
                     }
-                    samples.push((seat,x,mask,target,label_value));
-                    if a.public_context { contexts.push(transfer::public_context(&o)); }
+                    let mut context=[0.0f32;7];
+                    for slot in 0..o.reserved_counts[opponent] as usize {
+                        let r=o.players[opponent].reserved[slot];
+                        context[slot]=f32::from(!r.public);
+                        context[slot+3]=f32::from(r.tier+1)/3.0;
+                        context[6]+=context[slot]/3.0;
+                    }
+                    samples.push((seat,x,mask,target,label_value,context));
                 }
                 state.apply_action(chosen).unwrap();
             }
@@ -139,7 +143,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let result=state.outcome();
             let status=if result.is_some() {0} else if legal.is_empty() {1} else {2};
             let mut bytes=Vec::with_capacity(samples.len()*2232);
-            for (seat,x,mask,policy,value) in samples {
+            let mut contexts=Vec::new();
+            for (seat,x,mask,policy,value,context) in samples {
+                for v in context {contexts.extend(v.to_le_bytes());}
                 let outcome=result.map(|r| if r.winners&(1<<seat)!=0 {1.0/r.winners.count_ones() as f32} else {0.0}).unwrap_or(f32::NAN);
                 bytes.extend(setup.to_le_bytes());
                 for v in x.into_iter().chain(mask).chain(policy).chain([value,outcome]) {bytes.extend(v.to_le_bytes());}
@@ -150,14 +156,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             (status,bytes,s0+s1+label_s,c0+c1+label_c,record,view_groups,label_s,label_c,contexts)
         }).collect());
         for (status, bytes, s, c, record, view_groups, label_s, label_c, contexts) in results {
-            if let Some(writer) = context_out.as_mut() {
-                assert_eq!(contexts.len(), bytes.len() / 2232);
-                for context in contexts {
-                    for v in context {
-                        writer.write_all(&v.to_le_bytes())?;
-                    }
-                }
+            let offset = rows * 2232;
+            assert!(offset + bytes.len() <= original.len());
+            for (actual, expected) in bytes.as_chunks::<2232>().0.iter().zip(
+                original[offset..offset + bytes.len()]
+                    .as_chunks::<2232>()
+                    .0
+                    .iter(),
+            ) {
+                assert_eq!(
+                    &actual[..1900],
+                    &expected[..1900],
+                    "saved setup/input/mask mismatch"
+                );
+                assert_eq!(&actual[2228..], &expected[2228..], "saved outcome mismatch");
             }
+            context_out.write_all(&contexts)?;
             label_simulations += label_s;
             label_inference_calls += label_c;
             if let Some(writer) = views_out.as_mut() {
@@ -183,6 +197,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             serde_json::json!({"games_finished":counts.iter().sum::<usize>(),"rows":rows,"seconds":start.elapsed().as_secs_f64()})
         );
     }
+    context_out.flush()?;
+    assert_eq!(rows * 2232, original.len());
     out.flush()?;
     drop(out);
     std::fs::rename(tmp, &a.output)?;
@@ -191,12 +207,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         drop(writer);
         std::fs::rename(views_tmp, a.output.with_extension("views.bin"))?;
     }
-    if let Some(mut writer) = context_out {
-        writer.flush()?;
-        drop(writer);
-        std::fs::rename(context_tmp, a.output.with_extension("context.bin"))?;
-    }
-    let manifest = serde_json::json!({"schema":"flywheel-v1","public_context":a.public_context,"context_format":"f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
+    let manifest = serde_json::json!({"verified_base":a.verify_base,"context_output":context_path,"context_format":"f32[7]: opponent unknown[3], present tier+1 / 3[3], unknown count / 3","schema":"context-replay-v1","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
     std::fs::write(
         a.output.with_extension("json"),
         serde_json::to_vec_pretty(&manifest)?,

@@ -1,0 +1,14 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error: using `chunks_exact` with a constant chunk size
+    --> crates/splendor-agents/src/transfer.rs:1039:44
+     |
+1039 |         for row in original[..56 * 56 * 4].chunks_exact(56 * 4) {
+     |                                            ^^^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<56 * 4>().0`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+     = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: could not compile `splendor-agents` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
