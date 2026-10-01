@@ -283,3 +283,9 @@ Use `endpoint_cost --budget-sweep` with `SPLENDOR_BEST_MODEL` and
 of eight against a fixed 128-simulation baseline. Three runs alternate order
 on the same 568 observations. Select the cost budget before arena outcomes.
 The sweep is a host-specific cost measurement, not a playing-strength result.
+
+Use `--actor-iterations 128 --teacher-iterations 800` to train on states visited
+by the cheaper student. Only actor policy controls moves and opening sampling.
+Independent teacher agents query the same actor observations for labels. The
+native collector uses `--iterations 800 --actor-iterations 128`. Its manifest
+separates actor and label work. Omit the actor flag to retain teacher self-play.

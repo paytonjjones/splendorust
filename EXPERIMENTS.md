@@ -2524,3 +2524,44 @@ master4200000000,four workers,with the same replay/hash requirements. Record
 realized policy time; a predicted cost budget alone is not an equal-cost claim.
 This is a fresh native-profile pilot. The independent evaluator retains its
 separate reserved4150m800-simulation stage. No champion or lineage changes.
+
+## E67/E68 — Teacher queries on student-visited positions
+
+The large correction model failed at measured cost,and a normal fresh1k
+teacher-trajectory cycle did not advance. Test a different data-generation
+paradigm:let current-best128-simulation actors visit states,but query the
+same current-best model with800 simulations for policy/value labels. Strong
+teacher self-play may omit the states reached by the cheaper student.
+This is a state-coverage hypothesis,not a proven cause of stalled learning.
+
+E67 adds an optional actor budget to collection. The default must preserve
+prior raw data exactly. Actor decisions/opening sampling use actor policy only;
+independent teacher RNG must never affect the actor trajectory. Check legal
+labels,role work counts,serial/parallel identity,and same-budget actor trajectory
+parity with prior data. Keep unknown outcomes/labels unchanged. No core rules,
+canonical search defaults,or engine replay semantics change.
+
+E68 then uses5,000 student-trajectory training games plus E64's1,000-game
+replay,and1,000 independent student-trajectory dev games. Teacher E59 uses800,
+actor E59 uses128;one teacher query per Main observation. Warm E59 bootstrap,
+10epochs,seed800000013,lr1e-4,batch1024,existing loss and dev selection.
+Fresh master4210m train,4220m dev,and4230m2,000-game128-simulation screen.
+Use14threads and the existing provisional worst-case>50.5% rule. E56 stays
+champion. Record actual collection cost; this campaign tests data coverage,
+not equal teacher compute. It has comparable total position volume to the
+successful large-corpus experiment. No architecture change is planned.
+
+E66 scores40.375% in400 complete native games,paired interval35.875–45.0%.
+All400 replay exactly. Candidate policy time1006.85s exceeds external856.96s
+by17.5%; the predicted2048 budget was not equal realized cost. More search
+alone did not close this native-profile gap. No external or canonical strength
+promotion follows. Keep E56 champion and E59 research lineage.
+
+E67 checks pass. Default raw bytes match the original E64 prefix exactly.
+A separate800 actor preserves the same trajectory/input/mask/outcomes.
+Changing label teacher800 to256 leaves the128 actor states exactly fixed;
+labels change. Serial and parallel student collection are byte-identical.
+All labels pass legality/probability checks and role work counts are separate.
+All102 Rust tests and strict Clippy pass. The student sample has910 rows
+versus934 teacher-trajectory rows across the same16 setups. Source and hashes
+are preserved. E68 proceeds with the registered comparable-volume campaign.

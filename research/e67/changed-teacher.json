@@ -1,0 +1,142 @@
+{
+  "actor_iterations": 128,
+  "additional_label_inference_calls": 220351,
+  "additional_label_simulations": 232960,
+  "blocked": 0,
+  "capped": 0,
+  "complete": 16,
+  "depth": 16,
+  "encoding_views": 1,
+  "format": "u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)",
+  "games": 16,
+  "inference_calls": 332227,
+  "iterations": 256,
+  "label_scope": "Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling",
+  "policy_seed": 6630000000,
+  "records": [
+    {
+      "opponent_blind_rows": 5,
+      "rows": 60,
+      "setup": 5011066020161912855,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 18,
+      "rows": 60,
+      "setup": 13109212620459588122,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 16,
+      "rows": 58,
+      "setup": 4365831935940882889,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 26,
+      "rows": 60,
+      "setup": 16498798655945978362,
+      "status": "complete",
+      "turns": 60
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 56,
+      "setup": 4729486427674232152,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 54,
+      "setup": 17766220554599450944,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 1,
+      "rows": 48,
+      "setup": 2967006803236289137,
+      "status": "complete",
+      "turns": 48
+    },
+    {
+      "opponent_blind_rows": 7,
+      "rows": 58,
+      "setup": 8825449754712048942,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 15,
+      "rows": 56,
+      "setup": 13658922162550229171,
+      "status": "complete",
+      "turns": 56
+    },
+    {
+      "opponent_blind_rows": 30,
+      "rows": 54,
+      "setup": 9879857405421492531,
+      "status": "complete",
+      "turns": 54
+    },
+    {
+      "opponent_blind_rows": 22,
+      "rows": 62,
+      "setup": 18172981249718038842,
+      "status": "complete",
+      "turns": 62
+    },
+    {
+      "opponent_blind_rows": 42,
+      "rows": 58,
+      "setup": 16633766799916896088,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 29,
+      "rows": 58,
+      "setup": 5622926703018952564,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 28,
+      "rows": 58,
+      "setup": 5122031768408903702,
+      "status": "complete",
+      "turns": 58
+    },
+    {
+      "opponent_blind_rows": 0,
+      "rows": 52,
+      "setup": 11901197847847080962,
+      "status": "complete",
+      "turns": 52
+    },
+    {
+      "opponent_blind_rows": 3,
+      "rows": 58,
+      "setup": 18101023724218084296,
+      "status": "complete",
+      "turns": 58
+    }
+  ],
+  "row_bytes": 2232,
+  "rows": 910,
+  "schema": "flywheel-v1",
+  "seconds": 5.2119272500000005,
+  "seed": 3630000000,
+  "separate_actor": true,
+  "simulations": 349440,
+  "source": "d75ae3d66753dd9f",
+  "teacher_replicates": 1,
+  "temperature_total_turns": 6,
+  "threads": 4,
+  "views_format": "u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged"
+}

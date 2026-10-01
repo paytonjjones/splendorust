@@ -18,6 +18,7 @@ def main():
     p.add_argument('--shard-games',type=int,default=1000)
     p.add_argument('--iterations',type=int,default=128)
     p.add_argument('--teacher-iterations',type=int)
+    p.add_argument('--actor-iterations',type=int,help='separate student actor budget; teacher iterations label its visited states')
     p.add_argument('--dev-teacher-iterations',type=int)
     p.add_argument('--teacher-model',type=Path,default=Path('research/e30/model.bin'))
     p.add_argument('--teacher-checkpoint',type=Path)
@@ -53,6 +54,7 @@ def main():
     if a.teacher_iterations is None: a.teacher_iterations=a.iterations
     if a.dev_teacher_iterations is None: a.dev_teacher_iterations=a.teacher_iterations
     assert 0<a.teacher_iterations<2**32 and 0<a.dev_teacher_iterations<2**32
+    assert a.actor_iterations is None or 0<a.actor_iterations<2**32
     assert 1<=a.cycles<=5 and all(0<g<=100000 for g in a.games)
     assert a.shard_games>0 and a.dev_games>0
     assert a.screen>=2 and a.screen%2==0 and a.confirm>=0 and a.confirm%2==0 and a.threads>0
@@ -63,6 +65,7 @@ def main():
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
         lineage_code_sha256=sha(ROOT/'research/lineage.py'),encoding_views_code_sha256=sha(ROOT/'research/encoding_views.py'),
         split_code_sha256=sha(ROOT/'research/split_model.py') if a.architecture=='split-bootstrap' else None,
+        collector_code_sha256=sha(ROOT/'crates/splendor-arena/examples/flywheel_data.rs'),
         gated_code_sha256=sha(ROOT/'research/gated_model.py') if a.architecture in ['gated','residual'] else None,
         residual_code_sha256=sha(ROOT/'research/residual_model.py') if a.architecture=='residual' else None,
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
@@ -113,7 +116,7 @@ def main():
                     preserve(output);preserve(meta)
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
                          '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
-                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,'--output',output],output.with_suffix('.log'))
+                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,*([] if a.actor_iterations is None else ['--actor-iterations',a.actor_iterations]),'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None))
                 r=json.loads(receipt.read_text())
                 if a.encoding_views==8:assert sha(output.with_suffix('.views.bin'))==r['views_sha256']
