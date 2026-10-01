@@ -65,7 +65,6 @@ def main():
         model_code_sha256=sha(ROOT/'research/flywheel_model.py'),
         lineage_code_sha256=sha(ROOT/'research/lineage.py'),encoding_views_code_sha256=sha(ROOT/'research/encoding_views.py'),
         split_code_sha256=sha(ROOT/'research/split_model.py') if a.architecture=='split-bootstrap' else None,
-        collector_code_sha256=sha(ROOT/'crates/splendor-arena/examples/flywheel_data.rs'),
         gated_code_sha256=sha(ROOT/'research/gated_model.py') if a.architecture in ['gated','residual'] else None,
         residual_code_sha256=sha(ROOT/'research/residual_model.py') if a.architecture=='residual' else None,
         split_rule='cycle i: train seed+100m*i; dev train+10m; screen train+20m; confirm screen+1b',
