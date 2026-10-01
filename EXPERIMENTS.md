@@ -2463,3 +2463,29 @@ fixed-observation decision cost at most1.05times E59's128-simulation cost.
 Choose this budget from timing before any arena outcomes. Preserve both
 fixed-node and measured-cost results. Higher-cost gains alone do not show a
 faster improvement loop. E56 stays the champion until a later milestone.
+
+E62 validation passes:102 release Rust tests,strict Clippy,Python tests,exact
+initial/frozen-base/export checks,and native parity below0.000002 output error.
+E63 selects epoch3 after211.69s;dev KL improves0.5850 to0.5735 but value
+Brier changes0.21564 to0.21594. Fixed128 screen3610m has2,000 complete
+games and51.20% credit,CI47.01–55.39%. The median timing sweep chooses64
+simulations before outcomes:base128 costs4.468ms,correction128 costs8.467ms.
+The matched-cost3620m screen has2,000 complete games and41.525%,
+CI37.25–45.80%. Reject this model for the fast loop. Keep E59 lineage and
+E56 champion. This test does not prove a universal capacity limit; it shows
+that this additional capacity costs more than its measured playing benefit.
+
+## E64 — Fresh current-lineage teacher data with full replay
+
+After the residual capacity test failed at measured cost, test another normal
+learning cycle with the supported E59 lineage as the800-simulation teacher.
+Hypothesis:fresh on-policy targets from the improved teacher can produce a
+useful next fast student without more inference cost. Collect1,000 fresh train
+and1,000 independent dev games,retain the E58 5,000-game training replay,
+and warm E59 bootstrap weights. Keep10epochs,lr1e-4,batch1024,
+seed800000012,and existing loss/selection. Master seeds3630m train,
+3640m dev,and3650m for one fresh2,000-game128-simulation paired screen.
+Use14threads and the existing unknown-label rule for blocked games. Require
+requested-credit worst-case point above50.5% for provisional advancement;
+retain strict results and fixed E56 champion. This reuses a full-volume corpus
+while keeping fresh collection bounded,as in the successful E56 generation.
