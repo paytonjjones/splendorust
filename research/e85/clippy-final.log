@@ -1,0 +1,11 @@
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+error[E0599]: no method named `legal_actions` found for struct `splendor_core::Observation` in the current scope
+   --> crates/splendor-agents/src/lib.rs:868:11
+    |
+868 |         o.legal_actions(&mut legal);
+    |           ^^^^^^^^^^^^^ method not found in `splendor_core::Observation`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `splendor-agents` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

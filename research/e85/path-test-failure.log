@@ -1,0 +1,72 @@
++ cargo fmt --all --check
++ cargo clippy --workspace --all-targets --locked -- -D warnings
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.62s
++ cargo test --workspace --release --locked
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents)
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena)
+    Finished `release` profile [optimized] target(s) in 1m 30s
+     Running unittests src/lib.rs (local/research/flywheel-target/release/deps/splendor_agents-b3c226b755997fb5)
+
+running 43 tests
+test learned::tests::pairwise_value_is_symmetric_and_finite ... ok
+test belief::tests::small_pool_exact_moments_and_public_information ... ok
+test learned::tests::features_do_not_depend_on_sampled_hidden_world ... ok
+test native_environment::tests::all_eighty_one_native_action_ids_are_supported_without_projection ... ok
+test native_environment::tests::native_cap_and_shared_reward_differ_from_canonical ... ok
+test native_environment::tests::native_small_takes_returns_and_pass_are_whole_turns ... ok
+test native_environment::tests::native_reserve_at_cap_omits_gold_and_takes_do_not_overflow ... ok
+test native_environment::tests::native_colored_first_payment_and_multiple_nobles_on_purchase_only ... ok
+test native_environment::tests::native_observation_is_independent_of_real_blind_identity ... ok
+test neural::tests::hidden_world_and_blind_ids_do_not_enter_features ... ok
+test neural_search::tests::completed_q_policy_and_mixed_value ... ok
+test native_environment::tests::same_model_feature_contract_in_canonical_and_native_openings ... ok
+test neural_search::tests::transferred_keys_include_the_network_turn_input ... ok
+test tests::next_turn_bound_counts_depletion_and_market_removal_separately ... ok
+test tests::noble_threshold_take_ends_only_from_the_last_seat ... ok
+test tests::public_block_filter_never_guesses_blind_reservations ... ok
+test tests::return_filter_uses_complete_bundles_and_keeps_uncertified_choices ... ok
+test tests::search_stops_at_counter_capacity_without_panicking ... ok
+test tests::take_filter_keeps_uncertified_choices_without_a_safe_alternative ... ok
+test tests::belief_factory_preserves_requested_budget ... FAILED
+test tests::search_cannot_distinguish_unknown_decks ... ok
+test neural::tests::main_action_indices_are_unique_on_real_positions ... ok
+test transfer::tests::gated_bitplanes_preserve_signed_byte_semantics ... ok
+test transfer::tests::gated_checkpoint_output_bias_and_validation ... ok
+test neural_search::tests::belief_transform_runs_only_at_the_root ... ok
+test transfer::tests::bootstrap_dispatch_preserves_exact_inference ... ok
+test transfer::tests::deeper_identity_trunk_preserves_bootstrap_and_checks_header ... ok
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... ok
+test neural_search::tests::compact_keys_preserve_exact_observation_identity ... ok
+test transfer::tests::translated_main_logits_cover_exactly_native_main_actions ... ok
+test transfer::tests::transferred_search_has_no_hidden_world_access_and_handles_late_turns ... ok
+test belief::tests::sampled_world_invariance_and_no_blind_identity ... ok
+test neural_search::tests::correction_runs_once_at_root_and_base_runs_at_leaves ... ok
+test transfer::tests::information_projection_identity_and_payload_checks ... ok
+test transfer::tests::residual_identity_corrections_and_payload_checks ... ok
+test neural_search::tests::neural_tree_choices_match_across_hidden_worlds ... ok
+test transfer::tests::split_model_keeps_critic_independent_and_checks_payloads ... ok
+test neural_search::tests::persistent_tree_is_observation_only_and_keeps_actions_legal ... ok
+test neural_search::tests::gumbel_exact_budget_legal_targets_and_seed_identity ... ok
+test tests::cached_scores_equal_uncached_scores_for_every_legal_action ... ok
+test tests::timed_control_preserves_original_algorithm_settings ... ok
+test tests::every_agent_chooses_legal_and_is_reproducible ... ok
+test transfer::tests::interleaved_kernel_matches_reference_bits_on_real_observations ... ok
+
+failures:
+
+---- tests::belief_factory_preserves_requested_budget stdout ----
+
+thread 'tests::belief_factory_preserves_requested_budget' (19680569) panicked at crates/splendor-agents/src/neural_search.rs:877:41:
+read flywheel checkpoint: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::belief_factory_preserves_requested_budget
+
+test result: FAILED. 42 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+error: test failed, to rerun pass `-p splendor-agents --lib`
+reject: execution failure: Command '['cargo', 'test', '--workspace', '--release', '--locked']' returned non-zero exit status 101.

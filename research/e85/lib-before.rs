@@ -697,15 +697,6 @@ impl Agent for LearnedCycleAgent {
         self.search.select_action(o, legal)
     }
 }
-fn neural_iterations(name: &str, requested: u32) -> u32 {
-    match name {
-        "flywheel-best128" => 128,
-        "flywheel-best256" => 256,
-        "flywheel-best800" | "flywheel-gumbel800" => 800,
-        _ => requested,
-    }
-}
-
 pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dyn Agent>, String> {
     Ok(match name {
         "random" => Box::new(RandomAgent::new(seed)),
@@ -755,8 +746,6 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
         | "flywheel-gumbel-noisy"
         | "flywheel-gumbel-candidate"
         | "flywheel-gumbel800"
-        | "flywheel-belief-gumbel"
-        | "flywheel-belief-gumbel-candidate"
         | "flywheel-root-best"
         | "flywheel-root-candidate"
         | "flywheel-root-gumbel-best"
@@ -770,7 +759,12 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             if name == "transfer-deep" {
                 config.depth = 64;
             }
-            config.iterations = neural_iterations(name, config.iterations);
+            config.iterations = match name {
+                "flywheel-best128" => 128,
+                "flywheel-best256" => 256,
+                "flywheel-best800" | "flywheel-gumbel800" => 800,
+                _ => config.iterations,
+            };
             let mut agent = neural_search::NeuralAgent::new(seed, config);
             agent.logistic = name == "neural-logistic" || name == "neural-rollout-logistic";
             agent.enhanced = name == "neural-v2" || name.starts_with("neural-rollout");
@@ -783,16 +777,13 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
                     name,
                     "flywheel-candidate"
                         | "flywheel-gumbel-candidate"
-                        | "flywheel-belief-gumbel-candidate"
                         | "flywheel-root-candidate"
                         | "flywheel-root-gumbel-candidate"
                 )));
             }
             agent.root_only = name.starts_with("flywheel-root");
-            agent.belief_root = name.starts_with("flywheel-belief");
-            agent.gumbel = name.starts_with("flywheel-gumbel")
-                || name.starts_with("flywheel-root-gumbel")
-                || name.starts_with("flywheel-belief-gumbel");
+            agent.gumbel =
+                name.starts_with("flywheel-gumbel") || name.starts_with("flywheel-root-gumbel");
             if agent.gumbel {
                 assert!(
                     search.time_budget.is_none(),
@@ -865,14 +856,6 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
 mod tests {
     use super::*;
     use splendor_core::GameState;
-    #[test]
-    fn belief_factory_preserves_requested_budget() {
-        for name in ["flywheel-belief-gumbel", "flywheel-belief-gumbel-candidate"] {
-            assert_eq!(neural_iterations(name, 16), 16);
-            assert_eq!(neural_iterations(name, 128), 128);
-        }
-        assert_eq!(neural_iterations("flywheel-gumbel800", 128), 800);
-    }
     fn noble_finish_observation(last: bool) -> Observation {
         let mut o = GameState::new(2, 0).unwrap().observe(0);
         o.players = [Player::default(); 4];

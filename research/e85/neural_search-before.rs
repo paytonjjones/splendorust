@@ -196,8 +196,6 @@ pub struct NeuralAgent {
     pub persistent: bool,
     /// Gumbel planning with completed-Q policy targets (E72).
     pub root_only: bool,
-    pub belief_root: bool,
-    pub belief_calls: u64,
     root_evaluation: bool,
     pub correction_calls: u64,
     pub gumbel: bool,
@@ -229,8 +227,6 @@ impl NeuralAgent {
             rollout_depth: 0,
             persistent: false,
             root_only: false,
-            belief_root: false,
-            belief_calls: 0,
             root_evaluation: false,
             correction_calls: 0,
             gumbel: false,
@@ -258,11 +254,7 @@ impl NeuralAgent {
                     super::learned::predict(o, o.viewer as usize, &super::value_weights::WEIGHTS),
                 );
             }
-            let mut x = super::transfer::encode(o, &mut self.rng);
-            if self.belief_root && self.root_evaluation {
-                x = super::belief::moments(&x, &super::transfer::public_context(o)).0;
-                self.belief_calls += 1;
-            }
+            let x = super::transfer::encode(o, &mut self.rng);
             let model = self.external_model.unwrap_or_else(model_transferred);
             let (policy, values) = if model.needs_public_context() {
                 model.infer_with_context(&x, &super::transfer::public_context(o))
@@ -568,25 +560,13 @@ impl NeuralAgent {
         o: &crate::native_environment::Observation,
     ) -> ([f32; 81], f64) {
         self.calls += 1;
-        let mut x = o
+        let x = o
             .determinize(&mut self.rng)
             .expect("valid native observation")
             .model_features();
         let model = self
             .external_model
             .expect("native environment requires frozen model");
-        if self.belief_root && self.root_evaluation {
-            let opponent = 1 - usize::from(o.current);
-            let mut context = [0.0; 7];
-            for slot in 0..usize::from(o.players[opponent].reserved_count) {
-                let r = o.players[opponent].reserved[slot];
-                context[slot] = f32::from(!r.public);
-                context[slot + 3] = f32::from(r.tier + 1) / 3.0;
-                context[6] += context[slot] / 3.0;
-            }
-            x = super::belief::moments(&x, &context).0;
-            self.belief_calls += 1;
-        }
         let (policy, values) = if model.needs_public_context() {
             let opponent = 1 - usize::from(o.current);
             let mut context = [0.0; 7];
@@ -1041,33 +1021,6 @@ mod tests {
                 }
             }
         }
-    }
-    #[test]
-    fn belief_transform_runs_only_at_the_root() {
-        let model = Box::leak(Box::new(super::super::transfer::Model::from_bytes(
-            include_bytes!("../../../research/e81/model/model.bin"),
-        )));
-        let state = GameState::new(2, 4630000000).unwrap();
-        let mut legal = ActionSet::new();
-        state.legal_actions(&mut legal);
-        let o = state.observe(0);
-        let mut a = NeuralAgent::new(
-            85,
-            SearchConfig {
-                iterations: 16,
-                depth: 4,
-                ..Default::default()
-            },
-        );
-        a.transferred = true;
-        a.external_model = Some(model);
-        a.gumbel = true;
-        a.belief_root = true;
-        a.world_pool = 3;
-        assert!(legal.contains(&a.select_action(&o, &legal)));
-        assert_eq!(a.simulations, 16);
-        assert_eq!(a.belief_calls, 1);
-        assert!(a.calls > 1);
     }
     #[test]
     fn transferred_keys_include_the_network_turn_input() {
