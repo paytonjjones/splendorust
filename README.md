@@ -12,6 +12,10 @@ The [playing-strength report](benchmarks/strength/REPORT.md) records the fixed
 external opponents, approved observation adapters, native controls and unsupported
 games. Its results are separate from simulator-speed measurements.
 
+The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/README.md)
+adds public-only AlphaZero and privileged SplendoRust variants to the native
+benchmark. Both variants keep the game rules, models and search budgets fixed.
+
 ## Run
 
 Install Rust through rustup. The repository pins Rust 1.98.1. Dependencies are locked in `Cargo.lock`.
