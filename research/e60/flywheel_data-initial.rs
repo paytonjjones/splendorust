@@ -84,8 +84,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let mut label_value=value;
                     if a.teacher_replicates>1 {
                         for teacher in &mut replicas[seat] {
-                            let chosen=teacher.select_action(&o,&legal);
-                            let p=teacher.policy_target().unwrap_or_else(|| {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p});
+                            teacher.select_action(&o,&legal);
+                            let p=teacher.policy_target().expect("Main teacher policy");
                             for (v,x) in label_policy.iter_mut().zip(p) {*v+=x;}
                             label_value+=teacher.value_target().unwrap_or(f32::NAN);
                         }

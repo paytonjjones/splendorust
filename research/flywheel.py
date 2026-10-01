@@ -31,6 +31,7 @@ def main():
     p.add_argument('--policy-only',action='store_true')
     p.add_argument('--greedy-targets',action='store_true')
     p.add_argument('--encoding-views',type=int,choices=[1,8],default=1)
+    p.add_argument('--teacher-replicates',type=int,choices=[1,2,4,8],default=1)
     p.add_argument('--sample-encoding-views',action='store_true')
     p.add_argument('--selection-rule',choices=['strict','provisional'],default='strict')
     p.add_argument('--threads',type=int,default=14)
@@ -110,7 +111,7 @@ def main():
                     preserve(output);preserve(meta)
                     run([binaries/'examples/flywheel_data','--games',min(a.shard_games,games-offset),'--seed',master+offset,
                          '--policy-seed',master+offset+3000000000,'--iterations',a.teacher_iterations if split=='train' else a.dev_teacher_iterations,'--depth',16,
-                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--output',output],output.with_suffix('.log'))
+                         '--threads',a.threads,'--encoding-views',a.encoding_views,'--teacher-replicates',a.teacher_replicates,'--output',output],output.with_suffix('.log'))
                     atomic(receipt,dict(data_sha256=sha(output),manifest_sha256=sha(meta),teacher_sha256=best['model_sha256'],views_sha256=sha(output.with_suffix('.views.bin')) if a.encoding_views==8 else None))
                 r=json.loads(receipt.read_text())
                 if a.encoding_views==8:assert sha(output.with_suffix('.views.bin'))==r['views_sha256']

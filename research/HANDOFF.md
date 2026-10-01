@@ -49,9 +49,13 @@ incomplete control games remain unknown. The external400-game AlphaZero
 rerun is complete:209 complete,191 unsupported;59.81% conditional credit
 cannot establish a rank. All400 histories passed canonical replay checks.
 
-E58 is the next registered cycle:5,000 fresh800-simulation teacher games plus
-E56's1,000-game replay shard,1,000 dev games,10 epochs,2k provisional screen
-against this new confirmed champion. Seeds3510m/3520m/3530m are reserved.
+E58 completed its 5,000-game teacher corpus and advanced provisionally at
+51.8% over E56 in 2,000 complete games. E56 stays the confirmed champion.
+E59 is training a 50-epoch convergence control on the same corpus. Its
+3540m screen is reserved; do not duplicate it. E60 found 24.1% mean pairwise
+teacher policy TV on 62 fixed observations. A new teacher-aggregation mode
+is available, with exact original-data and trajectory checks. It has no
+playing-strength result yet.
 Data and Torch remain under this worktree's ignored `local/`; do not duplicate
 active seed streams. Use the confirmed E56 model for further teacher work.
 

@@ -262,3 +262,10 @@ with a separate RNG. The original data and trajectories stay exact. Sidecars
 use a u64 primary-row index followed by7x392 float32 inputs. `--sample-encoding-views` samples one of the eight inputs per training visit, keeping masks and
 labels unchanged; an independent augmentation RNG preserves the row order.
 Dataset/sidecar hashes, source code hashes and actual blind frequency are saved.
+
+For a registered target-aggregation experiment, `--teacher-replicates 2`
+(or4/8) averages independent teacher searches on each recorded Observation.
+The first teacher still selects all trajectory and opening actions. Additional
+label simulations and inference calls are reported separately. The default
+is1; its training bytes match the original collector exactly. This mode has
+passed trajectory/input/label-mask checks, but has no strength result yet.

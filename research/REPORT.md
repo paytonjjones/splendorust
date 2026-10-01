@@ -31,7 +31,13 @@ minutes. E56 collected 2,000 fresh games in 315.37 s, trained in 107.84 s,
 and screened in 46.15 s. Its 20,000-game milestone took 523.34 s and stays
 outside the inner loop. E55's random hidden-view control was rejected at
 49.525%; measured sensitivity changed little. Current evidence supports more
-strong-teacher data. E58 uses the confirmed model as an 800-simulation teacher.
+strong-teacher data. E58 used the confirmed model as an 800-simulation teacher and advanced
+provisionally at 51.8% over E56 in 2,000 complete games. Its 95% interval
+is 47.49–56.11%; this is not a confirmed gain. E56 stays the champion.
+E59 tests 50 epochs on the same corpus. E60 found 24.1% mean pairwise
+teacher policy TV on 62 fixed observations. E61 tests two-teacher averaged
+targets with all E58 trajectories and inputs held fixed. Its corpus generation
+is active. These controls will guide the next structural change.
 All negative results and prior champion files remain saved. Original Search128
 and core rules are unchanged. Learned evidence is for two players only; other
 player counts use Strong.

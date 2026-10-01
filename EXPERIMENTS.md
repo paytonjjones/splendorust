@@ -2366,3 +2366,52 @@ argmax disagreement, and value-target range. All teachers receive Observation
 only. This measures target repeatability, not playing strength or corpus
 prevalence. High variance would support a larger change to belief aggregation
 or target construction; low variance would direct attention to fit capacity.
+
+**E58 completed:** 2,000 complete games,51.8% over E56;95% interval
+47.49–56.11%. The registered provisional rule advances to native SHA
+fd448a7fd66463a20235d75a2a621ce1d22fc17d7b89138c4fd9d938288233f1.
+Strict gate retains E56. The fixed champion does not change. Fresh train
+corpus has280,951 positions;dev56,128. Collection803.67+159.25s,
+training119.53s. Epoch7 selected from10.
+
+**E60 completed:**62 fixed observations,eight independent searches each.
+Mean pairwise policy TV24.10%,mean TV to the mean17.42%,argmax
+disagreement22.38%. Mean value-credit range0.05525. Ordinary and blind
+stress cohorts are reported separately; this is not corpus prevalence or
+proof of a causal strength limit. It supports a target-aggregation control.
+
+An optional `--teacher-replicates` collector mode now averages independent
+root policy/value targets. The first teacher alone chooses every trajectory
+action and opening sample; all extra teachers receive Observation only. Its
+16-game800-simulation check (908rows) keeps trajectories,inputs,masks,
+outcomes and primary work identical. Default one-teacher data matches the
+original E58 prefix exactly. Extra label work is reported separately.
+The first check failed on a one-legal-action observation: no search target
+is available. The fix uses the same one-hot action fallback and unknown
+value mask as the original collector. Failed source/logs are preserved.
+This mode is available but has no playing-strength result yet.
+
+## E61 — Paired teacher-aggregation training control
+
+E60 identifies substantial repeatability error in teacher policies. Test a
+structural change to target construction, with two independent 800-simulation
+teachers per observation. Regenerate all 5,000 E58 training trajectories from
+E56 at the same setup/policy seeds. Only averaged policy/value labels may
+change: require identical records, inputs, masks, and outcome labels across
+all positions. The first teacher controls trajectories and opening sampling.
+This keeps the successful position volume and avoids a quality/volume confound.
+Use the exact E58 dev corpus and E56 replay shard, warmstart E56, 10 epochs,
+seed800000009, and the same loss/selection/batch/learning rate as E58.
+Teacher collection runs concurrently with E59's offline optimization. Report
+all extra label work and collection time. This is a two-teacher target average,
+not a change to runtime search or a claim of ensemble strength.
+
+Fixed 2,000-game paired screen3560000000 at128/depth16/14threads against
+E58's frozen10-epoch model gives the direct target-construction control. If
+it passes the provisional50.5% requested-credit rule, also compare against
+E59's selected lineage at3570000000 if that model differs from E58. Advance
+only if the candidate passes both applicable screens. Preserve all strict
+results. E56 stays the fixed champion. After these three attempts(E58,E59,E61),
+freeze the endpoint and use the reserved3580000000,20,000-game milestone
+against E56. No candidate selection from this milestone. The milestone sits
+outside the inner model screens. Do not call an incomplete milestone a victory.

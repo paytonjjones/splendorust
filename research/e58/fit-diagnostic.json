@@ -1,0 +1,46 @@
+{
+  "schema": "distillation-fit-diagnostic-v1",
+  "checkpoint_sha256": "957d93d8b34bdf277427ffd6bfff4b7ae068cf7447ebfb039c08889ed249b26d",
+  "script_sha256": "ff137d8a166d73de9385eaf2480ce2526dd0e0939b4872691a3c41fd241cd0eb",
+  "train_files": [
+    {
+      "path": "local/research/e58/train.bin",
+      "sha256": "7e060b30f2765470aa95b277dfc02ddac88f0f466fa8e72ef2d1ebe74ff73312",
+      "rows": 280951,
+      "setups": 5000
+    }
+  ],
+  "dev_files": [
+    {
+      "path": "local/research/e58/dev.bin",
+      "sha256": "2ca7195ced691ee793d4d21d125185b992fe8ad9d9793a7967bf3a7ebdcff73b",
+      "rows": 56128,
+      "setups": 1000
+    }
+  ],
+  "train": {
+    "rows": 280951,
+    "policy_ce": 1.7191331419144402,
+    "target_entropy": 1.1461089465810013,
+    "policy_kl": 0.573024195333439,
+    "argmax_agreement": 0.5596278354588523,
+    "target_max_probability": 0.6297695112756401,
+    "target_probability_of_student_argmax": 0.44369441081354255,
+    "value_brier": 0.20689214265833128,
+    "mean_policy_tv": 0.3658629627464648
+  },
+  "dev": {
+    "rows": 56128,
+    "policy_ce": 1.7252029540737244,
+    "target_entropy": 1.1409043732907374,
+    "policy_kl": 0.5842985807829871,
+    "argmax_agreement": 0.5536452394526796,
+    "target_max_probability": 0.6311627032411548,
+    "target_probability_of_student_argmax": 0.44069742259305045,
+    "value_brier": 0.2155043412777282,
+    "mean_policy_tv": 0.3692486408498975
+  },
+  "device": "mps",
+  "scope": "Policy/label fit on observation encodings. A small train/dev gap alone does not distinguish capacity, optimization, or target ambiguity.",
+  "seconds": 5.375738583039492
+}
