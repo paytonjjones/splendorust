@@ -93,3 +93,9 @@ interrupted control run against the full repeated control schedule. This
 driver does not change any outcome code or benchmark setting. The interrupted
 records and logs remain under `interrupted/control`; only the full repeated
 schedule contributes to the final comparison.
+
+`publish.py` waits for the completed report. It checks every saved artifact
+hash, commits the results, merges current main, reruns the frozen runtime
+and evidence audit, and pushes with a normal fast-forward protection check.
+It stops on a failed check or conflict. Its process log and status are kept
+under the ignored `local/strength/information-fair-publication` directory.
