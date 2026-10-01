@@ -2812,3 +2812,11 @@ E89 result: reject at 47.6% in 2,000 complete paired games against E88. Retain E
 ## E90 — Teacher action-label stability
 
 Hypothesis and fixed cohort: research/e90/PREREGISTRATION.md. Frozen E88 on 222 fresh learner-visited observations, eight independent searches each at 128 and 800 simulations. At 800, pairwise selected-action agreement is 57.1107%, four-versus-four consensus agreement 69.3694%. All root outputs are exactly encoding-invariant. This motivates a consensus-teacher strength test, not a causal noise claim or model promotion. Diagnostic time 7.76s; all raw vectors and build hashes preserved. See research/e90/REPORT.md.
+
+## E91 — Consensus teacher strength
+
+Hypothesis: independent chosen-action noise can hurt teacher quality. Four E88 root-Gumbel800 votes versus one E88 root-Gumbel800 teacher, 2,000 paired games at 4790000000, 14 threads; unequal 3,200 versus 800 simulations. All complete. Consensus scores 56.875%, conservative paired 95% interval 52.6431–61.1069%. No model promotion or equal-compute claim. Next test fixed-total-budget consensus before data collection. See research/e91/REPORT.md and PREREGISTRATION.md.
+
+## E92 — Current champion against unchanged AlphaZero
+
+Freeze E81 from CHAMPION.json and its Gumbel128 endpoint. Test 2,000 fresh native-profile paired games at 4810000000 against unchanged AlphaZero800, using eight workers. Preserve private-information asymmetry and native referee, validate all replay, and keep canonical evidence separate. Weak external performance triggers a training-paradigm reassessment. See research/e92/PREREGISTRATION.md.

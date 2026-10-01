@@ -1,0 +1,11 @@
+# E92: current champion against unchanged AlphaZero
+
+Hypothesis: The canonical champion's model/search gain over E56 carries to the stable external target. Resolve and freeze research/CHAMPION.json: E81, native model SHA e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8, Gumbel128, depth16, three public-observation sampled worlds, no root noise or correction branch. Do not use the provisional E88 model or rejected E89 model.
+
+Use the unchanged upstream AlphaZero800 at revision 32a27ac1f85d5de2766cc5f60c2bf04e557f7836 and checkpoint SHA 6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07. Keep its native rules, private-information input, cpuct0.8, fpu0.0593, three universes and six-total-turn temperature schedule unchanged. SplendoRust stays observation-only. Preserve the existing alphazero-native-32a27ac-v1 referee, model-input translation, RNG streams and native public-history interface.
+
+Run 2,000 fresh paired games at master4810000000 with eight workers. Native profile tests and differential checks must pass first. Record model, worker, source, upstream, settings and archive hashes. Validate every game by native replay. Keep incomplete statuses unknown and reject an incomplete result. Do not pool these games with E56's frozen schedules or use them for training/checkpoint selection. Keep canonical champion evidence separate. This is a current-endpoint milestone check, not equal-information, equal-compute or canonical ranking evidence.
+
+If the conservative 95% upper bound remains below50%, treat this as evidence that the current endpoint is weak against the critical external target. Reassess the training paradigm instead of continuing more generations of the same failed recipe. The next candidate direction is observation-only distillation from the stronger external teacher with an explicit native/canonical training boundary and fresh canonical checks. Privileged teacher labels may be used offline, but private identities, real remaining-card membership, referee seeds and future states must never enter runtime model inputs. Preserve AlphaZero unchanged as the evaluation opponent and use held-out seeds for any resulting model.
+
+Use about2,000 games for this check. Reserve20,000 confirmation for a later external dominance claim or an ambiguous result, outside the inner learning loop.

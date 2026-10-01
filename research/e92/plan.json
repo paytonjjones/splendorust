@@ -1,0 +1,59 @@
+{
+  "schema": "current-champion-external-v1",
+  "champion": {
+    "schema": "confirmed-research-champion-v1",
+    "model": "research/e81/model/model.bin",
+    "checkpoint": "research/e81/model/model.pt",
+    "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1",
+    "previous_model": "research/e56/model/model.bin",
+    "previous_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+    "previous_champion": "research/e83/previous-champion.json",
+    "decision": "research/e83/gate/decision.json",
+    "games": 20000,
+    "complete": 20000,
+    "credit": 0.548625,
+    "ci95": [
+      0.5372028047686535,
+      0.5600471952313466
+    ],
+    "iterations": 128,
+    "depth": 16,
+    "search_agent": "flywheel-gumbel",
+    "baseline_search_agent": "flywheel-best",
+    "search_config": {
+      "world_pool": 3,
+      "gumbel_max_considered": 16,
+      "gumbel_cvisit": 50,
+      "gumbel_cscale": 0.1,
+      "gumbel_root_noise": 0
+    },
+    "scope": "Combined model/search endpoint in canonical SplendoRust v2, two players, fixed128 simulations/depth16; external best-in-class rank remains unestablished"
+  },
+  "master": 4810000000,
+  "games": 2000,
+  "workers": 8,
+  "iterations": 128,
+  "search": "gumbel",
+  "root_only": false,
+  "profile": "alphazero-native-32a27ac-v1",
+  "source_revision": "43fdf273bc31c4d08646fd6ce7bc8ac51d114be7",
+  "files": {
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/CHAMPION.json": "c7706cd39dddc9cb89ffec78bfd5769d5661221f0ad6e2009c47553d6b33e7e8",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/research/e81/model/model.bin": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/strength/external/alphazero/splendor/pretrained_2players.pt": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/target/release/examples/native_policy_worker": "7d9cfc76186d54f4423a129bea3292523054ffcb8eb4ac45490451c056bc165b",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/target/release/examples/native_rules_probe": "6b9d694830eac4b0c8da3226c88b880286c05eb7d13e022932cde852c8c0a3af",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/target/release/examples/strength_worker": "8ed7e7d39f735f893b1fdd6f123026016fc207c06ee6cc8395ffc143fbbfb724",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/native_environment.rs": "f33a77f9757ba66ff35530d361788ae3d3d44ecc1ecc0adfd5588d8fad9f4676",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/neural_search.rs": "a6df4dc32acda960dfd2c79d5c9bdac65dfb89b80848b3a1d8d24a9d32f82486",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/transfer.rs": "3a95dff4131dc20b4541ac82550b32894e8d3d3d83c0fcce6b1faeb4442770f6",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-agents/src/belief.rs": "098e79bf3ea7525b973f2de074b0d368d73347539e9e740e58d91c4ea1badc33",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/crates/splendor-arena/examples/native_policy_worker.rs": "339037b619d44c90df0c0cf4c6f7b95b44863a84b11b9aa240bcc0aaca95101e",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/benchmarks/strength/native/run.py": "2fc808babad6a540d6e5a3a88a5ab69548e8a494f4d73c41ff914c4ee7b1ee8c",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/benchmarks/strength/native/schedule.py": "35aea9c88fb91f8a36968ba3e2c568e356cf382a1388a4356504d4424a1194ce"
+  },
+  "python": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/strength/inference/bin/python",
+  "scope": "Current canonical champion under unchanged native external profile; observation-only SR versus native-private AlphaZero800; no canonical/equal-information/equal-compute rank"
+}
