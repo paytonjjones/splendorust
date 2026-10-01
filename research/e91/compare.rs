@@ -5,6 +5,7 @@ use splendor_core::{ActionSet, GameState, Phase, Rng};
 use std::time::Instant;
 fn main() {
     let start = Instant::now();
+    let games:usize=std::env::args().nth(1).map(|s|s.parse().unwrap()).unwrap_or(2000);assert!(games>0 && games%2==0);
     let config = SearchConfig {
         iterations: 800,
         depth: 16,
@@ -15,7 +16,7 @@ fn main() {
         .build()
         .unwrap();
     let mut stream = Rng::new(4_790_000_000);
-    let setups: Vec<_> = (0..1000).map(|_| stream.next_u64()).collect();
+    let setups: Vec<_> = (0..games/2).map(|_| stream.next_u64()).collect();
     let rows = pool.install(|| setups.par_iter().enumerate().flat_map_iter(|(block,&setup)| {
         let config = &config;
         [0usize,1].into_iter().map(move |rotation| {
@@ -30,7 +31,7 @@ fn main() {
                 let seat = state.current_player();let o = state.observe(seat);
                 let action = if seat==rotation {
                     let first = ensemble[0].select_action(&o,&legal);
-                    if o.phase!=Phase::Main {first} else {
+                    if o.phase!=Phase::Main || ensemble[0].value_target().is_none() {first} else {
                         let mut votes = [0u8;67];let mut credits = [0.0f64;67];
                         let id = action_index(first).unwrap();votes[id]+=1;credits[id]+=f64::from(ensemble[0].value_target().unwrap());
                         for teacher in &mut ensemble[1..] {
@@ -53,7 +54,7 @@ fn main() {
     }).collect::<Vec<_>>());
     println!(
         "{}",
-        serde_json::json!({"schema":"consensus-teacher-v1","games":2000,"blocks":1000,"master":4790000000u64,"replicas":4,"iterations_per_replica":800,"single_iterations":800,"depth":16,"threads":14,"seconds":start.elapsed().as_secs_f64(),"rule":"teacher diagnostic only; unequal compute; no model promotion"})
+        serde_json::json!({"schema":"consensus-teacher-v1","games":games,"blocks":games/2,"master":4790000000u64,"replicas":4,"iterations_per_replica":800,"single_iterations":800,"depth":16,"threads":14,"seconds":start.elapsed().as_secs_f64(),"rule":"teacher diagnostic only; unequal compute; no model promotion"})
     );
     for row in rows {
         println!("{row}");

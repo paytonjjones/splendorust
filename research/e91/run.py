@@ -13,4 +13,5 @@ with (out/'build.log').open('w') as f:subprocess.run(cmd,stdout=f,stderr=subproc
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 (out/'build.json').write_text(json.dumps(dict(command=cmd,files={p:sha(p) for p in ['research/e91/compare.rs','local/research/e91/compare','research/e88/model/model.bin',*libs.values()]},toolchain=subprocess.check_output(['rustc','--version'],text=True).strip()),indent=2)+'\n')
 env=os.environ.copy();env['SPLENDOR_BEST_MODEL']=str(root/'research/e88/model/model.bin')
-with (out/'arena.jsonl').open('w') as f:subprocess.run(['local/research/e91/compare'],env=env,stdout=f,stderr=subprocess.STDOUT,check=True)
+with (out/'smoke.jsonl').open('w') as f:subprocess.run(['local/research/e91/compare','4'],env=env,stdout=f,stderr=subprocess.STDOUT,check=True)
+with (out/'arena.jsonl').open('w') as f, (out/'arena-stderr.log').open('w') as err:subprocess.run(['local/research/e91/compare'],env=env,stdout=f,stderr=err,check=True)
