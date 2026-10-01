@@ -36,8 +36,6 @@ struct Args {
     output: PathBuf,
     #[arg(long)]
     public_context: bool,
-    #[arg(long)]
-    teacher_action_targets: bool,
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let a = Args::parse();
@@ -110,12 +108,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if o.phase==Phase::Main && o.turns<124 {
                     let policy=agents[seat].policy_target().unwrap_or_else(|| {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p});
                     let value=agents[seat].value_target().unwrap_or(f32::NAN);
-                    let mut label_policy=if a.actor_iterations.is_some() {[0.0;67]} else if a.teacher_action_targets {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p} else {policy};
+                    let mut label_policy=if a.actor_iterations.is_some() {[0.0;67]} else {policy};
                     let mut label_value=if a.actor_iterations.is_some() {0.0} else {value};
                     if a.actor_iterations.is_some() || a.teacher_replicates>1 {
                         for teacher in &mut replicas[seat] {
                             let chosen=teacher.select_action(&o,&legal);
-                            let p=if a.teacher_action_targets {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p} else {teacher.policy_target().unwrap_or_else(|| {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p})};
+                            let p=teacher.policy_target().unwrap_or_else(|| {let mut p=[0.0;67];p[action_index(chosen).unwrap()]=1.0;p});
                             for (v,x) in label_policy.iter_mut().zip(p) {*v+=x;}
                             label_value+=teacher.value_target().unwrap_or(f32::NAN);
                         }
@@ -214,7 +212,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         drop(writer);
         std::fs::rename(context_tmp, a.output.with_extension("context.bin"))?;
     }
-    let manifest = serde_json::json!({"schema":"flywheel-v1","teacher_action_targets":a.teacher_action_targets,"teacher_agent":a.teacher_agent,"actor_agent":a.actor_agent.as_deref().unwrap_or(&a.teacher_agent),"public_context":a.public_context,"context_format":"f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
+    let manifest = serde_json::json!({"schema":"flywheel-v1","teacher_agent":a.teacher_agent,"actor_agent":a.actor_agent.as_deref().unwrap_or(&a.teacher_agent),"public_context":a.public_context,"context_format":"f32[7]: opponent unknown flags[3], reservation (tier+1)/3[3], unknown count/3","teacher_replicates":a.teacher_replicates,"additional_label_simulations":label_simulations,"additional_label_inference_calls":label_inference_calls,"actor_iterations":a.actor_iterations.unwrap_or(a.iterations),"separate_actor":a.actor_iterations.is_some(),"label_scope":if a.actor_iterations.is_some() {"Independent teacher root targets on actor-visited observations; actor policy alone determines actions and opening sampling"} else {"Mean root policy/value over independent teachers; first teacher alone determines trajectory and opening sampling"},"encoding_views":a.encoding_views,"views_format":"u64 base-row index; f32[7][392]; only opponent-blind rows; base labels unchanged","row_bytes":2232,"format":"u64 setup; f32[392] actor observation encoding; f32[81] native legal mask; f32[81] root visits; f32 teacher credit; f32 terminal credit (NaN if incomplete)","games":a.games,"complete":counts[0],"blocked":counts[1],"capped":counts[2],"rows":rows,"seed":a.seed,"policy_seed":a.policy_seed,"iterations":a.iterations,"depth":a.depth,"threads":a.threads,"temperature_total_turns":6,"seconds":start.elapsed().as_secs_f64(),"simulations":simulations,"inference_calls":inference_calls,"source":env!("SPLENDOR_SOURCE_ID"),"records":records});
     std::fs::write(
         a.output.with_extension("json"),
         serde_json::to_vec_pretty(&manifest)?,

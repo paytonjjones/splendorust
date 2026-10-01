@@ -1,0 +1,47 @@
+{
+  "original_e74_hashes": {
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/000000.bin": "aee15eec0241bc6ffb8463c2376d8ca57bf9fd06ffe6fda8ee187bfa0a2cb767",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/001000.bin": "18b621c1ebe296ef285af356daf2fb76699ec244a19ffd46da35fff051d3ae24",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/002000.bin": "afd9e2e8274c2ceed6d2a3c54e3f93abae8311dbe6b2ec6337b68ee6b9995cea",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/003000.bin": "c0ae0e3e03e71616b567b89703113f31d5a8b529516e330cf3b5e82a7d2ec8b9",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/train/004000.bin": "b74c12993e773c4dfba1da8dcc1f3ea7e2825f78b16d23938319b258f49eea2a",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e74/dev.bin": "086d99a7c004d7b58bac1972cc662e7aed785715d233485a5f2320193283eca2"
+  },
+  "schema": "verified-teacher-action-distillation-v1",
+  "actor_agent": "flywheel-gumbel",
+  "teacher_agent": "flywheel-gumbel",
+  "teacher_action_targets": true,
+  "screen_candidate": "flywheel-gumbel-candidate",
+  "screen_baseline": "flywheel-gumbel",
+  "train_seed": 4300000000,
+  "dev_seed": 4310000000,
+  "screen_seed": 4540000000,
+  "train_games": 5000,
+  "dev_games": 1000,
+  "shard_games": 1000,
+  "actor_iterations": 128,
+  "teacher_iterations": 800,
+  "teacher_replicates": 1,
+  "screen_iterations": 128,
+  "training_seed": 800000016,
+  "epochs": 10,
+  "batch_size": 1024,
+  "learning_rate": 0.0001,
+  "threads": 14,
+  "base_sha256": "d199a3878d7feebb443cb8e01e4afee502e05f2e9ba34c7a042a6bb3b62b86f2",
+  "base_checkpoint_sha256": "5e67a035d42570391dba0d3f354051b9ae48e95c10eedeadaee7bce6a0f1edfb",
+  "champion_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+  "replay": {
+    "path": "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/e68/train/004000.bin",
+    "sha256": "4b8a35c45b2065d5bb168506a20f09d8ee9c99d8e8f216b1fcec9e3b5675a014"
+  },
+  "collector_code_sha256": "2348c4d15770e0f4edd1e53959287aa85f248d39e8c9386451e797b0ab8d5acb",
+  "script_sha256": "89295aac12cf544dc378896f494f3c7611c805198f042a1f9e8aa081fb8afd8d",
+  "training_scripts_sha256": {
+    "train_flywheel.py": "e7aab1fd9886ebe706ac0a31d98346477294b706fd92c69bd7d9b1f8e064f446",
+    "flywheel_model.py": "6e5e8e3745f59b24e577482e84ef86d5830ac03d57eb284954920b8e3c4889e7",
+    "lineage.py": "9fc43765c69dc0981f01952a49f75d23d2ef055cbd95df3d6a126ff699cc62a4",
+    "encoding_views.py": "f6432bfed6c23b9a86acfcbceb08a31df1583580ebf441a7f3f64036a30224aa"
+  },
+  "rule": "provisional worst-case requested point >50.5%; strict decisions preserved; no champion change"
+}
