@@ -1,0 +1,36 @@
+{
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "-O",
+    "-D",
+    "warnings",
+    "-C",
+    "lto=thin",
+    "-C",
+    "codegen-units=1",
+    "research/e90/probe.rs",
+    "-L",
+    "dependency=local/research/flywheel-target/release/deps",
+    "--extern",
+    "splendor_core=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_core-ea8e951e307308ce.rlib",
+    "--extern",
+    "rayon=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/librayon-fe95705d0a313b86.rlib",
+    "--extern",
+    "serde_json=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libserde_json-8aa6d34949d86f06.rlib",
+    "--extern",
+    "splendor_agents=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_agents-1a03f936d2dec845.rlib",
+    "-o",
+    "local/research/e90/probe"
+  ],
+  "files": {
+    "research/e90/probe.rs": "a845c581afa1993b53380b6327981e9bf07a6d32b6ff3579f9cbb9f20a1bfbc6",
+    "local/research/e90/probe": "4a7881d684a3505380580219dc9555027c8ef9f69abcae99760940597e6d194a",
+    "research/e88/model/model.bin": "095020d9adb9f1d60978a19ac754fe21477d700e54c0afcac3cbee28c31b4331",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_core-ea8e951e307308ce.rlib": "3942886b212a2fde9c33428ce13f2a4e1795654c50c8a2ae3d010a4a022beb08",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/librayon-fe95705d0a313b86.rlib": "3b6bbb57819b717ca07596dbac914b99225ea756a8c8252da0eb0959147d18e9",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libserde_json-8aa6d34949d86f06.rlib": "a7a2ad54e7e651c5c2e63a654c4e5858a04cd781ada9061237be45f471f09df4",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_agents-1a03f936d2dec845.rlib": "859fc44b7b372c19edb33ecf11c97c2141a6b09b6b06f7afb15837ddaf595b5b"
+  },
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)"
+}

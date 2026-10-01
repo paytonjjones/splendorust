@@ -1,0 +1,36 @@
+{
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "-O",
+    "-D",
+    "warnings",
+    "-C",
+    "lto=thin",
+    "-C",
+    "codegen-units=1",
+    "research/e91/compare.rs",
+    "-L",
+    "dependency=local/research/flywheel-target/release/deps",
+    "--extern",
+    "splendor_core=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_core-ea8e951e307308ce.rlib",
+    "--extern",
+    "rayon=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/librayon-fe95705d0a313b86.rlib",
+    "--extern",
+    "serde_json=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libserde_json-8aa6d34949d86f06.rlib",
+    "--extern",
+    "splendor_agents=/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_agents-1a03f936d2dec845.rlib",
+    "-o",
+    "local/research/e91/compare"
+  ],
+  "files": {
+    "research/e91/compare.rs": "8a85445d80d390dcff81b445d71d974f6a6328e2bf95612369be8e618dd15e38",
+    "local/research/e91/compare": "aaae04987b913755cfbdebd226b602a099a5d00d66e8fa82fed51393c12c6f38",
+    "research/e88/model/model.bin": "095020d9adb9f1d60978a19ac754fe21477d700e54c0afcac3cbee28c31b4331",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_core-ea8e951e307308ce.rlib": "3942886b212a2fde9c33428ce13f2a4e1795654c50c8a2ae3d010a4a022beb08",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/librayon-fe95705d0a313b86.rlib": "3b6bbb57819b717ca07596dbac914b99225ea756a8c8252da0eb0959147d18e9",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libserde_json-8aa6d34949d86f06.rlib": "a7a2ad54e7e651c5c2e63a654c4e5858a04cd781ada9061237be45f471f09df4",
+    "/Users/payton.jones/.codex/worktrees/2311/splendorust/local/research/flywheel-target/release/deps/libsplendor_agents-1a03f936d2dec845.rlib": "859fc44b7b372c19edb33ecf11c97c2141a6b09b6b06f7afb15837ddaf595b5b"
+  },
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)"
+}

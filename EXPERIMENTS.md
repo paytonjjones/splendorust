@@ -2808,3 +2808,7 @@ E88 result: select provisional lineage at 51.05% in 2,000 complete games. Strict
 Hypothesis: E88 can compress its own stronger 800-simulation policy into the same 128-simulation model. Generate 5,000 fresh full games and 1,000 development games, retain one fixed E87 replay shard, and continue the E88 attention checkpoint for ten epochs. Screen 2,000 paired games against E88; retain E81 as champion. See research/e89/PREREGISTRATION.md.
 
 E89 result: reject at 47.6% in 2,000 complete paired games against E88. Retain E88 provisional / E81 champion. All 6,000 collection games completed; 334,260 train and 55,782 dev positions. Native parity, 118 tests, strict Clippy and legacy bytes pass. Full shared-host cycle 1,849.94s; selected epoch 3 of 10. Next diagnose independent teacher-action stability. See research/e89/REPORT.md.
+
+## E90 — Teacher action-label stability
+
+Hypothesis and fixed cohort: research/e90/PREREGISTRATION.md. Frozen E88 on 222 fresh learner-visited observations, eight independent searches each at 128 and 800 simulations. At 800, pairwise selected-action agreement is 57.1107%, four-versus-four consensus agreement 69.3694%. All root outputs are exactly encoding-invariant. This motivates a consensus-teacher strength test, not a causal noise claim or model promotion. Diagnostic time 7.76s; all raw vectors and build hashes preserved. See research/e90/REPORT.md.
