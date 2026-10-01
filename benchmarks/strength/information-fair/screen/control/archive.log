@@ -1,0 +1,67 @@
+{
+  "schema": "information-fair-lossless-chunks-v1",
+  "raw_file": "games.jsonl",
+  "raw_sha256": "55ec6ed458e3523fcb06ee73cf5dea72fc5273ef4d5cfda4ae1da00e5900f142",
+  "games": 2000,
+  "chunks": [
+    {
+      "file": "games.part-00.jsonl.gz",
+      "archive_sha256": "53921683abef2af6b791aa11146fe84fce3e2f856ba50538a1902c25c6818420",
+      "raw_sha256": "55ec6ed458e3523fcb06ee73cf5dea72fc5273ef4d5cfda4ae1da00e5900f142",
+      "raw_bytes": 26618026,
+      "archive_bytes": 11185532,
+      "games": 2000
+    }
+  ],
+  "shards": [
+    {
+      "file": "shard-00.jsonl",
+      "raw_sha256": "5957c255cac7b9e6e6efad8c7520843e83bcd59f6db8cdaf7cb8f87953a1fe82",
+      "start_index": 0,
+      "games": 250
+    },
+    {
+      "file": "shard-01.jsonl",
+      "raw_sha256": "2483219baeeff32953e3ed03af257b11e3652dd0983c0d514958a2d9cd5647ce",
+      "start_index": 250,
+      "games": 250
+    },
+    {
+      "file": "shard-02.jsonl",
+      "raw_sha256": "9eb05da7ee6c6d2ecc4805f07cc791c9e9ea54298ef9a3aaa879fae7ed82cfc2",
+      "start_index": 500,
+      "games": 250
+    },
+    {
+      "file": "shard-03.jsonl",
+      "raw_sha256": "8944cd415e29d00a57d2007486bffcbc4c9ea45021dc245cbea5fbc685f139ce",
+      "start_index": 750,
+      "games": 250
+    },
+    {
+      "file": "shard-04.jsonl",
+      "raw_sha256": "0958d10304ba8c895cfd2e8b30699369a53ed4b90642dcd3eea7d0745a3ea6d9",
+      "start_index": 1000,
+      "games": 250
+    },
+    {
+      "file": "shard-05.jsonl",
+      "raw_sha256": "75b1b48344eb930c51bcfb5e9b8ed1287318ae6c50372ffdf4681c98069bdfc1",
+      "start_index": 1250,
+      "games": 250
+    },
+    {
+      "file": "shard-06.jsonl",
+      "raw_sha256": "a4d0c17307e7545d3a8311cfc207cf799a6047cf2516d50bb2088b7d0973fd2a",
+      "start_index": 1500,
+      "games": 250
+    },
+    {
+      "file": "shard-07.jsonl",
+      "raw_sha256": "dd8d95d789c3a6c362db7f09856942540aa3d949d8f541286b07fd7efc01a629",
+      "start_index": 1750,
+      "games": 250
+    }
+  ],
+  "restore": "Concatenate gzip-decompressed chunks in listed order to recover games.jsonl exactly. Shard headers are in shard_metadata; select rows by start_index/games to recover each shard exactly."
+}

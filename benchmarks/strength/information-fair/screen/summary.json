@@ -1,0 +1,234 @@
+{
+  "schema": "information-fair-native-v1",
+  "blocks": 1000,
+  "settings": {
+    "ruleset": "alphazero-native-32a27ac-v1",
+    "master": 4900000000,
+    "games": 2000,
+    "iterations": 128,
+    "depth": 16,
+    "world_pool": 3,
+    "root_only": false,
+    "search": "gumbel",
+    "cpuct": 0.4,
+    "fpu_reduction": 0.02965,
+    "uniform_prior": 0,
+    "external_config": {
+      "numMCTSSims": 800,
+      "fpu": 0.0593,
+      "universes": 3,
+      "cpuct": 0.8,
+      "prob_fullMCTS": 1.0,
+      "forced_playouts": false,
+      "no_mem_optim": false
+    },
+    "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "upstream_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "model_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "source_id": "5cbcbf5fb2b739b5",
+    "source_sha256": {
+      "benchmarks/strength/information-fair/run.py": "3e17d8af924bf96e4c74dee34f919279abad7ee03a37960cf9a8cbebec3177da",
+      "benchmarks/strength/information-fair/boundary.py": "17a9e17b4e323c279a9f01772fdf32b8605a61bad860bbc00294acee6451b7b9",
+      "benchmarks/strength/native/upstream.py": "42d7770424aad45c7988c8bdb28e3fb3db5aed8422e947ea10f4b04ea4a812e5",
+      "crates/splendor-agents/src/privileged_environment.rs": "3419021a9a7ea7346763e8f4fe59c8ad53430434bddd62ad298a9abafd898930",
+      "crates/splendor-arena/examples/privileged_native_worker.rs": "54c790f74f0060c85482779ecae548a4c80bc4eb963a637e0e92847a2d662f7b",
+      "crates/splendor-agents/src/environment.rs": "00514f3c64fbf28017bfbf23ecdaa23e6971077ba398100c824ce75c04e38b90",
+      "crates/splendor-agents/src/native_environment.rs": "935f895b3b79c0828569f5a8bced6a4774e9925c4436bab067302fed2f339b44",
+      "crates/splendor-agents/src/neural_search.rs": "7c405a2c610e86b35eee5bb73951d4d0e258695cd427be0e08ab15a29923a99e",
+      "crates/splendor-arena/examples/native_policy_worker.rs": "339037b619d44c90df0c0cf4c6f7b95b44863a84b11b9aa240bcc0aaca95101e",
+      "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+    }
+  },
+  "arms": {
+    "control": {
+      "games": 2000,
+      "statuses": {
+        "complete": 2000
+      },
+      "credit_bounds": [
+        0.276,
+        0.276
+      ],
+      "hoeffding95": [
+        0.23305305916532626,
+        0.3189469408346738
+      ],
+      "seat_credit_bounds": {
+        "0": [
+          0.29,
+          0.29
+        ],
+        "1": [
+          0.262,
+          0.262
+        ]
+      },
+      "terminal_categories": {
+        "native_score": 2000
+      },
+      "cap_unknown_credit_bounds": [
+        0.276,
+        0.276
+      ],
+      "simulations": 7113344,
+      "inferences": 6986791,
+      "policy_seconds": {
+        "champion": 310.14347911567893,
+        "alphazero": 4145.301135701127
+      },
+      "wall_seconds": 576.268556999974,
+      "raw_file": "control/games.jsonl",
+      "raw_sha256": "55ec6ed458e3523fcb06ee73cf5dea72fc5273ef4d5cfda4ae1da00e5900f142",
+      "paired_bootstrap95_missing_envelope": [
+        0.2565,
+        0.2955
+      ]
+    },
+    "blind-alpha": {
+      "games": 2000,
+      "statuses": {
+        "complete": 2000
+      },
+      "credit_bounds": [
+        0.2925,
+        0.2925
+      ],
+      "hoeffding95": [
+        0.24955305916532622,
+        0.33544694083467375
+      ],
+      "seat_credit_bounds": {
+        "0": [
+          0.3085,
+          0.3085
+        ],
+        "1": [
+          0.2765,
+          0.2765
+        ]
+      },
+      "terminal_categories": {
+        "native_score": 2000
+      },
+      "cap_unknown_credit_bounds": [
+        0.2925,
+        0.2925
+      ],
+      "simulations": 7106304,
+      "inferences": 6981408,
+      "policy_seconds": {
+        "champion": 475.7706266080495,
+        "alphazero": 6394.283891007188
+      },
+      "wall_seconds": 891.0579625000246,
+      "raw_file": "blind-alpha/games.jsonl",
+      "raw_sha256": "2ac96a6a1e29f7fe4a8ca3401657b17de5667d3d85dde1af6798b36082134b15",
+      "paired_bootstrap95_missing_envelope": [
+        0.2725,
+        0.313
+      ]
+    },
+    "privileged-sr": {
+      "games": 2000,
+      "statuses": {
+        "complete": 2000
+      },
+      "credit_bounds": [
+        0.29925,
+        0.29925
+      ],
+      "hoeffding95": [
+        0.25630305916532625,
+        0.3421969408346738
+      ],
+      "seat_credit_bounds": {
+        "0": [
+          0.3055,
+          0.3055
+        ],
+        "1": [
+          0.293,
+          0.293
+        ]
+      },
+      "terminal_categories": {
+        "native_score": 2000
+      },
+      "cap_unknown_credit_bounds": [
+        0.29925,
+        0.29925
+      ],
+      "simulations": 7106304,
+      "inferences": 6976300,
+      "policy_seconds": {
+        "champion": 980.261420885101,
+        "alphazero": 10524.371279168292
+      },
+      "wall_seconds": 1483.7769206250086,
+      "raw_file": "privileged-sr/games.jsonl",
+      "raw_sha256": "13a3b32a27ab0b0d31b0677613ef4ffb0936d8a157bb48c6e6730551094046da",
+      "paired_bootstrap95_missing_envelope": [
+        0.2795,
+        0.31925
+      ]
+    }
+  },
+  "contrasts": {
+    "blind-alpha": {
+      "delta_credit_bounds": [
+        0.0165,
+        0.0165
+      ],
+      "paired_bootstrap95": [
+        -0.0022499999999999742,
+        0.03475
+      ],
+      "paired_bootstrap97_5": [
+        -0.0050000000000000044,
+        0.037500000000000006
+      ],
+      "simultaneous_hoeffding95": [
+        -0.07711652241643972,
+        0.11011652241643972
+      ],
+      "control_gap_reduced_fraction_bounds": [
+        0.0736607142857143,
+        0.0736607142857143
+      ],
+      "control_gap_reduced_fraction_bootstrap95": [
+        -0.009858424707822189,
+        0.15074826701347196
+      ]
+    },
+    "privileged-sr": {
+      "delta_credit_bounds": [
+        0.02325,
+        0.02325
+      ],
+      "paired_bootstrap95": [
+        -0.004249999999999976,
+        0.05025000000000002
+      ],
+      "paired_bootstrap97_5": [
+        -0.007749999999999979,
+        0.05399999999999999
+      ],
+      "simultaneous_hoeffding95": [
+        -0.07036652241643973,
+        0.11686652241643972
+      ],
+      "control_gap_reduced_fraction_bounds": [
+        0.10379464285714286,
+        0.10379464285714286
+      ],
+      "control_gap_reduced_fraction_bootstrap95": [
+        -0.019729123792911363,
+        0.2126502151362278
+      ]
+    }
+  },
+  "script_sha256": "7d8db9e09e152a0b84ec2d0470d9fc8e2bf4aa265d17b0fd4210009389153f82",
+  "bootstrap_replicates": 20000,
+  "bootstrap_seed": 491991,
+  "scope": "Independent information interventions at frozen rules/model/search budgets. Setup blocks are the sampling unit; incomplete outcomes retain [0,1] credit. Gap fractions are not additive. No canonical or equal-compute claim."
+}

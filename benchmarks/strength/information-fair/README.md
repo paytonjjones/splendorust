@@ -78,8 +78,10 @@ local/strength/inference/bin/python benchmarks/strength/information-fair/schedul
 
 Repeat for `control` and `privileged-sr` with the same master. Then replay each
 `games.jsonl`, and pass their common parent directory to `summarize.py`.
-Compressed raw archives can be read by `summarize.py`; decompress a copy for
-`replay.py`. Both rotations and all three arms form a matched setup block.
+Restore the lossless chunks with `restore.py` before these commands.
+For example: `restore.py confirmation/blind-alpha --output NEW-games.jsonl`.
+The command checks every chunk hash and the exact merged raw hash.
+Single gzip files can also be read by `summarize.py`. Both rotations and all three arms form a matched setup block.
 Paired intervals resample whole blocks. Fractions of the control gap removed
 are separate counterfactual estimates; they cannot be added. Native turn-cap
 outcomes and unknown-outcome sensitivity are reported separately. These are
