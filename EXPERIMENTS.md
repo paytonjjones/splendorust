@@ -2834,3 +2834,5 @@ Eight fresh unchanged AlphaZero800 native self-play games produce 440 public-inp
 ## E95 — External teacher and public inference at every node
 
 Hypothesis: replace weak internal supervision with unchanged AlphaZero800 expert labels, at comparable corpus volume, and remove sampled hidden-card input noise at every node. Collect5,000 train/1,000 dev native games; mix fixed canonical replay. Use E81 warmstart with a small public-input expansion and a public rules flag. Require fresh native and canonical2,000-game screens. See research/e95/PREREGISTRATION.md. No result or promotion yet.
+
+E95 data stopping point: all6,000 native expert games /336,636 positions complete and replay;280,710 train and55,926 dev. All raw rows/context/history plus canonical replay/development dependencies are preserved in verified gzip archives. The public model at every node passes125 release tests, strict Clippy and native/legacy checks. Training/screens have not started; championE81 and lineageE88 stay unchanged. Collection49.35min is an initial reusable cost; future dev scheduling must fill the worker pool. See research/e95/HANDOFF.md.

@@ -16,11 +16,14 @@ assert not (OUT/'model-plan.json').exists();(OUT/'model-plan.json').write_text(j
 # Preserve compressed replay streams and per-shard checks; raw arrays stay local.
 receipts=[]
 for split in ['train','dev']:
- dest=OUT/'data'/split;dest.mkdir(exist_ok=False,parents=True)
+ dest=OUT/'data'/split;dest.mkdir(exist_ok=True,parents=True)
  for shard in sorted((LOCAL/split).iterdir()):
   if not shard.is_dir():continue
   import shutil
-  for name in ['plan.json','checks.json','histories.json.gz']:shutil.copy2(shard/name,dest/(shard.name+'-'+name))
+  for name in ['plan.json','checks.json','histories.json.gz']:
+   target=dest/(shard.name+'-'+name)
+   if target.exists():assert sha(target)==sha(shard/name)
+   else:shutil.copy2(shard/name,target)
   receipts.append(dict(split=split,shard=shard.name,data_sha256=sha(shard/'data.bin'),context_sha256=sha(shard/'data.context.bin'),histories_sha256=sha(shard/'histories.json.gz')))
 (OUT/'data-receipts.json').write_text(json.dumps(receipts,indent=2)+'\n')
 run([PYTHON,OUT/'train.py','--output',OUT/'model','--epochs',10],'training.log')
