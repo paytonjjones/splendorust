@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "frozen_revision": "6115597ce283e452adfb4f56a6d018ce1c38c743",
+  "schedules": [
+    {
+      "stage": "screen",
+      "arm": "control",
+      "games": 2000,
+      "transitions": 111146,
+      "raw_sha256": "55ec6ed458e3523fcb06ee73cf5dea72fc5273ef4d5cfda4ae1da00e5900f142"
+    },
+    {
+      "stage": "screen",
+      "arm": "blind-alpha",
+      "games": 2000,
+      "transitions": 111036,
+      "raw_sha256": "2ac96a6a1e29f7fe4a8ca3401657b17de5667d3d85dde1af6798b36082134b15"
+    },
+    {
+      "stage": "screen",
+      "arm": "privileged-sr",
+      "games": 2000,
+      "transitions": 111036,
+      "raw_sha256": "13a3b32a27ab0b0d31b0677613ef4ffb0936d8a157bb48c6e6730551094046da"
+    },
+    {
+      "stage": "confirmation",
+      "arm": "control",
+      "games": 20000,
+      "transitions": 1110250,
+      "raw_sha256": "d5fda6099e80901843eb686ec3c627ff7783282bd7bcf58daf325eba7e47f180"
+    },
+    {
+      "stage": "confirmation",
+      "arm": "blind-alpha",
+      "games": 20000,
+      "transitions": 1108612,
+      "raw_sha256": "f612d9fd2a8ba74b215dbe59dc4e706f755706f0b77a9d5d038d4a186ea3a67e"
+    },
+    {
+      "stage": "confirmation",
+      "arm": "privileged-sr",
+      "games": 20000,
+      "transitions": 1111972,
+      "raw_sha256": "927101a3c61b692f84690a7a4c5279127b2ce288e20925459f2b2daf2565a501"
+    }
+  ],
+  "games": 66000,
+  "transitions": 3664052,
+  "original_benchmarks_and_canonical_rules_unchanged": true,
+  "fixed_protocol_checked": true,
+  "scope": "Original benchmarks/core preserved; exact seed schedules and all fixed settings checked; frozen code/binaries/models/upstream; lossless archive hashes; complete replay counts; exact rerun of matched statistical summaries."
+}

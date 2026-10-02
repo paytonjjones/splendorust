@@ -12,7 +12,7 @@ The [playing-strength report](benchmarks/strength/REPORT.md) records the fixed
 external opponents, approved observation adapters, native controls and unsupported
 games. Its results are separate from simulator-speed measurements.
 
-The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/README.md)
+The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/REPORT.md)
 adds public-only AlphaZero and privileged SplendoRust variants to the native
 benchmark. Both variants keep the game rules, models and search budgets fixed.
 
