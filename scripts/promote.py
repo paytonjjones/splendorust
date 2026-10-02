@@ -12,6 +12,47 @@ from collect_evidence import record_interval, validate_report
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CURRENT_ENGINE = 'splendorust-v2'
+COMPLETION_POLICY_VERSION = 'bounded-no-action-v2.1'
+DEFAULT_MAX_NO_ACTION_FRACTION = 0.01
+
+
+def completion_policy(max_no_action_fraction=DEFAULT_MAX_NO_ACTION_FRACTION):
+    if (type(max_no_action_fraction) not in (int, float)
+            or not math.isfinite(max_no_action_fraction)
+            or not 0 <= max_no_action_fraction <= 1):
+        raise ValueError('invalid maximum no-action fraction')
+    return dict(version=COMPLETION_POLICY_VERSION,
+                max_no_action_fraction=max_no_action_fraction,
+                tolerated_status='no_legal_action', decision_limit='reject',
+                lower_unknown_credit=0, upper_unknown_credit=1,
+                denominator='all requested games', replace_or_skip=False)
+
+
+def completion_rejection(report, max_no_action_fraction=DEFAULT_MAX_NO_ACTION_FRACTION):
+    """Apply the registered completion guard after report validation."""
+    completion_policy(max_no_action_fraction)
+    if any(r['status'] == 'decision_limit' for r in report['records']):
+        return 'reject: decision-limit games'
+    count = sum(r['status'] == 'no_legal_action' for r in report['records'])
+    if count > math.floor(report['requested_games'] * max_no_action_fraction):
+        return 'reject: no-action fraction exceeds policy'
+    return None
+
+
+def completion_evidence(report, max_no_action_fraction=DEFAULT_MAX_NO_ACTION_FRACTION):
+    """Preserve unknown outcomes; report credit bounds over all requested games."""
+    validate_report(report)
+    counts = {status: sum(r['status'] == status for r in report['records'])
+              for status in ('complete', 'no_legal_action', 'decision_limit')}
+    known_credit = sum(1 / r['winners'].bit_count() for r in report['records']
+                       if r['status'] == 'complete'
+                       and r['winners'] & (1 << r['seats'].index(0)))
+    return dict(policy=completion_policy(max_no_action_fraction), status_counts=counts,
+                max_no_action_games=math.floor(report['requested_games'] * max_no_action_fraction),
+                requested_games=report['requested_games'],
+                candidate_credit_bounds=[known_credit / report['requested_games'],
+                                        (known_credit + report['incomplete_games']) / report['requested_games']],
+                rejection=completion_rejection(report, max_no_action_fraction))
 
 
 def supported_source(report):
@@ -72,15 +113,17 @@ def checked_interval(report, players):
     return computed
 
 
-def decision(report, players, margin, minimum_rate):
+def decision(report, players, margin, minimum_rate,
+             max_no_action_fraction=DEFAULT_MAX_NO_ACTION_FRACTION):
     if not supported_source(report):
         return 'reject: unsupported engine or missing source identity'
     try:
         lower, _ = checked_interval(report, players)
+        completion_error = completion_rejection(report, max_no_action_fraction)
     except (KeyError, TypeError, ValueError, IndexError, OverflowError) as error:
         return f'reject: invalid report evidence: {error}'
-    if report['incomplete_games']:
-        return 'reject: incomplete games'
+    if completion_error:
+        return completion_error
     if report['reproducible'] is not True:
         return 'reject: nondeterministic search budget'
     if report['games_per_second'] < minimum_rate:
@@ -133,6 +176,8 @@ def main(argv=None):
     p.add_argument('--depth', type=int, default=8)
     p.add_argument('--margin', type=float, default=0.01)
     p.add_argument('--min-games-per-second', type=float, default=0)
+    p.add_argument('--max-no-action-fraction', type=float, default=DEFAULT_MAX_NO_ACTION_FRACTION,
+                   help='maximum no-legal-action fraction per stage; 0 restores strict completion')
     p.add_argument('--output', type=pathlib.Path, default=ROOT / 'results' / 'promotion')
     args = p.parse_args(argv)
     if args.screen < args.players or (args.confirm != 0 and args.confirm < args.players) or args.screen % args.players or args.confirm % args.players:
@@ -143,6 +188,10 @@ def main(argv=None):
         p.error('invalid margin, threads, or speed floor')
     if not 0 <= args.iterations < 2**32 or not 0 <= args.depth < 2**32:
         p.error('iterations and depth must fit unsigned 32-bit counts')
+    try:
+        args.completion_policy = completion_policy(args.max_no_action_fraction)
+    except ValueError as error:
+        p.error(str(error))
     args.output = args.output.resolve()
     try:
         args.output.mkdir(parents=True, exist_ok=False)
@@ -189,9 +238,12 @@ def execute(args):
         raw = output.read_bytes()
         report = json.loads(raw)
         previous_source = validate_stage(report, args, games, seed, previous_source)
-        result = decision(report, args.players, args.margin, args.min_games_per_second)
-        if proc.returncode and not report['incomplete_games']:
+        result = decision(report, args.players, args.margin, args.min_games_per_second,
+                          args.max_no_action_fraction)
+        if proc.returncode not in (0, 1) or (proc.returncode == 1 and not report['incomplete_games']):
             raise RuntimeError(f'{stage} failed: exit {proc.returncode}')
+        (args.output / f'{stage}-completion.json').write_text(json.dumps(
+            completion_evidence(report, args.max_no_action_fraction), indent=2) + '\n')
         if stage == 'screen' and args.confirm and not result.startswith('reject'):
             if record_interval(report['records'], args.players, 0)[1] < 1 / args.players:
                 result = 'reject: screening shows regression'
@@ -205,6 +257,7 @@ def execute(args):
             'raw_report_sha256': hashlib.sha256(raw).hexdigest(),
             'record_set_sha256': hashlib.sha256(json.dumps(report['records'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
             'minimum_games_per_second': args.min_games_per_second,
+            'completion': completion_evidence(report, args.max_no_action_fraction),
         }, indent=2) + '\n')
         print(result)
         return 0 if result == 'promote' else 2

@@ -1,0 +1,40 @@
+{
+  "validated_utc": "2026-10-02T21:05:40.336354+00:00",
+  "policy": "bounded-no-action-v2.1",
+  "python_tests": 38,
+  "python_test_command": "PYTHONPATH=scripts local/strength/inference/bin/python -m unittest test_promote test_collect_evidence test_lineage test_compare_budgets test_reassess_promotion",
+  "python_test_log_sha256": "e55fc46e164acd81e6045c1f772a139332c007a6f9355c6604a9969e6a5a9c86",
+  "real_cli": {
+    "screen": 2,
+    "confirm": 2,
+    "screen_master": 5340000000,
+    "confirmation_master": 6340000000,
+    "all_complete": true,
+    "decision": "retain baseline: benefit not confirmed",
+    "scope": "Command and metadata check; not strength evidence",
+    "decision_sha256": "75d8462d8d4e054c2e7b1b7320e1686e44dfefd459807db24bb7b6b7a9828c34",
+    "source_id": "cc154030de2934c0"
+  },
+  "required_checks": {
+    "format": true,
+    "strict_workspace_clippy": true,
+    "release_workspace_tests": 125
+  },
+  "first_smoke_failure": {
+    "reason": "Missing SPLENDOR_BEST_MODEL environment variable",
+    "preserved_decision_sha256": "e0437dfa6c94f780c387c7b7a024cb5e94ca2693e54370a311fcced211543f6a"
+  },
+  "scripts_sha256": {
+    "promote.py": "1f54614fdf0f91743241eea716541414e6e88d86e2df1c8537008dfaa3fc196e",
+    "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9",
+    "reassess_promotion.py": "ea7f5ed451f1ea13179353f097368f33b9a743b8b23495b175080720400efd4a"
+  },
+  "champion_sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+  "reanalysis_runs": 13,
+  "changed_reanalyses": [
+    "expanded-history-gate",
+    "expanded-small-cold-gate"
+  ],
+  "original_history_raw_sha256": "36630853eafc76e168adac5a8b067477e69cee8c3a9ecebf20efee95d5f9f95f",
+  "archived_history_raw_sha256": "d5a443171892c512dd0b9b4f2a7a03d976536cfdeae4c889530d2c3cb9d7870a"
+}

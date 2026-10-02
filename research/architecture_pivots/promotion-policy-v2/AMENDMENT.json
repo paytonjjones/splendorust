@@ -1,0 +1,21 @@
+{
+  "version": "bounded-no-action-v2.1",
+  "registered_utc": "2026-10-02T20:59:08.593378+00:00",
+  "supersedes_registration_sha256": "35b054b9370ca5b4ec04a62707e34590b343e55e30f9c6dc63f03319de57c940",
+  "user_authorization": "User requested a slightly more lenient limit, with concern only if no-action games become much more frequent.",
+  "previous_max_no_action_fraction": 0.001,
+  "max_no_action_fraction": 0.01,
+  "max_no_action_games": {
+    "screen_2000": 20,
+    "confirmation_20000": 200
+  },
+  "unchanged": [
+    "All requested games in denominator",
+    "Zero unknown candidate credit in lower bound; one in upper bound",
+    "No fabricated winners, draws, replacement or skipped games",
+    "Decision-limit and invalid evidence rejection",
+    "Existing paired confidence method and promotion margin",
+    "Original checkpoints, seeds, budgets and champion pointer"
+  ],
+  "application": "All retained canonical screens reassessed symmetrically; fresh stages use this fixed policy. Original policy and decisions remain preserved."
+}

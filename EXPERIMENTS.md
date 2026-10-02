@@ -1,5 +1,32 @@
 # Experiments
 
+## P2 — Conservative promotion with rare no-action outcomes
+
+Registered on 2026-10-02 at the user's request, after the expanded history/E81
+screen had one no-action game in 2,000 requested games. This is a policy
+amendment after a known result, not an advance registration of that result.
+Hypothesis: a rare published-rule gap need not stop research when the unchanged
+conservative strength bound clears the promotion margin.
+
+Use policy `bounded-no-action-v2.1`. Allow at most 1% `no_legal_action` games
+per stage: floor(requested games times 0.01). Keep every original record and
+seat rotation. Give no winner to an unfinished game. For the candidate's lower
+bound, give each unknown outcome zero credit; for its upper bound, give one.
+The denominator is all requested games. Keep the existing setup-block 95%
+interval and one-percentage-point promotion margin. Reject all decision-limit
+games, invalid evidence and execution errors. Strict mode uses
+`--max-no-action-fraction 0`. Do not replace or skip blocked setups.
+
+Keep all historical decisions unchanged. Write separate reanalyses tied to
+their raw report and old decision hashes. Apply the new rule to all eligible
+reports, including negative results. Fresh milestone screens and confirmations
+keep their registered seeds and budgets. Do not change the champion from a
+reanalysis alone. The exact registration is
+`research/architecture_pivots/promotion-policy-v2/REGISTRATION.json`.
+The user then requested a more lenient limit before new stages ran.
+`AMENDMENT.json` in that directory records the increase from 0.1% to 1%;
+the original registration remains intact.
+
 Experiments run on 2026-09-25. Opponents and weights are fixed within each run. All fixed-iteration comparisons rotate seats on identical setups. Each setup is an independent statistical block. See [docs/results/index.json](docs/results/index.json) for exact counts, seeds, intervals, runtimes, and record-set hashes. Compressed full per-game reports are kept beside their summaries.
 
 ## E1 — Failed long-range heuristic

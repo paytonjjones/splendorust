@@ -18,7 +18,7 @@ A reproducible random trajectory reaches a position with an empty colored bank, 
 
 The printed rules do not define a forced pass or stalemate winner. We therefore stop and label the trajectory `no_legal_action`. We do **not** classify that position as a normal terminal state, award points-based wins, or silently drop it from comparison uncertainty. An all-random arena reaches these positions frequently. A regression test also shows that legal take-and-return turns can repeat forever. Thus, termination is a measured property of a policy/seed set, not a theorem about all legal play.
 
-Normal-game results, no-action counts, and decision-limit counts must be reported separately. The promotion gate rejects a candidate when any game is unfinished. A future optional forced-pass ruleset would need its own version and experiments. It must not silently change this ground truth.
+Normal-game results, no-action counts, and decision-limit counts must be reported separately. Since the user-requested P2 amendment on 2026-10-02, the promotion gate allows at most 1% no-action games per stage. All requested games remain in the denominator; every unknown outcome gets zero candidate credit for the lower bound and one for the upper bound. The existing conservative setup-block interval must still clear the promotion margin. Decision-limit games, excessive no-action counts and invalid evidence reject the stage. No blocked outcome becomes a draw or normal loss in the raw record. Strict completion uses `--max-no-action-fraction 0`. Historical decisions remain unchanged. A future optional forced-pass ruleset would need its own version and experiments. It must not silently change this ground truth.
 
 Search now checks a sufficient public-information bound before certain token
 takes. This prevents its avoidable E18 three-player block. It changes agent
@@ -53,8 +53,9 @@ precise duration. Serialization stays in the arena crate. `verify-report FILE`
 requires a matching engine and source fingerprint, fixed budgets, valid run
 settings, and agreement between structured settings and existing metadata. It
 reruns the tournament and compares ordered game records exactly. Capped and
-blocked records can pass this reproducibility check; they still cannot pass the
-promotion gate. This command does not verify statistical summaries or timing.
+blocked records can pass this reproducibility check. The promotion gate separately
+applies its registered completion and strength rules. This command does not verify
+statistical summaries or timing.
 Reports without structured settings remain readable and fail rerun verification
 with an explicit error. The same 1,700 fixed-budget game records match on
 ARM macOS, x86-64 macOS under Rosetta, and ARM Linux. See

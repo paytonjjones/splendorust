@@ -1,0 +1,117 @@
+{
+  "run_config": {
+    "names": [
+      "flywheel-gumbel",
+      "flywheel-gumbel"
+    ],
+    "games": 2,
+    "seed": 6340000000,
+    "threads": 1,
+    "max_decisions": 20000,
+    "check": false,
+    "search": {
+      "iterations": 0,
+      "depth": 16,
+      "width": 6,
+      "time_budget": null,
+      "rollout": "strong",
+      "evaluation": "engine"
+    }
+  },
+  "source_id": "cc154030de2934c0",
+  "max_decisions": 20000,
+  "invariants_checked": false,
+  "engine": "splendorust-v2",
+  "seed": 6340000000,
+  "players": 2,
+  "requested_games": 2,
+  "completed_games": 2,
+  "incomplete_games": 0,
+  "independent_blocks": 1,
+  "ci_method": "95% empirical Bernstein over independent setup blocks; rotations clustered; shared wins split; unfinished credit bounded by 0 and 1",
+  "agents": [
+    {
+      "identity": 0,
+      "agent": "flywheel-gumbel",
+      "wins": 1,
+      "shared_wins": 0,
+      "win_share": 1.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0.0,
+        1.0
+      ],
+      "average_position": 1.5,
+      "average_score": 13.5
+    },
+    {
+      "identity": 1,
+      "agent": "flywheel-gumbel",
+      "wins": 1,
+      "shared_wins": 0,
+      "win_share": 1.0,
+      "win_rate": 0.5,
+      "ci95": [
+        0.0,
+        1.0
+      ],
+      "average_position": 1.5,
+      "average_score": 13.5
+    }
+  ],
+  "average_turns": 56.0,
+  "average_decisions": 79.0,
+  "runtime_seconds": 0.0055495,
+  "games_per_second": 360.3928281827192,
+  "decisions_per_second": 28471.033426434817,
+  "threads": 1,
+  "search_config": "SearchConfig { iterations: 0, depth: 16, width: 6, time_budget: None, rollout: Strong, evaluation: Engine }",
+  "reproducible": true,
+  "promotion": "inconclusive",
+  "records": [
+    {
+      "block": 0,
+      "rotation": 0,
+      "seed": 415980889330528028,
+      "seats": [
+        0,
+        1
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "274f70c882e24eb0"
+    },
+    {
+      "block": 0,
+      "rotation": 1,
+      "seed": 415980889330528028,
+      "seats": [
+        1,
+        0
+      ],
+      "scores": [
+        15,
+        12
+      ],
+      "ranks": [
+        1,
+        2
+      ],
+      "winners": 1,
+      "turns": 56,
+      "decisions": 79,
+      "status": "complete",
+      "trajectory_hash": "274f70c882e24eb0"
+    }
+  ]
+}
