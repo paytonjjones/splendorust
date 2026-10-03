@@ -84,6 +84,20 @@ cross-device trajectory identity. Keep the final backend fixed.
 
 ## 3. Run one external development trial
 
+The finite driver now binds sources, frozen binaries, an owned service,
+parity, the paired schedule, replay and both native/cap-sensitive statistics:
+
+```sh
+local/strength/inference/bin/python research/sprint48/run_external.py --checkpoint local/research/sprint48/ready/first/onehot/runtime.pt --output local/research/sprint48/external-00 --master 17700000000 --games 128 --workers 8 --iterations 128 --port 19720
+```
+
+Trial00 is already consumed. Use the next unused master and a new output.
+`RUN.json` and `RESULTS.md` record progress. For the checked updated binaries,
+pass `--binary-directory local/research/sprint48/build-controls/release/examples`.
+Use `--depth`, `--world-pool` and `--gumbel-max-considered` to change search
+coverage. Copies are made before play and used for every shard. Keep the
+original receipt and source snapshots for the pre-change baseline.
+
 First one-hot trial, Gumbel128 versus unchanged AlphaZero800:
 
 ```sh
@@ -95,8 +109,9 @@ local/strength/inference/bin/python benchmarks/strength/native/summarize.py loca
 Use a new master/output for each setting. Policy-only uses `--iterations 0`;
 larger search can use `800`, `1600`, `3200`, or more. The existing alternate
 uses `--search puct`. Selection remains exploratory. AlphaZero stays fixed.
-The scheduler fixes candidate depth16/worlds3/Gumbel-cap16. Expose controls
-with metadata before tuning them. `--root-only` does not reduce Entity cost.
+The scheduler defaults to candidate depth16/worlds3/Gumbel-cap16; the explicit
+controls and accepted-setting handshake now allow other values. Check the
+selected worker before using them. `--root-only` does not reduce Entity cost.
 
 For original Entity, export `local/research/sprint48/ready/baseline/model.pt`
 on another slot. Declare both bindings to one service or run sequentially.
@@ -109,17 +124,23 @@ or report schedule failure; do not drop them and choose replacement seeds.
 The data-reuse branch has an existing command:
 
 ```sh
-python3 research/entity_baseline/bootstrap.py --native-upstream
-local/strength/inference/bin/python research/architecture_pivots/train.py --kind entity --parent local/research/sprint48/ready/first/onehot/runtime.pt --data-scale expanded --epochs 2 --batch 512 --device mps --fast-entities --output local/research/sprint48/refit-01
+python3 research/entity_baseline/bootstrap.py --native-upstream --runtime local/strength/inference
+python3 research/sprint48/run_refit.py
 ```
 
 Bootstrap verifies all 408 corpus files once. The trainer uses the existing
 one-hot/mixed-value recipe/dev selection and resets AdamW. Stop the owned MPS
 inference service before fitting unless a measured overlap test supports it.
-Export/check the selected new `model.pt` before played selection.
+The finite wrapper owns the process and deadline; its receipt directory is
+`refit-01`, and the trainer writes to a new `refit-01/fit` directory. Preserve
+the venv interpreter path. Export/check the selected `fit/model.pt` before
+played selection. The fit is already running; do not launch it again.
 
 Native-focused sampling/value calibration needs a trainer change. Learner-state
-AlphaZero labels need actor mode in `e95/collect.py`. PCR reuses `rich_selfplay`
+AlphaZero labels now use `learner_data.py` to replay fixed native histories and
+label the learner's turns offline. See `DAgger_PREREGISTRATION.md`; the small
+CPU pilot passed, but these shards are not yet connected to a training recipe.
+Source setups become training data and need fresh later evaluations. PCR reuses `rich_selfplay`
 and `strategy_train.py`; inspect `--help` and record a new recipe. Do not start
 the closed `run_efficiency.py` chain. Preserve profile mapping, public rules
 flags, and native noble ordering.

@@ -17,6 +17,16 @@ pub trait Environment {
     fn rewards(state: &Self::State) -> Option<[f64; 2]>;
     fn legal(state: &Self::State) -> Self::Legal;
     fn apply(state: &mut Self::State, action: Self::Action, rng: &mut Rng);
+    /// Apply a search transition with a fixed chance universe when supported.
+    /// Other environments retain their normal transition behavior.
+    fn apply_with_chance_seed(
+        state: &mut Self::State,
+        action: Self::Action,
+        rng: &mut Rng,
+        _chance_seed: Option<u64>,
+    ) {
+        Self::apply(state, action, rng);
+    }
     fn determinize(o: &Self::Observation, rng: &mut Rng) -> Self::State;
     fn key(o: &Self::Observation, transferred: bool) -> Self::Key;
     fn action_index(a: Self::Action) -> usize;
@@ -120,6 +130,9 @@ impl Environment for AlphaZeroNative {
     }
     fn apply(s: &mut native::State, a: u8, r: &mut Rng) {
         s.apply(a, r, None).expect("native legal action");
+    }
+    fn apply_with_chance_seed(s: &mut native::State, a: u8, r: &mut Rng, chance_seed: Option<u64>) {
+        s.apply(a, r, chance_seed).expect("native legal action");
     }
     fn determinize(o: &native::Observation, r: &mut Rng) -> native::State {
         o.determinize(r).expect("valid native observation")

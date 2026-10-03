@@ -1,0 +1,248 @@
+{
+  "schema": "sprint48-search-validation-v1",
+  "fixture": {
+    "profile": "alphazero-native-32a27ac-v1",
+    "master": 480000123,
+    "block": 0,
+    "sha256": "a2ff976e72cbf6866448406ea1e67fdaf95fec4d1135683a580b4051dd86aa69",
+    "legal_count": 46,
+    "legal_actions": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      80
+    ]
+  },
+  "model_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/e56/model/model.bin",
+  "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+  "old_policy_binary_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-00/binaries/native_policy_worker",
+  "old_policy_binary_sha256": "42583d6f6ef6126402a535f29a87e69e5a6249741b8a8b1dabceb73171a2e2de",
+  "new_policy_binary_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/build-controls/release/examples/native_policy_worker",
+  "new_policy_binary_sha256": "424d3788f936542a0080750ed8445c9d9d2960328a6b87830da4b3e032b6d3b1",
+  "strength_binary_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/target/release/examples/strength_worker",
+  "strength_binary_sha256": "777e63c064a59be5da8a9ca6ba43afc9d1153bcf0171b1eb244a5e81866d51a2",
+  "default_compatibility": [
+    {
+      "iterations": 0,
+      "old": {
+        "reset": {
+          "ok": true
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 1,
+          "simulations": 0
+        }
+      },
+      "new": {
+        "reset": {
+          "ok": true,
+          "settings": {
+            "cpuct": 0.4,
+            "depth": 16,
+            "fpu_reduction": 0.02965,
+            "gumbel_max_considered": 16,
+            "gumbel_noise": 0.0,
+            "iterations": 0,
+            "root_only": false,
+            "search": "puct",
+            "uniform_prior": 0.0,
+            "world_pool": 3
+          }
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 1,
+          "simulations": 0
+        }
+      },
+      "identical_choose": true
+    },
+    {
+      "iterations": 1,
+      "old": {
+        "reset": {
+          "ok": true
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 2,
+          "simulations": 1
+        }
+      },
+      "new": {
+        "reset": {
+          "ok": true,
+          "settings": {
+            "cpuct": 0.4,
+            "depth": 16,
+            "fpu_reduction": 0.02965,
+            "gumbel_max_considered": 16,
+            "gumbel_noise": 0.0,
+            "iterations": 1,
+            "root_only": false,
+            "search": "puct",
+            "uniform_prior": 0.0,
+            "world_pool": 3
+          }
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 2,
+          "simulations": 1
+        }
+      },
+      "identical_choose": true
+    },
+    {
+      "iterations": 5,
+      "old": {
+        "reset": {
+          "ok": true
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 6,
+          "simulations": 5
+        }
+      },
+      "new": {
+        "reset": {
+          "ok": true,
+          "settings": {
+            "cpuct": 0.4,
+            "depth": 16,
+            "fpu_reduction": 0.02965,
+            "gumbel_max_considered": 16,
+            "gumbel_noise": 0.0,
+            "iterations": 5,
+            "root_only": false,
+            "search": "puct",
+            "uniform_prior": 0.0,
+            "world_pool": 3
+          }
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 6,
+          "simulations": 5
+        }
+      },
+      "identical_choose": true
+    },
+    {
+      "iterations": 128,
+      "old": {
+        "reset": {
+          "ok": true
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 129,
+          "simulations": 128
+        }
+      },
+      "new": {
+        "reset": {
+          "ok": true,
+          "settings": {
+            "cpuct": 0.4,
+            "depth": 16,
+            "fpu_reduction": 0.02965,
+            "gumbel_max_considered": 16,
+            "gumbel_noise": 0.0,
+            "iterations": 128,
+            "root_only": false,
+            "search": "puct",
+            "uniform_prior": 0.0,
+            "world_pool": 3
+          }
+        },
+        "choose": {
+          "action": 48,
+          "inferences": 129,
+          "simulations": 128
+        }
+      },
+      "identical_choose": true
+    }
+  ],
+  "nondefault_controls": [
+    {
+      "requested": {
+        "iterations": 9,
+        "depth": 24,
+        "world_pool": 0,
+        "gumbel_max_considered": 81,
+        "search": "gumbel",
+        "root_only": false,
+        "gumbel_noise": 0.0,
+        "cpuct": 0.4,
+        "fpu_reduction": 0.02965,
+        "uniform_prior": 0.0
+      },
+      "accepted": {
+        "cpuct": 0.4,
+        "depth": 24,
+        "fpu_reduction": 0.02965,
+        "gumbel_max_considered": 81,
+        "gumbel_noise": 0.0,
+        "iterations": 9,
+        "root_only": false,
+        "search": "gumbel",
+        "uniform_prior": 0.0,
+        "world_pool": 0
+      },
+      "choose": {
+        "action": 48,
+        "inferences": 10,
+        "simulations": 9
+      }
+    }
+  ],
+  "test_method": "CPU-only native worker RPC on the same initial public observation and legal-action list; no game schedule.",
+  "result": "PASS",
+  "finished_utc": "2026-10-03T20:01:07Z"
+}

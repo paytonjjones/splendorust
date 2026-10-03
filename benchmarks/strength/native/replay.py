@@ -5,14 +5,19 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from upstream import ROOT, PIN, Upstream, Tracker, sha, stream
+from upstream import ROOT, PIN, Upstream, Tracker, sha, stream, DEFAULT_STRENGTH_BINARY
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('input',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('input',type=Path);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--strength-binary',type=Path);a=p.parse_args()
     meta,*rows=map(json.loads,a.input.read_text().splitlines())
     assert meta['upstream_revision']==PIN
     assert len(rows)==meta['games']
-    u=Upstream();count=0;decisions=0
+    strength_binary=Path(a.strength_binary or meta.get('strength_binary_path') or DEFAULT_STRENGTH_BINARY).resolve(strict=True)
+    expected_strength_sha=meta.get('strength_binary_sha256')
+    if expected_strength_sha and sha(strength_binary)!=expected_strength_sha:
+        raise ValueError('strength binary SHA256 differs from run metadata')
+    u=Upstream(strength_binary=strength_binary);count=0;decisions=0
     start_index=2*meta.get('offset_block',0)
     for index,row in enumerate(rows,start_index):
         assert row['index']==index

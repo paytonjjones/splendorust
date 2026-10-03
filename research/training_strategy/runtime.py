@@ -1,5 +1,6 @@
 """Owned, checkpoint-bound inference service; never reuse another study's port."""
 import json
+import math
 import os
 import shutil
 import socket
@@ -11,21 +12,34 @@ from data import ROOT, sha
 
 
 class Runtime:
-    def __init__(self, models, output, port=19620, device='mps'):
+    MAX_BATCH = 256
+    MAX_DELAY_MS = 100
+
+    def __init__(self, models, output, port=19620, device='mps', batch=32, delay_ms=1):
+        if isinstance(batch, bool) or not isinstance(batch, int) or not 1 <= batch <= self.MAX_BATCH:
+            raise ValueError(f'batch must be an integer from 1 to {self.MAX_BATCH}')
+        if isinstance(delay_ms, bool) or not isinstance(delay_ms, (int, float)):
+            raise ValueError('delay_ms must be a number')
+        if not math.isfinite(delay_ms) or not 0 < delay_ms <= self.MAX_DELAY_MS:
+            raise ValueError(f'delay_ms must be greater than 0 and at most {self.MAX_DELAY_MS}')
         self.models = models
         self.output = Path(output)
         self.port, self.device = port, device
+        self.batch, self.delay_ms = batch, delay_ms
         self.service = None
         self.log = None
         self.descriptors = {}
+
+    def _service_command(self):
+        return [sys.executable, ROOT / 'research/architecture_pivots/service.py',
+            '--port', self.port, '--device', self.device, '--batch', self.batch,
+            '--delay-ms', self.delay_ms, '--fast-entities']
 
     def __enter__(self):
         self.output.mkdir(parents=True, exist_ok=False)
         with socket.socket() as probe:
             probe.bind(('127.0.0.1', self.port))
-        service_command = [sys.executable, ROOT / 'research/architecture_pivots/service.py',
-            '--port', self.port, '--device', self.device, '--batch', 32,
-            '--delay-ms', 1, '--fast-entities']
+        service_command = self._service_command()
         receipt = {}
         for slot, source in self.models:
             directory = self.output / str(slot)
@@ -44,7 +58,8 @@ class Runtime:
         try:
             self.service = subprocess.Popen(list(map(str, service_command)), cwd=ROOT, stdout=self.log, stderr=subprocess.STDOUT)
             (self.output / 'run.json').write_text(json.dumps(dict(pid=self.service.pid,
-                command=list(map(str,service_command)), models=receipt, batch=32,
+                command=list(map(str,service_command)), models=receipt,
+                batch=self.batch, delay_ms=self.delay_ms,
                 started_at=time.time()), indent=2)+'\n')
             deadline = time.monotonic()+60
             while True:

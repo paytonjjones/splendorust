@@ -3,7 +3,9 @@
 Current mandate: 2026-10-03. Prepared from main
 `3c1a65678a41db77aac66e034cbb4b5fa1f7b018`.
 This is the active research plan. Start with [the runbook](research/sprint48/README.md)
-and [the plan](research/sprint48/PLAN.json). The previous Entity training study
+and [the plan](research/sprint48/PLAN.json). Live execution status, completed trials,
+and retained artifacts are in [RESULTS.md](research/sprint48/RESULTS.md) and
+[RUN.json](research/sprint48/RUN.json). The previous Entity training study
 is closed. Reuse its outputs; do not resume its old controller.
 
 ## Objective and authority
@@ -132,8 +134,10 @@ exploratory even when its point estimate is high.
 Current Gumbel considers at most **16** prior-ranked legal root actions.
 More simulations refine those actions; they do not remove the restriction.
 Depth is **16 completed player turns**, with **three sampled worlds**.
-The native runner exposes PUCT/Gumbel and iterations; its scheduler does not
-expose depth or root candidate settings. Trees are fresh each real decision.
+The updated native runner and scheduler expose PUCT/Gumbel, iterations, depth,
+world pool, root cap and optional native chance universes. Checked frozen
+binaries and accepted-setting receipts bind each trial. Trees are fresh each
+real decision.
 There is no fixed node cap. `--root-only` does **not** give remote Entity a
 cheap leaf evaluator: its base path calls the same full model. See
 `neural_search.rs::gumbel_root`, `simulate_environment`,

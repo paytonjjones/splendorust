@@ -1,0 +1,49 @@
+{
+  "schema": "sprint48-execution-validation-v1",
+  "checked_utc": "2026-10-03T20:13:12.770254+00:00",
+  "rust_source_sha256": {
+    "crates/splendor-arena/examples/native_policy_worker.rs": "0974ab858fa71f1b1fb6b7899872d1348f38e7fca63a649c259842b73159c2e7",
+    "benchmarks/strength/native/run.py": "f54d122d7092f3a05aa07c1ebeb7b6a24a5ba451e2ba475957de0810ee6fb8c0",
+    "benchmarks/strength/native/schedule.py": "aa2f2de99f40a8f3a54468db7cf0b4ac86468b21f6a8c452df9cfe505825ef4d",
+    "benchmarks/strength/native/upstream.py": "7f277ce9f314935224d7f7c6985ff36fb08f81a02da5dddb7bf7486996dfd927",
+    "benchmarks/strength/native/replay.py": "4ccee6ff67a8cdddc559adaa19685b6d92e55e1639d0d273e6b404de5e9228e1"
+  },
+  "target_directory": "local/research/sprint48/build-controls",
+  "commands": [
+    {
+      "command": "cargo fmt --all --check",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --release --locked -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo test --workspace --release --locked",
+      "exit_code": 0,
+      "passed": 139
+    },
+    {
+      "command": "cargo test --release --locked -p splendor-arena --example native_policy_worker",
+      "exit_code": 0,
+      "passed": 3
+    },
+    {
+      "command": "cargo build --release --locked -p splendor-arena --bin splendor --example native_policy_worker --example strength_worker --example transfer_parity --example rich_selfplay",
+      "exit_code": 0
+    }
+  ],
+  "python_checks": {
+    "evidence_tests": 4,
+    "learner_data_tests": 8,
+    "syntax": "pass"
+  },
+  "search_fixture_receipt": "research/sprint48/SEARCH_VALIDATION.json",
+  "binaries": {
+    "native_policy_worker": "424d3788f936542a0080750ed8445c9d9d2960328a6b87830da4b3e032b6d3b1",
+    "strength_worker": "6e90d2d1741a34d3323247833ff426b821ccaeefce683a25b34d9ff04ca306e7",
+    "transfer_parity": "53c1a102617f7fbe654e31e66a9b6717f9212f5e736ca109e3282ea3269a5d07",
+    "rich_selfplay": "a332e490f409ff873a510b15d4783b3cebe838d55915a912f0b2661241da76ed"
+  },
+  "scope": "Checks for exposed search controls and frozen binary paths. No strength result implied."
+}

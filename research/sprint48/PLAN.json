@@ -2,7 +2,7 @@
   "schema": "splendorust-strength-sprint-plan-v1",
   "created_date": "2026-10-03",
   "source_main": "3c1a65678a41db77aac66e034cbb4b5fa1f7b018",
-  "status": "prepared; execution has not started",
+  "status": "active; live execution state in RUN.json",
   "strategy": "STRATEGY.md",
   "deadline": "Record start_utc and deadline_utc in the execution run.json. Use 48 elapsed hours, or an earlier user deadline. Never reset the clock on resume.",
   "target": {
@@ -31,11 +31,26 @@
       "maximum_trials": 8,
       "games_per_trial_default": 128
     },
-    "new_training": {"master_base": 17710000000, "master_step": 1000000},
-    "new_development": {"master_base": 17720000000, "master_step": 1000000},
-    "canonical_exploration": {"master_base": 17730000000, "master_step": 1000000},
-    "final_external": {"master": 17790000000, "sealed_until_candidate_freeze": true},
-    "final_canonical": {"master": 17791000000, "sealed_until_candidate_freeze": true},
+    "new_training": {
+      "master_base": 17710000000,
+      "master_step": 1000000
+    },
+    "new_development": {
+      "master_base": 17720000000,
+      "master_step": 1000000
+    },
+    "canonical_exploration": {
+      "master_base": 17730000000,
+      "master_step": 1000000
+    },
+    "final_external": {
+      "master": 17790000000,
+      "sealed_until_candidate_freeze": true
+    },
+    "final_canonical": {
+      "master": 17791000000,
+      "sealed_until_candidate_freeze": true
+    },
     "note": "Reserved by this campaign. Record each consumed master and split. Check other active jobs before use; do not reuse final seeds for tuning. Setup IDs must also be checked for split overlap."
   },
   "exploratory_evaluation_hours_ceiling": 6,
@@ -43,7 +58,11 @@
   "final": {
     "freeze_by_elapsed_hour": 32,
     "default_games": 2000,
-    "allowed_predeclared_games": [1000, 2000, 4000],
+    "allowed_predeclared_games": [
+      1000,
+      2000,
+      4000
+    ],
     "decisive_lower95_credit_threshold": 0.55,
     "interval": "two-sided Hoeffding over independent paired setup blocks; unknown outcomes bounded 0 to 1",
     "adaptive_stopping": false,
@@ -51,5 +70,6 @@
     "maximum_no_action_fraction": 0.01,
     "invalid_or_decision_limit": "reject evidence; retain records",
     "native_turn_caps": "report native result plus sensitivity with caps unknown"
-  }
+  },
+  "run": "research/sprint48/RUN.json"
 }

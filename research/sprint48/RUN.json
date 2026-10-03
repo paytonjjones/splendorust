@@ -1,0 +1,157 @@
+{
+  "schema": "splendorust-strength-sprint-run-v1",
+  "start_unix": 1791056152,
+  "deadline_unix": 1791228952,
+  "start_utc": "2026-10-03T19:35:52+00:00",
+  "deadline_utc": "2026-10-05T19:35:52+00:00",
+  "initial_commit": "f3902c8fe0460377ce00e174c63644e059bd2b08",
+  "status": "active",
+  "target": "unchanged AlphaZero800 native profile",
+  "final_master": 17790000000,
+  "final_seed_sealed": true,
+  "consumed_trials": [
+    {
+      "master": 17700000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-00",
+      "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+      "iterations": 128,
+      "games": 128,
+      "status": "complete",
+      "wall_seconds": 545.9100909233093,
+      "schedule_wall_seconds": 531.8753525000066,
+      "credit": [
+        0.45703125,
+        0.45703125
+      ],
+      "raw_sha256": "0d1fb4501178daf90b59249daf2084fa88950be672ad77ddbae6ac7464836cd5",
+      "replay_sha256": "97fcbaf0b39ad44a48c4438a4a2528b16902810feae9207bed55ecf0d59d63f2",
+      "evidence_sha256": "d6a146bff53387a4cbfc9abfb06a91ed3c9cac8e45c3d3cbc779156b761755be"
+    },
+    {
+      "master": 17701000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-01",
+      "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+      "iterations": 0,
+      "search": "gumbel",
+      "depth": 16,
+      "world_pool": 3,
+      "gumbel_max_considered": 16,
+      "workers": 16,
+      "games": 128,
+      "status": "complete",
+      "wall_seconds": 108.35852074623108
+    },
+    {
+      "master": 17702000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-02",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 1600,
+      "search": "puct",
+      "depth": 32,
+      "world_pool": 0,
+      "gumbel_max_considered": null,
+      "workers": 32,
+      "games": 128,
+      "status": "complete",
+      "wall_seconds": 1558.0544397830963
+    },
+    {
+      "master": 17703000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-03-retry",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 1600,
+      "search": "gumbel",
+      "depth": 32,
+      "world_pool": 0,
+      "gumbel_max_considered": 32,
+      "workers": 64,
+      "games": 128,
+      "status": "complete",
+      "wall_seconds": 1559.2793698310852
+    },
+    {
+      "master": 17704000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-04",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 1600,
+      "search": "puct",
+      "depth": 32,
+      "world_pool": 3,
+      "chance_universes": 3,
+      "gumbel_max_considered": null,
+      "workers": 64,
+      "games": 128,
+      "status": "running"
+    }
+  ],
+  "heavy_job_owner": "root",
+  "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
+  "output_root": "local/research/sprint48",
+  "current_stage": "local/research/sprint48/external-04",
+  "training_branches": [
+    {
+      "branch_index": 1,
+      "branch": "native-expanded-onehot-refit",
+      "output": "local/research/sprint48/refit-01",
+      "status": "complete",
+      "driver_pid": 98875,
+      "trainer_pid": 98876,
+      "parent_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+      "started_utc": "2026-10-03T20:01:01+00:00",
+      "selected_model_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "best_epoch": 2,
+      "finished_utc": "2026-10-03T20:25:57+00:00",
+      "seconds": 1494.291255415883
+    }
+  ],
+  "offline_label_jobs": [
+    {
+      "output": "local/research/sprint48/dagger-train-trial00-full",
+      "status": "complete",
+      "started_utc": "2026-10-03T20:32:32+00:00",
+      "source_master": 17700000000,
+      "teacher_master": 17711000001,
+      "feature_master": 17711000002,
+      "workers": 8,
+      "eligible_blocks": 63,
+      "pilot_block_retained_separately": true,
+      "scope": "training data; no strength claim",
+      "ended_utc": "2026-10-03T20:33:24+00:00",
+      "seconds": 52.41239033290185,
+      "rows": 3516,
+      "setups": 63,
+      "registry_sha256": "1c5f138fce0b31946649133ba722cd318024c346a103570ccc55acc2e67d628c"
+    }
+  ],
+  "failed_attempts": [
+    {
+      "master": 17703000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-03",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 1600,
+      "search": "gumbel",
+      "depth": 32,
+      "world_pool": 0,
+      "gumbel_max_considered": 32,
+      "workers": 64,
+      "games": 128,
+      "status": "failed",
+      "wall_seconds": 43.490859031677246,
+      "verified_zero_game_records": true,
+      "reason": "campaign_metadata call omitted ROOT; failed before output/game setup",
+      "logs_retained": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-03/arena"
+    }
+  ],
+  "validation_setup_ids": [
+    3960886096576718399,
+    15364970867196437976
+  ],
+  "validation_smokes": [
+    {
+      "master": 17703999999,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/native-context-smoke.jsonl",
+      "games": 2,
+      "scope": "E56 zero-search runner integration, excluded from strength selection"
+    }
+  ]
+}

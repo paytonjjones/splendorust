@@ -208,6 +208,9 @@ pub struct NeuralAgent {
     pub uniform_prior: f64,
     pub dynamic_fpu: bool,
     pub world_pool: usize,
+    /// Deterministic chance universes cycled across native root simulations.
+    /// Zero preserves the ordinary per-transition random refill behavior.
+    pub chance_universes: usize,
     pub rollout_depth: u32,
     pub persistent: bool,
     /// Gumbel planning with completed-Q policy targets (E72).
@@ -253,6 +256,7 @@ impl NeuralAgent {
             uniform_prior: 0.02,
             dynamic_fpu: false,
             world_pool: 0,
+            chance_universes: 0,
             rollout_depth: 0,
             persistent: false,
             root_only: false,
@@ -305,15 +309,16 @@ impl NeuralAgent {
         &mut self,
         state: &mut E::State,
         action: E::Action,
+        chance_seed: Option<u64>,
     ) -> Option<VecDeque<[f32; 32]>> {
         if !self.external_model.is_some_and(|m| m.uses_history_bridge()) {
-            E::apply(state, action, &mut self.rng);
+            E::apply_with_chance_seed(state, action, &mut self.rng, chance_seed);
             return None;
         }
         let old = self.public_events.clone();
         let actor = E::current(state);
         let before = E::observe(state, actor);
-        E::apply(state, action, &mut self.rng);
+        E::apply_with_chance_seed(state, action, &mut self.rng, chance_seed);
         let after = E::observe(state, actor);
         let event = if self
             .external_model
@@ -325,6 +330,17 @@ impl NeuralAgent {
         };
         self.observe_event(event);
         Some(old)
+    }
+    fn make_chance_seeds(&mut self) -> Vec<u64> {
+        if self.chance_universes == 0 {
+            return Vec::new();
+        }
+        (0..self.chance_universes)
+            .map(|_| self.rng.next_u64().max(1))
+            .collect()
+    }
+    fn chance_seed_for(seeds: &[u64], simulation: usize) -> Option<u64> {
+        (!seeds.is_empty()).then(|| seeds[simulation % seeds.len()])
     }
     fn restore_history(&mut self, old: Option<VecDeque<[f32; 32]>>) {
         if let Some(old) = old {
@@ -448,6 +464,7 @@ impl NeuralAgent {
     fn rollout_environment<E: crate::environment::Environment>(
         &mut self,
         state: &E::State,
+        chance_seed: Option<u64>,
     ) -> [f64; 2]
     where
         Self: crate::environment::PolicyValue<E>,
@@ -468,10 +485,11 @@ impl NeuralAgent {
                 break;
             }
             let o = E::observe(&s, E::current(&s));
-            E::apply(
+            E::apply_with_chance_seed(
                 &mut s,
                 <Self as crate::environment::PolicyValue<E>>::rollout_action(self, &o, legal),
                 &mut self.rng,
+                chance_seed,
             );
         }
         if let Some(r) = E::rewards(&s) {
@@ -511,6 +529,7 @@ impl NeuralAgent {
         if budget == 0 {
             return active[0];
         }
+        let chance_seeds = self.make_chance_seeds();
         let mut considered = active.len().min(self.gumbel_max_considered).min(budget);
         while considered > 1
             && budget / ((usize::BITS - (considered - 1).leading_zeros()) as usize) < considered
@@ -536,10 +555,15 @@ impl NeuralAgent {
                 };
                 let seat = E::current(&state);
                 let old = E::turns(&state);
-                let old_history =
-                    self.apply_environment::<E>(&mut state, nodes[root].edges[edge].action);
+                let chance_seed = Self::chance_seed_for(&chance_seeds, simulation);
+                let old_history = self.apply_environment::<E>(
+                    &mut state,
+                    nodes[root].edges[edge].action,
+                    chance_seed,
+                );
                 let depth = self.config.depth.max(1) - u32::from(E::turns(&state) != old);
-                let values = self.simulate_environment::<E>(&mut state, depth, nodes, index);
+                let values =
+                    self.simulate_environment::<E>(&mut state, depth, nodes, index, chance_seed);
                 self.restore_history(old_history);
                 nodes[root].visits += 1;
                 nodes[root].edges[edge].visits += 1;
@@ -562,6 +586,7 @@ impl NeuralAgent {
         depth: u32,
         nodes: &mut Vec<Node<E::Action>>,
         index: &mut HashMap<(E::Key, u64), usize>,
+        chance_seed: Option<u64>,
     ) -> [f64; 2]
     where
         Self: crate::environment::PolicyValue<E>,
@@ -593,12 +618,13 @@ impl NeuralAgent {
                 choices.as_deref().unwrap_or(legal),
             );
             let old = E::turns(state);
-            let old_history = self.apply_environment::<E>(state, action);
+            let old_history = self.apply_environment::<E>(state, action, chance_seed);
             let values = self.simulate_environment::<E>(
                 state,
                 depth - u32::from(E::turns(state) != old),
                 nodes,
                 index,
+                chance_seed,
             );
             self.restore_history(old_history);
             return values;
@@ -610,7 +636,7 @@ impl NeuralAgent {
             let choices = <Self as crate::environment::PolicyValue<E>>::choices(&o, legal);
             let mut node = self.expand_environment::<E>(&o, choices.as_deref().unwrap_or(legal));
             if self.rollout_depth > 0 {
-                node.value = self.rollout_environment::<E>(state)[seat];
+                node.value = self.rollout_environment::<E>(state, chance_seed)[seat];
             }
             let mut r = [1.0 - node.value; 2];
             r[seat] = node.value;
@@ -649,12 +675,13 @@ impl NeuralAgent {
         let action = node.edges[edge].action;
         debug_assert!(legal.contains(&action));
         let old = E::turns(state);
-        let old_history = self.apply_environment::<E>(state, action);
+        let old_history = self.apply_environment::<E>(state, action, chance_seed);
         let values = self.simulate_environment::<E>(
             state,
             depth - u32::from(E::turns(state) != old),
             nodes,
             index,
+            chance_seed,
         );
         self.restore_history(old_history);
         let node = &mut nodes[i];
@@ -758,6 +785,11 @@ impl NeuralAgent {
             let selected = self.gumbel_root::<E>(o, 0, &mut nodes, &mut index, &worlds);
             return nodes[0].edges[selected].action;
         }
+        let chance_seeds = if self.config.iterations == 0 {
+            Vec::new()
+        } else {
+            self.make_chance_seeds()
+        };
         for simulation in 0..self.config.iterations {
             let mut state = if worlds.is_empty() {
                 E::determinize(o, &mut self.rng)
@@ -769,6 +801,7 @@ impl NeuralAgent {
                 self.config.depth.max(1),
                 &mut nodes,
                 &mut index,
+                Self::chance_seed_for(&chance_seeds, simulation as usize),
             );
             self.simulations += 1;
         }
@@ -930,6 +963,7 @@ impl Agent for NeuralAgent {
                     self.config.depth.max(1),
                     &mut nodes,
                     &mut index,
+                    None,
                 );
                 self.simulations += 1;
             }
@@ -1122,6 +1156,23 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn chance_universe_seeds_are_policy_rng_derived_and_zero_preserves_rng() {
+        let mut disabled = NeuralAgent::new(818, SearchConfig::default());
+        let mut control = NeuralAgent::new(818, SearchConfig::default());
+        assert!(disabled.make_chance_seeds().is_empty());
+        assert_eq!(disabled.rng.next_u64(), control.rng.next_u64());
+
+        let mut first = NeuralAgent::new(818, SearchConfig::default());
+        let mut second = NeuralAgent::new(818, SearchConfig::default());
+        first.chance_universes = 3;
+        second.chance_universes = 3;
+        let seeds = first.make_chance_seeds();
+        assert_eq!(seeds, second.make_chance_seeds());
+        assert_eq!(seeds.len(), 3);
+        assert!(seeds.iter().all(|seed| *seed != 0));
+    }
+
     #[test]
     fn diagnostic_targets_preserve_search_and_mask_unvisited_edges() {
         let state = GameState::new(2, 42).unwrap();

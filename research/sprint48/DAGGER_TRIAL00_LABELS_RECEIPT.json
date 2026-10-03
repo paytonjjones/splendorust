@@ -1,0 +1,95 @@
+{
+  "schema": "sprint48-dagger-trial00-label-audit-v1",
+  "status": "read-only audit passed; no games or fit run",
+  "source": "local/research/sprint48/external-00/arena/games.jsonl",
+  "source_sha256": "0d1fb4501178daf90b59249daf2084fa88950be672ad77ddbae6ac7464836cd5",
+  "source_schedule": {
+    "complete_games": 128,
+    "complete_paired_setups": 64,
+    "incomplete_setups": 0,
+    "pilot_block_relabelled_once": false,
+    "pilot_block_skipped_by_full_run": true
+  },
+  "learner_descriptor_sha256": "914cbd5c9f831739f556ef031d11f3a048c57770a0223953476ab15a51d549c1",
+  "policy_binary_sha256": "42583d6f6ef6126402a535f29a87e69e5a6249741b8a8b1dabceb73171a2e2de",
+  "strength_binary_sha256": "777e63c064a59be5da8a9ca6ba43afc9d1153bcf0171b1eb244a5e81866d51a2",
+  "teacher_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+  "teacher_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+  "teacher_simulations_per_decision": 800,
+  "pilot": {
+    "directory": "local/research/sprint48/dagger-train-pilot-00",
+    "manifest_sha256": "79ab3b258d0348fea37bd1b1af285f47d5ad29c63dde6eb9fb6cb61e62e2f540",
+    "setup_id": "5682036930020612125",
+    "native_low32_setup_id": 2928121885,
+    "rows": 54,
+    "actor_teacher_disagreements": 28,
+    "outcome_credit_rows": {
+      "0": 0,
+      "0.5": 0,
+      "1": 54
+    },
+    "label_loop_seconds": 14.950367416953668,
+    "public_world_invariance_checks": 1
+  },
+  "full_run": {
+    "directory": "local/research/sprint48/dagger-train-trial00-full",
+    "status": "complete",
+    "run_seconds": 52.41239033290185,
+    "run_json_sha256": "b0d34dc272a482137d48e162b0846cf317f0a0dcea864a21e01864065245ee38",
+    "registry_sha256": "1c5f138fce0b31946649133ba722cd318024c346a103570ccc55acc2e67d628c",
+    "source_setup_blocks": 64,
+    "pilot_blocks_skipped": 1,
+    "new_complete_blocks": 63,
+    "incomplete_blocks": 0,
+    "games": 126,
+    "rows": 3516,
+    "actor_teacher_disagreements": 1654,
+    "actor_teacher_agreements": 1862,
+    "outcome_credit_rows": {
+      "0": 1910,
+      "0.5": 28,
+      "1": 1578
+    },
+    "public_world_invariance_checks": 64,
+    "shards": 8,
+    "shard_rows": [389, 451, 446, 443, 448, 446, 442, 451]
+  },
+  "combined_training_data": {
+    "unique_setup_blocks": 64,
+    "unique_full_setup_ids": 64,
+    "unique_native_low32_setup_ids": 64,
+    "rows": 3570,
+    "actor_teacher_disagreements": 1682,
+    "actor_teacher_agreements": 1888,
+    "disagreement_fraction": 0.4711484593837535,
+    "outcome_credit_rows": {
+      "0": 1910,
+      "0.5": 28,
+      "1": 1632
+    },
+    "dtype_itemsize_bytes": 2232,
+    "feature_shape": [3516, 392],
+    "mask_shape": [3516, 81],
+    "teacher_policy_shape": [3516, 81],
+    "context_shape": [3516, 7],
+    "packed_input_shape": [3516, 525],
+    "all_arrays_finite": true,
+    "masks_and_teacher_policies_binary": true,
+    "teacher_policy_one_hot_and_legal": true,
+    "actor_actions_legal": true,
+    "outcomes_match_candidate_seat_credit": true,
+    "packed_inputs_recomputed_exactly": true,
+    "recorded_packed_input_hashes_match": true,
+    "public_world_invariance_checks": 65
+  },
+  "split_isolation": {
+    "old_excluded_full_setup_ids": 32000,
+    "pilot_and_full_ids_disjoint_exact": true,
+    "pilot_and_full_ids_disjoint_native_low32": true,
+    "overlap_with_old_excluded_exact": 0,
+    "overlap_with_old_excluded_native_low32": 0,
+    "pilot_and_full_are_training_only": true,
+    "trial00_must_not_be_used_for_played_evaluation": true
+  },
+  "interpretation": "The audit confirms row structure, legal teacher labels, actor and terminal-credit orientation, public-input reproducibility, source completeness, and split isolation. It does not show that fitting these labels improves strength or value calibration. Trial 00 is training data only from this point onward."
+}

@@ -193,6 +193,28 @@ class EntityWithQ(EntityTransformer):
         return self.policy(h), self.value(h).tanh(), self.action_q(h).tanh()
 
 
+class EntityEnsemble(nn.Module):
+    """Use one Entity member for policy and average two signed value heads."""
+    def __init__(self):
+        super().__init__()
+        self.policy_member = EntityTransformer()
+        self.value_member = EntityTransformer()
+
+    @property
+    def fast_tokenization(self):
+        return self.policy_member.fast_tokenization
+
+    @fast_tokenization.setter
+    def fast_tokenization(self, value):
+        self.policy_member.fast_tokenization = value
+        self.value_member.fast_tokenization = value
+
+    def forward(self, x, history=None, pool=None):
+        policy, policy_value = self.policy_member(x, history, pool)
+        _, second_value = self.value_member(x, history, pool)
+        return policy, (policy_value + second_value) * .5
+
+
 def create(kind):
     if kind in ('small','small-cold'):
         model=small_load(ROOT/'research/e81/model/model.pt')
@@ -207,6 +229,8 @@ def create(kind):
         return EntityTransformer(history=kind == 'history')
     if kind == 'entity-q':
         return EntityWithQ()
+    if kind == 'entity-ensemble':
+        return EntityEnsemble()
     raise ValueError(kind)
 
 
@@ -214,7 +238,7 @@ def forward(model, kind, x, history=None, pool=None):
     if kind in ('small','small-cold'):
         from flywheel_model import raw
         return raw(model, x)
-    if kind=='history':return model(x,history,pool)
+    if kind in ('history','entity-ensemble'):return model(x,history,pool)
     return model(x, history)
 
 

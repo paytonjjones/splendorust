@@ -1,0 +1,91 @@
+{
+  "check_commands": [
+    "local/strength/inference/bin/python research/sprint48/prepare_dagger_branch2.py --check",
+    "local/strength/inference/bin/python research/sprint48/collect_dagger_sources.py --exclude-setup-ids local/research/sprint48/dagger-branch2-excluded-setup-ids.txt --check"
+  ],
+  "checked_inputs": {
+    "collector": "41129e958224f6ce234e830bc5d7e42953e22e0b4840976d2b82345b425cc1bb",
+    "exclusion_builder": "a8edfd0d1b1e223c197a5c5a7e3dd3bab7f5648c8365b35ff381bad7e8174db7",
+    "preregistration": "0a424f55065bc2c631cbc657b62e41d25abfe2a905c644b73bea57aa7a01a36b",
+    "trainer": "f85be22e775598a1318179efbbcc5ae11f76da4b4d1fa057b5deea4e84e35f03",
+    "wrapper": "0cd7a913980786b54cf48b2324d486af5111d80ae89c200c3c6fe06fe234c241"
+  },
+  "checked_utc": "2026-10-03T22:42:12+00:00",
+  "collection_started": false,
+  "consumed_masters": [
+    17700000000,
+    17701000000,
+    17702000000,
+    17703000000,
+    17704000000
+  ],
+  "current_stage_at_check": "local/research/sprint48/external-04",
+  "exclusions": {
+    "base_setup_ids": 32000,
+    "consumed_schedule_ids": 320,
+    "includes_running_master_17704000000": true,
+    "path": "local/research/sprint48/dagger-branch2-excluded-setup-ids.txt",
+    "sha256": "d115569b66a621d0fd3d6802e2e240c5b207483527d6439011d6d655fb4a2ba3",
+    "trial00_label_setup_ids": 64,
+    "unique_ids": 32322,
+    "validation_ids": 2
+  },
+  "fit_recipe": {
+    "base_rows_per_update": 512,
+    "dagger_rows_per_update": 57,
+    "epoch_zero_eligible": true,
+    "epochs": 2,
+    "loss_weights": {
+      "base": 0.9,
+      "dagger": 0.1
+    },
+    "selector_weights": {
+      "dagger_dev": 0.1,
+      "full_dev": 0.9
+    }
+  },
+  "fit_started": false,
+  "frozen_build_controls": {
+    "compiled_source_hashes": {
+      "crates/splendor-agents/src/environment.rs": "69bf2f23cf87f676b728fb41bdd0988362f5b848a21a1c84323cc19112f0d45f",
+      "crates/splendor-agents/src/native_environment.rs": "935f895b3b79c0828569f5a8bced6a4774e9925c4436bab067302fed2f339b44",
+      "crates/splendor-agents/src/neural_search.rs": "7ddf8aa65a77283bb852ae0d98f0e1ea04fd6863f0b82885938aa78e8fe8cc91",
+      "crates/splendor-arena/examples/native_policy_worker.rs": "0974ab858fa71f1b1fb6b7899872d1348f38e7fca63a649c259842b73159c2e7",
+      "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284"
+    },
+    "compiled_source_snapshot": "local/research/sprint48/external-02/sources",
+    "native_profile": "alphazero-native-32a27ac-v1",
+    "policy_sha256": "424d3788f936542a0080750ed8445c9d9d2960328a6b87830da4b3e032b6d3b1",
+    "reference_schedule": "local/research/sprint48/external-02/arena/games.jsonl",
+    "reference_schedule_sha256": "e66192fdd05f3a721c33ba385e4f3c4501e6fa6a2d4fbd6e67880773711281b8",
+    "settings": {
+      "cap": 16,
+      "chance_universes": 0,
+      "depth": 16,
+      "dynamic_fpu": false,
+      "iterations": 128,
+      "root_only": false,
+      "search": "gumbel",
+      "world_pool": 3
+    },
+    "strength_sha256": "6e90d2d1741a34d3323247833ff426b821ccaeefce683a25b34d9ff04ca306e7",
+    "transfer_parity_sha256": "53c1a102617f7fbe654e31e66a9b6717f9212f5e736ca109e3282ea3269a5d07"
+  },
+  "frozen_parent": {
+    "path": "local/research/sprint48/refit-01/fit/model.pt",
+    "sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f"
+  },
+  "prospective_split_check": {
+    "dev_exact_overlap": 0,
+    "dev_master": 17720000000,
+    "dev_setups": 128,
+    "train_dev_exact_overlap": 0,
+    "train_dev_native_low32_overlap": 0,
+    "train_exact_overlap": 0,
+    "train_master": 17710000000,
+    "train_setups": 512
+  },
+  "run_json_status_at_check": "active",
+  "schema": "sprint48-dagger-branch2-preflight-v1",
+  "status": "ready_for_root_launch_decision"
+}

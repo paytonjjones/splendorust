@@ -606,6 +606,49 @@ mod tests {
         s.observe(1).validate().unwrap();
     }
     #[test]
+    fn chance_seed_repeats_native_refills_and_none_keeps_rng_behavior() {
+        let mut seeded_a = opening();
+        let mut seeded_b = opening();
+        seeded_a
+            .apply(24, &mut Rng::new(1), Some(987654321))
+            .unwrap();
+        seeded_b
+            .apply(24, &mut Rng::new(2), Some(987654321))
+            .unwrap();
+        assert_eq!(seeded_a, seeded_b);
+
+        let mut random_a = opening();
+        let mut random_b = opening();
+        random_a.apply(24, &mut Rng::new(17), None).unwrap();
+        random_b.apply(24, &mut Rng::new(17), None).unwrap();
+        assert_eq!(random_a, random_b);
+
+        let seed = 987654321u64;
+        let deck = opening().decks[0];
+        let mut ids: Vec<_> = (0..90).filter(|&id| deck & (1u128 << id) != 0).collect();
+        ids.sort_by_key(|&id| (CARD_GROUP[id] as usize, CARD_SLOT[id] as usize));
+        let mut bits = [0u8; 5];
+        for &id in &ids {
+            bits[CARD_GROUP[id] as usize] |= 128 >> CARD_SLOT[id];
+        }
+        let hash = bits
+            .iter()
+            .enumerate()
+            .map(|(color, &value)| u64::from(value) << (5 * color))
+            .sum::<u64>();
+        let expected = ids
+            [(4594591u64.wrapping_mul(seed.wrapping_add(hash)) % ids.len() as u64) as usize]
+            as u8;
+        let mut upstream_formula = opening();
+        upstream_formula
+            .apply(24, &mut Rng::new(4), Some(seed))
+            .unwrap();
+        assert_eq!(
+            upstream_formula.public.players[0].reserved[0].card,
+            expected
+        );
+    }
+    #[test]
     fn native_reserve_at_cap_omits_gold_and_takes_do_not_overflow() {
         let mut s = opening();
         s.public.players[0].tokens = [2, 2, 2, 2, 2, 0];
