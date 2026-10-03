@@ -12,11 +12,22 @@ pub mod learned;
 pub mod native_environment;
 pub mod neural;
 pub mod neural_search;
+pub mod public_history;
 pub mod transfer;
 mod transfer_data;
 mod value_weights;
 
 pub trait Agent: Send {
+    fn wants_public_history(&self) -> bool {
+        false
+    }
+    fn observe_public_action(
+        &mut self,
+        _before: &Observation,
+        _action: Action,
+        _after: &Observation,
+    ) {
+    }
     fn policy_target(&self) -> Option<[f32; neural::ACTIONS]> {
         None
     }

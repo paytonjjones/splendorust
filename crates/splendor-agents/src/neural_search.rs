@@ -179,6 +179,7 @@ pub struct NeuralAgent {
     rng: Rng,
     config: SearchConfig,
     history: VecDeque<Observation>,
+    public_events: VecDeque<[f32; 32]>,
     simulations: u64,
     calls: u64,
     pub logistic: bool,
@@ -203,7 +204,7 @@ pub struct NeuralAgent {
     pub gumbel: bool,
     pub gumbel_noise: f64,
     cached_nodes: Vec<Node>,
-    cached_index: HashMap<[u8; 192], usize>,
+    cached_index: HashMap<([u8; 192], u64), usize>,
     root_policy: Option<[f32; ACTIONS]>,
     root_value: Option<f32>,
 }
@@ -213,6 +214,7 @@ impl NeuralAgent {
             rng: Rng::new(seed),
             config,
             history: VecDeque::new(),
+            public_events: VecDeque::new(),
             simulations: 0,
             calls: 0,
             logistic: false,
@@ -241,13 +243,71 @@ impl NeuralAgent {
             root_value: None,
         }
     }
-    fn tree_key(&self, o: &Observation) -> [u8; 192] {
+    fn history_hash(&self) -> u64 {
+        if !self.external_model.is_some_and(|m| m.uses_history_bridge()) {
+            return 0;
+        }
+        self.public_events
+            .iter()
+            .flatten()
+            .fold(0xcbf29ce484222325u64, |h, v| {
+                (h ^ u64::from(v.to_bits())).wrapping_mul(0x100000001b3)
+            })
+    }
+    pub fn observe_event(&mut self, event: [f32; 32]) {
+        if self.public_events.len() == 16 {
+            self.public_events.pop_front();
+        }
+        self.public_events.push_back(event);
+    }
+    fn history_tensor(&self, current: u8) -> [[f32; 32]; 16] {
+        let mut result = [[0.0; 32]; 16];
+        for (target, event) in result[16 - self.public_events.len()..]
+            .iter_mut()
+            .zip(&self.public_events)
+        {
+            *target = *event;
+            target[1] = f32::from(event[1] != f32::from(current));
+        }
+        result
+    }
+    fn apply_environment<E: crate::environment::Environment>(
+        &mut self,
+        state: &mut E::State,
+        action: E::Action,
+    ) -> Option<VecDeque<[f32; 32]>> {
+        if !self.external_model.is_some_and(|m| m.uses_history_bridge()) {
+            E::apply(state, action, &mut self.rng);
+            return None;
+        }
+        let old = self.public_events.clone();
+        let actor = E::current(state);
+        let before = E::observe(state, actor);
+        E::apply(state, action, &mut self.rng);
+        let after = E::observe(state, actor);
+        let event = if self
+            .external_model
+            .is_some_and(|m| m.uses_full_public_history())
+        {
+            E::full_public_event(&before, action, &after)
+        } else {
+            E::public_event(&before, action, &after)
+        };
+        self.observe_event(event);
+        Some(old)
+    }
+    fn restore_history(&mut self, old: Option<VecDeque<[f32; 32]>>) {
+        if let Some(old) = old {
+            self.public_events = old;
+        }
+    }
+    fn tree_key(&self, o: &Observation) -> ([u8; 192], u64) {
         let mut bytes = key(o);
         if self.transferred {
             // Unlike E26, the transferred network has a turn-counter input.
             bytes[188..192].copy_from_slice(&o.turns.to_le_bytes());
         }
-        bytes
+        (bytes, self.history_hash())
     }
     pub(super) fn leaf(&mut self, o: &Observation) -> ([f32; ACTIONS], f64) {
         self.calls += 1;
@@ -270,7 +330,13 @@ impl NeuralAgent {
                 if model.has_correction() {
                     self.correction_calls += 1;
                 }
-                model.infer_with_context(&x, &super::transfer::public_context(o))
+                model.infer_with_history(
+                    &x,
+                    &super::transfer::public_context(o),
+                    false,
+                    &self.history_tensor(o.current),
+                    &crate::public_history::canonical_pool(o),
+                )
             } else {
                 if model.has_correction() {
                     self.correction_calls += 1;
@@ -392,7 +458,7 @@ impl NeuralAgent {
         o: &E::Observation,
         root: usize,
         nodes: &mut Vec<Node<E::Action>>,
-        index: &mut HashMap<E::Key, usize>,
+        index: &mut HashMap<(E::Key, u64), usize>,
         worlds: &[E::State],
     ) -> usize
     where
@@ -440,9 +506,11 @@ impl NeuralAgent {
                 };
                 let seat = E::current(&state);
                 let old = E::turns(&state);
-                E::apply(&mut state, nodes[root].edges[edge].action, &mut self.rng);
+                let old_history =
+                    self.apply_environment::<E>(&mut state, nodes[root].edges[edge].action);
                 let depth = self.config.depth.max(1) - u32::from(E::turns(&state) != old);
                 let values = self.simulate_environment::<E>(&mut state, depth, nodes, index);
+                self.restore_history(old_history);
                 nodes[root].visits += 1;
                 nodes[root].edges[edge].visits += 1;
                 nodes[root].edges[edge].sum += values[seat];
@@ -463,7 +531,7 @@ impl NeuralAgent {
         state: &mut E::State,
         depth: u32,
         nodes: &mut Vec<Node<E::Action>>,
-        index: &mut HashMap<E::Key, usize>,
+        index: &mut HashMap<(E::Key, u64), usize>,
     ) -> [f64; 2]
     where
         Self: crate::environment::PolicyValue<E>,
@@ -495,15 +563,17 @@ impl NeuralAgent {
                 choices.as_deref().unwrap_or(legal),
             );
             let old = E::turns(state);
-            E::apply(state, action, &mut self.rng);
-            return self.simulate_environment::<E>(
+            let old_history = self.apply_environment::<E>(state, action);
+            let values = self.simulate_environment::<E>(
                 state,
                 depth - u32::from(E::turns(state) != old),
                 nodes,
                 index,
             );
+            self.restore_history(old_history);
+            return values;
         }
-        let key = E::key(&o, self.transferred);
+        let key = (E::key(&o, self.transferred), self.history_hash());
         let i = if let Some(&i) = index.get(&key) {
             i
         } else {
@@ -549,13 +619,14 @@ impl NeuralAgent {
         let action = node.edges[edge].action;
         debug_assert!(legal.contains(&action));
         let old = E::turns(state);
-        E::apply(state, action, &mut self.rng);
+        let old_history = self.apply_environment::<E>(state, action);
         let values = self.simulate_environment::<E>(
             state,
             depth - u32::from(E::turns(state) != old),
             nodes,
             index,
         );
+        self.restore_history(old_history);
         let node = &mut nodes[i];
         if self.dynamic_fpu {
             node.value = (f64::from(node.visits + 1) * node.value + values[seat])
@@ -608,7 +679,13 @@ impl NeuralAgent {
                 context[slot + 3] = f32::from(r.tier + 1) / 3.0;
                 context[6] += context[slot] / 3.0;
             }
-            model.infer_with_profile(&x, &context, true)
+            model.infer_with_history(
+                &x,
+                &context,
+                true,
+                &self.history_tensor(o.current),
+                &crate::public_history::native_pool(o),
+            )
         } else {
             if model.has_correction() {
                 self.correction_calls += 1;
@@ -635,7 +712,8 @@ impl NeuralAgent {
         let choices = <Self as crate::environment::PolicyValue<E>>::choices(o, legal);
         let mut nodes =
             vec![self.expand_root_environment::<E>(o, choices.as_deref().unwrap_or(legal))];
-        let mut index = HashMap::from([(E::key(o, self.transferred), 0usize)]);
+        let mut index =
+            HashMap::from([((E::key(o, self.transferred), self.history_hash()), 0usize)]);
         let worlds: Vec<_> = (0..self.world_pool)
             .map(|_| E::determinize(o, &mut self.rng))
             .collect();
@@ -698,6 +776,20 @@ pub(super) fn key(o: &Observation) -> [u8; 192] {
 }
 
 impl Agent for NeuralAgent {
+    fn wants_public_history(&self) -> bool {
+        self.external_model.is_some_and(|m| m.uses_history_bridge())
+    }
+    fn observe_public_action(&mut self, before: &Observation, action: Action, after: &Observation) {
+        let event = if self
+            .external_model
+            .is_some_and(|m| m.uses_full_public_history())
+        {
+            crate::public_history::canonical_v2(before, action, after)
+        } else {
+            crate::public_history::canonical(before, action, after)
+        };
+        self.observe_event(event);
+    }
     fn policy_target(&self) -> Option<[f32; ACTIONS]> {
         self.root_policy
     }

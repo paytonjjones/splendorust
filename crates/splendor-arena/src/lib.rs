@@ -207,6 +207,9 @@ fn play_validated_game(
         }
         let pi = s.current_player();
         let a = agents[pi].select_action(&s.observe(pi), &aa);
+        let public_before: [Option<splendor_core::Observation>; 4] = std::array::from_fn(|seat| {
+            (seat < agents.len() && agents[seat].wants_public_history()).then(|| s.observe(seat))
+        });
         let wire = encode(a);
         if capture {
             history.actions.push(wire);
@@ -216,6 +219,11 @@ fn play_validated_game(
                 "seed={seed} block={block} rotation={rotation} decision={decisions}: {e}; actions={:?}",
                 history.actions
             ));
+        }
+        for (seat, (agent, before)) in agents.iter_mut().zip(public_before).enumerate() {
+            if let Some(before) = before {
+                agent.observe_public_action(&before, a, &s.observe(seat));
+            }
         }
         if config.check {
             s.check_invariants().map_err(|e| {

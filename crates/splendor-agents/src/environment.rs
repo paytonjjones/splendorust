@@ -20,6 +20,18 @@ pub trait Environment {
     fn determinize(o: &Self::Observation, rng: &mut Rng) -> Self::State;
     fn key(o: &Self::Observation, transferred: bool) -> Self::Key;
     fn action_index(a: Self::Action) -> usize;
+    fn public_event(
+        before: &Self::Observation,
+        action: Self::Action,
+        after: &Self::Observation,
+    ) -> [f32; 32];
+    fn full_public_event(
+        before: &Self::Observation,
+        action: Self::Action,
+        after: &Self::Observation,
+    ) -> [f32; 32] {
+        Self::public_event(before, action, after)
+    }
 }
 
 pub struct Canonical;
@@ -73,6 +85,12 @@ impl Environment for Canonical {
     fn action_index(a: Action) -> usize {
         crate::neural::action_index(a).expect("canonical Main action")
     }
+    fn public_event(before: &Observation, action: Action, after: &Observation) -> [f32; 32] {
+        crate::public_history::canonical(before, action, after)
+    }
+    fn full_public_event(before: &Observation, action: Action, after: &Observation) -> [f32; 32] {
+        crate::public_history::canonical_v2(before, action, after)
+    }
 }
 
 pub struct AlphaZeroNative;
@@ -111,6 +129,20 @@ impl Environment for AlphaZeroNative {
     }
     fn action_index(a: u8) -> usize {
         a as usize
+    }
+    fn public_event(
+        before: &native::Observation,
+        action: u8,
+        after: &native::Observation,
+    ) -> [f32; 32] {
+        crate::public_history::native(before, action, after)
+    }
+    fn full_public_event(
+        before: &native::Observation,
+        action: u8,
+        after: &native::Observation,
+    ) -> [f32; 32] {
+        crate::public_history::native_v2(before, action, after)
     }
 }
 
