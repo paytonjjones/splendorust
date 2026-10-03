@@ -1,0 +1,195 @@
+{
+  "schema": "provisional-first-study-evidence-v1",
+  "complete": true,
+  "fits": {
+    "onehot": {
+      "selected_epoch": 1,
+      "seconds": 243.09432795806788,
+      "metrics": {
+        "visit_ce": 1.5184902969577425,
+        "onehot_ce": 1.001126315431835,
+        "visit_kl": 0.49729211584100685,
+        "target_entropy": 1.0211981811167357,
+        "executed_accuracy": 0.6592469595655881,
+        "visit_argmax_accuracy": 0.658349414351748,
+        "terminal_brier": 0.21496704040617734,
+        "mixed_value_mse": 0.2921422246124866,
+        "root_value_mse": 0.0521884669640417,
+        "rows": 22283,
+        "selection_score": 2.378358458582452,
+        "epoch": 1,
+        "updates": 217,
+        "train_loss": 1.2774764584179095,
+        "epoch_seconds": 60.9910068330355,
+        "seconds": 66.8834120829124
+      },
+      "checkpoint_sha256": "192bb6d86a3b920f200d8fbd1561d706b210aa44d308d8582d4da15a9f395625",
+      "runtime_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+    },
+    "visits": {
+      "selected_epoch": 1,
+      "seconds": 240.74868670897558,
+      "metrics": {
+        "visit_ce": 1.422820965488247,
+        "onehot_ce": 1.0551640921807859,
+        "visit_kl": 0.4016227843715115,
+        "target_entropy": 1.0211981811167357,
+        "executed_accuracy": 0.6678185163577616,
+        "visit_argmax_accuracy": 0.6667863393618454,
+        "terminal_brier": 0.21507312761133943,
+        "mixed_value_mse": 0.29303250336130243,
+        "root_value_mse": 0.053635410029279455,
+        "rows": 22283,
+        "selection_score": 2.2831134759336047,
+        "epoch": 1,
+        "updates": 217,
+        "train_loss": 1.6845379014181134,
+        "epoch_seconds": 59.29711116687395,
+        "seconds": 64.73024633387104
+      },
+      "checkpoint_sha256": "45c5f23f024d7315092044ba287122986205179d62722dbc7149824e672f5bda",
+      "runtime_sha256": "181f5045a5255bcc1f99755f5f79464249a84dc0a090bc6dce5e7d9a6f58e52a"
+    },
+    "visits-q": {
+      "selected_epoch": 1,
+      "seconds": 243.39345233305357,
+      "metrics": {
+        "visit_ce": 1.425015098963125,
+        "onehot_ce": 1.056565890282022,
+        "visit_kl": 0.40381691784638934,
+        "target_entropy": 1.0211981811167357,
+        "executed_accuracy": 0.6674594982722255,
+        "visit_argmax_accuracy": 0.6662029349728492,
+        "terminal_brier": 0.21477093504215922,
+        "mixed_value_mse": 0.29144094499946577,
+        "root_value_mse": 0.051586518332382904,
+        "rows": 22283,
+        "selection_score": 2.2840988391317616,
+        "q_signed_mse": 0.058522315715024045,
+        "q_rank_agreement": 0.6216467391393743,
+        "q_rank_pairs": 1823859,
+        "epoch": 1,
+        "updates": 217,
+        "train_loss": 1.789875181069149,
+        "epoch_seconds": 59.8404254168272,
+        "seconds": 65.98677475005388
+      },
+      "checkpoint_sha256": "4cb57324b1b9cde8ff55e1be225e1ff1550d30eee035bc41dc604b6baeedd569",
+      "runtime_sha256": "88fe307bc1f24cc56667c06fd141421a8ad40c6ddc3ef0af45de6823d47b04a3"
+    }
+  },
+  "screens": {
+    "screen-onehot": {
+      "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-onehot/screen.json",
+      "sha256": "9f99901a5cd503ef5180c3c0792a777e61e253ed4827aee859bd275c114e586d",
+      "games": 2000,
+      "completed": 2000,
+      "incomplete": 0,
+      "credit_bounds": [
+        0.56325,
+        0.56325
+      ],
+      "ci95": [
+        0.520308285431077,
+        0.6061917145689231
+      ],
+      "source_id": "aca8a8578011147f",
+      "runtime_seconds": 7449.696365625,
+      "decisions_per_second": 21.572020135147817,
+      "seed": 5431000000,
+      "strict_benefit": true,
+      "record_set_sha256": "e474c60e5c5cd772bc92d1fa94419a9e92dfa71ada23829db1f680b9e5d95d8e"
+    },
+    "screen-visits": {
+      "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits/screen.json",
+      "sha256": "b56dfc49e6f5b52041ab45ef993d7c9c91094aa640db34062936fd63cb356ba0",
+      "games": 2000,
+      "completed": 2000,
+      "incomplete": 0,
+      "credit_bounds": [
+        0.5605,
+        0.5605
+      ],
+      "ci95": [
+        0.5171216020858769,
+        0.6038783979141231
+      ],
+      "source_id": "aca8a8578011147f",
+      "runtime_seconds": 7629.388700583,
+      "decisions_per_second": 20.99342506795608,
+      "seed": 5432000000,
+      "strict_benefit": true,
+      "record_set_sha256": "2c20595d8c2d663fac9df3397581466256541958cf3f2ddb2801ae396fac8a01"
+    },
+    "screen-visits-q": {
+      "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-q/screen.json",
+      "sha256": "8c8455be75dd3c07fe607a352b5fe7e0dc22f213d63626c3c3787766ea7a061a",
+      "games": 2000,
+      "completed": 2000,
+      "incomplete": 0,
+      "credit_bounds": [
+        0.54875,
+        0.54875
+      ],
+      "ci95": [
+        0.5057247054706472,
+        0.5917752945293527
+      ],
+      "source_id": "aca8a8578011147f",
+      "runtime_seconds": 7343.325544959,
+      "decisions_per_second": 21.90451710402798,
+      "seed": 5433000000,
+      "strict_benefit": false,
+      "record_set_sha256": "1e79e203d37532aabd5ca867f1014b6b7cf30a5c69b0be5d48639158741dec50"
+    },
+    "screen-visits-v-onehot": {
+      "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-v-onehot/screen.json",
+      "sha256": "962e8cb701d28431c4279e497a4f76597d31ca02427cc01073328ab899c2c8d9",
+      "games": 2000,
+      "completed": 2000,
+      "incomplete": 0,
+      "credit_bounds": [
+        0.4945,
+        0.4945
+      ],
+      "ci95": [
+        0.45214590965404666,
+        0.5368540903459533
+      ],
+      "source_id": "aca8a8578011147f",
+      "runtime_seconds": 7932.621330125,
+      "decisions_per_second": 20.245514479571067,
+      "seed": 5434000000,
+      "strict_benefit": false,
+      "record_set_sha256": "76f41d8deb34b626edc2a514eff3c0793aded784c45aca3400eb63f0d22aa1cb"
+    },
+    "screen-q-v-visits": {
+      "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-q-v-visits/screen.json",
+      "sha256": "b03c8b19d82748046dfda292ac581a3df43aa433ea9bd9764c10c81eadd8172d",
+      "games": 2000,
+      "completed": 1999,
+      "incomplete": 1,
+      "credit_bounds": [
+        0.493,
+        0.4935
+      ],
+      "ci95": [
+        0.45022446335446736,
+        0.5363101277169156
+      ],
+      "source_id": "aca8a8578011147f",
+      "runtime_seconds": 8146.524726375,
+      "decisions_per_second": 19.633770886640693,
+      "seed": 5435000000,
+      "strict_benefit": false,
+      "record_set_sha256": "edb0691b3e5919ff5aad2f15ea86843682a3dfb616ea324f1ce1d513d2a001d7"
+    }
+  },
+  "limits": [
+    "All five first-stage comparisons are complete as experiments; Q/visits retains one unfinished game with unknown outcome.",
+    "Direct comparisons establish no benefit from richer policy targets or action-Q supervision. Iterative and efficiency studies remain open.",
+    "Held-out position metrics do not establish playing strength."
+  ],
+  "full_goal_complete": false,
+  "completion_sha256": "94aa522c0fa7b9bca81bcb3c8f8a7e4ae16cdcee3b36e9cec1762366fdf8705e"
+}

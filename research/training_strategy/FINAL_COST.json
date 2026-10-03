@@ -1,0 +1,2308 @@
+{
+  "schema": "training-strategy-cost-inventory-v1",
+  "full_goal_complete": false,
+  "commands": {
+    "1fa2d39cfb0882e4c321417965a682da2e651f061ce9ebc2336854df14e3f760": {
+      "process": {
+        "pid": 592,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev",
+          "--games",
+          "400",
+          "--seed",
+          "5420000000",
+          "--policy-seed",
+          "8420000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/dev-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 2129.9799808750395
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/dev-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 2129.9799808750395
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              400,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 22283,
+            "games": 400,
+            "inferences": 5370948,
+            "iterations": 256,
+            "policy_seed": 8420000000,
+            "row_bytes": 2600,
+            "rows": 22294,
+            "seconds": 2129.708641542,
+            "seed": 5420000000,
+            "simulations": 5704448,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              400,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 22283,
+            "games": 400,
+            "inferences": 5370948,
+            "iterations": 256,
+            "policy_seed": 8420000000,
+            "row_bytes": 2600,
+            "rows": 22294,
+            "seconds": 2129.708641542,
+            "seed": 5420000000,
+            "simulations": 5704448,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 2129.9799808750395
+    },
+    "68d58c2f7b3b59c4b4bed48ff8fb4921b5e2ace6deeeb98050ece80935df8d1f": {
+      "process": {
+        "pid": 9152,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/strategy_train.py",
+          "--arm",
+          "onehot",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--dev",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/onehot",
+          "--device",
+          "mps"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-onehot/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-onehot/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-onehot/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 244.36227099993266
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-onehot/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 244.36227099993266
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 244.36227099993266
+    },
+    "c304a47ac93bb6288c08e5b7a1c0fa6d209be5a39d9158777d63099ea99df8f2": {
+      "process": {
+        "pid": 9372,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/strategy_train.py",
+          "--arm",
+          "visits",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--dev",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits",
+          "--device",
+          "mps"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-visits/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-visits/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-visits/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 241.98533837497234
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-visits/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 241.98533837497234
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 241.98533837497234
+    },
+    "2d4b10af2f5044c9ad258f08a6286d499a299c1f1ef5cdc17102c4a67daf37c1": {
+      "process": {
+        "pid": 9602,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/strategy_train.py",
+          "--arm",
+          "visits-q",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--dev",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/dev",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits-q",
+          "--device",
+          "mps"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-visits-q/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-visits-q/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/fit-visits-q/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 244.63561658305116
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/fit-visits-q/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 244.63561658305116
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 244.63561658305116
+    },
+    "442fadcd79963363d09c3cc1544ed9cf2d1337567e127e0716a83cc0b75ace15": {
+      "process": {
+        "pid": 44769,
+        "command": [
+          "cargo",
+          "run",
+          "--release",
+          "--locked",
+          "-p",
+          "splendor-arena",
+          "--example",
+          "transfer_parity",
+          "--",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/parity.json",
+          "real"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/parity/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/parity/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/parity/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 2.4118392089148983
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/parity/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 2.4118392089148983
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 2.4118392089148983
+    },
+    "a42648b5bf197a5899a9a1edbdcef9ba0b5eb76079fa07af3322e283f5bfe5da": {
+      "process": {
+        "pid": 18098,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5432000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/interrupted/screen-visits-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/recovery-1/interrupted/screen-visits-command/process.json"
+      ],
+      "exit_receipts": [],
+      "collection_receipts": [],
+      "returncode": null,
+      "command_elapsed_seconds": null
+    },
+    "ef762521495801161860b475ce4ec63a83ec20bae51d334773dfad29b72ae76c": {
+      "process": {
+        "pid": 83833,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5432000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/interrupted/screen-visits-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/recovery-2/interrupted/screen-visits-command/process.json"
+      ],
+      "exit_receipts": [],
+      "collection_receipts": [],
+      "returncode": null,
+      "command_elapsed_seconds": null
+    },
+    "da53e449bbf72671b64201d88fe3226f77ebd9659754f528b76ae6ec015423db": {
+      "process": {
+        "pid": 88104,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-16",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "16",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-16-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-16-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-16-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 550.4773031249642
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-16-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 550.4773031249642
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-16/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 550.457835584,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 16,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-16/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 550.457835584,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 16,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 550.4773031249642
+    },
+    "8b3d888f2dac7537b7303c3f9d2ee6fde51f0509a7afe226d7bfd7f258b0d589": {
+      "process": {
+        "pid": 89563,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-32",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-32-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-32-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 309.9417076249374
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 309.9417076249374
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-32/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 309.926083416,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-32/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 309.926083416,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 309.9417076249374
+    },
+    "b8f64147f171078d18db0ab7e6a794a2ea71946c0821a183dc05a3d1cc2e8cdd": {
+      "process": {
+        "pid": 44787,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-4",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "4",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-4-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-4-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-4-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 3148.6511777910637
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-4-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 3148.6511777910637
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-4/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 3148.253285375,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 4,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-4/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 3148.253285375,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 4,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 3148.6511777910637
+    },
+    "24cf9b96006edaa2be8bfd880c98225c6e0d2dcd9c8cb65b30099a008e4ce819": {
+      "process": {
+        "pid": 77477,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "8",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-8-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 1064.9040170409717
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/scaling-8-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 1064.9040170409717
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 1064.890422459,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 8,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 1064.890422459,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 8,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 1064.9040170409717
+    },
+    "58321ddc2dff4528e29cf5652de176f5bd3891c1a0c4dffa52a3b49f45be63a6": {
+      "process": {
+        "pid": 9891,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5431000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-onehot"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-onehot-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-onehot-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-onehot-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7478.093325542053
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-onehot-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7478.093325542053
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 7478.093325542053
+    },
+    "5742873c5bf6d26fc3566d66908eb0448e972e1f28a00717b447dbfa8db2778a": {
+      "process": {
+        "pid": 16176,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5435000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-q-v-visits"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-q-v-visits-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-q-v-visits-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-q-v-visits-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 8155.651422458002
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-q-v-visits-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 8155.651422458002
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 2,
+      "command_elapsed_seconds": 8155.651422458002
+    },
+    "3e09060478fc2b150b028242e8a013631800c608baaf414e33ef9d156b2b7d51": {
+      "process": {
+        "pid": 60908,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5432000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7639.596714333165
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7639.596714333165
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 7639.596714333165
+    },
+    "76e28295d9a97f10bd5d6f75b88fe065432a9b6793cc43289431cf08c45ad596": {
+      "process": {
+        "pid": 95450,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5433000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-q"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-q-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-q-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-q-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 7353.023794125067
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-q-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 7353.023794125067
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 2,
+      "command_elapsed_seconds": 7353.023794125067
+    },
+    "10f9ea899b4a2951daf66b0f1544017751d7a6a54016b35131c1ad49d9024783": {
+      "process": {
+        "pid": 3772,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "2000",
+          "--confirm",
+          "0",
+          "--seed",
+          "5434000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-v-onehot"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-v-onehot-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-v-onehot-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/screen-visits-v-onehot-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 7942.245930959005
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/screen-visits-v-onehot-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 7942.245930959005
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 2,
+      "command_elapsed_seconds": 7942.245930959005
+    },
+    "f628e61cee6a921ccfef5e3e20b5f906d1d912a13885a9ece3c64cba1d1cee1d": {
+      "process": {
+        "pid": 93324,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--games",
+          "2000",
+          "--seed",
+          "5410000000",
+          "--policy-seed",
+          "8410000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/train-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 8865.92155337485
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/train-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 8865.92155337485
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              2000,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111065,
+            "games": 2000,
+            "inferences": 26751234,
+            "iterations": 256,
+            "policy_seed": 8410000000,
+            "row_bytes": 2600,
+            "rows": 111136,
+            "seconds": 8865.91066425,
+            "seed": 5410000000,
+            "simulations": 28432640,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              2000,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111065,
+            "games": 2000,
+            "inferences": 26751234,
+            "iterations": 256,
+            "policy_seed": 8410000000,
+            "row_bytes": 2600,
+            "rows": 111136,
+            "seconds": 8865.91066425,
+            "seed": 5410000000,
+            "simulations": 28432640,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 8865.92155337485
+    },
+    "d313df44b359a7ade0029e8176870f228b4f03ec9d7cb8f1971b53ce0563a85e": {
+      "process": {
+        "pid": 64614,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/dev-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev",
+          "--games",
+          "400",
+          "--seed",
+          "5450000000",
+          "--policy-seed",
+          "9460000000",
+          "--threads",
+          "64",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/dev-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 1388.8812176659703
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/dev-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 1388.8812176659703
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              400,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 22192,
+            "games": 400,
+            "inferences": 5347630,
+            "iterations": 256,
+            "policy_seed": 9460000000,
+            "row_bytes": 2600,
+            "rows": 22202,
+            "seconds": 1388.864679958,
+            "seed": 5450000000,
+            "simulations": 5681152,
+            "stochastic_turns": 0,
+            "threads": 64,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              400,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 22192,
+            "games": 400,
+            "inferences": 5347630,
+            "iterations": 256,
+            "policy_seed": 9460000000,
+            "row_bytes": 2600,
+            "rows": 22202,
+            "seconds": 1388.864679958,
+            "seed": 5450000000,
+            "simulations": 5681152,
+            "stochastic_turns": 0,
+            "threads": 64,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 1388.8812176659703
+    },
+    "49d44474a8e2819eea3d5ac3662829044867e82fa07aa1c4587407a9614f2216": {
+      "process": {
+        "pid": 70361,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/strategy_train.py",
+          "--arm",
+          "visits",
+          "--parent",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/model.pt",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen-data",
+          "--dev",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev",
+          "--epoch-rows",
+          "222130",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen",
+          "--device",
+          "mps"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/fit-frozen/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/fit-frozen/process.json"
+      ],
+      "exit_receipts": [],
+      "collection_receipts": [],
+      "returncode": null,
+      "command_elapsed_seconds": null
+    },
+    "19198eb0fa85cac62e6b32464592718a10d06f443123e26b47a9b485b07b6b71": {
+      "process": {
+        "pid": 67900,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/strategy_train.py",
+          "--arm",
+          "visits",
+          "--parent",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/model.pt",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/train",
+          "--train",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data",
+          "--dev",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/dev",
+          "--epoch-rows",
+          "222130",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative",
+          "--device",
+          "mps"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/fit-iterative/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/fit-iterative/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/fit-iterative/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 409.7246467501391
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/fit-iterative/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 409.7246467501391
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 409.7246467501391
+    },
+    "29e63a7b72187a83b9e5b8256d209c9799d50ce7a65c5ed539feb8ece45c91a7": {
+      "process": {
+        "pid": 48087,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen-data",
+          "--games",
+          "2000",
+          "--seed",
+          "5440000000",
+          "--policy-seed",
+          "9450000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen-data-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/frozen-data-command/process.json"
+      ],
+      "exit_receipts": [],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen-data/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              1999,
+              1,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111285,
+            "games": 2000,
+            "inferences": 26799631,
+            "iterations": 256,
+            "policy_seed": 9450000000,
+            "row_bytes": 2600,
+            "rows": 111354,
+            "seconds": 8682.166559667,
+            "seed": 5440000000,
+            "simulations": 28488960,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen-data/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              1999,
+              1,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111285,
+            "games": 2000,
+            "inferences": 26799631,
+            "iterations": 256,
+            "policy_seed": 9450000000,
+            "row_bytes": 2600,
+            "rows": 111354,
+            "seconds": 8682.166559667,
+            "seed": 5440000000,
+            "simulations": 28488960,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": null,
+      "command_elapsed_seconds": null,
+      "collector_reported_seconds": 8682.166559667
+    },
+    "df55c9e1d7eeadffd05e2ba0d2c81a92e26a668aca05a862b01550146022e548": {
+      "process": {
+        "pid": 27940,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/14/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data",
+          "--games",
+          "2000",
+          "--seed",
+          "5440000000",
+          "--policy-seed",
+          "9440000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/iterative-data-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7934.713521375088
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/iterative-data-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 7934.713521375088
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              2000,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111148,
+            "games": 2000,
+            "inferences": 26790104,
+            "iterations": 256,
+            "policy_seed": 9440000000,
+            "row_bytes": 2600,
+            "rows": 111214,
+            "seconds": 7934.0634335,
+            "seed": 5440000000,
+            "simulations": 28453888,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative-data/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              2000,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 111148,
+            "games": 2000,
+            "inferences": 26790104,
+            "iterations": 256,
+            "policy_seed": 9440000000,
+            "row_bytes": 2600,
+            "rows": 111214,
+            "seconds": 7934.0634335,
+            "seed": 5440000000,
+            "simulations": 28453888,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 7934.713521375088
+    },
+    "69e76932a3db4e94e60b7bbd2d3cafd5a96d6861473cbfe22c081b7f28ec0825": {
+      "process": {
+        "pid": 55271,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/splendor",
+          "compare",
+          "--agent-a",
+          "flywheel-gumbel-candidate",
+          "--agent-b",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--games",
+          "64",
+          "--seed",
+          "5491000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/arena-32.json"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/arena-32-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/arena-32-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/arena-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 267.4818248329684
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/arena-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 267.4818248329684
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 267.4818248329684
+    },
+    "ceb35413923e955d26dd20e5202e1565dcd26d050457c98485ca17fb9276548d": {
+      "process": {
+        "pid": 55698,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/splendor",
+          "compare",
+          "--agent-a",
+          "flywheel-gumbel-candidate",
+          "--agent-b",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--games",
+          "64",
+          "--seed",
+          "5491000000",
+          "--threads",
+          "64",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/arena-64.json"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/arena-64-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/arena-64-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/arena-64-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 180.70016649994068
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/arena-64-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 180.70016649994068
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 180.70016649994068
+    },
+    "9ccd3da2b3aa0247c33529455b1faf3e6013ec18602811a337975b95f70c92c6": {
+      "process": {
+        "pid": 54615,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-32",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "32",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/collect-32-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/collect-32-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/collect-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 447.06641475018114
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/collect-32-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 447.06641475018114
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-32/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 447.051452,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-32/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 447.051452,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 32,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 447.06641475018114
+    },
+    "69fa7f79754f1cecc0bec6f4c7ad125ecb607dd19f11f0b2579c45ef550385e1": {
+      "process": {
+        "pid": 53853,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/target/release/examples/rich_selfplay",
+          "--model",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/13/model.bin",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-64",
+          "--games",
+          "64",
+          "--seed",
+          "5401000000",
+          "--policy-seed",
+          "8401000000",
+          "--threads",
+          "64",
+          "--iterations",
+          "256",
+          "--depth",
+          "16"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/collect-64-command/process.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/collect-64-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/resource-pilots/collect-64-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 351.5550797081087
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/resource-pilots/collect-64-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 351.5550797081087
+          }
+        }
+      ],
+      "collection_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-64/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 351.535716542,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 64,
+            "world_pool": 3
+          }
+        },
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/resource-scaling/collect-64/complete.json",
+          "receipt": {
+            "all_games_replayed": true,
+            "cheap_iterations": 64,
+            "counts": [
+              64,
+              0,
+              0
+            ],
+            "depth": 16,
+            "engine": "splendorust-v2",
+            "full_probability": 1.0,
+            "full_rows": 3586,
+            "games": 64,
+            "inferences": 860927,
+            "iterations": 256,
+            "policy_seed": 8401000000,
+            "row_bytes": 2600,
+            "rows": 3590,
+            "seconds": 351.535716542,
+            "seed": 5401000000,
+            "simulations": 918016,
+            "stochastic_turns": 0,
+            "threads": 64,
+            "world_pool": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "command_elapsed_seconds": 351.5550797081087
+    },
+    "2cde2aabfc319dccb0b5af7528704fd279adc6d4438b05576f1db66281f4a57e": {
+      "process": {
+        "pid": 76258,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/archive_results.py",
+          "pack",
+          "--study",
+          "first:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first",
+          "--provenance",
+          "second:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second",
+          "--provenance",
+          "frozen-sources:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/frozen-sources",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-archive"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-archive-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-archive-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 45.07138308393769
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 45.07138308393769
+    },
+    "48a32ebcd37a2117880551d76a428f1fd92e9dde476a1310f7e8bbdeb42d6386": {
+      "process": {
+        "pid": 83210,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/archive_results.py",
+          "restore",
+          "--archive",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-archive",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored",
+          "--manifest-sha256",
+          "c413a533ce69648d5f69994abd0f8458c8f70f33ae2a12b72b351bdd1f7f9399"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restore-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restore-command/exit.json",
+          "receipt": {
+            "returncode": 0,
+            "seconds": 5.4907863340340555
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 0,
+      "command_elapsed_seconds": 5.4907863340340555
+    },
+    "b0e8836667c490da7ac543019dac7be9639e683ce7ca03e09e20a4e64a41a44d": {
+      "process": {
+        "pid": 72827,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/training_strategy/deadline_command.py",
+          "1791047748.9752011",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/scripts/promote.py",
+          "--candidate",
+          "flywheel-gumbel-candidate",
+          "--baseline",
+          "flywheel-gumbel",
+          "--players",
+          "2",
+          "--screen",
+          "256",
+          "--confirm",
+          "0",
+          "--seed",
+          "5492000000",
+          "--threads",
+          "64",
+          "--iterations",
+          "128",
+          "--depth",
+          "16",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/iterative-v-frozen"
+        ]
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-command/process.json"
+      ],
+      "exit_receipts": [
+        {
+          "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-command/exit.json",
+          "receipt": {
+            "returncode": 2,
+            "seconds": 515.2336366251111
+          }
+        }
+      ],
+      "collection_receipts": [],
+      "returncode": 2,
+      "command_elapsed_seconds": 515.2336366251111
+    }
+  },
+  "services": {
+    "2612062e841b7ee6bb2f5df6b4254babe2f139977dee3ce9edcf0f62b6148b1d": {
+      "run": {
+        "pid": 9889,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/13/model.pt",
+          "--model",
+          "14:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/14/model.pt",
+          "--model",
+          "15:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/15/model.pt",
+          "--model",
+          "16:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/16/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          },
+          "14": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/onehot/runtime.pt",
+            "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+            "descriptor_sha256": "0d6b2d6725a47a6f8e092501084ed55e4d7859f98af28ce3715b79ee74dda44a"
+          },
+          "15": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/runtime.pt",
+            "checkpoint_sha256": "181f5045a5255bcc1f99755f5f79464249a84dc0a090bc6dce5e7d9a6f58e52a",
+            "descriptor_sha256": "34ca9359d4d2978d1eb2b74b3b3f68dc71ed5cc8ff5a0153bc243fa72ec877b2"
+          },
+          "16": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits-q/runtime.pt",
+            "checkpoint_sha256": "88fe307bc1f24cc56667c06fd141421a8ad40c6ddc3ef0af45de6823d47b04a3",
+            "descriptor_sha256": "51014cc0629eb4b6bdfa4442b7a3b5a7acb6158c41e54b58a5ab143cbcde0d3d"
+          }
+        },
+        "batch": 32,
+        "started_at": 1790981657.4097111
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/arena-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 15870875,
+        "batches": 994277,
+        "seconds": 8612.524953458924,
+        "mean_batch": 15.962226824114406
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/arena-service/service.log"
+    },
+    "7d009739783a444fdd0885f8a0e7972bfa6dbf99478773602b03a139c0c70cd2": {
+      "run": {
+        "pid": 44768,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/13/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          }
+        },
+        "batch": 32,
+        "started_at": 1790964846.0502589
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/collection-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 35551244,
+        "batches": 1613088,
+        "seconds": 16052.974819457973,
+        "mean_batch": 22.039246463925092
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/collection-service/service.log"
+    },
+    "3b7436fbeded3697216e10812425a5c0be16f5ab87bbd72b33b5aede5948f9a9": {
+      "run": {
+        "pid": 83826,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/13/model.pt",
+          "--model",
+          "14:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/14/model.pt",
+          "--model",
+          "15:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/15/model.pt",
+          "--model",
+          "16:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/16/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          },
+          "14": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/onehot/runtime.pt",
+            "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+            "descriptor_sha256": "0d6b2d6725a47a6f8e092501084ed55e4d7859f98af28ce3715b79ee74dda44a"
+          },
+          "15": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/runtime.pt",
+            "checkpoint_sha256": "181f5045a5255bcc1f99755f5f79464249a84dc0a090bc6dce5e7d9a6f58e52a",
+            "descriptor_sha256": "34ca9359d4d2978d1eb2b74b3b3f68dc71ed5cc8ff5a0153bc243fa72ec877b2"
+          },
+          "16": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits-q/runtime.pt",
+            "checkpoint_sha256": "88fe307bc1f24cc56667c06fd141421a8ad40c6ddc3ef0af45de6823d47b04a3",
+            "descriptor_sha256": "51014cc0629eb4b6bdfa4442b7a3b5a7acb6158c41e54b58a5ab143cbcde0d3d"
+          }
+        },
+        "batch": 32,
+        "started_at": 1790995427.349668
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/recovery-1/arena-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 1115282,
+        "batches": 69422,
+        "seconds": 660.20049774996,
+        "mean_batch": 16.065253089798624
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-1/arena-service/service.log"
+    },
+    "460743571f0a3939d0372c293e6ff34172adbb3d28405c66016385b67a8b290f": {
+      "run": {
+        "pid": 60906,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/13/model.pt",
+          "--model",
+          "14:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/14/model.pt",
+          "--model",
+          "15:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/15/model.pt",
+          "--model",
+          "16:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/16/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          },
+          "14": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/onehot/runtime.pt",
+            "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+            "descriptor_sha256": "0d6b2d6725a47a6f8e092501084ed55e4d7859f98af28ce3715b79ee74dda44a"
+          },
+          "15": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/runtime.pt",
+            "checkpoint_sha256": "181f5045a5255bcc1f99755f5f79464249a84dc0a090bc6dce5e7d9a6f58e52a",
+            "descriptor_sha256": "34ca9359d4d2978d1eb2b74b3b3f68dc71ed5cc8ff5a0153bc243fa72ec877b2"
+          },
+          "16": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits-q/runtime.pt",
+            "checkpoint_sha256": "88fe307bc1f24cc56667c06fd141421a8ad40c6ddc3ef0af45de6823d47b04a3",
+            "descriptor_sha256": "51014cc0629eb4b6bdfa4442b7a3b5a7acb6158c41e54b58a5ab143cbcde0d3d"
+          }
+        },
+        "batch": 32,
+        "started_at": 1790996515.785065
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/first/recovery-2/arena-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 54882235,
+        "batches": 3440203,
+        "seconds": 31089.915441500023,
+        "mean_batch": 15.953196657290283
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/recovery-2/arena-service/service.log"
+    },
+    "6931c62989e0ac146428058d6fadb8fd7807fe5ef986fdc4014760c4fe13c917": {
+      "run": {
+        "pid": 27939,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/13/model.pt",
+          "--model",
+          "14:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/14/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          },
+          "14": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/visits/runtime.pt",
+            "checkpoint_sha256": "181f5045a5255bcc1f99755f5f79464249a84dc0a090bc6dce5e7d9a6f58e52a",
+            "descriptor_sha256": "3730dd5181aa259e94f675eb2f4a715683a4e9046ef1950fba9d86da00cd7cf9"
+          }
+        },
+        "batch": 32,
+        "started_at": 1791027621.775232
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/collection-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 56193373,
+        "batches": 1946406,
+        "seconds": 16622.358095125062,
+        "mean_batch": 28.870324587984214
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/collection-service/service.log"
+    },
+    "41ce9d5281b3b1dbb9052ce6c844a2e6131bdd597174bee7086deccfc71cefac": {
+      "run": {
+        "pid": 64612,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "13:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/dev-service/13/model.pt"
+        ],
+        "models": {
+          "13": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/entity_baseline/model.pt",
+            "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+            "descriptor_sha256": "7aef3eb83682f2fffadcdfa84dd745a5bfba3d2e69284a39cec073e805b0c18a"
+          }
+        },
+        "batch": 32,
+        "started_at": 1791044252.186717
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/dev-service/run.json",
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/core-restored/second/recovery-resource-1/dev-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 5342871,
+        "batches": 180494,
+        "seconds": 1380.1826391669456,
+        "mean_batch": 29.60137733110242
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/recovery-resource-1/dev-service/service.log"
+    },
+    "5726a3251a48499b9fe0976684dd5da645dbeac816a5049dec2b13c77efc82a4": {
+      "run": {
+        "pid": 72824,
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/research/architecture_pivots/service.py",
+          "--port",
+          "19620",
+          "--device",
+          "mps",
+          "--batch",
+          "32",
+          "--delay-ms",
+          "1",
+          "--fast-entities",
+          "--model",
+          "15:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-service/15/model.pt",
+          "--model",
+          "16:/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-service/16/model.pt"
+        ],
+        "models": {
+          "15": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/iterative/runtime.pt",
+            "checkpoint_sha256": "bfcec0daf0a8fca0b4214d209b46335a6a7fb256810a510b879cc78774f88236",
+            "descriptor_sha256": "e34a4c65de8eb18774a8f579f5e4a6f3a7bb879f1d79c72644f89348cf5c37c0"
+          },
+          "16": {
+            "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/second/frozen/runtime.pt",
+            "checkpoint_sha256": "fda92ee5a5ba2e4714bb8507305395b53fba28ca899b9ca6defd85132c275104",
+            "descriptor_sha256": "2575efd3a06e0da16403c82cf12b4e74bedfc72521c85dea32ddde53b3990080"
+          }
+        },
+        "batch": 32,
+        "started_at": 1791046461.6787379
+      },
+      "receipt_locations": [
+        "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-service/run.json"
+      ],
+      "last_logged_counter": {
+        "calls": 1751657,
+        "batches": 62532,
+        "seconds": 510.130912624998,
+        "mean_batch": 28.01216976907823
+      },
+      "counter_log": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/pilot-service/service.log"
+    }
+  },
+  "known_command_elapsed_seconds": 66917.80067004147,
+  "collector_reported_seconds_without_command_exit": 8682.166559667,
+  "commands_without_exit_receipts": [
+    "a42648b5bf197a5899a9a1edbdcef9ba0b5eb76079fa07af3322e283f5bfe5da",
+    "ef762521495801161860b475ce4ec63a83ec20bae51d334773dfad29b72ae76c",
+    "49d44474a8e2819eea3d5ac3662829044867e82fa07aa1c4587407a9614f2216",
+    "29e63a7b72187a83b9e5b8256d209c9799d50ce7a65c5ed539feb8ece45c91a7"
+  ],
+  "limits": [
+    "Copied process and service receipts count once by their full receipt identity.",
+    "Command elapsed seconds can overlap; their sum is not total host wall time.",
+    "Collector-reported seconds are separate when the parent exit receipt is absent.",
+    "Missing exit receipts do not establish failure or a successful process exit.",
+    "Last logged service counters are lower bounds and are not added to command time.",
+    "This inventory does not measure isolated GPU time, energy or FLOPs.",
+    "Receipt inventory is not a corpus, weight or strength validity check.",
+    "Final accounting must also retain archive/restore costs and interruption observations."
+  ],
+  "fit_reported_seconds_without_parent_exit": 403.60434375004843,
+  "closed_early": true
+}

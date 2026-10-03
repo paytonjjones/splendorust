@@ -1,0 +1,86 @@
+{
+  "schema": "entity-training-study-early-close-v1",
+  "closed_at": 1791047946.3776152,
+  "closed_at_user_request": true,
+  "registered_study_complete": false,
+  "champion_promoted": false,
+  "exploratory": {
+    "path": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/early-close/iterative-v-frozen/screen.json",
+    "sha256": "117f6ae468a44583ed04b8e16c0839f5a5468c85cd17e7e9902698f701541eef",
+    "games": 256,
+    "completed": 256,
+    "incomplete": 0,
+    "credit_bounds": [
+      0.501953125,
+      0.501953125
+    ],
+    "ci95": [
+      0.3336027062999568,
+      0.6703035437000432
+    ],
+    "source_id": "aca8a8578011147f",
+    "runtime_seconds": 505.665662334,
+    "decisions_per_second": 40.31122047305647,
+    "seed": 5492000000,
+    "strict_benefit": false,
+    "record_set_sha256": "ff0fce25016ea3097a70f5a3e684b947e74cb0f63a784775f406152993e0de58",
+    "exploratory": true,
+    "registered_study_complete": false
+  },
+  "unrun": [
+    "five registered second-generation 2000-game screens",
+    "PCR study",
+    "fresh milestone screen",
+    "20000-game confirmation"
+  ],
+  "fits": {
+    "iterative": {
+      "best_epoch": 1,
+      "checkpoint_sha256": "90e09b628c6faed565541393246aa2d596240c2a40020518f56d0093f1b7e7bd",
+      "runtime_sha256": "bfcec0daf0a8fca0b4214d209b46335a6a7fb256810a510b879cc78774f88236",
+      "seconds": 408.6928386671934,
+      "metrics": {
+        "visit_ce": 1.4267684610610225,
+        "onehot_ce": 1.04686128070394,
+        "visit_kl": 0.40600642044078383,
+        "target_entropy": 1.0207620406202387,
+        "executed_accuracy": 0.6683489545782264,
+        "visit_argmax_accuracy": 0.6675829127613554,
+        "terminal_brier": 0.21181375720815515,
+        "mixed_value_mse": 0.2915762672341807,
+        "root_value_mse": 0.056768685256996514,
+        "rows": 22192,
+        "selection_score": 2.274023489893643,
+        "epoch": 1,
+        "updates": 434,
+        "train_loss": 1.6463740913365525,
+        "epoch_seconds": 101.38551633292809,
+        "seconds": 107.47632783418521
+      }
+    },
+    "frozen": {
+      "best_epoch": 1,
+      "checkpoint_sha256": "f9984abb62192cfb10bef4aae0a8b6a2a83bdc4c0f9bb8308a28377ad826f0f5",
+      "runtime_sha256": "fda92ee5a5ba2e4714bb8507305395b53fba28ca899b9ca6defd85132c275104",
+      "seconds": 403.60434375004843,
+      "metrics": {
+        "visit_ce": 1.4173124034196762,
+        "onehot_ce": 1.0429890157511188,
+        "visit_kl": 0.3965503627994375,
+        "target_entropy": 1.0207620406202387,
+        "executed_accuracy": 0.6688446286950253,
+        "visit_argmax_accuracy": 0.6678983417447729,
+        "terminal_brier": 0.21114742661347558,
+        "mixed_value_mse": 0.2900330289800819,
+        "root_value_mse": 0.0565660463534591,
+        "rows": 22192,
+        "selection_score": 2.2619021098735783,
+        "epoch": 1,
+        "updates": 434,
+        "train_loss": 1.641826478845602,
+        "epoch_seconds": 98.99516679206863,
+        "seconds": 103.96320825000294
+      }
+    }
+  }
+}

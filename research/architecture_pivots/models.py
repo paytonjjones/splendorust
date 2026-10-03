@@ -180,6 +180,19 @@ class EntityTransformer(nn.Module):
         return self.policy(h), self.value(h).tanh()
 
 
+class EntityWithQ(EntityTransformer):
+    """The same trunk with an offline-only explored-action value output."""
+    def __init__(self):
+        super().__init__()
+        self.action_q = nn.Linear(256, 81)
+        nn.init.zeros_(self.action_q.weight)
+        nn.init.zeros_(self.action_q.bias)
+
+    def forward(self, x, history=None, pool=None):
+        h = self.embedding(x)
+        return self.policy(h), self.value(h).tanh(), self.action_q(h).tanh()
+
+
 def create(kind):
     if kind in ('small','small-cold'):
         model=small_load(ROOT/'research/e81/model/model.pt')
@@ -192,6 +205,8 @@ def create(kind):
         return Capacity()
     if kind in ('entity', 'history'):
         return EntityTransformer(history=kind == 'history')
+    if kind == 'entity-q':
+        return EntityWithQ()
     raise ValueError(kind)
 
 

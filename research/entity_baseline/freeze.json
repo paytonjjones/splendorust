@@ -1,0 +1,47 @@
+{
+  "schema": "expanded-entity-baseline-v1",
+  "origin_head": "241af12",
+  "original_source_fingerprint": "cc154030de2934c0",
+  "checkpoint": "research/entity_baseline/model.pt",
+  "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+  "architecture": {
+    "parameters": 4780883,
+    "width": 256,
+    "layers": 6,
+    "heads": 8,
+    "feedforward": 1024,
+    "tokens": 31,
+    "token_fields": 48,
+    "public_inputs": 525,
+    "history": false
+  },
+  "selected_epoch": 12,
+  "ongoing_history_parent_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+  "official_champion_unchanged_sha256": "c7706cd39dddc9cb89ffec78bfd5769d5661221f0ad6e2009c47553d6b33e7e8",
+  "runtime": {
+    "python": "3.11.13 (main, Sep 18 2025, 19:53:58) [Clang 20.1.4 ]",
+    "torch": "2.5.1",
+    "numpy": "1.26.4"
+  },
+  "source_sha256": {
+    "crates/splendor-agents/src/environment.rs": "69bf2f23cf87f676b728fb41bdd0988362f5b848a21a1c84323cc19112f0d45f",
+    "crates/splendor-agents/src/lib.rs": "5f63779231dd3af602103c397dd37c4b9df40f7625808afa0739e8ac1a2ec8f2",
+    "crates/splendor-agents/src/neural_search.rs": "99050e46d146887986a603de249c9d25066179efba25f10050907eb197df8767",
+    "crates/splendor-agents/src/public_history.rs": "5bedf7b4ac143f8b85a91dfc11348a08770c86d2aad595721008ab677e6bc543",
+    "crates/splendor-agents/src/transfer/attention.rs": "46132a7e3aed2cb86e919345d060af61fb22eb19e107682a8124d7a661f10893",
+    "crates/splendor-agents/src/transfer/large.rs": "6bb318150da825d6817b4a1abf77f2652d5727852037758c7a25f0c28b9e200d",
+    "crates/splendor-agents/src/transfer/remote.rs": "b931f5c5e7186fd161ec9af275d44114385c8e1d9c7cc08e48356e824b97fff8",
+    "crates/splendor-agents/src/transfer.rs": "9ab26240a9ba403abd6c40d3ff385a3a393250386ffa229f616eab161ee28963",
+    "crates/splendor-arena/examples/flywheel_data.rs": "bdd12ff9d3e138447c97dd83b60b6a553fe6b970354f46f0560a005a02dc2edf",
+    "crates/splendor-arena/examples/native_policy_worker.rs": "6f5eb6f3ac22e9ce21d7a854544938ad33b514bd96d1b9a3f9d8c5919bb73c79",
+    "crates/splendor-arena/examples/transfer_parity.rs": "93644329139cc8628214f01b82e24b52c67e1529f1de5a4d7f5ff0a99dbd4fc7",
+    "crates/splendor-arena/src/lib.rs": "c20579587c2fe30d6adbd10028caf7856cf9addbc239727b3583a202e7a5ed8a",
+    "research/architecture_pivots/export.py": "fde4df9f8f9d4adaa0bea154b6125e557fff7d7a28c3ace750eb02e974c2a757",
+    "research/architecture_pivots/models.py": "0e171dec6546e2352c8bc1b8a19a52db7537819fb0ad3921644828c535927d92",
+    "research/architecture_pivots/native_match.py": "1c44083a00d230219df8407c877d0361f24f3e341f17cfdce65270e8dc63e33c",
+    "research/architecture_pivots/service.py": "35e1304794c023841aa4b11d29866f808069dfcb83d6d9db38026ce233bd9ac5",
+    "research/architecture_pivots/train.py": "24e15c6e10ffc1dfc509ecc3cdce857f692c3a7af641a357e78d0d97f64b6bcf"
+  },
+  "external_artifacts": "Expanded corpus and Python runtime only; see frozen registry and bootstrap.py. No history state required.",
+  "provisional": "2000-game screens, no 20000-game confirmation at freeze; costs under shared load"
+}

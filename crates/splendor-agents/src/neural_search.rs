@@ -180,6 +180,16 @@ impl<A> Node<A> {
     }
 }
 
+/// Diagnostic root labels. Values are acting-player win credits, not signed values.
+/// Unvisited edges have no Q label. Capturing these labels changes no search choice.
+#[derive(Clone, Debug, PartialEq)]
+pub struct SearchTargets {
+    pub visits: [u32; ACTIONS],
+    pub q: [Option<f32>; ACTIONS],
+    pub root_value: f32,
+    pub network_value: f32,
+}
+
 pub struct NeuralAgent {
     rng: Rng,
     config: SearchConfig,
@@ -215,8 +225,15 @@ pub struct NeuralAgent {
     cached_index: HashMap<([u8; 192], u64), usize>,
     root_policy: Option<[f32; ACTIONS]>,
     root_value: Option<f32>,
+    pub capture_search_targets: bool,
+    pub search_targets: Option<SearchTargets>,
 }
 impl NeuralAgent {
+    /// Change an opt-in self-play cap. This does not reset policy RNG or history.
+    pub fn set_search_iterations(&mut self, iterations: u32) {
+        assert!(self.config.time_budget.is_none());
+        self.config.iterations = iterations;
+    }
     pub fn new(seed: u64, config: SearchConfig) -> Self {
         Self {
             rng: Rng::new(seed),
@@ -252,6 +269,8 @@ impl NeuralAgent {
             cached_index: HashMap::new(),
             root_policy: None,
             root_value: None,
+            capture_search_targets: false,
+            search_targets: None,
         }
     }
     fn history_hash(&self) -> u64 {
@@ -820,6 +839,7 @@ impl Agent for NeuralAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
         self.root_policy = None;
         self.root_value = None;
+        self.search_targets = None;
         if o.count != 2
             || o.phase != Phase::Main
             || legal.len() == 1
@@ -928,6 +948,23 @@ impl Agent for NeuralAgent {
                 .unwrap()
         };
         let visits: u32 = nodes[root].edges.iter().map(|e| e.visits).sum();
+        if self.capture_search_targets && visits > 0 {
+            let mut targets = SearchTargets {
+                visits: [0; ACTIONS],
+                q: [None; ACTIONS],
+                root_value: (nodes[root].edges.iter().map(|e| e.sum).sum::<f64>()
+                    / f64::from(visits)) as f32,
+                network_value: nodes[root].value as f32,
+            };
+            for edge in &nodes[root].edges {
+                let i = action_index(edge.action).expect("Main action");
+                targets.visits[i] = edge.visits;
+                if edge.visits > 0 {
+                    targets.q[i] = Some((edge.sum / f64::from(edge.visits)) as f32);
+                }
+            }
+            self.search_targets = Some(targets);
+        }
         if visits > 0 {
             let mut policy = [0.0; ACTIONS];
             let improved = if self.gumbel {
@@ -1085,6 +1122,48 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn diagnostic_targets_preserve_search_and_mask_unvisited_edges() {
+        let state = GameState::new(2, 42).unwrap();
+        let o = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        for gumbel in [false, true] {
+            let config = SearchConfig {
+                iterations: 32,
+                depth: 4,
+                ..Default::default()
+            };
+            let mut original = NeuralAgent::new(77, config.clone());
+            let mut captured = NeuralAgent::new(77, config);
+            original.gumbel = gumbel;
+            captured.gumbel = gumbel;
+            captured.capture_search_targets = true;
+            assert_eq!(
+                original.select_action(&o, &legal),
+                captured.select_action(&o, &legal)
+            );
+            assert_eq!(original.work_counts(), captured.work_counts());
+            assert_eq!(original.policy_target(), captured.policy_target());
+            assert_eq!(original.value_target(), captured.value_target());
+            let t = captured.search_targets.as_ref().unwrap();
+            let count: u32 = t.visits.iter().sum();
+            assert_eq!(count, 32);
+            let mut sum = 0.0f64;
+            for i in 0..ACTIONS {
+                assert_eq!(t.q[i].is_some(), t.visits[i] > 0);
+                if let Some(q) = t.q[i] {
+                    assert!((0.0..=1.0).contains(&q));
+                    assert!(legal.iter().any(|&a| action_index(a) == Some(i)));
+                    sum += f64::from(q) * f64::from(t.visits[i]);
+                }
+            }
+            assert!((sum / f64::from(count) - f64::from(t.root_value)).abs() < 1e-6);
+            assert!((0.0..=1.0).contains(&t.network_value));
+            captured.select_action(&o, &legal[..1]);
+            assert!(captured.search_targets.is_none());
+        }
+    }
     use splendor_core::{ActionSet, GameState};
     #[test]
     fn completed_q_policy_and_mixed_value() {
