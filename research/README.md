@@ -1,5 +1,12 @@
 # Playing-strength research
 
+Current work: [STRATEGY.md](../STRATEGY.md) and [the sprint runbook](sprint48/README.md).
+Start from confirmed Entity in `STRENGTH_CHAMPION.json` and the saved one-hot
+candidate. `CHAMPION.json` is the standalone/demo pointer;
+`EFFICIENCY_CHAMPION.json` states its cost scope. Text below records historical
+methods/results. Fixed game counts, cost gates, and old lineage are not the
+current mandate.
+
 Start revision: `4448c19`. The original `search` policy remains available.
 `search128` and `search512` freeze its depth-eight, width-six, Strong-rollout,
 Engine-leaf configuration at their named simulation count. `learned128` freezes

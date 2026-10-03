@@ -1,0 +1,29 @@
+{
+  "schema": "research-strength-champion-v1",
+  "name": "expanded-entity",
+  "checkpoint": "research/entity_baseline/model.pt",
+  "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+  "parameters": 4780883,
+  "runtime": "checkpoint-bound public-tensor service; export a fresh descriptor for the owned port",
+  "decision": "research/architecture_pivots/expanded-entity-confirmation/decision.json",
+  "baseline": "E81",
+  "profile": "canonical SplendoRust v2, two players",
+  "games": 20000,
+  "complete": 20000,
+  "credit": 0.607225,
+  "ci95": [0.5959506230894773, 0.6184993769105227],
+  "search": {
+    "algorithm": "gumbel",
+    "iterations": 128,
+    "depth": 16,
+    "world_pool": 3,
+    "max_considered": 16,
+    "cvisit": 50,
+    "cscale": 0.1,
+    "root_noise": 0
+  },
+  "record_set_sha256": "bffcdc9accda1da485f1632e1666776150668609545c5c68ff38b606a087ad61",
+  "scope": "Confirmed internal strength baseline at this profile. No AlphaZero win or global rank is established. The archived one-hot update is a stronger screened candidate, pending final confirmation.",
+  "policy": "STRATEGY.md",
+  "standalone_runtime_pointer": "research/CHAMPION.json"
+}

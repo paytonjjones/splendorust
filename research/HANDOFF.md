@@ -1,5 +1,13 @@
 # Learning research handoff
 
+**Current handoff:** [48-hour strategy](../STRATEGY.md),
+[execution runbook](sprint48/README.md), and [plan](sprint48/PLAN.json).
+Reuse confirmed Entity and the closed study's one-hot update. Do not start
+the old loop below. E56 statements below are historical; the current strength
+registry is `STRENGTH_CHAMPION.json`.
+
+## Historical E56 handoff
+
 The confirmed research champion is `research/e56/model/model.bin`, with matching
 `model.pt`. Native SHA256:
 `055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41`.

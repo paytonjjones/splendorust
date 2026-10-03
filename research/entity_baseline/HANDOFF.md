@@ -1,5 +1,12 @@
 # Frozen expanded Entity Transformer
 
+Current status: the architecture study completed its fresh 20,000-game Entity
+confirmation. [Final report](../architecture_pivots/REPORT.md) and
+[strength registry](../STRENGTH_CHAMPION.json) supersede provisional status
+below. New work starts with [STRATEGY.md](../../STRATEGY.md) and
+[the runbook](../sprint48/README.md). Frozen model/data identities remain valid;
+the old cost veto is not a new strength requirement.
+
 This is a reusable research baseline. It is the exact parent of the ongoing
 history/opponent/belief experiment in the original worktree. Do not replace it
 with that experiment's weights or the equal-budget parent continuation.

@@ -1,5 +1,18 @@
 # Experiments
 
+Current campaign: [STRATEGY.md](STRATEGY.md) and
+[sprint plan](research/sprint48/PLAN.json). On 2026-10-03 the user approved a
+48-hour push against pinned unchanged AlphaZero800. This supersedes old fixed
+search/game counts and cost vetoes for new work. Start from confirmed Entity
+and the saved one-hot challenger; the prior training study stays closed.
+The plan reserves masters 17700000000–17737999999 for exploratory/training/dev
+work, 17790000000 for final external play, and 17791000000 for optional final
+canonical play. Record exact consumed masters and check active jobs/split IDs.
+These are reservations, not new outcomes. Keep all historical hypotheses,
+decisions, and unknown outcomes below. A short new hypothesis and finite
+budget precede each implemented branch; one frozen fresh final test controls
+the external claim.
+
 ## P2 — Conservative promotion with rare no-action outcomes
 
 Registered on 2026-10-02 at the user's request, after the expanded history/E81

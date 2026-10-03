@@ -1,5 +1,10 @@
 # Performance evidence
 
+For the active [48-hour strength campaign](STRATEGY.md), cost measurements
+control scheduling and final-run feasibility. They do not impose an
+equal-latency strength veto. Small-model CPU results below do not settle
+Entity Transformer backend performance. Check current complete-game cost.
+
 The [external benchmark report](benchmarks/REPORT.md) contains the 2026-09-29
 cross-engine baseline. Its [protocol](benchmarks/PROTOCOL.md) and
 [result files](benchmarks/results/README.md) keep the workload definitions,
