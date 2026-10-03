@@ -1,6 +1,8 @@
 # Original raster assets
 
-The production game uses generated raster sprite sheets. It contains no drawn SVG art. Built-in image generation created all three sheets. WebP encoding reduces size and preserves transparency. CSS selects atlas cells; it does not draw the assets.
+The production game uses generated raster sprite sheets. It contains no drawn SVG art. Built-in image generation created all three sheets. WebP encoding reduces size and preserves transparency. CSS selects each illustration's visible bounds; it does not draw the assets.
+
+The generated sheets have uneven transparent margins. `web/src/art.tsx` records a crop for each illustration with two pixels of edge padding. CSS fits that crop without changing its proportions and centers it in its container. Card illustrations have a separate layout row between the bonus/prestige header and the cost strip. Mobile cards also leave space for the Reserve control. The original WebP files are unchanged, and the three files still total 142,466 bytes.
 
 ## gems
 
