@@ -343,3 +343,33 @@ strength claim. Save an exact source copy before each future probe.
 Final-guard regression tests found and fixed a rich-row stride error: explicit
 2600-byte legacy rows now advance by2600 rather than the default2232. Full
 Sprint48 Python discovery passes41 tests. No final seed stream was played.
+
+## Development trial05 result
+
+Dynamic FPU with the fixed refit01 checkpoint, PUCT1600, depth32, world3 and
+chance3 scored **70.3125% win credit**, with128 native-score completions and
+no caps/invalid outcomes. Exploratory paired bootstrap95:62.5–78.125%; paired
+Hoeffding95:53.336231–87.288769%. It does not yet meet the frozen final criterion.
+Select dynamic FPU for the preregistered6400/depth64 scale tests.
+Scheduler1500.390s; driver1513.518s;5,681,600simulations/5,024,241inferences.
+Replay checked128games/7102transitions. RawSHA256:
+`5e291fe447549f2d766d4ca8b00c9604520907c89908fefa79d63ccd2e68c54b`.
+
+The opt-in resident-FP16 microbenchmark aborted in MPSGraph with mismatched
+FP32 intermediates and FP16 bias. Its exact sources were copied before execution;
+see `MPS_RESIDENT_PROBE_FAILURE.json`. RetainFP32. No production profile changed.
+
+The first branch2 fit launch failed before any model/data load or fitting.
+The trainer requires a prepared output folder; the wrapper omitted it.
+Retain the failed receipt/output, fix the launch contract, and retry the same
+fixed branch in a new `dagger-branch2-fit-retry` directory. This is an execution
+repair, not a third training recipe or selector change.
+
+The final-guard multi-file fix passed42Python tests. A full read-only corpus
+audit verified32000 unique expanded IDs/136source receipts and32640 IDs/152
+receipts for the four-group branch2 registry. No final games have started.
+
+Trial05 archive:`artifacts/development-05`,185files, manifestSHA256
+`f28434b05925cb44738ea6cef00e8324b7fc33652bfe96904bbc8354e4dc8f78`.
+A full restore verified every file. Duplicate refit weights are referenced
+through the existing refit archive.

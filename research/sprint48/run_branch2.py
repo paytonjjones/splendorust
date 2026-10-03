@@ -54,6 +54,17 @@ def write_json(path: Path, value: dict) -> None:
     temporary.replace(path)
 
 
+def launch_trainer(command: list[str], output: Path, log, cwd: Path,
+                   env: dict[str, str]) -> subprocess.Popen:
+    """Create the trainer's exclusive output directory before process start."""
+    trainer_output = output / "fit"
+    trainer_output.mkdir(parents=False, exist_ok=False)
+    if not trainer_output.is_dir() or next(trainer_output.iterdir(), None) is not None:
+        raise RuntimeError("trainer output must exist and be empty before launch")
+    return subprocess.Popen(command, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
+                            start_new_session=True, env=env)
+
+
 def resolve_file(path_value: str, parent: Path) -> Path:
     path = Path(path_value)
     return (path if path.is_absolute() else parent / path).resolve(strict=True)
@@ -415,8 +426,8 @@ def main() -> int:
     process = None
     try:
         with (output / "trainer.log").open("wb") as log:
-            process = subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
-                start_new_session=True, env={**os.environ, "PYTHONUNBUFFERED": "1"})
+            process = launch_trainer(command, output, log, ROOT,
+                {**os.environ, "PYTHONUNBUFFERED": "1"})
         receipt.update(status="running", trainer_pid=process.pid, trainer_pgid=process.pid,
                        trainer_started_utc=utc_now())
         write_json(output / "process.json", dict(pid=process.pid, pgid=process.pid,

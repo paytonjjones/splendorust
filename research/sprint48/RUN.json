@@ -97,13 +97,14 @@
       "gumbel_max_considered": null,
       "workers": 64,
       "games": 128,
-      "status": "running"
+      "status": "complete",
+      "wall_seconds": 1513.541706085205
     }
   ],
   "heavy_job_owner": "root",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
   "output_root": "local/research/sprint48",
-  "current_stage": "local/research/sprint48/external-05",
+  "current_stage": "local/research/sprint48/dagger-branch2-fit-retry",
   "training_branches": [
     {
       "branch_index": 1,
@@ -118,6 +119,37 @@
       "best_epoch": 2,
       "finished_utc": "2026-10-03T20:25:57+00:00",
       "seconds": 1494.291255415883
+    },
+    {
+      "branch_index": 2,
+      "branch": "learner-state-dagger-10pct",
+      "output": "local/research/sprint48/dagger-branch2-fit-retry",
+      "status": "running",
+      "driver_pid": 51223,
+      "trainer_pid": 51226,
+      "parent_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "started_utc": "2026-10-03T23:56:21+00:00",
+      "receipt": "local/research/sprint48/dagger-branch2-fit-retry/run.json",
+      "registry": "local/research/sprint48/dagger-branch2-fit-retry/branch-registry.json",
+      "registry_sha256": "f095bfa4cc3d4388b902fb51f40c75b3d96b3c38fe46c562d3eec3574f0c39f2",
+      "recipe": {
+        "batch": 512,
+        "dagger_rows_per_update": 57,
+        "dagger_seed": 14313186,
+        "device": "mps",
+        "epochs": 2,
+        "learning_rate": 0.0001,
+        "loss_weights": {
+          "base": 0.9,
+          "dagger": 0.1
+        },
+        "optimizer": "fresh AdamW",
+        "scheduler": "cosine, two epochs",
+        "seed": 800000031,
+        "selection": "0.90 * full dev CE+4Brier + 0.10 * DAgger dev CE+4Brier; epoch zero eligible",
+        "weight_decay": 0.0001
+      },
+      "scope": "Fixed second recipe; one pre-training launch failure retained separately"
     }
   ],
   "offline_label_jobs": [
@@ -220,6 +252,17 @@
       "verified_zero_game_records": true,
       "reason": "campaign_metadata call omitted ROOT; failed before output/game setup",
       "logs_retained": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-03/arena"
+    },
+    {
+      "output": "local/research/sprint48/dagger-branch2-fit",
+      "status": "failed",
+      "kind": "branch2-fit-launch",
+      "reason": "Wrapper omitted trainer output directory; trainer rejected before loading data/model or any fitting",
+      "verified_zero_training_steps": true,
+      "receipt": "local/research/sprint48/dagger-branch2-fit/run.json",
+      "receipt_sha256": "ee24b4dbc2878c562c25cd2cf3b43aa39d140ebacdd991a209aae046bd77f4f8",
+      "started_utc": "2026-10-03T23:53:12+00:00",
+      "finished_utc": "2026-10-03T23:53:13+00:00"
     }
   ],
   "validation_setup_ids": [

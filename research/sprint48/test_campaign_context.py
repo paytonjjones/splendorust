@@ -312,6 +312,29 @@ class CampaignContextTests(unittest.TestCase):
         self.assertEqual(ids, {100, 101, 102, 103})
         self.assertEqual({receipt.get("group") for receipt in receipts}, set(groups))
 
+    def test_branch_two_multi_entry_groups_collect_every_mixed_size_source(self):
+        groups = {}
+        expected_ids = set()
+        for index, name in enumerate(("base_train", "base_dev", "dagger_train", "dagger_dev")):
+            entries = []
+            for row_size, setup_id in ((freeze.ROW_SIZE, 1000 + index * 2),
+                                       (freeze.RICH_ROW_SIZE, 1001 + index * 2)):
+                path = self.directory / f"{name}-{row_size}.bin"
+                path.write_bytes(setup_id.to_bytes(8, "little") + bytes(row_size - 8))
+                entries.append({"source": str(path), "source_sha256": freeze.sha(path),
+                    "rows": 1, "row_bytes": row_size})
+                expected_ids.add(setup_id)
+            groups[name] = entries
+        registry_path = self.directory / "branch-multi-registry.json"
+        registry_path.write_text(json.dumps({"schema": "sprint48-dagger-branch2-registry-v1",
+            "groups": groups}))
+        ids, receipts = freeze.corpus_ids([registry_path])
+        self.assertEqual(ids, expected_ids)
+        self.assertEqual(len(receipts), 8)
+        self.assertEqual({receipt["group"] for receipt in receipts}, set(groups))
+        self.assertEqual({receipt["row_bytes"] for receipt in receipts},
+            {freeze.ROW_SIZE, freeze.RICH_ROW_SIZE})
+
     def test_legacy_registry_accepts_hash_bound_rich_row_size(self):
         registry = {}
         for split, setup_id in (("train", 201), ("dev", 202)):

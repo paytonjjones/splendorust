@@ -32,6 +32,40 @@ class CampaignPreflightTests(unittest.TestCase):
                 _, returned_deadline = run_branch2.campaign_state(allow_active_trial=True)
                 self.assertEqual(returned_deadline, deadline)
 
+    def test_trainer_output_exists_empty_before_mock_process_start(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "receipt"
+            output.mkdir()
+            expected_command = ["trainer", "--output", str(output / "fit")]
+            expected_env = {"PYTHONUNBUFFERED": "1"}
+            sentinel = object()
+
+            def mock_popen(command, **kwargs):
+                trainer_output = output / "fit"
+                self.assertEqual(command, expected_command)
+                self.assertTrue(trainer_output.is_dir())
+                self.assertEqual(list(trainer_output.iterdir()), [])
+                self.assertEqual(kwargs["cwd"], root)
+                self.assertEqual(kwargs["env"], expected_env)
+                return sentinel
+
+            with patch.object(run_branch2.subprocess, "Popen", side_effect=mock_popen):
+                process = run_branch2.launch_trainer(
+                    expected_command, output, object(), root, expected_env)
+
+            self.assertIs(process, sentinel)
+
+    def test_trainer_output_must_be_new_before_process_start(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "receipt"
+            (output / "fit").mkdir(parents=True)
+            with patch.object(run_branch2.subprocess, "Popen") as popen:
+                with self.assertRaises(FileExistsError):
+                    run_branch2.launch_trainer(["trainer"], output, object(), root, {})
+                popen.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

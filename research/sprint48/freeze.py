@@ -208,9 +208,9 @@ def corpus_ids(registry_paths: list[Path]) -> tuple[set[int], list[dict]]:
                     if (not isinstance(rows, int) or rows < 1 or not isinstance(row_size, int)
                             or row_size < 8 or path.stat().st_size != rows * row_size):
                         raise FreezeError(f"corpus row count or packed-row size is invalid: {path}")
-                source_ids = set()
-                with path.open("rb") as stream, mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as data:
-                    for offset in range(0, len(data), row_size):
+                    source_ids = set()
+                    with path.open("rb") as stream, mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as data:
+                        for offset in range(0, len(data), row_size):
                             source_ids.add(int.from_bytes(data[offset:offset + 8], "little"))
                     ids.update(source_ids)
                     receipt = {"split": split, "path": str(path), "sha256": sha(path),

@@ -21,14 +21,14 @@ Refit01 is complete. Its selected checkpoint is
 `local/research/sprint48/refit-01/fit/model.pt`, SHA256
 `44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f`.
 Trial04 scored58.59375% in128 native games; this is exploratory evidence.
-Trial05 tests dynamic FPU. The source collection and branch2 labels are
+Trial05 scored70.3125% with dynamic FPU, which is selected for larger-search tests. The source collection and branch2 labels are
 complete; use the successful dev retry registry. `RESULTS.md` records the
 prospective6400-simulation scale tests and final-time calculations.
 
 Validate branch2 without starting training while a search job is active:
 
 ```sh
-local/strength/inference/bin/python research/sprint48/run_branch2.py --dagger-train-registry local/research/sprint48/dagger-branch2-train-labels/registry-entries.json --dagger-dev-registry local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json --output local/research/sprint48/dagger-branch2-fit --dry-run
+local/strength/inference/bin/python research/sprint48/run_branch2.py --dagger-train-registry local/research/sprint48/dagger-branch2-train-labels/registry-entries.json --dagger-dev-registry local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json --output local/research/sprint48/dagger-branch2-fit-retry --dry-run
 ```
 
 Remove `--dry-run` only after the sole primary MPS job ends. The wrapper checks
