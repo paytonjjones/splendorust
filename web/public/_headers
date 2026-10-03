@@ -1,0 +1,26 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+
+/champion.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Type: application/json; charset=utf-8
+
+/models/*
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/octet-stream
+
+/*.wasm
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/wasm
+
+/assets/*.wasm
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/wasm
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
