@@ -1,0 +1,27 @@
+{
+  "schema": "sprint48-mps-probe-source-recovery-v1",
+  "status": "original_source_bytes_missing",
+  "original_source_path": "research/sprint48/probe_mps_precision.py",
+  "original_source_sha256_from_completed_probe_receipt": "7d4de60efdb78a85b01bdebaaf2f733bdb2d5aa3b59377ce03063ff0f00b3fea",
+  "completed_probe_receipts": [
+    {
+      "path": "research/sprint48/MPS_PRECISION_PROBE.json",
+      "sha256": "fda733778c98794f7c1bd8294b432d8568dcd5bbd15b2cfc12024de5f0f05583"
+    },
+    {
+      "path": "local/research/sprint48/mps-precision-probe.json",
+      "sha256": "fda733778c98794f7c1bd8294b432d8568dcd5bbd15b2cfc12024de5f0f05583"
+    }
+  ],
+  "source_search": {
+    "git_tracked": false,
+    "local_matching_source_files": [],
+    "note": "The completed probe receipts retain the prior source hash, but no byte copy of that source was found in the current local research tree. The present source has later opt-in resident-FP16 edits and must not be treated as the measured source."
+  },
+  "current_modified_source": {
+    "path": "research/sprint48/probe_mps_precision.py",
+    "sha256": "d30091bcc2ec373facda1dea4de0cce264c6c055652f5d70a2bb7fb2d92d1f93",
+    "sha256_equals_original": false
+  },
+  "recovery_action": "No original bytes were reconstructed or substituted. Future probes must archive a byte copy of the exact script before execution."
+}

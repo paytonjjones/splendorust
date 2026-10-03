@@ -1,7 +1,14 @@
 """Offline checks for exact source-block assignment."""
 import unittest
 
-from research.sprint48.run_labels import assign_blocks, source_blocks, validate_split_master
+from pathlib import Path
+
+from research.sprint48.run_labels import (
+    assign_blocks,
+    source_blocks,
+    validate_split_master,
+    worker_cwd,
+)
 
 
 class LabelSchedulerTests(unittest.TestCase):
@@ -37,6 +44,14 @@ class LabelSchedulerTests(unittest.TestCase):
         validate_split_master("train", 17700000000)
         with self.assertRaisesRegex(ValueError, "new-development"):
             validate_split_master("dev", 17700000000)
+
+    def test_worker_processes_get_distinct_output_local_cwds(self):
+        output = Path("/tmp/labels-retry")
+        paths = [worker_cwd(output, worker) for worker in range(8)]
+        self.assertEqual(len(set(paths)), 8)
+        self.assertTrue(all(path.parent == output / "worker-cwd" for path in paths))
+        self.assertEqual(paths[0].name, "worker-00")
+        self.assertEqual(paths[-1].name, "worker-07")
 
 
 if __name__ == "__main__":

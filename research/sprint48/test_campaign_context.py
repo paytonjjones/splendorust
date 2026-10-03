@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import copy
+import gzip
 import importlib.util
+import hashlib
 import json
 import sys
 import tempfile
@@ -296,6 +298,115 @@ class CampaignContextTests(unittest.TestCase):
         seeds, receipts = freeze.explored_ids(run_path)
         self.assertEqual(seeds, set(validation_ids))
         self.assertEqual(receipts[0]["source"], "RUN.json:validation_setup_ids")
+
+    def test_branch_two_registry_collects_setup_ids_from_all_groups(self):
+        groups = {}
+        for offset, name in enumerate(("base_train", "base_dev", "dagger_train", "dagger_dev")):
+            path = self.directory / f"{name}.bin"
+            path.write_bytes((100 + offset).to_bytes(8, "little") + bytes(freeze.ROW_SIZE - 8))
+            groups[name] = [{"source": str(path), "source_sha256": freeze.sha(path), "rows": 1}]
+        registry_path = self.directory / "branch-registry.json"
+        registry_path.write_text(json.dumps({"schema": "sprint48-dagger-branch2-registry-v1",
+            "groups": groups}))
+        ids, receipts = freeze.corpus_ids([registry_path])
+        self.assertEqual(ids, {100, 101, 102, 103})
+        self.assertEqual({receipt.get("group") for receipt in receipts}, set(groups))
+
+    def test_legacy_registry_accepts_hash_bound_rich_row_size(self):
+        registry = {}
+        for split, setup_id in (("train", 201), ("dev", 202)):
+            path = self.directory / f"{split}-rich.bin"
+            path.write_bytes(setup_id.to_bytes(8, "little") + bytes(freeze.RICH_ROW_SIZE - 8))
+            registry[split] = [{"source": str(path), "source_sha256": freeze.sha(path),
+                "rows": 1, "row_bytes": freeze.RICH_ROW_SIZE}]
+        registry_path = self.directory / "rich-registry.json"
+        registry_path.write_text(json.dumps(registry))
+        ids, receipts = freeze.corpus_ids([registry_path])
+        self.assertEqual(ids, {201, 202})
+        self.assertEqual({entry["row_bytes"] for entry in receipts}, {freeze.RICH_ROW_SIZE})
+
+    def test_branch_two_registry_rejects_missing_groups_and_unknown_schema(self):
+        registry_path = self.directory / "invalid-branch-registry.json"
+        schema = "sprint48-dagger-branch2-registry-v1"
+        registry_path.write_text(json.dumps({"schema": schema, "groups": {}}))
+        with self.assertRaisesRegex(freeze.FreezeError, "groups must be exactly"):
+            freeze.corpus_ids([registry_path])
+        registry_path.write_text(json.dumps({"schema": "unknown-v1", "train": [], "dev": []}))
+        with self.assertRaisesRegex(freeze.FreezeError, "unsupported corpus registry schema"):
+            freeze.corpus_ids([registry_path])
+
+    def test_rich_archive_rows_extract_setup_ids_across_chunk_boundaries(self):
+        archive = self.directory / "tiny-archive"
+        (archive / "chunks").mkdir(parents=True)
+        raw = b"".join(value.to_bytes(8, "little") + bytes(freeze.RICH_ROW_SIZE - 8)
+            for value in (501, 502))
+        chunks = []
+        for index, block in enumerate((raw[:613], raw[613:])):
+            relative = f"chunks/{index}.gz"
+            path = archive / relative
+            with gzip.open(path, "wb") as stream:
+                stream.write(block)
+            chunks.append({"path": relative, "compressed_sha256": freeze.sha(path),
+                "uncompressed_sha256": hashlib.sha256(block).hexdigest(), "bytes": len(block)})
+        manifest = {"files": [{"path": "first/train/rows.bin", "sha256": hashlib.sha256(raw).hexdigest(),
+            "bytes": len(raw), "chunks": chunks}]}
+        ids, receipt = freeze._archive_member_ids(archive, manifest, "first/train/rows.bin", freeze.RICH_ROW_SIZE)
+        self.assertEqual(ids, {501, 502})
+        self.assertEqual(receipt["rows"], 2)
+        self.assertEqual(receipt["row_bytes"], freeze.RICH_ROW_SIZE)
+
+    def test_candidate_ancestry_receipt_binds_every_historical_setup_source(self):
+        run = freeze.read_json(ROOT / "research/sprint48/RUN.json")
+        checkpoint = ROOT / "local/research/sprint48/refit-01/fit/model.pt"
+        ids, receipts = freeze._candidate_ancestry(run, checkpoint)
+        ancestry = freeze.read_json(ROOT / freeze.ANCESTRY_SETUP_IDS_PATH)
+        self.assertEqual(len(ids), ancestry["validation"]["unique_ancestry_full_ids"])
+        receipt = receipts[0]
+        self.assertEqual(receipt["sha256"], freeze.ANCESTRY_SETUP_IDS_SHA256)
+        self.assertEqual(receipt["source_count"], len(ancestry["extra_ancestor_corpora"])
+            + len(ancestry["historical_selection_screens"]))
+
+    def test_collection_jobs_block_while_active_and_audit_complete_receipts(self):
+        active = {"data_collection_jobs": [{"status": "running"}]}
+        with self.assertRaisesRegex(freeze.FreezeError, "data_collection_jobs job is running"):
+            freeze._collection_ids(active)
+
+        output = self.directory / "completed-collection"
+        (output / "train").mkdir(parents=True)
+        master = 17710000000
+        seed = freeze.setup_seed(master, 0)
+        (output / "train/arena").mkdir()
+        raw_path = output / "train/arena/games.jsonl"
+        raw_path.write_text(json.dumps({"master": master}) + "\n" + "\n".join(
+            json.dumps({"block": 0, "setup_seed": seed, "rotation": rotation}) for rotation in (0, 1)) + "\n")
+        setup_path = output / "train/setup_ids.txt"
+        setup_path.write_text(f"{seed}\n")
+        source = {"split": "train", "status": "complete", "raw": str(raw_path),
+            "raw_sha256": freeze.sha(raw_path), "source_master": master, "games": 2,
+            "paired_setups": 1, "setup_ids_sha256": freeze.sha(setup_path)}
+        source_run = {"schema": "sprint48-dagger-source-collection-v1", "status": "complete",
+            "sources": [source]}
+        (output / "run.json").write_text(json.dumps(source_run))
+        ids, receipts = freeze._collection_ids({"data_collection_jobs": [{"status": "complete",
+            "output": str(output)}]})
+        self.assertEqual(ids, {seed})
+        self.assertEqual(receipts[0]["splits"][0]["setup_ids"], 1)
+
+        labels = self.directory / "completed-labels"
+        labels.mkdir()
+        label_ids_path = labels / "setup_ids.txt"
+        label_ids_path.write_text("700\n701\n")
+        registry_path = labels / "registry-entries.json"
+        registry_path.write_text(json.dumps({"schema": "sprint48-offline-label-registry-v1",
+            "setup_ids_file": label_ids_path.name, "setup_ids_sha256": freeze.sha(label_ids_path),
+            "setup_count": 2}))
+        label_run = {"schema": "sprint48-offline-label-run-result-v1", "status": "complete",
+            "registry": str(registry_path), "registry_sha256": freeze.sha(registry_path)}
+        (labels / "run.json").write_text(json.dumps(label_run))
+        label_audit, label_receipts = freeze._collection_ids({"offline_label_jobs": [{
+            "status": "complete", "output": str(labels), "registry_sha256": freeze.sha(registry_path)}]})
+        self.assertEqual(label_audit, {700, 701})
+        self.assertEqual(label_receipts[0]["setup_ids"], 2)
 
     def test_freeze_writer_requires_the_global_run_claim(self):
         run_path = self.directory / "unclaimed-RUN.json"

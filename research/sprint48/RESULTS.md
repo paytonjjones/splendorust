@@ -273,3 +273,73 @@ The trial02/03 archive checkpoint locator was corrected from
 `refit-01/fit/model.pt` to the actual refit archive entry `refit/fit/model.pt`.
 Only the generated reference file changed. Repacking and full restore verified
 all 408 files again; raw evidence and executable/checkpoint bytes did not change.
+
+## Branch2 data and precision probe
+
+The fixed refit policy collected all 1,024 train and 256 dev games.
+Offline train labels completed: 28,471 rows from 512 paired setups.
+The first dev label job failed when concurrent upstream ONNX exports used
+the same temporary filename. Each worker now has a separate working folder.
+The full dev retry completed: 7,138 rows from 128 setups. All seven previously
+successful shards match the retry data, context, inputs and setup IDs exactly.
+Retain the failed output. The retry changes file isolation, not labels or seeds.
+These are training and model-selection data, not playing-strength results.
+
+A bounded MPS autocast microbenchmark used the fixed refit checkpoint and
+registered public dev inputs. FP16 autocast achieved 1,438 versus 5,204 rows/s
+at batch32, and 2,808 versus 7,851 rows/s at batch64. It was slower than FP32.
+Reject this runtime change. This does not test every possible FP16 backend.
+See `MPS_PRECISION_PROBE.json` for inputs, hashes, error measurements and scope.
+
+Trial05 started with the preregistered dynamic-FPU profile. It is the sole
+primary GPU job. The second fit waits for its completion.
+
+## Next search scale tests, before trial05 results
+
+After trial05 and the fixed second fit complete, test a 6,400-simulation
+PUCT candidate with depth64, world_pool3 and chance_universes3. Trial06 uses
+the refit01 checkpoint; trial07 uses the second-fit selected checkpoint.
+Select static or dynamic FPU from the completed 1600-simulation screens,
+then hold that setting for both scale tests. Use fresh masters17706000000
+and17707000000, 128 paired games each, 64 workers, MPS batch32 and 1ms delay.
+This tests winning strength with more compute. It is not an equal-compute
+comparison. If the second-fit selector retains the exact parent, do not spend
+a separate trial on the same candidate and settings.
+
+Measure the full 6,400-simulation schedule before the final freeze. A 1,000-game
+final needs a win-credit point estimate above about61.1% to put the registered
+paired Hoeffding lower bound above55%, with no unknown outcomes. A 2,000-game
+final needs about59.3%. These are design calculations, not achieved results.
+Choose and freeze the final count from complete strength evidence and measured
+time, including a50% time margin. At6400, freeze earlier than hour32 if the
+measured final schedule requires it. Do not use final outcomes to change the
+count, model or search.
+
+The branch2 wrapper dry-run verified the fixed recipe and every input hash.
+It created no fit and used no GPU. The complete source/label evidence, including
+the failed dev job and its successful retry, is retained in
+`artifacts/dagger-branch2-data`:495 files, manifest SHA256
+`21390a20164ff230c7353f56cc0bf4a8cd6d5aa1088c65392def7bf9561a24f8`.
+A full restore verified all files. The duplicate refit checkpoint is a
+hash-bound reference to the existing refit archive. Relocated label registry
+paths must be rebased before a fit; original absolute-path receipts stay intact.
+`LABEL_RETRY_VALIDATION.json` records the byte comparisons and dry-run identity.
+
+The final ancestry receipt now excludes30,400 historical setup IDs, including
+the Entity canonical20k and native20k confirmation streams. It also binds the
+old first-stage corpus and model-selection screens. The new branch2 splits
+have zero exact/low32 overlap with this union. The older native confirmation
+raw games were not retained; those exclusion IDs are reconstructed from its
+hash-bound source, stream formula and summary. This is an exclusion proof,
+not a replacement raw-game claim.
+
+Precision-probe provenance limit: its original source bytes were not copied
+before adding the optional resident-FP16 mode. The original receipt retains
+the source hash and measurements, but exact source recovery is unavailable.
+`MPS_PRECISION_SOURCE_RECOVERY.json` records this limit. Treat the earlier
+autocast timings as a local diagnostic. They caused no runtime change or
+strength claim. Save an exact source copy before each future probe.
+
+Final-guard regression tests found and fixed a rich-row stride error: explicit
+2600-byte legacy rows now advance by2600 rather than the default2232. Full
+Sprint48 Python discovery passes41 tests. No final seed stream was played.

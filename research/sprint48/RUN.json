@@ -83,12 +83,27 @@
       "games": 128,
       "status": "complete",
       "wall_seconds": 1508.9272820949554
+    },
+    {
+      "master": 17705000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-05",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 1600,
+      "search": "puct",
+      "depth": 32,
+      "world_pool": 3,
+      "chance_universes": 3,
+      "dynamic_fpu": true,
+      "gumbel_max_considered": null,
+      "workers": 64,
+      "games": 128,
+      "status": "running"
     }
   ],
   "heavy_job_owner": "root",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
   "output_root": "local/research/sprint48",
-  "current_stage": "local/research/sprint48/dagger-branch2-sources",
+  "current_stage": "local/research/sprint48/external-05",
   "training_branches": [
     {
       "branch_index": 1,
@@ -125,7 +140,7 @@
     },
     {
       "output": "local/research/sprint48/dagger-branch2-train-labels",
-      "status": "queued",
+      "status": "complete",
       "owner": "training_audit under root authorization",
       "split": "train",
       "source_master": 17710000000,
@@ -133,11 +148,28 @@
       "feature_master": 17711000012,
       "workers": 8,
       "setups": 512,
-      "scope": "training data; no strength claim"
+      "scope": "training data; no strength claim",
+      "started_utc": "2026-10-03T23:08:31+00:00",
+      "worker_pids": [
+        45246,
+        45247,
+        45248,
+        45249,
+        45250,
+        45251,
+        45252,
+        45253
+      ],
+      "receipt": "local/research/sprint48/dagger-branch2-train-labels/run.json",
+      "receipt_sha256": "7665e66f08b03dcc927f4fdb86bf1f2f7bed75a243578a16f6b7fe872a5db0b6",
+      "finished_utc": "2026-10-03T23:14:47+00:00",
+      "seconds": 376.64893191610463,
+      "registry_sha256": "89807a1c8516fa8a51b98cff6f8323ad1b6840a71098e5d324e6334845e9faca",
+      "rows": 28471
     },
     {
       "output": "local/research/sprint48/dagger-branch2-dev-labels",
-      "status": "queued",
+      "status": "failed",
       "owner": "training_audit under root authorization",
       "split": "dev",
       "source_master": 17720000000,
@@ -145,7 +177,30 @@
       "feature_master": 17721000002,
       "workers": 8,
       "setups": 128,
-      "scope": "training data; no strength claim"
+      "scope": "training data; no strength claim",
+      "seconds": 75.02858204185,
+      "safe_retry_reason": "Concurrent upstream ONNX temporary filenames collided; retry uses isolated worker directories",
+      "receipt": "local/research/sprint48/dagger-branch2-dev-labels/run.json",
+      "finished_utc": null,
+      "rows": 6249
+    },
+    {
+      "output": "local/research/sprint48/dagger-branch2-dev-labels-retry",
+      "split": "dev",
+      "owner": "training_audit under root authorization",
+      "source_master": 17720000000,
+      "teacher_master": 17721000001,
+      "feature_master": 17721000002,
+      "workers": 8,
+      "setups": 128,
+      "scope": "held-out model-selection data; no strength claim",
+      "status": "complete",
+      "seconds": 74.96757499990053,
+      "receipt": "local/research/sprint48/dagger-branch2-dev-labels-retry/run.json",
+      "receipt_sha256": "629e0dcfd0db3df156e2e8413c45b9f7dd61063f4c08787764efb10d2a5f3883",
+      "registry_sha256": "7cb685fd2b371d5473e987fbb4fb38c8aa8e7f82db207622d52baff8b25120e1",
+      "finished_utc": "2026-10-03T23:24:25+00:00",
+      "rows": 7138
     }
   ],
   "failed_attempts": [
@@ -182,7 +237,7 @@
   "data_collection_jobs": [
     {
       "output": "local/research/sprint48/dagger-branch2-sources",
-      "status": "running",
+      "status": "complete",
       "driver_pid": 41641,
       "started_utc": "2026-10-03T22:49:40.288729+00:00",
       "parent_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
@@ -200,7 +255,18 @@
       "chance_universes": 0,
       "dynamic_fpu": false,
       "port": 19730,
-      "scope": "training and held-out model-selection data; not strength evidence"
+      "scope": "training and held-out model-selection data; not strength evidence",
+      "finished_utc": "2026-10-03T23:15:43+00:00",
+      "seconds": 1562.711641073227,
+      "descriptor_sha256": "ec7eba6f358536be8041cd8cbbb0152278440008d3f25df50d5e5780e96c7318",
+      "receipt": "local/research/sprint48/dagger-branch2-sources/run.json",
+      "receipt_sha256": "510b9ea4e1631a9ccb7d0591eb2afd83f445836bf8128ad1c2dc92fa017ac141",
+      "split_isolation": {
+        "train_dev_full_overlap": 0,
+        "train_dev_low32_overlap": 0,
+        "excluded_train_overlap": 0,
+        "excluded_dev_overlap": 0
+      }
     }
   ]
 }

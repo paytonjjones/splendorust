@@ -41,6 +41,11 @@ def utc_now() -> str:
     return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
 
+def worker_cwd(output: Path, worker: int) -> Path:
+    """Return an isolated process cwd for one shard's temporary runtime files."""
+    return output / "worker-cwd" / f"worker-{worker:02d}"
+
+
 def write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
@@ -142,6 +147,8 @@ def build_plan(args: argparse.Namespace) -> tuple[dict, dict, list[tuple[int, li
     if args.workers > len(selected_ids):
         raise ValueError("workers cannot exceed eligible setup blocks")
     by_worker = assign_blocks(blocks, args.workers, skip_ids)
+    worker_cwds = {str(worker): str(worker_cwd(args.output, worker).resolve())
+                   for worker in range(args.workers)}
     expected_blocks = [block for block, pair in blocks
                        if int(pair[0]["setup_seed"]) not in skip_ids]
 
@@ -168,6 +175,7 @@ def build_plan(args: argparse.Namespace) -> tuple[dict, dict, list[tuple[int, li
         skipped_setup_ids=sorted(skip_ids), eligible_setup_ids=len(expected_blocks),
         eligible_blocks=expected_blocks,
         worker_blocks={str(k): v for k, v in by_worker.items()},
+        worker_cwds=worker_cwds,
         worker_setup_ids={str(k): [int(pair[0]["setup_seed"]) for block, pair in blocks
                                    if block in set(v) and int(pair[0]["setup_seed"]) not in skip_ids]
                           for k, v in by_worker.items()},
@@ -352,26 +360,29 @@ def main(argv: list[str] | None = None) -> int:
     procs = []
     launch_failures = []
     for worker, command in enumerate(commands):
+        cwd = Path(plan["worker_cwds"][str(worker)])
+        cwd.mkdir(parents=True, exist_ok=False)
         log_path = logs / f"worker-{worker:02d}.log"
         log = log_path.open("wb")
         try:
-            process = subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
+            process = subprocess.Popen(command, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
                                        start_new_session=True)
         except Exception as error:
             log.write(f"launch failed: {type(error).__name__}: {error}\n".encode())
             log.close()
-            item = dict(worker=worker, pid=None, command=command, log=str(log_path),
+            item = dict(worker=worker, pid=None, command=command, cwd=str(cwd), log=str(log_path),
                         log_sha256=sha(log_path), start_utc=utc_now(), end_utc=utc_now(),
                         exit_code=-1, launch_error=f"{type(error).__name__}: {error}")
             run["workers"].append(item)
             launch_failures.append(item)
             for not_started in range(worker + 1, len(commands)):
                 run["workers"].append(dict(worker=not_started, pid=None,
-                    command=commands[not_started], log=None, log_sha256=None,
+                    command=commands[not_started], cwd=plan["worker_cwds"][str(not_started)],
+                    log=None, log_sha256=None,
                     start_utc=None, end_utc=utc_now(), exit_code=-2,
                     failure="not started after an earlier launch failure"))
             break
-        item = dict(worker=worker, pid=process.pid, command=command, log=str(log_path),
+        item = dict(worker=worker, pid=process.pid, command=command, cwd=str(cwd), log=str(log_path),
                     log_sha256=None, start_utc=utc_now(), exit_code=None)
         run["workers"].append(item)
         run["updated_utc"] = utc_now()

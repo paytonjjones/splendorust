@@ -1,0 +1,101 @@
+{
+  "schema": "mps-entity-precision-probe-v1",
+  "status": "passed",
+  "claim_scope": "inference microbenchmark only; no playing-strength result",
+  "checkpoint": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/refit-01/fit/model.pt",
+  "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+  "checkpoint_kind": "entity",
+  "fast_entities": true,
+  "source_public_dev": "/Users/payton.jones/dev/splendorust/local/research/e95/dev/000000/data.bin",
+  "source_sha256": "e264cc9b0e15fbd9f8c5fce9f383e93eb2f0df5d2873ea3c88be189b08d58460",
+  "inputs_path": "/Users/payton.jones/dev/splendorust/local/research/architecture-pivots/dev-00.inputs.bin",
+  "inputs_sha256": "baa393760bbc31a37ffebabcfff576c34ba70d1d32a9855fc9398c7bff772451",
+  "selected_rows": "uniformly spaced rows from first registered native dev shard",
+  "pytorch_version": "2.5.1",
+  "python_version": "3.11.13 (main, Sep 18 2025, 19:53:58) [Clang 20.1.4 ]",
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "machine": "arm64",
+  "mps_built": true,
+  "mps_available": true,
+  "mps_autocast_available": true,
+  "autocast_dtype": "torch.float16",
+  "service_shape": "x plus zero history/pool transfers, then policy/value CPU copy",
+  "code_sha256": {
+    "models.py": "0a554cd2a7b21b76a00add1157ab10b9cbdadd94b2b0e82097da2d9c06054417",
+    "service.py": "35e1304794c023841aa4b11d29866f808069dfcb83d6d9db38026ce233bd9ac5",
+    "runtime.py": "6435fe126943fc9d2450a7ac5caec47e3816e5ae68cc7ea1f1b800f0c2da9afd",
+    "probe_mps_precision.py": "7d4de60efdb78a85b01bdebaaf2f733bdb2d5aa3b59377ce03063ff0f00b3fea"
+  },
+  "measurements": [
+    {
+      "batch_rows": 32,
+      "fp32": {
+        "mode": "fp32",
+        "batch_rows": 32,
+        "warmup_batches": 2,
+        "timed_batches": 8,
+        "median_batch_seconds": 0.006148791406303644,
+        "median_rows_per_second": 5204.274772956862,
+        "min_batch_seconds": 0.005558209028095007,
+        "max_batch_seconds": 0.00655387481674552,
+        "output_dtypes": {
+          "policy_dtype": "torch.float32",
+          "value_dtype": "torch.float32"
+        }
+      },
+      "fp16_autocast": {
+        "mode": "fp16_autocast",
+        "batch_rows": 32,
+        "warmup_batches": 2,
+        "timed_batches": 8,
+        "median_batch_seconds": 0.02224747894797474,
+        "median_rows_per_second": 1438.3652221823122,
+        "min_batch_seconds": 0.017780874855816364,
+        "max_batch_seconds": 0.024964499985799193,
+        "output_dtypes": {
+          "policy_dtype": "torch.float16",
+          "value_dtype": "torch.float16"
+        }
+      },
+      "rows_per_second_ratio": 0.27638149116501975,
+      "max_abs_policy_logit_error": 0.024813175201416016,
+      "max_abs_legal_policy_probability_error": 0.003525979308404037,
+      "max_abs_value_error": 0.00413869321346283
+    },
+    {
+      "batch_rows": 64,
+      "fp32": {
+        "mode": "fp32",
+        "batch_rows": 64,
+        "warmup_batches": 2,
+        "timed_batches": 8,
+        "median_batch_seconds": 0.008151437505148351,
+        "median_rows_per_second": 7851.3759026648195,
+        "min_batch_seconds": 0.0075529590249061584,
+        "max_batch_seconds": 0.010493749985471368,
+        "output_dtypes": {
+          "policy_dtype": "torch.float32",
+          "value_dtype": "torch.float32"
+        }
+      },
+      "fp16_autocast": {
+        "mode": "fp16_autocast",
+        "batch_rows": 64,
+        "warmup_batches": 2,
+        "timed_batches": 8,
+        "median_batch_seconds": 0.022794354474171996,
+        "median_rows_per_second": 2807.7127638125316,
+        "min_batch_seconds": 0.01621266594156623,
+        "max_batch_seconds": 0.0263006251771003,
+        "output_dtypes": {
+          "policy_dtype": "torch.float16",
+          "value_dtype": "torch.float16"
+        }
+      },
+      "rows_per_second_ratio": 0.35760773635351883,
+      "max_abs_policy_logit_error": 0.024813175201416016,
+      "max_abs_legal_policy_probability_error": 0.0029745539695078538,
+      "max_abs_value_error": 0.0036607086658477783
+    }
+  ]
+}

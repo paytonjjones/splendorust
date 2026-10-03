@@ -267,14 +267,14 @@ def make_branch_registry(base: dict, train_entries: list[dict], dev_entries: lis
                           dagger_dev=EXPECTED_DEV_SETUP_COUNT))
 
 
-def campaign_state() -> tuple[dict, dt.datetime]:
+def campaign_state(*, allow_active_trial: bool = False) -> tuple[dict, dt.datetime]:
     value = json.loads(RUN_PATH.read_text())
     if value.get("status") != "active" or value.get("final_seed_sealed") is not True:
         raise ValueError("Sprint campaign must be active and final seeds must remain sealed")
     deadline = dt.datetime.fromisoformat(value["deadline_utc"].replace("Z", "+00:00"))
     if dt.datetime.now(dt.timezone.utc) >= deadline:
         raise ValueError("Sprint campaign deadline has passed")
-    if any(item.get("status") == "running" for item in value.get("consumed_trials", [])):
+    if not allow_active_trial and any(item.get("status") == "running" for item in value.get("consumed_trials", [])):
         raise ValueError("stop and receipt the active external trial before fitting")
     if any(item.get("status") == "running" for item in value.get("training_branches", [])):
         raise ValueError("another training branch is active")
@@ -343,7 +343,9 @@ def main() -> int:
         raise FileNotFoundError(f"missing Python runtime: {runtime_python}")
     if sha(base_path) != BASE_REGISTRY_SHA256:
         raise ValueError("base registry differs from the frozen expanded corpus")
-    _, deadline = campaign_state()
+    # A dry run is read-only. It can validate the inputs while a search control
+    # uses the GPU; real fitting still requires every external trial to stop.
+    _, deadline = campaign_state(allow_active_trial=args.dry_run)
     base, train_registry, dev_registry, branch_registry, ids = validate_inputs(
         base_path, train_path, dev_path, parent)
     if train_registry["setup_count"] != EXPECTED_TRAIN_SETUP_COUNT or \

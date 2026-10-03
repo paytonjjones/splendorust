@@ -10,6 +10,31 @@ masters. A scan of retained JSON/Markdown/Python/Rust records found no prior
 use of the chosen base/final masters. Check consumed setup IDs and active jobs
 as well; a new master alone is not a split-overlap proof.
 
+## Resume the active campaign
+
+The campaign started at **2026-10-03 19:35:52 UTC** and ends at
+**2026-10-05 19:35:52 UTC**. Keep this deadline on every resume. Check
+`RUN.json`, owned job receipts and processes before starting work. Do not
+repeat completed trials, refit01, collection, or label jobs.
+
+Refit01 is complete. Its selected checkpoint is
+`local/research/sprint48/refit-01/fit/model.pt`, SHA256
+`44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f`.
+Trial04 scored58.59375% in128 native games; this is exploratory evidence.
+Trial05 tests dynamic FPU. The source collection and branch2 labels are
+complete; use the successful dev retry registry. `RESULTS.md` records the
+prospective6400-simulation scale tests and final-time calculations.
+
+Validate branch2 without starting training while a search job is active:
+
+```sh
+local/strength/inference/bin/python research/sprint48/run_branch2.py --dagger-train-registry local/research/sprint48/dagger-branch2-train-labels/registry-entries.json --dagger-dev-registry local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json --output local/research/sprint48/dagger-branch2-fit --dry-run
+```
+
+Remove `--dry-run` only after the sole primary MPS job ends. The wrapper checks
+the branch limit before launch; record branch2 in `RUN.json` after it passes
+preflight and creates its private receipt. Do not register it as running first.
+
 ## 1. Restore the starting checkpoint
 
 ```sh
@@ -93,7 +118,8 @@ local/strength/inference/bin/python research/sprint48/run_external.py --checkpoi
 
 Trial00 is already consumed. Use the next unused master and a new output.
 `RUN.json` and `RESULTS.md` record progress. For the checked updated binaries,
-pass `--binary-directory local/research/sprint48/build-controls/release/examples`.
+pass `--binary-directory local/research/sprint48/build-dynamic/release/examples`.
+This target has checked finite-chance and dynamic-FPU controls.
 Use `--depth`, `--world-pool` and `--gumbel-max-considered` to change search
 coverage. Copies are made before play and used for every shard. Keep the
 original receipt and source snapshots for the pre-change baseline.
@@ -134,12 +160,13 @@ inference service before fitting unless a measured overlap test supports it.
 The finite wrapper owns the process and deadline; its receipt directory is
 `refit-01`, and the trainer writes to a new `refit-01/fit` directory. Preserve
 the venv interpreter path. Export/check the selected `fit/model.pt` before
-played selection. The fit is already running; do not launch it again.
+played selection. The fit is complete; do not launch it again.
 
 Native-focused sampling/value calibration needs a trainer change. Learner-state
 AlphaZero labels now use `learner_data.py` to replay fixed native histories and
 label the learner's turns offline. See `DAgger_PREREGISTRATION.md`; the small
-CPU pilot passed, but these shards are not yet connected to a training recipe.
+CPU pilot passed. The fixed second branch now uses `run_branch2.py` and
+`branch2_train.py`; see `DAGGER_BRANCH2_PREREGISTRATION.md`.
 Source setups become training data and need fresh later evaluations. PCR reuses `rich_selfplay`
 and `strategy_train.py`; inspect `--help` and record a new recipe. Do not start
 the closed `run_efficiency.py` chain. Preserve profile mapping, public rules
@@ -152,7 +179,16 @@ service/backend, search, AlphaZero pin/checkpoint, count/master, unknown rule,
 and conservative 55% lower-bound criterion. Choose 1,000, 2,000, or 4,000 from
 measured cost; do not edit the count from outcomes. Final master: **17790000000**.
 
-Use the same schedule/replay/summary commands with frozen settings and fresh
+Use `run_final.py` for the one global frozen campaign. It copies and binds
+inputs, starts the owned service, checks parity, freezes the profile, and runs
+the fixed schedule. Pass the selected checkpoint, count, search settings,
+copied binary directory and every relevant corpus registry. For a branch2
+candidate, use its generated four-group registry. `freeze.py check` can audit
+a proposal without consuming the final campaign. Active data/label/training
+jobs must end and have retained receipts first. Historical ancestry exclusions
+are hash-bound. Do not launch an ordinary development driver on final seeds.
+
+Use the same replay/summary checks with frozen settings and fresh
 final output. Controlling field:
 `conservative_hoeffding95_missing_envelope[0]`. Require all planned blocks,
 replay success, consistent receipts, at most 1% no-action, and no invalid/
@@ -175,6 +211,5 @@ Do not delay external proof for this optional comparison.
 
 Save `RESULTS.md`, weights/recipe/lineage, search/backend, records, replay,
 statistics, costs, and failures. Preserve the original archives. Archive
-required ignored files through the existing chunked workflow. This plan is
-ready for execution; preparation establishes no new strength result and
-starts no background study.
+required ignored files through the existing chunked workflow. The campaign is in progress. A completed exploratory test or fit does not
+establish the final decisive result.

@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import fcntl
+import gzip
 import hashlib
 import json
 import mmap
@@ -47,6 +48,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 AZ_REVISION = "32a27ac1f85d5de2766cc5f60c2bf04e557f7836"
 AZ_CHECKPOINT = "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07"
+FIRST_CANDIDATE_ARCHIVE = "research/training_strategy/artifacts/core"
+FIRST_CANDIDATE_ARCHIVE_MANIFEST = "c413a533ce69648d5f69994abd0f8458c8f70f33ae2a12b72b351bdd1f7f9399"
+ANCESTRY_SETUP_IDS_PATH = "research/sprint48/ANCESTRY_SETUP_IDS.json"
+ANCESTRY_SETUP_IDS_SHA256 = "c97f0b56da805ba241028c21cb7108b44a3e7da741cb822e779331a5ad0cf9ff"
+RICH_ROW_SIZE = 2600
 AZ_EXTERNAL_CONFIG = {"numMCTSSims": 800, "fpu": 0.0593, "universes": 3,
     "cpuct": 0.8, "prob_fullMCTS": 1.0, "forced_playouts": False, "no_mem_optim": False}
 MASTER = 17790000000
@@ -175,25 +181,262 @@ def corpus_ids(registry_paths: list[Path]) -> tuple[set[int], list[dict]]:
             raise FreezeError(f"duplicate corpus registry: {registry_path}")
         seen.add(registry_path)
         registry = read_json(registry_path)
-        for split in ("train", "dev"):
-            entries = registry.get(split)
-            if not isinstance(entries, list) or not entries:
-                raise FreezeError(f"registry must contain non-empty {split} entries")
-            for entry in entries:
-                path = rooted(entry["source"])
-                if sha(path) != entry.get("source_sha256"):
-                    raise FreezeError(f"corpus hash differs from registry: {path}")
-                rows = entry.get("rows")
-                if not isinstance(rows, int) or rows < 1 or path.stat().st_size != rows * ROW_SIZE:
-                    raise FreezeError(f"corpus row count or packed-row size is invalid: {path}")
+        schema = registry.get("schema")
+        if schema is None:
+            groups_by_split = {split: [(split, registry.get(split))] for split in ("train", "dev")}
+        elif schema == "sprint48-dagger-branch2-registry-v1":
+            groups = registry.get("groups")
+            expected = {"base_train", "base_dev", "dagger_train", "dagger_dev"}
+            if not isinstance(groups, dict) or set(groups) != expected:
+                raise FreezeError(f"branch-two registry groups must be exactly {sorted(expected)}")
+            groups_by_split = {
+                "train": [(name, groups[name]) for name in ("base_train", "dagger_train")],
+                "dev": [(name, groups[name]) for name in ("base_dev", "dagger_dev")],
+            }
+        else:
+            raise FreezeError(f"unsupported corpus registry schema: {schema}")
+        for split, groups in groups_by_split.items():
+            for group_name, entries in groups:
+                if not isinstance(entries, list) or not entries:
+                    raise FreezeError(f"registry must contain non-empty {group_name} entries")
+                for entry in entries:
+                    path = rooted(entry["source"])
+                    if sha(path) != entry.get("source_sha256"):
+                        raise FreezeError(f"corpus hash differs from registry: {path}")
+                    rows = entry.get("rows")
+                    row_size = entry.get("row_bytes", ROW_SIZE)
+                    if (not isinstance(rows, int) or rows < 1 or not isinstance(row_size, int)
+                            or row_size < 8 or path.stat().st_size != rows * row_size):
+                        raise FreezeError(f"corpus row count or packed-row size is invalid: {path}")
                 source_ids = set()
                 with path.open("rb") as stream, mmap.mmap(stream.fileno(), 0, access=mmap.ACCESS_READ) as data:
-                    for offset in range(0, len(data), ROW_SIZE):
-                        source_ids.add(int.from_bytes(data[offset:offset + 8], "little"))
-                ids.update(source_ids)
-                receipts.append({"split": split, "path": str(path), "sha256": sha(path),
-                                 "rows": rows, "setup_ids": len(source_ids)})
+                    for offset in range(0, len(data), row_size):
+                            source_ids.add(int.from_bytes(data[offset:offset + 8], "little"))
+                    ids.update(source_ids)
+                    receipt = {"split": split, "path": str(path), "sha256": sha(path),
+                        "rows": rows, "row_bytes": row_size, "setup_ids": len(source_ids)}
+                    if group_name != split:
+                        receipt["group"] = group_name
+                    receipts.append(receipt)
     return ids, receipts
+
+
+def _archive_member_ids(archive_root: Path, manifest: dict, member_path: str,
+                        row_size: int) -> tuple[set[int], dict]:
+    entries = [entry for entry in manifest.get("files", []) if entry.get("path") == member_path]
+    if len(entries) != 1:
+        raise FreezeError(f"archive member is missing or duplicated: {member_path}")
+    entry = entries[0]
+    rows, total_bytes = entry.get("bytes"), entry.get("bytes")
+    if not isinstance(total_bytes, int) or total_bytes < 1 or total_bytes % row_size:
+        raise FreezeError(f"archive row member size is invalid: {member_path}")
+    ids, member_digest, bytes_seen, tail = set(), hashlib.sha256(), 0, b""
+    chunk_receipts = []
+    for chunk in entry.get("chunks", []):
+        chunk_path = (archive_root / chunk["path"]).resolve(strict=True)
+        if not chunk_path.is_relative_to(archive_root.resolve(strict=True)):
+            raise FreezeError(f"archive chunk path escapes archive root: {chunk_path}")
+        if sha(chunk_path) != chunk.get("compressed_sha256"):
+            raise FreezeError(f"archive compressed chunk hash differs: {chunk_path}")
+        chunk_digest, chunk_bytes = hashlib.sha256(), 0
+        with gzip.open(chunk_path, "rb") as stream:
+            for block in iter(lambda: stream.read(4 << 20), b""):
+                chunk_bytes += len(block)
+                chunk_digest.update(block)
+                member_digest.update(block)
+                bytes_seen += len(block)
+                data = tail + block
+                full = len(data) // row_size
+                for offset in range(0, full * row_size, row_size):
+                    ids.add(int.from_bytes(data[offset:offset + 8], "little"))
+                tail = data[full * row_size:]
+        if (chunk_bytes != chunk.get("bytes") or chunk_digest.hexdigest() != chunk.get("uncompressed_sha256")):
+            raise FreezeError(f"archive uncompressed chunk differs: {chunk_path}")
+        chunk_receipts.append({"path": str(chunk_path), "compressed_sha256": sha(chunk_path),
+            "uncompressed_sha256": chunk_digest.hexdigest(), "bytes": chunk_bytes})
+    if bytes_seen != total_bytes or tail or member_digest.hexdigest() != entry.get("sha256"):
+        raise FreezeError(f"archive member hash or row layout differs: {member_path}")
+    rows = total_bytes // row_size
+    return ids, {"member": member_path, "sha256": entry["sha256"], "bytes": total_bytes,
+        "rows": rows, "row_bytes": row_size, "setup_ids": len(ids), "chunks": chunk_receipts}
+
+
+def _archive_member_bytes(archive_root: Path, manifest: dict, member_path: str) -> tuple[bytes, dict]:
+    entries = [entry for entry in manifest.get("files", []) if entry.get("path") == member_path]
+    if len(entries) != 1:
+        raise FreezeError(f"archive member is missing or duplicated: {member_path}")
+    entry = entries[0]
+    content, digest, chunk_receipts = bytearray(), hashlib.sha256(), []
+    for chunk in entry.get("chunks", []):
+        chunk_path = (archive_root / chunk["path"]).resolve(strict=True)
+        if not chunk_path.is_relative_to(archive_root.resolve(strict=True)):
+            raise FreezeError(f"archive chunk path escapes archive root: {chunk_path}")
+        if sha(chunk_path) != chunk.get("compressed_sha256"):
+            raise FreezeError(f"archive compressed chunk hash differs: {chunk_path}")
+        chunk_digest, chunk_bytes = hashlib.sha256(), 0
+        with gzip.open(chunk_path, "rb") as stream:
+            for block in iter(lambda: stream.read(4 << 20), b""):
+                chunk_bytes += len(block)
+                chunk_digest.update(block)
+                digest.update(block)
+                content.extend(block)
+        if chunk_bytes != chunk.get("bytes") or chunk_digest.hexdigest() != chunk.get("uncompressed_sha256"):
+            raise FreezeError(f"archive uncompressed chunk differs: {chunk_path}")
+        chunk_receipts.append({"path": str(chunk_path), "compressed_sha256": sha(chunk_path),
+            "uncompressed_sha256": chunk_digest.hexdigest(), "bytes": chunk_bytes})
+    if len(content) != entry.get("bytes") or digest.hexdigest() != entry.get("sha256"):
+        raise FreezeError(f"archive member hash or byte count differs: {member_path}")
+    return bytes(content), {"member": member_path, "sha256": entry["sha256"],
+        "bytes": len(content), "chunks": chunk_receipts}
+
+
+def _listed_ids(source: dict) -> tuple[set[int], set[int]]:
+    try:
+        full = [int(value) for value in source["full_setup_ids"]]
+        low = [int(value) for value in source["low32_setup_ids"]]
+    except (KeyError, TypeError, ValueError) as error:
+        raise FreezeError("ancestry receipt setup-ID arrays are invalid") from error
+    if (len(full) != source.get("unique_full_setup_ids") or len(full) != len(set(full))
+            or full != sorted(full) or any(not 0 <= value <= 0xFFFFFFFFFFFFFFFF for value in full)):
+        raise FreezeError("ancestry full setup-ID list is invalid")
+    if (len(low) != source.get("unique_low32_setup_ids") or len(low) != len(set(low))
+            or low != sorted(low) or low != sorted({value & 0xFFFFFFFF for value in full})):
+        raise FreezeError("ancestry low-32 setup-ID list is invalid")
+    if hashlib.sha256("".join(f"{value}\n" for value in full).encode()).hexdigest() != source.get("full_setup_ids_sha256_lines"):
+        raise FreezeError("ancestry full setup-ID line hash differs")
+    if hashlib.sha256("".join(f"{value}\n" for value in low).encode()).hexdigest() != source.get("low32_setup_ids_sha256_lines"):
+        raise FreezeError("ancestry low-32 setup-ID line hash differs")
+    return set(full), set(low)
+
+
+def _candidate_ancestry(run: dict, checkpoint: Path) -> tuple[set[int], list[dict]]:
+    receipt_path = rooted(ANCESTRY_SETUP_IDS_PATH)
+    if sha(receipt_path) != ANCESTRY_SETUP_IDS_SHA256:
+        raise FreezeError("candidate ancestry setup-ID receipt differs from its registered hash")
+    ancestry = read_json(receipt_path)
+    if ancestry.get("schema") != "candidate-ancestry-setup-ids-v1":
+        raise FreezeError("candidate ancestry setup-ID receipt schema differs")
+    lineage = ancestry.get("candidate_lineage", {})
+    for path_value, key in ((lineage.get("current_candidate_checkpoint"), "current_candidate_sha256"),
+            (lineage.get("warm_parent_checkpoint"), "warm_parent_sha256"),
+            (lineage.get("base_entity_checkpoint_path"), "base_entity_parent_sha256"),
+            (lineage.get("baseline_corpus_registry"), "baseline_corpus_registry_sha256")):
+        if not path_value or sha(rooted(path_value)) != lineage.get(key):
+            raise FreezeError(f"candidate ancestry lineage hash differs: {path_value}")
+    if checkpoint.is_file() and sha(checkpoint) != lineage.get("current_candidate_sha256"):
+        selected_sha = sha(checkpoint)
+        if not any(branch.get("status") == "complete"
+                and branch.get("parent_sha256") == lineage.get("current_candidate_sha256")
+                and branch.get("selected_model_sha256") == selected_sha
+                for branch in run.get("training_branches", [])):
+            raise FreezeError("selected checkpoint is not the hash-bound ancestry parent or a recorded child")
+    if sha(rooted("local/research/sprint48/ready/first/onehot/model.pt")) != lineage.get("onehot_selected_checkpoint_sha256"):
+        raise FreezeError("selected onehot checkpoint differs from the ancestry receipt")
+    if sha(rooted("research/training_strategy/first-stage-evidence.json")) != lineage.get("onehot_selection_evidence_sha256"):
+        raise FreezeError("onehot selection evidence differs from the ancestry receipt")
+    if sha(rooted("research/entity_baseline/freeze.json")) != lineage.get("base_entity_freeze_sha256"):
+        raise FreezeError("base entity freeze differs from the ancestry receipt")
+    if sha(rooted("local/research/sprint48/refit-01/fit/manifest.json")) != lineage.get("refit_manifest_sha256"):
+        raise FreezeError("refit manifest differs from the ancestry receipt")
+    archive_binding = ancestry.get("archive_binding", {})
+    archive = rooted(archive_binding.get("archive", ""))
+    archive_manifest_path = archive / "manifest.json"
+    archive_manifest_sha = archive_binding.get("manifest_sha256")
+    if (archive_manifest_sha != FIRST_CANDIDATE_ARCHIVE_MANIFEST
+            or archive_binding.get("manifest_member_sha256") != archive_manifest_sha
+            or sha(archive_manifest_path) != archive_manifest_sha):
+        raise FreezeError("candidate ancestry archive manifest differs from its registered hash")
+    archive_manifest = read_json(archive_manifest_path)
+    ids, source_receipts = set(), []
+    all_sources = ancestry.get("extra_ancestor_corpora", []) + ancestry.get("historical_selection_screens", [])
+    corpus_names = {source.get("name") for source in ancestry.get("extra_ancestor_corpora", [])}
+    for source in all_sources:
+        full, low = _listed_ids(source)
+        if source.get("name") in corpus_names:
+            if (source.get("archive") != archive_binding.get("archive")
+                    or source.get("archive_manifest_sha256") != archive_manifest_sha):
+                raise FreezeError("ancestry corpus archive binding differs")
+            actual, member_receipt = _archive_member_ids(archive, archive_manifest,
+                source.get("member", ""), source.get("row_bytes", 0))
+            if (actual != full or member_receipt.get("sha256") != source.get("source_sha256")
+                    or member_receipt.get("bytes") != source.get("source_bytes")
+                    or member_receipt.get("rows") != source.get("rows")):
+                raise FreezeError(f"ancestry corpus differs from its archive member: {source.get('name')}")
+            source_receipt = {"name": source.get("name"), "source": "archive-member",
+                "archive_manifest_sha256": archive_manifest_sha, **member_receipt}
+        else:
+            if source.get("source_archive"):
+                if (source.get("source_archive") != archive_binding.get("archive")
+                        or source.get("source_archive_manifest_sha256") != archive_manifest_sha):
+                    raise FreezeError("selection screen archive binding differs")
+                content, member_receipt = _archive_member_bytes(archive, archive_manifest,
+                    source.get("source_member", ""))
+                content_sha = hashlib.sha256(content).hexdigest()
+                source_receipt = {"name": source.get("name"), "source": "archive-member",
+                    "archive_manifest_sha256": archive_manifest_sha, **member_receipt}
+            else:
+                path = rooted(source.get("source_path", ""))
+                if sha(path) != source.get("source_sha256"):
+                    raise FreezeError(f"historical selection screen hash differs: {path}")
+                content = gzip.open(path, "rb").read() if path.suffix == ".gz" else path.read_bytes()
+                content_sha = sha(path)
+                source_receipt = {"name": source.get("name"), "source": str(path),
+                    "source_sha256": content_sha}
+            if content_sha != source.get("source_sha256"):
+                raise FreezeError(f"historical selection screen content hash differs: {source.get('name')}")
+            if source.get("raw_game_records_retained") is False:
+                schedule_path = rooted(source.get("schedule_source_path", ""))
+                if sha(schedule_path) != source.get("schedule_source_sha256"):
+                    raise FreezeError(f"historical schedule generator hash differs: {schedule_path}")
+                try:
+                    summary = json.loads(content)
+                except json.JSONDecodeError as error:
+                    raise FreezeError(f"historical confirmation summary is invalid: {source.get('name')}") from error
+                if (summary.get("master") != source.get("master")
+                        or summary.get("games") != source.get("records")
+                        or summary.get("completed") != source.get("records")
+                        or summary.get("record_set_sha256") != source.get("raw_record_set_sha256")):
+                    raise FreezeError(f"historical confirmation summary differs: {source.get('name')}")
+                actual = {setup_seed(source["master"], block)
+                    for block in range(source["paired_setup_blocks"])}
+                if len(actual) != source.get("unique_full_setup_ids"):
+                    raise FreezeError(f"reconstructed historical setup IDs are not unique: {source.get('name')}")
+                source_receipt["schedule_source"] = str(schedule_path)
+                source_receipt["schedule_source_sha256"] = source["schedule_source_sha256"]
+                source_receipt["setup_id_derivation"] = "SHA256 native-v1:{master}:setup:{block}:0; first 8 bytes little-endian"
+            else:
+                try:
+                    value = json.loads(content)
+                    records = value.get("records") if isinstance(value, dict) else value
+                    actual = {int(row["seed"]) for row in records}
+                except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
+                    raise FreezeError(f"historical selection screen records are invalid: {source.get('name')}") from error
+                if actual != full or len(records) != source.get("records"):
+                    raise FreezeError(f"historical selection screen setup IDs differ: {source.get('name')}")
+            if actual != full:
+                raise FreezeError(f"historical selection screen setup IDs differ: {source.get('name')}")
+        ids.update(full)
+        source_receipts.append(source_receipt | {"setup_ids": len(full),
+            "full_setup_ids_sha256_lines": source["full_setup_ids_sha256_lines"],
+            "low32_setup_ids_sha256_lines": source["low32_setup_ids_sha256_lines"]})
+    combined = ancestry.get("combined_setup_ids", {})
+    combined_full, combined_low = _listed_ids(combined)
+    if ids != combined_full or len(ids) != ancestry.get("validation", {}).get("unique_ancestry_full_ids"):
+        raise FreezeError("combined candidate ancestry setup IDs differ from source lists")
+    existing = ancestry.get("overlap_with_existing_sprint_exclusions", {})
+    excluded_path = rooted(existing.get("path", ""))
+    if sha(excluded_path) != existing.get("sha256"):
+        raise FreezeError("ancestry preflight exclusion file hash differs")
+    existing_ids = {int(line) for line in excluded_path.read_text().splitlines() if line.strip()}
+    if len(existing_ids) != existing.get("existing_ids") or ids & existing_ids:
+        raise FreezeError("candidate ancestry IDs overlap their recorded preflight exclusions")
+    source_receipts.insert(0, {"name": "candidate-ancestry-id-receipt",
+        "path": str(receipt_path), "sha256": ANCESTRY_SETUP_IDS_SHA256,
+        "source_count": len(all_sources), "unique_full_setup_ids": len(ids),
+        "unique_low32_setup_ids": len({value & 0xFFFFFFFF for value in ids}),
+        "full_setup_ids_sha256_lines": combined["full_setup_ids_sha256_lines"],
+        "low32_setup_ids_sha256_lines": combined["low32_setup_ids_sha256_lines"]})
+    return ids, source_receipts
 
 
 def _raw_files(output: Path) -> list[Path]:
@@ -252,6 +495,118 @@ def explored_ids(run_path: Path) -> tuple[set[int], list[dict]]:
             receipts.append({"path": str(path.resolve()), "sha256": sha(path), "records": path_ids})
         if count == 0:
             raise FreezeError(f"consumed trial has no retained setup records: {output}")
+    return ids, receipts
+
+
+def _read_setup_id_file(path_value: str | Path, expected_sha256: str,
+                        expected_count: int | None = None,
+                        base: Path = ROOT) -> tuple[set[int], Path]:
+    path_value = Path(path_value)
+    path = rooted(path_value if path_value.is_absolute() else base / path_value)
+    if sha(path) != expected_sha256:
+        raise FreezeError(f"setup-ID file hash differs: {path}")
+    try:
+        values = [int(line) for line in path.read_text().splitlines() if line.strip()]
+    except ValueError as error:
+        raise FreezeError(f"setup-ID file has a non-integer value: {path}") from error
+    if any(value < 0 or value > 0xFFFFFFFFFFFFFFFF for value in values) or len(values) != len(set(values)):
+        raise FreezeError(f"setup-ID file has invalid or duplicate values: {path}")
+    if expected_count is not None and len(values) != expected_count:
+        raise FreezeError(f"setup-ID count differs: {path}")
+    return set(values), path
+
+
+def _collection_ids(run: dict) -> tuple[set[int], list[dict]]:
+    """Audit setup IDs consumed by collection and offline-label jobs."""
+    ids, receipts = set(), []
+    for field in ("data_collection_jobs", "offline_label_jobs"):
+        jobs = run.get(field, [])
+        if not isinstance(jobs, list):
+            raise FreezeError(f"RUN.json {field} must be a list")
+        for job in jobs:
+            status = job.get("status")
+            if status in ("queued", "running"):
+                raise FreezeError(f"cannot freeze while a {field} job is {status}")
+            if status not in ("complete", "failed"):
+                raise FreezeError(f"cannot audit {field} job with status {status!r}")
+            output = rooted(job.get("output", ""))
+            run_receipt_path = output / "run.json"
+            run_receipt = read_json(run_receipt_path)
+            expected_schema = ("sprint48-dagger-source-collection-v1" if field == "data_collection_jobs"
+                               else "sprint48-offline-label-run-result-v1")
+            if run_receipt.get("schema") != expected_schema:
+                raise FreezeError(f"{field} run receipt schema differs: {run_receipt_path}")
+            receipt = {"source": field, "output": str(output),
+                "run_receipt": str(run_receipt_path), "run_receipt_sha256": sha(run_receipt_path),
+                "status": status}
+            if field == "data_collection_jobs":
+                if run_receipt.get("status") != status:
+                    raise FreezeError(f"{field} status differs from its run receipt: {output}")
+                sources = run_receipt.get("sources")
+                if not isinstance(sources, list) or not sources:
+                    raise FreezeError(f"{field} receipt has no source splits: {output}")
+                split_receipts = []
+                for source in sources:
+                    split = source.get("split")
+                    if split not in ("train", "dev") or source.get("status") != "complete":
+                        raise FreezeError(f"{field} source split is incomplete: {output}")
+                    raw = rooted(source.get("raw", ""))
+                    if sha(raw) != source.get("raw_sha256"):
+                        raise FreezeError(f"{field} raw schedule hash differs: {raw}")
+                    master = source.get("source_master")
+                    if not isinstance(master, int) or master < 0 or master == MASTER:
+                        raise FreezeError(f"{field} source master is invalid: {raw}")
+                    raw_ids = set()
+                    rows_seen = 0
+                    header_seen = False
+                    with raw.open() as stream:
+                        for line in stream:
+                            if not line.strip():
+                                continue
+                            row = json.loads(line)
+                            if not header_seen:
+                                header_seen = True
+                                if row.get("master") != master:
+                                    raise FreezeError(f"{field} raw master differs from its receipt: {raw}")
+                                continue
+                            seed, block = row.get("setup_seed"), row.get("block")
+                            if not isinstance(seed, int) or not isinstance(block, int) or seed != setup_seed(master, block):
+                                raise FreezeError(f"{field} raw setup ID differs from master/block: {raw}")
+                            raw_ids.add(seed)
+                            rows_seen += 1
+                    games = source.get("games")
+                    if rows_seen != games or not header_seen:
+                        raise FreezeError(f"{field} raw row count differs from its receipt: {raw}")
+                    ids_path = output / split / "setup_ids.txt"
+                    split_ids, ids_path = _read_setup_id_file(ids_path, source.get("setup_ids_sha256", ""),
+                        expected_count=source.get("paired_setups"))
+                    if split_ids != raw_ids:
+                        raise FreezeError(f"{field} setup-ID file differs from raw schedule: {raw}")
+                    ids.update(split_ids)
+                    split_receipts.append({"split": split, "raw": str(raw), "raw_sha256": sha(raw),
+                        "setup_ids_file": str(ids_path), "setup_ids_sha256": sha(ids_path),
+                        "setup_ids": len(split_ids), "source_master": master})
+                receipt["splits"] = split_receipts
+            else:
+                if run_receipt.get("status") != status:
+                    raise FreezeError(f"{field} status differs from its run receipt: {output}")
+                registry_path = rooted(run_receipt.get("registry", ""))
+                registry_hash = run_receipt.get("registry_sha256")
+                if registry_hash != job.get("registry_sha256") or sha(registry_path) != registry_hash:
+                    raise FreezeError(f"{field} registry hash differs: {registry_path}")
+                registry = read_json(registry_path)
+                if registry.get("schema") != "sprint48-offline-label-registry-v1":
+                    raise FreezeError(f"{field} registry schema differs: {registry_path}")
+                if job.get("split") is not None and registry.get("split") != job["split"]:
+                    raise FreezeError(f"{field} split differs from its registry: {registry_path}")
+                setup_ids, ids_path = _read_setup_id_file(
+                    registry.get("setup_ids_file", ""), registry.get("setup_ids_sha256", ""),
+                    expected_count=registry.get("setup_count"), base=registry_path.parent)
+                ids.update(setup_ids)
+                receipt.update(registry=str(registry_path), registry_sha256=registry_hash,
+                    setup_ids_file=str(ids_path), setup_ids_sha256=sha(ids_path),
+                    setup_ids=len(setup_ids))
+            receipts.append(receipt)
     return ids, receipts
 
 
@@ -322,9 +677,12 @@ def build_freeze(proposal: dict, registries: list[Path], run_path: Path,
         raise FreezeError("cannot freeze while a training branch is running")
     _check_no_final_outcomes(output_root, run)
     train_ids, corpus_receipts = corpus_ids(registries)
+    ancestry_ids, ancestry_receipts = _candidate_ancestry(run, Path(candidate["checkpoint"]))
     trial_ids, trial_receipts = explored_ids(run_path)
+    collection_setup_ids, collection_receipts = _collection_ids(run)
     final_ids = final_setup_ids(games)
-    check_disjoint(final_ids, train_ids | trial_ids)
+    excluded_ids = train_ids | ancestry_ids | trial_ids | collection_setup_ids
+    check_disjoint(final_ids, excluded_ids)
 
     files = {key: identity(candidate[key], key.replace("_", " "), key.endswith("binary"))
              for key in ("checkpoint", "descriptor", "export_receipt")}
@@ -359,11 +717,13 @@ def build_freeze(proposal: dict, registries: list[Path], run_path: Path,
         "seed_audit": {
             "conversion": "SHA256 native-v1:{master}:setup:{block}:0; first 8 bytes little-endian; low 32 bits",
             "setup_ids_low32": final_ids, "setup_ids_sha256": hash_value(final_ids),
-            "excluded_low32_sha256": hash_value(sorted({seed & 0xFFFFFFFF for seed in train_ids | trial_ids})),
-            "excluded_ids": len(train_ids | trial_ids), "overlap_count": 0,
+            "excluded_low32_sha256": hash_value(sorted({seed & 0xFFFFFFFF for seed in excluded_ids})),
+            "excluded_ids": len(excluded_ids), "overlap_count": 0,
             "no_prior_final_outcomes_found": True, "output_root_scanned": str(output_root),
             "corpus_registries": [{"path": str(p), "sha256": sha(p)} for p in registries],
             "corpus_sources": corpus_receipts,
+            "model_ancestry_sources": ancestry_receipts,
+            "collection_sources": collection_receipts,
             "run_json": {"path": str(run_path), "sha256": sha(run_path)},
             "exploratory_schedules": trial_receipts},
         "source_sha256": _sources(),
