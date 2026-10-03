@@ -1,0 +1,231 @@
+{
+  "schema": "splendor-web-midgame-performance-v1",
+  "generatedAt": "2026-10-03T03:11:36.056Z",
+  "champion": {
+    "id": "e81",
+    "sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "search": {
+      "agent": "flywheel-gumbel",
+      "iterations": 128,
+      "depth": 16,
+      "world_pool": 3,
+      "gumbel_max_considered": 16,
+      "gumbel_cvisit": 50,
+      "gumbel_cscale": 0.1,
+      "gumbel_root_noise": 0
+    }
+  },
+  "environment": {
+    "browser": "Chromium",
+    "browserVersion": "153.0.8010.12",
+    "platform": "darwin",
+    "viewportDuringMeasurement": {
+      "width": 390,
+      "height": 844
+    },
+    "cpuThrottle": "4x via Chrome DevTools Protocol",
+    "seed": "0x53504c454e440a21"
+  },
+  "humanMovesRequested": 20,
+  "humanMovesCompleted": 20,
+  "humanMoves": [
+    {
+      "kind": "take",
+      "turn": 0,
+      "cardsOwned": 0
+    },
+    {
+      "kind": "take",
+      "turn": 2,
+      "cardsOwned": 0
+    },
+    {
+      "kind": "take",
+      "turn": 4,
+      "cardsOwned": 0
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 6,
+      "cardsOwned": 0
+    },
+    {
+      "kind": "take",
+      "turn": 8,
+      "cardsOwned": 1
+    },
+    {
+      "kind": "take",
+      "turn": 10,
+      "cardsOwned": 1
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 12,
+      "cardsOwned": 1
+    },
+    {
+      "kind": "take",
+      "turn": 14,
+      "cardsOwned": 2
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 16,
+      "cardsOwned": 2
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 18,
+      "cardsOwned": 3
+    },
+    {
+      "kind": "take",
+      "turn": 20,
+      "cardsOwned": 4
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 22,
+      "cardsOwned": 4
+    },
+    {
+      "kind": "take",
+      "turn": 24,
+      "cardsOwned": 5
+    },
+    {
+      "kind": "take",
+      "turn": 26,
+      "cardsOwned": 5
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 28,
+      "cardsOwned": 5
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 30,
+      "cardsOwned": 6
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 32,
+      "cardsOwned": 7
+    },
+    {
+      "kind": "take",
+      "turn": 34,
+      "cardsOwned": 8
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 36,
+      "cardsOwned": 8
+    },
+    {
+      "kind": "buy_visible",
+      "turn": 38,
+      "cardsOwned": 9
+    }
+  ],
+  "startupMs": {
+    "wasmInit": 5.014999985694885,
+    "modelLoad": 10.355000019073486
+  },
+  "bot": {
+    "decisionMs": {
+      "count": 26,
+      "p50": 112.87000000476837,
+      "p95": 151.17500007152557,
+      "max": 177.0350000858307
+    },
+    "turnMs": {
+      "count": 20,
+      "p50": 113.19000005722046,
+      "p95": 151.2699999809265,
+      "max": 177.1949999332428
+    },
+    "decisionSamples": [
+      177.0350000858307,
+      151.17500007152557,
+      140.44000005722046,
+      134.44000005722046,
+      122.15499997138977,
+      0.039999961853027344,
+      121.71999990940094,
+      113.49500000476837,
+      113.1049998998642,
+      113.4300000667572,
+      0.03500008583068848,
+      112.81499993801117,
+      106.08000004291534,
+      110.2150000333786,
+      0.04499995708465576,
+      111.94000005722046,
+      113.26499998569489,
+      0.029999971389770508,
+      112.9099999666214,
+      112.78999996185303,
+      112.99000000953674,
+      0.04500007629394531,
+      112.87000000476837,
+      112.82000005245209,
+      119.67499995231628,
+      0.039999961853027344
+    ],
+    "turnSamples": [
+      177.1949999332428,
+      151.2699999809265,
+      140.55999994277954,
+      134.52499997615814,
+      122.32499992847443,
+      121.79999995231628,
+      113.58499991893768,
+      113.19000005722046,
+      113.62000000476837,
+      112.8950001001358,
+      106.1599999666214,
+      110.37999999523163,
+      112.01999998092651,
+      113.40499997138977,
+      112.99500000476837,
+      112.87999999523163,
+      113.15499997138977,
+      112.9449999332428,
+      112.89999997615814,
+      119.875
+    ]
+  },
+  "mainThread": {
+    "frameGapMs": {
+      "count": 290,
+      "p50": 16.664999999999964,
+      "p95": 16.670000000000073,
+      "max": 99.99499999999989
+    },
+    "frameGapsDuringBotSearchMs": {
+      "count": 195,
+      "p50": 16.664999999999964,
+      "p95": 16.670000000000073,
+      "max": 16.670000000000073
+    },
+    "frameGapsOver50ms": 0,
+    "frameGapsOver100ms": 0,
+    "method": "requestAnimationFrame intervals measured in the window while each bot reply was active"
+  },
+  "midgame": {
+    "turn": 40,
+    "humanCards": 10,
+    "humanPrestige": 2,
+    "championCards": 6,
+    "championPrestige": 9,
+    "screenshots": [
+      "docs/web/screenshots/midgame-desktop-1728x1117.png",
+      "docs/web/screenshots/midgame-laptop-1365x768.png",
+      "docs/web/screenshots/midgame-mobile-390x844.png"
+    ]
+  },
+  "note": "Measurements are descriptive for this browser and machine. No machine-specific latency limit is applied."
+}

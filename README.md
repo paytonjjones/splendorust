@@ -1,6 +1,6 @@
 # Splendorust
 
-A deterministic Rust engine and experiment framework for base Splendor, with 2–4 players. There is no GUI, artwork, network service, or model dependency.
+A deterministic Rust engine and experiment framework for base Splendor, with 2–4 players. The research engine stays independent of graphics, network services, and model dependencies. The optional web client lets a human play two-player Splendor against the registered champion.
 
 The workspace contains the full 90-card and 10-noble datasets, rule tests, random-play audits, hidden-information-safe agents, paired tournaments, replay, benchmarks, and a promotion gate. Read [VALIDATION.md](VALIDATION.md) before treating results as ground truth. In particular, the published rules leave some no-action positions unresolved; the engine reports these positions without inventing a winner.
 
@@ -15,6 +15,10 @@ games. Its results are separate from simulator-speed measurements.
 The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/REPORT.md)
 adds public-only AlphaZero and privileged SplendoRust variants to the native
 benchmark. Both variants keep the game rules, models and search budgets fixed.
+
+## Play in the browser
+
+[Play against the champion](https://splendorust.pages.dev). The client in `web/` uses React and a dedicated worker. Rules and champion search run in Rust/WASM. It uses original generated art and separate, content-addressed model assets. See [web setup and deployment](docs/WEB_DEPLOYMENT.md) and [web quality evidence](docs/web/QUALITY.md).
 
 ## Run
 

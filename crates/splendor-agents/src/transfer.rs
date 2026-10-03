@@ -271,9 +271,7 @@ impl BootstrapModel {
         };
         assert_eq!(
             bytes.len(),
-            include_bytes!("models/e30.bin").len()
-                + 4 * 33297 * (depth - 1)
-                + 4 * 56 * (inputs - 56),
+            569_624 + 4 * 33297 * (depth - 1) + 4 * 56 * (inputs - 56),
             "version-80 model byte length"
         );
         assert!(

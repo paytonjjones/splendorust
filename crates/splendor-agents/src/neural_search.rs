@@ -97,9 +97,14 @@ impl Model {
         (policy, value[0])
     }
 }
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e25.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 struct Edge<A = Action> {
     action: A,
@@ -134,7 +139,7 @@ impl<A> Node<A> {
             .sum();
         (self.value + f64::from(n) * weighted) / f64::from(n + 1)
     }
-    fn completed_scores(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
+    fn completed_scores(&self, cvisit: f64, cscale: f64) -> [f64; SEARCH_ACTION_CAPACITY] {
         let mut scores = [0.0; SEARCH_ACTION_CAPACITY];
         let mixed = self.mixed_value();
         let mut lo = f64::INFINITY;
@@ -151,14 +156,14 @@ impl<A> Node<A> {
             hi = hi.max(q);
             max_visits = max_visits.max(e.visits);
         }
-        let scale = (50.0 + f64::from(max_visits)) * 0.1 / (hi - lo).max(1e-8);
+        let scale = (cvisit + f64::from(max_visits)) * cscale / (hi - lo).max(1e-8);
         for (i, e) in self.edges.iter().enumerate() {
             scores[i] = e.prior.max(f64::MIN_POSITIVE).ln() + scale * (scores[i] - lo);
         }
         scores
     }
-    fn improved_policy(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
-        let mut policy = self.completed_scores();
+    fn improved_policy(&self, cvisit: f64, cscale: f64) -> [f64; SEARCH_ACTION_CAPACITY] {
+        let mut policy = self.completed_scores(cvisit, cscale);
         let max = policy[..self.edges.len()]
             .iter()
             .copied()
@@ -202,6 +207,9 @@ pub struct NeuralAgent {
     pub correction_calls: u64,
     pub gumbel: bool,
     pub gumbel_noise: f64,
+    pub gumbel_max_considered: usize,
+    pub gumbel_cvisit: f64,
+    pub gumbel_cscale: f64,
     cached_nodes: Vec<Node>,
     cached_index: HashMap<[u8; 192], usize>,
     root_policy: Option<[f32; ACTIONS]>,
@@ -235,6 +243,9 @@ impl NeuralAgent {
             correction_calls: 0,
             gumbel: false,
             gumbel_noise: 0.0,
+            gumbel_max_considered: 16,
+            gumbel_cvisit: 50.0,
+            gumbel_cscale: 0.1,
             cached_nodes: Vec::new(),
             cached_index: HashMap::new(),
             root_policy: None,
@@ -415,7 +426,7 @@ impl NeuralAgent {
         if budget == 0 {
             return active[0];
         }
-        let mut considered = active.len().min(16).min(budget);
+        let mut considered = active.len().min(self.gumbel_max_considered).min(budget);
         while considered > 1
             && budget / ((usize::BITS - (considered - 1).leading_zeros()) as usize) < considered
         {
@@ -450,7 +461,7 @@ impl NeuralAgent {
                 simulation += 1;
             }
             remaining -= allocation;
-            let scores = nodes[root].completed_scores();
+            let scores = nodes[root].completed_scores(self.gumbel_cvisit, self.gumbel_cscale);
             active.sort_by(|&a, &b| (noise[b] + scores[b]).total_cmp(&(noise[a] + scores[a])));
             if active.len() > 1 {
                 active.truncate(active.len().div_ceil(2));
@@ -520,7 +531,7 @@ impl NeuralAgent {
         };
         let node = &nodes[i];
         let edge = if self.gumbel {
-            let policy = node.improved_policy();
+            let policy = node.improved_policy(self.gumbel_cvisit, self.gumbel_cscale);
             (0..node.edges.len())
                 .max_by(|&a, &b| {
                     let score = |j: usize| {
@@ -773,6 +784,7 @@ impl Agent for NeuralAgent {
             index.insert(self.tree_key(o), root);
             root
         };
+        #[cfg(not(target_arch = "wasm32"))]
         let start = std::time::Instant::now();
         let worlds: Vec<_> = (0..self.world_pool)
             .map(|_| o.determinize(&mut self.rng).expect("valid observation"))
@@ -786,12 +798,14 @@ impl Agent for NeuralAgent {
         };
         if !self.gumbel {
             for simulation in 0..self.config.iterations {
-                if simulation > 0
-                    && self
-                        .config
-                        .time_budget
-                        .is_some_and(|t| start.elapsed() >= t)
-                {
+                #[cfg(target_arch = "wasm32")]
+                let time_budget_exhausted = false;
+                #[cfg(not(target_arch = "wasm32"))]
+                let time_budget_exhausted = self
+                    .config
+                    .time_budget
+                    .is_some_and(|t| start.elapsed() >= t);
+                if simulation > 0 && time_budget_exhausted {
                     break;
                 }
                 let mut state = if worlds.is_empty() {
@@ -825,7 +839,7 @@ impl Agent for NeuralAgent {
         if visits > 0 {
             let mut policy = [0.0; ACTIONS];
             let improved = if self.gumbel {
-                Some(nodes[root].improved_policy())
+                Some(nodes[root].improved_policy(self.gumbel_cvisit, self.gumbel_cscale))
             } else {
                 None
             };
@@ -851,28 +865,48 @@ pub fn value(o: &Observation) -> f64 {
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
 }
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_v2() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e26.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_v2() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 pub fn value_v2(o: &Observation) -> f64 {
     let (_, v) = model_v2().infer(&super::neural::enhanced_features(o));
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
 }
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_transferred() -> &'static super::transfer::Model {
     static MODEL: OnceLock<super::transfer::Model> = OnceLock::new();
     MODEL.get_or_init(|| super::transfer::Model::from_bytes(include_bytes!("models/e30.bin")))
 }
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_transferred() -> &'static super::transfer::Model {
+    panic!("embedded neural checkpoints are disabled in this build")
+}
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_self_play() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e28.bin")))
 }
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_self_play() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
+}
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_expert() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e27.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_expert() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 pub fn value_expert(o: &Observation) -> f64 {
     let (_, v) = model_expert().infer(&super::neural::enhanced_features(o));
@@ -988,21 +1022,21 @@ mod tests {
         };
         let weighted = (0.6 * 0.8 + 0.3 * 0.2) / 0.9;
         assert!((node.mixed_value() - (0.4 + 3.0 * weighted) / 4.0).abs() < 1e-12);
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         assert!((p[..3].iter().sum::<f64>() - 1.0).abs() < 1e-12);
         assert!(p[2] > 0.0 && p[0] > p[1]);
         for e in &mut node.edges {
             e.visits = 1;
             e.sum = 0.5;
         }
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         for (i, e) in node.edges.iter().enumerate() {
             assert!((p[i] - e.prior).abs() < 1e-12);
         }
         node.edges[0].sum = 0.9;
         node.edges[1].sum = 0.1;
         node.edges[2].sum = 0.4;
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         let original: f64 = node.edges.iter().map(|e| e.prior * e.sum).sum();
         let improved: f64 = node
             .edges
