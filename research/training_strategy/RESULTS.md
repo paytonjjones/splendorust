@@ -13,7 +13,7 @@ It supports no adoption advantage for visit targets. Action-Q versus visits
 scored 49.30–49.35%, interval 45.02–53.63%, with one unknown no-action outcome.
 Extra Q supervision has no supported benefit here. Keep one-hot policy labels
 and omit the extra Q head for now. These uncertain results do not prove
- equivalence or that richer labels can never help. The offline gain also
+equivalence or that richer labels can never help. The offline gain also
 includes the shared root/terminal value update; policy loss is not isolated.
 
 ## Final exploratory result

@@ -13,6 +13,15 @@ def write(path, value):
 
 
 class Costs(unittest.TestCase):
+    def test_archive_chunk_directories_are_not_receipts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'chunks/process.json').mkdir(parents=True)
+            (root/'chunks/run.json').mkdir()
+            result = inventory([root])
+            self.assertEqual(result['commands'], {})
+            self.assertEqual(result['services'], {})
+
     def test_copied_pilot_is_counted_once(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
