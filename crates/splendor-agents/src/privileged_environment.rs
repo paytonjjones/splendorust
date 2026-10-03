@@ -53,4 +53,10 @@ impl Environment for PrivilegedNative {
     fn action_index(a: u8) -> usize {
         a as usize
     }
+    fn public_event(before: &Observation, action: u8, after: &Observation) -> [f32; 32] {
+        AlphaZeroNative::public_event(&before.observation, action, &after.observation)
+    }
+    fn full_public_event(before: &Observation, action: u8, after: &Observation) -> [f32; 32] {
+        AlphaZeroNative::full_public_event(&before.observation, action, &after.observation)
+    }
 }

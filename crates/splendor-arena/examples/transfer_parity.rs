@@ -42,11 +42,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .collect::<Vec<_>>()
                 .try_into()
                 .unwrap();
-            model.infer_with_profile(
-                &x,
-                &context,
-                data["native_profiles"][i].as_bool().unwrap_or(false),
-            )
+            let native = data["native_profiles"][i].as_bool().unwrap_or(false);
+            if let Some(rows) = data["history"].as_array() {
+                let history: [[f32; 32]; 16] = std::array::from_fn(|j| {
+                    std::array::from_fn(|k| rows[i][j][k].as_f64().unwrap() as f32)
+                });
+                let pool: [f32; 90] =
+                    std::array::from_fn(|j| data["pool"][i][j].as_f64().unwrap() as f32);
+                model.infer_with_history(&x, &context, native, &history, &pool)
+            } else {
+                model.infer_with_profile(&x, &context, native)
+            }
         } else {
             model.infer(&x)
         };

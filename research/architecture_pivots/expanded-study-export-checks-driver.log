@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/run_expanded_study.py", line 159, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/run_expanded_study.py", line 125, in main
+    run(f'train-{output}',[sys.executable,trainer,'--kind',kind,'--parent',parent,
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/run_expanded_study.py", line 35, in run
+    if result.returncode not in allowed:raise RuntimeError(f'{name}: exit {result.returncode}')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: train-expanded-entity-continuation: exit -15

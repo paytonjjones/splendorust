@@ -1,0 +1,84 @@
+{
+  "drivers": [
+    {
+      "stage": "expanded-attribution",
+      "old_plan_sha256": "f4fc8ead838e6e184632efe7f340862b3af9cc66e3fcd444028de7e4cf5e3fbd",
+      "new_receipt_sha256": "d7ca9a092e6917c06aaa48f226ee37636476359402108c9a5d34beb25a98e1a3",
+      "new_plan": {
+        "previous_plan_sha256": "f4fc8ead838e6e184632efe7f340862b3af9cc66e3fcd444028de7e4cf5e3fbd",
+        "amendment_sha256": "995ceca4657901ad67b58517659a1600829f549eb1dc1ef1b9494ead455c88e0",
+        "resumed_plan": {
+          "trigger": "Policy-valid history/parent screen in either profile, lower 95% bound above 50%",
+          "controls": [
+            "history-only",
+            "no-history"
+          ],
+          "epochs": 12,
+          "batch": 512,
+          "learning_rate": 0.0001,
+          "native_masters": [
+            5190060000,
+            5190070000
+          ],
+          "canonical_masters": [
+            5180050000,
+            5180060000
+          ],
+          "native_workers": 14,
+          "canonical_workers": 32,
+          "iterations": 128,
+          "depth": 16,
+          "script_sha256": "fc20154ea1b2d81a25f6bbe31897fb6698f49f4a60e1271dfa6dca4740f5bb90",
+          "completion_policy": {
+            "version": "bounded-no-action-v2.1",
+            "max_no_action_fraction": 0.01,
+            "tolerated_status": "no_legal_action",
+            "decision_limit": "reject",
+            "lower_unknown_credit": 0,
+            "upper_unknown_credit": 1,
+            "denominator": "all requested games",
+            "replace_or_skip": false
+          }
+        },
+        "scope": "Resume waiting driver only; retain checkpoints, seeds and budgets"
+      },
+      "pid": 52687,
+      "command": "local/strength/inference/bin/python research/architecture_pivots/run_expanded_attribution.py --resume-completion-policy-v2.1"
+    },
+    {
+      "stage": "confirmations",
+      "old_plan_sha256": "bec69215cd7c9688e374aad5047bbcd7ab8642cc965bca710c2bad59044129e9",
+      "new_receipt_sha256": "838b06e91c4ee548183d0129237a0bb6be006c460e853a5cdcaff017ab679d8b",
+      "new_plan": {
+        "previous_plan_sha256": "bec69215cd7c9688e374aad5047bbcd7ab8642cc965bca710c2bad59044129e9",
+        "amendment_sha256": "995ceca4657901ad67b58517659a1600829f549eb1dc1ef1b9494ead455c88e0",
+        "resumed_plan": {
+          "rule": "Highest policy-valid expanded champion worst-case credit; confirm if >=48% and upper bound >=50%, or supported promotion; also supported history/parent milestone",
+          "champion_master_base": 5220000000,
+          "parent_master": 5230000000,
+          "screen": 2000,
+          "confirm": 20000,
+          "confirmation_offset": 1000000000,
+          "iterations": 128,
+          "depth": 16,
+          "workers": 32,
+          "script_sha256": "801858029b676f11cbdd811672399fcc70e0a9c62bedd917a0e8a81b4a86c695",
+          "completion_policy": {
+            "version": "bounded-no-action-v2.1",
+            "max_no_action_fraction": 0.01,
+            "tolerated_status": "no_legal_action",
+            "decision_limit": "reject",
+            "lower_unknown_credit": 0,
+            "upper_unknown_credit": 1,
+            "denominator": "all requested games",
+            "replace_or_skip": false
+          }
+        },
+        "scope": "Resume waiting driver only; retain checkpoints, seeds and budgets"
+      },
+      "pid": 52691,
+      "command": "local/strength/inference/bin/python research/architecture_pivots/run_confirmations.py --resume-completion-policy-v2.1"
+    }
+  ],
+  "scope": "Waiting controller policy filters only; no match or training interrupted"
+}

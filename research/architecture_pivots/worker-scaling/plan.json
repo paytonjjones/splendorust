@@ -1,0 +1,19 @@
+{
+  "purpose": "Test whether more game workers use fixed padded model batches better without changing search results",
+  "masters": {
+    "policy_only": 5200000000,
+    "gumbel128": 5200010000
+  },
+  "games": {
+    "policy_only": 128,
+    "gumbel128": 32
+  },
+  "workers": [
+    14,
+    32
+  ],
+  "depth": 16,
+  "models": "Initial entity versus E81; fixed checkpoint and descriptor; existing batch32 MPS service",
+  "selection": "Change only later unstarted screens if ordered records and trajectory hashes match; preserve original registered screens",
+  "cost_scope": "Shared host; no isolated speed claim"
+}

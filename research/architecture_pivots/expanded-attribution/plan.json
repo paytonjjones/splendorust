@@ -1,0 +1,23 @@
+{
+  "trigger": "Complete history/parent screen in either profile, lower 95% bound above 50%",
+  "controls": [
+    "history-only",
+    "no-history"
+  ],
+  "epochs": 12,
+  "batch": 512,
+  "learning_rate": 0.0001,
+  "native_masters": [
+    5190060000,
+    5190070000
+  ],
+  "canonical_masters": [
+    5180050000,
+    5180060000
+  ],
+  "native_workers": 14,
+  "canonical_workers": 32,
+  "iterations": 128,
+  "depth": 16,
+  "script_sha256": "7b104d2a098e1f06d2a8ddb4e7e86750c8fb753e31d052d7033ade4809a466b8"
+}

@@ -1,0 +1,39 @@
+{
+  "candidate": {
+    "path": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/entity/model.bin",
+    "sha256": "d4abbd767bbecdbd972a3faf6070bcd67f5ae8cf899f0cf01d6647a9c1619809",
+    "bytes": 93,
+    "runtime": "tensor-service",
+    "endpoint": "127.0.0.1:19531",
+    "slot": 2,
+    "checkpoint_sha256": "d732e2eaab04678e187d5cd59bf4b6bb8a1ac37c2a874240165b36a07d3a99b3",
+    "public_history": false,
+    "history_version": 0
+  },
+  "baseline": {
+    "path": "/Users/payton.jones/dev/splendorust/research/e81/model/model.bin",
+    "sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+    "bytes": 569624,
+    "runtime": "native Rust"
+  },
+  "binary_sha256": "3b3d5a0006c65048fe5e87ef17057adf8f0e0120f2b39330ae2cc2ed755a81db",
+  "environment": {
+    "SPLENDOR_CANDIDATE_MODEL": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/entity/model.bin",
+    "SPLENDOR_BEST_MODEL": "/Users/payton.jones/dev/splendorust/research/e81/model/model.bin"
+  },
+  "script_sha256": "2dc47d3f680c6d9b57adb6bebb2a32437a936d9da4b916a17ed781f2a0fb66fb",
+  "service": {
+    "ready": true,
+    "port": 19531,
+    "device": "mps",
+    "batch": 32,
+    "delay_ms": 1.0,
+    "fast_entities": true,
+    "models": {
+      "2": {
+        "kind": "entity",
+        "sha256": "d732e2eaab04678e187d5cd59bf4b6bb8a1ac37c2a874240165b36a07d3a99b3"
+      }
+    }
+  }
+}

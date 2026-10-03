@@ -1,0 +1,39 @@
+{
+  "services": {
+    "entity-service-resume.log": {
+      "ready": true,
+      "port": 19531,
+      "device": "mps",
+      "batch": 32,
+      "delay_ms": 1.0,
+      "fast_entities": true,
+      "models": {
+        "2": {
+          "kind": "entity",
+          "sha256": "d732e2eaab04678e187d5cd59bf4b6bb8a1ac37c2a874240165b36a07d3a99b3"
+        }
+      }
+    },
+    "history-service.log": {
+      "ready": true,
+      "port": 19532,
+      "device": "mps",
+      "batch": 32,
+      "delay_ms": 1.0,
+      "fast_entities": true,
+      "models": {
+        "3": {
+          "kind": "history",
+          "sha256": "10b801304f843d4397aea4b4ca67d268130303a10cb44605efd685cb14f3b975"
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "models.py": "0e171dec6546e2352c8bc1b8a19a52db7537819fb0ad3921644828c535927d92",
+    "service.py": "35e1304794c023841aa4b11d29866f808069dfcb83d6d9db38026ce233bd9ac5"
+  },
+  "torch_version": "2.5.1",
+  "machine": "arm64",
+  "timing_scope": "Shared host; code unchanged since these service starts"
+}

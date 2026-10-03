@@ -1,0 +1,71 @@
+{
+  "registered_utc": "2026-10-03T02:22:28.286860+00:00",
+  "hypothesis": "Finer search-budget steps can bring measured native mean policy-response cost within 20%, without selecting budgets on strength.",
+  "known_initial_cost_ratios": {
+    "capacity": 1.6588912940839584,
+    "entity": 1.462990873840711,
+    "history": 0.7630307740158095
+  },
+  "reason": "Repair metadata-field check after the first pilot failed; preserve the old pilot and avoid contention with the already active canonical confirmation.",
+  "grids": {
+    "capacity": [
+      [
+        4,
+        128
+      ],
+      [
+        5,
+        128
+      ],
+      [
+        6,
+        128
+      ]
+    ],
+    "entity": [
+      [
+        0,
+        320
+      ],
+      [
+        0,
+        384
+      ],
+      [
+        0,
+        448
+      ]
+    ],
+    "history": [
+      [
+        0,
+        320
+      ],
+      [
+        0,
+        384
+      ],
+      [
+        0,
+        448
+      ]
+    ]
+  },
+  "calibration_games": 128,
+  "strength_games": 2000,
+  "workers": 14,
+  "batch": 32,
+  "delay_ms": 1,
+  "device": "mps",
+  "port": 19549,
+  "selection": "Minimum absolute log ratio of mean policy response seconds per decision; ignore all calibration strength.",
+  "calibration_master_base": 5370000000,
+  "model_offset": 100000,
+  "pilot_offset": 1000,
+  "strength_master_base": 5380000000,
+  "scope": "Native profile and this backend/worker configuration only; not canonical equal-compute evidence.",
+  "timing": "After native and canonical confirmations finish; one experiment service active.",
+  "original_summary_sha256": "6a4460eb711af5de9a5731a74311b923d59df25b5b7dd2f54c70ef388d45bc37",
+  "superseded_plan_sha256": "808260c1fbd846439bfb47b0ac97b26aaea0a08e347381b10ddf3d54b5bb738c",
+  "failed_prior_pilot": "cost-refinement/pilot-capacity-4-128"
+}

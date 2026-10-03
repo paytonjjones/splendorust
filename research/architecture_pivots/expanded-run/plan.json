@@ -1,0 +1,13 @@
+{
+  "training_kinds": [
+    "small",
+    "small-cold",
+    "capacity",
+    "entity"
+  ],
+  "epochs": 12,
+  "batch": 512,
+  "data": "expanded fixed train; original fixed dev",
+  "initialization": "E81 for warm small; fixed-seed scratch for cold small and large models",
+  "history": "Prepare public prefixes and ground-truth targets; choose history parent after expanded fit/strength evidence"
+}

@@ -1,5 +1,32 @@
 # Experiments
 
+## P2 — Conservative promotion with rare no-action outcomes
+
+Registered on 2026-10-02 at the user's request, after the expanded history/E81
+screen had one no-action game in 2,000 requested games. This is a policy
+amendment after a known result, not an advance registration of that result.
+Hypothesis: a rare published-rule gap need not stop research when the unchanged
+conservative strength bound clears the promotion margin.
+
+Use policy `bounded-no-action-v2.1`. Allow at most 1% `no_legal_action` games
+per stage: floor(requested games times 0.01). Keep every original record and
+seat rotation. Give no winner to an unfinished game. For the candidate's lower
+bound, give each unknown outcome zero credit; for its upper bound, give one.
+The denominator is all requested games. Keep the existing setup-block 95%
+interval and one-percentage-point promotion margin. Reject all decision-limit
+games, invalid evidence and execution errors. Strict mode uses
+`--max-no-action-fraction 0`. Do not replace or skip blocked setups.
+
+Keep all historical decisions unchanged. Write separate reanalyses tied to
+their raw report and old decision hashes. Apply the new rule to all eligible
+reports, including negative results. Fresh milestone screens and confirmations
+keep their registered seeds and budgets. Do not change the champion from a
+reanalysis alone. The exact registration is
+`research/architecture_pivots/promotion-policy-v2/REGISTRATION.json`.
+The user then requested a more lenient limit before new stages ran.
+`AMENDMENT.json` in that directory records the increase from 0.1% to 1%;
+the original registration remains intact.
+
 Experiments run on 2026-09-25. Opponents and weights are fixed within each run. All fixed-iteration comparisons rotate seats on identical setups. Each setup is an independent statistical block. See [docs/results/index.json](docs/results/index.json) for exact counts, seeds, intervals, runtimes, and record-set hashes. Compressed full per-game reports are kept beside their summaries.
 
 ## E1 — Failed long-range heuristic
@@ -2836,3 +2863,9 @@ Eight fresh unchanged AlphaZero800 native self-play games produce 440 public-inp
 Hypothesis: replace weak internal supervision with unchanged AlphaZero800 expert labels, at comparable corpus volume, and remove sampled hidden-card input noise at every node. Collect5,000 train/1,000 dev native games; mix fixed canonical replay. Use E81 warmstart with a small public-input expansion and a public rules flag. Require fresh native and canonical2,000-game screens. See research/e95/PREREGISTRATION.md. No result or promotion yet.
 
 E95 data stopping point: all6,000 native expert games /336,636 positions complete and replay;280,710 train and55,926 dev. All raw rows/context/history plus canonical replay/development dependencies are preserved in verified gzip archives. The public model at every node passes125 release tests, strict Clippy and native/legacy checks. Training/screens have not started; championE81 and lineageE88 stay unchanged. Collection49.35min is an initial reusable cost; future dev scheduling must fill the worker pool. See research/e95/HANDOFF.md.
+
+## Major architecture pivots — capacity, entities and public history
+
+Hypotheses: a full 4.52M residual can improve on the small model; a 4.78M Entity Transformer can learn better relational policy/value features; a 4.97M public-history extension with opponent and hidden-reservation supervision can improve on the strongest parent. Fixed designs, seed streams, corpus versions, negative fits and registered amendments are in research/architecture_pivots/PREREGISTRATION.md. The expanded corpus has 1,682,022 train rows from 30,000 setups and the same 111,572-row disjoint dev set. Full-network inference and batched tensor services are research options; E81 remains the champion.
+
+Source commit a92badd contains training, export, public-history and inference code. Commit 0165030 freezes all five selected expanded checkpoints and manifests. The exact Entity parent also has an independent reusable baseline at 7367b05ea3a6587bf9c982756027652eeb974990. Direct expanded screens, history diagnostics and worker scaling are complete. Native Entity confirmation gives 78.735% in 20,000 complete games. Fresh canonical Entity confirmation gives 60.7225% (95% interval 59.595–61.850%) in 20,000 complete Gumbel128 games against E81. The gate returns promote at that fixed budget; the official pointer remains E81. History shows no established parent gain. At matched native response cost within 20%, residual/entity/history score 14.575%/34.750%/32.500% against E81. All three cost screens have 2,000 complete games. Capacity-only and this history recipe give no scaling benefit; Entity improves representation and fixed-budget strength, but current cost prevents a practical efficiency gain. All required stages are complete, with original runs and failures preserved. See research/architecture_pivots/REPORT.md and CHECKPOINTS.json.

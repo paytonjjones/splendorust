@@ -38,10 +38,15 @@ struct Args {
     public_context: bool,
     #[arg(long)]
     teacher_action_targets: bool,
+    #[arg(long)]
+    public_history: bool,
+    #[arg(long, default_value_t = 1)]
+    history_version: u8,
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let a = Args::parse();
     assert!(a.games > 0 && a.threads > 0);
+    assert!(matches!(a.history_version, 1 | 2));
     assert!(
         a.actor_agent.is_none() || a.actor_iterations.is_some(),
         "separate actor name requires separate actor budget"
@@ -75,6 +80,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pool = rayon::ThreadPoolBuilder::new()
         .num_threads(a.threads)
         .build()?;
+    let mut history_out = if a.public_history {
+        Some(BufWriter::new(std::fs::File::create(
+            a.output.with_extension("history.bin"),
+        )?))
+    } else {
+        None
+    };
+    let mut aux_out = if a.public_history {
+        Some(BufWriter::new(std::fs::File::create(
+            a.output.with_extension("aux.bin"),
+        )?))
+    } else {
+        None
+    };
     let mut counts = [0usize; 3];
     let mut rows = 0usize;
     let mut simulations = 0u64;
@@ -101,6 +120,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut legal=ActionSet::new();
             let mut samples=Vec::new();
             let mut contexts=Vec::new();
+            let mut events=std::collections::VecDeque::<[f32;32]>::new();
+            let mut histories=Vec::new();let mut aux=Vec::new();let mut executed=Vec::new();
             for _ in 0..2000 {
                 state.legal_actions(&mut legal);
                 if legal.is_empty() {break;}
@@ -150,13 +171,43 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                     samples.push((seat,x,mask,target,label_value));
                     if a.public_context { contexts.push(transfer::public_context(&o)); }
+                    if a.public_history {
+                        let mut history=[[0.0f32;32];16];
+                        for (dest,event) in history[16-events.len()..].iter_mut().zip(&events) {
+                            *dest = *event;dest[1]=f32::from(event[1]!=seat as f32);
+                        }
+                        histories.push(history);
+                        let private=state.observe(opponent);
+                        let labels:[i16;3]=std::array::from_fn(|slot| {
+                            if slot<o.reserved_counts[opponent] as usize && !o.players[opponent].reserved[slot].public {
+                                i16::from(private.players[opponent].reserved[slot].card)
+                            } else {-1}
+                        });
+                        aux.push(labels);executed.push((seat,native_ids[action_index(chosen).unwrap()] as i16));
+                    }
                 }
+                let before=a.public_history.then(|| state.observe(seat));
                 state.apply_action(chosen).unwrap();
+                if let Some(before)=before {
+                    if events.len()==16 {events.pop_front();}
+                    let after = state.observe(seat);
+                    events.push_back(if a.history_version == 2 {
+                        splendor_agents::public_history::canonical_v2(&before, chosen, &after)
+                    } else {
+                        splendor_agents::public_history::canonical(&before, chosen, &after)
+                    });
+                }
             }
             state.legal_actions(&mut legal);
             let result=state.outcome();
             let status=if result.is_some() {0} else if legal.is_empty() {1} else {2};
             let mut bytes=Vec::with_capacity(samples.len()*2232);
+            let mut aux_bytes=Vec::new();
+            for (i,labels) in aux.into_iter().enumerate() {
+                let opponent=executed[i+1..].iter().find(|(seat,_)| *seat!=executed[i].0).map_or(-1,|(_,action)| *action);
+                aux_bytes.extend(opponent.to_le_bytes());
+                for label in labels {aux_bytes.extend(label.to_le_bytes());}
+            }
             for (seat,x,mask,policy,value) in samples {
                 let outcome=result.map(|r| if r.winners&(1<<seat)!=0 {1.0/r.winners.count_ones() as f32} else {0.0}).unwrap_or(f32::NAN);
                 bytes.extend(setup.to_le_bytes());
@@ -165,9 +216,33 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let (s0,c0)=agents[0].work_counts();let (s1,c1)=agents[1].work_counts();
             let record=serde_json::json!({"setup":setup,"status":(["complete","blocked","capped"][status]),"turns":state.turns(),"rows":bytes.len()/2232,"opponent_blind_rows":blind_rows});
             let (label_s,label_c)=replicas.iter().flatten().map(|teacher|teacher.work_counts()).fold((0,0),|(s,c),(x,y)|(s+x,c+y));
-            (status,bytes,s0+s1+label_s,c0+c1+label_c,record,view_groups,label_s,label_c,contexts)
+            (status,bytes,s0+s1+label_s,c0+c1+label_c,record,view_groups,label_s,label_c,contexts,histories,aux_bytes)
         }).collect());
-        for (status, bytes, s, c, record, view_groups, label_s, label_c, contexts) in results {
+        for (
+            status,
+            bytes,
+            s,
+            c,
+            record,
+            view_groups,
+            label_s,
+            label_c,
+            contexts,
+            histories,
+            aux_bytes,
+        ) in results
+        {
+            if let Some(writer) = history_out.as_mut() {
+                assert_eq!(histories.len(), bytes.len() / 2232);
+                for history in histories {
+                    for row in history {
+                        for value in row {
+                            writer.write_all(&value.to_le_bytes())?;
+                        }
+                    }
+                }
+                aux_out.as_mut().unwrap().write_all(&aux_bytes)?;
+            }
             if let Some(writer) = context_out.as_mut() {
                 assert_eq!(contexts.len(), bytes.len() / 2232);
                 for context in contexts {
@@ -204,6 +279,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     out.flush()?;
     drop(out);
     std::fs::rename(tmp, &a.output)?;
+    if let Some(mut writer) = history_out {
+        writer.flush()?;
+    }
+    if let Some(mut writer) = aux_out {
+        writer.flush()?;
+    }
     if let Some(mut writer) = views_out {
         writer.flush()?;
         drop(writer);

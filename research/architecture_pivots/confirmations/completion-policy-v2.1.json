@@ -1,0 +1,27 @@
+{
+  "previous_plan_sha256": "bec69215cd7c9688e374aad5047bbcd7ab8642cc965bca710c2bad59044129e9",
+  "amendment_sha256": "995ceca4657901ad67b58517659a1600829f549eb1dc1ef1b9494ead455c88e0",
+  "resumed_plan": {
+    "rule": "Highest policy-valid expanded champion worst-case credit; confirm if >=48% and upper bound >=50%, or supported promotion; also supported history/parent milestone",
+    "champion_master_base": 5220000000,
+    "parent_master": 5230000000,
+    "screen": 2000,
+    "confirm": 20000,
+    "confirmation_offset": 1000000000,
+    "iterations": 128,
+    "depth": 16,
+    "workers": 32,
+    "script_sha256": "801858029b676f11cbdd811672399fcc70e0a9c62bedd917a0e8a81b4a86c695",
+    "completion_policy": {
+      "version": "bounded-no-action-v2.1",
+      "max_no_action_fraction": 0.01,
+      "tolerated_status": "no_legal_action",
+      "decision_limit": "reject",
+      "lower_unknown_credit": 0,
+      "upper_unknown_credit": 1,
+      "denominator": "all requested games",
+      "replace_or_skip": false
+    }
+  },
+  "scope": "Resume waiting driver only; retain checkpoints, seeds and budgets"
+}

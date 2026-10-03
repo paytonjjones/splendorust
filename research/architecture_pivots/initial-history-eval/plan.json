@@ -1,0 +1,26 @@
+{
+  "games": 2000,
+  "iterations": 128,
+  "depth": 16,
+  "workers": 14,
+  "native_master_range": [
+    5130060000,
+    5130120000
+  ],
+  "canonical_masters": [
+    5100050000,
+    5100060000
+  ],
+  "native_binary_sha256": "2f66e16beecc83cb573e2cb8231c16a484200e5d69b1c5f0ccf1339881325638",
+  "script_sha256": "d987cef3b16505dfcbdc37117eaecb4a089831eacdc288d1bea75c1efb38d737",
+  "conditions": [
+    "history",
+    "entity parent",
+    "same-weight no-history inference",
+    "capacity",
+    "parent continuation",
+    "history-only training",
+    "state-only auxiliary training"
+  ],
+  "timing": "Shared host with data collection and registered training; fixed simulation budgets"
+}

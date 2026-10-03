@@ -1,0 +1,38 @@
+{
+  "previous_plan_sha256": "f4fc8ead838e6e184632efe7f340862b3af9cc66e3fcd444028de7e4cf5e3fbd",
+  "amendment_sha256": "995ceca4657901ad67b58517659a1600829f549eb1dc1ef1b9494ead455c88e0",
+  "resumed_plan": {
+    "trigger": "Policy-valid history/parent screen in either profile, lower 95% bound above 50%",
+    "controls": [
+      "history-only",
+      "no-history"
+    ],
+    "epochs": 12,
+    "batch": 512,
+    "learning_rate": 0.0001,
+    "native_masters": [
+      5190060000,
+      5190070000
+    ],
+    "canonical_masters": [
+      5180050000,
+      5180060000
+    ],
+    "native_workers": 14,
+    "canonical_workers": 32,
+    "iterations": 128,
+    "depth": 16,
+    "script_sha256": "fc20154ea1b2d81a25f6bbe31897fb6698f49f4a60e1271dfa6dca4740f5bb90",
+    "completion_policy": {
+      "version": "bounded-no-action-v2.1",
+      "max_no_action_fraction": 0.01,
+      "tolerated_status": "no_legal_action",
+      "decision_limit": "reject",
+      "lower_unknown_credit": 0,
+      "upper_unknown_credit": 1,
+      "denominator": "all requested games",
+      "replace_or_skip": false
+    }
+  },
+  "scope": "Resume waiting driver only; retain checkpoints, seeds and budgets"
+}

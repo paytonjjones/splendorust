@@ -1,0 +1,171 @@
+{
+  "source": "02e8778089114225",
+  "base_commit": "3821a71",
+  "binary_sha256": "045aeac2d75aa581836b0af5579afab23b33682a2e82a593a8426dd672d6847e",
+  "command": [
+    "sample",
+    "75577",
+    "5",
+    "1",
+    "-file",
+    "profile-arena.sample.txt"
+  ],
+  "scope": "diagnostic five-second one-millisecond sampling; benchmark timings from this process are excluded because profiling and a prototype build overlapped",
+  "top_of_stack": [
+    {
+      "symbol": "_RNvMs1_NtCscdoMJ8WWLbI_15splendor_agents8transferNtB5_4Norm5apply  (in splendor)",
+      "samples": 11693
+    },
+    {
+      "symbol": "__psynch_cvwait  (in libsystem_kernel.dylib)",
+      "samples": 3695
+    },
+    {
+      "symbol": "_RNvMs_NtCscdoMJ8WWLbI_15splendor_agents8transferNtB4_5Dense5apply  (in splendor)",
+      "samples": 1390
+    },
+    {
+      "symbol": "_RNvMs2_NtCscdoMJ8WWLbI_15splendor_agents8transferNtB5_5Block5apply  (in splendor)",
+      "samples": 276
+    },
+    {
+      "symbol": "_platform_memset  (in libsystem_platform.dylib)",
+      "samples": 227
+    },
+    {
+      "symbol": "mach_absolute_time  (in libsystem_kernel.dylib)",
+      "samples": 185
+    },
+    {
+      "symbol": "_RNvMs0_NtCscdoMJ8WWLbI_15splendor_agents13neural_searchNtB5_11NeuralAgent8simulate  (in splendor)",
+      "samples": 143
+    },
+    {
+      "symbol": "_RNvMs3_CsgOWAGOV9obi_13splendor_coreNtB5_9GameState13legal_actions  (in splendor)",
+      "samples": 81
+    },
+    {
+      "symbol": "_RNvMs4_CsgOWAGOV9obi_13splendor_coreNtB5_11Observation11determinize  (in splendor)",
+      "samples": 74
+    },
+    {
+      "symbol": "_RNvNtCscdoMJ8WWLbI_15splendor_agents8transfer6encode  (in splendor)",
+      "samples": 71
+    },
+    {
+      "symbol": "_xzm_xzone_malloc_tiny  (in libsystem_malloc.dylib)",
+      "samples": 70
+    },
+    {
+      "symbol": "_xzm_free  (in libsystem_malloc.dylib)",
+      "samples": 61
+    },
+    {
+      "symbol": "_RNvMs3_CsgOWAGOV9obi_13splendor_coreNtB5_9GameState7observe  (in splendor)",
+      "samples": 52
+    },
+    {
+      "symbol": "_RNvXs2_NtNtCs82bWklYMk3w_3std4hash6randomNtB5_13DefaultHasherNtNtCs8Mbv00yxnRz_4core4hash6Hasher5write  (in splendor)",
+      "samples": 50
+    },
+    {
+      "symbol": "_RNvMs3_CsgOWAGOV9obi_13splendor_coreNtB5_9GameState12apply_action  (in splendor)",
+      "samples": 45
+    },
+    {
+      "symbol": "_RNvMs0_NtCscdoMJ8WWLbI_15splendor_agents13neural_searchNtB5_11NeuralAgent6expand  (in splendor)",
+      "samples": 41
+    },
+    {
+      "symbol": "_RNvMs3_CsgOWAGOV9obi_13splendor_coreNtB5_9GameState16check_invariants  (in splendor)",
+      "samples": 33
+    },
+    {
+      "symbol": "_RNvCsgOWAGOV9obi_13splendor_core8payments  (in splendor)",
+      "samples": 20
+    },
+    {
+      "symbol": "_RNvMs2_CscdoMJ8WWLbI_15splendor_agentsNtB5_16PotentialTargets5score  (in splendor)",
+      "samples": 20
+    },
+    {
+      "symbol": "_RNvXs1_NtNtNtCs8Mbv00yxnRz_4core4iter8adapters6filterINtB5_6FilterINtNtB7_6copied6CopiedINtNtNtBb_5slice4iter4IterNtCsgOWAGOV9obi_13splendor_core6ActionEENCNvCscdoMJ8WWLbI_15splendor_agents12safe_choices0ENtNtNtB9_6traits8iterator8Iterator4nextB2w_  (in splendor)",
+      "samples": 18
+    },
+    {
+      "symbol": "_xzm_xzone_malloc_small_freelist  (in libsystem_malloc.dylib)",
+      "samples": 15
+    },
+    {
+      "symbol": "_xzm_xzone_malloc  (in libsystem_malloc.dylib)",
+      "samples": 14
+    },
+    {
+      "symbol": "_RNvCscdoMJ8WWLbI_15splendor_agents9potential  (in splendor)",
+      "samples": 12
+    },
+    {
+      "symbol": "expf  (in libsystem_m.dylib)",
+      "samples": 12
+    },
+    {
+      "symbol": "_RNvCsgOWAGOV9obi_13splendor_core7returns  (in splendor)",
+      "samples": 10
+    },
+    {
+      "symbol": "_xzm_free_outlined  (in libsystem_malloc.dylib)",
+      "samples": 10
+    },
+    {
+      "symbol": "_RINvYNtNtNtCs82bWklYMk3w_3std4hash6random11RandomStateNtNtCs8Mbv00yxnRz_4core4hash11BuildHasher8hash_oneRAhjc0_ECscdoMJ8WWLbI_15splendor_agents  (in splendor)",
+      "samples": 9
+    },
+    {
+      "symbol": "_malloc_zone_malloc  (in libsystem_malloc.dylib)",
+      "samples": 9
+    },
+    {
+      "symbol": "_platform_memcmp  (in libsystem_platform.dylib)",
+      "samples": 9
+    },
+    {
+      "symbol": "_platform_memmove  (in libsystem_platform.dylib)",
+      "samples": 9
+    },
+    {
+      "symbol": "_xzm_xzone_free_freelist  (in libsystem_malloc.dylib)",
+      "samples": 9
+    },
+    {
+      "symbol": "<deduplicated_symbol>  (in libsystem_malloc.dylib)",
+      "samples": 7
+    },
+    {
+      "symbol": "_xzm_malloc_zone_malloc_type_calloc_entry  (in libsystem_malloc.dylib)",
+      "samples": 7
+    },
+    {
+      "symbol": "xzm_realloc  (in libsystem_malloc.dylib)",
+      "samples": 7
+    },
+    {
+      "symbol": "_RNvMs0_NtCscdoMJ8WWLbI_15splendor_agents13neural_searchNtB5_11NeuralAgent4leaf  (in splendor)",
+      "samples": 6
+    },
+    {
+      "symbol": "_RNvMs2_CscdoMJ8WWLbI_15splendor_agentsNtB5_16PotentialTargets3new  (in splendor)",
+      "samples": 6
+    },
+    {
+      "symbol": "_free  (in libsystem_malloc.dylib)",
+      "samples": 6
+    },
+    {
+      "symbol": "xzm_malloc_zone_size  (in libsystem_malloc.dylib)",
+      "samples": 5
+    }
+  ],
+  "normalization_samples": 11693,
+  "dense_samples": 1390,
+  "notes": "Counts are not precise wall-time percentages; main thread wait included; low-frequency frames omitted by sample."
+}

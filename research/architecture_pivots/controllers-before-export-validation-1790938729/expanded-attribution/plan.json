@@ -1,0 +1,23 @@
+{
+  "trigger": "Complete canonical history/parent screen, lower 95% bound above 50%",
+  "controls": [
+    "history-only",
+    "no-history"
+  ],
+  "epochs": 12,
+  "batch": 512,
+  "learning_rate": 0.0001,
+  "native_masters": [
+    5190060000,
+    5190070000
+  ],
+  "canonical_masters": [
+    5180050000,
+    5180060000
+  ],
+  "native_workers": 14,
+  "canonical_workers": 32,
+  "iterations": 128,
+  "depth": 16,
+  "script_sha256": "28a67ad70d8586b87e6e6420887afecd5050d80f8a848f19f42c426c2be961fd"
+}

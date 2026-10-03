@@ -69,6 +69,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     json!({"features":sample.features().as_slice(),"observation":native_wire::write(&sample.observe(o.viewer))}),
                 )
             }
+            "observe" => {
+                let before = native_wire::read(v["before"].clone())?;
+                let after = native_wire::read(v["after"].clone())?;
+                before.validate()?;
+                after.validate()?;
+                let action = u8::try_from(v["action"].as_u64().ok_or("public action")?)?;
+                if before.viewer != after.viewer {
+                    return Err("history viewer changed".into());
+                }
+                let event = if model.uses_full_public_history()
+                    || v["history_version"].as_u64() == Some(2)
+                {
+                    splendor_agents::public_history::native_v2(&before, action, &after)
+                } else {
+                    splendor_agents::public_history::native(&before, action, &after)
+                };
+                agent.observe_event(event);
+                if v["include_event"].as_bool().unwrap_or(false) {
+                    Ok(json!({"ok":true,"public_event":event.as_slice(),
+                        "public_pool":splendor_agents::public_history::native_pool(&before).as_slice()}))
+                } else {
+                    Ok(json!({"ok":true}))
+                }
+            }
             _ => Err("unknown policy operation".into()),
         })();
         writeln!(

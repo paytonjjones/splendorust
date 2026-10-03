@@ -2,6 +2,8 @@
 //! Architecture copyright (c) 2018 Surag Nair (MIT).
 //! See research/e30/UPSTREAM-LICENSE. No game-state input is accepted here.
 mod attention;
+mod large;
+mod remote;
 struct Reader {
     values: Vec<f32>,
     at: usize,
@@ -372,6 +374,8 @@ pub struct Model {
     architecture: Architecture,
 }
 enum Architecture {
+    Remote(remote::RemoteModel),
+    Large(Box<large::LargeModel>),
     Attention(Box<attention::AttentionModel>),
     Bootstrap(Box<BootstrapModel>),
     Gated(GatedModel),
@@ -454,8 +458,18 @@ impl ResidualModel {
     }
 }
 impl Model {
+    pub fn uses_history_bridge(&self) -> bool {
+        matches!(&self.architecture, Architecture::Remote(model) if model.history)
+    }
+    pub fn uses_full_public_history(&self) -> bool {
+        matches!(&self.architecture, Architecture::Remote(model) if model.history_version == 2)
+    }
     pub fn from_bytes(bytes: &[u8]) -> Self {
-        let architecture = if bytes.starts_with(b"SPATTN01") {
+        let architecture = if bytes.starts_with(b"SPREMOTE") {
+            Architecture::Remote(remote::RemoteModel::from_bytes(bytes))
+        } else if bytes.starts_with(b"SPLARGE1") {
+            Architecture::Large(Box::new(large::LargeModel::from_bytes(bytes)))
+        } else if bytes.starts_with(b"SPATTN01") {
             Architecture::Attention(Box::new(attention::AttentionModel::from_bytes(bytes)))
         } else if bytes.starts_with(b"SPRESID1") || bytes.starts_with(b"SPBELF01") {
             Architecture::Residual(Box::new(ResidualModel::from_bytes(bytes)))
@@ -475,7 +489,9 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, false),
             Architecture::Residual(model) => model.infer(x, false),
-            Architecture::Attention(_) => panic!("attention model requires public context"),
+            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_) => {
+                panic!("model requires public context")
+            }
         }
     }
     pub fn has_correction(&self) -> bool {
@@ -495,11 +511,16 @@ impl Model {
     /// Public models retain native noble slot order, which affects native rules.
     /// Legacy transferred models keep their frozen sorted-noble feature contract.
     pub fn uses_native_noble_order(&self) -> bool {
-        matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 75)
+        matches!(
+            &self.architecture,
+            Architecture::Remote(_) | Architecture::Large(_)
+        ) || matches!(&self.architecture, Architecture::Bootstrap(model) if model.first.input == 75)
     }
     pub fn needs_public_context(&self) -> bool {
-        matches!(&self.architecture, Architecture::Attention(_))
-            || matches!(&self.architecture, Architecture::Bootstrap(model) if matches!(model.first.input, 57 | 75))
+        matches!(
+            &self.architecture,
+            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_)
+        ) || matches!(&self.architecture, Architecture::Bootstrap(model) if matches!(model.first.input, 57 | 75))
             || matches!(&self.architecture, Architecture::Residual(model) if model.public_belief)
     }
     pub fn infer_with_context(&self, x: &[f32; 392], context: &[f32; 7]) -> ([f32; 81], [f32; 2]) {
@@ -512,6 +533,12 @@ impl Model {
         context: &[f32; 7],
         native_rules: bool,
     ) -> ([f32; 81], [f32; 2]) {
+        if let Architecture::Remote(model) = &self.architecture {
+            return model.infer(x, context, native_rules, &[[0.0; 32]; 16], &[1.0; 90]);
+        }
+        if let Architecture::Large(model) = &self.architecture {
+            return model.infer(x, context, native_rules);
+        }
         if let Architecture::Bootstrap(model) = &self.architecture
             && model.first.input == 75
         {
@@ -556,7 +583,24 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, true),
             Architecture::Residual(model) => model.infer(x, true),
-            Architecture::Attention(_) => panic!("attention model requires public context"),
+            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_) => {
+                panic!("model requires public context")
+            }
+        }
+    }
+    /// A bounded sequence of public events; hidden labels are never accepted.
+    pub fn infer_with_history(
+        &self,
+        x: &[f32; 392],
+        context: &[f32; 7],
+        native_rules: bool,
+        history: &[[f32; 32]; 16],
+        pool: &[f32; 90],
+    ) -> ([f32; 81], [f32; 2]) {
+        if let Architecture::Remote(model) = &self.architecture {
+            model.infer(x, context, native_rules, history, pool)
+        } else {
+            self.infer_with_profile(x, context, native_rules)
         }
     }
 }

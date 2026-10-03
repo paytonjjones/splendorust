@@ -1,0 +1,39 @@
+{
+  "checkpoint_sha256": "471ab63620410708733d9a55eebc3e6f8f91625ffd05f69088c45ca84a5986a1",
+  "shape_occupancy_bit_exact": true,
+  "maximum_abs_error": 0.0,
+  "shared_host": true,
+  "scope": "Tensor service only, including client queue/socket overhead",
+  "results": [
+    {
+      "workers": 1,
+      "calls": 256,
+      "seconds": 2.663799291010946,
+      "calls_per_second": 96.10333663796597
+    },
+    {
+      "workers": 4,
+      "calls": 256,
+      "seconds": 0.6790962090017274,
+      "calls_per_second": 376.9716228814183
+    },
+    {
+      "workers": 8,
+      "calls": 256,
+      "seconds": 0.33885462500620633,
+      "calls_per_second": 755.486220662655
+    },
+    {
+      "workers": 14,
+      "calls": 256,
+      "seconds": 0.2257940840208903,
+      "calls_per_second": 1133.7763835137287
+    },
+    {
+      "workers": 32,
+      "calls": 256,
+      "seconds": 0.11613516707438976,
+      "calls_per_second": 2204.3279951198638
+    }
+  ]
+}

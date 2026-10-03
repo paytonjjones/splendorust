@@ -1,0 +1,26 @@
+{
+  "scaling_workers": [
+    1,
+    4,
+    8,
+    14,
+    32
+  ],
+  "scaling_games": 128,
+  "scaling_iterations": 0,
+  "scaling_master": 5170000000,
+  "cost_pilot_games": 32,
+  "candidate_budget_grid": [
+    0,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "baseline_budget": 128,
+  "cost_strength_games": 2000,
+  "budget_rule": "Nearest mean policy response cost per decision; increase baseline budget if candidate root alone costs more",
+  "timing": "Wait for all registered expanded screens; record host activity; fixed batch32",
+  "script_sha256": "d517dbdc4bd811850302e205f901ed12f0d7fe93976de31aeae644f36da24681"
+}

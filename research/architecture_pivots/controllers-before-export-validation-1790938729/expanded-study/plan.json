@@ -1,0 +1,18 @@
+{
+  "base_kinds": [
+    "small",
+    "small-cold",
+    "capacity",
+    "entity"
+  ],
+  "games": 2000,
+  "canonical_workers": 32,
+  "native_workers": 14,
+  "canonical_champion_master": 5180000000,
+  "native_champion_master": 5190000000,
+  "selection": "Use direct canonical entity/capacity strength; if inconclusive, lower matched dev selection score",
+  "history": "12 extra epochs from selected expanded parent; entity history or residual plus four history-attention layers; equal-budget parent continuation; same-weight no-history inference",
+  "conditional_controls": "If history shows a supported direct gain, train history-only and state-only auxiliary controls",
+  "budgets": "Canonical Gumbel128/depth16. Native policy-only first. Fixed seeds and public inference only.",
+  "script_sha256": "c573d6ea56c8b02a83912adaf335553b7f3d67434424b16631e3e3e38c2384e1"
+}
