@@ -30,3 +30,32 @@
 @media(max-width:700px){.deck-tier{font-size:14px;letter-spacing:-.3px}}
 
 .card-buy:focus-visible{outline-offset:-5px}.development-card:focus-within{outline:2px solid #45798c;outline-offset:3px}
+.table-footer{flex-wrap:wrap;gap:8px}.game-log-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-basis:100%;font-size:10px}.game-log-row .text-button{font-size:10px;min-height:24px}.game-log-row [role=status]{max-width:70%;line-height:1.5}
+
+/* Tabletop refinement: clear game data, one frame per object, quiet labels. */
+:root{--white-wash:#c3bba6;--blue-wash:#a4bbc3;--green-wash:#afbea6;--red-wash:#ceb09d;--black-wash:#afb4ad}
+.board-label,.eyebrow{text-transform:none;letter-spacing:0;font-size:11px;font-weight:500}
+.player-name{font-weight:600}
+.bonus-stack:after,.deck:before,.deck:after{display:none}
+.bonus-stack:before{border-color:#899485;background:#e4e6db;border-radius:1px}
+.deck{border-color:#a5ae9e;border-radius:2px;background:#d9dfd0}
+.deck-label{text-transform:none;letter-spacing:0;font-size:8px}
+.development-card{border-color:#84917f;border-radius:3px;box-shadow:0 1px 2px #293b3614}
+.development-card:not(:has(button:disabled)):hover{box-shadow:0 2px 4px #293b3620}
+.affordable{border-color:#304c37;box-shadow:inset 0 0 0 1px #304c37}
+.card-footer{background:#f5f1e5;border-top:0}
+.prestige{font-family:'DM Sans',sans-serif;font-size:25px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.zero-prestige{opacity:.75}
+.cost{font-weight:600;font-variant-numeric:tabular-nums}
+.buy-mark{font-size:9px;letter-spacing:0;font-weight:600}
+.noble-tile{border-radius:3px;box-shadow:none}
+.score-number{font-family:'DM Sans',sans-serif;font-size:30px;line-height:1;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.gem-name{text-transform:none;letter-spacing:0;font-size:9px}
+.modal{border-radius:4px;box-shadow:0 12px 40px #253b3326}
+.modal::backdrop{backdrop-filter:none}
+.return-chooser{background:transparent}
+.opponent-reserve{border:0;padding-left:0;background:transparent}
+.action-title{font-weight:600}
+@media(min-width:1600px){.prestige{font-size:28px}.score-number{font-size:34px}}
+@media(max-width:700px){.eyebrow{font-size:10px}.prestige{font-size:24px}.score-number{font-size:27px}.human-reserves>.board-label{font-size:10px}.buy-mark{font-size:8px}.gem-name{font-size:8px}}
+@media(max-width:430px){.prestige{font-size:22px}.score-number{font-size:25px}.compact-card .prestige{font-size:20px}.buy-mark{background:#f5f1e5;font-size:8px;bottom:43px;padding:2px 3px}.human-reserves .compact-card .buy-mark{bottom:26px}}

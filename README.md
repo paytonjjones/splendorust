@@ -18,7 +18,7 @@ benchmark. Both variants keep the game rules, models and search budgets fixed.
 
 ## Play in the browser
 
-[Play against the champion](https://splendorust.pages.dev). The client in `web/` uses React and a dedicated worker. Rules and champion search run in Rust/WASM. It uses original generated art and separate, content-addressed model assets. See [web setup and deployment](docs/WEB_DEPLOYMENT.md) and [web quality evidence](docs/web/QUALITY.md).
+[Play against the champion](https://splendorust.pages.dev). The client in `web/` uses React and a dedicated worker. Rules and champion search run in Rust/WASM. It uses original generated art and separate, content-addressed model assets. Mouse, touch, and arrows plus Enter use the same game actions. All visitor games are recorded for research. See [web setup and deployment](docs/WEB_DEPLOYMENT.md), [game log export and replay validation](docs/web/GAME_LOGS.md), and [web quality evidence](docs/web/QUALITY.md).
 
 ## Run
 

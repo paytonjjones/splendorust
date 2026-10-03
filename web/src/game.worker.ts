@@ -1,7 +1,9 @@
 import type {
   ChampionMetadata,
   ClientMetrics,
+  EffectiveSearch,
   GameSnapshot,
+  TrainingReplay,
 } from "./types";
 
 type StartRequest = {
@@ -26,7 +28,13 @@ type WorkerMessage =
   | {
       type: "champion";
       champion: ChampionMetadata;
+      effectiveSearch: EffectiveSearch;
       metrics: ClientMetrics;
+      requestId?: number;
+    }
+  | {
+      type: "trainingRecord";
+      replay: TrainingReplay;
       requestId?: number;
     }
   | { type: "ack"; requestId: number }
@@ -34,6 +42,7 @@ type WorkerMessage =
 
 interface WasmGame {
   snapshot(): string;
+  trainingRecord(): string;
   act(actionId: string): string;
   botStep(): string;
 }
@@ -70,6 +79,38 @@ function postSnapshot(requestId?: number): GameSnapshot {
   return state;
 }
 
+function postTrainingRecord(requestId?: number): TrainingReplay {
+  if (!game) throw new Error("The game is not ready.");
+  const replay = JSON.parse(game.trainingRecord()) as TrainingReplay;
+  post({ type: "trainingRecord", replay, requestId });
+  return replay;
+}
+
+function makeEffectiveSearch(
+  metadata: ChampionMetadata,
+  testSearchBudget?: { iterations: number; depth: number },
+): EffectiveSearch {
+  const validTestOverrides =
+    (import.meta.env.DEV || import.meta.env.VITE_ENABLE_TEST_BRIDGE === "true") &&
+    testSearchBudget &&
+    Number.isInteger(testSearchBudget.iterations) &&
+    testSearchBudget.iterations > 0 &&
+    Number.isInteger(testSearchBudget.depth) &&
+    testSearchBudget.depth > 0
+      ? testSearchBudget
+      : undefined;
+  return {
+    agent: metadata.search.agent,
+    iterations: validTestOverrides?.iterations ?? metadata.search.iterations,
+    depth: validTestOverrides?.depth ?? metadata.search.depth,
+    worldPool: metadata.search.world_pool,
+    gumbelMaxConsidered: metadata.search.gumbel_max_considered,
+    gumbelCvisit: metadata.search.gumbel_cvisit,
+    gumbelCscale: metadata.search.gumbel_cscale,
+    gumbelRootNoise: metadata.search.gumbel_root_noise,
+  };
+}
+
 function copyMetrics(): ClientMetrics {
   return {
     wasmInitMs: metrics.wasmInitMs,
@@ -83,25 +124,16 @@ function makeConfig(
   metadata: ChampionMetadata,
   testSearchBudget?: { iterations: number; depth: number },
 ): string {
-  const search = metadata.search;
-  const testOverrides =
-    (import.meta.env.DEV || import.meta.env.VITE_ENABLE_TEST_BRIDGE === "true") &&
-    testSearchBudget &&
-    Number.isInteger(testSearchBudget.iterations) &&
-    testSearchBudget.iterations > 0 &&
-    Number.isInteger(testSearchBudget.depth) &&
-    testSearchBudget.depth > 0
-      ? testSearchBudget
-      : undefined;
+  const search = makeEffectiveSearch(metadata, testSearchBudget);
   return JSON.stringify({
     searchAgent: search.agent,
-    iterations: testOverrides?.iterations ?? search.iterations,
-    depth: testOverrides?.depth ?? search.depth,
-    worldPool: search.world_pool,
-    gumbelMaxConsidered: search.gumbel_max_considered,
-    gumbelCvisit: search.gumbel_cvisit,
-    gumbelCscale: search.gumbel_cscale,
-    gumbelRootNoise: search.gumbel_root_noise,
+    iterations: search.iterations,
+    depth: search.depth,
+    worldPool: search.worldPool,
+    gumbelMaxConsidered: search.gumbelMaxConsidered,
+    gumbelCvisit: search.gumbelCvisit,
+    gumbelCscale: search.gumbelCscale,
+    gumbelRootNoise: search.gumbelRootNoise,
   });
 }
 
@@ -187,6 +219,7 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
     const serialized = game!.botStep();
     metrics.botDecisionMs.push(performance.now() - decisionStart);
     state = JSON.parse(serialized) as GameSnapshot;
+    postTrainingRecord(requestId);
     post({ type: "state", state, metrics: copyMetrics(), requestId });
   }
   metrics.botTurnMs.push(performance.now() - turnStart);
@@ -208,9 +241,11 @@ async function start(request: StartRequest): Promise<void> {
   metrics.modelLoadMs = loadedChampion.loadMs;
   metrics.wasmInitMs = loadedWasm.loadMs;
   champion = loadedChampion.metadata;
+  const search = makeEffectiveSearch(loadedChampion.metadata, request.testSearchBudget);
   post({
     type: "champion",
     champion,
+    effectiveSearch: search,
     metrics: copyMetrics(),
     requestId: request.requestId,
   });
@@ -220,6 +255,7 @@ async function start(request: StartRequest): Promise<void> {
     loadedChampion.modelBytes,
     makeConfig(loadedChampion.metadata, request.testSearchBudget),
   );
+  postTrainingRecord(request.requestId);
   const state = postSnapshot(request.requestId);
   await runBot(request.requestId, state);
   post({ type: "ack", requestId: request.requestId });
@@ -233,6 +269,7 @@ async function act(request: ActRequest): Promise<void> {
   }
   const serialized = game.act(request.actionId);
   const stateAfterHuman = JSON.parse(serialized) as GameSnapshot;
+  postTrainingRecord(request.requestId);
   // Publish the human result before the opponent starts. The UI can animate the action.
   post({
     type: "state",

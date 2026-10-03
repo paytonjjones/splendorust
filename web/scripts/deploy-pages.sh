@@ -5,7 +5,9 @@ web_dir="$(cd "$(dirname "$0")/.." && pwd)"
 repo_dir="$(cd "$web_dir/.." && pwd)"
 ring_root="${RING_OF_BINDING_ROOT:-/Users/payton.jones/dev/ring_of_binding}"
 
-if [[ ( -z "${CLOUDFLARE_ACCOUNT_ID:-}" || -z "${CLOUDFLARE_API_TOKEN:-}" ) && -f "$ring_root/.env" ]]; then
+auth_mode="${CLOUDFLARE_AUTH_MODE:-token}"
+
+if [[ "$auth_mode" != "oauth" && ( -z "${CLOUDFLARE_ACCOUNT_ID:-}" || -z "${CLOUDFLARE_API_TOKEN:-}" ) && -f "$ring_root/.env" ]]; then
   set -a
   # The Ring deployment uses these same credential names. Values stay out of output.
   # shellcheck disable=SC1091
@@ -13,10 +15,16 @@ if [[ ( -z "${CLOUDFLARE_ACCOUNT_ID:-}" || -z "${CLOUDFLARE_API_TOKEN:-}" ) && -
   set +a
 fi
 
-: "${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID or provide it in $ring_root/.env}"
-: "${CLOUDFLARE_API_TOKEN:?Set CLOUDFLARE_API_TOKEN or provide it in $ring_root/.env}"
-
-export CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_API_TOKEN
+if [[ "$auth_mode" == "oauth" ]]; then
+  unset CLOUDFLARE_API_TOKEN
+elif [[ "$auth_mode" == "token" ]]; then
+  : "${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID or provide it in $ring_root/.env}"
+  : "${CLOUDFLARE_API_TOKEN:?Set CLOUDFLARE_API_TOKEN or provide it in $ring_root/.env}"
+  export CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_API_TOKEN
+else
+  echo "CLOUDFLARE_AUTH_MODE must be token or oauth." >&2
+  exit 1
+fi
 
 if [[ ! -d "$web_dir/dist" ]]; then
   echo "Production build is missing. Run npm run build first." >&2

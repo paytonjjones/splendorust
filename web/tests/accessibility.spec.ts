@@ -142,7 +142,7 @@ test("keyboard can select gems, take them, and use the help dialog", async ({ pa
   const help = page.getByRole("button", { name: "How to play" });
   await help.focus();
   await page.keyboard.press("Enter");
-  const dialog = page.getByRole("dialog", { name: "A little strategy. A lot of gems." });
+  const dialog = page.getByRole("dialog", { name: "How to play" });
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();

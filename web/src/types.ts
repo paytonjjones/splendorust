@@ -81,6 +81,62 @@ export interface GameResult {
   reason?: "no_legal_action" | "decision_limit";
 }
 
+export type CanonicalAction = [number, number, number, number, number, number, number];
+
+/** Complete Rust replay state. This contains the private seed and state debug text. */
+export interface TrainingReplay {
+  schema: "splendor-web-replay-v1";
+  engine: string;
+  players: 2;
+  seed: string;
+  actions: CanonicalAction[];
+  revision: number;
+  turns: number;
+  stateDebug: string;
+  result: GameResult | null;
+}
+
+export interface EffectiveSearch {
+  agent: string;
+  iterations: number;
+  depth: number;
+  worldPool: number;
+  gumbelMaxConsidered: number;
+  gumbelCvisit: number;
+  gumbelCscale: number;
+  gumbelRootNoise: number;
+}
+
+export type RecordedGameStatus =
+  | "in_progress"
+  | "finished"
+  | "blocked"
+  | "abandoned"
+  | "error";
+
+/** Durable client/backend envelope. Never display replay.seed or stateDebug in the UI. */
+export interface RecordedGame {
+  schema: "splendor-web-game-v1";
+  gameId: string;
+  writeToken: string;
+  version: number;
+  startedAt: string;
+  updatedAt: string;
+  humanSeat: number;
+  champion: ChampionMetadata;
+  effectiveSearch: EffectiveSearch;
+  runtime: "production" | "test";
+  status: RecordedGameStatus;
+  replay: TrainingReplay;
+}
+
+export interface GameRecorderUpdate {
+  status: "idle" | "saving" | "saved" | "queued" | "uploading" | "error";
+  pendingUploads: number;
+  storedGames: number;
+  error?: string;
+}
+
 /** Public game information plus the human player's private reserved cards. */
 export interface GameSnapshot {
   revision: number;
@@ -139,9 +195,11 @@ export interface ClientMetrics {
 export interface GameClientUpdate {
   state: GameSnapshot | null;
   status: ClientStatus;
+  requestPending: boolean;
   error?: string;
   champion: ChampionMetadata | null;
   metrics: ClientMetrics;
+  recorder: GameRecorderUpdate;
 }
 
 export interface GameStartOptions {

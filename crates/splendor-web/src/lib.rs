@@ -6,7 +6,8 @@ use splendor_agents::{
     Agent, SearchConfig, SearchProfileOverrides, make_agent_with_profile, transfer,
 };
 use splendor_core::{
-    Action, ActionSet, GameOutcome, GameState, NONE, Observation, Phase, Player, Source,
+    Action, ActionSet, ENGINE_VERSION, GameOutcome, GameState, NONE, Observation, Phase, Player,
+    Source,
     data::{CARDS, NOBLES},
 };
 use std::collections::HashMap;
@@ -167,13 +168,29 @@ struct GameSnapshot {
     last_events: Vec<GameEvent>,
 }
 
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct TrainingRecord {
+    schema: &'static str,
+    engine: &'static str,
+    players: u8,
+    seed: String,
+    actions: Vec<[u8; 7]>,
+    revision: u32,
+    turns: u32,
+    state_debug: String,
+    result: Option<GameResult>,
+}
+
 /// A deterministic two-player game controlled by one human and a loaded model.
 #[wasm_bindgen]
 pub struct WebGame {
     state: GameState,
+    seed: u64,
     human_seat: u8,
     bot: Box<dyn Agent>,
     revision: u32,
+    actions: Vec<[u8; 7]>,
     events: Vec<GameEvent>,
 }
 
@@ -271,9 +288,11 @@ impl WebGame {
             GameState::new(2, seed).map_err(|e| js_error(&format!("could not start game: {e}")))?;
         Ok(Self {
             state,
+            seed,
             human_seat,
             bot,
             revision: 0,
+            actions: Vec::new(),
             events: Vec::new(),
         })
     }
@@ -281,6 +300,30 @@ impl WebGame {
     /// Return the public board and the human's private information as JSON.
     pub fn snapshot(&self) -> Result<String, JsValue> {
         self.snapshot_json()
+    }
+
+    /// Return the private versioned action journal for export or offline validation.
+    #[wasm_bindgen(js_name = trainingRecord)]
+    pub fn training_record(&self) -> Result<String, JsValue> {
+        let observation = self.state.observe(usize::from(self.human_seat));
+        let result = self
+            .state
+            .outcome()
+            .map(finished_result)
+            .or_else(|| self.is_blocked().then(|| blocked_result(&observation)));
+        let record = TrainingRecord {
+            schema: "splendor-web-replay-v1",
+            engine: ENGINE_VERSION,
+            players: 2,
+            seed: self.seed.to_string(),
+            actions: self.actions.clone(),
+            revision: self.revision,
+            turns: self.state.turns(),
+            state_debug: format!("{:?}", self.state),
+            result,
+        };
+        serde_json::to_string(&record)
+            .map_err(|e| js_error(&format!("could not encode training record: {e}")))
     }
 
     /// Apply one legal human choice, then make forced human choices automatically.
@@ -345,12 +388,17 @@ impl WebGame {
         self.legal().into_iter().find(|a| action_id(*a) == id)
     }
     fn apply(&mut self, action: Action) -> Result<(), JsValue> {
+        let next_revision = self
+            .revision
+            .checked_add(1)
+            .ok_or_else(|| js_error("game revision limit reached"))?;
         let actor = self.state.current_player() as u8;
         let observation = self.state.observe(actor as usize);
         self.state
             .apply_action(action)
             .map_err(|e| js_error(&format!("engine rejected action: {e}")))?;
-        self.revision += 1;
+        self.actions.push(encode_action(action));
+        self.revision = next_revision;
         let after = self.state.observe(actor as usize);
         self.events.push(event_for(
             self.revision,
@@ -470,6 +518,44 @@ fn parse_seed(seed: &str) -> Option<u64> {
     } else {
         seed.parse().ok()
     }
+}
+fn encode_action(action: Action) -> [u8; 7] {
+    let mut encoded = [0; 7];
+    match action {
+        Action::Take(counts) => {
+            encoded[0] = 0;
+            encoded[1..6].copy_from_slice(&counts);
+        }
+        Action::ReserveVisible(slot) => {
+            encoded[0] = 1;
+            encoded[1] = slot;
+        }
+        Action::ReserveDeck(tier) => {
+            encoded[0] = 2;
+            encoded[1] = tier;
+        }
+        Action::BuyVisible(slot) => {
+            encoded[0] = 3;
+            encoded[1] = slot;
+        }
+        Action::BuyReserved(slot) => {
+            encoded[0] = 4;
+            encoded[1] = slot;
+        }
+        Action::Pay(counts) => {
+            encoded[0] = 5;
+            encoded[1..6].copy_from_slice(&counts);
+        }
+        Action::Return(counts) => {
+            encoded[0] = 6;
+            encoded[1..7].copy_from_slice(&counts);
+        }
+        Action::Noble(id) => {
+            encoded[0] = 7;
+            encoded[1] = id;
+        }
+    }
+    encoded
 }
 fn load_model(bytes: &[u8]) -> Result<&'static transfer::Model, JsValue> {
     static MODELS: OnceLock<Mutex<HashMap<Vec<u8>, &'static transfer::Model>>> = OnceLock::new();
@@ -767,6 +853,54 @@ mod tests {
     }
 
     #[test]
+    fn training_record_keeps_high_seed_and_exact_arena_action_encoding() {
+        let seed = u64::MAX;
+        let mut g = game(seed, 0, "{}");
+        let initial: Value = serde_json::from_str(&g.training_record().unwrap()).unwrap();
+        assert_eq!(initial["schema"], "splendor-web-replay-v1");
+        assert_eq!(initial["engine"], ENGINE_VERSION);
+        assert_eq!(initial["players"], 2);
+        assert_eq!(initial["seed"], seed.to_string());
+        assert_eq!(initial["actions"], serde_json::json!([]));
+        assert_eq!(initial["revision"], 0);
+        assert_eq!(initial["turns"], 0);
+        assert_eq!(initial["stateDebug"], format!("{:?}", g.state));
+        assert!(initial["result"].is_null());
+        assert!(snapshot(&g).get("seed").is_none());
+
+        let action = g
+            .legal()
+            .into_iter()
+            .find(|action| matches!(action, Action::Take(_)))
+            .unwrap();
+        g.act(action_id(action)).unwrap();
+        let record: Value = serde_json::from_str(&g.training_record().unwrap()).unwrap();
+        assert_eq!(record["actions"].as_array().unwrap().len(), 1);
+        assert_eq!(record["revision"], 1);
+        assert_eq!(
+            record["actions"][0],
+            serde_json::json!(splendor_arena::encode(action))
+        );
+    }
+
+    #[test]
+    fn journal_action_encoder_matches_arena_for_every_action_variant() {
+        let actions = [
+            Action::Take([1, 2, 3, 4, 5]),
+            Action::ReserveVisible(4),
+            Action::ReserveDeck(2),
+            Action::BuyVisible(3),
+            Action::BuyReserved(1),
+            Action::Pay([1, 2, 3, 4, 5]),
+            Action::Return([1, 2, 3, 4, 5, 6]),
+            Action::Noble(9),
+        ];
+        for action in actions {
+            assert_eq!(encode_action(action), splendor_arena::encode(action));
+        }
+    }
+
+    #[test]
     fn invalid_human_action_preserves_last_events_and_snapshot() {
         let mut g = game(12, 0, "{}");
         let action = g
@@ -779,8 +913,10 @@ mod tests {
         let before = g.snapshot().unwrap();
         let before_json: Value = serde_json::from_str(&before).unwrap();
         assert!(!before_json["lastEvents"].as_array().unwrap().is_empty());
+        let record_before = g.training_record().unwrap();
         assert!(g.act("not-a-legal-action".into()).is_err());
         assert_eq!(g.snapshot().unwrap(), before);
+        assert_eq!(g.training_record().unwrap(), record_before);
     }
 
     #[test]
@@ -830,6 +966,7 @@ mod tests {
         use splendor_agents::StrongHeuristicAgent;
         let mut g = game(10, 0, "{\"iterations\":2,\"depth\":3}");
         let mut human = StrongHeuristicAgent;
+        let mut saw_forced_human_decision = false;
         for _ in 0..250 {
             if g.state.phase() == Phase::Noble {
                 let before = snapshot(&g);
@@ -838,6 +975,7 @@ mod tests {
                 let chosen = nobles[0]["id"].as_str().unwrap().to_owned();
                 let after: Value = serde_json::from_str(&g.act(chosen).unwrap()).unwrap();
                 assert_eq!(after["lastEvents"][0]["kind"], "noble");
+                assert!(saw_forced_human_decision);
                 return;
             }
             if g.state.is_terminal() || g.is_blocked() {
@@ -849,6 +987,18 @@ mod tests {
                 let action = human.select_action(&observation, &legal);
                 let after: Value =
                     serde_json::from_str(&g.act(action_id(action)).unwrap()).unwrap();
+                let human_events = after["lastEvents"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|event| event["actor"] == 0)
+                    .count();
+                saw_forced_human_decision |= human_events > 1;
+                let journal: Value = serde_json::from_str(&g.training_record().unwrap()).unwrap();
+                assert_eq!(
+                    journal["actions"].as_array().unwrap().len(),
+                    g.revision as usize
+                );
                 if after["activePlayer"] == 1
                     && after["stage"] != "finished"
                     && after["stage"] != "blocked"

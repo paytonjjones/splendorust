@@ -19,7 +19,9 @@
     "test": "npm run test:e2e",
     "test:a11y": "npm run build:test && playwright test --grep @a11y",
     "test:perf": "npm run build:test && playwright test --grep @perf --workers=1",
-    "deploy": "bash scripts/deploy-pages.sh"
+    "deploy": "bash scripts/deploy-pages.sh",
+    "test:logs": "node scripts/test-game-logs.mjs",
+    "logs:export": "node scripts/export-games.mjs"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "5.3.0",

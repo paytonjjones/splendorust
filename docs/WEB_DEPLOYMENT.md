@@ -1,6 +1,6 @@
 # SplendoRust web deployment
 
-The web client is a static Vite application in `web/`. React renders the board. A dedicated worker owns the game loop and loads the Rust WebAssembly engine. The production build has no server inference, account service, or runtime model download from a third party.
+The web client is a Vite application in `web/`. React renders the static game assets. A dedicated worker owns the game loop and loads the Rust WebAssembly engine. A small Pages Function records visitor games in private D1 storage. The production build has no server inference, account service, or runtime model download from a third party.
 
 ## Local setup
 
@@ -42,14 +42,17 @@ The public Pages project is `splendorust`, deployed from `web/dist`. GitHub Acti
 ```sh
 cd web
 npm run build
-npm run deploy
+env -u CLOUDFLARE_API_TOKEN npx wrangler d1 migrations apply splendorust-game-logs --remote
+CLOUDFLARE_AUTH_MODE=oauth npm run deploy
 ```
 
 For the first deployment only, use `npm run deploy -- --create`. With the pinned Wrangler 4.147, the script passes `--force` to project creation so it uses the direct Cloudflare Pages API. The script then deploys the assets. Later deployments use `npm run deploy` without `--force`.
 
 The public site is available at <https://splendorust.pages.dev>.
 
-The deploy script reads `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` from the environment. It can source the established Ring of Binding `.env` by default, or from `$RING_OF_BINDING_ROOT/.env`. It does not need or set `WEBSITE_PASSWORD` because this project is public. Do not print or commit credential values.
+The deploy script keeps the established Ring of Binding credential path: it reads `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` from the environment, or sources Ring's `.env` from `$RING_OF_BINDING_ROOT`. The current game-log deployment uses `CLOUDFLARE_AUTH_MODE=oauth` with the existing Wrangler login in the same account. That login can access D1; the Ring Pages token cannot. OAuth mode removes the Pages token from the process environment. It does not need or set `WEBSITE_PASSWORD` because this project is public. Do not print or commit credential values.
+
+`wrangler.jsonc` defines the `GAME_LOGS` binding. `functions/api/games.ts` accepts versioned private journals at `/api/games`. `_routes.json` restricts Functions to `/api/*`, so game and model assets keep their static delivery path. See [game log export and validation](web/GAME_LOGS.md) for the storage contract, retry limits, and private JSONL export command.
 
 ## Delivery and performance settings
 
@@ -62,3 +65,5 @@ npm run test:e2e
 npm run test:a11y
 npm run test:perf
 ```
+
+After deployment, `node scripts/check-public.mjs` plays through the normal public UI, verifies upload replies and read isolation, downloads its records into ignored `local/web-games/`, and writes a compact public check report. It records a real production game; do not run it as a background load generator.

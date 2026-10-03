@@ -1,11 +1,16 @@
 import type {
   ChampionMetadata,
   ClientMetrics,
+  EffectiveSearch,
   GameEvent,
   GameClientUpdate,
+  GameRecorderUpdate,
   GameSnapshot,
   LegalAction,
+  RecordedGame,
+  TrainingReplay,
 } from "./types";
+import { createGameId, createWriteToken, GameRecorder } from "./game-recorder";
 
 interface WorkerStatusMessage {
   type: "status";
@@ -21,7 +26,13 @@ interface WorkerStateMessage {
 interface WorkerChampionMessage {
   type: "champion";
   champion: ChampionMetadata;
+  effectiveSearch: EffectiveSearch;
   metrics: ClientMetrics;
+  requestId?: number;
+}
+interface WorkerTrainingRecordMessage {
+  type: "trainingRecord";
+  replay: TrainingReplay;
   requestId?: number;
 }
 interface WorkerAckMessage {
@@ -37,6 +48,7 @@ type WorkerMessage =
   | WorkerStatusMessage
   | WorkerStateMessage
   | WorkerChampionMessage
+  | WorkerTrainingRecordMessage
   | WorkerAckMessage
   | WorkerErrorMessage;
 
@@ -56,6 +68,8 @@ export interface GameClientPort {
   reset(seed?: string | number, humanSeat?: number): Promise<void>;
   newGame(seed?: string | number, humanSeat?: number): Promise<void>;
   retry(): Promise<void>;
+  exportGames(): Promise<string>;
+  retryUploads(): void;
   dispose(): void;
   setSkipWaits(skip: boolean): void;
   readonly skipWaits: boolean;
@@ -68,6 +82,21 @@ function freshMetrics(): ClientMetrics {
     botDecisionMs: [],
     botTurnMs: [],
   };
+}
+
+function initialRecorderStatus(): GameRecorderUpdate {
+  return { status: "idle", pendingUploads: 0, storedGames: 0 };
+}
+
+interface RecordingHeader {
+  gameId: string;
+  writeToken: string;
+  startedAt: string;
+  humanSeat: number;
+  runtime: "production" | "test";
+  champion: ChampionMetadata | null;
+  effectiveSearch: EffectiveSearch | null;
+  version: number;
 }
 
 function copyMetrics(metrics: ClientMetrics): ClientMetrics {
@@ -98,8 +127,10 @@ export class GameClient implements GameClientPort {
   private update: GameClientUpdate = {
     state: null,
     status: "loading",
+    requestPending: false,
     champion: null,
     metrics: freshMetrics(),
+    recorder: initialRecorderStatus(),
   };
   private lastOptions: { seed: string; humanSeat: number } = {
     seed: "",
@@ -108,8 +139,15 @@ export class GameClient implements GameClientPort {
   private disposed = false;
   private fastMode = false;
   private testEventLog: GameEvent[] | null = null;
+  private recorder: GameRecorder;
+  private recordingHeader: RecordingHeader | null = null;
+  private currentRecordedGame: RecordedGame | null = null;
 
   constructor() {
+    this.recorder = new GameRecorder((recorder) => {
+      this.update = { ...this.update, recorder };
+      this.publish();
+    }, import.meta.env.VITE_GAME_LOG_ENDPOINT || "/api/games");
     this.attachTestBridgeWhenRequested();
   }
 
@@ -122,7 +160,9 @@ export class GameClient implements GameClientPort {
   getUpdate(): GameClientUpdate {
     return {
       ...this.update,
+      requestPending: this.activeRequest !== null,
       metrics: copyMetrics(this.update.metrics),
+      recorder: { ...this.update.recorder },
     };
   }
 
@@ -141,6 +181,14 @@ export class GameClient implements GameClientPort {
 
   retry(): Promise<void> {
     return this.launch({ ...this.lastOptions });
+  }
+
+  exportGames(): Promise<string> {
+    return this.recorder.exportGames();
+  }
+
+  retryUploads(): void {
+    this.recorder.retryUploads();
   }
 
   act(actionId: string): Promise<void> {
@@ -166,8 +214,10 @@ export class GameClient implements GameClientPort {
   }
 
   dispose(): void {
+    this.abandonCurrentGame();
     this.disposed = true;
     this.stopWorker();
+    this.recorder.dispose();
     this.listeners.clear();
   }
 
@@ -179,13 +229,28 @@ export class GameClient implements GameClientPort {
     if (!Number.isInteger(options.humanSeat) || options.humanSeat < 0 || options.humanSeat > 1) {
       return Promise.reject(new Error("The human seat must be 0 or 1."));
     }
+    this.abandonCurrentGame();
+    this.recordingHeader = {
+      gameId: createGameId(),
+      writeToken: createWriteToken(),
+      startedAt: new Date().toISOString(),
+      humanSeat: options.humanSeat,
+      runtime: this.isTestRuntime() ? "test" : "production",
+      champion: null,
+      effectiveSearch: null,
+      version: 0,
+    };
+    this.currentRecordedGame = null;
+    void this.recorder.abandonRestoredGames(this.recordingHeader.gameId);
     this.stopWorker();
     this.lastOptions = options;
     this.update = {
       state: null,
       status: "loading",
+      requestPending: false,
       champion: null,
       metrics: freshMetrics(),
+      recorder: this.recorder.getUpdate(),
     };
     this.publish();
 
@@ -221,6 +286,7 @@ export class GameClient implements GameClientPort {
     return new Promise<void>((resolve, reject) => {
       this.activeRequest = message.requestId;
       this.pending.set(message.requestId, { kind: message.type, resolve, reject });
+      this.publish();
       worker.postMessage(message);
     });
   }
@@ -238,12 +304,19 @@ export class GameClient implements GameClientPort {
         this.publish();
         break;
       case "champion":
+        if (this.recordingHeader) {
+          this.recordingHeader.champion = message.champion;
+          this.recordingHeader.effectiveSearch = message.effectiveSearch;
+        }
         this.update = {
           ...this.update,
           champion: message.champion,
           metrics: copyMetrics(message.metrics),
         };
         this.publish();
+        break;
+      case "trainingRecord":
+        this.acceptTrainingRecord(message.replay);
         break;
       case "state":
         // Every worker decision emits one immutable snapshot for display and animation.
@@ -282,6 +355,7 @@ export class GameClient implements GameClientPort {
         this.publish();
         if (message.requestId === undefined) this.failAll(error);
         else this.failRequest(message.requestId, error);
+        if (!recoverableActionError) this.markCurrentGameError();
         break;
       }
     }
@@ -334,6 +408,75 @@ export class GameClient implements GameClientPort {
     }
   }
 
+  private isTestRuntime(): boolean {
+    return !import.meta.env.PROD || import.meta.env.VITE_ENABLE_TEST_BRIDGE === "true";
+  }
+
+  private uploadEnabledFor(runtime: "production" | "test"): boolean {
+    if (runtime === "production") return true;
+    return import.meta.env.VITE_GAME_LOG_TEST_UPLOAD === "true" &&
+      new URLSearchParams(window.location.search).get("uploadLogs") === "1";
+  }
+
+  private acceptTrainingRecord(replay: TrainingReplay): void {
+    const header = this.recordingHeader;
+    if (!header?.champion || !header.effectiveSearch) return;
+    const now = new Date().toISOString();
+    const status = replay.result?.status === "finished"
+      ? "finished"
+      : replay.result?.status === "blocked"
+        ? "blocked"
+        : "in_progress";
+    const record: RecordedGame = {
+      schema: "splendor-web-game-v1",
+      gameId: header.gameId,
+      writeToken: header.writeToken,
+      version: ++header.version,
+      startedAt: header.startedAt,
+      updatedAt: now,
+      humanSeat: header.humanSeat,
+      champion: header.champion,
+      effectiveSearch: header.effectiveSearch,
+      runtime: header.runtime,
+      status,
+      replay,
+    };
+    this.currentRecordedGame = record;
+    this.recorder.save(record, this.uploadEnabledFor(header.runtime));
+  }
+
+  private abandonCurrentGame(): void {
+    const record = this.currentRecordedGame;
+    if (!record || record.status !== "in_progress") return;
+    const abandoned: RecordedGame = {
+      ...record,
+      version: record.version + 1,
+      updatedAt: new Date().toISOString(),
+      status: "abandoned",
+    };
+    this.currentRecordedGame = abandoned;
+    this.recordingHeader = this.recordingHeader
+      ? { ...this.recordingHeader, version: abandoned.version }
+      : null;
+    this.recorder.save(abandoned, this.uploadEnabledFor(abandoned.runtime));
+  }
+
+  private markCurrentGameError(): void {
+    const record = this.currentRecordedGame;
+    if (!record || record.status !== "in_progress") return;
+    const errored: RecordedGame = {
+      ...record,
+      version: record.version + 1,
+      updatedAt: new Date().toISOString(),
+      status: "error",
+    };
+    this.currentRecordedGame = errored;
+    this.recordingHeader = this.recordingHeader
+      ? { ...this.recordingHeader, version: errored.version }
+      : null;
+    this.recorder.save(errored, this.uploadEnabledFor(errored.runtime));
+  }
+
   private attachTestBridgeWhenRequested(): void {
     if (
       !(import.meta.env.DEV || import.meta.env.VITE_ENABLE_TEST_BRIDGE === "true") ||
@@ -375,6 +518,9 @@ export class GameClient implements GameClientPort {
         seat = this.lastOptions.humanSeat,
         testSearchBudget?: { iterations: number; depth: number },
       ) => this.launch({ seed: seed === undefined ? createSeed() : String(seed), humanSeat: seat }, testSearchBudget),
+      exportGames: () => this.exportGames(),
+      recorder: () => this.recorder.getUpdate(),
+      retryUploads: () => this.retryUploads(),
       waitForHuman,
       status: () => this.update.status,
       metrics: () => copyMetrics(this.update.metrics),

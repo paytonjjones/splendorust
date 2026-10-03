@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { GameEvent, GameSnapshot, LegalAction } from "../src/types";
+import { arrowTo } from "./support/keyboard";
 
 declare global {
   interface Window {
@@ -16,6 +17,9 @@ declare global {
       events(): GameEvent[];
       clearEvents(): void;
       skipWaits(skip?: boolean): void;
+      exportGames(): Promise<string>;
+      recorder(): import("../src/types").GameRecorderUpdate;
+      retryUploads(): void;
     };
   }
 }
@@ -74,6 +78,7 @@ const report = {
 };
 
 test.describe.configure({ mode: "serial" });
+let fullGameRunStarted = false;
 
 function sum(values: readonly number[]): number {
   return values.reduce((total, value) => total + value, 0);
@@ -220,6 +225,8 @@ function assertPublicInvariants(state: GameSnapshot, tokenTotal: number): void {
 }
 
 function writeReport(): void {
+  // A targeted UI check must not replace the retained full-game report with zero games.
+  if (!fullGameRunStarted) return;
   report.generatedAt = new Date().toISOString();
   const path = fileURLToPath(new URL("../../docs/web/playtest.json", import.meta.url));
   writeFileSync(path, `${JSON.stringify(report, null, 2)}\n`);
@@ -262,6 +269,7 @@ async function driveUntil(
 }
 
 test("play seeded complete games against the WASM champion", async ({ page }) => {
+  fullGameRunStarted = true;
   test.setTimeout(12 * 60 * 1000);
   page.setDefaultTimeout(90_000);
   const startedAt = Date.now();
@@ -491,10 +499,15 @@ test("payment alternatives work through the visible payment dialog", async ({ pa
   const goldValues = state.legalActions.map((action) => Math.max(0, sum(required) - sum(action.payment ?? [])));
   const gold = Math.max(...goldValues);
   const selector = page.getByLabel("Gold to spend");
-  if (new Set(goldValues).size > 1) await selector.selectOption(String(gold));
+  if (new Set(goldValues).size > 1) {
+    await arrowTo(page, selector);
+    for (let index = 1; index < new Set(goldValues).size; index++) await page.keyboard.press("ArrowDown");
+    await expect(selector).toHaveValue(String(gold));
+  }
   const payment = page.getByRole("button", { name: /^Pay / }).first();
   await expect(payment).toBeEnabled();
-  await payment.click();
+  await arrowTo(page, payment);
+  await page.keyboard.press("Enter");
   await page.evaluate(() => window.splendorTest!.waitForHuman());
   const events = await page.evaluate(() => window.splendorTest!.events());
   expect(events.some((event) => event.actor === state.humanSeat && event.kind === "pay")).toBe(true);
@@ -525,13 +538,16 @@ test("token returns work through the visible bank controls", async ({ page }) =>
   const choices = page.locator(".return-token");
   for (let color = 0; color < (action.returns?.length ?? 0); color += 1) {
     for (let count = 0; count < (action.returns?.[color] ?? 0); count += 1) {
-      await choices.nth(color).click();
+      await arrowTo(page, choices.nth(color));
+      await page.keyboard.press("Enter");
     }
   }
   const amount = sum(action.returns ?? []);
   const submit = page.getByRole("button", { name: `Return ${amount} ${amount === 1 ? "gem" : "gems"}` });
   await expect(submit).toBeEnabled();
-  await submit.click();
+  await page.keyboard.press("ArrowDown");
+  await expect(submit).toBeFocused();
+  await page.keyboard.press("Enter");
   await page.evaluate(() => window.splendorTest!.waitForHuman());
   const events = await page.evaluate(() => window.splendorTest!.events());
   expect(events.some((event) => event.actor === state.humanSeat && event.actionId === action.id)).toBe(true);
@@ -569,7 +585,8 @@ test("a multi-noble choice works through the visible noble tiles", async ({ page
   expect(action?.nobleId).toBeDefined();
   const tile = page.getByRole("button", { name: new RegExp(`^Noble ${action!.nobleId! + 1}.*Choose this noble\\.$`) });
   await expect(tile).toBeEnabled();
-  await tile.click();
+  await arrowTo(page, tile);
+  await page.keyboard.press("Enter");
   await page.evaluate(() => window.splendorTest!.waitForHuman());
   const events = await page.evaluate(() => window.splendorTest!.events());
   expect(events.some((event) => event.actor === state.humanSeat && event.actionId === action!.id)).toBe(true);
