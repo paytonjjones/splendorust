@@ -81,13 +81,14 @@
       "gumbel_max_considered": null,
       "workers": 64,
       "games": 128,
-      "status": "running"
+      "status": "complete",
+      "wall_seconds": 1508.9272820949554
     }
   ],
   "heavy_job_owner": "root",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
   "output_root": "local/research/sprint48",
-  "current_stage": "local/research/sprint48/external-04",
+  "current_stage": "local/research/sprint48/dagger-branch2-sources",
   "training_branches": [
     {
       "branch_index": 1,
@@ -121,6 +122,30 @@
       "rows": 3516,
       "setups": 63,
       "registry_sha256": "1c5f138fce0b31946649133ba722cd318024c346a103570ccc55acc2e67d628c"
+    },
+    {
+      "output": "local/research/sprint48/dagger-branch2-train-labels",
+      "status": "queued",
+      "owner": "training_audit under root authorization",
+      "split": "train",
+      "source_master": 17710000000,
+      "teacher_master": 17711000011,
+      "feature_master": 17711000012,
+      "workers": 8,
+      "setups": 512,
+      "scope": "training data; no strength claim"
+    },
+    {
+      "output": "local/research/sprint48/dagger-branch2-dev-labels",
+      "status": "queued",
+      "owner": "training_audit under root authorization",
+      "split": "dev",
+      "source_master": 17720000000,
+      "teacher_master": 17721000001,
+      "feature_master": 17721000002,
+      "workers": 8,
+      "setups": 128,
+      "scope": "training data; no strength claim"
     }
   ],
   "failed_attempts": [
@@ -152,6 +177,30 @@
       "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/native-context-smoke.jsonl",
       "games": 2,
       "scope": "E56 zero-search runner integration, excluded from strength selection"
+    }
+  ],
+  "data_collection_jobs": [
+    {
+      "output": "local/research/sprint48/dagger-branch2-sources",
+      "status": "running",
+      "driver_pid": 41641,
+      "started_utc": "2026-10-03T22:49:40.288729+00:00",
+      "parent_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "train_master": 17710000000,
+      "dev_master": 17720000000,
+      "train_games": 1024,
+      "dev_games": 256,
+      "workers": 64,
+      "device": "mps",
+      "batch": 64,
+      "search": "gumbel",
+      "iterations": 128,
+      "depth": 16,
+      "world_pool": 3,
+      "chance_universes": 0,
+      "dynamic_fpu": false,
+      "port": 19730,
+      "scope": "training and held-out model-selection data; not strength evidence"
     }
   ]
 }

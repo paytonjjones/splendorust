@@ -4,10 +4,10 @@ The campaign started at **2026-10-03 19:35:52 UTC**. Its fixed deadline is
 **2026-10-05 19:35:52 UTC**. `RUN.json` records the live stage and consumed
 masters. The final master remains sealed. No decisive win is established.
 
-Current state: trial04 is running with PUCT1600, depth32, three root worlds
-and three chance universes. The selected refit01 model has not beaten the
-unchanged target in a completed trial. Branch2 source collection and fitting
-are prepared but have not started. The GPU queue has one owner and one job.
+Current state: trial04 completed at 58.59375% exploratory win credit. This
+promising point estimate does not establish a decisive win. Branch2 source
+collection is the next GPU job; fitting has not started. The GPU queue has
+one owner and one primary job.
 
 | Completed candidate | Games | Win credit | Scheduler seconds |
 | --- | ---: | ---: | ---: |
@@ -15,13 +15,14 @@ are prepared but have not started. The GPU queue has one owner and one job.
 | One-hot policy only | 128 | 33.593750% | 91.745 |
 | Refit01 PUCT1600, fresh worlds | 128 | 47.265625% | 1,543.928 |
 | Refit01 Gumbel1600, fresh worlds | 128 | 38.281250% | 1,545.709 |
+| Refit01 PUCT1600, three chance universes | 128 | 58.593750% | 1,495.633 |
 
 These are separate exploratory schedules. Changed seeds and settings prevent
-an isolated estimate of each change. No partial trial04 outcomes are used.
+an isolated estimate of each change. No partial schedule outcomes are used.
 
 Trials02 and03, including the failed zero-game launch, are retained in
 `artifacts/development-02-03`. Manifest SHA256:
-`1d9a64381c299dd3784ae2e158f47e9ffc3a747ba7b8d15f42502c7fef698562`.
+`127a12ebb86c7dba6be8b0d1df2cc6e3c0399e80cce5190bc80a3f10a5e51da7`.
 A restore verified all 408 files. The archive notes the missing imported
 campaign-context helper snapshot in these older trials. Recorded source maps,
 raw games, replay results, frozen binaries and logs remain intact. The helper
@@ -241,3 +242,34 @@ keep all base exposures and update counts, and select by 90% full-dev plus
 10% held-out DAgger-dev score. No DAgger source games, fit or selector outcomes
 exist at the time of this decision. This tests a larger distribution change
 than the earlier 5% proposal, with about 11% more examples per update.
+
+## Development trial 04 result
+
+All 128 games completed with native-score outcomes: **58.59375% win credit**.
+No caps or invalid games. Paired exploratory bootstrap: 50.78125–66.40625%;
+conservative paired Hoeffding: 41.617481–75.570019%. The point estimate is
+promising, but it does not establish a decisive win. Keep finite chance
+universes as a candidate for the next search comparison.
+
+Scheduler time: 1,495.633 seconds. Search used 5,710,400 simulations and
+5,178,709 inferences. Replay checked all 128 games and 7,138 transitions.
+Raw SHA256: `ce3f2045477286595b71090e94d9a5b46174ca89432c94b3a49a2153818e89c7`.
+This is a combined finite-world / finite-chance profile on new seeds. It does
+not isolate either effect. Evidence: `local/research/sprint48/external-04`.
+
+The root CPU RPC0 compatibility fixture passed for branch2's pinned old worker
+under the current runner's accepted-setting check. The same excluded setup
+was reused; no new game or strength outcome was produced. Branch2 source
+collection is now launched at port19730, with 1,024 train and 256 dev games.
+It is the sole primary GPU job. Its results are data, not a played promotion.
+
+Trial04 is retained in `artifacts/development-04`. Manifest SHA256:
+`56f699cbaf0ffc8e44f15e73178f6259c6ba0921d7e2df7b80a81faaddcc582b`.
+A full restore verified 185 files, including all raw/replay records, source
+snapshots and binary byte streams. The duplicate selected checkpoint is
+referenced to `artifacts/refit-01`.
+
+The trial02/03 archive checkpoint locator was corrected from
+`refit-01/fit/model.pt` to the actual refit archive entry `refit/fit/model.pt`.
+Only the generated reference file changed. Repacking and full restore verified
+all 408 files again; raw evidence and executable/checkpoint bytes did not change.

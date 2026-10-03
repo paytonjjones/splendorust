@@ -87,5 +87,43 @@
   },
   "run_json_status_at_check": "active",
   "schema": "sprint48-dagger-branch2-preflight-v1",
-  "status": "ready_for_root_launch_decision"
+  "status": "ready_for_root_launch_decision",
+  "root_rpc0_compatibility": {
+    "checked_utc": "2026-10-03T22:48:51.678346+00:00",
+    "scope": "CPU E56 zero-search public fixture; no game, no DAgger collection",
+    "setup_seed": 3960886096576718399,
+    "policy_binary_sha256": "424d3788f936542a0080750ed8445c9d9d2960328a6b87830da4b3e032b6d3b1",
+    "model_sha256": "055c427ad1da9f86f1632e43409cb1648b7f8a350109d7d105ac5eae56f2df41",
+    "requested": {
+      "seed": 123456789,
+      "iterations": 0,
+      "depth": 16,
+      "world_pool": 3,
+      "gumbel_max_considered": 16,
+      "chance_universes": 0,
+      "dynamic_fpu": false,
+      "search": "gumbel",
+      "root_only": false
+    },
+    "accepted": {
+      "ok": true,
+      "settings": {
+        "cpuct": 0.4,
+        "depth": 16,
+        "fpu_reduction": 0.02965,
+        "gumbel_max_considered": 16,
+        "gumbel_noise": 0.0,
+        "iterations": 0,
+        "root_only": false,
+        "search": "gumbel",
+        "uniform_prior": 0.0,
+        "world_pool": 3
+      }
+    },
+    "result": {
+      "action": 48,
+      "inferences": 1,
+      "simulations": 0
+    }
+  }
 }
