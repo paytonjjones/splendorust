@@ -1,0 +1,55 @@
+{
+  "models": [
+    {
+      "kind": "small",
+      "path": "research/architecture_pivots/expanded-small/model.pt",
+      "sha256": "b83448a046e720129345f584fd23c47dc8fad47955e3942660e4f6dd8c1f2c5d",
+      "bytes": 606073,
+      "parameters": 143470,
+      "selected_epoch": 12,
+      "manifest": "research/architecture_pivots/expanded-small/manifest.json"
+    },
+    {
+      "kind": "small-cold",
+      "path": "research/architecture_pivots/expanded-small-cold/model.pt",
+      "sha256": "fb93642e998a2fffc0d4b7069ce4aa189465a78f2c4eba80a4c1cf3b36e82a7e",
+      "bytes": 606073,
+      "parameters": 143470,
+      "selected_epoch": 12,
+      "manifest": "research/architecture_pivots/expanded-small-cold/manifest.json"
+    },
+    {
+      "kind": "capacity",
+      "path": "research/architecture_pivots/expanded-capacity/model.pt",
+      "sha256": "3b97a851cea99271a0afb610ae634ab5aed9e7adf37905148b212a887c276e0e",
+      "bytes": 18107510,
+      "parameters": 4523603,
+      "selected_epoch": 9,
+      "manifest": "research/architecture_pivots/expanded-capacity/manifest.json"
+    },
+    {
+      "kind": "entity",
+      "path": "research/architecture_pivots/expanded-entity/model.pt",
+      "sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+      "bytes": 19143225,
+      "parameters": 4780883,
+      "selected_epoch": 12,
+      "manifest": "research/architecture_pivots/expanded-entity/manifest.json"
+    },
+    {
+      "kind": "history",
+      "path": "research/architecture_pivots/expanded-history/model.pt",
+      "sha256": "46bb56e507fde549e86d9394628a42faf6026e39dd3f6adc9f7227537879483a",
+      "bytes": 19917831,
+      "parameters": 4973746,
+      "selected_epoch": 1,
+      "manifest": "research/architecture_pivots/expanded-history/manifest.json"
+    }
+  ],
+  "corpus_registry": "research/architecture_pivots/TRAINING_CORPUS.json",
+  "corpus_registry_sha256": "4dd2f1a9c8f9e78a192a10da1c686dac3481e76c45a4034a931fae61a4eca581",
+  "history_parent": "expanded-entity/model.pt",
+  "history_parent_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+  "champion": "E81 unchanged",
+  "scope": "Selected expanded checkpoint weights; preserve later epoch files and early-stop receipts on disk"
+}
