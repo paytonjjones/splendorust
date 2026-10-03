@@ -1,0 +1,49 @@
+{
+  "analysis": "Retrospective policy reassessment; original evidence is unchanged.",
+  "original_directory": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/expanded-entity-confirmation",
+  "original_decision": "promote",
+  "original_decision_sha256": "ebfbf6d7802e775937f9839eb136968ccf5e280a47cb374d5aa821986dad1476",
+  "original_run_sha256": "01ce7c23a24d586100a3340e836efbd749451155870c40cd39e6cb5b19128868",
+  "raw_report_sha256": "fd1be6108ccaafb9d0e191694533410073697e9661cde1dca7f369d502333161",
+  "record_set_sha256": "bffcdc9accda1da485f1632e1666776150668609545c5c68ff38b606a087ad61",
+  "source_id": "cc154030de2934c0",
+  "stage": "confirm",
+  "decision": "promote",
+  "interval_from_records": [
+    0.5959506230894773,
+    0.6184993769105227
+  ],
+  "margin": 0.01,
+  "minimum_games_per_second": 0,
+  "completion": {
+    "policy": {
+      "version": "bounded-no-action-v2.1",
+      "max_no_action_fraction": 0.01,
+      "tolerated_status": "no_legal_action",
+      "decision_limit": "reject",
+      "lower_unknown_credit": 0,
+      "upper_unknown_credit": 1,
+      "denominator": "all requested games",
+      "replace_or_skip": false
+    },
+    "status_counts": {
+      "complete": 20000,
+      "no_legal_action": 0,
+      "decision_limit": 0
+    },
+    "max_no_action_games": 200,
+    "requested_games": 20000,
+    "candidate_credit_bounds": [
+      0.607225,
+      0.607225
+    ],
+    "rejection": null
+  },
+  "evidence_tools_sha256": {
+    "promote.py": "1f54614fdf0f91743241eea716541414e6e88d86e2df1c8537008dfaa3fc196e",
+    "collect_evidence.py": "35cb7cee075b986af0d541d85fdce935fce9178e2c4462ad87ecfae0b4f5d0e9",
+    "reassess_promotion.py": "ea7f5ed451f1ea13179353f097368f33b9a743b8b23495b175080720400efd4a"
+  },
+  "champion_changed": false,
+  "new_games": 0
+}

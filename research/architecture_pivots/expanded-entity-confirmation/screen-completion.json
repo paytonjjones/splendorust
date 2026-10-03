@@ -1,0 +1,24 @@
+{
+  "policy": {
+    "version": "bounded-no-action-v2.1",
+    "max_no_action_fraction": 0.01,
+    "tolerated_status": "no_legal_action",
+    "decision_limit": "reject",
+    "lower_unknown_credit": 0,
+    "upper_unknown_credit": 1,
+    "denominator": "all requested games",
+    "replace_or_skip": false
+  },
+  "status_counts": {
+    "complete": 1999,
+    "no_legal_action": 1,
+    "decision_limit": 0
+  },
+  "max_no_action_games": 20,
+  "requested_games": 2000,
+  "candidate_credit_bounds": [
+    0.618,
+    0.6185
+  ],
+  "rejection": null
+}

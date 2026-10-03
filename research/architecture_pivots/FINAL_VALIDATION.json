@@ -1,0 +1,57 @@
+{
+  "utc": "2026-10-03T08:58:27.898511+00:00",
+  "rust_source": "a92badd",
+  "source_fingerprint": "cc154030de2934c0",
+  "rust": {
+    "format": "passed",
+    "strict_workspace_clippy": "passed",
+    "release_locked_workspace_tests": 125,
+    "reason": "Rust unchanged since recorded required checks and fresh confirmation preflight"
+  },
+  "python": {
+    "model_tests": 7,
+    "promotion_evidence_tests": 38,
+    "cost_parser_actual_record_checks": "passed",
+    "cost_rotated_decision_count_check": "passed"
+  },
+  "selected_checkpoint_hashes": "five passed",
+  "canonical_confirmation": {
+    "games": 20000,
+    "complete": 20000,
+    "credit": 0.607225,
+    "interval": [
+      0.5959506230894773,
+      0.6184993769105227
+    ],
+    "decision": "promote",
+    "raw_sha256": "fd1be6108ccaafb9d0e191694533410073697e9661cde1dca7f369d502333161"
+  },
+  "native_confirmation": {
+    "games": 20000,
+    "complete": 20000,
+    "credit": 0.78735
+  },
+  "refined_cost": {
+    "games_per_model": 2000,
+    "models": 3,
+    "all_complete": true,
+    "all_hashes_and_intervals_pass": true,
+    "all_within_twenty_percent": true
+  },
+  "worker_scaling": {
+    "workers": [
+      1,
+      4,
+      8,
+      14,
+      32
+    ],
+    "models": 6,
+    "ordered_records_and_trajectories": "identical across worker counts per model"
+  },
+  "official_champion": "E81 unchanged",
+  "engine_version": 2,
+  "core_rules_rng_replay": "unchanged",
+  "github_actions": "remain disabled",
+  "scope": "Existing required check receipts plus independent final evidence validation; no invented test reruns"
+}

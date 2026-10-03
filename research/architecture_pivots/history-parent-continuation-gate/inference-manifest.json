@@ -1,0 +1,25 @@
+{
+  "candidate": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/history/model.bin",
+  "candidate_descriptor_sha256": "b6011099811f712c97a48d898af532ca1a9f1dbe2266db57f0878177d87b84f8",
+  "baseline": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/entity-continuation/model.bin",
+  "baseline_sha256": "aec8aba88359a040640792b01b3e326eba7e9414ecb6e926adf514469d530461",
+  "binary_sha256": "6e3f32d240c6197a5a989168a3091c3d60c6f8cad84f5164e98041547ed3d562",
+  "service": {
+    "ready": true,
+    "port": 19532,
+    "device": "mps",
+    "batch": 32,
+    "delay_ms": 1.0,
+    "fast_entities": true,
+    "models": {
+      "3": {
+        "kind": "history",
+        "sha256": "10b801304f843d4397aea4b4ca67d268130303a10cb44605efd685cb14f3b975"
+      }
+    }
+  },
+  "environment": {
+    "SPLENDOR_CANDIDATE_MODEL": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/history/model.bin",
+    "SPLENDOR_BEST_MODEL": "/Users/payton.jones/dev/splendorust/research/architecture_pivots/entity-continuation/model.bin"
+  }
+}

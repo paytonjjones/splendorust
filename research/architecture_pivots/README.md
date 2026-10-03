@@ -2,7 +2,8 @@
 
 Read [REPORT.md](REPORT.md) for results and limits, [PREREGISTRATION.md](PREREGISTRATION.md)
 for hypotheses and budgets, and [STATUS.json](STATUS.json) for pending work.
-The report stays marked incomplete until the required training, games and costs finish.
+All required stages are complete. Read the report before planning more scaling.
+`ARTIFACTS.json` binds retained files; `CHECKPOINTS.json` binds committed selected weights.
 
 The Rust core has no ML dependency. Training and the optional local tensor service
 use the existing Python runtime at `local/strength/inference/bin/python`. It has
@@ -24,8 +25,9 @@ The manifest retains every epoch and the selected checkpoint hash. The
 interrupted CPU cold-small run remains separate from the completed MPS trial.
 Large raw archives, model files and frozen executables remain on disk.
 The directory ignore rules keep them out of normal source commits; selected
-checkpoint files can be committed explicitly. The frozen Entity baseline
-contains its selected weights. The final artifact manifest records retained
+checkpoint files can be committed explicitly. Commit `0165030` contains all five selected expanded checkpoints and
+`CHECKPOINTS.json`. The separate frozen Entity baseline also contains its
+selected weights. The final artifact manifest records retained
 paths, byte counts and hashes.
 Do not remove them when packaging source changes.
 
@@ -46,7 +48,7 @@ a different parent or change the official champion.
 
 ## Execution and evidence
 
-The active order is:
+The executed order was:
 
 1. `run_expanded.py`: validate expanded rows and fit all four base controls.
 2. `run_expanded_early.py`: run the three finished native-model controls while
@@ -71,7 +73,7 @@ The active order is:
    corrected finer timing grid and fresh native cost screens. Its current
    plan is `cost-refinement-v2/PLAN.json`; retain the failed first attempt.
 
-These controllers already run. Do not start duplicate controllers or services.
+These controllers finished. Do not rerun them in their existing output directories.
 Inspect each controller's plan, progress, log and completion receipt first.
 An existing output directory is protected against accidental overwrite. Preserve
 its files before any recovery. A completion receipt for one stage does not mean
@@ -117,6 +119,37 @@ Reproduce into a new output path:
 ```sh
 local/strength/inference/bin/python research/architecture_pivots/auxiliary_diagnostics.py --output local/research/history-auxiliary-diagnostic.json
 ```
+
+## Reproduce the selected history recipe
+
+Use `CHECKPOINTS.json` to verify the selected weights. Restore the corpus from
+`TRAINING_CORPUS.json` and the frozen Entity handoff. The history manifest also
+binds every version 2 public-prefix tensor, auxiliary label file and public-pool
+file by SHA256. These caches remain under
+`local/research/architecture-pivots/`; they are required for training, not for
+model loading or live inference. Do not replace version 2 caches with version 1.
+
+Train into a new output directory:
+
+```sh
+local/strength/inference/bin/python research/architecture_pivots/train_v2.py --kind history --parent research/architecture_pivots/expanded-entity/model.pt --output local/research/architecture-pivots/new-history-study --data-scale expanded --epochs 12 --batch 512 --device mps --fast-entities
+```
+
+This reproduces the tested recipe and fixed training seed. It does not launch a
+new study by itself or assert a history benefit. For an independent experiment,
+register the changed hypothesis, recipe and fresh strength seeds first.
+Export a copy of its selected checkpoint so retained study descriptors stay intact:
+
+```sh
+local/strength/inference/bin/python research/architecture_pivots/export.py local/research/architecture-pivots/new-history-study/model.pt --port 19559 --slot 0
+local/strength/inference/bin/python research/architecture_pivots/service.py --port 19559 --device mps --batch 32 --delay-ms 1 --fast-entities --model 0:local/research/architecture-pivots/new-history-study/model.pt
+```
+
+The service command stays running. Use a free port. For canonical evaluation,
+set `SPLENDOR_CANDIDATE_MODEL` to the new `.bin` descriptor and
+`SPLENDOR_BEST_MODEL` to the frozen E81 model, then use `scripts/promote.py` with
+fresh registered seeds, 32 workers, Gumbel128 and depth 16. The exact standalone
+Entity loading/export/evaluation commands remain in its frozen handoff.
 
 ## Validation
 

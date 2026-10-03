@@ -1,0 +1,183 @@
+{
+  "best": "entity",
+  "jobs": [
+    [
+      "expanded-entity-confirmation",
+      "entity",
+      "champion",
+      5220300000
+    ]
+  ],
+  "champion_screens": {
+    "small": {
+      "credit": 0.49925,
+      "interval": [
+        0.45678109982004184,
+        0.5417189001799582
+      ],
+      "completion": {
+        "policy": {
+          "version": "bounded-no-action-v2.1",
+          "max_no_action_fraction": 0.01,
+          "tolerated_status": "no_legal_action",
+          "decision_limit": "reject",
+          "lower_unknown_credit": 0,
+          "upper_unknown_credit": 1,
+          "denominator": "all requested games",
+          "replace_or_skip": false
+        },
+        "status_counts": {
+          "complete": 2000,
+          "no_legal_action": 0,
+          "decision_limit": 0
+        },
+        "max_no_action_games": 20,
+        "requested_games": 2000,
+        "candidate_credit_bounds": [
+          0.49925,
+          0.49925
+        ],
+        "rejection": null
+      }
+    },
+    "small-cold": {
+      "credit": 0.4404702351175588,
+      "interval": [
+        0.39670293396805395,
+        0.4843377949359976
+      ],
+      "completion": {
+        "policy": {
+          "version": "bounded-no-action-v2.1",
+          "max_no_action_fraction": 0.01,
+          "tolerated_status": "no_legal_action",
+          "decision_limit": "reject",
+          "lower_unknown_credit": 0,
+          "upper_unknown_credit": 1,
+          "denominator": "all requested games",
+          "replace_or_skip": false
+        },
+        "status_counts": {
+          "complete": 1999,
+          "no_legal_action": 1,
+          "decision_limit": 0
+        },
+        "max_no_action_games": 20,
+        "requested_games": 2000,
+        "candidate_credit_bounds": [
+          0.44025,
+          0.44075
+        ],
+        "rejection": null
+      }
+    },
+    "capacity": {
+      "credit": 0.30975,
+      "interval": [
+        0.2690935502528213,
+        0.35040644974717877
+      ],
+      "completion": {
+        "policy": {
+          "version": "bounded-no-action-v2.1",
+          "max_no_action_fraction": 0.01,
+          "tolerated_status": "no_legal_action",
+          "decision_limit": "reject",
+          "lower_unknown_credit": 0,
+          "upper_unknown_credit": 1,
+          "denominator": "all requested games",
+          "replace_or_skip": false
+        },
+        "status_counts": {
+          "complete": 2000,
+          "no_legal_action": 0,
+          "decision_limit": 0
+        },
+        "max_no_action_games": 20,
+        "requested_games": 2000,
+        "candidate_credit_bounds": [
+          0.30975,
+          0.30975
+        ],
+        "rejection": null
+      }
+    },
+    "entity": {
+      "credit": 0.60975,
+      "interval": [
+        0.567270147193409,
+        0.6522298528065911
+      ],
+      "completion": {
+        "policy": {
+          "version": "bounded-no-action-v2.1",
+          "max_no_action_fraction": 0.01,
+          "tolerated_status": "no_legal_action",
+          "decision_limit": "reject",
+          "lower_unknown_credit": 0,
+          "upper_unknown_credit": 1,
+          "denominator": "all requested games",
+          "replace_or_skip": false
+        },
+        "status_counts": {
+          "complete": 2000,
+          "no_legal_action": 0,
+          "decision_limit": 0
+        },
+        "max_no_action_games": 20,
+        "requested_games": 2000,
+        "candidate_credit_bounds": [
+          0.60975,
+          0.60975
+        ],
+        "rejection": null
+      }
+    },
+    "history": {
+      "credit": 0.5907953976988495,
+      "interval": [
+        0.5476089105032826,
+        0.6338452873959073
+      ],
+      "completion": {
+        "policy": {
+          "version": "bounded-no-action-v2.1",
+          "max_no_action_fraction": 0.01,
+          "tolerated_status": "no_legal_action",
+          "decision_limit": "reject",
+          "lower_unknown_credit": 0,
+          "upper_unknown_credit": 1,
+          "denominator": "all requested games",
+          "replace_or_skip": false
+        },
+        "status_counts": {
+          "complete": 1999,
+          "no_legal_action": 1,
+          "decision_limit": 0
+        },
+        "max_no_action_games": 20,
+        "requested_games": 2000,
+        "candidate_credit_bounds": [
+          0.5905,
+          0.591
+        ],
+        "rejection": null
+      }
+    }
+  },
+  "parent": "entity",
+  "parent_interval": [
+    0.42043619658128123,
+    0.5050638034187188
+  ],
+  "completion_policy": {
+    "version": "bounded-no-action-v2.1",
+    "max_no_action_fraction": 0.01,
+    "tolerated_status": "no_legal_action",
+    "decision_limit": "reject",
+    "lower_unknown_credit": 0,
+    "upper_unknown_credit": 1,
+    "denominator": "all requested games",
+    "replace_or_skip": false
+  }
+}

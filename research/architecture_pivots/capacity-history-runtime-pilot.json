@@ -1,0 +1,80 @@
+{
+  "scope": "Untrained residual history infrastructure only; no model strength claim",
+  "checkpoint": "/Users/payton.jones/dev/splendorust/local/research/architecture-pivots/capacity-history-pilot/model.pt",
+  "checkpoint_sha256": "625e2ceb452bb9fa4a53adcaa341a2f0f586d38fad02df0d910c320e19d52752",
+  "descriptor_sha256": "c5fda36e5108215727ef58394011aa30603efac2c6c314c5b38afc638a6a2f1b",
+  "parent_sha256": "471ab63620410708733d9a55eebc3e6f8f91625ffd05f69088c45ca84a5986a1",
+  "transfer_parity": {
+    "all_inputs_max_logit_error": 4.76837158203125e-06,
+    "masked_policy_and_value_max_error": 1.1920928955078125e-06,
+    "output_tolerance": 0.001,
+    "positions": 32,
+    "real_initial_board_max_logit_error": 4.76837158203125e-06,
+    "real_logit_tolerance": 0.0001,
+    "stress_logit_tolerance": "0.001 + 0.00001 * abs(expected)"
+  },
+  "batch_probe": {
+    "checkpoint_sha256": "625e2ceb452bb9fa4a53adcaa341a2f0f586d38fad02df0d910c320e19d52752",
+    "history_version": 2,
+    "history_fixture": "/Users/payton.jones/dev/splendorust/local/research/architecture-pivots/history-v2/dev-000.history.bin",
+    "history_fixture_sha256": "0c843a9e48d1bae3d358e731d885457507398efefe682da24d7b3a473262ab01",
+    "shape_occupancy_bit_exact": true,
+    "maximum_abs_error": 0.0,
+    "shared_host": true,
+    "scope": "Tensor service only, including client queue/socket overhead",
+    "results": [
+      {
+        "workers": 1,
+        "calls": 128,
+        "seconds": 2.707146000000648,
+        "calls_per_second": 47.28226700738318
+      },
+      {
+        "workers": 4,
+        "calls": 128,
+        "seconds": 0.7525593750178814,
+        "calls_per_second": 170.08624734355163
+      },
+      {
+        "workers": 8,
+        "calls": 128,
+        "seconds": 0.3419624170055613,
+        "calls_per_second": 374.3101394616659
+      },
+      {
+        "workers": 14,
+        "calls": 128,
+        "seconds": 0.22454079205635935,
+        "calls_per_second": 570.0523224656312
+      },
+      {
+        "workers": 32,
+        "calls": 128,
+        "seconds": 0.12094583397265524,
+        "calls_per_second": 1058.3250021570784
+      }
+    ]
+  },
+  "ready": {
+    "ready": true,
+    "port": 19539,
+    "device": "mps",
+    "batch": 32,
+    "delay_ms": 1.0,
+    "fast_entities": false,
+    "models": {
+      "20": {
+        "kind": "history",
+        "sha256": "625e2ceb452bb9fa4a53adcaa341a2f0f586d38fad02df0d910c320e19d52752"
+      }
+    }
+  },
+  "sources": {
+    "capacity_history.py": "1e17b20b938edd363c5e6954f26c26e6001dc62d7c6184b6b7f1269ad1641fec",
+    "service_capacity_history.py": "a90a09acb77c0956bed44468b3f9f6dee96b1eea0e991f71d93691b9650d1018",
+    "service.py": "35e1304794c023841aa4b11d29866f808069dfcb83d6d9db38026ce233bd9ac5",
+    "models.py": "0e171dec6546e2352c8bc1b8a19a52db7537819fb0ad3921644828c535927d92",
+    "export_capacity_history.py": "b89f9f9184df2a67c556a4fa4dbf3a1f30ec44b9de029c85776e61797982920c",
+    "export.py": "fde4df9f8f9d4adaa0bea154b6125e557fff7d7a28c3ace750eb02e974c2a757"
+  }
+}

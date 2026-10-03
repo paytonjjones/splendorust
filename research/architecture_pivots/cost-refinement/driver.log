@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/refine_cost_study.py", line 108, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/refine_cost_study.py", line 80, in main
+    d,r=native(f'pilot-{kind}-{ia}-{ib}',kind,ia,ib,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/payton.jones/dev/splendorust/research/architecture_pivots/refine_cost_study.py", line 72, in native
+    assert len(records)==games and d['completed']==games and sha(worker)==d['binary_sha256']
+                                                                          ~^^^^^^^^^^^^^^^^^
+KeyError: 'worker_sha256'
+ones/dev/splendorust/research/architecture_pivots/cost-refinement/implementation.json'

@@ -1,0 +1,49 @@
+{
+  "scope": "CPU forward only; shared host; initial frozen entity; no service overhead or strength claim",
+  "checkpoint_sha256": "d732e2eaab04678e187d5cd59bf4b6bb8a1ac37c2a874240165b36a07d3a99b3",
+  "results": [
+    {
+      "threads": 1,
+      "batch": 32,
+      "positions": 256,
+      "seconds": 0.2247353750281036,
+      "positions_per_second": 1139.1175063916248
+    },
+    {
+      "threads": 4,
+      "batch": 32,
+      "positions": 256,
+      "seconds": 0.12220087507739663,
+      "positions_per_second": 2094.9113485305315
+    },
+    {
+      "threads": 8,
+      "batch": 32,
+      "positions": 256,
+      "seconds": 0.10550349997356534,
+      "positions_per_second": 2426.4597863022805
+    },
+    {
+      "threads": 14,
+      "batch": 32,
+      "positions": 256,
+      "seconds": 0.13487379206344485,
+      "positions_per_second": 1898.0707525415849
+    }
+  ],
+  "models_source_sha256": "0e171dec6546e2352c8bc1b8a19a52db7537819fb0ad3921644828c535927d92",
+  "torch_version": "2.5.1",
+  "disposition": "Keep registered MPS backend. CPU transport probe shows no clear gain at 32 workers; microbenchmarks do not establish whole-game parity or backend promotion.",
+  "protocol": {
+    "kind": "entity",
+    "device": "cpu",
+    "fast_entities": true,
+    "warmup_batches": 2,
+    "timed_batches": 8,
+    "batch": 32,
+    "input_first_rows": 32,
+    "clock": "time.perf_counter"
+  },
+  "input_fixture": "/Users/payton.jones/dev/splendorust/local/research/architecture-pivots/dev-00.inputs.bin",
+  "input_fixture_sha256": "baa393760bbc31a37ffebabcfff576c34ba70d1d32a9855fc9398c7bff772451"
+}

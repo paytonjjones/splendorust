@@ -1,0 +1,42 @@
+{
+  "checkpoint_sha256": "625e2ceb452bb9fa4a53adcaa341a2f0f586d38fad02df0d910c320e19d52752",
+  "history_version": 2,
+  "history_fixture": "/Users/payton.jones/dev/splendorust/local/research/architecture-pivots/history-v2/dev-000.history.bin",
+  "history_fixture_sha256": "0c843a9e48d1bae3d358e731d885457507398efefe682da24d7b3a473262ab01",
+  "shape_occupancy_bit_exact": true,
+  "maximum_abs_error": 0.0,
+  "shared_host": true,
+  "scope": "Tensor service only, including client queue/socket overhead",
+  "results": [
+    {
+      "workers": 1,
+      "calls": 128,
+      "seconds": 2.707146000000648,
+      "calls_per_second": 47.28226700738318
+    },
+    {
+      "workers": 4,
+      "calls": 128,
+      "seconds": 0.7525593750178814,
+      "calls_per_second": 170.08624734355163
+    },
+    {
+      "workers": 8,
+      "calls": 128,
+      "seconds": 0.3419624170055613,
+      "calls_per_second": 374.3101394616659
+    },
+    {
+      "workers": 14,
+      "calls": 128,
+      "seconds": 0.22454079205635935,
+      "calls_per_second": 570.0523224656312
+    },
+    {
+      "workers": 32,
+      "calls": 128,
+      "seconds": 0.12094583397265524,
+      "calls_per_second": 1058.3250021570784
+    }
+  ]
+}

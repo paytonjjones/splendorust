@@ -1,0 +1,46 @@
+{
+  "models": {
+    "capacity": {
+      "checkpoint_sha256": "3b97a851cea99271a0afb610ae634ab5aed9e7adf37905148b212a887c276e0e",
+      "tokens": 1,
+      "components_macs": {
+        "dense_linear": 4505600
+      },
+      "forward_macs_per_position": 4505600,
+      "estimated_flops_per_position": 9011200,
+      "mac_ratio_to_residual": 1.0
+    },
+    "entity": {
+      "checkpoint_sha256": "cc664b1748ad3f5c704d6fbc471816dcfb59b6a7d7798cef87491468df2fba84",
+      "tokens": 31,
+      "components_macs": {
+        "token_projection": 380928,
+        "attention_projections": 48758784,
+        "attention_scores_and_values": 2952192,
+        "feedforward": 97517568,
+        "policy_value": 21248
+      },
+      "forward_macs_per_position": 149630720,
+      "estimated_flops_per_position": 299261440,
+      "mac_ratio_to_residual": 33.20994318181818
+    },
+    "history": {
+      "checkpoint_sha256": "46bb56e507fde549e86d9394628a42faf6026e39dd3f6adc9f7227537879483a",
+      "tokens": 47,
+      "components_macs": {
+        "token_projection": 380928,
+        "attention_projections": 73924608,
+        "attention_scores_and_values": 6786048,
+        "feedforward": 147849216,
+        "policy_value": 21248,
+        "history_projection": 131072,
+        "auxiliary_and_feedback": 179712
+      },
+      "forward_macs_per_position": 229272832,
+      "estimated_flops_per_position": 458545664,
+      "mac_ratio_to_residual": 50.88619318181818
+    }
+  },
+  "scope": "Dense linear and attention multiply-accumulates only; one MAC counted as two FLOPs. Excludes activation, normalization, masks, token encoding, transport, queueing, search and backward pass. Includes all padded tokens. Runtime is measured separately.",
+  "fixed_batch32": "Each service forward evaluates 32 padded positions even at lower occupancy."
+}
