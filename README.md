@@ -4,15 +4,17 @@ A deterministic Rust engine and experiment framework for base Splendor, with 2â€
 
 The workspace contains the full 90-card and 10-noble datasets, rule tests, random-play audits, hidden-information-safe agents, paired tournaments, replay, benchmarks, and a promotion gate. Read [VALIDATION.md](VALIDATION.md) before treating results as ground truth. In particular, the published rules leave some no-action positions unresolved; the engine reports these positions without inventing a winner.
 
-Current work starts with the [48-hour strength strategy](STRATEGY.md) and
-[execution runbook](research/sprint48/README.md). The goal is a decisive fresh
-win against pinned unchanged AlphaZero800. Model size, latency, and equal
-compute are not strength limits. The confirmed research baseline is
-[expanded Entity](research/STRENGTH_CHAMPION.json); the stronger screened
-one-hot update is the first candidate. The standalone/demo pointer remains
-E81 in `research/CHAMPION.json`. Its [efficiency scope](research/EFFICIENCY_CHAMPION.json)
-does not veto research strength. Older schedules below are reproduction
-instructions, not current campaign requirements.
+The [48-hour strength campaign](STRATEGY.md) decisively beat pinned unchanged
+AlphaZero800 in 1,000 fresh two-player native games: **77.5% win credit**,
+with a conservative paired 95% interval of **71.43â€“83.57%**. All games completed
+by native score. The selected first-onehot Entity used PUCT6400 against
+AlphaZero800; the result is conditional on that unequal compute and native
+rules. See the [confirmed result](research/sprint48/RESULTS.md),
+[research strength champion](research/STRENGTH_CHAMPION.json), and
+[restore and delivery checklist](research/sprint48/FINAL_DELIVERY.md).
+The standalone/demo pointer remains E81 in `research/CHAMPION.json`.
+Older schedules below are reproduction instructions, not current campaign
+requirements.
 
 The [external benchmark report](benchmarks/REPORT.md) contains the reproducible
 baseline, workload rankings and limits. Its [protocol](benchmarks/PROTOCOL.md)

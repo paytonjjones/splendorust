@@ -10,44 +10,29 @@ masters. A scan of retained JSON/Markdown/Python/Rust records found no prior
 use of the chosen base/final masters. Check consumed setup IDs and active jobs
 as well; a new master alone is not a split-overlap proof.
 
-## Resume the active campaign
+## Restore the completed campaign
 
-The campaign started at **2026-10-03 19:35:52 UTC** and ends at
-**2026-10-05 19:35:52 UTC**. Keep this deadline on every resume. Check
-`RUN.json`, owned job receipts and processes before starting work. Do not
-repeat completed trials, refit01, collection, or label jobs.
+The campaign started at **2026-10-03 19:35:52 UTC** and completed at
+**2026-10-04 13:47:15 UTC**, before its fixed deadline of
+**2026-10-05 19:35:52 UTC**. The 1,000-game final confirmation scored
+**77.5% win credit** against unchanged AlphaZero800. Its conservative paired
+95% interval is **71.43–83.57%**, with no caps or unknown outcomes.
 
-Refit01 is complete. Its selected checkpoint is
-`local/research/sprint48/refit-01/fit/model.pt`, SHA256
-`44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f`.
-Trial04 scored58.59375% in128 native games; this is exploratory evidence.
-Trial05 scored70.3125% with dynamic FPU, which is selected for larger-search tests. The source collection and branch2 labels are
-complete; use the successful dev retry registry. `RESULTS.md` records the
-completed 6400-simulation test and the final-time estimate.
-
-Branch2 completed both epochs and retained exact epoch0 parent bytes. Both new
-updates had worse declared dev scores. Its artifacts are archived; do not run
-this fit again.
-
-Trial06 completed 128 native games at dynamic PUCT6400/depth64, world3/chance3.
-It scored 73.828125% against AlphaZero800. All games ended by native score.
-Its conservative paired lower bound was 56.85%. Trial07 completed the same
-search with the saved first-onehot checkpoint. It scored 76.5625%, with all
-games complete and no invalid games or caps. Select first-onehot for the
-registered 1000-game final confirmation. This selection uses the higher
-all-requested credit from the two exploratory screens.
-
-The final campaign started at 2026-10-04 03:48:29 UTC. The run_final driver
-uses PID79079, caffeinate uses PID79080, the service uses PID79082, and the
-schedule uses PID79104. It uses the selected
-first-onehot checkpoint, 1000 paired games, master17790000000, dynamic
-PUCT6400/depth64, world3/chance3, 64 workers and MPS FP32 batch32. Freeze ID:
+The selected first-onehot runtime SHA256 is
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`.
+The final profile used dynamic PUCT6400, depth64, world3/chance3, 64 workers,
+MPS FP32 batch32 and master17790000000. Freeze ID:
 `feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
-The start archive contains freeze, context and immutable launch receipts. It
-does not contain game rows or outcomes. One earlier preparation attempt failed
-before freeze; its evidence is retained separately. Do not start a second run.
-After the fixed campaign completes, use `FINAL_DELIVERY.md` to check and archive
-the full result.
+All owned driver, service, schedule and sleep-prevention processes stopped.
+Replay verified 1,000 games and 55,466 transitions. The independent final
+audit passed. See [RESULTS.md](RESULTS.md), [FINAL_DECISION.json](FINAL_DECISION.json)
+and [FINAL_DELIVERY.md](FINAL_DELIVERY.md) for results and archive restoration.
+
+Do not repeat completed trials, fits, collection, labels or the final run.
+Refit01 improved its declared dev score but scored below the saved first-onehot
+checkpoint in the larger native search screen. Branch2 retained epoch0 parent
+bytes because both new updates had worse declared dev scores. Both failed
+recipes and the pre-freeze launch failure remain archived.
 
 Completed trial07 used the saved firstonehot runtime:
 
@@ -237,5 +222,5 @@ Do not delay external proof for this optional comparison.
 
 Save `RESULTS.md`, weights/recipe/lineage, search/backend, records, replay,
 statistics, costs, and failures. Preserve the original archives. Archive
-required ignored files through the existing chunked workflow. The campaign is in progress. A completed exploratory test or fit does not
-establish the final decisive result.
+required ignored files through the existing chunked workflow. The campaign is complete. FINAL_DECISION.json and the verified final archive
+establish the scoped decisive native result. Keep exploratory results separate.

@@ -1,13 +1,52 @@
-# Active 48-hour campaign
+# Confirmed 48-hour campaign result
 
-The campaign started at **2026-10-03 19:35:52 UTC**. Its fixed deadline is
-**2026-10-05 19:35:52 UTC**. `RUN.json` records the live stage and consumed
-masters. The final master remains sealed. No decisive win is established.
+The fixed final run decisively beat pinned unchanged AlphaZero800 in the
+registered two-player native profile. It completed at **2026-10-04 13:47:15 UTC**,
+about 18.2 hours after the campaign began, within the 48-hour deadline.
 
-Current state: trial04 completed at 58.59375% exploratory win credit. This
-promising point estimate does not establish a decisive win. Branch2 source
-collection is the next GPU job; fitting has not started. The GPU queue has
-one owner and one primary job.
+**770 wins, 220 losses and 10 draws** in 1,000 games give **77.5% win credit**.
+The conservative two-sided paired Hoeffding 95% interval is
+**71.426385–83.573615%** over 500 independent setup blocks. Its lower bound
+exceeds the fixed 55% decisive-win threshold. All games ended by native score.
+There were no caps, no-action games, invalid games or decision-limit games.
+The caps-as-unknown interval is identical. The paired bootstrap interval,
+a secondary diagnostic, is 74.85–80.10%.
+
+The selected first-onehot Entity used dynamic PUCT at 6,400 simulations,
+depth64, world pool3 and chance universes3. AlphaZero kept its pinned model,
+source and 800 simulations. This result uses unequal compute and applies to
+`alphazero-native-32a27ac-v1`. It does not establish a worldwide rank,
+canonical-rule dominance, equal-compute superiority or expert-human strength.
+The standalone/demo runtime pointer is unchanged.
+
+The candidate, count, profile and final master were frozen before outcomes.
+The final setup-ID audit found zero overlap with training, model-selection,
+collection and earlier test IDs. Replay checked all 1,000 games and 55,466
+transitions. The independent final audit passed source, model, binary,
+receipt, setup-pair and regenerated-statistic checks. Raw SHA256:
+`8b3887d08b918e021e114a2632ff301ad8d4b272b435b057027bfd4a51b45c6e`.
+Freeze SHA256:
+`feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
+
+The schedule took 35,912.640 seconds (9.976 hours); the driver, including
+checks, took 35,932.637 seconds. The candidate used 177,491,200 simulations
+and 150,725,122 inferences. The Mac ran 64 game workers and one MPS FP32
+service with batch32 and a 1ms delay. No final outcomes changed the sample
+size or selected model. See [FINAL_DECISION.json](FINAL_DECISION.json) for the
+confirmed decision and archive references.
+
+The full final evidence archive is `artifacts/final-native`, manifest SHA256:
+`cf35548e0c5448c20e5fe696a83db6c660110385efc7ff40c4b321918332095f`.
+Restore verified all 215 files and all five deduplicated model/binary targets.
+The archive retains raw game records, replay, both independent statistics,
+freeze/context, frozen source files, exact commands, cost logs and repair
+receipts. Model bytes resolve to the original verified core archive.
+
+## Historical development record
+
+The following entries retain the hypotheses, failed attempts and exploratory
+results used before the final freeze. Their statements about work in progress
+refer to their recorded stage.
 
 | Completed candidate | Games | Win credit | Scheduler seconds |
 | --- | ---: | ---: | ---: |

@@ -1,6 +1,12 @@
 # Final campaign delivery
 
-Use this checklist only after `final-native-retry/run.json` reports
+Delivery is complete. The final evidence archive is `artifacts/final-native`,
+manifest SHA256 `cf35548e0c5448c20e5fe696a83db6c660110385efc7ff40c4b321918332095f`.
+All 215 files and five deduplicated model/binary targets passed restore checks.
+The receipt is [final-native.restore.json](artifacts/final-native.restore.json).
+
+The checklist below records the completed verification. Use it only after
+`final-native-retry/run.json` reports
 `status: complete`. Do not change the frozen schedule or inspect partial
 outcomes to change the run. The registered result rule is in `RESULTS.md`.
 

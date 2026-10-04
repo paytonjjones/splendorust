@@ -2,11 +2,15 @@
 
 Current mandate: 2026-10-03. Prepared from main
 `3c1a65678a41db77aac66e034cbb4b5fa1f7b018`.
-This is the active research plan. Start with [the runbook](research/sprint48/README.md)
-and [the plan](research/sprint48/PLAN.json). Live execution status, completed trials,
-and retained artifacts are in [RESULTS.md](research/sprint48/RESULTS.md) and
-[RUN.json](research/sprint48/RUN.json). The previous Entity training study
-is closed. Reuse its outputs; do not resume its old controller.
+The campaign is complete. The fixed final run scored **77.5% win credit**
+against pinned unchanged AlphaZero800. Its conservative paired 95% lower
+bound is **71.43%**, above the registered 55% target. All 1,000 games completed
+by native score. See [the confirmed result](research/sprint48/RESULTS.md),
+[the decision](research/sprint48/FINAL_DECISION.json), and
+[the delivery checklist](research/sprint48/FINAL_DELIVERY.md).
+The plan below records the approved research strategy. Do not restart its
+completed trials or final schedule. The previous Entity training study is
+also closed; reuse its outputs.
 
 ## Objective and authority
 

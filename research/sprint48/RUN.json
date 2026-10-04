@@ -1,4 +1,5 @@
 {
+  "completed_at_utc": "2026-10-04T13:47:15.158524+00:00",
   "consumed_trials": [
     {
       "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
@@ -141,7 +142,7 @@
       "supervisor_pid": 56141
     }
   ],
-  "current_stage": "local/research/sprint48/final-native-retry",
+  "current_stage": "research/sprint48/FINAL_DECISION.json",
   "data_collection_jobs": [
     {
       "batch": 64,
@@ -362,6 +363,7 @@
     "driver_pid": 79079,
     "dynamic_fpu": true,
     "export_receipt_sha256": "72cd8a1ec5b5808b0e1889e02614b28a1858d3de7f1406056e370964b7de93bd",
+    "finished_at_utc": "2026-10-04T13:47:15.550371Z",
     "freeze_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/final-native-retry/final-freeze.json",
     "freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
     "frozen_at_utc": "2026-10-04T03:48:29.424773Z",
@@ -410,8 +412,8 @@
     "schema": "sprint48-final-campaign-v1",
     "search": "puct",
     "service_pid": 79082,
-    "status": "running",
-    "updated_at_utc": "2026-10-04T03:48:29.463976Z",
+    "status": "complete",
+    "updated_at_utc": "2026-10-04T13:47:15.550864Z",
     "workers": 64,
     "world_pool": 3
   },
@@ -434,7 +436,7 @@
     "workers": 64,
     "world_pool": 3
   },
-  "heavy_job_owner": "root final confirmation",
+  "heavy_job_owner": null,
   "initial_commit": "f3902c8fe0460377ce00e174c63644e059bd2b08",
   "offline_label_jobs": [
     {
@@ -521,10 +523,21 @@
   ],
   "output_root": "local/research/sprint48",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
+  "result": {
+    "claim_supported": true,
+    "conservative_paired_hoeffding95": [
+      0.7142638538091695,
+      0.8357361461908306
+    ],
+    "credit": 0.775,
+    "decision": "research/sprint48/FINAL_DECISION.json",
+    "games": 1000,
+    "setup_blocks": 500
+  },
   "schema": "splendorust-strength-sprint-run-v1",
   "start_unix": 1791056152,
   "start_utc": "2026-10-03T19:35:52+00:00",
-  "status": "active",
+  "status": "complete",
   "target": "unchanged AlphaZero800 native profile",
   "training_branches": [
     {

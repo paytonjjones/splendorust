@@ -1,17 +1,20 @@
 # Experiments
 
-Current campaign: [STRATEGY.md](STRATEGY.md) and
-[sprint plan](research/sprint48/PLAN.json). On 2026-10-03 the user approved a
-48-hour push against pinned unchanged AlphaZero800. This supersedes old fixed
-search/game counts and cost vetoes for new work. Start from confirmed Entity
-and the saved one-hot challenger; the prior training study stays closed.
-The plan reserves masters 17700000000–17737999999 for exploratory/training/dev
-work, 17790000000 for final external play, and 17791000000 for optional final
-canonical play. Record exact consumed masters and check active jobs/split IDs.
-These are reservations, not new outcomes. Keep all historical hypotheses,
-decisions, and unknown outcomes below. A short new hypothesis and finite
-budget precede each implemented branch; one frozen fresh final test controls
-the external claim.
+The [48-hour campaign](STRATEGY.md) is complete. Its frozen final candidate
+scored **77.5% win credit** against pinned unchanged AlphaZero800 in 1,000
+fresh paired native games. The conservative paired 95% interval is
+**71.43–83.57%**, above the registered 55% lower-bound threshold. All games
+completed by native score; no cap or unknown outcome occurred. Replay and the
+independent audit passed. See [the results](research/sprint48/RESULTS.md) and
+[the final decision](research/sprint48/FINAL_DECISION.json).
+
+The winning profile uses the saved first-onehot Entity with dynamic PUCT6400,
+depth64 and world3/chance3, against unchanged AlphaZero800. This is a native,
+unequal-compute result. It does not establish a worldwide or canonical rank.
+The completed campaign superseded old fixed search/game counts and cost
+vetoes. Its unsuccessful refit/DAgger branches and pre-freeze launch failure
+remain recorded. Keep those results when planning new work. All consumed
+masters remain unavailable for a fresh claim.
 
 ## P2 — Conservative promotion with rare no-action outcomes
 
