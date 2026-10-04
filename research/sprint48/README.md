@@ -29,7 +29,15 @@ Branch2 completed both epochs and retained exact epoch0 parent bytes. Both new
 updates had worse declared dev scores. Its artifacts are archived; do not run
 this fit again. Trial06 is the refit scale test at dynamicPUCT6400/depth64,
 world3/chance3, port19726. Check its private receipt and `RUN.json` before acting.
-After it ends, the conditional trial07 is the saved firstonehot control:
+An independent supervisor now owns the06→07 queue:PID56141,
+`local/research/sprint48/queue-06-07/supervisor.json`. It waits for complete
+trial06/replay/evidence and service exit, then launches07. It survives a model
+limit reset. Do not launch the queued command manually while this supervisor
+is active. Luna owns monitoring and archival under Sol's fixed protocol.
+No final seeds or candidate selection are delegated. After both finish, Sol
+must review complete evidence and measured costs before final freeze.
+
+The conditional trial07 is the saved firstonehot control:
 
 ```sh
 local/strength/inference/bin/python research/sprint48/run_external.py --checkpoint local/research/sprint48/ready/first/onehot/runtime.pt --output local/research/sprint48/external-07 --master 17707000000 --games 128 --iterations 6400 --workers 64 --search puct --depth 64 --world-pool 3 --chance-universes 3 --dynamic-fpu --binary-directory local/research/sprint48/build-dynamic/release/examples --port 19727 --device mps --batch 32

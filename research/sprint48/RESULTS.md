@@ -413,3 +413,10 @@ to the retained epoch2. Trainer time1558.384s.
 
 Trial06 has all64 worker headers matching the predeclared6400/depth64 dynamic
 profile. It is the sole primary GPU job. No final games have started.
+
+At user direction, Sol reduced polling and delegated the06→07 compute queue
+to Luna. Independent supervisorPID56141 is waiting for06, then runs the exact
+preregistered07 command after completion/evidence/service-exit checks. Its
+private receipt is `local/research/sprint48/queue-06-07/supervisor.json`; it
+survives model usage resets and stops on failure. This introduces no new
+profile or seed. Final seeds and final selection stay reserved for Sol review.

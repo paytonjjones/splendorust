@@ -116,7 +116,7 @@
       "status": "running"
     }
   ],
-  "heavy_job_owner": "root",
+  "heavy_job_owner": "training_audit Luna queue under root authorization",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
   "output_root": "local/research/sprint48",
   "current_stage": "local/research/sprint48/external-06",
@@ -330,6 +330,22 @@
         "excluded_train_overlap": 0,
         "excluded_dev_overlap": 0
       }
+    }
+  ],
+  "control_queue_jobs": [
+    {
+      "output": "local/research/sprint48/queue-06-07",
+      "receipt": "local/research/sprint48/queue-06-07/supervisor.json",
+      "status": "running",
+      "owner": "training_audit Luna under root authorization",
+      "supervisor_pid": 56141,
+      "source_sha256": "e3281a4c52f957b49b0187b9b22c6e934a346582d0d6d41e9dadfcc36c176238",
+      "started_utc": "2026-10-04T00:41:35.130066+00:00",
+      "planned_masters": [
+        17706000000,
+        17707000000
+      ],
+      "scope": "Only preregistered exploratory controls; final freeze requires Sol review after both complete"
     }
   ]
 }
