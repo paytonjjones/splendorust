@@ -11,3 +11,16 @@ There is a known completion issue. The pinned AlphaZero config is a dotdict. The
 Do not rerun this master or change its seeds. Keep every shard and frozen input. Do not patch shard headers to claim 6,400 in the checkpoint mapping. A separately reviewed recovery must validate the completed raw games and active MCTS evidence, and report both values: checkpoint mapping 800 and active MCTS budget 6,400. Do not inspect partial game outcomes while the schedule runs.
 
 The original native proof remains `confirmed_decisive_native_win` against the unchanged AlphaZero800 checkpoint. The completed 256-game canonical screen scored 59.1796875% with a 95% interval of 42.029052–76.330323%; it retained the canonical baseline because it did not confirm a gain.
+
+The separate `recover_completion.py` passed 25 follow-up tests. Its detached
+`--wait --recover` process waits until the original driver, service, scheduler,
+and shard workers stop. It writes only to
+`local/research/sprint48/opponent-search-6400-recovered`. It requires every
+original shard to finish, all 1,000 rows, the registered 500 paired seeds, and
+source, artifact, candidate-profile, and opponent-identity bindings. It retains
+the original checkpoint mapping of 800 and records active MCTS 6,400. Replay,
+summary, and evidence commands use the original campaign cutoff. A timeout or
+incomplete sample is a failed check; it must not produce a strength claim.
+The tool does not promote a champion. The final result still needs independent
+review, archive verification, and delivery. See the completion watcher launch
+receipt under `research/sprint48/artifacts/` for its process ID and log.
