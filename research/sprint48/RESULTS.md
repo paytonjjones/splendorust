@@ -393,3 +393,23 @@ This comparison can detect a refit regression. If branch2 selects a new
 checkpoint, the original trial07 plan for that selected child remains in force.
 The final freshness guard must accept the verified onehot ancestor as well as
 the refit and recorded children; all historical exclusions remain conservative.
+
+## Second-fit result
+
+Both declared epochs completed. Initial selector2.2483576367; epoch1
+2.2841615282; epoch2 2.2958628528. Neither epoch improved the declared score.
+Select epoch0, which retains exact refit bytes SHA256`44ebfc8f...`.
+This recipe produced no selected weight update and no demonstrated strength
+gain. Retain both negative epochs, full metrics and receipts. Epoch1 took
+777.162s and epoch2 759.744s. Trial06 will test the fixed refit at dynamic
+PUCT6400/depth64. The conditional trial07 will test saved firstonehot ef8a
+at those same settings. Both are fresh exploratory schedules.
+
+The complete second-fit archive is `artifacts/dagger-branch2-fit`:18files,
+manifestSHA256`611e640ec9ff9c4560bc16bd4bc8dce0d7717763e801ad2d1a2eebf3f23924b0`.
+Full restore verified both negative epoch weights, all metrics and five exact
+source files. Parent/selected weights refer to the refit archive; latest refers
+to the retained epoch2. Trainer time1558.384s.
+
+Trial06 has all64 worker headers matching the predeclared6400/depth64 dynamic
+profile. It is the sole primary GPU job. No final games have started.

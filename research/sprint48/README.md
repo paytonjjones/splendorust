@@ -25,15 +25,20 @@ Trial05 scored70.3125% with dynamic FPU, which is selected for larger-search tes
 complete; use the successful dev retry registry. `RESULTS.md` records the
 prospective6400-simulation scale tests and final-time calculations.
 
-Validate branch2 without starting training while a search job is active:
+Branch2 completed both epochs and retained exact epoch0 parent bytes. Both new
+updates had worse declared dev scores. Its artifacts are archived; do not run
+this fit again. Trial06 is the refit scale test at dynamicPUCT6400/depth64,
+world3/chance3, port19726. Check its private receipt and `RUN.json` before acting.
+After it ends, the conditional trial07 is the saved firstonehot control:
 
 ```sh
-local/strength/inference/bin/python research/sprint48/run_branch2.py --dagger-train-registry local/research/sprint48/dagger-branch2-train-labels/registry-entries.json --dagger-dev-registry local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json --output local/research/sprint48/dagger-branch2-fit-retry --dry-run
+local/strength/inference/bin/python research/sprint48/run_external.py --checkpoint local/research/sprint48/ready/first/onehot/runtime.pt --output local/research/sprint48/external-07 --master 17707000000 --games 128 --iterations 6400 --workers 64 --search puct --depth 64 --world-pool 3 --chance-universes 3 --dynamic-fpu --binary-directory local/research/sprint48/build-dynamic/release/examples --port 19727 --device mps --batch 32
 ```
 
-Remove `--dry-run` only after the sole primary MPS job ends. The wrapper checks
-the branch limit before launch; record branch2 in `RUN.json` after it passes
-preflight and creates its private receipt. Do not register it as running first.
+This command is prospective; do not repeat it once its master is consumed.
+Choose one final model/profile from completed evidence, then freeze the game
+count from measured cost and the remaining fixed deadline. Preserve all failed
+and unused fits. Final streams remain sealed until this choice.
 
 ## 1. Restore the starting checkpoint
 

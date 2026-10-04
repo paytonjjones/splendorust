@@ -99,12 +99,27 @@
       "games": 128,
       "status": "complete",
       "wall_seconds": 1513.541706085205
+    },
+    {
+      "master": 17706000000,
+      "output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/external-06",
+      "checkpoint_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "iterations": 6400,
+      "search": "puct",
+      "depth": 64,
+      "world_pool": 3,
+      "chance_universes": 3,
+      "dynamic_fpu": true,
+      "gumbel_max_considered": null,
+      "workers": 64,
+      "games": 128,
+      "status": "running"
     }
   ],
   "heavy_job_owner": "root",
   "resource_policy": "one primary MPS job; root schedules heavy CPU jobs",
   "output_root": "local/research/sprint48",
-  "current_stage": "local/research/sprint48/dagger-branch2-fit-retry",
+  "current_stage": "local/research/sprint48/external-06",
   "training_branches": [
     {
       "branch_index": 1,
@@ -124,7 +139,7 @@
       "branch_index": 2,
       "branch": "learner-state-dagger-10pct",
       "output": "local/research/sprint48/dagger-branch2-fit-retry",
-      "status": "running",
+      "status": "complete",
       "driver_pid": 51223,
       "trainer_pid": 51226,
       "parent_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
@@ -149,7 +164,12 @@
         "selection": "0.90 * full dev CE+4Brier + 0.10 * DAgger dev CE+4Brier; epoch zero eligible",
         "weight_decay": 0.0001
       },
-      "scope": "Fixed second recipe; one pre-training launch failure retained separately"
+      "scope": "Fixed second recipe; one pre-training launch failure retained separately",
+      "selected_model_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+      "best_epoch": 0,
+      "finished_utc": "2026-10-04T00:22:20+00:00",
+      "seconds": 1558.3835577920545,
+      "receipt_sha256": "5b1d2fbae200ac319833b101d863f41e039a3cbfea43e0d1a9e07ace631d425f"
     }
   ],
   "offline_label_jobs": [
