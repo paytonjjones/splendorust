@@ -323,13 +323,18 @@ def _candidate_ancestry(run: dict, checkpoint: Path) -> tuple[set[int], list[dic
             (lineage.get("baseline_corpus_registry"), "baseline_corpus_registry_sha256")):
         if not path_value or sha(rooted(path_value)) != lineage.get(key):
             raise FreezeError(f"candidate ancestry lineage hash differs: {path_value}")
-    if checkpoint.is_file() and sha(checkpoint) != lineage.get("current_candidate_sha256"):
+    if lineage.get("first_onehot_runtime_sha256") != lineage.get("warm_parent_sha256"):
+        raise FreezeError("onehot runtime differs from the hash-bound warm parent")
+    if checkpoint.is_file():
         selected_sha = sha(checkpoint)
-        if not any(branch.get("status") == "complete"
+        if selected_sha not in (lineage.get("current_candidate_sha256"),
+                lineage.get("warm_parent_sha256")):
+            selected_sha_is_child = any(branch.get("status") == "complete"
                 and branch.get("parent_sha256") == lineage.get("current_candidate_sha256")
                 and branch.get("selected_model_sha256") == selected_sha
-                for branch in run.get("training_branches", [])):
-            raise FreezeError("selected checkpoint is not the hash-bound ancestry parent or a recorded child")
+                for branch in run.get("training_branches", []))
+            if not selected_sha_is_child:
+                raise FreezeError("selected checkpoint is not a hash-bound ancestry checkpoint")
     if sha(rooted("local/research/sprint48/ready/first/onehot/model.pt")) != lineage.get("onehot_selected_checkpoint_sha256"):
         raise FreezeError("selected onehot checkpoint differs from the ancestry receipt")
     if sha(rooted("research/training_strategy/first-stage-evidence.json")) != lineage.get("onehot_selection_evidence_sha256"):

@@ -381,3 +381,15 @@ and resident-probe source snapshot/failure excerpts. Full native-abort stderr
 was not captured; this limit is explicit. The failed fit's duplicate parent
 weights are a verified reference to the refit archive. The repaired branch2
 launch is now running in the new retry directory.
+
+## Conditional trial07 control, before second-fit completion or scale results
+
+If the fixed second-fit selector keeps the exact refit parent, use the remaining
+trial07 for the saved first onehot runtime (`ef8a4521...`) instead of repeating
+the same candidate. Test dynamicPUCT6400/depth64/world3/chance3,128pairedgames,
+master17707000000,64workers,MPSFP32batch32/1ms,port19727. Its canonical screen
+favored it, but its native strength at the corrected search profile is unknown.
+This comparison can detect a refit regression. If branch2 selects a new
+checkpoint, the original trial07 plan for that selected child remains in force.
+The final freshness guard must accept the verified onehot ancestor as well as
+the refit and recorded children; all historical exclusions remain conservative.

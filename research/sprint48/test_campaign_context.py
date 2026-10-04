@@ -389,6 +389,15 @@ class CampaignContextTests(unittest.TestCase):
         self.assertEqual(receipt["source_count"], len(ancestry["extra_ancestor_corpora"])
             + len(ancestry["historical_selection_screens"]))
 
+        onehot_runtime = ROOT / ancestry["candidate_lineage"]["warm_parent_checkpoint"]
+        onehot_ids, _ = freeze._candidate_ancestry(run, onehot_runtime)
+        self.assertEqual(onehot_ids, ids)
+
+        unknown = self.directory / "unregistered-checkpoint.pt"
+        unknown.write_bytes(b"unregistered model")
+        with self.assertRaisesRegex(freeze.FreezeError, "not a hash-bound ancestry checkpoint"):
+            freeze._candidate_ancestry(run, unknown)
+
     def test_collection_jobs_block_while_active_and_audit_complete_receipts(self):
         active = {"data_collection_jobs": [{"status": "running"}]}
         with self.assertRaisesRegex(freeze.FreezeError, "data_collection_jobs job is running"):
