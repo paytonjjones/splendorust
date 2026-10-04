@@ -448,23 +448,51 @@ class CampaignContextTests(unittest.TestCase):
         receipt = {"schema": "sprint48-trial06-07-supervisor-v1", "status": "waiting_for_trial06",
             "source_path": str(source), "source_sha256": source_hash}
         receipt_path.write_text(json.dumps(receipt))
-        run = {"control_queue_jobs": [{"status": "running", "receipt_path": str(receipt_path),
-            "source_sha256": source_hash}]}
+        run = {"control_queue_jobs": [{"status": "running", "receipt": str(receipt_path),
+            "receipt_sha256": freeze.sha(receipt_path), "source_sha256": source_hash}]}
         with self.assertRaisesRegex(freeze.FreezeError, "receipt is 'waiting_for_trial06'"):
             freeze._control_queue_receipts(run)
 
         receipt["status"] = "complete"
         receipt_path.write_text(json.dumps(receipt))
+        run["control_queue_jobs"][0]["receipt_sha256"] = freeze.sha(receipt_path)
         audited = freeze._control_queue_receipts(run)
         self.assertEqual(len(audited), 1)
         self.assertEqual(audited[0]["status"], "complete")
         self.assertEqual(audited[0]["run_status"], "running")
         self.assertTrue(audited[0]["status_from_receipt"])
         self.assertEqual(audited[0]["source_sha256"], source_hash)
+        legacy_run = {"control_queue_jobs": [{"status": "running", "receipt_path": str(receipt_path),
+            "receipt_sha256": freeze.sha(receipt_path), "source_sha256": source_hash}]}
+        self.assertEqual(freeze._control_queue_receipts(legacy_run), audited)
 
         source.write_text("changed supervisor source\n")
         with self.assertRaisesRegex(freeze.FreezeError, "source hash differs"):
             freeze._control_queue_receipts(run)
+
+    def test_failed_offline_label_plan_audits_all_assigned_setup_ids(self):
+        output = self.directory / "failed-labels"
+        output.mkdir()
+        source = output / "source.jsonl"
+        master = 17720000000
+        seeds = [freeze.setup_seed(master, block) for block in (0, 1)]
+        source.write_text(json.dumps({"master": master}) + "\n" + "\n".join(
+            json.dumps({"block": block, "setup_seed": seed, "rotation": rotation})
+            for block, seed in enumerate(seeds) for rotation in (0, 1)) + "\n")
+        plan_path = output / "plan.json"
+        plan = {"schema": "sprint48-offline-label-run-v1", "source": str(source),
+            "source_sha256": freeze.sha(source), "source_master": master, "workers": 1,
+            "worker_setup_ids": {"0": seeds}, "worker_blocks": {"0": [0, 1]},
+            "eligible_blocks": [0, 1], "eligible_setup_ids": 2}
+        plan_path.write_text(json.dumps(plan))
+        run_receipt = {"schema": "sprint48-offline-label-run-result-v1", "status": "failed",
+            "plan": str(plan_path), "plan_sha256": freeze.sha(plan_path), "source_unchanged": True}
+        (output / "run.json").write_text(json.dumps(run_receipt))
+        ids, receipts = freeze._collection_ids({"offline_label_jobs": [{"status": "failed",
+            "output": str(output)}]})
+        self.assertEqual(ids, set(seeds))
+        self.assertEqual(receipts[0]["status"], "failed-plan-audited")
+        self.assertEqual(receipts[0]["setup_ids"], 2)
 
     def test_freeze_writer_requires_the_global_run_claim(self):
         run_path = self.directory / "unclaimed-RUN.json"

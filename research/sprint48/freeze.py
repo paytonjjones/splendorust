@@ -536,6 +536,13 @@ def _collection_ids(run: dict) -> tuple[set[int], list[dict]]:
                 raise FreezeError(f"cannot audit {field} job with status {status!r}")
             output = rooted(job.get("output", ""))
             run_receipt_path = output / "run.json"
+            declared_receipt = job.get("receipt")
+            if declared_receipt is not None:
+                declared_path = rooted(declared_receipt)
+                if declared_path != run_receipt_path:
+                    raise FreezeError(f"{field} receipt path differs from its output: {declared_path}")
+                if job.get("receipt_sha256") is not None and sha(declared_path) != job["receipt_sha256"]:
+                    raise FreezeError(f"{field} receipt hash differs from RUN.json: {declared_path}")
             run_receipt = read_json(run_receipt_path)
             expected_schema = ("sprint48-dagger-source-collection-v1" if field == "data_collection_jobs"
                                else "sprint48-offline-label-run-result-v1")
@@ -595,8 +602,75 @@ def _collection_ids(run: dict) -> tuple[set[int], list[dict]]:
             else:
                 if run_receipt.get("status") != status:
                     raise FreezeError(f"{field} status differs from its run receipt: {output}")
-                registry_path = rooted(run_receipt.get("registry", ""))
                 registry_hash = run_receipt.get("registry_sha256")
+                if status == "failed" and not registry_hash:
+                    plan_path = rooted(run_receipt.get("plan", ""))
+                    plan_hash = run_receipt.get("plan_sha256")
+                    if not isinstance(plan_hash, str) or sha(plan_path) != plan_hash:
+                        raise FreezeError(f"{field} failed-plan hash differs: {plan_path}")
+                    plan = read_json(plan_path)
+                    if plan.get("schema") != "sprint48-offline-label-run-v1":
+                        raise FreezeError(f"{field} failed-plan schema differs: {plan_path}")
+                    source = rooted(plan.get("source", ""))
+                    if sha(source) != plan.get("source_sha256") or run_receipt.get("source_unchanged") is not True:
+                        raise FreezeError(f"{field} failed-plan source is not hash-bound: {source}")
+                    master = plan.get("source_master")
+                    if not isinstance(master, int) or master < 0 or master == MASTER:
+                        raise FreezeError(f"{field} failed-plan source master is invalid: {plan_path}")
+                    worker_ids = plan.get("worker_setup_ids")
+                    worker_blocks = plan.get("worker_blocks")
+                    workers = plan.get("workers")
+                    if (not isinstance(workers, int) or workers < 1
+                            or not isinstance(worker_ids, dict) or not isinstance(worker_blocks, dict)
+                            or set(worker_ids) != {str(i) for i in range(workers)}
+                            or set(worker_blocks) != set(worker_ids)):
+                        raise FreezeError(f"{field} failed-plan worker assignments are invalid: {plan_path}")
+                    assigned_ids, assigned_blocks = [], []
+                    for worker in range(workers):
+                        raw_ids = worker_ids[str(worker)]
+                        blocks = worker_blocks[str(worker)]
+                        if (not isinstance(raw_ids, list) or not isinstance(blocks, list)
+                                or len(raw_ids) != len(blocks)):
+                            raise FreezeError(f"{field} failed-plan worker assignment is invalid: {plan_path}")
+                        assigned_ids.extend(raw_ids)
+                        assigned_blocks.extend(blocks)
+                    if (any(not isinstance(value, int) or not 0 <= value <= 0xFFFFFFFFFFFFFFFF
+                            for value in assigned_ids)
+                            or len(assigned_ids) != len(set(assigned_ids))
+                            or len(assigned_blocks) != len(set(assigned_blocks))
+                            or set(assigned_blocks) != set(plan.get("eligible_blocks", []))
+                            or len(assigned_ids) != plan.get("eligible_setup_ids")):
+                        raise FreezeError(f"{field} failed-plan eligible assignments differ: {plan_path}")
+                    block_ids = {}
+                    with source.open() as stream:
+                        header_seen = False
+                        for line in stream:
+                            if not line.strip():
+                                continue
+                            row = json.loads(line)
+                            if not header_seen:
+                                header_seen = True
+                                if row.get("master") != master:
+                                    raise FreezeError(f"{field} failed-plan source master differs: {source}")
+                                continue
+                            block, setup_id = row.get("block"), row.get("setup_seed")
+                            if (not isinstance(block, int) or not isinstance(setup_id, int)
+                                    or setup_id != setup_seed(master, block)):
+                                raise FreezeError(f"{field} failed-plan source setup ID differs: {source}")
+                            if block in block_ids and block_ids[block] != setup_id:
+                                raise FreezeError(f"{field} failed-plan source block conflicts: {source}")
+                            block_ids[block] = setup_id
+                    if not header_seen or any(block_ids.get(block) != setup_id
+                            for worker in range(workers)
+                            for block, setup_id in zip(worker_blocks[str(worker)], worker_ids[str(worker)])):
+                        raise FreezeError(f"{field} failed-plan IDs do not match source schedule: {source}")
+                    ids.update(assigned_ids)
+                    receipt.update(plan=str(plan_path), plan_sha256=plan_hash,
+                        plan_source=str(source), plan_source_sha256=plan["source_sha256"],
+                        setup_ids=len(set(assigned_ids)), status="failed-plan-audited")
+                    receipts.append(receipt)
+                    continue
+                registry_path = rooted(run_receipt.get("registry", ""))
                 if registry_hash != job.get("registry_sha256") or sha(registry_path) != registry_hash:
                     raise FreezeError(f"{field} registry hash differs: {registry_path}")
                 registry = read_json(registry_path)
@@ -625,7 +699,16 @@ def _control_queue_receipts(run: dict) -> list[dict]:
         run_status = job.get("status")
         if run_status not in ("queued", "running", "complete"):
             raise FreezeError(f"cannot audit control_queue_jobs job with status {run_status!r}")
-        receipt_path = rooted(job.get("receipt_path", ""))
+        receipt_value = job.get("receipt")
+        receipt_path_value = job.get("receipt_path")
+        if receipt_value is None and receipt_path_value is None:
+            raise FreezeError("control_queue_jobs entry has no receipt path")
+        if (receipt_value is not None and receipt_path_value is not None
+                and rooted(receipt_value) != rooted(receipt_path_value)):
+            raise FreezeError("control_queue_jobs receipt aliases differ")
+        receipt_path = rooted(receipt_value if receipt_value is not None else receipt_path_value)
+        if job.get("receipt_sha256") is not None and sha(receipt_path) != job["receipt_sha256"]:
+            raise FreezeError(f"control queue receipt hash differs from RUN.json: {receipt_path}")
         receipt = read_json(receipt_path)
         if receipt.get("schema") != "sprint48-trial06-07-supervisor-v1":
             raise FreezeError(f"control_queue_jobs receipt schema differs: {receipt_path}")
