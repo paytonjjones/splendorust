@@ -1,0 +1,161 @@
+{
+  "schema": "sprint48-opponent-search-launch-v1",
+  "captured_at_utc": "2026-10-04T16:34:01.796677Z",
+  "status": "running",
+  "partial_outcomes_read": false,
+  "launch": {
+    "command": [
+      "/usr/bin/caffeinate",
+      "-i",
+      "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/opponent_search/run_campaign.py",
+      "--execute"
+    ],
+    "source_commit": "99800e0",
+    "started_at_utc": "2026-10-04T16:27:57.733767+00:00",
+    "requested_output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400",
+    "master": 17792000000,
+    "games": 1000,
+    "job_budget_seconds": 50400,
+    "launch_log_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400-launch.log",
+    "launch_log_bytes": 0
+  },
+  "campaign": {
+    "master": 17792000000,
+    "requested_games": 1000,
+    "paired_blocks": 500,
+    "shards": 64,
+    "candidate": {
+      "search": "puct",
+      "iterations": 6400,
+      "depth": 64,
+      "world_pool": 3,
+      "chance_universes": 3,
+      "dynamic_fpu": true,
+      "root_only": false,
+      "model_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400/service/13/model.bin",
+      "model_sha256": "f680803521c59584f175d424057ded63e3240b47326a27831b63eb6b80fa9b2d",
+      "policy_binary_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400/binaries/native_policy_worker",
+      "policy_binary_sha256": "da7ba89cbe418acee6df1cac5e753f2c2bfb981c9f34f362c94694c6ace65898",
+      "strength_binary_path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400/binaries/strength_worker",
+      "strength_binary_sha256": "4bd368a0ceeeebce42e3e0500f88de2bb0326c1383cd659435386a081e6ea91b"
+    },
+    "alphazero_checkpoint_simulations": 800,
+    "alphazero_active_simulations": 6400,
+    "checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "upstream_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "reservation_sha256": "a4d5a7172cd0441a93530e1ab7d306260d63c0b6dbf747cd8d7c7515e77f27fe",
+    "setup_audit_sha256": "a92ca6b397c9cffd6d0a24f9a7984377254fc5d0e0055076beffdbbdbbf91b0a",
+    "excluded_ids_sha256": "6f5e7a9f13efde03bd589692f89a04af134ef5944a5e213f90f2bc51044a8a13",
+    "setup_seed_stream_sha256": "74dbd468c514d480525244406fa10f6862230836998fdd099eb8a44017a341cd"
+  },
+  "processes": {
+    "owner": {
+      "pid": 44658,
+      "alive_at_capture": true
+    },
+    "service": {
+      "pid": 44666,
+      "alive_at_capture": true,
+      "port": 19760
+    },
+    "schedule": {
+      "pid": 44668,
+      "alive_at_capture": true
+    }
+  },
+  "deadlines": {
+    "schedule_cutoff_utc": "2026-10-05T06:12:57.796480Z",
+    "campaign_completion_cutoff_utc": "2026-10-05T06:27:57.796480Z",
+    "postprocess_reserve_seconds": 900,
+    "followup_plan_deadline_utc": "2026-10-05T19:35:52Z"
+  },
+  "launch_verification": {
+    "verified_at_utc": "2026-10-04T16:30:21.197413+00:00",
+    "headers": 64,
+    "requested_games": 1000,
+    "candidate_simulations": 6400,
+    "opponent_active_simulations": 6400,
+    "opponent_checkpoint_mapping_simulations": 800,
+    "owner_pid": 44658,
+    "service_pid": 44666,
+    "schedule_pid": 44668,
+    "reservation_sha256": "a4d5a7172cd0441a93530e1ab7d306260d63c0b6dbf747cd8d7c7515e77f27fe",
+    "source_commit": "99800e0"
+  },
+  "known_completion_issue": {
+    "status": "unresolved at launch capture; completion recovery is required if the original scheduler rejects shard headers",
+    "detail": "The pinned AlphaZero dotdict attribute override sends numMCTSSims=6400 to active MCTS. The config mapping used in external_config metadata still reports checkpoint value 800. The scheduler completion validator expects the mapping to report 6400, so it may reject otherwise valid completed shards before merge.",
+    "recovery_rule": "Keep this master and all shard files. Do not rerun, change seeds, or rewrite the 800 mapping. Use a separately reviewed recovery path that verifies raw games and active-MCTS evidence while preserving both checkpoint mapping 800 and active budget 6400."
+  },
+  "prior_evidence": {
+    "original_native_proof_status": "confirmed_decisive_native_win",
+    "original_native_opponent_simulations": 800,
+    "original_native_decision_sha256": "1e19eed26bd2ef80ce8635aa8c2fd98db63ec681344d3be3b429637366462ab5",
+    "canonical_screen_games": 256,
+    "canonical_screen_credit_percent": 59.1796875,
+    "canonical_screen_interval_percent": [
+      42.029052,
+      76.330323
+    ],
+    "canonical_screen_decision": "retain baseline; the interval does not confirm a gain",
+    "canonical_archive_manifest_sha256": "3e7185ba375a00f1f92b323684ec298bb1e140ed72f322bdc3137fd208bb4684"
+  },
+  "preservation_rule": "Do not stop or rerun the active schedule. Keep frozen source copies, binaries, all shard files, and all receipts. Do not inspect partial game outcomes.",
+  "evidence_files": [
+    {
+      "role": "launch_record",
+      "path": "local/research/sprint48/opponent-search-6400-launch.json",
+      "sha256": "fc88069becbe775e5df88c9b6f6b7c4ea2f499308f061da85854287a293a77fa",
+      "bytes": 695
+    },
+    {
+      "role": "launch_log",
+      "path": "local/research/sprint48/opponent-search-6400-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "role": "campaign_run_receipt",
+      "path": "local/research/sprint48/opponent-search-6400/run.json",
+      "sha256": "ee2cd65308e8a25140dc86a6e6c3eb5301856e3d2d29b7f989520f709e0a9279",
+      "bytes": 37180
+    },
+    {
+      "role": "launch_verification",
+      "path": "local/research/sprint48/opponent-search-6400/launch-verification.json",
+      "sha256": "82c4b375b946f1249a9ab2736098fa1d0c7922845870841b22c2b9518498f63a",
+      "bytes": 843
+    },
+    {
+      "role": "service_receipt",
+      "path": "local/research/sprint48/opponent-search-6400/service/run.json",
+      "sha256": "6ef569851208f413b77c8b442e178624d346f3c32e92fbdee1b8186a0d1cc67c",
+      "bytes": 940
+    },
+    {
+      "role": "schedule_plan",
+      "path": "local/research/sprint48/opponent-search-6400/schedule/plan.json",
+      "sha256": "c590fdaf92b4536935a9064018f9a086a1a8c8bfe0711c1925c06d03a6cb1f2b",
+      "bytes": 116088
+    },
+    {
+      "role": "original_800_decision",
+      "path": "research/sprint48/FINAL_DECISION.json",
+      "sha256": "1e19eed26bd2ef80ce8635aa8c2fd98db63ec681344d3be3b429637366462ab5",
+      "bytes": 4868
+    },
+    {
+      "role": "canonical_diagnostic_results",
+      "path": "research/sprint48/RESULTS.md",
+      "sha256": "96314e6e50eada587e060cf512b5ba336f3c819e5f2daa49fc8a4676301d0d9c",
+      "bytes": 32724
+    },
+    {
+      "role": "canonical_diagnostic_archive_manifest",
+      "path": "research/sprint48/artifacts/final-canonical-diagnostic-17791000000/manifest.json",
+      "sha256": "3e7185ba375a00f1f92b323684ec298bb1e140ed72f322bdc3137fd208bb4684",
+      "bytes": 19054
+    }
+  ]
+}

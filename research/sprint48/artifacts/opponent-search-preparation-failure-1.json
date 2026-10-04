@@ -1,0 +1,99 @@
+{
+  "schema": "sprint48-opponent-search-preparation-failure-v1",
+  "attempt": 1,
+  "verified_at_utc": "2026-10-04T16:30:18.869578Z",
+  "launch": {
+    "command": [
+      "/usr/bin/caffeinate",
+      "-i",
+      "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/opponent_search/run_campaign.py",
+      "--execute"
+    ],
+    "pid": 43714,
+    "started_at_utc": "2026-10-04T16:21:07.527106+00:00",
+    "source_commit": "bbe10a2",
+    "requested_output": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400",
+    "master": 17792000000,
+    "games": 1000,
+    "job_budget_seconds": 50400,
+    "log_path_in_launch_record": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/opponent-search-6400-launch.log",
+    "log_path_in_launch_record_exists": true,
+    "captured_attempt_log_path": "local/research/sprint48/opponent-search-6400-preparation-failed-1-launch.log"
+  },
+  "failure": {
+    "status": "failed",
+    "failed_at_utc": "2026-10-04T16:21:07.685353Z",
+    "error": "ValueError('copied artifact hash differs: /Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/final-native-retry/final-freeze.json')",
+    "stage": "provenance copy stopped at final-freeze.json because raw file SHA256 did not equal the semantic freeze digest.",
+    "cause_evidence": {}
+  },
+  "freeze_hashes": {
+    "source_file_sha256": "ed2f76128ea8dd848d503b4262fd975b97ee9cfde3d717b33806ecd81056345f",
+    "copied_file_sha256": "ed2f76128ea8dd848d503b4262fd975b97ee9cfde3d717b33806ecd81056345f",
+    "source_and_copy_bytes_match": true,
+    "semantic_freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
+    "decision_semantic_freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
+    "run_receipt_semantic_freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
+    "semantic_digests_match": true,
+    "raw_file_sha_equals_semantic_digest": false,
+    "note": "Raw JSON bytes match between source and copied file. Their byte SHA256 differs from the embedded semantic freeze digest."
+  },
+  "non_consumption_checks": {
+    "attempt_private_snapshot": "local/research/sprint48/opponent-search-6400-preparation-failed-1",
+    "owner_pid": 43714,
+    "owner_pid_running_at_verification": false,
+    "seed_consumed": false,
+    "schedule_pid": null,
+    "reservation_field_in_attempt_receipt": false,
+    "schedule_games_jsonl_in_attempt_snapshot": false,
+    "service_13_in_attempt_snapshot": false,
+    "service_receipt_in_attempt_snapshot": false,
+    "parity_result_in_attempt_snapshot": false
+  },
+  "evidence_files": [
+    {
+      "role": "failed_run_receipt",
+      "path": "local/research/sprint48/opponent-search-6400-preparation-failed-1/run.json",
+      "sha256": "0118aa51f2a8944928a37adeadb7d1f2985b01497714f9775a232df94774f4e9",
+      "bytes": 2307
+    },
+    {
+      "role": "launch_record",
+      "path": "local/research/sprint48/opponent-search-6400-preparation-failed-1-launch.json",
+      "sha256": "9554c79bbffa800bfde95930b29ae9fc2f4cb1766bd81c4f3545ddb5b3c3b042",
+      "bytes": 695
+    },
+    {
+      "role": "captured_launch_log",
+      "path": "local/research/sprint48/opponent-search-6400-preparation-failed-1-launch.log",
+      "sha256": "3168b82a7a02b9aaa8e42a3142be9259865090f7cb3b3f943037fe88ec5bcefd",
+      "bytes": 192
+    },
+    {
+      "role": "source_freeze_bytes",
+      "path": "local/research/sprint48/final-native-retry/final-freeze.json",
+      "sha256": "ed2f76128ea8dd848d503b4262fd975b97ee9cfde3d717b33806ecd81056345f",
+      "bytes": 82467
+    },
+    {
+      "role": "copied_freeze_bytes",
+      "path": "local/research/sprint48/opponent-search-6400-preparation-failed-1/provenance/final-freeze.json",
+      "sha256": "ed2f76128ea8dd848d503b4262fd975b97ee9cfde3d717b33806ecd81056345f",
+      "bytes": 82467
+    },
+    {
+      "role": "executed_campaign_source_copy",
+      "path": "local/research/sprint48/opponent-search-6400-preparation-failed-1/provenance/campaign-sources/research/sprint48/opponent_search/run_campaign.py",
+      "sha256": "4c2c51fc6a922f1a689098c779ac0b3b2a1a1b1e0f61007b88eac7e7a5aa2b65",
+      "bytes": 49015
+    },
+    {
+      "role": "final_decision",
+      "path": "research/sprint48/FINAL_DECISION.json",
+      "sha256": "1e19eed26bd2ef80ce8635aa8c2fd98db63ec681344d3be3b429637366462ab5",
+      "bytes": 4868
+    }
+  ],
+  "scope_note": "This receipt binds only the attempt-specific preserved snapshot, launch record, and captured log. The driver default output path may be reused by later attempts; its later state is not evidence for this attempt."
+}
