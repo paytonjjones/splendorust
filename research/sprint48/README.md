@@ -37,14 +37,17 @@ games complete and no invalid games or caps. Select first-onehot for the
 registered 1000-game final confirmation. This selection uses the higher
 all-requested credit from the two exploratory screens.
 
-The final campaign started at 2026-10-04 03:48:29 UTC. Driver PID79104,
-service PID79082 and caffeinate PID79079 own the run. It uses the selected
+The final campaign started at 2026-10-04 03:48:29 UTC. The run_final driver
+uses PID79079, caffeinate uses PID79080, the service uses PID79082, and the
+schedule uses PID79104. It uses the selected
 first-onehot checkpoint, 1000 paired games, master17790000000, dynamic
 PUCT6400/depth64, world3/chance3, 64 workers and MPS FP32 batch32. Freeze ID:
 `feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
 The start archive contains freeze, context and immutable launch receipts. It
 does not contain game rows or outcomes. One earlier preparation attempt failed
 before freeze; its evidence is retained separately. Do not start a second run.
+After the fixed campaign completes, use `FINAL_DELIVERY.md` to check and archive
+the full result.
 
 Completed trial07 used the saved firstonehot runtime:
 

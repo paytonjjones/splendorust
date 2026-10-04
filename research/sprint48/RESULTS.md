@@ -493,8 +493,9 @@ A full restore verified every file. Its source, parity output and process
 receipts are preserved. The duplicate model and binary copies have verified
 hash-bound references to the core and development-07 archives.
 
-The repaired final campaign started at 2026-10-04T03:48:29.450828Z with driver
-PID79104, service PID79082 and caffeinate PID79079. It uses the selected
+The repaired final campaign started at 2026-10-04T03:48:29.450828Z. The
+run_final driver uses PID79079, caffeinate uses PID79080, the service uses
+PID79082, and the schedule uses PID79104. It uses the selected
 first-onehot runtime SHA256
 `ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`, 1000
 paired games, master17790000000, dynamic PUCT6400/depth64, world pool3,
