@@ -24,3 +24,14 @@ incomplete sample is a failed check; it must not produce a strength claim.
 The tool does not promote a champion. The final result still needs independent
 review, archive verification, and delivery. See the completion watcher launch
 receipt under `research/sprint48/artifacts/` for its process ID and log.
+
+## Execution preference, 2026-10-04
+
+The user stopped the chat babysitter and paused its heartbeat monitor.
+Training, benchmarking, and the detached completion checker remain authorized.
+Prefer bounded compute-heavy jobs that can run without agent polling. Use Luna
+helpers for preparation and checks; use Sol for decisions and integration. Keep
+one primary MPS job at a time. Do not start another heavy job while this fixed
+sample is running. Preserve receipts and checkpoints so the next agent can
+review completed work without a token-heavy watch loop. Do not restart a chat
+babysitter unless the user requests it.
