@@ -491,5 +491,18 @@ manifest SHA256
 `35280f3d2b11c65007c041ea7becdcf0c7de32607ffbd79e4333528cb2468e22`.
 A full restore verified every file. Its source, parity output and process
 receipts are preserved. The duplicate model and binary copies have verified
-hash-bound references to the core and development-07 archives. The final
-campaign is being prepared; it has not started, and no final outcome exists.
+hash-bound references to the core and development-07 archives.
+
+The repaired final campaign started at 2026-10-04T03:48:29.450828Z with driver
+PID79104, service PID79082 and caffeinate PID79079. It uses the selected
+first-onehot runtime SHA256
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`, 1000
+paired games, master17790000000, dynamic PUCT6400/depth64, world pool3,
+chance universes3, 64 workers, and MPS FP32 batch32. Frozen campaign ID:
+`feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
+The start archive is `artifacts/final-campaign-start`:13 files, manifest
+SHA256 `e53d113258029038ae652b2e24bb432e61059c7d1216ae49e26906913354e283`.
+A full restore verified all files and the freeze/context identity. It contains
+no mutable game rows or outcomes. The64 frozen schedule headers passed the
+registered settings check. The final campaign is running; no final result is
+reported here.

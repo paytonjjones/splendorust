@@ -37,10 +37,14 @@ games complete and no invalid games or caps. Select first-onehot for the
 registered 1000-game final confirmation. This selection uses the higher
 all-requested credit from the two exploratory screens.
 
-Final preparation is in progress for dynamic PUCT6400/depth64, world3/chance3,
-with64 workers and MPS FP32 batch32. One preparation attempt failed before
-freeze. It launched no final games. See `RESULTS.md` and the failed-prep
-archive. Do not claim that the final campaign has started.
+The final campaign started at 2026-10-04 03:48:29 UTC. Driver PID79104,
+service PID79082 and caffeinate PID79079 own the run. It uses the selected
+first-onehot checkpoint, 1000 paired games, master17790000000, dynamic
+PUCT6400/depth64, world3/chance3, 64 workers and MPS FP32 batch32. Freeze ID:
+`feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
+The start archive contains freeze, context and immutable launch receipts. It
+does not contain game rows or outcomes. One earlier preparation attempt failed
+before freeze; its evidence is retained separately. Do not start a second run.
 
 Completed trial07 used the saved firstonehot runtime:
 
@@ -192,10 +196,11 @@ flags, and native noble ordering.
 
 ## 5. Freeze and confirm
 
-Save `final-freeze.json` before final games: checkpoint/descriptor/binary hashes,
-service/backend, search, AlphaZero pin/checkpoint, count/master, unknown rule,
-and conservative 55% lower-bound criterion. Choose 1,000, 2,000, or 4,000 from
-measured cost; do not edit the count from outcomes. Final master: **17790000000**.
+The active run has a saved `final-freeze.json` that binds checkpoint,
+descriptor and binary hashes, service/backend, search, AlphaZero pin,
+count/master, unknown rule and the conservative 55% lower-bound criterion.
+Its fixed count is **1000 paired games** and its final master is
+**17790000000**. Do not change the profile or count.
 
 Use `run_final.py` for the one global frozen campaign. It copies and binds
 inputs, starts the owned service, checks parity, freezes the profile, and runs
