@@ -420,11 +420,12 @@ def copy_provenance(output: Path, freeze: dict, decision: dict, checkpoint: Path
     checkpoint_sha = _copy_hash(checkpoint, target_checkpoint, CHECKPOINT_SHA256)
     checkpoint_info = {"source": str(checkpoint), "path": str(target_checkpoint), "sha256": checkpoint_sha}
     copied_freeze = output / "provenance/final-freeze.json"
-    _copy_hash(FREEZE_PATH, copied_freeze, decision["freeze_sha256"] if "freeze_sha256" in decision else freeze["freeze_sha256"])
+    freeze_file_sha256 = _copy_hash(FREEZE_PATH, copied_freeze, sha(FREEZE_PATH))
     copied_decision = output / "provenance/FINAL_DECISION.json"
     _copy_hash(DECISION_PATH, copied_decision)
     return {"sources": files, "binaries": binaries, "checkpoint": checkpoint_info,
-            "freeze_path": str(copied_freeze), "freeze_sha256": sha(copied_freeze),
+            "freeze_path": str(copied_freeze), "freeze_sha256": freeze["freeze_sha256"],
+            "freeze_file_sha256": freeze_file_sha256,
             "decision_path": str(copied_decision), "decision_sha256": sha(copied_decision)}
 
 

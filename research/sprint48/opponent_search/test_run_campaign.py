@@ -193,6 +193,51 @@ class CampaignDriverTests(unittest.TestCase):
                                      Path(bins["strength_worker"]["path"]))
             self.assertEqual(reservation["service"], reservation["candidate_artifacts"]["service"])
 
+    def test_copy_provenance_binds_freeze_file_bytes_and_keeps_semantic_digest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+
+            def file(name: str, data: bytes = b"artifact") -> Path:
+                path = base / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+                return path
+
+            repo = base / "repo"
+            frozen_source = repo / "tests/frozen.rs"
+            frozen_source.parent.mkdir(parents=True)
+            frozen_source.write_bytes(b"frozen source")
+            semantic_digest = "freeze-semantic-digest"
+            freeze_path = file("final-freeze.json", json.dumps({"freeze_sha256": semantic_digest}).encode())
+            decision_path = file("FINAL_DECISION.json", b"decision")
+            checkpoint = file("runtime.pt", b"checkpoint")
+            binaries = base / "release/examples"
+            for name in ("native_policy_worker", "strength_worker", "transfer_parity"):
+                file(f"release/examples/{name}", name.encode())
+            extra_paths = [file(f"sources/source-{index}.py") for index in range(11)]
+            output = base / "campaign"
+            freeze = {"freeze_sha256": semantic_digest,
+                "source_sha256": {"tests/frozen.rs": campaign.sha(frozen_source)}}
+            decision = {"freeze_sha256": semantic_digest}
+            patches = {
+                "ROOT": repo, "FREEZE_PATH": freeze_path, "DECISION_PATH": decision_path,
+                "CHECKPOINT_SHA256": campaign.sha(checkpoint),
+                "RUNNER": extra_paths[0], "SCHEDULE": extra_paths[1],
+                "RUNTIME_SOURCE": extra_paths[2], "SERVICE_SOURCE": extra_paths[3],
+                "EXPORT_SOURCE": extra_paths[4], "EVIDENCE_SOURCE": extra_paths[5],
+                "REPLAY": extra_paths[6], "SUMMARIZE": extra_paths[7],
+                "BUILD_VALIDATION": extra_paths[8], "PREFLIGHT": extra_paths[9],
+                "EXCLUSIONS": extra_paths[10],
+            }
+            with mock.patch.multiple(campaign, **patches):
+                copied = campaign.copy_provenance(output, freeze, decision, checkpoint, binaries)
+
+            copied_freeze = Path(copied["freeze_path"])
+            self.assertEqual(copied["freeze_sha256"], semantic_digest)
+            self.assertEqual(copied["freeze_file_sha256"], campaign.sha(freeze_path))
+            self.assertEqual(campaign.sha(copied_freeze), campaign.sha(freeze_path))
+            self.assertNotEqual(copied["freeze_file_sha256"], semantic_digest)
+
 
 if __name__ == "__main__":
     unittest.main()
