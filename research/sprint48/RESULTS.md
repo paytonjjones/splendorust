@@ -401,9 +401,9 @@ Both declared epochs completed. Initial selector2.2483576367; epoch1
 Select epoch0, which retains exact refit bytes SHA256`44ebfc8f...`.
 This recipe produced no selected weight update and no demonstrated strength
 gain. Retain both negative epochs, full metrics and receipts. Epoch1 took
-777.162s and epoch2 759.744s. Trial06 will test the fixed refit at dynamic
-PUCT6400/depth64. The conditional trial07 will test saved firstonehot ef8a
-at those same settings. Both are fresh exploratory schedules.
+777.162s and epoch2 759.744s. Trial06 tested the fixed refit at dynamic
+PUCT6400/depth64. Trial07 tests saved firstonehot ef8a at those settings.
+Both schedules use fresh exploratory masters.
 
 The complete second-fit archive is `artifacts/dagger-branch2-fit`:18files,
 manifestSHA256`611e640ec9ff9c4560bc16bd4bc8dce0d7717763e801ad2d1a2eebf3f23924b0`.
@@ -411,12 +411,45 @@ Full restore verified both negative epoch weights, all metrics and five exact
 source files. Parent/selected weights refer to the refit archive; latest refers
 to the retained epoch2. Trainer time1558.384s.
 
-Trial06 has all64 worker headers matching the predeclared6400/depth64 dynamic
-profile. It is the sole primary GPU job. No final games have started.
+## Development trial06 result
 
-At user direction, Sol reduced polling and delegated the06→07 compute queue
-to Luna. Independent supervisorPID56141 is waiting for06, then runs the exact
-preregistered07 command after completion/evidence/service-exit checks. Its
-private receipt is `local/research/sprint48/queue-06-07/supervisor.json`; it
-survives model usage resets and stops on failure. This introduces no new
-profile or seed. Final seeds and final selection stay reserved for Sol review.
+The fixed refit checkpoint scored **73.828125% win credit** against unchanged
+AlphaZero800 in128 paired native games. All128 games ended by native score;
+there were no caps, invalid games or evidence rejections. The paired bootstrap
+95% interval was66.40625–81.25%. The conservative paired Hoeffding interval
+was56.851856–90.804394%, with caps treated as unknown as well. Its lower bound
+clears the registered55% threshold for this64-block exploratory screen. This
+does not replace the fixed fresh final campaign.
+
+The schedule used dynamic PUCT6400, depth64, world pool3, chance universes3,
+64workers, MPS FP32 batch32 and a1ms delay. It used23,008,000 simulations and
+19,773,421 inferences. Scheduler time was5617.488s; driver time was5630.772s,
+or43.887s per game. Replay checked128 games and7190 transitions. Raw SHA256:
+`699590890e12059d4282bcdb964d9642c1ce1c8603ca0ae2746e77a832bb202f`.
+See `local/research/sprint48/external-06` for the live receipts and
+`artifacts/development-06` for the archived records.
+
+The archive has186 files and manifest SHA256
+`918ebca5d78fd477dd8c1391e551c93fe32b5e5fbd767aa05bbbd4944386d078`.
+A full restore verified every file. The duplicate refit checkpoint is a
+hash-bound reference to the refit archive. The detached supervisor passed the
+trial06 replay, evidence and service-exit checks, then launched the exact
+preregistered trial07 command. Its private receipt is
+`local/research/sprint48/queue-06-07/supervisor.json`. Final seeds and
+candidate selection remain reserved for Sol review.
+
+## Final selection rule and count, before trial07 results
+
+Freeze **1000 paired games** (500 independent setup blocks), finalmaster
+17790000000, after the control queue finishes. Use dynamicPUCT6400/depth64,
+world_pool3/chance_universes3,MPSFP32batch32/1ms,64workers and checked dynamic
+binaries. Select between the completed06 refit and07 firstonehot by higher
+all-requested win credit; retain refit on a tie. Use complete eligible evidence
+only, never partial07 outcomes. Both are exploratory controls. This selects
+the strongest measured candidate at the highest tested compute; it does not
+claim a statistically isolated difference between them.
+
+Trial06 full schedule5617.488s/128=43.887s/game:1000games≈12.19h, plus50%
+time margin≈18.29h. About40h remain at the decision. This leaves room for
+replay, archival and delivery. Keep the count, backend, profile and selected
+checkpoint fixed after the freeze; do not adapt from final outcomes.

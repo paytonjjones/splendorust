@@ -23,19 +23,21 @@ Refit01 is complete. Its selected checkpoint is
 Trial04 scored58.59375% in128 native games; this is exploratory evidence.
 Trial05 scored70.3125% with dynamic FPU, which is selected for larger-search tests. The source collection and branch2 labels are
 complete; use the successful dev retry registry. `RESULTS.md` records the
-prospective6400-simulation scale tests and final-time calculations.
+completed 6400-simulation test and the final-time estimate.
 
 Branch2 completed both epochs and retained exact epoch0 parent bytes. Both new
 updates had worse declared dev scores. Its artifacts are archived; do not run
-this fit again. Trial06 is the refit scale test at dynamicPUCT6400/depth64,
-world3/chance3, port19726. Check its private receipt and `RUN.json` before acting.
-An independent supervisor now owns the06→07 queue:PID56141,
-`local/research/sprint48/queue-06-07/supervisor.json`. It waits for complete
-trial06/replay/evidence and service exit, then launches07. It survives a model
-limit reset. Do not launch the queued command manually while this supervisor
-is active. Luna owns monitoring and archival under Sol's fixed protocol.
-No final seeds or candidate selection are delegated. After both finish, Sol
-must review complete evidence and measured costs before final freeze.
+this fit again.
+
+Trial06 completed 128 native games at dynamic PUCT6400/depth64, world3/chance3.
+It scored 73.828125% against AlphaZero800. All games ended by native score.
+Its conservative paired lower bound was 56.85%. The result is exploratory.
+Trial07 now tests the saved first-onehot checkpoint at the same settings.
+Independent supervisor PID56141 owns the queue. Check
+`local/research/sprint48/queue-06-07/supervisor.json` and `RUN.json` for
+current status. Do not launch trial07 again. Luna owns monitoring and
+archival under Sol's fixed protocol. Final seeds and candidate selection
+remain reserved for Sol review after trial07 completes.
 
 The conditional trial07 is the saved firstonehot control:
 
