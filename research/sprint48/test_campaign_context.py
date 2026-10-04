@@ -440,6 +440,32 @@ class CampaignContextTests(unittest.TestCase):
         self.assertEqual(label_audit, {700, 701})
         self.assertEqual(label_receipts[0]["setup_ids"], 2)
 
+    def test_control_queue_receipt_blocks_until_complete_and_binds_source(self):
+        source = self.directory / "supervisor.py"
+        source.write_text("fixed supervisor source\n")
+        source_hash = freeze.sha(source)
+        receipt_path = self.directory / "supervisor.json"
+        receipt = {"schema": "sprint48-trial06-07-supervisor-v1", "status": "waiting_for_trial06",
+            "source_path": str(source), "source_sha256": source_hash}
+        receipt_path.write_text(json.dumps(receipt))
+        run = {"control_queue_jobs": [{"status": "running", "receipt_path": str(receipt_path),
+            "source_sha256": source_hash}]}
+        with self.assertRaisesRegex(freeze.FreezeError, "receipt is 'waiting_for_trial06'"):
+            freeze._control_queue_receipts(run)
+
+        receipt["status"] = "complete"
+        receipt_path.write_text(json.dumps(receipt))
+        audited = freeze._control_queue_receipts(run)
+        self.assertEqual(len(audited), 1)
+        self.assertEqual(audited[0]["status"], "complete")
+        self.assertEqual(audited[0]["run_status"], "running")
+        self.assertTrue(audited[0]["status_from_receipt"])
+        self.assertEqual(audited[0]["source_sha256"], source_hash)
+
+        source.write_text("changed supervisor source\n")
+        with self.assertRaisesRegex(freeze.FreezeError, "source hash differs"):
+            freeze._control_queue_receipts(run)
+
     def test_freeze_writer_requires_the_global_run_claim(self):
         run_path = self.directory / "unclaimed-RUN.json"
         run_path.write_text(json.dumps({"status": "active"}))

@@ -615,6 +615,50 @@ def _collection_ids(run: dict) -> tuple[set[int], list[dict]]:
     return ids, receipts
 
 
+def _control_queue_receipts(run: dict) -> list[dict]:
+    """Require registered bounded supervisors to finish before final freeze."""
+    jobs = run.get("control_queue_jobs", [])
+    if not isinstance(jobs, list):
+        raise FreezeError("RUN.json control_queue_jobs must be a list")
+    receipts = []
+    for job in jobs:
+        run_status = job.get("status")
+        if run_status not in ("queued", "running", "complete"):
+            raise FreezeError(f"cannot audit control_queue_jobs job with status {run_status!r}")
+        receipt_path = rooted(job.get("receipt_path", ""))
+        receipt = read_json(receipt_path)
+        if receipt.get("schema") != "sprint48-trial06-07-supervisor-v1":
+            raise FreezeError(f"control_queue_jobs receipt schema differs: {receipt_path}")
+        if receipt.get("status") != "complete":
+            raise FreezeError(
+                f"cannot freeze while control_queue_jobs receipt is {receipt.get('status')!r}")
+        source_path_value = receipt.get("source_path")
+        source_hash = receipt.get("source_sha256")
+        if source_path_value is not None or source_hash is not None:
+            if not source_path_value or not isinstance(source_hash, str):
+                raise FreezeError(f"control queue source binding is incomplete: {receipt_path}")
+            source_path = rooted(source_path_value)
+            actual_source_hash = sha(source_path)
+            if actual_source_hash != source_hash:
+                raise FreezeError(f"control queue source hash differs: {source_path}")
+            recorded_source_hash = job.get("source_sha256")
+            if recorded_source_hash is not None and recorded_source_hash != source_hash:
+                raise FreezeError(f"control queue source hash differs from RUN.json: {source_path}")
+        else:
+            source_path = None
+            actual_source_hash = None
+        receipts.append({
+            "receipt_path": str(receipt_path),
+            "receipt_sha256": sha(receipt_path),
+            "status": receipt["status"],
+            "run_status": run_status,
+            "status_from_receipt": run_status != receipt["status"],
+            "source_path": str(source_path) if source_path else None,
+            "source_sha256": actual_source_hash,
+        })
+    return receipts
+
+
 def _check_no_final_outcomes(output_root: Path, run: dict) -> None:
     if any(trial.get("master") == MASTER for trial in run.get("consumed_trials", [])):
         raise FreezeError("final master already appears in consumed trials")
@@ -680,6 +724,7 @@ def build_freeze(proposal: dict, registries: list[Path], run_path: Path,
         raise FreezeError("campaign is not active")
     if any(branch.get("status") == "running" for branch in run.get("training_branches", [])):
         raise FreezeError("cannot freeze while a training branch is running")
+    control_queue_receipts = _control_queue_receipts(run)
     _check_no_final_outcomes(output_root, run)
     train_ids, corpus_receipts = corpus_ids(registries)
     ancestry_ids, ancestry_receipts = _candidate_ancestry(run, Path(candidate["checkpoint"]))
@@ -729,6 +774,7 @@ def build_freeze(proposal: dict, registries: list[Path], run_path: Path,
             "corpus_sources": corpus_receipts,
             "model_ancestry_sources": ancestry_receipts,
             "collection_sources": collection_receipts,
+            "control_queue_sources": control_queue_receipts,
             "run_json": {"path": str(run_path), "sha256": sha(run_path)},
             "exploratory_schedules": trial_receipts},
         "source_sha256": _sources(),
