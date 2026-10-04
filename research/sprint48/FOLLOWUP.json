@@ -1,0 +1,46 @@
+{
+  "schema": "sprint48-followup-plan-v1",
+  "authority": "User requested continued research after the confirmed AlphaZero800 result. The original deadline and one heavy-job owner remain.",
+  "deadline_utc": "2026-10-05T19:35:52Z",
+  "confirmed_decision": "research/sprint48/FINAL_DECISION.json",
+  "status": "active",
+  "canonical_diagnostic": {
+    "status": "running",
+    "driver_pid": 38974,
+    "service_pid": 38978,
+    "compare_pid": 38980,
+    "output": "local/research/sprint48/final-canonical-diagnostic-17791000000",
+    "games": 256,
+    "master": 17791000000,
+    "budget_seconds": 7200,
+    "scope": "Common Gumbel128/depth16 canonical regression diagnostic against original Entity; separate from native proof."
+  },
+  "opponent_search": {
+    "status": "preparing_harness",
+    "hypothesis": "The confirmed public-observation Entity with PUCT6400 retains a material native win-credit advantage when pinned AlphaZero also uses 6400 simulations.",
+    "candidate_checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+    "candidate_search": {
+      "algorithm": "puct",
+      "iterations": 6400,
+      "depth": 64,
+      "world_pool": 3,
+      "chance_universes": 3,
+      "dynamic_fpu": true
+    },
+    "opponent_revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "opponent_checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "opponent_simulations": 6400,
+    "other_opponent_settings": "Keep pinned checkpoint configuration, information and six-total-turn temperature schedule. Only simulation count changes.",
+    "games": 1000,
+    "paired_blocks": 500,
+    "master": 17792000000,
+    "criterion": "Conservative paired Hoeffding95 lower win-credit bound strictly above0.55; all requested games; at most1% no-action; reject invalid/decision-limit; report caps-as-unknown separately.",
+    "adaptive_stopping": false,
+    "implementation_budget_seconds": 7200,
+    "job_budget_seconds": 50400,
+    "resource": "One MPS FP32 batch32 service and64workers, after canonical job exits; no overlapping primary GPU job.",
+    "seed_audit": "local/research/sprint48/opponent-search-preflight/setup-audit.json",
+    "exclusions_sha256": "6f5e7a9f13efde03bd589692f89a04af134ef5944a5e213f90f2bc51044a8a13",
+    "scope": "Separate higher-search-opponent diagnostic. Preserve the confirmed800-simulation result and its frozen source files. It does not establish equal compute or worldwide rank."
+  }
+}

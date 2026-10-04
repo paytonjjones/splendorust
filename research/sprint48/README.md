@@ -10,6 +10,17 @@ masters. A scan of retained JSON/Markdown/Python/Rust records found no prior
 use of the chosen base/final masters. Check consumed setup IDs and active jobs
 as well; a new master alone is not a split-overlap proof.
 
+## Continued research after the confirmed win
+
+The user requested more work after the AlphaZero800 result was delivered.
+[FOLLOWUP.json](FOLLOWUP.json) records the finite follow-up plan under the
+original deadline. A 256-game common-budget canonical diagnostic is running.
+A separate fixed 1,000-game native test against AlphaZero with 6,400 simulations
+is being prepared. The confirmed candidate is unchanged. The stronger-opponent
+test changes only AlphaZero's simulation count and keeps the original 800-search
+result separate. Its isolated harness preserves the first freeze's source files.
+One owner schedules both jobs; the second job starts after the first exits.
+
 ## Restore the completed campaign
 
 The campaign started at **2026-10-03 19:35:52 UTC** and completed at
