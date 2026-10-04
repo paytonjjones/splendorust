@@ -5,7 +5,7 @@
   "confirmed_decision": "research/sprint48/FINAL_DECISION.json",
   "status": "active",
   "canonical_diagnostic": {
-    "status": "running",
+    "status": "complete",
     "driver_pid": 38974,
     "service_pid": 38978,
     "compare_pid": 38980,
@@ -13,7 +13,20 @@
     "games": 256,
     "master": 17791000000,
     "budget_seconds": 7200,
-    "scope": "Common Gumbel128/depth16 canonical regression diagnostic against original Entity; separate from native proof."
+    "scope": "Common Gumbel128/depth16 canonical regression diagnostic against original Entity; separate from native proof.",
+    "credit": 0.591796875,
+    "ci95": [
+      0.4202905235,
+      0.7633032265
+    ],
+    "complete": 256,
+    "setup_blocks": 128,
+    "seconds": 540.17,
+    "decision": "retain canonical baseline: benefit not confirmed",
+    "report_sha256": "168f760d6f8e5dbfe095dc211b1341581772a6bb93df421d85187f9c837dfe1d",
+    "setup_ids_verified_in_followup_exclusions": true,
+    "archive": "research/sprint48/artifacts/final-canonical-diagnostic-17791000000",
+    "archive_manifest_sha256": "3e7185ba375a00f1f92b323684ec298bb1e140ed72f322bdc3137fd208bb4684"
   },
   "opponent_search": {
     "status": "preparing_harness",

@@ -546,3 +546,19 @@ A full restore verified all files and the freeze/context identity. It contains
 no mutable game rows or outcomes. The64 frozen schedule headers passed the
 registered settings check. The final campaign is running; no final result is
 reported here.
+
+## Follow-up canonical diagnostic
+
+The fixed 256-game common-budget canonical screen completed in 540.17 seconds
+using Gumbel128/depth16, 64 threads and one MPS service. The confirmed native
+candidate scored **59.1796875% win credit** against the original Entity model.
+All 256 games completed across 128 paired setups. The canonical empirical-
+Bernstein 95% interval is **42.029052–76.330323%**. The registered screen rule
+retains the canonical baseline because a benefit is not confirmed. This small
+diagnostic does not change the confirmed native champion or the AlphaZero800
+result. All 128 actual setup IDs are in the next diagnostic's exclusion set.
+
+Archive: `artifacts/final-canonical-diagnostic-17791000000`, manifest SHA256
+`3e7185ba375a00f1f92b323684ec298bb1e140ed72f322bdc3137fd208bb4684`.
+All 37 files passed restore checks. The separate stronger-opponent plan is in
+[FOLLOWUP.json](FOLLOWUP.json).
