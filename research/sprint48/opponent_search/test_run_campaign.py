@@ -231,12 +231,22 @@ class CampaignDriverTests(unittest.TestCase):
             }
             with mock.patch.multiple(campaign, **patches):
                 copied = campaign.copy_provenance(output, freeze, decision, checkpoint, binaries)
+                copied["descriptor_sha256"] = "descriptor-digest"
+                manifest_info = campaign.write_bundle_manifest(output, freeze, copied)
 
             copied_freeze = Path(copied["freeze_path"])
             self.assertEqual(copied["freeze_sha256"], semantic_digest)
             self.assertEqual(copied["freeze_file_sha256"], campaign.sha(freeze_path))
             self.assertEqual(campaign.sha(copied_freeze), campaign.sha(freeze_path))
             self.assertNotEqual(copied["freeze_file_sha256"], semantic_digest)
+            for row in copied["sources"].values():
+                staged_path = Path(row["path"])
+                self.assertTrue(staged_path.is_file(), staged_path)
+                self.assertEqual(campaign.sha(staged_path), row["sha256"])
+            manifest = json.loads(Path(manifest_info["manifest_path"]).read_text())
+            self.assertEqual(manifest["source_sha256"], copied["source_sha256"])
+            self.assertEqual(manifest["files"]["sources"], copied["sources"])
+            self.assertEqual(manifest_info["manifest_sha256"], campaign.sha(manifest_info["manifest_path"]))
 
 
 if __name__ == "__main__":

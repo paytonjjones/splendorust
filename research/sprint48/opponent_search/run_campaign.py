@@ -19,6 +19,7 @@ import signal
 import subprocess
 import sys
 import time
+import traceback
 
 ROOT = Path(__file__).resolve().parents[3]
 SPRINT = ROOT / "research/sprint48"
@@ -406,9 +407,9 @@ def copy_provenance(output: Path, freeze: dict, decision: dict, checkpoint: Path
         "local/research/sprint48/opponent-search-preflight/excluded-setup-ids.txt": EXCLUSIONS,
     }
     for relative, source in extras.items():
-        files[f"campaign-source:{relative}"] = {"path": str(_copy_hash(
-            source, output / "provenance/campaign-sources" / relative)),
-            "sha256": sha(source)}
+        target = output / "provenance/campaign-sources" / relative
+        digest = _copy_hash(source, target)
+        files[f"campaign-source:{relative}"] = {"path": str(target), "sha256": digest}
     binaries = {}
     for name in ("native_policy_worker", "strength_worker", "transfer_parity"):
         source = binary_directory / name
@@ -427,6 +428,20 @@ def copy_provenance(output: Path, freeze: dict, decision: dict, checkpoint: Path
             "freeze_path": str(copied_freeze), "freeze_sha256": freeze["freeze_sha256"],
             "freeze_file_sha256": freeze_file_sha256,
             "decision_path": str(copied_decision), "decision_sha256": sha(copied_decision)}
+
+
+def write_bundle_manifest(output: Path, freeze: dict, bundle: dict) -> dict:
+    bundle["source_sha256"] = source_hash_map(bundle)
+    manifest_path = output / "provenance/bundle-manifest.json"
+    atomic_json(manifest_path, {"schema": "sprint48-opponent-search-bundle-v1",
+        "profile": PROFILE, "freeze_sha256": freeze["freeze_sha256"],
+        "master": MASTER, "games": GAMES, "candidate_search": expected_candidate_search(),
+        "candidate_checkpoint_sha256": CHECKPOINT_SHA256,
+        "descriptor_sha256": bundle["descriptor_sha256"],
+        "source_sha256": bundle["source_sha256"], "files": bundle})
+    bundle["manifest_path"] = str(manifest_path)
+    bundle["manifest_sha256"] = sha(manifest_path)
+    return bundle
 
 
 def service_check(output: Path, checkpoint: Path, descriptor: Path) -> dict:
@@ -687,17 +702,7 @@ def run_campaign(output: Path, execute: bool, is_alive=pid_is_alive) -> dict:
             bundle["service_receipt"] = {"path": str(service_output / "run.json"),
                                          "sha256": bundle["service_receipt_sha256"]}
             bundle["pinned_upstream"] = upstream
-            bundle["source_sha256"] = source_hash_map(bundle)
-            bundle_manifest_path = output / "provenance/bundle-manifest.json"
-            atomic_json(bundle_manifest_path, {"schema": "sprint48-opponent-search-bundle-v1",
-                "profile": PROFILE, "freeze_sha256": freeze_manifest["freeze_sha256"],
-                "master": MASTER, "games": GAMES, "candidate_search": expected_candidate_search(),
-                "candidate_checkpoint_sha256": CHECKPOINT_SHA256,
-                "descriptor_sha256": bundle["descriptor_sha256"],
-                "source_sha256": bundle["source_sha256"],
-                "files": bundle})
-            bundle["manifest_path"] = str(bundle_manifest_path)
-            bundle["manifest_sha256"] = sha(bundle_manifest_path)
+            write_bundle_manifest(output, freeze_manifest, bundle)
             receipt["provenance"] = bundle
             receipt["service"] = {"pid": runtime.service.pid, "port": PORT,
                                    "batch": BATCH, "delay_ms": DELAY_MS,
@@ -824,7 +829,8 @@ def run_campaign(output: Path, execute: bool, is_alive=pid_is_alive) -> dict:
         return result
     except BaseException as error:
         failed = error
-        receipt.update(status="failed", failed_at_utc=utc_now(), error=repr(error))
+        receipt.update(status="failed", failed_at_utc=utc_now(), error=repr(error),
+                       error_traceback=traceback.format_exc())
         if schedule_process is not None:
             receipt["schedule_pid"] = schedule_process.pid
             receipt["seed_consumed"] = True
@@ -836,6 +842,7 @@ def run_campaign(output: Path, execute: bool, is_alive=pid_is_alive) -> dict:
                     fields={"error": repr(error)})
             except BaseException as update_error:
                 receipt["followup_update_error"] = repr(update_error)
+                receipt["followup_update_traceback"] = traceback.format_exc()
                 atomic_json(output / "run.json", receipt)
         raise
     finally:
