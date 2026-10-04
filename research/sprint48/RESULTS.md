@@ -438,18 +438,58 @@ preregistered trial07 command. Its private receipt is
 `local/research/sprint48/queue-06-07/supervisor.json`. Final seeds and
 candidate selection remain reserved for Sol review.
 
-## Final selection rule and count, before trial07 results
+## Development trial07 result
 
-Freeze **1000 paired games** (500 independent setup blocks), finalmaster
-17790000000, after the control queue finishes. Use dynamicPUCT6400/depth64,
-world_pool3/chance_universes3,MPSFP32batch32/1ms,64workers and checked dynamic
-binaries. Select between the completed06 refit and07 firstonehot by higher
-all-requested win credit; retain refit on a tie. Use complete eligible evidence
-only, never partial07 outcomes. Both are exploratory controls. This selects
-the strongest measured candidate at the highest tested compute; it does not
-claim a statistically isolated difference between them.
+The saved first-onehot checkpoint scored **76.5625% win credit** against
+unchanged AlphaZero800 in128 paired native games. All128 games ended by native
+score. There were no caps, invalid games or evidence rejections. The paired
+bootstrap95 interval was70.3125–82.8125%. The conservative paired Hoeffding
+interval was59.586231–93.538769%, with caps treated as unknown as well. This
+is an exploratory screen, not the final confirmation.
 
-Trial06 full schedule5617.488s/128=43.887s/game:1000games≈12.19h, plus50%
-time margin≈18.29h. About40h remain at the decision. This leaves room for
-replay, archival and delivery. Keep the count, backend, profile and selected
-checkpoint fixed after the freeze; do not adapt from final outcomes.
+The schedule used dynamic PUCT6400, depth64, world pool3, chance universes3,
+64 workers, MPS FP32 batch32 and a1ms delay. It used22,732,800 simulations
+and19,382,801 inferences. Scheduler time was5485.196s; driver time was
+5498.282s, or42.853s per game. Replay checked128 games and7104 transitions.
+Raw SHA256:
+`979d24be2b773613b46f1154a41ab94a808ebdbeb8e7eb90c8266cf2db6510c9`.
+Replay SHA256:
+`230dd1961a608434d09b24469e24bb56877e1aa4f900d50cfa021f91ead7d69d`.
+Summary SHA256:
+`af5aebfddb708e6ceaccd5a88eb0f00b416d510754d17d0061c9ec565dbb0765`.
+Evidence SHA256:
+`ee819f60f9a1dde4854dbd689d56f7ca4ba5143f24914fb8ee4e5f6881185467`.
+
+The archive is `artifacts/development-07`:186 files, manifest SHA256
+`14fbb3ca9619cbfbbad90598da62f3041d89df6482e7f00f2ed7d79eb9be511a`.
+A full restore verified every file. The duplicate onehot checkpoint refers to
+the core archive. The completed trial and queue receipts are in
+`local/research/sprint48/external-07` and
+`local/research/sprint48/queue-06-07`.
+
+## Final model selection and registered confirmation
+
+Trial07's all-requested win credit (76.5625%) was higher than trial06's
+73.828125%. Under the registered selection rule, choose the saved first-onehot
+runtime SHA256
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`.
+Keep the registered **1000 paired games** (500 independent setup blocks),
+final master17790000000, dynamic PUCT6400/depth64, world pool3, chance
+universes3, MPS FP32 batch32/1ms, 64 workers, and checked dynamic binaries.
+Both trials are exploratory screens. Their difference does not establish an
+isolated model effect.
+
+Trial07 took5485.196s for128 games, or42.853s per game. The measured rate
+estimates1000 games at about11.90 hours. A50% time margin gives about17.86
+hours. Keep the registered count and settings fixed after freeze.
+
+The first final-preparation attempt failed before freeze and before any final
+game. Parity passed. The freeze check failed because it received the repository
+directory where it expected a file. The run receipt records the failure. The
+failed evidence bundle is archived at `artifacts/failed-final-prep`:38 files,
+manifest SHA256
+`35280f3d2b11c65007c041ea7becdcf0c7de32607ffbd79e4333528cb2468e22`.
+A full restore verified every file. Its source, parity output and process
+receipts are preserved. The duplicate model and binary copies have verified
+hash-bound references to the core and development-07 archives. The final
+campaign is being prepared; it has not started, and no final outcome exists.

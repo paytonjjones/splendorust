@@ -31,24 +31,27 @@ this fit again.
 
 Trial06 completed 128 native games at dynamic PUCT6400/depth64, world3/chance3.
 It scored 73.828125% against AlphaZero800. All games ended by native score.
-Its conservative paired lower bound was 56.85%. The result is exploratory.
-Trial07 now tests the saved first-onehot checkpoint at the same settings.
-Independent supervisor PID56141 owns the queue. Check
-`local/research/sprint48/queue-06-07/supervisor.json` and `RUN.json` for
-current status. Do not launch trial07 again. Luna owns monitoring and
-archival under Sol's fixed protocol. Final seeds and candidate selection
-remain reserved for Sol review after trial07 completes.
+Its conservative paired lower bound was 56.85%. Trial07 completed the same
+search with the saved first-onehot checkpoint. It scored 76.5625%, with all
+games complete and no invalid games or caps. Select first-onehot for the
+registered 1000-game final confirmation. This selection uses the higher
+all-requested credit from the two exploratory screens.
 
-The conditional trial07 is the saved firstonehot control:
+Final preparation is in progress for dynamic PUCT6400/depth64, world3/chance3,
+with64 workers and MPS FP32 batch32. One preparation attempt failed before
+freeze. It launched no final games. See `RESULTS.md` and the failed-prep
+archive. Do not claim that the final campaign has started.
+
+Completed trial07 used the saved firstonehot runtime:
 
 ```sh
 local/strength/inference/bin/python research/sprint48/run_external.py --checkpoint local/research/sprint48/ready/first/onehot/runtime.pt --output local/research/sprint48/external-07 --master 17707000000 --games 128 --iterations 6400 --workers 64 --search puct --depth 64 --world-pool 3 --chance-universes 3 --dynamic-fpu --binary-directory local/research/sprint48/build-dynamic/release/examples --port 19727 --device mps --batch 32
 ```
 
-This command is prospective; do not repeat it once its master is consumed.
-Choose one final model/profile from completed evidence, then freeze the game
-count from measured cost and the remaining fixed deadline. Preserve all failed
-and unused fits. Final streams remain sealed until this choice.
+This command records the completed exploratory trial. Its master is consumed;
+do not repeat it. The final model is selected, and the 1000-game count and
+search settings are registered. A successful final freeze and fresh final
+schedule are still required. Preserve failed and unused fits.
 
 ## 1. Restore the starting checkpoint
 
