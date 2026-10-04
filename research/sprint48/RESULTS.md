@@ -373,3 +373,11 @@ Trial05 archive:`artifacts/development-05`,185files, manifestSHA256
 `f28434b05925cb44738ea6cef00e8324b7fc33652bfe96904bbc8354e4dc8f78`.
 A full restore verified every file. Duplicate refit weights are referenced
 through the existing refit archive.
+
+Execution repair evidence is retained in `artifacts/execution-repairs`:28files,
+manifestSHA256`038b9ae7818c43f7ebda3d2a3c362c705c6c3334ab3df9b5c8512254aa19936e`.
+Full restore verified the failed fit receipts, exact source files at2417e62,
+and resident-probe source snapshot/failure excerpts. Full native-abort stderr
+was not captured; this limit is explicit. The failed fit's duplicate parent
+weights are a verified reference to the refit archive. The repaired branch2
+launch is now running in the new retry directory.
