@@ -13,6 +13,14 @@ rules. See the [confirmed result](research/sprint48/RESULTS.md),
 [research strength champion](research/STRENGTH_CHAMPION.json), and
 [restore and delivery checklist](research/sprint48/FINAL_DELIVERY.md).
 The standalone/demo pointer remains E81 in `research/CHAMPION.json`.
+
+The same campaign also has a separate matched-search-budget diagnostic:
+Splendorust PUCT6400 earned **58.85% win credit** in 1,000 complete games
+against the pinned AlphaZero checkpoint with its active search budget raised to
+6,400 simulations. The paired bootstrap interval is 55.75–61.90%; the more
+conservative Hoeffding interval is 52.78–64.92%. This is positive evidence at
+the same simulation count, not equal total compute or a decisive promotion
+result. See [the recovered diagnostic](research/sprint48/opponent_search/RESULT-6400.md).
 Older schedules below are reproduction instructions, not current campaign
 requirements.
 

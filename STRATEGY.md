@@ -16,6 +16,14 @@ The plan below records the approved research strategy. Do not restart its
 completed trials or final schedule. The previous Entity training study is
 also closed; reuse its outputs.
 
+The completed follow-up diagnostic also compared Splendorust PUCT6400 with the
+pinned AlphaZero checkpoint at an active 6,400-simulation budget. It earned
+58.85% win credit in 1,000 complete games. The paired bootstrap interval was
+55.75–61.90%; the conservative Hoeffding interval was 52.78–64.92%. This is
+positive matched-search-budget evidence, but not a decisive promotion result
+and not equal total compute. See
+`research/sprint48/opponent_search/RESULT-6400.md`.
+
 ## Objective and authority
 
 Produce the strongest public-observation SplendoRust agent that this Mac can
