@@ -1,0 +1,55 @@
+{
+  "schema": "ahin-adapter-smoke-v1",
+  "strength_claim": false,
+  "mode": "scripted legal actions; no weights or search",
+  "seed": 1002,
+  "decisions": 112,
+  "status": "complete",
+  "phases_seen": [
+    "main",
+    "noble",
+    "payment",
+    "return"
+  ],
+  "canonical_action_categories": [
+    "buy_reserved",
+    "buy_visible",
+    "noble",
+    "payment",
+    "reserve_deck",
+    "return",
+    "take"
+  ],
+  "saw_hidden_reservation_redaction": true,
+  "turn_guard": {
+    "seconds": 20.0,
+    "scope": "one canonical player turn across all subdecisions",
+    "preemptive": false,
+    "limitation": "blocking referee reads or action selection can exceed the limit before the post-call check"
+  },
+  "provenance": {
+    "upstream": {
+      "path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor",
+      "commit": "96e6f2daff83147495826c4a2073dc3c9c856cc9"
+    },
+    "referee_binary": {
+      "path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/ahinlendor/target-adapter/release/examples/ahin_referee",
+      "sha256": "6cb07504b9767c0c8616b73af2b5a147f3dc6e8f89dbd1d970d224d8825e08e6"
+    },
+    "build": {
+      "profile": "release",
+      "command": "CARGO_TARGET_DIR=local/research/ahinlendor/target-adapter cargo build --release --locked -p splendor-arena --example ahin_referee",
+      "cargo_lock_sha256": "cde6b45f4fa36401baa2053f5ddd9983dbe7f30f88fabde00d018d874a910e6a",
+      "target_dir": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/ahinlendor/target-adapter"
+    },
+    "source_sha256": {
+      "crates/splendor-arena/examples/ahin_referee.rs": "335a1d415f442c89231ebd7f7d988c16023fa06beacf31ef9726eb985c4ca4c8",
+      "crates/splendor-core/src/lib.rs": "6187610b6b77e178f2a6156f3ca98749abcb8a6eb46faf23cb68d964dd41c43c",
+      "crates/splendor-arena/Cargo.toml": "a3ae68011b61f5e5571e4a527df2b19d4ac768c51362e51ad5a223459465dee8",
+      "Cargo.lock": "cde6b45f4fa36401baa2053f5ddd9983dbe7f30f88fabde00d018d874a910e6a",
+      "research/ahinlendor/adapter/adapter.py": "9dff366a5c097e09e8f21482a9bc598bbb3810e951e753774e3da1619d25802a",
+      "research/ahinlendor/adapter/hydration.py": "b350045bc2ebe7eee7b17347a76f10cece423647d179054bd0fde8540b7ac3d0",
+      "research/ahinlendor/adapter/smoke.py": "00fa0c5c67a428b3403576ee647190dfaa6589cca79a5725ddd8e17f762d4372"
+    }
+  }
+}

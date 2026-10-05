@@ -1,0 +1,61 @@
+{
+  "build": {
+    "build_exit_code": 0,
+    "command": "c++ -O3 -DNDEBUG -std=c++17 -fPIC -bundle -undefined dynamic_lookup '-DSPLENDOR_BUILD_TYPE=\"Release\"' -DSPLENDOR_BUILD_OPTIMIZED=1 -I/Users/payton.jones/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/include/python3.11 -I/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/lib/python3.11/site-packages/torch/include /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/game_logic.cpp /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/state_encoder.cpp /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/native_mcts.cpp /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/native_endgame.cpp /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/py_splendor.cpp -o /Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/external/ahinlendor/splendor_native.cpython-311-darwin.so",
+    "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+    "elapsed_seconds": 7.918,
+    "gpu_inference_run": false,
+    "optimized": true,
+    "output": "local/strength/external/ahinlendor/splendor_native.cpython-311-darwin.so",
+    "output_sha256": "db31352c79b5dbce964d7a56c127e8f33a34d2604d25f97eb1a88e8db417aa8c",
+    "python": "3.11.13",
+    "python_include": "/Users/payton.jones/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/include/python3.11",
+    "python_path": "local/strength/inference/bin/python",
+    "torch_pybind_headers": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/lib/python3.11/site-packages/torch/include/pybind11",
+    "torch_version": "2.5.1"
+  },
+  "schema": "ahinlendor-cpu-extension-build-v1",
+  "smoke": {
+    "action_dim": 69,
+    "build_type": "Release",
+    "cpu_ismcts_simulations": 1,
+    "optimized": true,
+    "real_model_checkpoint_tested": false,
+    "reset_legal_actions": 30,
+    "standard_cards": 90,
+    "standard_nobles": 10,
+    "state_dim": 252,
+    "visit_probs_shape": [
+      69
+    ]
+  },
+  "upstream": {
+    "commit": "96e6f2daff83147495826c4a2073dc3c9c856cc9",
+    "dirty": false,
+    "path": "local/strength/external/ahinlendor"
+  },
+  "upstream_source_sha256": {
+    ".gitignore": "587d120fa32c3a50d9db28f6c42012eafa9ad90ee77c94eb113d13ed3b0a6ba1",
+    "CMakeLists.txt": "cca0dec6d932910b794a2dfe929f8425b668d32225d85089b57ba7655c91b2fc",
+    "README.md": "140c52dbfba52cccce75d97364c6c79f7418b9a821fb3987dc3057262af43d2d",
+    "game_logic.cpp": "928d013a7395caa505d709d720d6707e90c940f490d603790a17d180cf728f51",
+    "game_logic.h": "4bbfd0651995e5629ac47f2d2f4f3b5b5e2db51d4ae800ca86b937f65efaab75",
+    "native_endgame.cpp": "0be66f109004175eeea1abc7f8a80452d81bb723e2165f8ec95fd5a12c512513",
+    "native_endgame.h": "a4f29c4ad715f6981c5e9269793dba501bb22216bcacef5683310618036ae56a",
+    "native_mcts.cpp": "ef6a386e408135e9ebc5ab597a1c0fe5c06e28df95f1645d11afc66abe131fcc",
+    "native_mcts.h": "82dd02454428185efde17369c5a5e0970d044faaf4d82767682b5e08cf99d138",
+    "nn/checkpoints.py": "1f8dbfd6482ee357f21de2d5a39179fba9a64e9275498c95da0532759c0c2a96",
+    "nn/ismcts.py": "c30f4dc49a50166feb73b6ff152031d9cd2893c882bd9d5c831e5f0dc10138c4",
+    "nn/mcts.py": "552e8907419029cbdccea1d739739daf5df61293968daf7068336e3200887968",
+    "nn/native_env.py": "42cf9c498399ff4fdf74be8e954232424d53722be0b9bfdfd8f13f6a8be8cfdc",
+    "py_splendor.cpp": "81b82c6442a0a24f821b26798df69b61d254ba1773a1d05e768fe1e7fed3b525",
+    "pyproject.toml": "a3c89dffd429e75f9f9517201d48c0183d18292c6df99986706920d627d0ad03",
+    "spendee/cli.py": "f18e1976c056aa5baf672c8d840f3e88f80e0932e0fb60bb1963b6928aec1c74",
+    "spendee/determinize.py": "df4d762527e39483241d695cf76f11787160dc8555d3e0e524909afae0a66e86",
+    "spendee/engine_policy.py": "6cce9f1e92d1f7f74b66be765e0b900756367951594bf63ed8cc3bf2e493b860",
+    "spendee/runner.py": "a50098c9dcd704f53946cf41d39e1c36d1842549f2e7f87056783e4ad3751e9f",
+    "spendee/shadow_state.py": "a815607a7b42b80a7d40ada027a703b3b60038b050a1e07f55253c9acd3dbb71",
+    "state_encoder.cpp": "83319c3d8db4da1b2ee898c1e0fde8cbb6ba9ab55626bd49ab29361f4a879af2",
+    "state_encoder.h": "3891b7eb88b65934da85050915f2a3b47fb65f0761fd2b1b3790f142565c9936"
+  }
+}

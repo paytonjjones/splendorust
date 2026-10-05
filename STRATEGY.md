@@ -1,5 +1,9 @@
 # Beat pinned AlphaZero within 48 hours
 
+The active follow-up is [the AhinLendor comparison](research/ahinlendor/README.md).
+Finish the fixed AlphaZero6400 test and preserve its evidence before that
+comparison. The original deadline remains in force.
+
 Current mandate: 2026-10-03. Prepared from main
 `3c1a65678a41db77aac66e034cbb4b5fa1f7b018`.
 The campaign is complete. The fixed final run scored **77.5% win credit**

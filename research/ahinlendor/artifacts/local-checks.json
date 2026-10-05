@@ -1,0 +1,60 @@
+{
+  "schema": "ahin-local-checks-v1",
+  "checked_utc": "2026-10-05T03:00:59.432031+00:00",
+  "target_dir": "local/research/ahinlendor/rust-build",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --locked -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo test --release --workspace --locked",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo test --release --locked -p splendor-arena --example ahin_referee",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy -p splendor-arena --all-targets --features benchmark-compat --locked -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo test --release --locked -p splendor-arena --features benchmark-compat --example engine_comparison",
+      "exit_code": 0
+    }
+  ],
+  "referee_tests": 3,
+  "engine_example_tests": 0,
+  "engine_example_note": "Build check only; fixture parity is separate.",
+  "python_adapter_tests": 21,
+  "python_command": "local/strength/inference/bin/python -m unittest discover -s research/ahinlendor/adapter -p test_*.py",
+  "source_sha256": {
+    "Cargo.lock": "cde6b45f4fa36401baa2053f5ddd9983dbe7f30f88fabde00d018d874a910e6a",
+    "crates/splendor-arena/Cargo.toml": "a3ae68011b61f5e5571e4a527df2b19d4ac768c51362e51ad5a223459465dee8",
+    "crates/splendor-arena/examples/ahin_referee.rs": "335a1d415f442c89231ebd7f7d988c16023fa06beacf31ef9726eb985c4ca4c8",
+    "crates/splendor-arena/examples/engine_comparison.rs": "77c009754a7bab5c13f1310a80ae3232c766fd04ac2a8ca2aba068fe13736ab3"
+  },
+  "latest_engine_incremental_checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=local/research/ahinlendor/rust-build cargo clippy -p splendor-arena --example engine_comparison --features benchmark-compat --locked -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=local/research/ahinlendor/rust-build cargo test --release --locked -p splendor-arena --features benchmark-compat --example engine_comparison",
+      "exit_code": 0,
+      "tests": 0,
+      "note": "This example has no unit tests; this builds the release test target. The bounded runtime parity checks are recorded in ahin-run-corrected.log."
+    }
+  ],
+  "latest_engine_source_sha256": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+  "scope_note": "Workspace checks cover unchanged production code and referee; final benchmark-only timer edits have the incremental checks listed separately. The concurrent trajectory draft is excluded."
+}

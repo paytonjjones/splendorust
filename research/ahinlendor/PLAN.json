@@ -17,5 +17,43 @@
   },
   "phase4": "Optimized raw engine primitives and representative workloads on shared predetermined state/action corpus, excluding Python/inference/search from inner timing. Report semantic work differences and host load.",
   "resource": "Keep current one primary MPS benchmark job untouched. CPU preparation only until it stops. No chat babysitter.",
-  "prior_training_plan": "Superseded; no new training or collection job was launched."
+  "prior_training_plan": "Superseded; no new training or collection job was launched.",
+  "checkpoint_gate": {
+    "status": "blocked_missing_flagship_weights",
+    "user_confirmation": "User does not have checkpoint; assumed GitHub supplied it.",
+    "contact_policy": "Do not message humans on user behalf. Await user-supplied or public documented checkpoint; no substitute flagship."
+  },
+  "integration_evidence": {
+    "adapter_tests": 21,
+    "scripted_smoke": "adapter/artifacts/smoke-full-phases.json",
+    "scripted_seed": 1002,
+    "scripted_decisions": 112,
+    "phases": [
+      "main",
+      "payment",
+      "return",
+      "noble"
+    ],
+    "strength_claim": false,
+    "hard_search_timeout_implemented": false
+  },
+  "full_turn_engine_followup": {
+    "status": "implementation",
+    "owner": "Luna search_and_evaluation",
+    "engineering_limit_hours": 5,
+    "cpu_limit_minutes": 60,
+    "deadline_utc": "2026-10-05T19:35:52Z",
+    "scope": "Separate raw-engine trace replay; exact private-state parity after full turns; no agents or strength claim",
+    "unsupported": "Record exclusions for gold returns and PASS/no-action; no fabricated fallback"
+  },
+  "raw_primitive_evidence": {
+    "status": "complete",
+    "receipt": "engine/RUN.json",
+    "report": "engine/RESULTS.md",
+    "fixtures": 4,
+    "repeats": 3,
+    "independent_review": "passed",
+    "full_turn_evidence": false,
+    "strength_claim": false
+  }
 }
