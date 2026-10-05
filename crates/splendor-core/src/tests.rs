@@ -409,6 +409,9 @@ fn payment_capacity_bound() {
     let mut out = ActionSet::new();
     payments(0, [5; 5], &[5; 6], 5, [0; 5], &mut out);
     assert_eq!(out.len(), 252);
+    let mut fast = ActionSet::new();
+    fast_actions::enumerate_payments([5; 5], &[5; 6], 5, &mut fast);
+    assert_eq!(fast, out);
 }
 #[test]
 fn replay_deterministic_every_decision() {
@@ -482,6 +485,9 @@ fn payment_generator_matches_independent_cartesian_reference() {
         let tokens = std::array::from_fn(|_| rng.index(6) as u8);
         let mut generated = ActionSet::new();
         payments(0, cost, &tokens, tokens[5], [0; 5], &mut generated);
+        let mut fast = ActionSet::new();
+        fast_actions::enumerate_payments(cost, &tokens, tokens[5], &mut fast);
+        assert_eq!(fast, generated);
         let mut expected = std::collections::HashSet::new();
         for code in 0..3125 {
             let mut code = code;
@@ -682,6 +688,11 @@ fn counter_capacity_is_atomic_for_all_generated_actions() {
                 boundary.turns = u32::MAX;
                 for &action in &legal {
                     assert_eq!(boundary.apply_action(action), Err(RuleError::TurnLimit));
+                    let mut buffer = ActionSet::new();
+                    assert_eq!(
+                        boundary.decision(&mut buffer).apply(action),
+                        Err(RuleError::TurnLimit)
+                    );
                     assert_eq!(boundary.turns, u32::MAX);
                     let mut restored = boundary.clone();
                     restored.turns = state.turns;
@@ -784,4 +795,174 @@ fn eighth_bonus_of_a_color_is_a_legal_purchase() {
     assert_eq!(state.players[0].bonuses[color], 8);
     assert_eq!(state.players[0].owned.count_ones(), 8);
     assert_eq!(state.players[0].tokens[GOLD], 1);
+}
+
+#[test]
+fn fast_enumeration_preserves_every_bank_pattern_and_order() {
+    let mut state = GameState::new(2, 424262).unwrap();
+    let mut expected = ActionSet::new();
+    let mut actual = ActionSet::new();
+    for pattern in 0..1024usize {
+        let mut digits = pattern;
+        for bank in &mut state.bank[..5] {
+            *bank = [0, 1, 4, 7][digits % 4];
+            digits /= 4;
+        }
+        state.legal_actions_reference(&mut expected);
+        state.legal_actions(&mut actual);
+        assert_eq!(actual, expected, "bank pattern {pattern}");
+    }
+}
+
+#[test]
+fn fast_enumeration_preserves_optional_payments_and_gold_returns() {
+    let mut state = GameState::new(2, 424262).unwrap();
+    let mut expected = ActionSet::new();
+    let mut actual = ActionSet::new();
+    let mut rng = Rng::new(424263);
+    for card in 0..90u8 {
+        state.market[0] = card;
+        state.phase = Phase::Payment(Source::Market(0));
+        for _ in 0..128 {
+            let player = &mut state.players[0];
+            for color in 0..5 {
+                player.tokens[color] = rng.index(5) as u8;
+                player.bonuses[color] = rng.index(5) as u8;
+            }
+            player.tokens[GOLD] = rng.index(6) as u8;
+            state.legal_actions_reference(&mut expected);
+            state.legal_actions(&mut actual);
+            assert_eq!(actual, expected, "payment card {card}");
+        }
+    }
+    state.phase = Phase::Return;
+    for pattern in 0..6144usize {
+        let mut digits = pattern / 6;
+        state.players[0].tokens[GOLD] = (pattern % 6) as u8;
+        for token in &mut state.players[0].tokens[..5] {
+            *token = (digits % 4) as u8;
+            digits /= 4;
+        }
+        if !(11..=13).contains(&state.players[0].token_count()) {
+            continue;
+        }
+        state.legal_actions_reference(&mut expected);
+        state.legal_actions(&mut actual);
+        assert_eq!(actual, expected, "return pattern {pattern}");
+    }
+}
+
+#[test]
+fn fast_enumeration_preserves_complete_seeded_games_and_all_choices() {
+    let mut phases = [0usize; 5];
+    let mut action_types = [0usize; 8];
+    for count in 2..=4 {
+        for seed in 424262..424294 {
+            let mut state = GameState::new(count, seed).unwrap();
+            let mut reference = state.clone();
+            let mut rng = Rng::new(seed);
+            let mut expected = ActionSet::new();
+            let mut actual = ActionSet::new();
+            for _ in 0..2000 {
+                phases[match state.phase {
+                    Phase::Main => 0,
+                    Phase::Payment(_) => 1,
+                    Phase::Return => 2,
+                    Phase::Noble => 3,
+                    Phase::Terminal => 4,
+                }] += 1;
+                reference.legal_actions_reference(&mut expected);
+                state.legal_actions(&mut actual);
+                assert_eq!(actual, expected, "count {count} seed {seed}");
+                for &action in &actual {
+                    action_types[match action {
+                        Action::Take(_) => 0,
+                        Action::ReserveVisible(_) => 1,
+                        Action::ReserveDeck(_) => 2,
+                        Action::BuyVisible(_) => 3,
+                        Action::BuyReserved(_) => 4,
+                        Action::Pay(_) => 5,
+                        Action::Return(_) => 6,
+                        Action::Noble(_) => 7,
+                    }] += 1;
+                    let mut branch = state.clone();
+                    branch.apply_action(action).unwrap();
+                    branch.check_invariants().unwrap();
+                    let mut guarded = state.clone();
+                    let mut buffer = ActionSet::new();
+                    let expected_observation = guarded.observe(guarded.current_player());
+                    let decision = guarded.decision(&mut buffer);
+                    assert_eq!(
+                        decision.observe(expected_observation.viewer as usize),
+                        expected_observation
+                    );
+                    decision.apply(action).unwrap();
+                    assert_eq!(guarded, branch);
+                    let mut indexed = state.clone();
+                    let index = actual.iter().position(|a| *a == action).unwrap();
+                    indexed.decision(&mut buffer).apply_index(index).unwrap();
+                    assert_eq!(indexed, branch);
+                }
+                if actual.is_empty() {
+                    break;
+                }
+                let action = if rng.index(3) != 0 {
+                    actual
+                        .iter()
+                        .find(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
+                        .copied()
+                } else {
+                    None
+                }
+                .unwrap_or(actual[rng.index(actual.len())]);
+                state.apply_action(action).unwrap();
+                reference.apply_action(action).unwrap();
+                assert_eq!(state, reference);
+                assert_eq!(state.outcome(), reference.outcome());
+                for seat in 0..usize::from(count) {
+                    assert_eq!(state.observe(seat), reference.observe(seat));
+                }
+            }
+        }
+    }
+    assert!(phases.iter().all(|&n| n > 0), "phases {phases:?}");
+    assert!(
+        action_types.iter().all(|&n| n > 0),
+        "action types {action_types:?}"
+    );
+}
+
+#[test]
+fn validated_decisions_reject_invalid_choices_and_capacity_atomically() {
+    let mut state = GameState::new(2, 424262).unwrap();
+    let before = state.clone();
+    let mut buffer = ActionSet::new();
+    assert_eq!(
+        state.decision(&mut buffer).apply(Action::Pay([0; 5])),
+        Err(RuleError::IllegalAction)
+    );
+    assert_eq!(state, before);
+    assert_eq!(
+        state.decision(&mut buffer).apply_index(usize::MAX),
+        Err(RuleError::IllegalAction)
+    );
+    assert_eq!(state, before);
+    state.turns = u32::MAX;
+    let before = state.clone();
+    let action = actions(&state)[0];
+    assert_eq!(
+        state.decision(&mut buffer).apply(action),
+        Err(RuleError::TurnLimit)
+    );
+    assert_eq!(state, before);
+    assert_eq!(
+        state.decision(&mut buffer).apply_index(0),
+        Err(RuleError::TurnLimit)
+    );
+    assert_eq!(state, before);
+    assert_eq!(
+        state.decision(&mut buffer).apply(Action::Pay([0; 5])),
+        Err(RuleError::IllegalAction)
+    );
+    assert_eq!(state, before);
 }

@@ -606,17 +606,18 @@ impl Agent for SearchAgent {
                 {
                     break;
                 }
-                state.legal_actions(&mut aa);
-                if aa.is_empty() {
+                let obs = state.observe(state.current_player());
+                let decision = state.decision(&mut aa);
+                let legal = decision.actions();
+                if legal.is_empty() {
                     break;
                 }
-                let obs = state.observe(state.current_player());
                 let a = match self.config.rollout {
-                    RolloutPolicy::Random => aa[self.rng.index(aa.len())],
-                    RolloutPolicy::Greedy => best(&obs, &aa, false),
-                    RolloutPolicy::Strong => best(&obs, &aa, true),
+                    RolloutPolicy::Random => legal[self.rng.index(legal.len())],
+                    RolloutPolicy::Greedy => best(&obs, legal, false),
+                    RolloutPolicy::Strong => best(&obs, legal, true),
                 };
-                state.apply_action(a).unwrap();
+                decision.apply(a).unwrap();
             }
             let reward = if let Some(result) = state.outcome() {
                 if result.winners & (1 << o.current) != 0 {

@@ -200,21 +200,22 @@ fn play_validated_game(
             status = "complete";
             break;
         }
-        s.legal_actions(&mut aa);
-        if aa.is_empty() {
+        let pi = s.current_player();
+        let decision = s.decision(&mut aa);
+        if decision.actions().is_empty() {
             status = "no_legal_action";
             break;
         }
-        let pi = s.current_player();
-        let a = agents[pi].select_action(&s.observe(pi), &aa);
+        let a = agents[pi].select_action(&decision.observe(pi), decision.actions());
         let public_before: [Option<splendor_core::Observation>; 4] = std::array::from_fn(|seat| {
-            (seat < agents.len() && agents[seat].wants_public_history()).then(|| s.observe(seat))
+            (seat < agents.len() && agents[seat].wants_public_history())
+                .then(|| decision.observe(seat))
         });
         let wire = encode(a);
         if capture {
             history.actions.push(wire);
         }
-        if let Err(e) = s.apply_action(a) {
+        if let Err(e) = decision.apply(a) {
             return Err(format!(
                 "seed={seed} block={block} rotation={rotation} decision={decisions}: {e}; actions={:?}",
                 history.actions
