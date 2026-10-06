@@ -78,27 +78,35 @@ fn game(q: &Request, index: u64) -> Record {
             status = 0;
             break;
         }
-        state.legal_actions(&mut legal);
-        if legal.is_empty() {
+        // The selected action stays tied to this exact state until application.
+        let current = state.current_player();
+        let decision = state.decision(&mut legal);
+        let actions = decision.actions();
+        if actions.is_empty() {
             status = 1;
             break;
         }
         let action = match q.workload.as_str() {
-            "random" => legal[rng.index(legal.len())],
-            "greedy" => {
-                SimpleGreedyAgent.select_action(&state.observe(state.current_player()), &legal)
+            "random" => {
+                let index = rng.index(actions.len());
+                decision.apply_index(index).unwrap();
+                if q.check {
+                    state.check_invariants().unwrap();
+                }
+                decisions += 1;
+                continue;
             }
-            "search32" => search[state.current_player()]
-                .select_action(&state.observe(state.current_player()), &legal),
-            "search128_strong" if state.current_player() == 0 => {
-                search[0].select_action(&state.observe(0), &legal)
+            "greedy" => SimpleGreedyAgent.select_action(&decision.observe(current), actions),
+            "search32" => search[current].select_action(&decision.observe(current), actions),
+            "search128_strong" if current == 0 => {
+                search[0].select_action(&decision.observe(0), actions)
             }
             "search128_strong" => {
-                StrongHeuristicAgent.select_action(&state.observe(state.current_player()), &legal)
+                StrongHeuristicAgent.select_action(&decision.observe(current), actions)
             }
             _ => unreachable!(),
         };
-        state.apply_action(action).unwrap();
+        decision.apply(action).unwrap();
         if q.check {
             state.check_invariants().unwrap();
         }

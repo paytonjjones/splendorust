@@ -95,6 +95,10 @@ fn normal_core_paths_do_not_allocate() {
                         let mut branch = state.clone();
                         branch.apply_action(action).unwrap();
                         branch.check_invariants().unwrap();
+                        let mut guarded = state.clone();
+                        let mut buffer = ActionSet::new();
+                        guarded.decision(&mut buffer).apply(action).unwrap();
+                        assert_eq!(guarded, branch);
                         black_box(branch.observe(branch.current_player()));
                     }
                     if legal.is_empty() {

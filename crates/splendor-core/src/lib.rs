@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 //! Deterministic base Splendor. No I/O, clocks, global RNG, or agent dependencies.
 pub mod data;
+mod fast_actions;
 mod rng;
 use arrayvec::ArrayVec;
 use data::{CARDS, NOBLES};
@@ -16,6 +17,9 @@ pub const NONE: u8 = 255;
 pub const GOLD: usize = 5;
 /// Maximum: 252 payments (at most five wild tokens over five colors).
 pub type ActionSet = ArrayVec<Action, 256>;
+// Word-sized storage makes complete action-list writes and copies efficient.
+// Wire encoding is explicit in callers and does not use this memory layout.
+#[repr(align(8))]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Action {
     Take([u8; 5]),
@@ -267,7 +271,36 @@ impl GameState {
         mask
     }
     /// Reuses caller-owned stack storage. Enumeration order is versioned.
+    #[inline(always)]
     pub fn legal_actions(&self, out: &mut ActionSet) {
+        fast_actions::legal_actions(self, out);
+    }
+
+    /// Enumerate complete legal choices and reserve the state and action buffer.
+    ///
+    /// The returned value has exclusive access to both borrows until it is
+    /// consumed by `apply` or `apply_index`.
+    ///
+    /// ```compile_fail
+    /// use splendor_core::{Action, ActionSet, GameState};
+    /// let mut state = GameState::new(2, 1).unwrap();
+    /// let mut actions = ActionSet::new();
+    /// let decision = state.decision(&mut actions);
+    /// let _ = state.apply_action(Action::Take([1, 0, 0, 0, 0]));
+    /// let _ = decision.actions();
+    /// ```
+    #[inline(always)]
+    pub fn decision<'a>(&'a mut self, out: &'a mut ActionSet) -> Decision<'a> {
+        self.legal_actions(out);
+        Decision {
+            state: self,
+            actions: out,
+        }
+    }
+
+    /// Reference enumeration retained for exact parity checks and benchmarks.
+    #[cfg(any(test, feature = "benchmark-compat"))]
+    pub fn legal_actions_reference(&self, out: &mut ActionSet) {
         out.clear();
         let p = &self.players[self.current_player()];
         match self.phase {
@@ -332,6 +365,12 @@ impl GameState {
         if !self.valid_action(a) {
             return Err(RuleError::IllegalAction);
         }
+        self.apply_legal_action(a)
+    }
+
+    /// Apply an action whose legality was established by the current state.
+    /// The caller must hold the exclusive state borrow used to enumerate it.
+    fn apply_legal_action(&mut self, a: Action) -> Result<(), RuleError> {
         // Check before any phase-specific mutation, including pending decisions.
         if self.turns == u32::MAX {
             return Err(RuleError::TurnLimit);
@@ -681,6 +720,48 @@ impl GameState {
         Ok(())
     }
 }
+
+/// A complete legal-action list tied to an exclusive borrow of its game state.
+///
+/// A `Decision` cannot be cloned or inspected through a state accessor. Its
+/// public methods expose only immutable actions and consume it when applying
+/// one of them.
+pub struct Decision<'a> {
+    state: &'a mut GameState,
+    actions: &'a mut ActionSet,
+}
+
+impl Decision<'_> {
+    /// Return the complete legal actions for the borrowed state.
+    pub fn actions(&self) -> &[Action] {
+        self.actions.as_slice()
+    }
+
+    /// Build the same redacted observation as `GameState::observe`.
+    pub fn observe(&self, viewer: usize) -> Observation {
+        self.state.observe(viewer)
+    }
+
+    /// Apply an action if it belongs to the enumerated legal-action list.
+    #[inline(always)]
+    pub fn apply(self, action: Action) -> Result<(), RuleError> {
+        if !self.actions.contains(&action) {
+            return Err(RuleError::IllegalAction);
+        }
+        self.state.apply_legal_action(action)
+    }
+
+    /// Apply the legal action at `index` in enumeration order.
+    #[inline(always)]
+    pub fn apply_index(self, index: usize) -> Result<(), RuleError> {
+        let Some(&action) = self.actions.get(index) else {
+            return Err(RuleError::IllegalAction);
+        };
+        self.state.apply_legal_action(action)
+    }
+}
+
+#[cfg(any(test, feature = "benchmark-compat"))]
 fn payments(
     i: usize,
     cost: [u8; 5],

@@ -1,4 +1,5 @@
 //! Explicit benchmark profile; no policy or rules change in the standard engine.
+use arrayvec::ArrayVec;
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use splendor_core::{
@@ -105,7 +106,8 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> 
         let o = s.observe(s.current_player());
         let p = &o.players[s.current_player()];
         s.legal_actions(&mut legal);
-        let mut projected = Vec::new();
+        // At most one projected entry per canonical Main action.
+        let mut projected = ArrayVec::<(u32, Action), 256>::new();
         for &action in &legal {
             let key = match action {
                 Action::BuyVisible(i) => Some(u32::from(o.market[i as usize])),
