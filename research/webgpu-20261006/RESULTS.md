@@ -21,10 +21,10 @@ readback. Model loading is outside the turn measurement.
 | Maximum value error versus portable Rust | 0.00000102818 |
 | Warm inference median | 2.80 ms |
 | Warm inference p95 | 3.48 ms |
-| Seed 91337, first reply | 4,067 simulations in 9.903 s |
-| Seed 17798000007, bot starts | 4,128 simulations in 9.902 s |
-| Seed 17798000019, bot starts | 4,110 simulations in 9.902 s |
-| Longest main-thread timer gap during the first reply | 22.2 ms |
+| Seed 91337, first reply | 4,100 simulations in 9.902 s |
+| Seed 17798000007, bot starts | 4,062 simulations in 9.902 s |
+| Seed 17798000019, bot starts | 4,088 simulations in 9.903 s |
+| Longest main-thread timer gap during the first reply | 22.7 ms |
 
 The retained numerical thresholds are 0.001 for logits and 0.0001 for values.
 The original portable WASM decision took 417.8 seconds with 6,400 simulations;
@@ -34,6 +34,14 @@ The browser uses canonical rules; the native research chance-universe behavior
 is not part of this change. No new research champion is promoted.
 
 ## Failed branches and checks
+
+The first public full-game check found a handoff race after short tests passed.
+The GPU worker read the mailbox state twice. A request arriving between those
+reads could make it wait on state 1, although state 1 means work is ready.
+Inference then timed out. The fix reads state once and waits only on the old
+idle/completed state. A regression test forces that interleaving and also
+checks 100,000 real worker handoffs without GPU arithmetic. Keep
+[the failed public receipt](failed-public-handoff.json).
 
 Graph capture with reusable external GPU buffers failed numerical comparison.
 The first recorded error was 13.64 for logits and 0.6442 for values. Additional
@@ -50,7 +58,7 @@ The preview applies the production content security policy.
 Local checks passed: formatting, strict release workspace Clippy with all
 features and targets, release workspace tests with default and all features,
 TypeScript, both builds, five champion browser tests, six recording tests,
-and 32 game-log backend checks. Recording tests include a complete game at a
+32 game-log backend checks, and the mailbox stress check. Recording tests include a complete game at a
 smaller test budget and native replay validation. The fixed-budget native
 6,400-simulation diagnostic was not repeated for this backend.
 

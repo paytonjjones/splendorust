@@ -1,0 +1,40 @@
+{
+  "sourceCommit": "d8e7ff1",
+  "status": "error",
+  "error": "WebGPU inference timed out",
+  "metrics": {
+    "wasmInitMs": 108.5550000667572,
+    "modelLoadMs": 5125.90499997139,
+    "botDecisionMs": [
+      9900.920000076294,
+      9900.735000133514,
+      9901.055000066757,
+      0.03000020980834961
+    ],
+    "botSimulations": [
+      4225,
+      4233,
+      4315,
+      0
+    ],
+    "botTurnMs": [
+      9901.414999961853,
+      9900.884999990463,
+      9901.549999952316
+    ]
+  },
+  "humanActions": {
+    "reserve": 1,
+    "take": 2,
+    "buy": 1
+  },
+  "uploadStatuses": [
+    202,
+    202,
+    202,
+    202,
+    202
+  ],
+  "diagnosis": "The GPU waiter loaded the control state twice. A request arriving between reads could cause it to wait on pending request state 1.",
+  "fix": "Load once, and wait only on an idle or completed state. Force this exact interleaving in the mailbox regression test."
+}

@@ -1,3 +1,4 @@
+import { waitForGpuRequest } from "./gpu-mailbox";
 import { loadGpuModel } from "./webgpu-model";
 
 self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceSha256: string; baseUrl: string }>) => {
@@ -16,11 +17,7 @@ self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceS
     for (let i = 0; i < 3; i++) await model.evaluate(input);
     self.postMessage({ type: "ready", model: model.metadata });
     while (true) {
-      while (Atomics.load(control, 0) !== 1) {
-        const state = Atomics.load(control, 0);
-        const wait = Atomics.waitAsync(control, 0, state);
-        if (wait.async) await wait.value;
-      }
+      await waitForGpuRequest(control);
       output.set(await model.evaluate(input));
       Atomics.store(control, 0, 2);
       Atomics.notify(control, 0);

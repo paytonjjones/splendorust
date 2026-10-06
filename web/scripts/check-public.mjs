@@ -22,7 +22,11 @@ page.on('worker', worker => {
 });
 page.on('console', message => {
   const text = message.text();
-  if (text.startsWith('PUBLIC_SEARCH_METRICS ')) metrics = JSON.parse(text.slice('PUBLIC_SEARCH_METRICS '.length));
+  if (text.startsWith('PUBLIC_SEARCH_METRICS ')) {
+    const next = JSON.parse(text.slice('PUBLIC_SEARCH_METRICS '.length));
+    if (next.botTurnMs.length > (metrics?.botTurnMs.length ?? 0)) console.log(JSON.stringify({ turn: next.botTurnMs.length, ms: next.botTurnMs.at(-1), simulations: next.botSimulations.at(-1) }));
+    metrics = next;
+  }
 });
 const mark = async () => { boardBefore = await page.getByRole('main', { name: 'Two-player Splendor game' }).innerHTML(); };
 page.on('pageerror', error => errors.push(error.message));
@@ -99,6 +103,12 @@ try {
   writeFileSync(resolve('../docs/web/public-check.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
   console.log(`Browser JSONL: ${output}`);
+} catch (error) {
+  const failure = { error: String(error), metrics, actions, uploads, errors, body: await page.locator('body').innerText() };
+  writeFileSync(resolve('../local/research/webgpu-20261006/public-failure.json'), JSON.stringify(failure, null, 2) + '\n');
+  await page.screenshot({ path: resolve('../local/research/webgpu-20261006/public-failure.png'), fullPage: true });
+  console.log(JSON.stringify(failure));
+  throw error;
 } finally {
   await context.close(); await browser.close();
 }

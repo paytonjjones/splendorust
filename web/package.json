@@ -22,7 +22,8 @@
     "deploy": "bash scripts/deploy-pages.sh",
     "test:logs": "node scripts/test-game-logs.mjs",
     "logs:export": "node scripts/export-games.mjs",
-    "prepare:webgpu": "node scripts/prepare-webgpu.mjs"
+    "prepare:webgpu": "node scripts/prepare-webgpu.mjs",
+    "test:gpu-mailbox": "node --experimental-strip-types scripts/test-gpu-mailbox.mjs"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "5.3.0",
