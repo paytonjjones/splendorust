@@ -1,127 +1,98 @@
 # Splendorust
 
-A deterministic Rust engine and experiment framework for base Splendor, with 2–4 players. The research engine stays independent of graphics, network services, and model dependencies. The optional web client lets a human play two-player Splendor against the registered champion.
+Splendorust is a Rust engine for base Splendor with 2–4 players. Use it to
+run games, compare agents, and check saved games. It also has a browser game.
 
-The workspace contains the full 90-card and 10-noble datasets, rule tests, random-play audits, hidden-information-safe agents, paired tournaments, replay, benchmarks, and a promotion gate. Read [VALIDATION.md](VALIDATION.md) before treating results as ground truth. In particular, the published rules leave some no-action positions unresolved; the engine reports these positions without inventing a winner.
+## Play
 
-The [48-hour strength campaign](STRATEGY.md) decisively beat pinned unchanged
-AlphaZero800 in 1,000 fresh two-player native games: **77.5% win credit**,
-with a conservative paired 95% interval of **71.43–83.57%**. All games completed
-by native score. The selected first-onehot Entity used PUCT6400 against
-AlphaZero800; the result is conditional on that unequal compute and native
-rules. See the [confirmed result](research/sprint48/RESULTS.md),
-[research strength champion](research/STRENGTH_CHAMPION.json), and
-[restore and delivery checklist](research/sprint48/FINAL_DELIVERY.md).
-The standalone/demo pointer remains E81 in `research/CHAMPION.json`.
+[Play in the browser](https://splendorust.pages.dev). You play a two-player
+game against a model that runs on your device. The game footer identifies the
+loaded model. Use a mouse, touch, or the arrow keys and Enter. Visitor games
+are recorded for research.
 
-The same campaign also has a separate matched-search-budget diagnostic:
-Splendorust PUCT6400 earned **58.85% win credit** in 1,000 complete games
-against the pinned AlphaZero checkpoint with its active search budget raised to
-6,400 simulations. The paired bootstrap interval is 55.75–61.90%; the more
-conservative Hoeffding interval is 52.78–64.92%. This is positive evidence at
-the same simulation count, not equal total compute or a decisive promotion
-result. See [the recovered diagnostic](research/sprint48/opponent_search/RESULT-6400.md).
-Older schedules below are reproduction instructions, not current campaign
-requirements.
+For local setup and deployment, see [the web guide](docs/WEB_DEPLOYMENT.md).
+For recorded games, see [the game log guide](docs/web/GAME_LOGS.md).
 
-The [external benchmark report](benchmarks/REPORT.md) contains the reproducible
-baseline, workload rankings and limits. Its [protocol](benchmarks/PROTOCOL.md)
-defines the comparable rules and timing scopes.
+## Run locally
 
-The [playing-strength report](benchmarks/strength/REPORT.md) records the fixed
-external opponents, approved observation adapters, native controls and unsupported
-games. Its results are separate from simulator-speed measurements.
-
-The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/REPORT.md)
-adds public-only AlphaZero and privileged SplendoRust variants to the native
-benchmark. Both variants keep the game rules, models and search budgets fixed.
-
-## Play in the browser
-
-[Play against the champion](https://splendorust.pages.dev). The client in `web/` uses React and a dedicated worker. Rules and champion search run in Rust/WASM. It uses original generated art and separate, content-addressed model assets. Mouse, touch, and arrows plus Enter use the same game actions. All visitor games are recorded for research. See [web setup and deployment](docs/WEB_DEPLOYMENT.md), [game log export and replay validation](docs/web/GAME_LOGS.md), and [web quality evidence](docs/web/QUALITY.md).
-
-## Run
-
-Install Rust through rustup. The repository pins Rust 1.98.1. Dependencies are locked in `Cargo.lock`.
+Install Rust with rustup. The repository selects Rust 1.98.1 and uses the
+locked dependencies in `Cargo.lock`. Run these commands from the repository root:
 
 ```sh
-cargo test --workspace --release --locked
-cargo run --release -- play --agents strong,greedy --seed 42 --check --output game.json
-cargo run --release -- replay game.json
-cargo run --release -- compare --agent-a strong --agent-b greedy --games 20000 --seed 9000001 --threads 4 --output comparison.json
-cargo run --release -- verify-report comparison.json
-cargo run --release -- compare --agent-a search --agent-b strong --games 1000 --seed 100001 --threads 4 --iterations 128 --depth 8
-cargo run --release -- tournament --agents strong,greedy,random --games 3000 --threads 4
-cargo run --release -- benchmark --games 10000 --players 2 --threads 4
-cargo run --release -- audit --games 1000002 --threads 4
+cargo run --release --locked -- play --agents strong,greedy --seed 42 --check --output game.json
+cargo run --release --locked -- replay game.json
 ```
 
-`games` must be divisible by the player count. Each setup is played in all seat rotations. `compare` puts one candidate against N−1 copies of the baseline. `tournament` accepts 2–4 named identities. A repeated agent name still has a separate RNG stream per identity.
+The first command runs one game and saves its actions. `--check` checks the
+state after each decision. The second command checks the saved game.
 
-Use `--help` on any command. `play --trace` prints all decisions. `--check` enables state audits after each decision. JSON reports contain ordered per-game records and trajectory hashes. The source fingerprint identifies uncommitted experiments too. Timing fields vary between runs; fixed-budget game records do not depend on thread count. New reports also store structured run settings. `verify-report` reruns these settings and compares every game record, including blocked and capped games. It requires the same source fingerprint and engine version, and rejects timed runs. It does not check timing fields or statistical summaries. Older reports remain readable, but cannot use this command because their settings are not structured.
-
-## Agents
-
-| Name | Policy |
-|---|---|
-| `random` | Uniform choice from the legal actions at each decision phase |
-| `greedy` / `simple-greedy` | Buy affordable cards; favor points and useful bonuses |
-| `strong` / `strong-heuristic` | Favor efficient purchases, near-term targets, and noble progress |
-| `search` | Root UCB Monte Carlo search with a fresh hidden-state sample per simulation |
-
-`mcts` is a CLI alias for `search`, **not** a claim that this implementation has a persistent MCTS tree. The current search is a simple measured baseline.
-
-Search checks public bank supply and affordable cards before choosing a take
-with three reservations. When a take can preserve a legal next turn, it
-excludes takes that fail this sufficient bound. This prevents the E18
-three-player block without changing the core game rules. It does not guarantee
-that all legal policies or all games terminate. See E18 and E19 in
-[EXPERIMENTS.md](EXPERIMENTS.md) for fixed-budget strength and completion results
-against strong opponents.
-
-Search options: `--iterations`, `--depth` (completed player turns), `--width`, `--rollout random|greedy|strong`, and `--evaluation score|engine`. Fixed iterations are the default. `--search-ms` adds a soft wall-clock cap and marks the report as non-reproducible. A simulation can run past the time cap. Saved action histories still replay exactly.
-
-## Experiment workflow
+To compare two agents:
 
 ```sh
-python3 scripts/promote.py --candidate strong --baseline greedy --seed 12345 --output results/promotion-new
-cargo bench -p splendor-core --bench engine -- --save-baseline before
-# Make one measured change, then:
-cargo bench -p splendor-core --bench engine -- --baseline before
-cargo bench -p splendor-arena --bench arena
+cargo run --release --locked -- compare --agent-a search --agent-b strong --games 1000 --seed 100001 --threads 4 --iterations 128 --depth 8 --output comparison.json
+cargo run --release --locked -- verify-report comparison.json
 ```
 
-The gate runs checks, a throughput smoke test, and a fixed 2,000-game paired gate by default. Use `--confirm 20000` for a fresh milestone confirmation on disjoint seeds. It requires a new output directory, records parameters and completion policy in `run.json`, and writes `decision.json`. It allows at most 1% no-action games per stage while treating their candidate credit as zero for the conservative lower bound. All requested games stay in the denominator; no blocked game gets a winner. Decision-limit games still reject the stage. Use `--max-no-action-fraction 0` for strict completion. The gate can enforce a throughput floor. It uses the executable reported by Cargo, including custom target directories, and records its path and SHA-256 in `build.json` beside `cargo-build.jsonl`. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
+Each setup is played with every seat rotation. The game count must be a
+multiple of the player count. `verify-report` runs the saved settings again
+and compares every game record. It requires the same source and engine version.
+This example is a small comparison, not a formal strength claim.
 
-The local validation suite includes the pinned independent-reference comparison
-on fixed games. GitHub Actions stays disabled at the user's request. See
-[docs/PARITY.md](docs/PARITY.md) for checked scope and explicit rule differences.
+Run `cargo run --release --locked -- --help` for all commands. Add `--help`
+after a command name for its options.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md), [EXPERIMENTS.md](EXPERIMENTS.md), [BENCHMARKS.md](BENCHMARKS.md), and [data/SOURCES.md](data/SOURCES.md).
+## Choose an agent
 
+| CLI name | Behavior |
+| --- | --- |
+| `random` | Selects a random legal action at each decision. |
+| `greedy` | Buys affordable cards and favors points and useful bonuses. |
+| `strong` | Favors efficient purchases, useful tokens, and noble progress. |
+| `search` | Samples unknown cards and tests actions with simulated play. |
 
-Current engine: `splendorust-v2`. At the `u32` turn-counter limit the core returns
-an atomic `TurnLimit` resource error, not a game outcome. Old v1 replay files
-require the matching v1 source; current versioned fixtures and migration evidence
-are documented in [VALIDATION.md](VALIDATION.md).
+These agents work without a model service. Neural research agents also need
+model files. Some research backends use a separate inference service. See
+[the research guide](STRATEGY.md) before you use them.
 
-Search and Strong also apply the public next-turn bound to complete token
-returns. They avoid a take that empties the colored bank and proves that the
-next actor cannot act, when another choice exists. A blind opponent reservation
-prevents this proof. The check does not reject a take that finishes an already
-active final round, or that ends the game through an already eligible noble
-from the last seat. E20 and E21 record the failed candidate and fresh checks;
-E22 records the noble boundary correction.
-These policies do not guarantee termination for all setups or budgets.
+## Download the champion weights
 
-Historical small-model lineage is in `research/LINEAGE.json`; the standalone
-endpoint is in `research/CHAMPION.json`. The active confirmed research baseline
-is in `research/STRENGTH_CHAMPION.json`. The old offline loop's
-`--teacher-action-targets` mode remains available for reproduction. E80 records
-why its exported Gumbel policy target could be weaker than the executed teacher
-choice; E81 records a learning gain from repaired labels. New work follows
-STRATEGY.md rather than automatically restarting that loop.
+The champion weights are public under the [MIT license](LICENSE).
+[Download the Rust/WASM model](https://raw.githubusercontent.com/paytonjjones/splendorust/main/web/public/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin)
+or [the compressed PyTorch checkpoint](https://raw.githubusercontent.com/paytonjjones/splendorust/main/research/training_strategy/artifacts/core/chunks/first/onehot/runtime.pt/0000.gz).
+[The weights guide](docs/CHAMPION.md) explains the formats, hashes, and setup.
 
-E92 showed that the current champion remains weak against the unchanged AlphaZero800 target. The [E95 supervision pivot](research/e95/REPORT.md) uses external expert labels and deterministic public inputs at every search node, with a public rules flag and separate fresh canonical/native screens. Collection and evaluation data remain disjoint.
+## Understand the results
 
-The [E95 handoff](research/e95/HANDOFF.md) freezes6,000 completed expert games and exact dataset archives. Training and fresh strength screens remain pending; the current champion is unchanged.
+The confirmed research agent earned **77.5% win credit** in 1,000 complete
+games against the pinned AlphaZero800 agent. A win gives one credit; an exact
+tie splits that credit. The conservative 95% interval was **71.43–83.57%**.
+
+The research agent used 6,400 search simulations per decision; AlphaZero used
+800. The test used AlphaZero's own rules profile, which differs from this
+engine's base-game rules. It does not establish strength at equal compute,
+under all Splendor rules, or against expert humans. See
+[the full result](research/sprint48/RESULTS.md).
+
+The browser build selects the model from
+[the strength champion record](research/STRENGTH_CHAMPION.json) and runs its
+exported weights locally in Rust/WASM. The native research test used a separate
+inference service. [CHAMPION.json](research/CHAMPION.json) retains the older E81
+model and canonical result.
+
+Some legal games can stop with no legal action or can repeat token moves.
+These games have no winner. Read [the rule and validation guide](VALIDATION.md)
+before you use comparison results.
+
+## Find more information
+
+| Document | Use it to |
+| --- | --- |
+| [Architecture](ARCHITECTURE.md) | Understand the crates, decisions, hidden information, and replay. |
+| [Validation](VALIDATION.md) | Check rule choices, test coverage, and evidence limits. |
+| [Benchmarks](BENCHMARKS.md) | Measure speed and find performance results. |
+| [Experiments](EXPERIMENTS.md) | Find research results and earlier trials. |
+| [Strategy](STRATEGY.md) | Plan a new strength experiment. |
+| [Data sources](data/SOURCES.md) | Check the source of the 90 cards and 10 nobles. |
+
+GitHub Actions is disabled. Run checks locally as described in
+[Validation](VALIDATION.md#run-local-checks).
