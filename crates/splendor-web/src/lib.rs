@@ -20,6 +20,7 @@ use wasm_bindgen::prelude::*;
 #[serde(default, rename_all = "camelCase", deny_unknown_fields)]
 struct ChampionConfig {
     search_agent: String,
+    gpu_inference: bool,
     cpuct: f64,
     fpu_reduction: f64,
     dynamic_fpu: bool,
@@ -40,6 +41,7 @@ impl Default for ChampionConfig {
     fn default() -> Self {
         Self {
             search_agent: "flywheel-gumbel".into(),
+            gpu_inference: false,
             cpuct: 0.4,
             fpu_reduction: 0.02965,
             dynamic_fpu: false,
@@ -282,7 +284,14 @@ impl WebGame {
                 "champion search settings are outside valid ranges",
             ));
         }
-        let model = load_model(&model_bytes)?;
+        let model = if config.gpu_inference {
+            if !model_bytes.starts_with(b"SPENTY01") {
+                return Err(js_error("WebGPU requires the Entity model"));
+            }
+            Box::leak(Box::new(transfer::Model::with_entity_backend(gpu_infer)))
+        } else {
+            load_model(&model_bytes)?
+        };
         let search = SearchConfig {
             iterations: config.iterations,
             depth: config.depth,
@@ -300,6 +309,7 @@ impl WebGame {
             return Err(js_error("invalid PUCT settings; root noise is unsupported"));
         }
         let profile = Some(SearchProfileOverrides {
+            clock: Some(browser_time_ms),
             puct: (!gumbel).then_some(PuctProfileOverrides {
                 cpuct: config.cpuct,
                 fpu_reduction: config.fpu_reduction,
@@ -390,6 +400,18 @@ impl WebGame {
         let (simulations, inference_calls) = self.bot.work_counts();
         serde_json::json!({"simulations": simulations, "inferenceCalls": inference_calls})
             .to_string()
+    }
+
+    /// Apply the caller's full-turn deadline to the existing PUCT search.
+    #[wasm_bindgen(js_name = botStepWithDeadline)]
+    pub fn bot_step_with_deadline(&mut self, deadline_ms: f64) -> Result<String, JsValue> {
+        if !deadline_ms.is_finite() || deadline_ms < 0.0 {
+            return Err(js_error("invalid search deadline"));
+        }
+        self.bot.set_search_deadline(Some(deadline_ms));
+        let result = self.bot_step();
+        self.bot.set_search_deadline(None);
+        result
     }
 
     /// Make one bot engine decision. The caller can repeat this in test mode.
@@ -860,6 +882,48 @@ fn event_for(
         tier,
         card_id,
         noble_id,
+    }
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = performance, js_name = now)]
+    fn performance_now() -> f64;
+    #[wasm_bindgen(js_namespace = splendorInference, js_name = predict)]
+    fn gpu_predict(tokens: &[f32]) -> Vec<f32>;
+}
+
+fn browser_time_ms() -> f64 {
+    #[cfg(target_arch = "wasm32")]
+    {
+        performance_now()
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        static START: OnceLock<std::time::Instant> = OnceLock::new();
+        START
+            .get_or_init(std::time::Instant::now)
+            .elapsed()
+            .as_secs_f64()
+            * 1000.0
+    }
+}
+fn gpu_infer(tokens: &[f32]) -> ([f32; 81], [f32; 2]) {
+    #[cfg(target_arch = "wasm32")]
+    {
+        let output = gpu_predict(tokens);
+        assert_eq!(output.len(), 83);
+        assert!(output.iter().all(|v| v.is_finite()));
+        (
+            output[..81].try_into().unwrap(),
+            output[81..].try_into().unwrap(),
+        )
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let _ = tokens;
+        panic!("WebGPU requires a browser worker")
     }
 }
 

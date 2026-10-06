@@ -121,7 +121,7 @@ impl EntityModel {
         let erf = sign * (1.0 - poly * (-ax * ax).exp());
         0.5 * x * (1.0 + erf)
     }
-    fn tokens(input: &[f32; 525]) -> Vec<f32> {
+    pub(super) fn tokens(input: &[f32; 525]) -> Vec<f32> {
         let mut z = vec![0.0; TOKENS * 48];
         let mut r = [0.0f32; 392];
         for i in 0..392 {

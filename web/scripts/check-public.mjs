@@ -4,11 +4,26 @@ import { resolve } from 'node:path';
 
 // Use the normal public UI. No test bridge, seed override, or private state input.
 const url = process.argv[2] ?? 'https://splendorust.pages.dev';
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: "chrome" });
 const context = await browser.newContext({ viewport: { width: 1365, height: 768 }, reducedMotion: 'reduce' });
 const page = await context.newPage();
 const errors = [], uploads = [], actions = {};
 let boardBefore = '';
+let metrics = null;
+page.on('worker', worker => {
+  if (!worker.url().includes('game.worker-')) return;
+  void worker.evaluate(() => {
+    const original = self.postMessage.bind(self);
+    self.postMessage = (message, ...rest) => {
+      if (message.type === 'state') console.debug('PUBLIC_SEARCH_METRICS ' + JSON.stringify(message.metrics));
+      return original(message, ...rest);
+    };
+  });
+});
+page.on('console', message => {
+  const text = message.text();
+  if (text.startsWith('PUBLIC_SEARCH_METRICS ')) metrics = JSON.parse(text.slice('PUBLIC_SEARCH_METRICS '.length));
+});
 const mark = async () => { boardBefore = await page.getByRole('main', { name: 'Two-player Splendor game' }).innerHTML(); };
 page.on('pageerror', error => errors.push(error.message));
 page.on('response', response => {
@@ -79,7 +94,8 @@ try {
   const privateGet = await page.request.get(`${url}/api/games`);
   if (privateGet.status() !== 405) throw new Error('The journal endpoint permits reads.');
   if (errors.length || !uploads.length || uploads.some(status => status !== 200 && status !== 202)) throw new Error(JSON.stringify({ errors, uploads }));
-  const report = { schema: 'splendor-web-public-check-v1', checkedAt: new Date().toISOString(), url, result, actions, uploads, errors, testBridgeAbsent: true, publicReadsStatus: privateGet.status() };
+  if (!metrics?.botTurnMs.length || metrics.botTurnMs.some(ms => ms > 10000)) throw new Error('Missing metrics or bot turn exceeded 10 seconds.');
+  const report = { browser: browser.version(), metrics, schema: 'splendor-web-public-check-v1', checkedAt: new Date().toISOString(), url, result, actions, uploads, errors, testBridgeAbsent: true, publicReadsStatus: privateGet.status() };
   writeFileSync(resolve('../docs/web/public-check.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
   console.log(`Browser JSONL: ${output}`);

@@ -191,6 +191,8 @@ pub struct SearchTargets {
 }
 
 pub struct NeuralAgent {
+    pub clock: Option<fn() -> f64>,
+    deadline_ms: Option<f64>,
     rng: Rng,
     config: SearchConfig,
     history: VecDeque<Observation>,
@@ -239,6 +241,8 @@ impl NeuralAgent {
     }
     pub fn new(seed: u64, config: SearchConfig) -> Self {
         Self {
+            clock: None,
+            deadline_ms: None,
             rng: Rng::new(seed),
             config,
             history: VecDeque::new(),
@@ -846,6 +850,10 @@ pub(super) fn key(o: &Observation) -> [u8; 192] {
 }
 
 impl Agent for NeuralAgent {
+    fn set_search_deadline(&mut self, deadline_ms: Option<f64>) {
+        self.deadline_ms = deadline_ms;
+    }
+
     fn wants_public_history(&self) -> bool {
         self.external_model.is_some_and(|m| m.uses_history_bridge())
     }
@@ -950,7 +958,11 @@ impl Agent for NeuralAgent {
                     .config
                     .time_budget
                     .is_some_and(|t| start.elapsed() >= t);
-                if simulation > 0 && time_budget_exhausted {
+                let deadline_exhausted = self
+                    .deadline_ms
+                    .zip(self.clock)
+                    .is_some_and(|(deadline, clock)| clock() >= deadline);
+                if simulation > 0 && (time_budget_exhausted || deadline_exhausted) {
                     break;
                 }
                 let mut state = if worlds.is_empty() {
@@ -1156,6 +1168,27 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn runtime_deadline_stops_search_and_can_be_cleared() {
+        let state = GameState::new(2, 91337).unwrap();
+        let o = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let config = SearchConfig {
+            iterations: 32,
+            depth: 4,
+            ..Default::default()
+        };
+        let mut agent = NeuralAgent::new(77, config);
+        agent.clock = Some(|| 10.0);
+        agent.set_search_deadline(Some(9.0));
+        assert!(legal.contains(&agent.select_action(&o, &legal)));
+        assert_eq!(agent.work_counts().0, 1);
+        agent.set_search_deadline(None);
+        assert!(legal.contains(&agent.select_action(&o, &legal)));
+        assert_eq!(agent.work_counts().0, 33);
+    }
+
     #[test]
     fn chance_universe_seeds_are_policy_rng_derived_and_zero_preserves_rng() {
         let mut disabled = NeuralAgent::new(818, SearchConfig::default());

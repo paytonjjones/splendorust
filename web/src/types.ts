@@ -97,6 +97,8 @@ export interface TrainingReplay {
 }
 
 export interface EffectiveSearch {
+  inferenceBackend: "webgpu-f32";
+  turnBudgetMs: 10000;
   agent: string;
   iterations: number;
   depth: number;

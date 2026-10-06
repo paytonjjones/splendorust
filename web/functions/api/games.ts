@@ -34,6 +34,8 @@ type Runtime = "production" | "test";
 type CanonicalAction = [number, number, number, number, number, number, number];
 
 interface SearchSettings {
+  inferenceBackend?: "webgpu-f32";
+  turnBudgetMs?: number;
   cpuct?: number;
   fpuReduction?: number;
   dynamicFpu?: boolean;
@@ -292,7 +294,9 @@ function validateSearch(value: unknown): value is SearchSettings {
   const legacy = ["agent", "iterations", "depth", "worldPool", "gumbelMaxConsidered", "gumbelCvisit", "gumbelCscale", "gumbelRootNoise"];
   const puct = ["cpuct", "fpuReduction", "dynamicFpu", "chanceUniverses", "uniformPrior", "rootOnly", "rootNoise"];
   if (!isRecord(value)) return false;
-  const hasPuct = exactKeys(value, [...legacy, ...puct]);
+  const hasGpu = exactKeys(value, [...legacy, ...puct, "inferenceBackend", "turnBudgetMs"]);
+  if (hasGpu && (value.inferenceBackend !== "webgpu-f32" || value.turnBudgetMs !== 10000 || value.agent !== "flywheel-best")) return false;
+  const hasPuct = hasGpu || exactKeys(value, [...legacy, ...puct]);
   if (!hasPuct && (!exactKeys(value, legacy) || value.agent === "flywheel-best")) return false;
   if (hasPuct && !validPuct(value.cpuct, value.fpuReduction, value.dynamicFpu, value.chanceUniverses, value.uniformPrior, value.rootOnly, value.rootNoise)) return false;
   return typeof value.agent === "string" && value.agent.length > 0 && value.agent.length <= 64 &&

@@ -7,11 +7,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "npm run prepare:webgpu && vite --host 127.0.0.1",
     "build:wasm": "bash scripts/build-wasm.sh",
     "sync:champion": "python3 scripts/sync-champion.py",
-    "build": "npm run build:wasm && npm run sync:champion && vite build",
-    "build:test": "npm run build:wasm && npm run sync:champion && vite build --mode test --outDir dist-test",
+    "build": "npm run build:wasm && npm run sync:champion && npm run prepare:webgpu && vite build",
+    "build:test": "npm run build:wasm && npm run sync:champion && npm run prepare:webgpu && vite build --mode test --outDir dist-test",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host 127.0.0.1",
     "preview:test": "vite preview --mode test --outDir dist-test --host 127.0.0.1 --port 4174 --strictPort",
@@ -21,11 +21,13 @@
     "test:perf": "npm run build:test && playwright test --grep @perf --workers=1",
     "deploy": "bash scripts/deploy-pages.sh",
     "test:logs": "node scripts/test-game-logs.mjs",
-    "logs:export": "node scripts/export-games.mjs"
+    "logs:export": "node scripts/export-games.mjs",
+    "prepare:webgpu": "node scripts/prepare-webgpu.mjs"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "5.3.0",
     "@fontsource/dm-sans": "5.3.0",
+    "onnxruntime-web": "1.30.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
@@ -36,6 +38,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.1",
+    "@webgpu/types": "0.1.74",
     "typescript": "7.0.2",
     "vite": "8.3.2",
     "wrangler": "4.147.0"

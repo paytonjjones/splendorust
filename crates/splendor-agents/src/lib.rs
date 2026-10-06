@@ -20,6 +20,10 @@ mod transfer_data;
 mod value_weights;
 
 pub trait Agent: Send {
+    /// Absolute deadline from the runtime's monotonic clock. None preserves
+    /// fixed-budget research behavior.
+    fn set_search_deadline(&mut self, _deadline_ms: Option<f64>) {}
+
     fn wants_public_history(&self) -> bool {
         false
     }
@@ -751,8 +755,9 @@ pub struct PuctProfileOverrides {
 /// Runtime settings for a metadata-selected flywheel search profile.
 ///
 /// The normal factory profile remains authoritative when this is `None`.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug)]
 pub struct SearchProfileOverrides {
+    pub clock: Option<fn() -> f64>,
     pub puct: Option<PuctProfileOverrides>,
     pub world_pool: usize,
     pub gumbel_max_considered: usize,
@@ -906,6 +911,7 @@ pub fn make_agent_with_profile(
                 agent.rollout_depth = 8;
             }
             if let Some(profile) = profile {
+                agent.clock = profile.clock;
                 if let Some(puct) = profile.puct {
                     if agent.gumbel
                         || !puct.cpuct.is_finite()

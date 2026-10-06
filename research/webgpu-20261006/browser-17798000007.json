@@ -1,0 +1,103 @@
+{
+  "seed": "17798000007",
+  "metrics": {
+    "wasmInitMs": 1.8249998092651367,
+    "modelLoadMs": 775.4199998378754,
+    "botDecisionMs": [
+      9900.799999952316
+    ],
+    "botSimulations": [
+      4128
+    ],
+    "botTurnMs": [
+      9901.734999895096
+    ]
+  },
+  "games": [
+    {
+      "schema": "splendor-web-game-v1",
+      "gameId": "53a68d74-c43b-4759-9d27-65750be59447",
+      "version": 2,
+      "startedAt": "2026-10-06T21:29:05.530Z",
+      "updatedAt": "2026-10-06T21:29:16.214Z",
+      "humanSeat": 1,
+      "champion": {
+        "schema": "splendor-web-champion-v1",
+        "id": "entity-onehot-generation-one-puct6400",
+        "name": "SplendoRust entity-onehot-generation-one-puct6400",
+        "model": {
+          "url": "/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+          "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+          "bytes": 19123540
+        },
+        "search": {
+          "agent": "flywheel-best",
+          "iterations": 6400,
+          "depth": 64,
+          "algorithm": "puct",
+          "chance_universes": 3,
+          "cpuct": 0.4,
+          "dynamic_fpu": true,
+          "fpu_reduction": 0.02965,
+          "gumbel_cscale": null,
+          "gumbel_cvisit": null,
+          "gumbel_max_considered": null,
+          "gumbel_noise": 0,
+          "root_noise": 0,
+          "root_only": false,
+          "uniform_prior": 0,
+          "world_pool": 3
+        },
+        "source": {
+          "path": "web/public/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+          "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+          "scope": "Decisive win against unchanged pinned AlphaZero800 in two-player native rules with unequal compute. No worldwide, canonical, equal-compute or human rank is established.",
+          "checkpoint": "local/research/sprint48/ready/first/onehot/runtime.pt",
+          "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+        }
+      },
+      "effectiveSearch": {
+        "inferenceBackend": "webgpu-f32",
+        "turnBudgetMs": 10000,
+        "agent": "flywheel-best",
+        "iterations": 6400,
+        "depth": 64,
+        "worldPool": 3,
+        "cpuct": 0.4,
+        "fpuReduction": 0.02965,
+        "dynamicFpu": true,
+        "chanceUniverses": 3,
+        "uniformPrior": 0,
+        "rootOnly": false,
+        "rootNoise": 0,
+        "gumbelMaxConsidered": 16,
+        "gumbelCvisit": 50,
+        "gumbelCscale": 0.1,
+        "gumbelRootNoise": 0
+      },
+      "runtime": "test",
+      "status": "in_progress",
+      "replay": {
+        "schema": "splendor-web-replay-v1",
+        "engine": "splendorust-v2",
+        "players": 2,
+        "seed": "17798000007",
+        "actions": [
+          [
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "revision": 1,
+        "turns": 1,
+        "stateDebug": "GameState { players: [Player { tokens: [0, 2, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }], count: 2, current: 1, bank: [4, 2, 4, 4, 4, 5], market: [27, 28, 38, 37, 60, 52, 65, 61, 76, 71, 85, 88], decks: [[35, 12, 0, 3, 14, 9, 33, 7, 36, 22, 30, 24, 39, 5, 29, 16, 32, 21, 8, 34, 17, 20, 6, 23, 4, 25, 31, 2, 19, 10, 1, 26, 13, 15, 11, 18, 255, 255, 255, 255], [51, 55, 68, 49, 45, 67, 59, 57, 58, 40, 50, 63, 44, 62, 56, 46, 66, 42, 48, 47, 64, 69, 43, 53, 54, 41, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255], [73, 86, 89, 74, 80, 84, 72, 70, 78, 87, 83, 82, 77, 75, 81, 79, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]], remaining: [36, 26, 16], nobles: 49, initial_nobles: 49, phase: Main, final_round: false, turns: 1 }",
+        "result": null
+      }
+    }
+  ]
+}

@@ -46,6 +46,11 @@ try {
   const oldChampion = { schema: 'splendor-web-champion-v1', id: 'e81', model: { url: '/models/' + 'e'.repeat(64) + '.bin', sha256: 'e'.repeat(64), bytes: 569624 }, search: { agent: 'flywheel-gumbel', iterations: 128, depth: 16, world_pool: 3, gumbel_max_considered: 16, gumbel_cvisit: 50, gumbel_cscale: 0.1, gumbel_root_noise: 0 } };
   const oldSearch = oldChampion.search;
   await request({ ...base, gameId: crypto.randomUUID(), champion: oldChampion, effectiveSearch: { agent: oldSearch.agent, iterations: oldSearch.iterations, depth: oldSearch.depth, worldPool: oldSearch.world_pool, gumbelMaxConsidered: oldSearch.gumbel_max_considered, gumbelCvisit: oldSearch.gumbel_cvisit, gumbelCscale: oldSearch.gumbel_cscale, gumbelRootNoise: oldSearch.gumbel_root_noise } }, 202);
+  const gpuSearch = { ...base.effectiveSearch, inferenceBackend: "webgpu-f32", turnBudgetMs: 10000 };
+  await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: gpuSearch }, 202);
+  for (const invalid of [{ turnBudgetMs: 10001 }, { inferenceBackend: "cpu" }, { turnBudgetMs: undefined }]) {
+    await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, ...invalid } }, 400);
+  }
   await request(base, 202);
   await request(base, 200);
   const row = sqlite.prepare('SELECT * FROM games WHERE game_id = ?').get(base.gameId);

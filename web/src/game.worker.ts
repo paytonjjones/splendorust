@@ -1,3 +1,4 @@
+import { startGpu } from "./gpu-client";
 import type {
   ChampionMetadata,
   ClientMetrics,
@@ -45,6 +46,7 @@ interface WasmGame {
   trainingRecord(): string;
   act(actionId: string): string;
   botStep(): string;
+  botStepWithDeadline(deadlineMs: number): string;
   searchWork(): string;
 }
 
@@ -69,6 +71,7 @@ const metrics: ClientMetrics = {
 let game: WasmGame | null = null;
 let champion: ChampionMetadata | null = null;
 let busy = false;
+let stopGpu: (() => void) | null = null;
 
 function post(message: WorkerMessage): void {
   self.postMessage(message);
@@ -102,6 +105,8 @@ function makeEffectiveSearch(
       ? testSearchBudget
       : undefined;
   return {
+    inferenceBackend: "webgpu-f32",
+    turnBudgetMs: 10000,
     agent: metadata.search.agent,
     iterations: validTestOverrides?.iterations ?? metadata.search.iterations,
     depth: validTestOverrides?.depth ?? metadata.search.depth,
@@ -140,6 +145,7 @@ function makeConfig(
     iterations: search.iterations,
     depth: search.depth,
     worldPool: search.worldPool,
+    gpuInference: true,
     cpuct: search.cpuct,
     fpuReduction: search.fpuReduction,
     dynamicFpu: search.dynamicFpu,
@@ -234,7 +240,7 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
     await yieldToWorker();
     const before = JSON.parse(game!.searchWork()) as { simulations: number };
     const decisionStart = performance.now();
-    const serialized = game!.botStep();
+    const serialized = game!.botStepWithDeadline(turnStart + 9900);
     metrics.botDecisionMs.push(performance.now() - decisionStart);
     const after = JSON.parse(game!.searchWork()) as { simulations: number };
     metrics.botSimulations.push(after.simulations - before.simulations);
@@ -249,6 +255,8 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
 
 async function start(request: StartRequest): Promise<void> {
   game = null;
+  stopGpu?.();
+  stopGpu = null;
   champion = null;
   metrics.wasmInitMs = null;
   metrics.modelLoadMs = null;
@@ -257,9 +265,15 @@ async function start(request: StartRequest): Promise<void> {
   metrics.botTurnMs = [];
   post({ type: "status", status: "loading", requestId: request.requestId });
 
+  const modelStart = performance.now();
   const modelTask = loadChampion(request.baseUrl);
   const [loadedChampion, loadedWasm] = await Promise.all([modelTask, loadWasm()]);
-  metrics.modelLoadMs = loadedChampion.loadMs;
+  stopGpu = await startGpu(loadedChampion.metadata.model.sha256, new URL(request.baseUrl, self.location.origin).href, error => {
+    stopGpu?.();
+    stopGpu = null;
+    post({ type: "error", error });
+  });
+  metrics.modelLoadMs = performance.now() - modelStart;
   metrics.wasmInitMs = loadedWasm.loadMs;
   champion = loadedChampion.metadata;
   const search = makeEffectiveSearch(loadedChampion.metadata, request.testSearchBudget);
@@ -316,6 +330,8 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
   const operation = request.type === "start" ? start(request) : act(request);
   void operation
     .catch((error: unknown) => {
+      stopGpu?.();
+      stopGpu = null;
       const message = error instanceof Error ? error.message : String(error);
       post({ type: "error", requestId: request.requestId, error: message });
     })

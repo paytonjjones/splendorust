@@ -368,12 +368,20 @@ impl BootstrapModel {
     }
 }
 
+/// Tokenize an Entity public input without access to a real hidden world.
+pub fn entity_tokens(input: &[f32; 525]) -> Vec<f32> {
+    entity::EntityModel::tokens(input)
+}
+
 /// Native checkpoint dispatch. Both architectures use the same observation encoder.
 pub struct Model {
     architecture: Architecture,
 }
+type EntityBackend = fn(&[f32]) -> ([f32; 81], [f32; 2]);
+
 enum Architecture {
     Entity(entity::EntityModel),
+    ExternalEntity(EntityBackend),
     Remote(remote::RemoteModel),
     Large(Box<large::LargeModel>),
     Attention(Box<attention::AttentionModel>),
@@ -458,6 +466,14 @@ impl ResidualModel {
     }
 }
 impl Model {
+    /// Run the frozen Entity trunk through a host backend. The callback receives
+    /// only tokens made from the public observation encoder.
+    pub fn with_entity_backend(infer: EntityBackend) -> Self {
+        Self {
+            architecture: Architecture::ExternalEntity(infer),
+        }
+    }
+
     pub fn uses_history_bridge(&self) -> bool {
         matches!(&self.architecture, Architecture::Remote(model) if model.history)
     }
@@ -492,6 +508,7 @@ impl Model {
             Architecture::Split(model) => model.infer(x, false),
             Architecture::Residual(model) => model.infer(x, false),
             Architecture::Entity(_)
+            | Architecture::ExternalEntity(_)
             | Architecture::Attention(_)
             | Architecture::Remote(_)
             | Architecture::Large(_) => {
@@ -525,6 +542,7 @@ impl Model {
         matches!(
             &self.architecture,
             Architecture::Entity(_)
+                | Architecture::ExternalEntity(_)
                 | Architecture::Attention(_)
                 | Architecture::Remote(_)
                 | Architecture::Large(_)
@@ -541,13 +559,20 @@ impl Model {
         context: &[f32; 7],
         native_rules: bool,
     ) -> ([f32; 81], [f32; 2]) {
-        if let Architecture::Entity(model) = &self.architecture {
+        if matches!(
+            &self.architecture,
+            Architecture::Entity(_) | Architecture::ExternalEntity(_)
+        ) {
             let (mean, public) = crate::belief::moments(x, context);
             let mut input = [0.0; 525];
             input[..392].copy_from_slice(&mean);
             input[392..519].copy_from_slice(&public[392..]);
             input[519] = f32::from(native_rules);
-            return model.infer(&input);
+            return match &self.architecture {
+                Architecture::Entity(model) => model.infer(&input),
+                Architecture::ExternalEntity(infer) => infer(&entity_tokens(&input)),
+                _ => unreachable!(),
+            };
         }
         if let Architecture::Remote(model) = &self.architecture {
             return model.infer(x, context, native_rules, &[[0.0; 32]; 16], &[1.0; 90]);
@@ -600,6 +625,7 @@ impl Model {
             Architecture::Split(model) => model.infer(x, true),
             Architecture::Residual(model) => model.infer(x, true),
             Architecture::Entity(_)
+            | Architecture::ExternalEntity(_)
             | Architecture::Attention(_)
             | Architecture::Remote(_)
             | Architecture::Large(_) => {

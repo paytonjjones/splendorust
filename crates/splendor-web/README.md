@@ -28,9 +28,14 @@ never returned. `humanSeat` is 0 or 1. `modelBytes` contains a production model
 supported by the inference crate. `configJson` accepts camel-case fields
 `iterations`, `depth`, `worldPool`, `gumbelMaxConsidered`, `gumbelCvisit`,
 `gumbelCscale`, and `gumbelRootNoise`; omitted fields use champion defaults.
-It can also include `searchAgent`, which must be `flywheel-gumbel`; unsupported
-search profiles fail during game setup instead of silently running another
-agent.
+`searchAgent` accepts `flywheel-gumbel` or `flywheel-best`. The latter accepts
+`cpuct`, `fpuReduction`, `dynamicFpu`, `chanceUniverses`, `uniformPrior`,
+`rootOnly`, and zero `rootNoise`. `gpuInference: true` uses the host Entity
+backend. The callback receives only tokens from the public observation.
+The web application supplies the current champion settings. It sets an
+absolute monotonic deadline with `botStepWithDeadline(deadlineMs)` for each
+bot decision. All decisions in a turn share one deadline. Ordinary
+`botStep()` calls keep the fixed simulation budget.
 
 `snapshot()` returns JSON with `revision`, `turn`, `activePlayer`, `humanSeat`,
 `stage`, `finalRound`, `bank`, `market`, `deckCounts`, `nobles`, `players`,
