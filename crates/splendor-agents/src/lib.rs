@@ -22,6 +22,7 @@ mod value_weights;
 pub trait Agent: Send {
     /// Absolute deadline from the runtime's monotonic clock. None preserves
     /// fixed-budget research behavior.
+    fn set_inference_batch_size(&mut self, _size: usize) {}
     fn set_search_deadline(&mut self, _deadline_ms: Option<f64>) {}
 
     fn wants_public_history(&self) -> bool {

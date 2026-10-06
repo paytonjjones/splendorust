@@ -163,6 +163,9 @@ impl Environment for AlphaZeroNative {
 pub trait PolicyValue<E: Environment> {
     type Policy: AsRef<[f32]>;
     fn evaluate(&mut self, o: &E::Observation) -> (Self::Policy, f64);
+    fn evaluate_batch(&mut self, observations: &[E::Observation]) -> Vec<(Self::Policy, f64)> {
+        observations.iter().map(|o| self.evaluate(o)).collect()
+    }
     fn choices(o: &E::Observation, legal: &[E::Action]) -> Option<Vec<E::Action>>;
     fn rollout_action(&mut self, o: &E::Observation, legal: &[E::Action]) -> E::Action;
 }

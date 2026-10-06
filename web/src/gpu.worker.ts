@@ -1,13 +1,13 @@
 import { waitForGpuRequest } from "./gpu-mailbox";
 import { loadGpuModel } from "./webgpu-model";
 
-self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceSha256: string; baseUrl: string }>) => {
-  const { buffer, sourceSha256, baseUrl } = event.data;
+self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceSha256: string; baseUrl: string; batch: 1 | 8 }>) => {
+  const { buffer, sourceSha256, baseUrl, batch } = event.data;
   const control = new Int32Array(buffer, 0, 4);
-  const input = new Float32Array(buffer, 16, 31 * 48);
-  const output = new Float32Array(buffer, 16 + 31 * 48 * 4, 83);
+  const input = new Float32Array(buffer, 16, batch * 31 * 48);
+  const output = new Float32Array(buffer, 16 + batch * 31 * 48 * 4, batch * 83);
   try {
-    const model = await loadGpuModel(sourceSha256, baseUrl, true, progress => self.postMessage({ type: "progress", progress }));
+    const model = await loadGpuModel(sourceSha256, baseUrl, true, progress => self.postMessage({ type: "progress", progress }), batch);
     void model.lost.then(error => {
       Atomics.store(control, 0, -1);
       Atomics.notify(control, 0);

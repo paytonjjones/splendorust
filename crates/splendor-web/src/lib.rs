@@ -21,6 +21,7 @@ use wasm_bindgen::prelude::*;
 struct ChampionConfig {
     search_agent: String,
     gpu_inference: bool,
+    inference_batch_size: usize,
     cpuct: f64,
     fpu_reduction: f64,
     dynamic_fpu: bool,
@@ -42,6 +43,7 @@ impl Default for ChampionConfig {
         Self {
             search_agent: "flywheel-gumbel".into(),
             gpu_inference: false,
+            inference_batch_size: 8,
             cpuct: 0.4,
             fpu_reduction: 0.02965,
             dynamic_fpu: false,
@@ -324,7 +326,7 @@ impl WebGame {
             gumbel_cscale: config.gumbel_cscale,
             gumbel_noise: config.gumbel_root_noise,
         });
-        let bot = make_agent_with_profile(
+        let mut bot = make_agent_with_profile(
             &config.search_agent,
             seed ^ 0x5350_4c45_4e44_4f52,
             &search,
@@ -332,6 +334,12 @@ impl WebGame {
             profile,
         )
         .map_err(|e| js_error(&format!("could not configure champion search: {e}")))?;
+        if config.gpu_inference {
+            if !matches!(config.inference_batch_size, 1 | 8) {
+                return Err(js_error("invalid inference batch size"));
+            }
+            bot.set_inference_batch_size(config.inference_batch_size);
+        }
         let state =
             GameState::new(2, seed).map_err(|e| js_error(&format!("could not start game: {e}")))?;
         Ok(Self {
@@ -391,6 +399,24 @@ impl WebGame {
         self.events.clear();
         self.apply(action)?;
         self.resolve_forced_human_choices()?;
+        self.snapshot_json()
+    }
+
+    /// Apply one legal human decision without resolving later forced choices.
+    /// This lets paired engine instances replay the same decision sequence.
+    #[wasm_bindgen(js_name = actOne)]
+    pub fn act_one(&mut self, action_id: String) -> Result<String, JsValue> {
+        if self.state.is_terminal()
+            || self.is_blocked()
+            || self.state.current_player() != usize::from(self.human_seat)
+        {
+            return Err(js_error("human decision unavailable"));
+        }
+        let action = self
+            .action_by_id(&action_id)
+            .ok_or_else(|| js_error("illegal action id"))?;
+        self.events.clear();
+        self.apply(action)?;
         self.snapshot_json()
     }
 
@@ -909,20 +935,29 @@ fn browser_time_ms() -> f64 {
             * 1000.0
     }
 }
-fn gpu_infer(tokens: &[f32]) -> ([f32; 81], [f32; 2]) {
+fn gpu_infer(tokens: &[f32], count: usize) -> Vec<([f32; 81], [f32; 2])> {
     #[cfg(target_arch = "wasm32")]
     {
+        assert!((1..=8).contains(&count));
+        assert_eq!(tokens.len(), count * 31 * 48);
         let output = gpu_predict(tokens);
-        assert_eq!(output.len(), 83);
+        let batch = output.len() / 83;
+        assert!(matches!(batch, 1 | 8) && output.len() == batch * 83 && count <= batch);
         assert!(output.iter().all(|v| v.is_finite()));
-        (
-            output[..81].try_into().unwrap(),
-            output[81..].try_into().unwrap(),
-        )
+        (0..count)
+            .map(|i| {
+                (
+                    output[i * 81..(i + 1) * 81].try_into().unwrap(),
+                    output[batch * 81 + i * 2..batch * 81 + (i + 1) * 2]
+                        .try_into()
+                        .unwrap(),
+                )
+            })
+            .collect()
     }
     #[cfg(not(target_arch = "wasm32"))]
     {
-        let _ = tokens;
+        let _ = (tokens, count);
         panic!("WebGPU requires a browser worker")
     }
 }

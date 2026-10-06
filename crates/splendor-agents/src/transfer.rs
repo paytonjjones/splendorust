@@ -377,7 +377,15 @@ pub fn entity_tokens(input: &[f32; 525]) -> Vec<f32> {
 pub struct Model {
     architecture: Architecture,
 }
-type EntityBackend = fn(&[f32]) -> ([f32; 81], [f32; 2]);
+/// One public tensor row for an opt-in batched inference wave.
+pub struct InferenceRow<'a> {
+    pub features: &'a [f32; 392],
+    pub context: &'a [f32; 7],
+    pub native_rules: bool,
+    pub history: &'a [[f32; 32]; 16],
+    pub pool: &'a [f32; 90],
+}
+type EntityBackend = fn(&[f32], usize) -> Vec<([f32; 81], [f32; 2])>;
 
 enum Architecture {
     Entity(entity::EntityModel),
@@ -570,7 +578,7 @@ impl Model {
             input[519] = f32::from(native_rules);
             return match &self.architecture {
                 Architecture::Entity(model) => model.infer(&input),
-                Architecture::ExternalEntity(infer) => infer(&entity_tokens(&input)),
+                Architecture::ExternalEntity(infer) => infer(&entity_tokens(&input), 1).remove(0),
                 _ => unreachable!(),
             };
         }
@@ -646,6 +654,55 @@ impl Model {
             model.infer(x, context, native_rules, history, pool)
         } else {
             self.infer_with_profile(x, context, native_rules)
+        }
+    }
+
+    /// Evaluate public observation rows together when the model uses the
+    /// checkpoint-bound tensor service. Other model formats keep scalar parity.
+    pub fn infer_with_history_batch(
+        &self,
+        inputs: &[InferenceRow<'_>],
+    ) -> Vec<([f32; 81], [f32; 2])> {
+        if let Architecture::ExternalEntity(infer) = &self.architecture {
+            if inputs.is_empty() {
+                return Vec::new();
+            }
+            let mut tokens = Vec::with_capacity(inputs.len() * 31 * 48);
+            for row in inputs {
+                let (mean, public) = crate::belief::moments(row.features, row.context);
+                let mut input = [0.0; 525];
+                input[..392].copy_from_slice(&mean);
+                input[392..519].copy_from_slice(&public[392..]);
+                input[519] = f32::from(row.native_rules);
+                tokens.extend_from_slice(&entity_tokens(&input));
+            }
+            return infer(&tokens, inputs.len());
+        }
+        if let Architecture::Remote(model) = &self.architecture {
+            let rows: Vec<_> = inputs
+                .iter()
+                .map(|row| remote::Input {
+                    x: row.features,
+                    context: row.context,
+                    native: row.native_rules,
+                    history: row.history,
+                    pool: row.pool,
+                })
+                .collect();
+            model.infer_batch(&rows)
+        } else {
+            inputs
+                .iter()
+                .map(|row| {
+                    self.infer_with_history(
+                        row.features,
+                        row.context,
+                        row.native_rules,
+                        row.history,
+                        row.pool,
+                    )
+                })
+                .collect()
         }
     }
 }

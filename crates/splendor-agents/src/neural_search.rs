@@ -6,7 +6,7 @@ use super::{
 };
 use splendor_core::{Action, Observation, Phase, Rng};
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{HashMap, HashSet, VecDeque},
     sync::OnceLock,
 };
 struct Layer {
@@ -117,6 +117,18 @@ struct Node<A = Action> {
     visits: u32,
     value: f64,
 }
+struct PendingLeaf<O, A, K> {
+    observation: O,
+    legal: Option<Vec<A>>,
+    key: Option<K>,
+    seat: usize,
+    path: Vec<(usize, usize, usize)>,
+}
+type PendingEnvironmentLeaf<E> = PendingLeaf<
+    <E as crate::environment::Environment>::Observation,
+    <E as crate::environment::Environment>::Action,
+    (<E as crate::environment::Environment>::Key, u64),
+>;
 const SEARCH_ACTION_CAPACITY: usize = 81;
 impl<A> Node<A> {
     /// Appendix D mixed value; unvisited actions have no invented empirical Q.
@@ -210,6 +222,14 @@ pub struct NeuralAgent {
     pub uniform_prior: f64,
     pub dynamic_fpu: bool,
     pub world_pool: usize,
+    /// Opt-in leaf batch size for observation-only environment search.
+    pub inference_batch_size: usize,
+    /// Number of search waves observed at each request count.
+    pub inference_batch_histogram: [u64; 9],
+    /// Requests for an information set already queued in the same wave.
+    pub duplicate_leaf_inferences: u64,
+    #[cfg(test)]
+    force_batch_search: bool,
     /// Deterministic chance universes cycled across native root simulations.
     /// Zero preserves the ordinary per-transition random refill behavior.
     pub chance_universes: usize,
@@ -260,6 +280,11 @@ impl NeuralAgent {
             uniform_prior: 0.02,
             dynamic_fpu: false,
             world_pool: 0,
+            inference_batch_size: 1,
+            inference_batch_histogram: [0; 9],
+            duplicate_leaf_inferences: 0,
+            #[cfg(test)]
+            force_batch_search: false,
             chance_universes: 0,
             rollout_depth: 0,
             persistent: false,
@@ -776,6 +801,429 @@ impl NeuralAgent {
         let seat = usize::from(o.viewer != o.current);
         (policy, (f64::from(values[seat]) + 1.0) / 2.0)
     }
+
+    fn canonical_leaf_batch(&mut self, observations: &[Observation]) -> Vec<([f32; ACTIONS], f64)> {
+        let Some(model) = self.external_model else {
+            return observations.iter().map(|o| self.leaf(o)).collect();
+        };
+        if observations.iter().any(|o| o.turns >= 124) || !self.transferred {
+            return observations.iter().map(|o| self.leaf(o)).collect();
+        }
+        assert!(!model.uses_history_bridge());
+        let features: Vec<_> = observations
+            .iter()
+            .map(|o| super::transfer::encode(o, &mut self.rng))
+            .collect();
+        let contexts: Vec<_> = observations
+            .iter()
+            .map(super::transfer::public_context)
+            .collect();
+        let pools: Vec<_> = observations
+            .iter()
+            .map(crate::public_history::canonical_pool)
+            .collect();
+        let history = [[0.0; 32]; 16];
+        let rows: Vec<_> = (0..observations.len())
+            .map(|i| super::transfer::InferenceRow {
+                features: &features[i],
+                context: &contexts[i],
+                native_rules: false,
+                history: &history,
+                pool: &pools[i],
+            })
+            .collect();
+        self.calls += observations.len() as u64;
+        model
+            .infer_with_history_batch(&rows)
+            .into_iter()
+            .zip(observations)
+            .map(|((policy, values), o)| {
+                let seat = usize::from(o.viewer != o.current);
+                (
+                    super::transfer::policy_logits(&policy),
+                    (f64::from(values[seat]) + 1.0) / 2.0,
+                )
+            })
+            .collect()
+    }
+
+    fn native_leaf_batch(
+        &mut self,
+        observations: &[crate::native_environment::Observation],
+    ) -> Vec<([f32; 81], f64)> {
+        if observations.is_empty() {
+            return Vec::new();
+        }
+        let Some(model) = self.external_model else {
+            return observations.iter().map(|o| self.native_leaf(o)).collect();
+        };
+        assert!(
+            !model.uses_history_bridge(),
+            "batched leaf evaluation does not accept public-history models yet"
+        );
+        if !model.needs_public_context() || self.root_only || self.rollout_depth > 0 {
+            return observations.iter().map(|o| self.native_leaf(o)).collect();
+        }
+        let worlds: Vec<_> = observations
+            .iter()
+            .map(|o| {
+                o.determinize(&mut self.rng)
+                    .expect("valid native observation")
+            })
+            .collect();
+        self.calls += observations.len() as u64;
+        let mut features: Vec<[f32; 392]> = worlds
+            .iter()
+            .map(|world| {
+                if model.uses_native_noble_order() {
+                    world.features()
+                } else {
+                    world.model_features()
+                }
+            })
+            .collect();
+        if self.belief_root && self.root_evaluation {
+            for (o, x) in observations.iter().zip(&mut features) {
+                let context = native_public_context(o);
+                *x = super::belief::moments(x, &context).0;
+                self.belief_calls += 1;
+            }
+        }
+        let contexts: Vec<_> = observations.iter().map(native_public_context).collect();
+        let histories: Vec<_> = observations
+            .iter()
+            .map(|o| self.history_tensor(o.current))
+            .collect();
+        let pools: Vec<_> = observations
+            .iter()
+            .map(crate::public_history::native_pool)
+            .collect();
+        if model.has_correction() {
+            self.correction_calls += observations.len() as u64;
+        }
+        let rows: Vec<_> = (0..observations.len())
+            .map(|i| super::transfer::InferenceRow {
+                features: &features[i],
+                context: &contexts[i],
+                native_rules: true,
+                history: &histories[i],
+                pool: &pools[i],
+            })
+            .collect();
+        model
+            .infer_with_history_batch(&rows)
+            .into_iter()
+            .zip(observations)
+            .map(|((policy, values), o)| {
+                let seat = usize::from(o.viewer != o.current);
+                (policy, (f64::from(values[seat]) + 1.0) / 2.0)
+            })
+            .collect()
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn trace_batch_environment<E: crate::environment::Environment>(
+        &mut self,
+        state: &mut E::State,
+        depth: u32,
+        nodes: &mut Vec<Node<E::Action>>,
+        index: &mut HashMap<(E::Key, u64), usize>,
+        chance_seed: Option<u64>,
+        path: &mut Vec<(usize, usize, usize)>,
+        pending_nodes: &mut [u32],
+        pending_edges: &mut HashMap<(usize, usize), u32>,
+        leaves: &mut Vec<PendingEnvironmentLeaf<E>>,
+    ) -> Option<[f64; 2]>
+    where
+        Self: crate::environment::PolicyValue<E>,
+    {
+        if let Some(rewards) = E::rewards(state) {
+            return Some(rewards);
+        }
+        let seat = E::current(state);
+        let observation = E::observe(state, seat);
+        if depth == 0 || E::turns(state) == u32::MAX {
+            leaves.push(PendingLeaf {
+                observation,
+                legal: None,
+                key: None,
+                seat,
+                path: path.clone(),
+            });
+            return None;
+        }
+        let actions = E::legal(state);
+        let legal = actions.as_ref();
+        if legal.is_empty() {
+            leaves.push(PendingLeaf {
+                observation,
+                legal: None,
+                key: None,
+                seat,
+                path: path.clone(),
+            });
+            return None;
+        }
+        if !E::main(state) {
+            let choices =
+                <Self as crate::environment::PolicyValue<E>>::choices(&observation, legal);
+            let action = <Self as crate::environment::PolicyValue<E>>::rollout_action(
+                self,
+                &observation,
+                choices.as_deref().unwrap_or(legal),
+            );
+            let old_turns = E::turns(state);
+            let old_history = self.apply_environment::<E>(state, action, chance_seed);
+            let result = self.trace_batch_environment::<E>(
+                state,
+                depth - u32::from(E::turns(state) != old_turns),
+                nodes,
+                index,
+                chance_seed,
+                path,
+                pending_nodes,
+                pending_edges,
+                leaves,
+            );
+            self.restore_history(old_history);
+            return result;
+        }
+
+        let key = (E::key(&observation, self.transferred), self.history_hash());
+        let Some(&node_index) = index.get(&key) else {
+            let choices =
+                <Self as crate::environment::PolicyValue<E>>::choices(&observation, legal);
+            leaves.push(PendingLeaf {
+                observation,
+                legal: Some(choices.unwrap_or_else(|| legal.to_vec())),
+                key: Some(key),
+                seat,
+                path: path.clone(),
+            });
+            return None;
+        };
+        let edge_index = {
+            let node = &nodes[node_index];
+            (0..node.edges.len())
+                .max_by(|&a, &b| {
+                    let score = |edge_index: usize| {
+                        let edge = &node.edges[edge_index];
+                        let queued = f64::from(
+                            pending_edges
+                                .get(&(node_index, edge_index))
+                                .copied()
+                                .unwrap_or(0),
+                        );
+                        let visits = f64::from(edge.visits) + queued;
+                        let q = if visits == 0.0 {
+                            node.value - self.fpu_reduction
+                        } else {
+                            (edge.sum - queued) / visits
+                        };
+                        q + self.cpuct
+                            * edge.prior
+                            * (f64::from(node.visits + pending_nodes[node_index] + 1)).sqrt()
+                            / (visits + 1.0)
+                    };
+                    score(a).total_cmp(&score(b))
+                })
+                .expect("expanded node has legal edges")
+        };
+        let action = nodes[node_index].edges[edge_index].action;
+        debug_assert!(legal.contains(&action));
+        *pending_nodes
+            .get_mut(node_index)
+            .expect("pending node slot") += 1;
+        *pending_edges.entry((node_index, edge_index)).or_default() += 1;
+        path.push((node_index, edge_index, seat));
+        let old_turns = E::turns(state);
+        let old_history = self.apply_environment::<E>(state, action, chance_seed);
+        let result = self.trace_batch_environment::<E>(
+            state,
+            depth - u32::from(E::turns(state) != old_turns),
+            nodes,
+            index,
+            chance_seed,
+            path,
+            pending_nodes,
+            pending_edges,
+            leaves,
+        );
+        self.restore_history(old_history);
+        path.pop();
+        if let Some(values) = result {
+            pending_nodes[node_index] -= 1;
+            let remove_edge = if let Some(queued) = pending_edges.get_mut(&(node_index, edge_index))
+            {
+                *queued -= 1;
+                *queued == 0
+            } else {
+                false
+            };
+            if remove_edge {
+                pending_edges.remove(&(node_index, edge_index));
+            }
+            let node = &mut nodes[node_index];
+            if self.dynamic_fpu {
+                node.value = (f64::from(node.visits + 1) * node.value + values[seat])
+                    / f64::from(node.visits + 2);
+            }
+            node.visits += 1;
+            node.edges[edge_index].visits += 1;
+            node.edges[edge_index].sum += values[seat];
+        }
+        result
+    }
+
+    fn finish_batch_leaf<E: crate::environment::Environment>(
+        leaf: &PendingEnvironmentLeaf<E>,
+        prediction: &(<Self as crate::environment::PolicyValue<E>>::Policy, f64),
+        nodes: &mut Vec<Node<E::Action>>,
+        index: &mut HashMap<(E::Key, u64), usize>,
+        wave_expansion_values: &mut HashMap<(E::Key, u64), f64>,
+        uniform_prior: f64,
+    ) -> [f64; 2]
+    where
+        Self: crate::environment::PolicyValue<E>,
+        E::Key: Clone,
+    {
+        let mut value = prediction.1;
+        if let (Some(legal), Some(key)) = (&leaf.legal, &leaf.key) {
+            if let Some(&first_value) = wave_expansion_values.get(key) {
+                // Several paths can reach one unseen information set in a
+                // wave. Later rows reuse the first row's expansion value;
+                // sequential search would descend after expanding the node.
+                value = first_value;
+            } else if let Some(&node_index) = index.get(key) {
+                value = nodes[node_index].value;
+            } else {
+                wave_expansion_values.insert(key.clone(), value);
+                let logits = prediction.0.as_ref();
+                let max = legal
+                    .iter()
+                    .map(|&action| logits[E::action_index(action)])
+                    .fold(f32::NEG_INFINITY, f32::max);
+                let weights: Vec<_> = legal
+                    .iter()
+                    .map(|&action| f64::from((logits[E::action_index(action)] - max).exp()))
+                    .collect();
+                let total: f64 = weights.iter().sum();
+                let node = Node {
+                    edges: legal
+                        .iter()
+                        .zip(weights)
+                        .map(|(&action, weight)| Edge {
+                            action,
+                            prior: (1.0 - uniform_prior) * weight / total
+                                + uniform_prior / legal.len() as f64,
+                            visits: 0,
+                            sum: 0.0,
+                        })
+                        .collect(),
+                    visits: 0,
+                    value,
+                };
+                index.insert(key.clone(), nodes.len());
+                nodes.push(node);
+            }
+        }
+        let mut values = [1.0 - value; 2];
+        values[leaf.seat] = value;
+        values
+    }
+
+    fn select_environment_batched<E: crate::environment::Environment>(
+        &mut self,
+        o: &E::Observation,
+        root: usize,
+        nodes: &mut Vec<Node<E::Action>>,
+        index: &mut HashMap<(E::Key, u64), usize>,
+        worlds: &[E::State],
+    ) where
+        Self: crate::environment::PolicyValue<E>,
+        E::Key: Clone,
+    {
+        let budget = self.config.iterations as usize;
+        let batch_size = self.inference_batch_size.max(1);
+        assert!(batch_size <= 8, "batch leaf limit is eight");
+        let chance_seeds = if budget == 0 {
+            Vec::new()
+        } else {
+            self.make_chance_seeds()
+        };
+        let mut completed = 0;
+        while completed < budget {
+            if completed > 0
+                && self
+                    .deadline_ms
+                    .zip(self.clock)
+                    .is_some_and(|(deadline, clock)| clock() >= deadline)
+            {
+                break;
+            }
+            let wave = batch_size.min(budget - completed);
+            let mut leaves = Vec::with_capacity(wave);
+            let mut pending_nodes = vec![0u32; nodes.len()];
+            let mut pending_edges = HashMap::new();
+            for offset in 0..wave {
+                let simulation = completed + offset;
+                let mut state = if worlds.is_empty() {
+                    E::determinize(o, &mut self.rng)
+                } else {
+                    worlds[simulation % worlds.len()].clone()
+                };
+                let mut path = Vec::new();
+                self.trace_batch_environment::<E>(
+                    &mut state,
+                    self.config.depth.max(1),
+                    nodes,
+                    index,
+                    Self::chance_seed_for(&chance_seeds, simulation),
+                    &mut path,
+                    &mut pending_nodes,
+                    &mut pending_edges,
+                    &mut leaves,
+                );
+                self.simulations += 1;
+            }
+            let observations: Vec<_> = leaves.iter().map(|leaf| leaf.observation.clone()).collect();
+            if !leaves.is_empty() {
+                self.inference_batch_histogram[leaves.len()] += 1;
+                let mut seen = HashSet::new();
+                self.duplicate_leaf_inferences += leaves
+                    .iter()
+                    .filter_map(|leaf| leaf.key.as_ref())
+                    .filter(|key| !seen.insert(*key))
+                    .count() as u64;
+            }
+            let predictions =
+                <Self as crate::environment::PolicyValue<E>>::evaluate_batch(self, &observations);
+            assert_eq!(predictions.len(), leaves.len());
+            let mut wave_expansion_values = HashMap::new();
+            for (leaf, prediction) in leaves.iter().zip(&predictions) {
+                let values = Self::finish_batch_leaf::<E>(
+                    leaf,
+                    prediction,
+                    nodes,
+                    index,
+                    &mut wave_expansion_values,
+                    self.uniform_prior,
+                );
+                for &(node_index, edge_index, seat) in leaf.path.iter().rev() {
+                    let node = &mut nodes[node_index];
+                    if self.dynamic_fpu {
+                        node.value = (f64::from(node.visits + 1) * node.value + values[seat])
+                            / f64::from(node.visits + 2);
+                    }
+                    node.visits += 1;
+                    node.edges[edge_index].visits += 1;
+                    node.edges[edge_index].sum += values[seat];
+                }
+            }
+            completed += wave;
+        }
+        debug_assert!(root < nodes.len());
+    }
     /// Run the same PUCT kernel in an explicit non-canonical environment.
     /// The caller supplies only a public observation and its legal action set.
     pub fn select_environment<E: crate::environment::Environment>(
@@ -785,6 +1233,7 @@ impl NeuralAgent {
     ) -> E::Action
     where
         Self: crate::environment::PolicyValue<E>,
+        E::Key: Clone,
     {
         assert!(!legal.is_empty());
         if legal.len() == 1 {
@@ -802,12 +1251,47 @@ impl NeuralAgent {
             let selected = self.gumbel_root::<E>(o, 0, &mut nodes, &mut index, &worlds);
             return nodes[0].edges[selected].action;
         }
+        let batch_search = self.inference_batch_size > 1;
+        #[cfg(test)]
+        let batch_search = batch_search || self.force_batch_search;
+        if batch_search {
+            if self.inference_batch_size > 1 {
+                assert!(
+                    self.external_model
+                        .is_some_and(|model| !model.uses_history_bridge()),
+                    "batched PUCT currently requires a frozen no-history external model"
+                );
+                assert!(
+                    !self.root_only && self.rollout_depth == 0,
+                    "batched PUCT does not support root_only or rollout_depth"
+                );
+            }
+            self.select_environment_batched::<E>(o, 0, &mut nodes, &mut index, &worlds);
+            return nodes[0]
+                .edges
+                .iter()
+                .max_by(|a, b| {
+                    a.visits
+                        .cmp(&b.visits)
+                        .then_with(|| a.prior.total_cmp(&b.prior))
+                })
+                .unwrap()
+                .action;
+        }
         let chance_seeds = if self.config.iterations == 0 {
             Vec::new()
         } else {
             self.make_chance_seeds()
         };
         for simulation in 0..self.config.iterations {
+            if simulation > 0
+                && self
+                    .deadline_ms
+                    .zip(self.clock)
+                    .is_some_and(|(deadline, clock)| clock() >= deadline)
+            {
+                break;
+            }
             let mut state = if worlds.is_empty() {
                 E::determinize(o, &mut self.rng)
             } else {
@@ -834,6 +1318,18 @@ impl NeuralAgent {
             .action
     }
 }
+fn native_public_context(o: &crate::native_environment::Observation) -> [f32; 7] {
+    let opponent = 1 - usize::from(o.current);
+    let mut context = [0.0; 7];
+    for slot in 0..usize::from(o.players[opponent].reserved_count) {
+        let reservation = o.players[opponent].reserved[slot];
+        context[slot] = f32::from(!reservation.public);
+        context[slot + 3] = f32::from(reservation.tier + 1) / 3.0;
+        context[6] += context[slot] / 3.0;
+    }
+    context
+}
+
 pub(super) fn key(o: &Observation) -> [u8; 192] {
     debug_assert_eq!(o.phase, Phase::Main);
     let mut bytes = [0u8; 192];
@@ -863,6 +1359,10 @@ pub(super) fn key(o: &Observation) -> [u8; 192] {
 }
 
 impl Agent for NeuralAgent {
+    fn set_inference_batch_size(&mut self, size: usize) {
+        assert!(matches!(size, 1 | 8));
+        self.inference_batch_size = size;
+    }
     fn set_search_deadline(&mut self, deadline_ms: Option<f64>) {
         self.deadline_ms = deadline_ms;
     }
@@ -962,7 +1462,14 @@ impl Agent for NeuralAgent {
         } else {
             None
         };
-        if !self.gumbel {
+        if !self.gumbel && self.inference_batch_size > 1 {
+            let chance_universes = self.chance_universes;
+            self.chance_universes = 0;
+            self.select_environment_batched::<crate::environment::Canonical>(
+                o, root, &mut nodes, &mut index, &worlds,
+            );
+            self.chance_universes = chance_universes;
+        } else if !self.gumbel {
             for simulation in 0..self.config.iterations {
                 #[cfg(target_arch = "wasm32")]
                 let time_budget_exhausted = false;
@@ -1123,6 +1630,9 @@ impl crate::environment::PolicyValue<crate::environment::Canonical> for NeuralAg
     fn evaluate(&mut self, o: &Observation) -> (Self::Policy, f64) {
         self.leaf(o)
     }
+    fn evaluate_batch(&mut self, observations: &[Observation]) -> Vec<(Self::Policy, f64)> {
+        self.canonical_leaf_batch(observations)
+    }
     fn choices(o: &Observation, legal: &[Action]) -> Option<Vec<Action>> {
         safe_choices(o, legal)
     }
@@ -1134,6 +1644,12 @@ impl crate::environment::PolicyValue<crate::environment::AlphaZeroNative> for Ne
     type Policy = [f32; 81];
     fn evaluate(&mut self, o: &crate::native_environment::Observation) -> (Self::Policy, f64) {
         self.native_leaf(o)
+    }
+    fn evaluate_batch(
+        &mut self,
+        observations: &[crate::native_environment::Observation],
+    ) -> Vec<(Self::Policy, f64)> {
+        self.native_leaf_batch(observations)
     }
     fn choices(_: &crate::native_environment::Observation, _: &[u8]) -> Option<Vec<u8>> {
         None
@@ -1181,6 +1697,7 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::environment::Environment;
     #[test]
     fn runtime_deadline_stops_search_and_can_be_cleared() {
         let state = GameState::new(2, 91337).unwrap();
@@ -1263,6 +1780,169 @@ mod tests {
             captured.select_action(&o, &legal[..1]);
             assert!(captured.search_targets.is_none());
         }
+    }
+
+    #[test]
+    fn forced_batch_size_one_matches_sequential_environment_search() {
+        let state = GameState::new(2, 77123).unwrap();
+        let observation = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let config = SearchConfig {
+            iterations: 24,
+            depth: 8,
+            ..Default::default()
+        };
+        let mut scalar = NeuralAgent::new(902, config.clone());
+        let mut queued = NeuralAgent::new(902, config);
+        queued.force_batch_search = true;
+        scalar.world_pool = 3;
+        queued.world_pool = 3;
+        scalar.chance_universes = 3;
+        queued.chance_universes = 3;
+        let expected =
+            scalar.select_environment::<crate::environment::Canonical>(&observation, &legal);
+        let actual =
+            queued.select_environment::<crate::environment::Canonical>(&observation, &legal);
+        assert_eq!(actual, expected);
+        assert_eq!(queued.work_counts(), scalar.work_counts());
+        assert_eq!(queued.rng.next_u64(), scalar.rng.next_u64());
+    }
+
+    #[test]
+    fn expired_batch_deadline_finishes_one_wave() {
+        let state = GameState::new(2, 77125).unwrap();
+        let observation = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let mut agent = NeuralAgent::new(
+            904,
+            SearchConfig {
+                iterations: 17,
+                depth: 8,
+                ..Default::default()
+            },
+        );
+        agent.clock = Some(|| 100.0);
+        agent.set_search_deadline(Some(99.0));
+        let root =
+            agent.expand_root_environment::<crate::environment::Canonical>(&observation, &legal);
+        let mut nodes = vec![root];
+        let mut index = HashMap::from([(
+            (
+                crate::environment::Canonical::key(&observation, false),
+                agent.history_hash(),
+            ),
+            0usize,
+        )]);
+        agent.inference_batch_size = 8;
+        agent.select_environment_batched::<crate::environment::Canonical>(
+            &observation,
+            0,
+            &mut nodes,
+            &mut index,
+            &[],
+        );
+        assert_eq!(agent.simulations, 8);
+        assert_eq!(nodes[0].visits, 8);
+        let mut scalar = NeuralAgent::new(
+            904,
+            SearchConfig {
+                iterations: 17,
+                depth: 8,
+                ..Default::default()
+            },
+        );
+        scalar.clock = Some(|| 100.0);
+        scalar.set_search_deadline(Some(99.0));
+        let action =
+            scalar.select_environment::<crate::environment::Canonical>(&observation, &legal);
+        assert!(legal.contains(&action));
+        assert_eq!(scalar.simulations, 1);
+    }
+
+    #[test]
+    fn batched_leaf_waves_consume_exact_simulation_budget() {
+        let state = GameState::new(2, 77124).unwrap();
+        let observation = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let mut agent = NeuralAgent::new(
+            903,
+            SearchConfig {
+                iterations: 17,
+                depth: 8,
+                ..Default::default()
+            },
+        );
+        let root =
+            agent.expand_root_environment::<crate::environment::Canonical>(&observation, &legal);
+        let mut nodes = vec![root];
+        let mut index = HashMap::from([(
+            (
+                crate::environment::Canonical::key(&observation, false),
+                agent.history_hash(),
+            ),
+            0usize,
+        )]);
+        let worlds: Vec<_> = (0..3)
+            .map(|_| crate::environment::Canonical::determinize(&observation, &mut agent.rng))
+            .collect();
+        agent.world_pool = 3;
+        agent.chance_universes = 3;
+        agent.inference_batch_size = 8;
+        agent.select_environment_batched::<crate::environment::Canonical>(
+            &observation,
+            0,
+            &mut nodes,
+            &mut index,
+            &worlds,
+        );
+        assert_eq!(agent.simulations, 17);
+        assert_eq!(nodes[0].visits, 17);
+        assert_eq!(
+            nodes[0].edges.iter().map(|edge| edge.visits).sum::<u32>(),
+            17
+        );
+    }
+
+    #[test]
+    fn duplicate_unexpanded_leaves_reuse_first_wave_value() {
+        let state = GameState::new(2, 77125).unwrap();
+        let observation = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        let key = (crate::environment::Canonical::key(&observation, false), 0);
+        let leaf = PendingLeaf {
+            observation,
+            legal: Some(legal.iter().copied().collect()),
+            key: Some(key),
+            seat: 0,
+            path: Vec::new(),
+        };
+        let mut nodes = Vec::new();
+        let mut index = HashMap::new();
+        let mut frozen = HashMap::new();
+        let policy = [0.0; ACTIONS];
+        let first = NeuralAgent::finish_batch_leaf::<crate::environment::Canonical>(
+            &leaf,
+            &(policy, 0.2),
+            &mut nodes,
+            &mut index,
+            &mut frozen,
+            0.0,
+        );
+        let second = NeuralAgent::finish_batch_leaf::<crate::environment::Canonical>(
+            &leaf,
+            &(policy, 0.8),
+            &mut nodes,
+            &mut index,
+            &mut frozen,
+            0.0,
+        );
+        assert_eq!(nodes.len(), 1);
+        assert_eq!(first, second);
+        assert_eq!(nodes[0].value, 0.2);
     }
     use splendor_core::{ActionSet, GameState};
     #[test]

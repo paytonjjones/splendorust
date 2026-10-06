@@ -111,6 +111,7 @@ function makeEffectiveSearch(
       : undefined;
   return {
     inferenceBackend,
+    inferenceBatchSize: inferenceBackend === "webgpu-f32" ? 8 : 1,
     turnBudgetMs,
     agent: metadata.search.agent,
     iterations: validTestOverrides?.iterations ?? metadata.search.iterations,

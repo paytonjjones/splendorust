@@ -98,6 +98,7 @@ export interface TrainingReplay {
 }
 
 export interface EffectiveSearch {
+  inferenceBatchSize?: number;
   inferenceBackend: "webgpu-f32" | "wasm-cpu";
   turnBudgetMs: 5000 | 10000 | 30000;
   agent: string;

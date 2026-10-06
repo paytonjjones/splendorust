@@ -34,6 +34,7 @@ type Runtime = "production" | "test";
 type CanonicalAction = [number, number, number, number, number, number, number];
 
 interface SearchSettings {
+  inferenceBatchSize?: number;
   inferenceBackend?: "webgpu-f32" | "wasm-cpu";
   turnBudgetMs?: number;
   cpuct?: number;
@@ -294,7 +295,9 @@ function validateSearch(value: unknown): value is SearchSettings {
   const legacy = ["agent", "iterations", "depth", "worldPool", "gumbelMaxConsidered", "gumbelCvisit", "gumbelCscale", "gumbelRootNoise"];
   const puct = ["cpuct", "fpuReduction", "dynamicFpu", "chanceUniverses", "uniformPrior", "rootOnly", "rootNoise"];
   if (!isRecord(value)) return false;
-  const hasRuntime = exactKeys(value, [...legacy, ...puct, "inferenceBackend", "turnBudgetMs"]);
+  const hasBatch = exactKeys(value, [...legacy, ...puct, "inferenceBackend", "turnBudgetMs", "inferenceBatchSize"]);
+  if (hasBatch && (value.inferenceBackend === "webgpu-f32" ? value.inferenceBatchSize !== 8 : value.inferenceBatchSize !== 1)) return false;
+  const hasRuntime = hasBatch || exactKeys(value, [...legacy, ...puct, "inferenceBackend", "turnBudgetMs"]);
   if (hasRuntime && (!["webgpu-f32", "wasm-cpu"].includes(value.inferenceBackend as string) || ![5000, 10000, 30000].includes(value.turnBudgetMs as number) || (value.inferenceBackend === "webgpu-f32" ? value.agent !== "flywheel-best" : value.agent !== "flywheel-gumbel"))) return false;
   const hasPuct = hasRuntime || exactKeys(value, [...legacy, ...puct]);
   if (!hasPuct && (!exactKeys(value, legacy) || value.agent === "flywheel-best")) return false;
