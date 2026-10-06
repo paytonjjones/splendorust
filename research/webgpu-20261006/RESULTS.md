@@ -78,4 +78,23 @@ weights, and exports FP32 operations without training.
 
 [Export hashes](export.json), [runtime hashes](runtime.json), and the three
 browser receipts in this directory identify the tested model and inputs.
-Public deployment checks will be added after deployment.
+## Public deployment
+
+The corrected source commit is `7bd5e9d`. The deployment is
+[3184d119](https://3184d119.splendorust.pages.dev), with the live site at
+[SplendoRust](https://splendorust.pages.dev). All 12 public model, metadata,
+runtime, JavaScript, and WASM assets matched the production build hashes.
+See [the asset receipt](public-assets.json).
+
+The normal public interface completed one game: 81 engine decisions and
+52 player turns. No test bridge or seed override was used. All 26 bot turns
+were at most 9,902.705 ms. Five late-game decisions reached 6,400 simulations;
+the other main decisions stopped at the time cap. The initial model load took
+8.62 seconds and is outside the per-turn budget. This host had no GPU fallback.
+
+All 25 observed uploads returned 202. Public journal reads returned 405.
+The downloaded record reported the production WebGPU backend and 10-second
+budget. Native replay validation reported `verified=1 rejected=0 finished=1`.
+The record hash is in [the public check](public-check.json). The private replay
+stays in ignored `local/web-games/`; it is not published as a visitor dataset.
+The game outcome is a runtime check, not a strength estimate.

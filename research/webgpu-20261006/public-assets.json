@@ -1,34 +1,8 @@
 {
-  "baselineCommit": "758805b",
-  "checks": {
-    "rust-tests": {
-      "passed": 148,
-      "ignored": 1
-    },
-    "rust-tests-all-features": {
-      "passed": 155,
-      "ignored": 1
-    },
-    "clippy": "passed",
-    "fmt": "passed",
-    "typecheck": "passed",
-    "champion_browser": 5,
-    "recording_browser": 6,
-    "game_log_backend": 32,
-    "mailboxForcedInterleaving": true,
-    "mailboxHandoffs": 100000,
-    "publicCompleteGame": {
-      "verified": 1,
-      "rejected": 0,
-      "finished": 1,
-      "decisions": 81,
-      "playerTurns": 52,
-      "botTurns": 26,
-      "maxBotTurnMs": 9902.705000162125,
-      "fullBudgetDecisions": 5
-    }
-  },
-  "productionAssets": {
+  "url": "https://splendorust.pages.dev",
+  "sourceCommit": "7bd5e9d",
+  "deploymentUrl": "https://3184d119.splendorust.pages.dev",
+  "assets": {
     "webgpu.json": {
       "bytes": 407,
       "sha256": "a38fb2f471670dae559bd5a9fd9cafc40fb30c446624837b2fe74d47b6d92235"
@@ -77,16 +51,5 @@
       "bytes": 12836,
       "sha256": "53e06849ccb5619394996340bbfe0fb3bd8d36bf7e38adfc7c04581dc053830f"
     }
-  },
-  "sourceHashes": {
-    "web/src/gpu.worker.ts": "a586e91dd1d7378f696bb3815c8812b5591e0a668874065cd910bb3a48325f67",
-    "web/src/game.worker.ts": "6993daa67c54427cff80e8bdda11fce6979feab9eb68f16252ce016965b7c41a",
-    "web/src/gpu-mailbox.ts": "60b7b9abf036dece2cf83d0a94b7c9badfaa553ef42f21dac752b488ac6abb8a",
-    "web/src/gpu-client.ts": "87a94d517072b9c122429a564bc3f4f55fd1ab225367f0155dc48837143480eb",
-    "web/src/webgpu-model.ts": "a1e56610383e6a08f5a857dd435a77048512f33ea81c1d4fa45d6e98763ee7ba",
-    "crates/splendor-agents/src/neural_search.rs": "fca632d8a8566be0472144699bb751b9c56cc4c9a9a60de8c01d8250d6f84838",
-    "crates/splendor-agents/src/transfer.rs": "1c6a09a7130896bc0dec849fca78cee2123dd051c58ba58c96af5d2af529a290",
-    "crates/splendor-web/src/lib.rs": "0a16385917adc8851b97b469bdaa9424e0b65688bfa847440e7ce4d241c1da0c"
-  },
-  "sourceCommit": "7bd5e9d"
+  }
 }
