@@ -14,3 +14,7 @@ versus WASM decisions on fixed public states. Measure at least one actual
 are not sufficient. Deploy with local Cloudflare OAuth, keep GHA disabled,
 and verify the public metadata, model hash, worker, and a live decision.
 Do not claim browser strength equivalent to the native AlphaZero confirmation.
+
+Finding: fixed chance universes apply only to native research rules. The
+browser passes the registered setting to Rust, but canonical refills keep
+their existing behavior. This deployment does not add a new chance mechanism.

@@ -33,7 +33,7 @@ npm run dev
 - `public/champion.json`, fetched at `/champion.json` with no-cache headers;
 - `public/models/<sha256>.bin`, served with a one-year immutable cache policy.
 
-If a worktree does not contain the champion metadata and model, the sync script checks `SPLENDORUST_ROOT`, then `/Users/payton.jones/dev/splendorust`. To replace the champion, update the research promotion pointer and model, run the sync script, then build and deploy. Search settings and the model hash travel in metadata. The worker passes the PUCT budget, depth, world pool, chance universes, cpuct, FPU settings, uniform prior, and root settings to Rust. Nonzero PUCT root noise is not supported. The current champion uses 6,400 simulations and zero root noise. Search runs in the browser worker with portable CPU inference. Its latency can differ from the research model service.
+If a worktree does not contain the champion metadata and model, the sync script checks `SPLENDORUST_ROOT`, then `/Users/payton.jones/dev/splendorust`. To replace the champion, update the research promotion pointer and model, run the sync script, then build and deploy. Search settings and the model hash travel in metadata. The worker passes the PUCT budget, depth, world pool, chance universes, cpuct, FPU settings, uniform prior, and root settings to Rust. Nonzero PUCT root noise is not supported. The current champion uses 6,400 simulations and zero root noise. The chance-universe setting is passed through, but only native research rules implement fixed chance universes. The canonical browser rules keep their existing refill behavior. Search runs in the browser worker with portable CPU inference. Its latency can differ from the research model service.
 
 ## Cloudflare Pages
 

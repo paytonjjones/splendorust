@@ -1,0 +1,68 @@
+{
+  "deployment": "a1cba1e1",
+  "sourceCommit": "5fe6aa2",
+  "url": "https://splendorust.pages.dev",
+  "champion": {
+    "schema": "splendor-web-champion-v1",
+    "id": "entity-onehot-generation-one-puct6400",
+    "name": "SplendoRust entity-onehot-generation-one-puct6400",
+    "model": {
+      "url": "/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+      "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+      "bytes": 19123540
+    },
+    "search": {
+      "agent": "flywheel-best",
+      "iterations": 6400,
+      "depth": 64,
+      "algorithm": "puct",
+      "chance_universes": 3,
+      "cpuct": 0.4,
+      "dynamic_fpu": true,
+      "fpu_reduction": 0.02965,
+      "gumbel_cscale": null,
+      "gumbel_cvisit": null,
+      "gumbel_max_considered": null,
+      "gumbel_noise": 0.0,
+      "root_noise": 0.0,
+      "root_only": false,
+      "uniform_prior": 0.0,
+      "world_pool": 3
+    },
+    "source": {
+      "path": "web/public/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+      "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+      "scope": "Decisive win against unchanged pinned AlphaZero800 in two-player native rules with unequal compute. No worldwide, canonical, equal-compute or human rank is established.",
+      "checkpoint": "local/research/sprint48/ready/first/onehot/runtime.pt",
+      "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+    }
+  },
+  "modelSha256Verified": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+  "modelBytesVerified": 19123540,
+  "assetsVerified": [
+    {
+      "path": "web/dist/index.html",
+      "bytes": 814,
+      "sha256": "498614cd58c31573a1e6f7637b04689933052abc4b1e160da4577b9afde21882"
+    },
+    {
+      "path": "web/dist/assets/game.worker-ClZlrt0f.js",
+      "bytes": 10205,
+      "sha256": "5b5de75de882297a4e73f877cbe2e558df279660fc78a59f23e683d4f139e39c"
+    },
+    {
+      "path": "web/dist/assets/splendor_web_bg-CuISKuLj.wasm",
+      "bytes": 487912,
+      "sha256": "efaabcb1f0c3b5f96ee9bdbc650115aafe4666a754be0c7e1dbd93dc1ed967af"
+    }
+  ],
+  "cloudflareRecord": {
+    "Id": "a1cba1e1-92e0-4907-a96e-9150f897f7ec",
+    "Environment": "Production",
+    "Branch": "main",
+    "Source": "5fe6aa2",
+    "Deployment": "https://a1cba1e1.splendorust.pages.dev",
+    "Status": "5 minutes ago",
+    "Build": "https://dash.cloudflare.com/b0325078d6734d26bb7c1490dd9b68be/pages/view/splendorust/a1cba1e1-92e0-4907-a96e-9150f897f7ec"
+  }
+}

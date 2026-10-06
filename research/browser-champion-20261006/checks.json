@@ -42,7 +42,35 @@
       "command": "npm run build",
       "cwd": "web",
       "passed": true
+    },
+    {
+      "command": "cargo run --release --locked -p splendor-arena --example validate_web_records -- local/research/live-champion-audit-20261006/browser-games.jsonl",
+      "passed": true,
+      "verified": 1,
+      "rejected": 0,
+      "decisions": 2
+    },
+    {
+      "command": "npx playwright test champion.spec.ts --workers=1",
+      "cwd": "web",
+      "passed": true,
+      "simulations": 6400,
+      "seconds": 415.45,
+      "nativeWasmActionParity": true
     }
   ],
-  "githubActions": "correctness disabled_manually"
+  "githubActions": "correctness disabled_manually",
+  "chanceUniverseScope": "native research only; no effect in canonical browser rules",
+  "live": {
+    "passed": true,
+    "simulations": 6400,
+    "seconds": 417.79,
+    "largestPageTimerGapMs": 30.5,
+    "uploadStatuses": [
+      202,
+      202
+    ],
+    "testBridge": false,
+    "modelAndAssetHashesMatch": true
+  }
 }

@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-10-06T18:06:06.944Z",
+  "url": "https://splendorust.pages.dev/",
+  "browser": "153.0.8010.12",
+  "elapsedMs": 420217,
+  "champion": {
+    "metadata": {
+      "schema": "splendor-web-champion-v1",
+      "id": "entity-onehot-generation-one-puct6400",
+      "name": "SplendoRust entity-onehot-generation-one-puct6400",
+      "model": {
+        "url": "/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+        "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+        "bytes": 19123540
+      },
+      "search": {
+        "agent": "flywheel-best",
+        "iterations": 6400,
+        "depth": 64,
+        "algorithm": "puct",
+        "chance_universes": 3,
+        "cpuct": 0.4,
+        "dynamic_fpu": true,
+        "fpu_reduction": 0.02965,
+        "gumbel_cscale": null,
+        "gumbel_cvisit": null,
+        "gumbel_max_considered": null,
+        "gumbel_noise": 0,
+        "root_noise": 0,
+        "root_only": false,
+        "uniform_prior": 0,
+        "world_pool": 3
+      },
+      "source": {
+        "path": "web/public/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin",
+        "sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+        "scope": "Decisive win against unchanged pinned AlphaZero800 in two-player native rules with unequal compute. No worldwide, canonical, equal-compute or human rank is established.",
+        "checkpoint": "local/research/sprint48/ready/first/onehot/runtime.pt",
+        "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+      }
+    },
+    "effectiveSearch": {
+      "agent": "flywheel-best",
+      "iterations": 6400,
+      "depth": 64,
+      "worldPool": 3,
+      "cpuct": 0.4,
+      "fpuReduction": 0.02965,
+      "dynamicFpu": true,
+      "chanceUniverses": 3,
+      "uniformPrior": 0,
+      "rootOnly": false,
+      "rootNoise": 0,
+      "gumbelMaxConsidered": 16,
+      "gumbelCvisit": 50,
+      "gumbelCscale": 0.1,
+      "gumbelRootNoise": 0
+    }
+  },
+  "metrics": {
+    "wasmInitMs": 182.68499994277954,
+    "modelLoadMs": 3639.6500000953674,
+    "botDecisionMs": [
+      417785.8100001812
+    ],
+    "botSimulations": [
+      6400
+    ],
+    "botTurnMs": [
+      417786.25500011444
+    ]
+  },
+  "ticks": 20892,
+  "maxGapMs": 30.5,
+  "botEvents": [
+    {
+      "revision": 2,
+      "actor": 1,
+      "actionId": "reserve-visible:0",
+      "kind": "reserve_visible",
+      "slot": 0,
+      "cardId": 28
+    }
+  ],
+  "uploadStatuses": [
+    202,
+    202
+  ],
+  "testBridge": false
+}
