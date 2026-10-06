@@ -37,3 +37,5 @@ The timeout bot has no fresh playing-strength result. More simulations are a pos
 ## Validation
 
 Format, strict release workspace Clippy, default and all-feature release workspace tests, TypeScript, and both builds passed. All 14 browser tests passed. They cover time levels, the visible timer, real download progress, E81 fallback, device loss, recording, and native replay. The log backend passed 37 checks. The GPU mailbox passed its forced race and 100,000 round trips. See TUNING_VALIDATION.json. The public deployment check is recorded separately after deployment.
+
+The public deployment of `c9c932b` completed one normal UI game. All 23 engine turns stayed below 10 seconds (maximum 9902.645 ms). Both downloads reported their complete byte counts. All 21 uploads succeeded. The private replay passed native validation: one verified, zero rejected, one finished. All 16 checked public asset hashes match the final build. This checks runtime behavior, not playing strength. See tuning-public-check.json and tuning-public-assets.json.
