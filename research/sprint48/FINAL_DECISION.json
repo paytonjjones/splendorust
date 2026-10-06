@@ -1,0 +1,134 @@
+{
+  "schema": "sprint48-final-decision-v1",
+  "status": "confirmed_decisive_native_win",
+  "completed_at_utc": "2026-10-04T13:47:15.158524+00:00",
+  "profile": "alphazero-native-32a27ac-v1",
+  "candidate": {
+    "name": "entity-onehot-generation-one-puct6400",
+    "checkpoint_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+    "parameters": 4780883,
+    "weights_archive": "research/training_strategy/artifacts/core",
+    "weights_archive_manifest_sha256": "c413a533ce69648d5f69994abd0f8458c8f70f33ae2a12b72b351bdd1f7f9399",
+    "weights_member": "first/onehot/runtime.pt",
+    "information": "Public observations and own private cards; no future deck order"
+  },
+  "target": {
+    "checkpoint": {
+      "path": "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/external/alphazero/splendor/pretrained_2players.pt",
+      "sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07"
+    },
+    "external_config": {
+      "cpuct": 0.8,
+      "forced_playouts": false,
+      "fpu": 0.0593,
+      "no_mem_optim": false,
+      "numMCTSSims": 800,
+      "prob_fullMCTS": 1.0,
+      "universes": 3
+    },
+    "profile": "alphazero-native-32a27ac-v1",
+    "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "simulations": 800,
+    "source_path": "/Users/payton.jones/.codex/worktrees/1b31/splendorust/local/strength/external/alphazero",
+    "working_tree_clean": true
+  },
+  "search": {
+    "algorithm": "puct",
+    "chance_universes": 3,
+    "cpuct": 0.4,
+    "depth": 64,
+    "dynamic_fpu": true,
+    "fpu_reduction": 0.02965,
+    "gumbel_cscale": null,
+    "gumbel_cvisit": null,
+    "gumbel_max_considered": null,
+    "gumbel_noise": 0.0,
+    "iterations": 6400,
+    "root_noise": 0.0,
+    "root_only": false,
+    "uniform_prior": 0.0,
+    "world_pool": 3
+  },
+  "service": {
+    "backend": "mps",
+    "batch": 32,
+    "delay_ms": 1,
+    "fast_entities": true,
+    "port": 19740,
+    "source": {
+      "path": "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/architecture_pivots/service.py",
+      "sha256": "35e1304794c023841aa4b11d29866f808069dfcb83d6d9db38026ce233bd9ac5"
+    }
+  },
+  "evaluation": {
+    "adaptive_stopping": false,
+    "caps_sensitivity": {
+      "native_turn_cap_as_unknown": true,
+      "primary_threshold_applies_to_caps_sensitivity": false,
+      "report_hoeffding95_interval": true,
+      "same_paired_blocks": true
+    },
+    "full_planned_schedule_required": true,
+    "games": 1000,
+    "master": 17790000000,
+    "max_no_action_fraction": 0.01,
+    "paired_setup_blocks": 500,
+    "primary_criterion": {
+      "candidate_lower_credit_strictly_greater_than": 0.55,
+      "interval": "two-sided Hoeffding 95% over paired setup blocks",
+      "radius": "sqrt(log(40)/(2*paired_setup_blocks))",
+      "unknown_game_credit_bounds": [
+        0,
+        1
+      ]
+    },
+    "profile": "alphazero-native-32a27ac-v1",
+    "reject_statuses": [
+      "invalid",
+      "decision_limit"
+    ],
+    "sample_size_locked_before_outcomes": true
+  },
+  "games": 1000,
+  "paired_setup_blocks": 500,
+  "wins": 770,
+  "losses": 220,
+  "draws": 10,
+  "win_credit": 0.775,
+  "conservative_paired_hoeffding95": [
+    0.7142638538091695,
+    0.8357361461908306
+  ],
+  "caps_as_unknown_hoeffding95": [
+    0.7142638538091695,
+    0.8357361461908306
+  ],
+  "statuses": {
+    "complete": 1000
+  },
+  "native_turn_caps": 0,
+  "no_action_games": 0,
+  "invalid_games": 0,
+  "decision_limit_games": 0,
+  "criterion_met": true,
+  "seed_overlap_count": 0,
+  "freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
+  "raw_sha256": "8b3887d08b918e021e114a2632ff301ad8d4b272b435b057027bfd4a51b45c6e",
+  "replay_sha256": "fff534beb52a6a39e4cc8b921570f2494cceb17c1c1e9a6ffcd1340797974e57",
+  "replay_checked_transitions": 55466,
+  "evidence_sha256": "86fe42afef79bcbd3eb9c6cd8a41cf129858908277862d74c3e8b8f823a64ff6",
+  "summary_sha256": "47da83a039c3b24e0df4f713efdbf57cd528f69602f1808d4b9ce6e6db39b70b",
+  "independent_audit_sha256": "1a2254457c9864d9a675c9edb5605234b7d5353ffc846ef6a4557c22c832099d",
+  "cost": {
+    "scheduler_seconds": 35912.64020820893,
+    "driver_seconds": 35932.63672876358,
+    "simulations": 177491200,
+    "inferences": 150725122
+  },
+  "scope": "Decisive win against unchanged pinned AlphaZero800 in two-player native rules with unequal compute. No worldwide, canonical, equal-compute or human rank is established.",
+  "artifacts": "research/sprint48/artifacts/final-native",
+  "restore_instructions": "research/sprint48/FINAL_DELIVERY.md",
+  "archive_manifest_sha256": "cf35548e0c5448c20e5fe696a83db6c660110385efc7ff40c4b321918332095f",
+  "archive_restore_receipt": "research/sprint48/artifacts/final-native.restore.json",
+  "archive_restore_receipt_sha256": "c672644c17560369a9e2fd4c7b48da79593cac5c4029d7710e7ef3f41418f328"
+}

@@ -2,6 +2,7 @@
 //! Architecture copyright (c) 2018 Surag Nair (MIT).
 //! See research/e30/UPSTREAM-LICENSE. No game-state input is accepted here.
 mod attention;
+mod entity;
 mod large;
 mod remote;
 struct Reader {
@@ -273,9 +274,7 @@ impl BootstrapModel {
         };
         assert_eq!(
             bytes.len(),
-            include_bytes!("models/e30.bin").len()
-                + 4 * 33297 * (depth - 1)
-                + 4 * 56 * (inputs - 56),
+            569_624 + 4 * 33297 * (depth - 1) + 4 * 56 * (inputs - 56),
             "version-80 model byte length"
         );
         assert!(
@@ -374,6 +373,7 @@ pub struct Model {
     architecture: Architecture,
 }
 enum Architecture {
+    Entity(entity::EntityModel),
     Remote(remote::RemoteModel),
     Large(Box<large::LargeModel>),
     Attention(Box<attention::AttentionModel>),
@@ -467,6 +467,8 @@ impl Model {
     pub fn from_bytes(bytes: &[u8]) -> Self {
         let architecture = if bytes.starts_with(b"SPREMOTE") {
             Architecture::Remote(remote::RemoteModel::from_bytes(bytes))
+        } else if bytes.starts_with(b"SPENTY01") {
+            Architecture::Entity(entity::EntityModel::from_bytes(bytes))
         } else if bytes.starts_with(b"SPLARGE1") {
             Architecture::Large(Box::new(large::LargeModel::from_bytes(bytes)))
         } else if bytes.starts_with(b"SPATTN01") {
@@ -489,7 +491,10 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, false),
             Architecture::Residual(model) => model.infer(x, false),
-            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_) => {
+            Architecture::Entity(_)
+            | Architecture::Attention(_)
+            | Architecture::Remote(_)
+            | Architecture::Large(_) => {
                 panic!("model requires public context")
             }
         }
@@ -519,7 +524,10 @@ impl Model {
     pub fn needs_public_context(&self) -> bool {
         matches!(
             &self.architecture,
-            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_)
+            Architecture::Entity(_)
+                | Architecture::Attention(_)
+                | Architecture::Remote(_)
+                | Architecture::Large(_)
         ) || matches!(&self.architecture, Architecture::Bootstrap(model) if matches!(model.first.input, 57 | 75))
             || matches!(&self.architecture, Architecture::Residual(model) if model.public_belief)
     }
@@ -533,6 +541,14 @@ impl Model {
         context: &[f32; 7],
         native_rules: bool,
     ) -> ([f32; 81], [f32; 2]) {
+        if let Architecture::Entity(model) = &self.architecture {
+            let (mean, public) = crate::belief::moments(x, context);
+            let mut input = [0.0; 525];
+            input[..392].copy_from_slice(&mean);
+            input[392..519].copy_from_slice(&public[392..]);
+            input[519] = f32::from(native_rules);
+            return model.infer(&input);
+        }
         if let Architecture::Remote(model) = &self.architecture {
             return model.infer(x, context, native_rules, &[[0.0; 32]; 16], &[1.0; 90]);
         }
@@ -583,7 +599,10 @@ impl Model {
             Architecture::Gated(model) => model.infer(x),
             Architecture::Split(model) => model.infer(x, true),
             Architecture::Residual(model) => model.infer(x, true),
-            Architecture::Attention(_) | Architecture::Remote(_) | Architecture::Large(_) => {
+            Architecture::Entity(_)
+            | Architecture::Attention(_)
+            | Architecture::Remote(_)
+            | Architecture::Large(_) => {
                 panic!("model requires public context")
             }
         }

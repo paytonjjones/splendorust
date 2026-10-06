@@ -1,5 +1,10 @@
 # Validation and rule decisions
 
+For the new campaign, [STRATEGY.md](STRATEGY.md) controls development sample
+sizes and the fresh external acceptance test. Fixed 2,000/20,000 schedules
+are not universal requirements. Keep correctness, public inputs, all requested
+outcomes, and record-derived uncertainty. Historical decisions remain unchanged.
+
 ## Scope and authority
 
 The implementation follows the publisher's base-game rules. The complete functional datasets are documented in [data/SOURCES.md](data/SOURCES.md). There are no expansions or copyrighted visual assets.

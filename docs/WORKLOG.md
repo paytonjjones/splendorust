@@ -1167,3 +1167,14 @@ Next: return to the independent parity evidence and assess the largest remaining
 unsupported comparison dimension. The recent agent probes show opponent-specific
 policy mismatch; do not keep extending a failed candidate to fit one case.
 Existing reference exclusions and published no-action gap remain explicit.
+
+# Web integration hypothesis (non-strength change)
+
+Hypothesis: exposing the existing canonical `GameState` and E81 `NeuralAgent`
+through a small JSON-facing WASM wrapper will preserve engine decisions while
+allowing the production model bytes and champion search settings to be supplied
+as assets. The wrapper must emit only the active human's observation, redact
+blind opponent reservations, retain every legal payment/return/noble choice,
+and report blocked games without assigning a winner. This is a product
+integration change; it makes no playing-strength claim and does not change game
+rules or search defaults.

@@ -606,17 +606,18 @@ impl Agent for SearchAgent {
                 {
                     break;
                 }
-                state.legal_actions(&mut aa);
-                if aa.is_empty() {
+                let obs = state.observe(state.current_player());
+                let decision = state.decision(&mut aa);
+                let legal = decision.actions();
+                if legal.is_empty() {
                     break;
                 }
-                let obs = state.observe(state.current_player());
                 let a = match self.config.rollout {
-                    RolloutPolicy::Random => aa[self.rng.index(aa.len())],
-                    RolloutPolicy::Greedy => best(&obs, &aa, false),
-                    RolloutPolicy::Strong => best(&obs, &aa, true),
+                    RolloutPolicy::Random => legal[self.rng.index(legal.len())],
+                    RolloutPolicy::Greedy => best(&obs, legal, false),
+                    RolloutPolicy::Strong => best(&obs, legal, true),
                 };
-                state.apply_action(a).unwrap();
+                decision.apply(a).unwrap();
             }
             let reward = if let Some(result) = state.outcome() {
                 if result.winners & (1 << o.current) != 0 {
@@ -720,6 +721,52 @@ fn neural_iterations(name: &str, requested: u32) -> u32 {
 }
 
 pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dyn Agent>, String> {
+    make_agent_with_model(name, seed, search, None)
+}
+
+/// Create an agent with an externally loaded production model.
+///
+/// This uses the same profile setup as [`make_agent`]. The model override is
+/// used only by flywheel agents; all other agent profiles are unchanged.
+pub fn make_agent_with_model(
+    name: &str,
+    seed: u64,
+    search: &SearchConfig,
+    external_model: Option<&'static transfer::Model>,
+) -> Result<Box<dyn Agent>, String> {
+    make_agent_with_profile(name, seed, search, external_model, None)
+}
+
+/// Runtime settings for a metadata-selected flywheel Gumbel search profile.
+///
+/// The normal factory profile remains authoritative when this is `None`.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct SearchProfileOverrides {
+    pub world_pool: usize,
+    pub gumbel_max_considered: usize,
+    pub gumbel_cvisit: f64,
+    pub gumbel_cscale: f64,
+    pub gumbel_noise: f64,
+}
+
+/// Create an agent with an optional runtime profile override and external model.
+///
+/// Overrides apply after the canonical agent factory has set its defaults.
+/// They are supported only for flywheel Gumbel agents.
+pub fn make_agent_with_profile(
+    name: &str,
+    seed: u64,
+    search: &SearchConfig,
+    external_model: Option<&'static transfer::Model>,
+    profile: Option<SearchProfileOverrides>,
+) -> Result<Box<dyn Agent>, String> {
+    if profile.is_some()
+        && !(name.starts_with("flywheel-gumbel")
+            || name.starts_with("flywheel-root-gumbel")
+            || name.starts_with("flywheel-belief-gumbel"))
+    {
+        return Err("search profile overrides require a flywheel Gumbel agent".into());
+    }
     Ok(match name {
         "random" => Box::new(RandomAgent::new(seed)),
         "greedy" | "simple-greedy" => Box::new(SimpleGreedyAgent),
@@ -792,14 +839,16 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
             agent.self_play = name == "neural-selfplay";
             agent.transferred = name.starts_with("transfer") || name.starts_with("flywheel-");
             if name.starts_with("flywheel-") {
-                agent.external_model = Some(neural_search::flywheel_model(matches!(
-                    name,
-                    "flywheel-candidate"
-                        | "flywheel-gumbel-candidate"
-                        | "flywheel-belief-gumbel-candidate"
-                        | "flywheel-root-candidate"
-                        | "flywheel-root-gumbel-candidate"
-                )));
+                agent.external_model = Some(external_model.unwrap_or_else(|| {
+                    neural_search::flywheel_model(matches!(
+                        name,
+                        "flywheel-candidate"
+                            | "flywheel-gumbel-candidate"
+                            | "flywheel-belief-gumbel-candidate"
+                            | "flywheel-root-candidate"
+                            | "flywheel-root-gumbel-candidate"
+                    ))
+                }));
             }
             agent.root_only = name.starts_with("flywheel-root");
             agent.belief_root = name.starts_with("flywheel-belief");
@@ -842,6 +891,27 @@ pub fn make_agent(name: &str, seed: u64, search: &SearchConfig) -> Result<Box<dy
                 || name == "transfer-native-rollout"
             {
                 agent.rollout_depth = 8;
+            }
+            if let Some(profile) = profile {
+                if !agent.gumbel {
+                    return Err("search profile overrides require a flywheel Gumbel agent".into());
+                }
+                if profile.world_pool == 0
+                    || profile.gumbel_max_considered == 0
+                    || !profile.gumbel_cvisit.is_finite()
+                    || profile.gumbel_cvisit < 0.0
+                    || !profile.gumbel_cscale.is_finite()
+                    || profile.gumbel_cscale <= 0.0
+                    || !profile.gumbel_noise.is_finite()
+                    || profile.gumbel_noise < 0.0
+                {
+                    return Err("search profile override values are outside valid ranges".into());
+                }
+                agent.world_pool = profile.world_pool;
+                agent.gumbel_max_considered = profile.gumbel_max_considered;
+                agent.gumbel_cvisit = profile.gumbel_cvisit;
+                agent.gumbel_cscale = profile.gumbel_cscale;
+                agent.gumbel_noise = profile.gumbel_noise;
             }
             Box::new(agent)
         }

@@ -1,5 +1,10 @@
 # Architecture
 
+Current model/search work follows [STRATEGY.md](STRATEGY.md). Model size,
+search depth, and equal compute are not final strength limits. Isolated
+research tensor services may use ML frameworks; the core stays independent.
+Historical baseline descriptions below do not constrain new agents.
+
 ## Crates
 
 - `splendor-core`: static metadata, fixed-size state, explicit SplitMix64 RNG, setup, action generation, action validation, transitions, observations, hidden-state sampling, and invariants. Its only production dependency is `arrayvec`. No I/O, serialization framework, clock, global RNG, or agent code.
@@ -63,7 +68,7 @@ Action tags: 0 take, 1 visible reserve, 2 blind reserve, 3 visible buy, 4 reserv
 
 Normal rank uses prestige descending, then purchased-card count ascending. Exact ties share a competition rank and split one win credit. Reserved cards do not break ties. An unfinished state has no outcome.
 
-The official rules neither force eventual progress nor explain a turn with no legal main action. Core does not add a pass or a move-limit victory. The arena stops such games as `no_legal_action`, and stops looping policies as `decision_limit`. Both remain in per-game records. Both block promotion.
+The official rules neither force eventual progress nor explain a turn with no legal main action. Core does not add a pass or a move-limit victory. The arena stops such games as `no_legal_action`, and stops looping policies as `decision_limit`. Both remain in per-game records. Decision-limit games reject promotion. No-action outcomes remain unknown; the current conservative policy allows at most 1%, as specified in VALIDATION.md.
 
 Confidence intervals cluster the seat rotations from one setup. They use the bounded empirical Bernstein interval of Maurer and Pontil (2009), Theorem 4, applying alpha/2 to each tail: `log(4 / 0.05)`. Missing outcomes contribute worst-case credit 0 to the lower bound and 1 to the upper bound. This avoids selective deletion of failed games. Intervals assume independent random setups and a policy fixed before evaluation. These are conservative intervals, not normal/Wald intervals. No Elo is reported for multiplayer games.
 

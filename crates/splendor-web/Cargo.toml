@@ -1,0 +1,22 @@
+[package]
+name = "splendor-web"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+external-model-only = ["splendor-agents/external-model-only"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+splendor-agents.workspace = true
+splendor-core.workspace = true
+wasm-bindgen.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+splendor-arena = { path = "../splendor-arena" }

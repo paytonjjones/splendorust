@@ -1,0 +1,51 @@
+{
+  "schema": "search-target-audit-v1",
+  "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8",
+  "receipt": {
+    "schema": "canonical-rich-root-v1",
+    "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8/rows.bin",
+    "source_sha256": "630a24f39a701545d9f46a2c85147550b5823d7f5cd4c006df4c0ccda86ffb14",
+    "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first/scaling-8/inputs.bin",
+    "inputs_sha256": "696209e9de21b0c2b3d133b4ca6f0bebad634496b22ef5d229530ed8f9a33149",
+    "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+    "rows": 3590,
+    "eligible_rows": 3586,
+    "incomplete_rows": 0,
+    "non_full_or_no_search_rows": 4,
+    "setups": 64,
+    "policy_entropy": 1.0203488505816427,
+    "explored_actions_per_row": 10.631344116006693,
+    "executed_vs_visit_argmax": 0.9974902398215282,
+    "profile": "canonical-v2",
+    "learner_fields": "public x, public context; audit IDs excluded"
+  },
+  "completion_sha256": "3717b8c1fb9178e5ba660f9e228ceda4d4a63910f26f731f7ec8dda9088a6ca8",
+  "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+  "terminal_labels_match_records": true,
+  "counts": {
+    "complete": 64,
+    "no_legal_action": 0,
+    "decision_limit": 0
+  },
+  "rows": 3590,
+  "eligible_rows": 3586,
+  "full_visit_totals": [
+    256
+  ],
+  "mean_executed_action_mass": 0.6525627004322365,
+  "mean_alternative_action_mass": 0.34743729956776354,
+  "mean_legal_actions": 20.482152938842773,
+  "mean_explored_actions": 10.631344116006693,
+  "mean_unexplored_legal_actions": 9.850808700501952,
+  "mean_explored_q_span": 0.16259577870368958,
+  "root_terminal_brier": 0.20632503926753998,
+  "network_terminal_brier": 0.22036495804786682,
+  "root_network_mse": 0.013868141919374466,
+  "eligible_rows_per_collection_hour": 12122.937466363624,
+  "collection_seconds": 1064.890422459,
+  "limits": [
+    "Position-weighted in-sample label diagnostics are not playing strength.",
+    "Unexplored legal actions have no Q target.",
+    "Pilot games are excluded from model training and evaluation."
+  ]
+}

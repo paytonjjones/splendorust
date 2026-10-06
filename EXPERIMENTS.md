@@ -1,5 +1,21 @@
 # Experiments
 
+The [48-hour campaign](STRATEGY.md) is complete. Its frozen final candidate
+scored **77.5% win credit** against pinned unchanged AlphaZero800 in 1,000
+fresh paired native games. The conservative paired 95% interval is
+**71.43–83.57%**, above the registered 55% lower-bound threshold. All games
+completed by native score; no cap or unknown outcome occurred. Replay and the
+independent audit passed. See [the results](research/sprint48/RESULTS.md) and
+[the final decision](research/sprint48/FINAL_DECISION.json).
+
+The winning profile uses the saved first-onehot Entity with dynamic PUCT6400,
+depth64 and world3/chance3, against unchanged AlphaZero800. This is a native,
+unequal-compute result. It does not establish a worldwide or canonical rank.
+The completed campaign superseded old fixed search/game counts and cost
+vetoes. Its unsuccessful refit/DAgger branches and pre-freeze launch failure
+remain recorded. Keep those results when planning new work. All consumed
+masters remain unavailable for a fresh claim.
+
 ## P2 — Conservative promotion with rare no-action outcomes
 
 Registered on 2026-10-02 at the user's request, after the expanded history/E81

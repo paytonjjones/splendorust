@@ -1,0 +1,311 @@
+   Compiling cfg-if v1.0.5
+   Compiling utf8parse v0.2.2
+   Compiling arrayvec v0.7.8
+   Compiling libc v0.2.189
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling zmij v1.0.23
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling either v1.18.0
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling anstyle v1.0.14
+   Compiling colorchoice v1.0.5
+   Compiling once_cell v1.21.4
+   Compiling anstyle-parse v1.0.0
+   Compiling zerocopy v0.8.59
+   Compiling clap_lex v1.1.1
+   Compiling strsim v0.11.1
+   Compiling anstream v1.0.0
+   Compiling regex-syntax v0.8.11
+   Compiling num-traits v0.2.19
+   Compiling splendor-core v0.1.0 (/Users/payton.jones/.codex/worktrees/training-strategy-closeout/splendorust/crates/splendor-core)
+   Compiling plotters-backend v0.3.7
+   Compiling ciborium-io v0.2.2
+   Compiling itertools v0.10.5
+   Compiling same-file v1.0.6
+   Compiling crossbeam-epoch v0.9.21
+   Compiling clap_builder v4.6.7
+   Compiling splendor-agents v0.1.0 (/Users/payton.jones/.codex/worktrees/training-strategy-closeout/splendorust/crates/splendor-agents)
+   Compiling plotters-svg v0.3.7
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/.codex/worktrees/training-strategy-closeout/splendorust/crates/splendor-arena)
+   Compiling cast v0.3.0
+   Compiling is-terminal v0.4.17
+   Compiling walkdir v2.5.0
+   Compiling crossbeam-deque v0.8.8
+   Compiling anes v0.1.6
+   Compiling oorandom v11.1.5
+   Compiling rayon-core v1.13.0
+   Compiling getrandom v0.3.4
+   Compiling errno v0.3.14
+   Compiling bitflags v2.13.2
+   Compiling plotters v0.3.7
+   Compiling rand_core v0.9.5
+   Compiling getrandom v0.4.3
+   Compiling fastrand v2.5.0
+   Compiling rustix v1.1.5
+   Compiling wait-timeout v0.2.1
+   Compiling bit-vec v0.8.0
+   Compiling quick-error v1.2.3
+   Compiling fnv v1.0.7
+   Compiling rayon v1.12.0
+   Compiling unicode-ident v1.0.26
+   Compiling bit-set v0.8.0
+   Compiling wasm-bindgen-shared v0.2.129
+   Compiling rand v0.9.5
+   Compiling rand_xorshift v0.4.0
+   Compiling unarray v0.1.4
+   Compiling wasm-bindgen v0.2.129
+   Compiling criterion-plot v0.5.0
+   Compiling regex-automata v0.4.18
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.151
+   Compiling clap v4.6.7
+   Compiling tinytemplate v1.2.1
+   Compiling regex v1.13.1
+   Compiling half v2.7.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling ciborium-ll v0.2.2
+   Compiling proptest v1.11.0
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+   Compiling splendor-web v0.1.0 (/Users/payton.jones/.codex/worktrees/training-strategy-closeout/splendorust/crates/splendor-web)
+    Finished `release` profile [optimized] target(s) in 37.52s
+     Running unittests src/lib.rs (target/release/deps/splendor_agents-e63df0728f96c105)
+
+running 52 tests
+test learned::tests::pairwise_value_is_symmetric_and_finite ... ok
+test native_environment::tests::native_cap_and_shared_reward_differ_from_canonical ... ok
+test belief::tests::small_pool_exact_moments_and_public_information ... ok
+test neural::tests::hidden_world_and_blind_ids_do_not_enter_features ... ok
+test learned::tests::features_do_not_depend_on_sampled_hidden_world ... ok
+test native_environment::tests::native_reserve_at_cap_omits_gold_and_takes_do_not_overflow ... ok
+test native_environment::tests::all_eighty_one_native_action_ids_are_supported_without_projection ... ok
+test native_environment::tests::native_colored_first_payment_and_multiple_nobles_on_purchase_only ... ok
+test native_environment::tests::native_observation_is_independent_of_real_blind_identity ... ok
+test native_environment::tests::native_small_takes_returns_and_pass_are_whole_turns ... ok
+test neural_search::tests::completed_q_policy_and_mixed_value ... ok
+test native_environment::tests::same_model_feature_contract_in_canonical_and_native_openings ... ok
+test neural_search::tests::transferred_keys_include_the_network_turn_input ... ok
+test public_history::tests::blind_draw_has_no_private_identity ... ok
+test tests::belief_factory_preserves_requested_budget ... ok
+test neural::tests::main_action_indices_are_unique_on_real_positions ... ok
+test tests::next_turn_bound_counts_depletion_and_market_removal_separately ... ok
+test tests::noble_threshold_take_ends_only_from_the_last_seat ... ok
+test tests::public_block_filter_never_guesses_blind_reservations ... ok
+test neural_search::tests::belief_transform_runs_only_at_the_root ... ok
+test tests::search_cannot_distinguish_unknown_decks ... ok
+test neural_search::tests::public_native_leaf_preserves_teacher_noble_order ... ok
+test tests::return_filter_uses_complete_bundles_and_keeps_uncertified_choices ... ok
+test tests::take_filter_keeps_uncertified_choices_without_a_safe_alternative ... ok
+test neural_search::tests::compact_keys_preserve_exact_observation_identity ... ok
+test tests::search_stops_at_counter_capacity_without_panicking ... ok
+test neural_search::tests::diagnostic_targets_preserve_search_and_mask_unvisited_edges ... ok
+test tests::large_search_depth_does_not_wrap_at_nonzero_turn ... ok
+test transfer::remote::tests::reject_nonlocal_service - should panic ... ok
+test transfer::remote::tests::reject_checkpoint_mismatch_before_tensor_send ... ok
+test transfer::tests::gated_bitplanes_preserve_signed_byte_semantics ... ok
+test transfer::tests::bootstrap_dispatch_preserves_exact_inference ... ok
+test transfer::tests::gated_checkpoint_output_bias_and_validation ... ok
+test transfer::tests::deeper_identity_trunk_preserves_bootstrap_and_checks_header ... ok
+test transfer::remote::tests::history_versions_preserve_their_registered_public_fields ... ok
+test belief::tests::sampled_world_invariance_and_no_blind_identity ... ok
+test transfer::remote::tests::tensors_are_invariant_across_hidden_samples_and_disabled_history ... ok
+test neural_search::tests::correction_runs_once_at_root_and_base_runs_at_leaves ... ok
+test transfer::tests::translated_main_logits_cover_exactly_native_main_actions ... ok
+test transfer::tests::public_projection_identity_and_hidden_world_invariance ... ok
+test neural_search::tests::neural_tree_choices_match_across_hidden_worlds ... ok
+test transfer::tests::information_projection_identity_and_payload_checks ... ok
+test transfer::tests::transferred_search_has_no_hidden_world_access_and_handles_late_turns ... ok
+test transfer::tests::residual_identity_corrections_and_payload_checks ... ok
+test neural_search::tests::learned_public_models_use_only_root_correction ... ok
+test neural_search::tests::gumbel_exact_budget_legal_targets_and_seed_identity ... ok
+test transfer::tests::split_model_keeps_critic_independent_and_checks_payloads ... ok
+test neural_search::tests::persistent_tree_is_observation_only_and_keeps_actions_legal ... ok
+test tests::cached_scores_equal_uncached_scores_for_every_legal_action ... ok
+test tests::timed_control_preserves_original_algorithm_settings ... ok
+test tests::every_agent_chooses_legal_and_is_reproducible ... ok
+test transfer::tests::interleaved_kernel_matches_reference_bits_on_real_observations ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running unittests src/lib.rs (target/release/deps/splendor_arena-8fe48c7065902a54)
+
+running 11 tests
+test tests::confidence_interval_keeps_uncertainty_at_boundaries ... ok
+test tests::direct_game_rejects_invalid_run_settings ... ok
+test tests::direct_game_rejects_invalid_player_counts ... ok
+test tests::direct_game_rejects_invalid_rotations ... ok
+test tests::wire_roundtrip_all_actions ... ok
+test tests::replay_roundtrip_and_reject_version_and_corruption ... ok
+test tests::incomplete_games_cannot_promote ... ok
+test tests::structured_settings_preserve_all_policies_and_duration_precision ... ok
+test tests::direct_game_matches_tournament_for_every_seat ... ok
+test tests::parallel_results_match_serial_bit_for_bit ... ok
+test tests::report_rerun_checks_records_and_rejects_unsafe_or_missing_settings ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release/deps/splendor-386a2098d68c0102)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/learned.rs (target/release/deps/learned-8dba36ba9c4e113f)
+
+running 1 test
+test learned_cycle_uses_only_observed_history_and_selects_a_legal_purchase ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/replays.rs (target/release/deps/replays-06ecf089d7fe045d)
+
+running 12 tests
+test old_engine_histories_are_not_silently_relabelled ... ok
+test final_round_cannot_put_threshold_scores_in_unplayed_seats ... ok
+test counter_limit_rejects_legal_cycle_action_without_mutation_or_outcome ... ok
+test finished_round_observation_cannot_restart_main_phase ... ok
+test a_legal_cycle_can_ignore_affordable_purchases ... ok
+test final_round_requires_a_threshold_player_who_already_finished_this_round ... ok
+test recorded_search_cycle_preserves_state_except_turn_count ... ok
+test final_representable_turn_can_still_finish_a_real_game ... ok
+test published_rule_gap_is_a_reproducible_blocked_state_not_a_victory ... ok
+test threshold_observations_allow_pending_nobles_but_require_completed_round_flag ... ok
+test legal_histories_cross_high_tier_depletion_and_leave_empty_market_slots ... ok
+test golden_completed_game_and_all_prefix_snapshots ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/search_safety.rs (target/release/deps/search_safety-0f3512922518c0fd)
+
+running 5 tests
+test e19_strong_safe_takes_survive_every_opponent_reply_and_hide_decks ... ok
+test e18_previously_blocked_game_completes_with_search_safety ... ok
+test e18_safe_take_keeps_a_legal_reply_against_every_opponent_action ... ok
+test e20_search_does_not_empty_bank_into_a_known_opponent_block ... ok
+test e19_two_player_blocks_are_preserved_and_changed_policies_complete ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests examples/block_audit.rs (target/release/examples/block_audit-baa70da277e13161)
+
+running 2 tests
+test tests::cutoff_is_not_a_block_but_a_real_block_is_detected_at_zero_depth ... ok
+test tests::earlier_takes_have_different_forced_block_risks ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/strength_worker.rs (target/release/examples/strength_worker-162bd0cc8c5c24b6)
+
+running 1 test
+test tests::equal_observations_produce_equal_external_inputs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/validate_web_records.rs (target/release/examples/validate_web_records-4da6065b704f489d)
+
+running 3 tests
+test tests::replay_actions_use_the_canonical_seven_byte_arena_encoding ... ok
+test tests::completed_envelope_replays_all_actions_and_checks_real_result ... ok
+test tests::partial_replay_stays_unfinished_and_bad_decision_count_is_rejected ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release/deps/splendor_core-57e48dd3218875b7)
+
+running 41 tests
+test tests::blind_reservation_does_not_refill_market ... ok
+test tests::buy_payments_include_optional_gold_and_exact_cost ... ok
+test tests::determinization_rejects_seat_turn_mismatch ... ok
+test tests::determinization_rejects_unlisted_reservation ... ok
+test tests::determinization_rejects_phantom_reservation_count ... ok
+test tests::buying_reserved_compacts_slots ... ok
+test tests::depleted_decks_leave_empty_slots ... ok
+test tests::choose_exactly_one_noble_then_next_turn_can_claim_another ... ok
+test tests::determinization_rejects_disclosed_opponent_blind_reservation ... ok
+test tests::determinization_rejects_final_round_without_threshold_score ... ok
+test tests::different_gems_and_double_threshold ... ok
+test tests::determinization_rejects_market_gap_with_nonempty_deck ... ok
+test tests::counter_capacity_is_atomic_for_all_generated_actions ... ok
+test tests::discounts_and_free_purchase ... ok
+test tests::eighth_bonus_of_a_color_is_a_legal_purchase ... ok
+test tests::every_optional_gold_payment_preserves_full_state_invariants ... ok
+test tests::final_round_waits_for_returns_and_noble_choice ... ok
+test tests::initial_actions_exact ... ok
+test tests::invalid_observations_are_rejected_without_panics ... ok
+test tests::malformed_indices_do_not_panic_or_mutate ... ok
+test tests::noble_can_trigger_end_and_last_seat_ends_immediately ... ok
+test tests::noble_csv_matches_runtime_data ... ok
+test tests::noble_is_mandatory_and_uses_bonuses_not_tokens ... ok
+test tests::observations_independent_of_hidden_permutations ... ok
+test tests::official_noble_dataset_exact ... ok
+test tests::payment_capacity_bound ... ok
+test tests::reservation_without_gold_and_three_limit ... ok
+test tests::reserve_at_ten_can_return_the_new_gold ... ok
+test tests::private_information_is_redacted_and_determinization_preserves_observation ... ok
+test tests::rng_golden_sequence ... ok
+test tests::setup_counts_and_supply ... ok
+test tests::taking_tokens_can_repeat_forever_under_official_rules ... ok
+test tests::replay_deterministic_every_decision ... ok
+test tests::static_data_complete_and_auditable ... ok
+test tests::tie_break_uses_fewest_owned_cards_then_shared_win ... ok
+test tests::token_returns_allow_old_new_and_gold_tokens ... ok
+test tests::visible_reservation_and_refill ... ok
+test tests::return_generator_matches_independent_cartesian_reference ... ok
+test tests::payment_generator_matches_independent_cartesian_reference ... ok
+test tests::all_generated_actions_preserve_invariants ... ok
+test tests::ten_thousand_random_games ... ok
+
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/allocations.rs (target/release/deps/allocations-812d249ce2bd7c32)
+
+running 1 test
+test normal_core_paths_do_not_allocate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running unittests src/lib.rs (target/release/deps/splendor_web-4840a2cb636dc5bf)
+
+running 10 tests
+test tests::journal_action_encoder_matches_arena_for_every_action_variant ... ok
+test tests::stable_ids_cover_all_action_payloads ... ok
+test tests::metadata_contains_the_engine_card_and_noble_catalogs ... ok
+test tests::invalid_human_action_preserves_last_events_and_snapshot ... ok
+test tests::api_redacts_blind_reservations_and_only_lists_human_actions ... ok
+test tests::training_record_keeps_high_seed_and_exact_arena_action_encoding ... ok
+test tests::config_rejects_unknown_fields_and_invalid_model_bytes ... ok
+test tests::reachable_two_player_noble_choice_uses_the_web_api ... ok
+test tests::e81_web_api_first_bot_decision_matches_native_agent_profile ... ok
+test tests::api_completes_games_without_inventing_blocked_winners ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests splendor_agents
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests splendor_arena
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests splendor_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests splendor_web
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

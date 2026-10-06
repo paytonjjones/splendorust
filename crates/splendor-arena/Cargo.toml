@@ -24,6 +24,10 @@ harness = false
 name = "block_audit"
 test = true
 
+[[example]]
+name = "validate_web_records"
+test = true
+
 [features]
 information-benchmark = ["splendor-agents/information-benchmark"]
 environment-validation = ["splendor-agents/environment-validation"]
@@ -44,3 +48,15 @@ required-features = ["environment-validation"]
 [[example]]
 name = "privileged_native_worker"
 required-features = ["information-benchmark"]
+
+[[example]]
+name = "engine_comparison"
+required-features = ["benchmark-compat"]
+
+[[example]]
+name = "engine_trajectory"
+required-features = ["benchmark-compat"]
+
+[[example]]
+name = "engine_profile"
+required-features = ["benchmark-compat"]

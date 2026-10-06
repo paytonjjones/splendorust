@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT/'local/strength/external/alphazero'
 PIN = '32a27ac1f85d5de2766cc5f60c2bf04e557f7836'
+DEFAULT_STRENGTH_BINARY = ROOT/'target/release/examples/strength_worker'
 
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -19,7 +20,11 @@ def stream(master, label, block, identity=0):
     return int.from_bytes(hashlib.sha256(f'native-v1:{master}:{label}:{block}:{identity}'.encode()).digest()[:8], 'little')
 
 class Upstream:
-    def __init__(self, network=False):
+    def __init__(self, network=False, strength_binary=None):
+        self.strength_binary = Path(strength_binary or DEFAULT_STRENGTH_BINARY).resolve(strict=True)
+        if not self.strength_binary.is_file():
+            raise ValueError('strength binary must be a file')
+        self.strength_binary_sha256 = sha(self.strength_binary)
         actual = subprocess.check_output(['git', '-C', str(SOURCE), 'rev-parse', 'HEAD'], text=True).strip()
         dirty = subprocess.check_output(['git', '-C', str(SOURCE), 'status', '--porcelain', '--untracked-files=no'], text=True).strip()
         if actual != PIN or dirty:
@@ -36,7 +41,7 @@ class Upstream:
             np.random.seed(seed)
         self.seed_numba = seed_numba
         # Use canonical metadata supplied by the existing benchmark worker.
-        process = subprocess.run([ROOT/'target/release/examples/strength_worker'], input='{"op":"data"}\n', capture_output=True, text=True, check=True)
+        process = subprocess.run([self.strength_binary], input='{"op":"data"}\n', capture_output=True, text=True, check=True)
         self.data = json.loads(process.stdout)
         self.card_lookup = {}
         self.card_native = {}

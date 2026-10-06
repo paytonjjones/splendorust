@@ -1,0 +1,75 @@
+{
+  "schema": "splendorust-strength-sprint-plan-v1",
+  "created_date": "2026-10-03",
+  "source_main": "3c1a65678a41db77aac66e034cbb4b5fa1f7b018",
+  "status": "complete; fixed final decisive native win, see FINAL_DECISION.json",
+  "strategy": "STRATEGY.md",
+  "deadline": "Record start_utc and deadline_utc in the execution run.json. Use 48 elapsed hours, or an earlier user deadline. Never reset the clock on resume.",
+  "target": {
+    "profile": "alphazero-native-32a27ac-v1",
+    "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+    "checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+    "simulations": 800,
+    "unchanged": true
+  },
+  "baseline": "research/STRENGTH_CHAMPION.json",
+  "first_candidate": {
+    "name": "entity-onehot-generation-one",
+    "archive": "research/training_strategy/artifacts/core",
+    "archive_manifest_sha256": "c413a533ce69648d5f69994abd0f8458c8f70f33ae2a12b72b351bdd1f7f9399",
+    "checkpoint_member": "first/onehot/model.pt",
+    "checkpoint_sha256": "192bb6d86a3b920f200d8fbd1561d706b210aa44d308d8582d4da15a9f395625",
+    "runtime_member": "first/onehot/runtime.pt",
+    "runtime_sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+    "evidence": "research/training_strategy/first-stage-evidence.json",
+    "status": "supported canonical 2000-game screen; not confirmed against AlphaZero"
+  },
+  "seeds": {
+    "external_exploration": {
+      "master_base": 17700000000,
+      "master_step": 1000000,
+      "maximum_trials": 8,
+      "games_per_trial_default": 128
+    },
+    "new_training": {
+      "master_base": 17710000000,
+      "master_step": 1000000
+    },
+    "new_development": {
+      "master_base": 17720000000,
+      "master_step": 1000000
+    },
+    "canonical_exploration": {
+      "master_base": 17730000000,
+      "master_step": 1000000
+    },
+    "final_external": {
+      "master": 17790000000,
+      "sealed_until_candidate_freeze": true
+    },
+    "final_canonical": {
+      "master": 17791000000,
+      "sealed_until_candidate_freeze": true
+    },
+    "note": "Reserved by this campaign. Record each consumed master and split. Check other active jobs before use; do not reuse final seeds for tuning. Setup IDs must also be checked for split overlap."
+  },
+  "exploratory_evaluation_hours_ceiling": 6,
+  "maximum_new_training_branches": 2,
+  "final": {
+    "freeze_by_elapsed_hour": 32,
+    "default_games": 2000,
+    "allowed_predeclared_games": [
+      1000,
+      2000,
+      4000
+    ],
+    "decisive_lower95_credit_threshold": 0.55,
+    "interval": "two-sided Hoeffding over independent paired setup blocks; unknown outcomes bounded 0 to 1",
+    "adaptive_stopping": false,
+    "twenty_thousand_games_required": false,
+    "maximum_no_action_fraction": 0.01,
+    "invalid_or_decision_limit": "reject evidence; retain records",
+    "native_turn_caps": "report native result plus sensitivity with caps unknown"
+  },
+  "run": "research/sprint48/RUN.json"
+}

@@ -1,0 +1,171 @@
+{
+  "schema": "pinned-training-strategy-audit-v1",
+  "revision": "32a27ac1f85d5de2766cc5f60c2bf04e557f7836",
+  "checkpoint_sha256": "6a98e0375613ce7f50c87b0f630c4166629fecc13be487f099cfed3def02fa07",
+  "metadata": {
+    "checkpoint": "/home/best/ray_temp/spl_k7yuy48q/05",
+    "load_folder_file": "/home/best/ray_temp/spl_k7yuy48q/04/best.pt",
+    "numEps": 300,
+    "numItersHistory": 3,
+    "numMCTSSims": 800,
+    "tempThreshold": 6,
+    "temperature": [
+      1.25,
+      0.8
+    ],
+    "cpuct": 0.8,
+    "dirichletAlpha": 0.3,
+    "fpu": 0.0593,
+    "forced_playouts": true,
+    "learn_rate": 1e-05,
+    "epochs": 2,
+    "batch_size": 32,
+    "dropout": 0.403,
+    "nn_version": 80,
+    "q_weight": 0.837,
+    "updateThreshold": 0.6,
+    "ratio_fullMCTS": 5,
+    "prob_fullMCTS": 0.25,
+    "universes": 3,
+    "forget_examples": false,
+    "numIters": 3,
+    "stop_after_N_fail": 3.0,
+    "profile": false,
+    "debug": false,
+    "useray": true,
+    "parallel_inferences": 8,
+    "no_compression": false,
+    "no_mem_optim": false,
+    "arenaCompare": 30,
+    "maxlenOfQueue": 1666666,
+    "load_model": true
+  },
+  "files": {
+    "Coach.py": "ab424fa233dade532f917531e2b9ce1a1f0d4a9d4c2ecfb4f2a5c1a51ce76f10",
+    "MCTS.py": "5ba73b3f648ea700f1e10b392c218583adaeeb12794ecdde703df82cc1d9c492",
+    "GenericNNetWrapper.py": "f8dc05b2d9788f38639a20710d1111ef5f26536c90c84f64c31c15c02c9ef7a6",
+    "main.py": "53133e81a7284f36a65832381e8f285f3f617f6b59c162eeecac90454c0a4e35",
+    "splendor/SplendorGame.py": "20236acffd6b2b51b7a3c026abd68980e681a3ef2c0b82169c86ab8d93963a9c",
+    "splendor/SplendorLogicNumba.py": "389bdf4c4ce25dfe3264989feef4f776ad80c206a2476ba7d4ad24f1760ea465",
+    "splendor/SplendorNNet.py": "ff18a8d285ef961399a85d8c29c39f071c21b25d6597ea89470ff7164ae26a57"
+  },
+  "features": {
+    "iterative_selfplay": {
+      "file": "Coach.py",
+      "lines": [
+        196
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "recent_replay": {
+      "file": "Coach.py",
+      "lines": [
+        182
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "full_visit_policy": {
+      "file": "Coach.py",
+      "lines": [
+        65
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "root_q_label": {
+      "file": "Coach.py",
+      "lines": [
+        84
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "terminal_value": {
+      "file": "Coach.py",
+      "lines": [
+        82
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "mixed_value_loss": {
+      "file": "GenericNNetWrapper.py",
+      "lines": [
+        188
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "full_cap_randomization": {
+      "file": "MCTS.py",
+      "lines": [
+        58
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "full_states_only": {
+      "file": "Coach.py",
+      "lines": [
+        68
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "root_noise": {
+      "file": "MCTS.py",
+      "lines": [
+        149,
+        159
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "early_stochastic_actions": {
+      "file": "Coach.py",
+      "lines": [
+        66
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "forced_playout_pruning": {
+      "file": "MCTS.py",
+      "lines": [
+        78
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "symmetry": {
+      "file": "splendor/SplendorLogicNumba.py",
+      "lines": [
+        255
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "previous_network_gate": {
+      "file": "Coach.py",
+      "lines": [
+        204
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "batch_inference": {
+      "file": "Coach.py",
+      "lines": [
+        127
+      ],
+      "evidence": "implemented in pinned source"
+    },
+    "architecture_v80": {
+      "file": "splendor/SplendorNNet.py",
+      "lines": [
+        172
+      ],
+      "evidence": "implemented in pinned source"
+    }
+  },
+  "parameters": 142407,
+  "limits": [
+    "Saved settings and current pinned implementation do not prove the full checkpoint training lineage.",
+    "Upstream trains value on root Q; it does not train a per-action Q output.",
+    "No verified staged-budget lineage is retained in this checkpoint.",
+    "Upstream native rules and private-information inputs differ from canonical SplendoRust."
+  ],
+  "value_formula": "(terminal_signed + q_weight * root_Q_signed) / (1 + q_weight)",
+  "policy_formula": "normalized root visits after optional forced-playout pruning, temperature 1",
+  "action_formula": "sample policy with temperature 2 before total turn threshold; saved later temperature 0.8",
+  "inference_config": "Frozen benchmark overrides full probability to1 and forced_playouts toFalse; training metadata remains distinct."
+}

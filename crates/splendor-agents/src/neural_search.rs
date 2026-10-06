@@ -97,9 +97,14 @@ impl Model {
         (policy, value[0])
     }
 }
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e25.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 struct Edge<A = Action> {
     action: A,
@@ -134,7 +139,7 @@ impl<A> Node<A> {
             .sum();
         (self.value + f64::from(n) * weighted) / f64::from(n + 1)
     }
-    fn completed_scores(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
+    fn completed_scores(&self, cvisit: f64, cscale: f64) -> [f64; SEARCH_ACTION_CAPACITY] {
         let mut scores = [0.0; SEARCH_ACTION_CAPACITY];
         let mixed = self.mixed_value();
         let mut lo = f64::INFINITY;
@@ -151,14 +156,14 @@ impl<A> Node<A> {
             hi = hi.max(q);
             max_visits = max_visits.max(e.visits);
         }
-        let scale = (50.0 + f64::from(max_visits)) * 0.1 / (hi - lo).max(1e-8);
+        let scale = (cvisit + f64::from(max_visits)) * cscale / (hi - lo).max(1e-8);
         for (i, e) in self.edges.iter().enumerate() {
             scores[i] = e.prior.max(f64::MIN_POSITIVE).ln() + scale * (scores[i] - lo);
         }
         scores
     }
-    fn improved_policy(&self) -> [f64; SEARCH_ACTION_CAPACITY] {
-        let mut policy = self.completed_scores();
+    fn improved_policy(&self, cvisit: f64, cscale: f64) -> [f64; SEARCH_ACTION_CAPACITY] {
+        let mut policy = self.completed_scores(cvisit, cscale);
         let max = policy[..self.edges.len()]
             .iter()
             .copied()
@@ -173,6 +178,16 @@ impl<A> Node<A> {
         }
         policy
     }
+}
+
+/// Diagnostic root labels. Values are acting-player win credits, not signed values.
+/// Unvisited edges have no Q label. Capturing these labels changes no search choice.
+#[derive(Clone, Debug, PartialEq)]
+pub struct SearchTargets {
+    pub visits: [u32; ACTIONS],
+    pub q: [Option<f32>; ACTIONS],
+    pub root_value: f32,
+    pub network_value: f32,
 }
 
 pub struct NeuralAgent {
@@ -193,6 +208,9 @@ pub struct NeuralAgent {
     pub uniform_prior: f64,
     pub dynamic_fpu: bool,
     pub world_pool: usize,
+    /// Deterministic chance universes cycled across native root simulations.
+    /// Zero preserves the ordinary per-transition random refill behavior.
+    pub chance_universes: usize,
     pub rollout_depth: u32,
     pub persistent: bool,
     /// Gumbel planning with completed-Q policy targets (E72).
@@ -203,12 +221,22 @@ pub struct NeuralAgent {
     pub correction_calls: u64,
     pub gumbel: bool,
     pub gumbel_noise: f64,
+    pub gumbel_max_considered: usize,
+    pub gumbel_cvisit: f64,
+    pub gumbel_cscale: f64,
     cached_nodes: Vec<Node>,
     cached_index: HashMap<([u8; 192], u64), usize>,
     root_policy: Option<[f32; ACTIONS]>,
     root_value: Option<f32>,
+    pub capture_search_targets: bool,
+    pub search_targets: Option<SearchTargets>,
 }
 impl NeuralAgent {
+    /// Change an opt-in self-play cap. This does not reset policy RNG or history.
+    pub fn set_search_iterations(&mut self, iterations: u32) {
+        assert!(self.config.time_budget.is_none());
+        self.config.iterations = iterations;
+    }
     pub fn new(seed: u64, config: SearchConfig) -> Self {
         Self {
             rng: Rng::new(seed),
@@ -228,6 +256,7 @@ impl NeuralAgent {
             uniform_prior: 0.02,
             dynamic_fpu: false,
             world_pool: 0,
+            chance_universes: 0,
             rollout_depth: 0,
             persistent: false,
             root_only: false,
@@ -237,10 +266,15 @@ impl NeuralAgent {
             correction_calls: 0,
             gumbel: false,
             gumbel_noise: 0.0,
+            gumbel_max_considered: 16,
+            gumbel_cvisit: 50.0,
+            gumbel_cscale: 0.1,
             cached_nodes: Vec::new(),
             cached_index: HashMap::new(),
             root_policy: None,
             root_value: None,
+            capture_search_targets: false,
+            search_targets: None,
         }
     }
     fn history_hash(&self) -> u64 {
@@ -275,15 +309,16 @@ impl NeuralAgent {
         &mut self,
         state: &mut E::State,
         action: E::Action,
+        chance_seed: Option<u64>,
     ) -> Option<VecDeque<[f32; 32]>> {
         if !self.external_model.is_some_and(|m| m.uses_history_bridge()) {
-            E::apply(state, action, &mut self.rng);
+            E::apply_with_chance_seed(state, action, &mut self.rng, chance_seed);
             return None;
         }
         let old = self.public_events.clone();
         let actor = E::current(state);
         let before = E::observe(state, actor);
-        E::apply(state, action, &mut self.rng);
+        E::apply_with_chance_seed(state, action, &mut self.rng, chance_seed);
         let after = E::observe(state, actor);
         let event = if self
             .external_model
@@ -295,6 +330,17 @@ impl NeuralAgent {
         };
         self.observe_event(event);
         Some(old)
+    }
+    fn make_chance_seeds(&mut self) -> Vec<u64> {
+        if self.chance_universes == 0 {
+            return Vec::new();
+        }
+        (0..self.chance_universes)
+            .map(|_| self.rng.next_u64().max(1))
+            .collect()
+    }
+    fn chance_seed_for(seeds: &[u64], simulation: usize) -> Option<u64> {
+        (!seeds.is_empty()).then(|| seeds[simulation % seeds.len()])
     }
     fn restore_history(&mut self, old: Option<VecDeque<[f32; 32]>>) {
         if let Some(old) = old {
@@ -418,6 +464,7 @@ impl NeuralAgent {
     fn rollout_environment<E: crate::environment::Environment>(
         &mut self,
         state: &E::State,
+        chance_seed: Option<u64>,
     ) -> [f64; 2]
     where
         Self: crate::environment::PolicyValue<E>,
@@ -438,10 +485,11 @@ impl NeuralAgent {
                 break;
             }
             let o = E::observe(&s, E::current(&s));
-            E::apply(
+            E::apply_with_chance_seed(
                 &mut s,
                 <Self as crate::environment::PolicyValue<E>>::rollout_action(self, &o, legal),
                 &mut self.rng,
+                chance_seed,
             );
         }
         if let Some(r) = E::rewards(&s) {
@@ -481,7 +529,8 @@ impl NeuralAgent {
         if budget == 0 {
             return active[0];
         }
-        let mut considered = active.len().min(16).min(budget);
+        let chance_seeds = self.make_chance_seeds();
+        let mut considered = active.len().min(self.gumbel_max_considered).min(budget);
         while considered > 1
             && budget / ((usize::BITS - (considered - 1).leading_zeros()) as usize) < considered
         {
@@ -506,10 +555,15 @@ impl NeuralAgent {
                 };
                 let seat = E::current(&state);
                 let old = E::turns(&state);
-                let old_history =
-                    self.apply_environment::<E>(&mut state, nodes[root].edges[edge].action);
+                let chance_seed = Self::chance_seed_for(&chance_seeds, simulation);
+                let old_history = self.apply_environment::<E>(
+                    &mut state,
+                    nodes[root].edges[edge].action,
+                    chance_seed,
+                );
                 let depth = self.config.depth.max(1) - u32::from(E::turns(&state) != old);
-                let values = self.simulate_environment::<E>(&mut state, depth, nodes, index);
+                let values =
+                    self.simulate_environment::<E>(&mut state, depth, nodes, index, chance_seed);
                 self.restore_history(old_history);
                 nodes[root].visits += 1;
                 nodes[root].edges[edge].visits += 1;
@@ -518,7 +572,7 @@ impl NeuralAgent {
                 simulation += 1;
             }
             remaining -= allocation;
-            let scores = nodes[root].completed_scores();
+            let scores = nodes[root].completed_scores(self.gumbel_cvisit, self.gumbel_cscale);
             active.sort_by(|&a, &b| (noise[b] + scores[b]).total_cmp(&(noise[a] + scores[a])));
             if active.len() > 1 {
                 active.truncate(active.len().div_ceil(2));
@@ -532,6 +586,7 @@ impl NeuralAgent {
         depth: u32,
         nodes: &mut Vec<Node<E::Action>>,
         index: &mut HashMap<(E::Key, u64), usize>,
+        chance_seed: Option<u64>,
     ) -> [f64; 2]
     where
         Self: crate::environment::PolicyValue<E>,
@@ -563,12 +618,13 @@ impl NeuralAgent {
                 choices.as_deref().unwrap_or(legal),
             );
             let old = E::turns(state);
-            let old_history = self.apply_environment::<E>(state, action);
+            let old_history = self.apply_environment::<E>(state, action, chance_seed);
             let values = self.simulate_environment::<E>(
                 state,
                 depth - u32::from(E::turns(state) != old),
                 nodes,
                 index,
+                chance_seed,
             );
             self.restore_history(old_history);
             return values;
@@ -580,7 +636,7 @@ impl NeuralAgent {
             let choices = <Self as crate::environment::PolicyValue<E>>::choices(&o, legal);
             let mut node = self.expand_environment::<E>(&o, choices.as_deref().unwrap_or(legal));
             if self.rollout_depth > 0 {
-                node.value = self.rollout_environment::<E>(state)[seat];
+                node.value = self.rollout_environment::<E>(state, chance_seed)[seat];
             }
             let mut r = [1.0 - node.value; 2];
             r[seat] = node.value;
@@ -590,7 +646,7 @@ impl NeuralAgent {
         };
         let node = &nodes[i];
         let edge = if self.gumbel {
-            let policy = node.improved_policy();
+            let policy = node.improved_policy(self.gumbel_cvisit, self.gumbel_cscale);
             (0..node.edges.len())
                 .max_by(|&a, &b| {
                     let score = |j: usize| {
@@ -619,12 +675,13 @@ impl NeuralAgent {
         let action = node.edges[edge].action;
         debug_assert!(legal.contains(&action));
         let old = E::turns(state);
-        let old_history = self.apply_environment::<E>(state, action);
+        let old_history = self.apply_environment::<E>(state, action, chance_seed);
         let values = self.simulate_environment::<E>(
             state,
             depth - u32::from(E::turns(state) != old),
             nodes,
             index,
+            chance_seed,
         );
         self.restore_history(old_history);
         let node = &mut nodes[i];
@@ -728,6 +785,11 @@ impl NeuralAgent {
             let selected = self.gumbel_root::<E>(o, 0, &mut nodes, &mut index, &worlds);
             return nodes[0].edges[selected].action;
         }
+        let chance_seeds = if self.config.iterations == 0 {
+            Vec::new()
+        } else {
+            self.make_chance_seeds()
+        };
         for simulation in 0..self.config.iterations {
             let mut state = if worlds.is_empty() {
                 E::determinize(o, &mut self.rng)
@@ -739,6 +801,7 @@ impl NeuralAgent {
                 self.config.depth.max(1),
                 &mut nodes,
                 &mut index,
+                Self::chance_seed_for(&chance_seeds, simulation as usize),
             );
             self.simulations += 1;
         }
@@ -809,6 +872,7 @@ impl Agent for NeuralAgent {
     fn select_action(&mut self, o: &Observation, legal: &[Action]) -> Action {
         self.root_policy = None;
         self.root_value = None;
+        self.search_targets = None;
         if o.count != 2
             || o.phase != Phase::Main
             || legal.len() == 1
@@ -865,6 +929,7 @@ impl Agent for NeuralAgent {
             index.insert(self.tree_key(o), root);
             root
         };
+        #[cfg(not(target_arch = "wasm32"))]
         let start = std::time::Instant::now();
         let worlds: Vec<_> = (0..self.world_pool)
             .map(|_| o.determinize(&mut self.rng).expect("valid observation"))
@@ -878,12 +943,14 @@ impl Agent for NeuralAgent {
         };
         if !self.gumbel {
             for simulation in 0..self.config.iterations {
-                if simulation > 0
-                    && self
-                        .config
-                        .time_budget
-                        .is_some_and(|t| start.elapsed() >= t)
-                {
+                #[cfg(target_arch = "wasm32")]
+                let time_budget_exhausted = false;
+                #[cfg(not(target_arch = "wasm32"))]
+                let time_budget_exhausted = self
+                    .config
+                    .time_budget
+                    .is_some_and(|t| start.elapsed() >= t);
+                if simulation > 0 && time_budget_exhausted {
                     break;
                 }
                 let mut state = if worlds.is_empty() {
@@ -896,6 +963,7 @@ impl Agent for NeuralAgent {
                     self.config.depth.max(1),
                     &mut nodes,
                     &mut index,
+                    None,
                 );
                 self.simulations += 1;
             }
@@ -914,10 +982,27 @@ impl Agent for NeuralAgent {
                 .unwrap()
         };
         let visits: u32 = nodes[root].edges.iter().map(|e| e.visits).sum();
+        if self.capture_search_targets && visits > 0 {
+            let mut targets = SearchTargets {
+                visits: [0; ACTIONS],
+                q: [None; ACTIONS],
+                root_value: (nodes[root].edges.iter().map(|e| e.sum).sum::<f64>()
+                    / f64::from(visits)) as f32,
+                network_value: nodes[root].value as f32,
+            };
+            for edge in &nodes[root].edges {
+                let i = action_index(edge.action).expect("Main action");
+                targets.visits[i] = edge.visits;
+                if edge.visits > 0 {
+                    targets.q[i] = Some((edge.sum / f64::from(edge.visits)) as f32);
+                }
+            }
+            self.search_targets = Some(targets);
+        }
         if visits > 0 {
             let mut policy = [0.0; ACTIONS];
             let improved = if self.gumbel {
-                Some(nodes[root].improved_policy())
+                Some(nodes[root].improved_policy(self.gumbel_cvisit, self.gumbel_cscale))
             } else {
                 None
             };
@@ -943,28 +1028,48 @@ pub fn value(o: &Observation) -> f64 {
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
 }
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_v2() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e26.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_v2() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 pub fn value_v2(o: &Observation) -> f64 {
     let (_, v) = model_v2().infer(&super::neural::enhanced_features(o));
     1.0 / (1.0 + f64::from(-v.clamp(-30.0, 30.0)).exp())
 }
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_transferred() -> &'static super::transfer::Model {
     static MODEL: OnceLock<super::transfer::Model> = OnceLock::new();
     MODEL.get_or_init(|| super::transfer::Model::from_bytes(include_bytes!("models/e30.bin")))
 }
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_transferred() -> &'static super::transfer::Model {
+    panic!("embedded neural checkpoints are disabled in this build")
+}
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_self_play() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e28.bin")))
 }
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_self_play() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
+}
 
+#[cfg(not(all(feature = "external-model-only", target_arch = "wasm32")))]
 fn model_expert() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| Model::from_bytes(include_bytes!("models/e27.bin")))
+}
+#[cfg(all(feature = "external-model-only", target_arch = "wasm32"))]
+fn model_expert() -> &'static Model {
+    panic!("embedded neural checkpoints are disabled in this build")
 }
 pub fn value_expert(o: &Observation) -> f64 {
     let (_, v) = model_expert().infer(&super::neural::enhanced_features(o));
@@ -1051,6 +1156,65 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn chance_universe_seeds_are_policy_rng_derived_and_zero_preserves_rng() {
+        let mut disabled = NeuralAgent::new(818, SearchConfig::default());
+        let mut control = NeuralAgent::new(818, SearchConfig::default());
+        assert!(disabled.make_chance_seeds().is_empty());
+        assert_eq!(disabled.rng.next_u64(), control.rng.next_u64());
+
+        let mut first = NeuralAgent::new(818, SearchConfig::default());
+        let mut second = NeuralAgent::new(818, SearchConfig::default());
+        first.chance_universes = 3;
+        second.chance_universes = 3;
+        let seeds = first.make_chance_seeds();
+        assert_eq!(seeds, second.make_chance_seeds());
+        assert_eq!(seeds.len(), 3);
+        assert!(seeds.iter().all(|seed| *seed != 0));
+    }
+
+    #[test]
+    fn diagnostic_targets_preserve_search_and_mask_unvisited_edges() {
+        let state = GameState::new(2, 42).unwrap();
+        let o = state.observe(0);
+        let mut legal = ActionSet::new();
+        state.legal_actions(&mut legal);
+        for gumbel in [false, true] {
+            let config = SearchConfig {
+                iterations: 32,
+                depth: 4,
+                ..Default::default()
+            };
+            let mut original = NeuralAgent::new(77, config.clone());
+            let mut captured = NeuralAgent::new(77, config);
+            original.gumbel = gumbel;
+            captured.gumbel = gumbel;
+            captured.capture_search_targets = true;
+            assert_eq!(
+                original.select_action(&o, &legal),
+                captured.select_action(&o, &legal)
+            );
+            assert_eq!(original.work_counts(), captured.work_counts());
+            assert_eq!(original.policy_target(), captured.policy_target());
+            assert_eq!(original.value_target(), captured.value_target());
+            let t = captured.search_targets.as_ref().unwrap();
+            let count: u32 = t.visits.iter().sum();
+            assert_eq!(count, 32);
+            let mut sum = 0.0f64;
+            for i in 0..ACTIONS {
+                assert_eq!(t.q[i].is_some(), t.visits[i] > 0);
+                if let Some(q) = t.q[i] {
+                    assert!((0.0..=1.0).contains(&q));
+                    assert!(legal.iter().any(|&a| action_index(a) == Some(i)));
+                    sum += f64::from(q) * f64::from(t.visits[i]);
+                }
+            }
+            assert!((sum / f64::from(count) - f64::from(t.root_value)).abs() < 1e-6);
+            assert!((0.0..=1.0).contains(&t.network_value));
+            captured.select_action(&o, &legal[..1]);
+            assert!(captured.search_targets.is_none());
+        }
+    }
     use splendor_core::{ActionSet, GameState};
     #[test]
     fn completed_q_policy_and_mixed_value() {
@@ -1080,21 +1244,21 @@ mod tests {
         };
         let weighted = (0.6 * 0.8 + 0.3 * 0.2) / 0.9;
         assert!((node.mixed_value() - (0.4 + 3.0 * weighted) / 4.0).abs() < 1e-12);
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         assert!((p[..3].iter().sum::<f64>() - 1.0).abs() < 1e-12);
         assert!(p[2] > 0.0 && p[0] > p[1]);
         for e in &mut node.edges {
             e.visits = 1;
             e.sum = 0.5;
         }
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         for (i, e) in node.edges.iter().enumerate() {
             assert!((p[i] - e.prior).abs() < 1e-12);
         }
         node.edges[0].sum = 0.9;
         node.edges[1].sum = 0.1;
         node.edges[2].sum = 0.4;
-        let p = node.improved_policy();
+        let p = node.improved_policy(50.0, 0.1);
         let original: f64 = node.edges.iter().map(|e| e.prior * e.sum).sum();
         let improved: f64 = node
             .edges

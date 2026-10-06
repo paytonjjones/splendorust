@@ -1,0 +1,121 @@
+{
+  "schema": "ahinlendor-raw-engine-run-v1",
+  "status": "complete",
+  "finished_utc": "2026-10-05T03:07:51Z",
+  "host": {
+    "model": "Apple M4 Pro",
+    "architecture": "aarch64-apple-darwin",
+    "os": "Darwin 25.6.0",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "clang": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+    "shared_load_at_finish": {
+      "uptime_load_average_1_5_15": [
+        3.61,
+        5.4,
+        6.6
+      ],
+      "active_model_service_cpu_percent": 89.6,
+      "active_search_worker": true
+    }
+  },
+  "upstream": {
+    "path": "local/strength/external/ahinlendor",
+    "commit": "96e6f2daff83147495826c4a2073dc3c9c856cc9",
+    "game_logic_cpp_sha256": "928d013a7395caa505d709d720d6707e90c940f490d603790a17d180cf728f51",
+    "state_encoder_cpp_sha256": "83319c3d8db4da1b2ee898c1e0fde8cbb6ba9ab55626bd49ab29361f4a879af2"
+  },
+  "commands": {
+    "rust_timing": "CARGO_TARGET_DIR=local/research/ahinlendor/rust-build cargo run --release --locked -p splendor-arena --features benchmark-compat --example engine_comparison -- research/ahinlendor/engine/fixtures-corrected.txt",
+    "cpp_build": "clang++ -std=c++17 -O3 -DNDEBUG -flto -I local/strength/external/ahinlendor research/ahinlendor/engine/ahin_bench.cpp local/strength/external/ahinlendor/game_logic.cpp local/strength/external/ahinlendor/state_encoder.cpp -o local/research/ahinlendor/engine/ahin_bench-corrected",
+    "cpp_timing": "local/research/ahinlendor/engine/ahin_bench-corrected research/ahinlendor/engine/fixtures-corrected.txt"
+  },
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=local/research/ahinlendor/rust-build cargo clippy -p splendor-arena --example engine_comparison --features benchmark-compat --locked -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=local/research/ahinlendor/rust-build cargo test --release --locked -p splendor-arena --features benchmark-compat --example engine_comparison",
+      "exit_code": 0,
+      "tests": 0,
+      "note": "This example has no unit tests; this builds the release test target. The bounded runtime parity checks are recorded in ahin-run-corrected.log."
+    }
+  ],
+  "fixture": {
+    "states": [
+      "start",
+      "refill",
+      "mid",
+      "late"
+    ],
+    "source_trajectory_actions": 28,
+    "rust_bytes_sha256": "dcec643a301d15a959a9e67649c1702cb99807a86b44b015e181281ceb58d568",
+    "rust_source_sha256": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+    "cpp_source_sha256": "5ec2196747098ae8564b763788bddfc9dcee770b13d0c3611a62e1fadcd7f6ec"
+  },
+  "validation": {
+    "full_material_digest_match": 4,
+    "post_take_material_and_phase_digest_match": 4,
+    "reserve_deck_top_matches": 3,
+    "buy_refill_matches": 1,
+    "legal_take_count_matches": 4,
+    "catalog_signatures": {
+      "cards": 90,
+      "nobles": 10,
+      "canonical_to_ahin_noble_mapping": [
+        9,
+        8,
+        10,
+        6,
+        7,
+        5,
+        4,
+        2,
+        3,
+        1
+      ]
+    }
+  },
+  "timing": {
+    "repeats_per_operation_per_state": 3,
+    "fixtures": 4,
+    "base_operations": 80000,
+    "legal_and_observation_operations": 20000,
+    "clone_apply_operations": 20000,
+    "tree_like_operations": 10000,
+    "apply_take_operations_per_repeat": 262144,
+    "apply_take_reset_copy_outside_timer": true,
+    "warmup_passes": 0
+  },
+  "files": {
+    "crates/splendor-arena/examples/engine_comparison.rs": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+    "research/ahinlendor/engine/ahin_bench.cpp": "5ec2196747098ae8564b763788bddfc9dcee770b13d0c3611a62e1fadcd7f6ec",
+    "research/ahinlendor/engine/fixtures-corrected.txt": "dcec643a301d15a959a9e67649c1702cb99807a86b44b015e181281ceb58d568",
+    "research/ahinlendor/engine/rust-results-corrected.csv": "b83ee7167738ee30c9385655ab7e74f65dcec6edb4b64751e8c4c4c2aada3f9b",
+    "research/ahinlendor/engine/ahin-results-corrected.csv": "c70a6a993bd678bc00d7ef2a39fa65f2ec2d8ac246f97e71771bc06164db71f3",
+    "research/ahinlendor/engine/rust-run-corrected.log": "50db1e9e5ff65d8f2710fc91ad7124079f86b3cb108c70f847ef16c8de7e77db",
+    "research/ahinlendor/engine/ahin-run-corrected.log": "f6da68cfd6d0fc6923bde6099adf44aedc9b82e8a02b19e27a2b85593748ee28",
+    "local/research/ahinlendor/engine/ahin_bench-corrected": "038f4c782fed5554fd2044fef9b34459f70e3e5a108a13fcd9ea581ab87400ad",
+    "local/research/ahinlendor/rust-build/release/examples/engine_comparison": "8b2ab275bc243348878c3748ce261e53901bda7eea20df974f7796d554501dcb"
+  },
+  "limitations": [
+    "No game strength, model, MCTS, or completed-turn result was measured.",
+    "Action counts match on sampled fixtures, but complete legal sets are not proven equal.",
+    "Rust and C++ action generation and action representations differ.",
+    "Clone, terminal, and observation cases perform different work and must not be converted into a general speed ratio.",
+    "The run shared the host with an active search and was not isolated."
+  ],
+  "rust_build_profile": {
+    "cargo_profile": "release",
+    "opt_level": 3,
+    "lto": "thin",
+    "codegen_units": 1,
+    "profile_source": "Cargo.toml",
+    "profile_source_sha256": "8e558d6799bd05e56252bbe3d880c878151e3fe8375e39008437af1deb0c15af"
+  },
+  "independent_review": "File hashes,84 rows per engine,operation counts,parity logs and timing scope verified by separate helper and owner."
+}

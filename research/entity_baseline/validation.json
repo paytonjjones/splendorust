@@ -1,0 +1,31 @@
+{
+  "format": "cargo fmt --all -- --check: pass",
+  "clippy": "cargo clippy --workspace --all-targets --release --locked -- -D warnings: pass",
+  "release_tests": 125,
+  "corpus_files_verified": 408,
+  "checkpoint_load": "epoch12, 4780883 params, 32 real public positions: pass",
+  "cpu_rust_parity": {
+    "all_inputs_max_logit_error": 0.0,
+    "masked_policy_and_value_max_error": 0.0,
+    "output_tolerance": 0.001,
+    "positions": 32,
+    "real_initial_board_max_logit_error": 0.0,
+    "real_logit_tolerance": 0.0001,
+    "stress_logit_tolerance": "0.001 + 0.00001 * abs(expected)"
+  },
+  "command_check": {
+    "seed": 5320000000,
+    "games": 2,
+    "completed": 2,
+    "incomplete": 0,
+    "source_id": "cc154030de2934c0",
+    "scope": "Command/infrastructure check only; not strength evidence",
+    "raw_report_sha256": "46d47ac7440d3a0b7827de62fe8f7c61295c6e713c1ba395171ec255ebb483c2"
+  },
+  "champion_pointer_unchanged": true,
+  "logs_sha256": {
+    "clippy.log": "b99846b2dea0cdccb7be7237f00848e6927a14b3d91bc9a58c9a844328e2f3f2",
+    "release-tests.log": "2cbfc310bbd4c261ae3d1bbf325fadfe932179066d44bd0188b70baeb6c49cd0",
+    "command-check.log": "6639b50e3b8a5e0b7437e48311f769163d0c08feef4847794f7da0ba8d726b48"
+  }
+}

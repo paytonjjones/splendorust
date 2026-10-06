@@ -1,0 +1,26 @@
+{
+  "schema": "sprint48-preparation-validation-v1",
+  "checked_date": "2026-10-03",
+  "based_on_main": "3c1a65678a41db77aac66e034cbb4b5fa1f7b018",
+  "prepare_source_sha256": "7e7cd6e3672d2d61714c37cb8f4b783c18ee4d579a748d92cd24f8e2a3df2130",
+  "checks": {
+    "selected_archive_restore": "passed; compressed, uncompressed, whole-file hashes match",
+    "idempotent_restore": "passed",
+    "corrupt_existing_output": "rejected without overwrite",
+    "archive_path_traversal": "rejected",
+    "baseline_check": "32 real public fixtures passed entity_baseline/check.py",
+    "selected_checkpoint_and_runtime": "epoch1, entity, 4780883 parameters, identical state_dict tensors",
+    "upstream_source": "pinned revision and clean tracked source verified",
+    "upstream_checkpoint": "pinned SHA256 verified",
+    "export_fixture_source_and_context": "registered SHA256 verified",
+    "runtime": "CPython3.11.13, Torch2.5.1, MPS available",
+    "strategy_local_links_json_and_python_syntax": "passed",
+    "strength_registry": "agrees with confirmed decision and checkpoint",
+    "command_review": "cargo binary is splendor; native0 iterations and CLI settings inspected",
+    "reserved_master_scan": "New 17.7-billion base/final masters have no prior exact occurrence in retained research/benchmark JSON, Markdown, Python or Rust; split IDs still checked at execution."
+  },
+  "rust_changes": false,
+  "strength_games_run": 0,
+  "training_started": false,
+  "note": "Preparation evidence only. No new strength, backend throughput, or 48-hour execution claim."
+}

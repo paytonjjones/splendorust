@@ -1,0 +1,77 @@
+{
+  "archive": "research/sprint48/artifacts/final-native",
+  "archive_bytes": 8467499,
+  "archive_manifest_sha256": "cf35548e0c5448c20e5fe696a83db6c660110385efc7ff40c4b321918332095f",
+  "detached_receipt_sha256": "1dcccddb528e3e42c7fc79b90ec9796ec64d8d81629ebfb4699735c75da2896f",
+  "freeze_sha256": "feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58",
+  "games": 1000,
+  "independent_audit_report_sha256": "1a2254457c9864d9a675c9edb5605234b7d5353ffc846ef6a4557c22c832099d",
+  "manifest_file_count": 215,
+  "method": "archive_results.restore verified every archived file hash; each omitted checkpoint/binary referent was streamed from its chunk archive and matched its reference SHA256.",
+  "raw_sha256": "8b3887d08b918e021e114a2632ff301ad8d4b272b435b057027bfd4a51b45c6e",
+  "reference_targets_verified": [
+    {
+      "archive": "research/training_strategy/artifacts/core",
+      "member": "first/onehot/runtime.pt",
+      "omitted_path": "final-native-retry/input/candidate.pt",
+      "referent_bytes_verified": 19148003,
+      "sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+    },
+    {
+      "archive": "research/training_strategy/artifacts/core",
+      "member": "first/onehot/runtime.pt",
+      "omitted_path": "final-native-retry/service/13/model.pt",
+      "referent_bytes_verified": 19148003,
+      "sha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb"
+    },
+    {
+      "archive": "research/sprint48/artifacts/development-07",
+      "member": "development-07/external-07/binaries/native_policy_worker",
+      "omitted_path": "final-native-retry/binaries/native_policy_worker",
+      "referent_bytes_verified": 843168,
+      "sha256": "da7ba89cbe418acee6df1cac5e753f2c2bfb981c9f34f362c94694c6ace65898"
+    },
+    {
+      "archive": "research/sprint48/artifacts/development-07",
+      "member": "development-07/external-07/binaries/strength_worker",
+      "omitted_path": "final-native-retry/binaries/strength_worker",
+      "referent_bytes_verified": 2801792,
+      "sha256": "4bd368a0ceeeebce42e3e0500f88de2bb0326c1383cd659435386a081e6ea91b"
+    },
+    {
+      "archive": "research/sprint48/artifacts/development-07",
+      "member": "development-07/external-07/binaries/transfer_parity",
+      "omitted_path": "final-native-retry/binaries/transfer_parity",
+      "referent_bytes_verified": 658768,
+      "sha256": "07075e469aa2830699d1644193a1132bee6ca5b888ec1cafccf2ef519938ecf4"
+    }
+  ],
+  "required_receipts_present": [
+    "final/final-native-retry/arena/games.jsonl",
+    "final/final-native-retry/arena/plan.json",
+    "final/final-native-retry/run.json",
+    "final/final-native-retry/final-freeze.json",
+    "final/final-native-retry/campaign-context.json",
+    "final/final-native-retry/replay.json",
+    "final/final-native-retry/summary.json",
+    "final/final-native-retry/evidence.json",
+    "final/final-native-retry/independent-audit/report.json",
+    "final/final-native-retry/independent-audit/summary.json",
+    "final/final-native-retry/independent-audit/evidence.json",
+    "final/provenance/driver.log",
+    "final/provenance/preparation-repair.json",
+    "final/provenance/detached-driver.json",
+    "final/provenance/registered-final-campaign.json",
+    "final/auditor-source/audit_final.py",
+    "final/auditor-source/test_audit_final.py",
+    "final/auditor-source/SHA256SUMS.json"
+  ],
+  "restore_location": "local/research/sprint48/final-native-archive-check",
+  "restore_receipt_sha256": "c4cc261f8ec287c4c2c4d60c42cacc45451f6a0929e38f1fa2bbb402ffa7ddae",
+  "restored_file_hashes_verified": 215,
+  "root_repair_sha256": "e33486980203b62437d690e2ea2236730a77abdc4b55ce5d534c7150aa652e38",
+  "schema": "sprint48-final-restore-verification-v1",
+  "setup_blocks": 500,
+  "uncompressed_bytes": 22617647,
+  "verified_at_utc": "2026-10-04T14:23:48.491527Z"
+}

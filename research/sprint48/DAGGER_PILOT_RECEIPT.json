@@ -1,0 +1,65 @@
+{
+  "schema": "sprint48-dagger-pilot-audit-v1",
+  "status": "read-only audit passed; no new games or fit run",
+  "pilot": "local/research/sprint48/dagger-train-pilot-00",
+  "source": "local/research/sprint48/external-00/arena/games.jsonl",
+  "source_sha256": "0d1fb4501178daf90b59249daf2084fa88950be672ad77ddbae6ac7464836cd5",
+  "manifest_sha256": "79ab3b258d0348fea37bd1b1af285f47d5ad29c63dde6eb9fb6cb61e62e2f540",
+  "setup_id": 5682036930020612125,
+  "native_low32_setup_id": 2928121885,
+  "excluded_setup_ids_sha256": "1f781d1785ab1a17d73492fc25d42b34d3a7aae119633a97ebb2de9ba50dd8d0",
+  "audit_sha256": "075005d994071a1a250f1758098d5c562c861d78bdbf3f99c7301c83b49c909d",
+  "schema_checks": {
+    "rows": 54,
+    "dtype_itemsize_bytes": 2232,
+    "x_shape": [54, 392],
+    "mask_shape": [54, 81],
+    "policy_shape": [54, 81],
+    "teacher_shape": [54],
+    "outcome_shape": [54],
+    "context_shape": [54, 7],
+    "packed_input_shape": [54, 525],
+    "finite_training_arrays": true,
+    "binary_masks_and_policy": true,
+    "legal_action_count_min": 19,
+    "legal_action_count_max": 61
+  },
+  "label_checks": {
+    "actor_actions_in_legal_mask": 54,
+    "teacher_actions_in_legal_mask": 54,
+    "one_hot_teacher_policy": true,
+    "teacher_credit_range": [0.3921603262424469, 1.0],
+    "outcome_credit_values": [1.0],
+    "outcome_matches_candidate_seat_rewards": true,
+    "candidate_turns_by_record": {"0": 26, "1": 28},
+    "candidate_seat_by_record": {"0": 0, "1": 1}
+  },
+  "public_input_checks": {
+    "packed_inputs_recomputed_from_saved_features_and_context_exactly": true,
+    "all_audit_packed_input_hashes_match": true,
+    "collector_hidden_world_invariance_checks": 1,
+    "collector_hidden_world_invariance_result": "passed"
+  },
+  "policy_disagreement": {
+    "actor_teacher_agreement": 26,
+    "actor_teacher_disagreement": 28,
+    "rows": 54,
+    "disagreement_fraction": 0.5185185185185185
+  },
+  "runtime": {
+    "label_loop_seconds": 14.950367416953668,
+    "rows_per_second": 3.611949,
+    "seconds_per_row": 0.276859,
+    "seconds_per_setup_block": 14.950367,
+    "teacher_simulations_estimate": 43200,
+    "linear_projection": {
+      "8_blocks": {"rows": 432, "label_seconds": 119.6},
+      "32_blocks": {"rows": 1728, "label_seconds": 478.4},
+      "64_blocks": {"rows": 3456, "label_seconds": 956.8},
+      "128_blocks": {"rows": 6912, "label_seconds": 1913.6},
+      "1000_blocks": {"rows": 54000, "label_seconds": 14950.4}
+    },
+    "projection_scope": "Label-loop time only. It assumes 54 learner turns and linear CPU search cost per setup. Source game collection and fit time are extra."
+  },
+  "interpretation": "The pilot proves row and label plumbing for one paired setup. It does not estimate policy improvement, value calibration, or strength. Both source games gave the candidate full credit; one setup is too small to assess outcomes. The 52 percent action disagreement is a reason to test a controlled mixture, not evidence that the labels help."
+}

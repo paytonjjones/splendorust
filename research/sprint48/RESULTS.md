@@ -1,0 +1,564 @@
+# Confirmed 48-hour campaign result
+
+The fixed final run decisively beat pinned unchanged AlphaZero800 in the
+registered two-player native profile. It completed at **2026-10-04 13:47:15 UTC**,
+about 18.2 hours after the campaign began, within the 48-hour deadline.
+
+**770 wins, 220 losses and 10 draws** in 1,000 games give **77.5% win credit**.
+The conservative two-sided paired Hoeffding 95% interval is
+**71.426385–83.573615%** over 500 independent setup blocks. Its lower bound
+exceeds the fixed 55% decisive-win threshold. All games ended by native score.
+There were no caps, no-action games, invalid games or decision-limit games.
+The caps-as-unknown interval is identical. The paired bootstrap interval,
+a secondary diagnostic, is 74.85–80.10%.
+
+The selected first-onehot Entity used dynamic PUCT at 6,400 simulations,
+depth64, world pool3 and chance universes3. AlphaZero kept its pinned model,
+source and 800 simulations. This result uses unequal compute and applies to
+`alphazero-native-32a27ac-v1`. It does not establish a worldwide rank,
+canonical-rule dominance, equal-compute superiority or expert-human strength.
+The standalone/demo runtime pointer is unchanged.
+
+The candidate, count, profile and final master were frozen before outcomes.
+The final setup-ID audit found zero overlap with training, model-selection,
+collection and earlier test IDs. Replay checked all 1,000 games and 55,466
+transitions. The independent final audit passed source, model, binary,
+receipt, setup-pair and regenerated-statistic checks. Raw SHA256:
+`8b3887d08b918e021e114a2632ff301ad8d4b272b435b057027bfd4a51b45c6e`.
+Freeze SHA256:
+`feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
+
+The schedule took 35,912.640 seconds (9.976 hours); the driver, including
+checks, took 35,932.637 seconds. The candidate used 177,491,200 simulations
+and 150,725,122 inferences. The Mac ran 64 game workers and one MPS FP32
+service with batch32 and a 1ms delay. No final outcomes changed the sample
+size or selected model. See [FINAL_DECISION.json](FINAL_DECISION.json) for the
+confirmed decision and archive references.
+
+The full final evidence archive is `artifacts/final-native`, manifest SHA256:
+`cf35548e0c5448c20e5fe696a83db6c660110385efc7ff40c4b321918332095f`.
+Restore verified all 215 files and all five deduplicated model/binary targets.
+The archive retains raw game records, replay, both independent statistics,
+freeze/context, frozen source files, exact commands, cost logs and repair
+receipts. Model bytes resolve to the original verified core archive.
+
+## Historical development record
+
+The following entries retain the hypotheses, failed attempts and exploratory
+results used before the final freeze. Their statements about work in progress
+refer to their recorded stage.
+
+| Completed candidate | Games | Win credit | Scheduler seconds |
+| --- | ---: | ---: | ---: |
+| One-hot Gumbel128 | 128 | 45.703125% | 531.875 |
+| One-hot policy only | 128 | 33.593750% | 91.745 |
+| Refit01 PUCT1600, fresh worlds | 128 | 47.265625% | 1,543.928 |
+| Refit01 Gumbel1600, fresh worlds | 128 | 38.281250% | 1,545.709 |
+| Refit01 PUCT1600, three chance universes | 128 | 58.593750% | 1,495.633 |
+
+These are separate exploratory schedules. Changed seeds and settings prevent
+an isolated estimate of each change. No partial schedule outcomes are used.
+
+Trials02 and03, including the failed zero-game launch, are retained in
+`artifacts/development-02-03`. Manifest SHA256:
+`127a12ebb86c7dba6be8b0d1df2cc6e3c0399e80cce5190bc80a3f10a5e51da7`.
+A restore verified all 408 files. The archive notes the missing imported
+campaign-context helper snapshot in these older trials. Recorded source maps,
+raw games, replay results, frozen binaries and logs remain intact. The helper
+is included in trial04's source snapshots.
+
+The development records, source/executable copies, logs and pilot rows are
+retained in `artifacts/development-00-01`. Manifest SHA256:
+`d585eccf7455bebc6b3152b3efcba191952597d3fc8de983b49110fd02ab1148`.
+A full restore verified all 160 files. Duplicate service checkpoint copies
+are referenced to the verified core archive in `WEIGHTS_REFERENCES.json`.
+After restore, check executable hashes and set their execute bits. Descriptors
+retain old ports; export again for a new service.
+
+## Development trial 01 preregistration
+
+Hypothesis: the first model's Gumbel128 search helps beyond its copied policy.
+Measure policy-only play from the **same one-hot checkpoint** against unchanged
+AlphaZero800, on 128 fresh paired games. Master: `17701000000`. Candidate
+iterations0, depth16, worlds3, Gumbel cap16 (the zero budget selects root
+policy directly). Use the checked new frozen worker, CPU inference, batch32,
+1ms delay and 16 game workers. Port19721. This CPU job may overlap the owned
+MPS refit; there is still one GPU job. Record both elapsed and policy times.
+Backend float differences mean this is a diagnostic comparison; it does not
+prove exact CPU/MPS trajectory parity or establish a final strength claim.
+
+Result: **33.59375% credit**, 128/128 complete native-score games, zero search
+simulations and 3,556 inferences. Paired exploratory bootstrap:
+**24.21875–42.96875%**. Conservative paired Hoeffding:
+**16.617481–50.570019%**. No native caps or invalid games. Replay checked
+7,112 transitions. Raw SHA256:
+`6057499ebcd3b9f377c73e50590fba382663a3876b2c90bcb639556d00043215`.
+Scheduler time: **91.745 seconds**; driver time including setup/checks:
+108.335 seconds. Evidence: `local/research/sprint48/external-01`.
+
+The point estimate is 12.109375 percentage points below trial00. Different
+seeds and backend limit causal attribution, and the exploratory intervals
+overlap. This is a reason to prioritize higher-budget search rather than a
+policy-only final candidate. It does not establish a scaling gain from 8 to
+16 workers because workload and backend also changed.
+
+## Development trial 00
+
+Hypothesis: the generation-one one-hot model's canonical improvement also
+improves native play against unchanged AlphaZero800. Candidate checkpoint:
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`.
+Search: Gumbel128, depth16, three sampled worlds, prior root cap16. Runtime:
+MPS, batch32, 1ms batch delay, eight game workers. Master: `17700000000`.
+
+Result: **45.703125% win credit** in 128/128 complete native-score games.
+There were no native caps or invalid games. The paired exploratory bootstrap
+interval was **37.5–53.90625%**. The conservative paired Hoeffding interval
+was **28.726856–62.679394%**; caps-as-unknown sensitivity is identical.
+This screen does not show a win and does not prove a loss. Keep the model as
+a candidate; do not promote it against AlphaZero from this result.
+
+Trial00's first paired setup was later used for an offline labeling pilot.
+It is now a training setup. Any model trained on that shard needs fresh
+played evaluation; the trial00 result remains a record of the original model.
+
+The scheduler took **531.875 seconds**. Across games, candidate policy time
+was 3,789.256 seconds and AlphaZero policy time was 259.175 seconds. These
+are summed concurrent times, not elapsed wall time. The service averaged
+about 7.5 useful rows per fixed 32-row batch. The later 32-worker trial fills about 31 rows per fixed 32-row batch.
+This improves service use under that workload; the changed model and search
+prevent a controlled inference scaling claim.
+
+Replay checked all 128 games and 7,140 transitions, including legal moves,
+chance draws, state/public-observation digests, and terminal rewards.
+Raw record SHA256:
+`0d1fb4501178daf90b59249daf2084fa88950be672ad77ddbae6ac7464836cd5`.
+Local evidence: `local/research/sprint48/external-00/{trial,summary,replay,evidence}.json`
+and `arena/games.jsonl`. Sources and executable copies are retained beside
+the records. The original build's source fingerprint is `584589a4db074b5e`.
+
+## Development trial 02 preregistration
+
+Hypothesis: the full-corpus refit plus PUCT1600 and fresh public worlds
+improves native play beyond the initial Gumbel128 candidate. Use the refit's
+registered selected `fit/model.pt`, including the parent if the selector
+retains epoch0. Do not select an epoch from played games. This tests a
+combined candidate; it cannot isolate the effects of refitting and search.
+
+Fixed schedule: 128 games, master `17702000000`, 32 workers, MPS batch32,
+1ms delay, port19722. Search: PUCT1600, depth32, world_pool0 (fresh public
+determinization each simulation). The Gumbel root cap is inapplicable.
+Use the checked binaries from `build-controls/release/examples`, copied
+into the run before play. Start only after the refit and its owned process
+group end. Measure complete-game throughput and resource use; do not run
+another primary GPU job. Fixed AlphaZero800 is unchanged.
+
+Thirty-two workers can fill the existing batch32 service better than eight.
+The previous policy-only test does not establish this gain. The host has
+14 CPU cores and 48GiB RAM; check actual memory/load during this new workload.
+
+## Training branch 1
+
+The campaign started training branch 1: a two-epoch warm start on the verified full expanded
+corpus. The short public development check in `TRAINING_DIAGNOSTIC.md`
+supports checking native-policy drift after the prior canonical-only fit.
+The branch uses existing expert data; it adds no final or development-game
+records to training. Select weights with the existing full-dev rule.
+
+The refit started at **2026-10-03 20:01:01 UTC**. Driver PID98875 owns trainer
+PID98876 and its process group. Receipts/logs: `local/research/sprint48/refit-01`;
+weights/metrics: `refit-01/fit`. It is the sole primary MPS job. Initial full
+development score: 2.31105742 (policy CE plus four times outcome Brier).
+
+The two-epoch refit completed in **1,494.291 seconds** and selected epoch2:
+checkpoint SHA256
+`44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f`.
+Full-dev selection score improved to **2.25979946**. Native policy CE:
+1.33158387 → 1.27574740; native outcome Brier: 0.20561159 → 0.20844755.
+Canonical policy CE: 1.64090033 → 1.57121035; outcome Brier:
+0.20699360 → 0.20990177. Thus policy loss improved and terminal calibration
+became slightly worse. These metrics do not establish playing strength.
+Trial02 used this selected checkpoint and completed; see its result below.
+
+The selected refit and its full logs are retained in `artifacts/refit-01`.
+Manifest SHA256: `2ab30249d888edad292cabeb90b739aab998692e92ecd9e2f9ab169e75844365`.
+A restore verified all seven files, including both checkpoint byte streams.
+
+The CPU offline-labeling pilot replayed two games from one paired setup and
+produced 54 public-input rows in 14.950 seconds of labeling/replay work. It
+passed a sampled-hidden-world input invariance check. This proves the path
+works on that setup; it establishes no training or strength gain. Shard:
+`local/research/sprint48/dagger-train-pilot-00`. Its native low32 setup seed
+is checked against all 32,000 existing training/development setup IDs.
+
+Expose root width, depth and world sampling in the native runner, with frozen
+executable paths and accepted-setting checks. After local checks and the
+refit, test higher search budgets on fresh exploratory masters. AlphaZero's
+source, checkpoint, private information and 800-simulation budget stay fixed.
+
+The full trial00 offline-label job completed in **52.412 seconds** with eight
+CPU workers. It produced 3,516 rows from 63 paired setups; the separate pilot
+adds 54 rows from the remaining setup, for **3,570 rows / 64 setups**.
+Registry SHA256: `1c5f138fce0b31946649133ba722cd318024c346a103570ccc55acc2e67d628c`.
+This is training data; it adds no played strength evidence.
+
+## Development trial 02 result
+
+Result: **47.265625% credit**, 128/128 complete native-score games. No caps
+or invalid games. Paired exploratory bootstrap: **39.0625–55.46875%**;
+conservative paired Hoeffding: **30.289356–64.241894%**. This does not support
+a decisive win or show a clear gain from the combined refit/search change.
+
+Scheduler time: **1,543.928 seconds**; driver including setup and replay:
+**1,558.031 seconds**. Search used 5,723,200 simulations and 5,463,526
+inferences. Replay checked all 128 games and 7,154 transitions. Raw SHA256:
+`e66192fdd05f3a721c33ba385e4f3c4501e6fa6a2d4fbd6e67880773711281b8`.
+Evidence is in `local/research/sprint48/external-02`.
+
+## Development trial 03 conditional preregistration
+
+If completed trial02 does not support choosing PUCT1600 for confirmation,
+compare the same refit checkpoint with **Gumbel1600, depth32, world_pool0,
+root cap32**. Keep AlphaZero800 unchanged. The fixed schedule is 128 games,
+master `17703000000`, MPS port19723. Use 64 game workers and fixed batch64
+with 1ms delay to test higher GPU throughput. Bind the actual batch size in
+receipts and check exported numeric parity before play. The different fixed
+batch can change floating-point results, so this is a combined search/runtime
+candidate comparison, not a strict isolated estimate of root-allocation effects.
+Record complete-game wall time, service occupancy, memory and replay results.
+Do not use partial trial02 or trial03 outcomes for a decision.
+
+The trial00 label archive is `artifacts/dagger-trial00`. Manifest SHA256:
+`f8cfcd70e157ad4ada6edf2d59c001f1fa08a36865265f5867fe6a57a701ed00`.
+A restore verified all 63 files. These labels are retained but will stay out
+of branch2's matched refit01-source collection.
+
+Trial03's first launch failed before any game setup or output record. Its
+64 logs are retained at `external-03`; `RUN.json.failed_attempts` records this
+zero-game failure. The campaign-context call omitted ROOT. After fixing it,
+two real E56 zero-search CLI games passed on a separate validation setup.
+That setup is excluded from final evaluation. Retry the unchanged trial03
+protocol and master in a new directory; no outcomes selected this retry.
+
+## Development trial 03 result
+
+The retry completed all 128 native-score games with **38.28125% credit**.
+No caps or invalid games. Paired bootstrap: 30.46875–46.09375%; conservative
+paired Hoeffding: 21.304981–55.257519%. Scheduler time: 1,545.709 seconds.
+Batch64 with 64 workers did not give a useful complete-game time gain over
+trial02's batch32 / 32 workers. Search and game length also differ, so this
+is not an isolated batch scaling result. Evidence: `external-03-retry`.
+
+## Development trial 04 preregistration
+
+Hypothesis: fixed chance universes let PUCT spend more visits on deeper
+branches rather than new random refills. Use the same selected refit01
+checkpoint with PUCT1600, depth32, world_pool3 and **chance_universes3**.
+The chance seeds come from the policy RNG, never the referee or hidden state.
+This combines finite root worlds and finite chance universes; it does not
+isolate those two effects. All real referee moves and AlphaZero800 stay fixed.
+
+Fixed schedule: 128 games, master17704000000, 64 workers, MPS batch32,
+1ms delay, port19724. Use newly checked copied binaries from `build-chance`.
+Bind new source and executable hashes. Record simulations/inferences and
+complete-game time. This remains exploration; final seeds stay sealed.
+
+## Development trial 05 prospective preregistration
+
+After trial04 ends and the new worker passes checks, test **dynamic FPU**
+with the same selected refit01 checkpoint, PUCT1600, depth32, world_pool3,
+chance_universes3, 64 workers, MPS batch32 and 1ms delay. Use 128 paired games,
+master17705000000 and port19725. This changes the unvisited-action value
+from a fixed network estimate to the existing pseudocount running value.
+It matches the pinned upstream update formula in credit units; it does not
+establish a gain before play. Keep all other search constants unchanged.
+Use copied checked executables from a separate build target. Do not use
+partial outcomes from trial04 to alter this protocol. Both trials are
+exploration, and different fresh seeds limit causal comparison.
+
+Branch2 is prospectively revised before collection to 10% DAgger loss and
+90% existing base loss. Append 57 fresh-label rows to each 512-row base update,
+keep all base exposures and update counts, and select by 90% full-dev plus
+10% held-out DAgger-dev score. No DAgger source games, fit or selector outcomes
+exist at the time of this decision. This tests a larger distribution change
+than the earlier 5% proposal, with about 11% more examples per update.
+
+## Development trial 04 result
+
+All 128 games completed with native-score outcomes: **58.59375% win credit**.
+No caps or invalid games. Paired exploratory bootstrap: 50.78125–66.40625%;
+conservative paired Hoeffding: 41.617481–75.570019%. The point estimate is
+promising, but it does not establish a decisive win. Keep finite chance
+universes as a candidate for the next search comparison.
+
+Scheduler time: 1,495.633 seconds. Search used 5,710,400 simulations and
+5,178,709 inferences. Replay checked all 128 games and 7,138 transitions.
+Raw SHA256: `ce3f2045477286595b71090e94d9a5b46174ca89432c94b3a49a2153818e89c7`.
+This is a combined finite-world / finite-chance profile on new seeds. It does
+not isolate either effect. Evidence: `local/research/sprint48/external-04`.
+
+The root CPU RPC0 compatibility fixture passed for branch2's pinned old worker
+under the current runner's accepted-setting check. The same excluded setup
+was reused; no new game or strength outcome was produced. Branch2 source
+collection is now launched at port19730, with 1,024 train and 256 dev games.
+It is the sole primary GPU job. Its results are data, not a played promotion.
+
+Trial04 is retained in `artifacts/development-04`. Manifest SHA256:
+`56f699cbaf0ffc8e44f15e73178f6259c6ba0921d7e2df7b80a81faaddcc582b`.
+A full restore verified 185 files, including all raw/replay records, source
+snapshots and binary byte streams. The duplicate selected checkpoint is
+referenced to `artifacts/refit-01`.
+
+The trial02/03 archive checkpoint locator was corrected from
+`refit-01/fit/model.pt` to the actual refit archive entry `refit/fit/model.pt`.
+Only the generated reference file changed. Repacking and full restore verified
+all 408 files again; raw evidence and executable/checkpoint bytes did not change.
+
+## Branch2 data and precision probe
+
+The fixed refit policy collected all 1,024 train and 256 dev games.
+Offline train labels completed: 28,471 rows from 512 paired setups.
+The first dev label job failed when concurrent upstream ONNX exports used
+the same temporary filename. Each worker now has a separate working folder.
+The full dev retry completed: 7,138 rows from 128 setups. All seven previously
+successful shards match the retry data, context, inputs and setup IDs exactly.
+Retain the failed output. The retry changes file isolation, not labels or seeds.
+These are training and model-selection data, not playing-strength results.
+
+A bounded MPS autocast microbenchmark used the fixed refit checkpoint and
+registered public dev inputs. FP16 autocast achieved 1,438 versus 5,204 rows/s
+at batch32, and 2,808 versus 7,851 rows/s at batch64. It was slower than FP32.
+Reject this runtime change. This does not test every possible FP16 backend.
+See `MPS_PRECISION_PROBE.json` for inputs, hashes, error measurements and scope.
+
+Trial05 started with the preregistered dynamic-FPU profile. It is the sole
+primary GPU job. The second fit waits for its completion.
+
+## Next search scale tests, before trial05 results
+
+After trial05 and the fixed second fit complete, test a 6,400-simulation
+PUCT candidate with depth64, world_pool3 and chance_universes3. Trial06 uses
+the refit01 checkpoint; trial07 uses the second-fit selected checkpoint.
+Select static or dynamic FPU from the completed 1600-simulation screens,
+then hold that setting for both scale tests. Use fresh masters17706000000
+and17707000000, 128 paired games each, 64 workers, MPS batch32 and 1ms delay.
+This tests winning strength with more compute. It is not an equal-compute
+comparison. If the second-fit selector retains the exact parent, do not spend
+a separate trial on the same candidate and settings.
+
+Measure the full 6,400-simulation schedule before the final freeze. A 1,000-game
+final needs a win-credit point estimate above about61.1% to put the registered
+paired Hoeffding lower bound above55%, with no unknown outcomes. A 2,000-game
+final needs about59.3%. These are design calculations, not achieved results.
+Choose and freeze the final count from complete strength evidence and measured
+time, including a50% time margin. At6400, freeze earlier than hour32 if the
+measured final schedule requires it. Do not use final outcomes to change the
+count, model or search.
+
+The branch2 wrapper dry-run verified the fixed recipe and every input hash.
+It created no fit and used no GPU. The complete source/label evidence, including
+the failed dev job and its successful retry, is retained in
+`artifacts/dagger-branch2-data`:495 files, manifest SHA256
+`21390a20164ff230c7353f56cc0bf4a8cd6d5aa1088c65392def7bf9561a24f8`.
+A full restore verified all files. The duplicate refit checkpoint is a
+hash-bound reference to the existing refit archive. Relocated label registry
+paths must be rebased before a fit; original absolute-path receipts stay intact.
+`LABEL_RETRY_VALIDATION.json` records the byte comparisons and dry-run identity.
+
+The final ancestry receipt now excludes30,400 historical setup IDs, including
+the Entity canonical20k and native20k confirmation streams. It also binds the
+old first-stage corpus and model-selection screens. The new branch2 splits
+have zero exact/low32 overlap with this union. The older native confirmation
+raw games were not retained; those exclusion IDs are reconstructed from its
+hash-bound source, stream formula and summary. This is an exclusion proof,
+not a replacement raw-game claim.
+
+Precision-probe provenance limit: its original source bytes were not copied
+before adding the optional resident-FP16 mode. The original receipt retains
+the source hash and measurements, but exact source recovery is unavailable.
+`MPS_PRECISION_SOURCE_RECOVERY.json` records this limit. Treat the earlier
+autocast timings as a local diagnostic. They caused no runtime change or
+strength claim. Save an exact source copy before each future probe.
+
+Final-guard regression tests found and fixed a rich-row stride error: explicit
+2600-byte legacy rows now advance by2600 rather than the default2232. Full
+Sprint48 Python discovery passes41 tests. No final seed stream was played.
+
+## Development trial05 result
+
+Dynamic FPU with the fixed refit01 checkpoint, PUCT1600, depth32, world3 and
+chance3 scored **70.3125% win credit**, with128 native-score completions and
+no caps/invalid outcomes. Exploratory paired bootstrap95:62.5–78.125%; paired
+Hoeffding95:53.336231–87.288769%. It does not yet meet the frozen final criterion.
+Select dynamic FPU for the preregistered6400/depth64 scale tests.
+Scheduler1500.390s; driver1513.518s;5,681,600simulations/5,024,241inferences.
+Replay checked128games/7102transitions. RawSHA256:
+`5e291fe447549f2d766d4ca8b00c9604520907c89908fefa79d63ccd2e68c54b`.
+
+The opt-in resident-FP16 microbenchmark aborted in MPSGraph with mismatched
+FP32 intermediates and FP16 bias. Its exact sources were copied before execution;
+see `MPS_RESIDENT_PROBE_FAILURE.json`. RetainFP32. No production profile changed.
+
+The first branch2 fit launch failed before any model/data load or fitting.
+The trainer requires a prepared output folder; the wrapper omitted it.
+Retain the failed receipt/output, fix the launch contract, and retry the same
+fixed branch in a new `dagger-branch2-fit-retry` directory. This is an execution
+repair, not a third training recipe or selector change.
+
+The final-guard multi-file fix passed42Python tests. A full read-only corpus
+audit verified32000 unique expanded IDs/136source receipts and32640 IDs/152
+receipts for the four-group branch2 registry. No final games have started.
+
+Trial05 archive:`artifacts/development-05`,185files, manifestSHA256
+`f28434b05925cb44738ea6cef00e8324b7fc33652bfe96904bbc8354e4dc8f78`.
+A full restore verified every file. Duplicate refit weights are referenced
+through the existing refit archive.
+
+Execution repair evidence is retained in `artifacts/execution-repairs`:28files,
+manifestSHA256`038b9ae7818c43f7ebda3d2a3c362c705c6c3334ab3df9b5c8512254aa19936e`.
+Full restore verified the failed fit receipts, exact source files at2417e62,
+and resident-probe source snapshot/failure excerpts. Full native-abort stderr
+was not captured; this limit is explicit. The failed fit's duplicate parent
+weights are a verified reference to the refit archive. The repaired branch2
+launch is now running in the new retry directory.
+
+## Conditional trial07 control, before second-fit completion or scale results
+
+If the fixed second-fit selector keeps the exact refit parent, use the remaining
+trial07 for the saved first onehot runtime (`ef8a4521...`) instead of repeating
+the same candidate. Test dynamicPUCT6400/depth64/world3/chance3,128pairedgames,
+master17707000000,64workers,MPSFP32batch32/1ms,port19727. Its canonical screen
+favored it, but its native strength at the corrected search profile is unknown.
+This comparison can detect a refit regression. If branch2 selects a new
+checkpoint, the original trial07 plan for that selected child remains in force.
+The final freshness guard must accept the verified onehot ancestor as well as
+the refit and recorded children; all historical exclusions remain conservative.
+
+## Second-fit result
+
+Both declared epochs completed. Initial selector2.2483576367; epoch1
+2.2841615282; epoch2 2.2958628528. Neither epoch improved the declared score.
+Select epoch0, which retains exact refit bytes SHA256`44ebfc8f...`.
+This recipe produced no selected weight update and no demonstrated strength
+gain. Retain both negative epochs, full metrics and receipts. Epoch1 took
+777.162s and epoch2 759.744s. Trial06 tested the fixed refit at dynamic
+PUCT6400/depth64. Trial07 tests saved firstonehot ef8a at those settings.
+Both schedules use fresh exploratory masters.
+
+The complete second-fit archive is `artifacts/dagger-branch2-fit`:18files,
+manifestSHA256`611e640ec9ff9c4560bc16bd4bc8dce0d7717763e801ad2d1a2eebf3f23924b0`.
+Full restore verified both negative epoch weights, all metrics and five exact
+source files. Parent/selected weights refer to the refit archive; latest refers
+to the retained epoch2. Trainer time1558.384s.
+
+## Development trial06 result
+
+The fixed refit checkpoint scored **73.828125% win credit** against unchanged
+AlphaZero800 in128 paired native games. All128 games ended by native score;
+there were no caps, invalid games or evidence rejections. The paired bootstrap
+95% interval was66.40625–81.25%. The conservative paired Hoeffding interval
+was56.851856–90.804394%, with caps treated as unknown as well. Its lower bound
+clears the registered55% threshold for this64-block exploratory screen. This
+does not replace the fixed fresh final campaign.
+
+The schedule used dynamic PUCT6400, depth64, world pool3, chance universes3,
+64workers, MPS FP32 batch32 and a1ms delay. It used23,008,000 simulations and
+19,773,421 inferences. Scheduler time was5617.488s; driver time was5630.772s,
+or43.887s per game. Replay checked128 games and7190 transitions. Raw SHA256:
+`699590890e12059d4282bcdb964d9642c1ce1c8603ca0ae2746e77a832bb202f`.
+See `local/research/sprint48/external-06` for the live receipts and
+`artifacts/development-06` for the archived records.
+
+The archive has186 files and manifest SHA256
+`918ebca5d78fd477dd8c1391e551c93fe32b5e5fbd767aa05bbbd4944386d078`.
+A full restore verified every file. The duplicate refit checkpoint is a
+hash-bound reference to the refit archive. The detached supervisor passed the
+trial06 replay, evidence and service-exit checks, then launched the exact
+preregistered trial07 command. Its private receipt is
+`local/research/sprint48/queue-06-07/supervisor.json`. Final seeds and
+candidate selection remain reserved for Sol review.
+
+## Development trial07 result
+
+The saved first-onehot checkpoint scored **76.5625% win credit** against
+unchanged AlphaZero800 in128 paired native games. All128 games ended by native
+score. There were no caps, invalid games or evidence rejections. The paired
+bootstrap95 interval was70.3125–82.8125%. The conservative paired Hoeffding
+interval was59.586231–93.538769%, with caps treated as unknown as well. This
+is an exploratory screen, not the final confirmation.
+
+The schedule used dynamic PUCT6400, depth64, world pool3, chance universes3,
+64 workers, MPS FP32 batch32 and a1ms delay. It used22,732,800 simulations
+and19,382,801 inferences. Scheduler time was5485.196s; driver time was
+5498.282s, or42.853s per game. Replay checked128 games and7104 transitions.
+Raw SHA256:
+`979d24be2b773613b46f1154a41ab94a808ebdbeb8e7eb90c8266cf2db6510c9`.
+Replay SHA256:
+`230dd1961a608434d09b24469e24bb56877e1aa4f900d50cfa021f91ead7d69d`.
+Summary SHA256:
+`af5aebfddb708e6ceaccd5a88eb0f00b416d510754d17d0061c9ec565dbb0765`.
+Evidence SHA256:
+`ee819f60f9a1dde4854dbd689d56f7ca4ba5143f24914fb8ee4e5f6881185467`.
+
+The archive is `artifacts/development-07`:186 files, manifest SHA256
+`14fbb3ca9619cbfbbad90598da62f3041d89df6482e7f00f2ed7d79eb9be511a`.
+A full restore verified every file. The duplicate onehot checkpoint refers to
+the core archive. The completed trial and queue receipts are in
+`local/research/sprint48/external-07` and
+`local/research/sprint48/queue-06-07`.
+
+## Final model selection and registered confirmation
+
+Trial07's all-requested win credit (76.5625%) was higher than trial06's
+73.828125%. Under the registered selection rule, choose the saved first-onehot
+runtime SHA256
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`.
+Keep the registered **1000 paired games** (500 independent setup blocks),
+final master17790000000, dynamic PUCT6400/depth64, world pool3, chance
+universes3, MPS FP32 batch32/1ms, 64 workers, and checked dynamic binaries.
+Both trials are exploratory screens. Their difference does not establish an
+isolated model effect.
+
+Trial07 took5485.196s for128 games, or42.853s per game. The measured rate
+estimates1000 games at about11.90 hours. A50% time margin gives about17.86
+hours. Keep the registered count and settings fixed after freeze.
+
+The first final-preparation attempt failed before freeze and before any final
+game. Parity passed. The freeze check failed because it received the repository
+directory where it expected a file. The run receipt records the failure. The
+failed evidence bundle is archived at `artifacts/failed-final-prep`:38 files,
+manifest SHA256
+`35280f3d2b11c65007c041ea7becdcf0c7de32607ffbd79e4333528cb2468e22`.
+A full restore verified every file. Its source, parity output and process
+receipts are preserved. The duplicate model and binary copies have verified
+hash-bound references to the core and development-07 archives.
+
+The repaired final campaign started at 2026-10-04T03:48:29.450828Z. The
+run_final driver uses PID79079, caffeinate uses PID79080, the service uses
+PID79082, and the schedule uses PID79104. It uses the selected
+first-onehot runtime SHA256
+`ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb`, 1000
+paired games, master17790000000, dynamic PUCT6400/depth64, world pool3,
+chance universes3, 64 workers, and MPS FP32 batch32. Frozen campaign ID:
+`feed64ad3e0555699264972c1a086e305e0b7c17e311dfe3560f88e956d97e58`.
+The start archive is `artifacts/final-campaign-start`:13 files, manifest
+SHA256 `e53d113258029038ae652b2e24bb432e61059c7d1216ae49e26906913354e283`.
+A full restore verified all files and the freeze/context identity. It contains
+no mutable game rows or outcomes. The64 frozen schedule headers passed the
+registered settings check. The final campaign is running; no final result is
+reported here.
+
+## Follow-up canonical diagnostic
+
+The fixed 256-game common-budget canonical screen completed in 540.17 seconds
+using Gumbel128/depth16, 64 threads and one MPS service. The confirmed native
+candidate scored **59.1796875% win credit** against the original Entity model.
+All 256 games completed across 128 paired setups. The canonical empirical-
+Bernstein 95% interval is **42.029052–76.330323%**. The registered screen rule
+retains the canonical baseline because a benefit is not confirmed. This small
+diagnostic does not change the confirmed native champion or the AlphaZero800
+result. All 128 actual setup IDs are in the next diagnostic's exclusion set.
+
+Archive: `artifacts/final-canonical-diagnostic-17791000000`, manifest SHA256
+`3e7185ba375a00f1f92b323684ec298bb1e140ed72f322bdc3137fd208bb4684`.
+All 37 files passed restore checks. The separate stronger-opponent plan is in
+[FOLLOWUP.json](FOLLOWUP.json).

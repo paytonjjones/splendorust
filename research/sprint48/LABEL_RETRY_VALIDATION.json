@@ -1,0 +1,776 @@
+{
+  "archive_verification": {
+    "chunk_bytes": 50331648,
+    "manifest_file_count": 495,
+    "manifest_sha256": "21390a20164ff230c7353f56cc0bf4a8cd6d5aa1088c65392def7bf9561a24f8",
+    "path": "research/sprint48/artifacts/dagger-branch2-data",
+    "restore_path": "local/research/sprint48/dagger-branch2-data-archive-check",
+    "restore_receipt_sha256": "9477872ac4f919a8303af15b2511671788be161e4c689ab170116c8f79b62c9f",
+    "restored_files_verified": 495,
+    "uncompressed_bytes": 220066471
+  },
+  "branch2_dry_run": {
+    "data_counts": {
+      "base_dev_rows": 111572,
+      "base_train_rows": 1682022,
+      "dagger_dev_rows": 7138,
+      "dagger_dev_setups": 128,
+      "dagger_train_rows": 28471,
+      "dagger_train_setups": 512
+    },
+    "fit": {
+      "batch": 512,
+      "dagger_rows_per_update": 57,
+      "epochs": 2,
+      "loss_weights": {
+        "base": 0.9,
+        "dagger": 0.1
+      },
+      "selection": "0.90 full dev CE+4Brier plus 0.10 DAgger dev CE+4Brier; epoch zero eligible"
+    },
+    "fit_output_created": false,
+    "fit_started": false,
+    "parent_sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f",
+    "path": "local/research/sprint48/dagger-branch2-fit-dry-run.json",
+    "setup_id_checks": {
+      "exact_overlap": 0,
+      "native_low32_overlap": 0
+    },
+    "sha256": "c449904155387b8b003994a6fdc269cd9fd7ade6e33b0e9b469c6403eaab9525",
+    "status": "prepared"
+  },
+  "datasets": {
+    "dev_retry": {
+      "registry": {
+        "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json",
+        "sha256": "7cb685fd2b371d5473e987fbb4fb38c8aa8e7f82db207622d52baff8b25120e1"
+      },
+      "rows": 7138,
+      "run": {
+        "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/run.json",
+        "sha256": "629e0dcfd0db3df156e2e8413c45b9f7dd61063f4c08787764efb10d2a5f3883"
+      },
+      "setups": 128
+    },
+    "train": {
+      "audit": {
+        "path": "local/research/sprint48/dagger-branch2-train-labels/audit.json",
+        "sha256": "7559fe5878cc21079de47b7e5a25988955d9b5417f2461b8a235f51a9d6a54ce"
+      },
+      "registry": {
+        "path": "local/research/sprint48/dagger-branch2-train-labels/registry-entries.json",
+        "sha256": "89807a1c8516fa8a51b98cff6f8323ad1b6840a71098e5d324e6334845e9faca"
+      },
+      "rows": 28471,
+      "run": {
+        "path": "local/research/sprint48/dagger-branch2-train-labels/run.json",
+        "sha256": "7665e66f08b03dcc927f4fdb86bf1f2f7bed75a243578a16f6b7fe872a5db0b6"
+      },
+      "setups": 512
+    }
+  },
+  "determinism_check": {
+    "all_successful_old_shards_byte_identical": true,
+    "comparisons": [
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "26f5037c54158afac3418b6e495565b85417195c08cc95ef2381342e30f4a8e2",
+            "retry": "26f5037c54158afac3418b6e495565b85417195c08cc95ef2381342e30f4a8e2"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "476ccf88013dff4ebf0ec4a6d0e513480338262968a52a1f8d562ab5101a8a4d",
+            "retry": "476ccf88013dff4ebf0ec4a6d0e513480338262968a52a1f8d562ab5101a8a4d"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "2ab0631ac332e3e85dc6fdb98ffe833455650caff14a0a41789f7b3f5858d67f",
+            "retry": "2ab0631ac332e3e85dc6fdb98ffe833455650caff14a0a41789f7b3f5858d67f"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-00/manifest.json",
+          "sha256": "360c25216744b3835ca066c07356b23794c0a358f7af64310a872b5530ae87a9"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-00/manifest.json",
+          "sha256": "05cd4a330ae178e7a60314e532c94064e5c309b1238ea5d5d5a8a8dc7a27c32f"
+        },
+        "rows": 893,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "4a595e79b71de3f8da39edd2a0c71791896f4f7e370d82895e8a5cd8d0d9caba",
+          "retry": "4a595e79b71de3f8da39edd2a0c71791896f4f7e370d82895e8a5cd8d0d9caba"
+        },
+        "worker": 0
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "df9b9482d4c042a407d41c09d7aeb37cbebbac09bc5a92031c31dde9dc34eb18",
+            "retry": "df9b9482d4c042a407d41c09d7aeb37cbebbac09bc5a92031c31dde9dc34eb18"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "da191462c0b045921195c05678ce5d6b32e644773293fd3424137eee03195f6b",
+            "retry": "da191462c0b045921195c05678ce5d6b32e644773293fd3424137eee03195f6b"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "5746761330f3534d2db6648610ad6a7c26a9865186a10a94d8c0d037250a8851",
+            "retry": "5746761330f3534d2db6648610ad6a7c26a9865186a10a94d8c0d037250a8851"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-01/manifest.json",
+          "sha256": "5cc5625808358944070230158ab3108463bd4f2cf07b27eb6feed1a96c03a901"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-01/manifest.json",
+          "sha256": "c1fe0f83ec9d7bb5722039751429af1a8cbfa3dbf2a0d24dbca9495dd4522bb6"
+        },
+        "rows": 897,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "6ed68c7aedd326f5759a7facf72c03e29d1df5b4fe49e21d553e4dd95b687434",
+          "retry": "6ed68c7aedd326f5759a7facf72c03e29d1df5b4fe49e21d553e4dd95b687434"
+        },
+        "worker": 1
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "23880dc688ad39aedd98f3638682d144f9d0171217102a404b011f82e1322e19",
+            "retry": "23880dc688ad39aedd98f3638682d144f9d0171217102a404b011f82e1322e19"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "5b2f8c0dcecb682f3f666188a4c7baee12ac98287c3f75e3cb590f708e6cd648",
+            "retry": "5b2f8c0dcecb682f3f666188a4c7baee12ac98287c3f75e3cb590f708e6cd648"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "731a5045412a093f6d48eb062eadcddbcb872a9721d14755acb645c15afa20c2",
+            "retry": "731a5045412a093f6d48eb062eadcddbcb872a9721d14755acb645c15afa20c2"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-03/manifest.json",
+          "sha256": "543cd987d8faeba43e0a5ff20cb5f87067c55488c46c8568819cce565a6cf5c3"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-03/manifest.json",
+          "sha256": "d2fde6f22204603c3eb548bd7a872e77f5c40a5f653e319c051e99d27274735b"
+        },
+        "rows": 877,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "408ec8c415828546ccc930e0553beddec1f404edf0581315ebb4fa73b18d4fb7",
+          "retry": "408ec8c415828546ccc930e0553beddec1f404edf0581315ebb4fa73b18d4fb7"
+        },
+        "worker": 3
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "c0458dec27c7b24e0f61bbbdde496dd7bcc8ec0351ca3cb759c8e008db548aed",
+            "retry": "c0458dec27c7b24e0f61bbbdde496dd7bcc8ec0351ca3cb759c8e008db548aed"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "ce31000e043e8e3b53bced9556cb5d078bc3b6cdfea8202d2ab5cea8a378237e",
+            "retry": "ce31000e043e8e3b53bced9556cb5d078bc3b6cdfea8202d2ab5cea8a378237e"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "327ea92fb35cf98bc66c2b8d873ba6354e081427acafaf927c35d26f38343775",
+            "retry": "327ea92fb35cf98bc66c2b8d873ba6354e081427acafaf927c35d26f38343775"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-04/manifest.json",
+          "sha256": "7afa7b0aca2c6251714242fc243cfb06a8bedf013013e8711c6b43a61adc5f4c"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-04/manifest.json",
+          "sha256": "e4da5d950897505dbe3d8a320c3e74139a240cbdbcc26b9eee94b42bc628e7e3"
+        },
+        "rows": 891,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "b9203f6f22e8304d2733a50e868ad42304a5508d5f54a06225bc10ebf7ca2a23",
+          "retry": "b9203f6f22e8304d2733a50e868ad42304a5508d5f54a06225bc10ebf7ca2a23"
+        },
+        "worker": 4
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "723c7472917d02980b053805ec3bf69bd626252f4c34a4a1303ab4662cd08d46",
+            "retry": "723c7472917d02980b053805ec3bf69bd626252f4c34a4a1303ab4662cd08d46"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "4921d68bbf579933fcade2d059c56df85eaf098a5f77b9a7a129d22589df1c60",
+            "retry": "4921d68bbf579933fcade2d059c56df85eaf098a5f77b9a7a129d22589df1c60"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "b707f0dcaaca2787744aa57535af50409ddd8b7376300f6d438ec04f3ec3c75c",
+            "retry": "b707f0dcaaca2787744aa57535af50409ddd8b7376300f6d438ec04f3ec3c75c"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-05/manifest.json",
+          "sha256": "963f881f140252dc41996a8f3115293fbf45e2e81673773c8cc320162f20ae72"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-05/manifest.json",
+          "sha256": "39f37b2ae5177aebd067109ad90342792e23316f3e134c290fce90a6be02a46f"
+        },
+        "rows": 904,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "bee3f13b0edd462b536d8554bebf89d4f67f052b9bf9cb8f2905877a7fd6c5ac",
+          "retry": "bee3f13b0edd462b536d8554bebf89d4f67f052b9bf9cb8f2905877a7fd6c5ac"
+        },
+        "worker": 5
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "7dc3ea67eaf1c50a7325a5ea73ca7ac3992c45166c2ecd6f747fc8d9822cec5c",
+            "retry": "7dc3ea67eaf1c50a7325a5ea73ca7ac3992c45166c2ecd6f747fc8d9822cec5c"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "607d19bbdf91b8b2f3e83ceca911b3b5b9587334f20c8fc5580f3d12372eac5e",
+            "retry": "607d19bbdf91b8b2f3e83ceca911b3b5b9587334f20c8fc5580f3d12372eac5e"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "e63348982f85cf6cbb1a403ca4dd5ff27ba940125ca6b8395796960f0924da2d",
+            "retry": "e63348982f85cf6cbb1a403ca4dd5ff27ba940125ca6b8395796960f0924da2d"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-06/manifest.json",
+          "sha256": "af93b35bcc81c58c072e12a31e2a51902239aee29a263ee7df08853e043cc3e4"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-06/manifest.json",
+          "sha256": "e144a0636ff36453b773e84b3477b71500b0905a495f8360177191d0fe43c1b1"
+        },
+        "rows": 890,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "25661899fb8496ca7582acb71a5b977e6ba8bddb5b3232d4e8691b6193f5ea98",
+          "retry": "25661899fb8496ca7582acb71a5b977e6ba8bddb5b3232d4e8691b6193f5ea98"
+        },
+        "worker": 6
+      },
+      {
+        "data_hashes": {
+          "data.bin": {
+            "equal": true,
+            "old": "cc8d04edfa2036947735069c7e19acf5f38ccafb706e2759373251866cd5e5d0",
+            "retry": "cc8d04edfa2036947735069c7e19acf5f38ccafb706e2759373251866cd5e5d0"
+          },
+          "data.context.bin": {
+            "equal": true,
+            "old": "afa819a676195f1ec93cd1c208bb60ce4242318cb2881bf4087e18350a73a8a2",
+            "retry": "afa819a676195f1ec93cd1c208bb60ce4242318cb2881bf4087e18350a73a8a2"
+          },
+          "data.inputs.bin": {
+            "equal": true,
+            "old": "6fcc5b8abfb353fd75a7e447aac0690fa44c0617e8f2090cceefde851ee99e21",
+            "retry": "6fcc5b8abfb353fd75a7e447aac0690fa44c0617e8f2090cceefde851ee99e21"
+          }
+        },
+        "old_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels/shard-07/manifest.json",
+          "sha256": "9286993e526224dac83fbf1e9b59122c547cdbf9cf4dd3c326bb9433bc9329d4"
+        },
+        "retry_manifest": {
+          "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/shard-07/manifest.json",
+          "sha256": "4755a87063b35a90b3cf666de7e61a96b7ba60eef99ab5cf3cb91513da504bc2"
+        },
+        "rows": 897,
+        "setup_ids_sha256": {
+          "equal": true,
+          "old": "d2c2aac8470279c5b9de6c3e798d962628cb44bb6ffb582cc34e4fac7970cb49",
+          "retry": "d2c2aac8470279c5b9de6c3e798d962628cb44bb6ffb582cc34e4fac7970cb49"
+        },
+        "worker": 7
+      }
+    ],
+    "failed_old_worker": 2,
+    "old_successful_workers": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "failed_first_attempt": {
+    "failure_logs": [
+      {
+        "path": "local/research/sprint48/dagger-branch2-dev-labels/logs/worker-02.log",
+        "sha256": "db7cfa5d3ef95dffec27d179bc797d88555db020422fe2340e1a1c59de529834"
+      }
+    ],
+    "seconds": 75.02858204185031,
+    "started_utc": "2026-10-03T23:17:01+00:00",
+    "status": "failed",
+    "workers": [
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-00",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "0",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-00.log",
+        "log_sha256": "682591a1cddad6b9d5d0b909769b76f12e0d7c25dac7421fd871c0ee70c054d4",
+        "pid": 46203,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 0
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-01",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "1",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-01.log",
+        "log_sha256": "b536a4d9ae16932e4d3fea7860eb0a3f7f62c087ddd499e53bff5039af4756c6",
+        "pid": 46205,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 1
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-02",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "2",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 1,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-02.log",
+        "log_sha256": "db7cfa5d3ef95dffec27d179bc797d88555db020422fe2340e1a1c59de529834",
+        "pid": 46206,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 2
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-03",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "3",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-03.log",
+        "log_sha256": "33a0351b30ff1e092f92e6dd1273840a3f162325eb331adeece60355fe028885",
+        "pid": 46207,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 3
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-04",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "4",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-04.log",
+        "log_sha256": "8fe344fbaecb8f1d73d17bb05459d18350518a4daf1aae8012467f4ee880da6e",
+        "pid": 46208,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 4
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-05",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "5",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-05.log",
+        "log_sha256": "27a1c5d39ba5882a38449668e52a78e7840728735f10debcee37daf1336b48dc",
+        "pid": 46209,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 5
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-06",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "6",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-06.log",
+        "log_sha256": "4c7f0c13c44535b2cf7f721baa24b8de9d426f6417d8797a348809057f2e3517",
+        "pid": 46210,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 6
+      },
+      {
+        "command": [
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/strength/inference/bin/python",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/research/sprint48/learner_data.py",
+          "--input",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+          "--learner-descriptor",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+          "--policy-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/native_policy_worker",
+          "--strength-binary",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-sources/binaries/strength_worker",
+          "--output",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/shard-07",
+          "--split",
+          "dev",
+          "--max-blocks",
+          "128",
+          "--workers",
+          "8",
+          "--worker-index",
+          "7",
+          "--teacher-master",
+          "17721000001",
+          "--feature-master",
+          "17721000002",
+          "--exclude-setup-ids",
+          "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/combined-excluded-setup-ids.txt",
+          "--invariance-checks",
+          "8"
+        ],
+        "end_utc": "2026-10-03T23:18:16+00:00",
+        "exit_code": 0,
+        "log": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels/logs/worker-07.log",
+        "log_sha256": "e6165799bffb5e26c947c90f36bd0fec9d0fc2f069559a167be9deb23ac351a5",
+        "pid": 46211,
+        "start_utc": "2026-10-03T23:17:01+00:00",
+        "timed_out": false,
+        "worker": 7
+      }
+    ]
+  },
+  "finished_utc": "2026-10-03T23:33:18+00:00",
+  "path_dependent_registries": {
+    "dev_registry_sha256": "7cb685fd2b371d5473e987fbb4fb38c8aa8e7f82db207622d52baff8b25120e1",
+    "note": "Registry entries contain absolute paths to shard data, context, and packed inputs. Archive restore preserves registry bytes and hashes; after restore, rebase those paths to restored shard files and recompute registry hashes before the fit wrapper can read the restored data. The current dry-run validated the live local paths.",
+    "train_registry_sha256": "89807a1c8516fa8a51b98cff6f8323ad1b6840a71098e5d324e6334845e9faca"
+  },
+  "retry": {
+    "finished_utc": "2026-10-03T23:24:25+00:00",
+    "low32_setup_count": 128,
+    "registry": {
+      "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/registry-entries.json",
+      "sha256": "7cb685fd2b371d5473e987fbb4fb38c8aa8e7f82db207622d52baff8b25120e1"
+    },
+    "rows": 7138,
+    "seconds": 74.96757499990053,
+    "setups": 128,
+    "started_utc": "2026-10-03T23:23:10+00:00",
+    "status": "complete",
+    "worker_receipts": [
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-00",
+        "exit_code": 0,
+        "pid": 46843,
+        "worker": 0
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-01",
+        "exit_code": 0,
+        "pid": 46844,
+        "worker": 1
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-02",
+        "exit_code": 0,
+        "pid": 46845,
+        "worker": 2
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-03",
+        "exit_code": 0,
+        "pid": 46846,
+        "worker": 3
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-04",
+        "exit_code": 0,
+        "pid": 46847,
+        "worker": 4
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-05",
+        "exit_code": 0,
+        "pid": 46848,
+        "worker": 5
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-06",
+        "exit_code": 0,
+        "pid": 46849,
+        "worker": 6
+      },
+      {
+        "cwd": "/Users/payton.jones/.codex/worktrees/9424/splendorust/local/research/sprint48/dagger-branch2-dev-labels-retry/worker-cwd/worker-07",
+        "exit_code": 0,
+        "pid": 46850,
+        "worker": 7
+      }
+    ]
+  },
+  "schema": "sprint48-dagger-branch2-label-retry-validation-v1",
+  "snapshot_copy_validation": {
+    "excluded_duplicate_checkpoint": {
+      "archive_member": "refit/fit/model.pt",
+      "original": "local/research/sprint48/dagger-branch2-sources/service/13/model.pt",
+      "reference_path": "branch2-data/sources/service/13/model.pt.archive-reference.json",
+      "refit_archive": "research/sprint48/artifacts/refit-01",
+      "refit_manifest_sha256": "2ab30249d888edad292cabeb90b739aab998692e92ecd9e2f9ab169e75844365",
+      "sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f"
+    },
+    "source_paths_byte_identical_except_declared_checkpoint_reference_and_pycache": {
+      "dev-first-failed": 54,
+      "dev-retry": 63,
+      "sources": 312,
+      "train-labels": 64
+    },
+    "stage": "local/research/sprint48/dagger-branch2-data-snapshot"
+  },
+  "source_and_private_receipts": {
+    "collector_plan": null,
+    "collector_run": {
+      "path": "local/research/sprint48/dagger-branch2-sources/run.json",
+      "sha256": "510b9ea4e1631a9ccb7d0591eb2afd83f445836bf8128ad1c2dc92fa017ac141"
+    },
+    "learner_checkpoint": {
+      "path": "local/research/sprint48/refit-01/fit/model.pt",
+      "sha256": "44ebfc8f46cd3c7f4288183313cb4c69e22337b8b7169f6e1bc5e920553d6e6f"
+    },
+    "learner_descriptor": {
+      "path": "local/research/sprint48/dagger-branch2-sources/service/13/model.bin",
+      "sha256": "ec7eba6f358536be8041cd8cbbb0152278440008d3f25df50d5e5780e96c7318"
+    },
+    "old_dev_run": {
+      "path": "local/research/sprint48/dagger-branch2-dev-labels/run.json",
+      "sha256": "fc6a69eb8c9cd62e44cf197c9695c33b8792f149e73a38408d9d1a52d4cb9d21"
+    },
+    "retry_dev_run": {
+      "path": "local/research/sprint48/dagger-branch2-dev-labels-retry/run.json",
+      "sha256": "629e0dcfd0db3df156e2e8413c45b9f7dd61063f4c08787764efb10d2a5f3883"
+    },
+    "source_dev_games": {
+      "path": "local/research/sprint48/dagger-branch2-sources/dev/arena/games.jsonl",
+      "sha256": "516378ba9bd5d7dbfddcb4036ebdcb79eb1913fa7aef358bcee64511a38f366d"
+    },
+    "source_train_games": {
+      "path": "local/research/sprint48/dagger-branch2-sources/train/arena/games.jsonl",
+      "sha256": "2a7e5500adb4944f79d7e5cbcef5acd762db2c14726057bac696f6505e755fc5"
+    }
+  }
+}

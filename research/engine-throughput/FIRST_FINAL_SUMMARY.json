@@ -1,0 +1,683 @@
+{
+  "scope": "four fixed complete two-player traces; complete canonical Rust lists and phases retained; C++ shared-choice subset",
+  "status": "gap_remains",
+  "receipt_sha256": "40de48549bce6178846ec77adf3b31e27fb371f78ac8796af176e71be452361e",
+  "results": [
+    {
+      "seed": 424262,
+      "turns": 68,
+      "canonical_actions": 117,
+      "cpp_native_applies": 71,
+      "legal_choices_by_phase_main_payment_return_noble": [
+        1647,
+        49,
+        9,
+        2
+      ],
+      "max_choices_by_phase": [
+        34,
+        4,
+        5,
+        2
+      ],
+      "profiles": {
+        "full_new_buffer_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.508462,
+            0.491723,
+            0.48761,
+            0.491238,
+            0.488643,
+            0.489043,
+            0.482387
+          ],
+          "median_seconds": 0.489043,
+          "median_games_per_second": 204480.99655858483,
+          "median_ns_per_complete_turn": 71.91808823529412,
+          "median_ns_per_internal_operation": 41.79854700854701,
+          "internal_operations_per_game": 117,
+          "ns_per_complete_turn_range": [
+            70.93926470588235,
+            74.77382352941176
+          ]
+        },
+        "full_optimized_enum_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.261702,
+            0.262954,
+            0.258292,
+            0.261019,
+            0.26589,
+            0.257089,
+            0.25596
+          ],
+          "median_seconds": 0.261019,
+          "median_games_per_second": 383113.8729364529,
+          "median_ns_per_complete_turn": 38.38514705882353,
+          "median_ns_per_internal_operation": 22.30931623931624,
+          "internal_operations_per_game": 117,
+          "ns_per_complete_turn_range": [
+            37.64117647058824,
+            39.1014705882353
+          ]
+        },
+        "full_optimized_reused_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.25433,
+            0.255363,
+            0.257194,
+            0.261831,
+            0.256997,
+            0.260313,
+            0.264301
+          ],
+          "median_seconds": 0.257194,
+          "median_games_per_second": 388811.5585900138,
+          "median_ns_per_complete_turn": 37.82264705882353,
+          "median_ns_per_internal_operation": 21.98239316239316,
+          "internal_operations_per_game": 117,
+          "ns_per_complete_turn_range": [
+            37.40147058823529,
+            38.86779411764706
+          ]
+        },
+        "full_validated_decision": {
+          "repeats": 7,
+          "seconds": [
+            0.247023,
+            0.248417,
+            0.249765,
+            0.256896,
+            0.256276,
+            0.254382,
+            0.249948
+          ],
+          "median_seconds": 0.249948,
+          "median_games_per_second": 400083.2173092003,
+          "median_ns_per_complete_turn": 36.75705882352941,
+          "median_ns_per_internal_operation": 21.363076923076925,
+          "internal_operations_per_game": 117,
+          "ns_per_complete_turn_range": [
+            36.32691176470588,
+            37.77882352941177
+          ]
+        },
+        "cpp_original_full_turn_trace": {
+          "repeats": 7,
+          "seconds": [
+            0.282925708,
+            0.26375775,
+            0.261398583,
+            0.269962166,
+            0.263952291,
+            0.262829041,
+            0.264979583
+          ],
+          "median_seconds": 0.263952291,
+          "median_games_per_second": 378856.3441565279,
+          "median_ns_per_complete_turn": 38.816513382352944,
+          "median_ns_per_internal_operation": 37.17637901408451,
+          "internal_operations_per_game": 71,
+          "ns_per_complete_turn_range": [
+            38.4409680882353,
+            41.60672176470588
+          ]
+        },
+        "cpp_predecoded_full_enum_apply": {
+          "repeats": 7,
+          "seconds": [
+            0.2418925,
+            0.238629042,
+            0.238826458,
+            0.239333042,
+            0.239142583,
+            0.238881708,
+            0.23851825
+          ],
+          "median_seconds": 0.238881708,
+          "median_games_per_second": 418617.23460215714,
+          "median_ns_per_complete_turn": 35.12966294117647,
+          "median_ns_per_internal_operation": 33.64531098591549,
+          "internal_operations_per_game": 71,
+          "ns_per_complete_turn_range": [
+            35.07621323529412,
+            35.57242647058823
+          ]
+        },
+        "original_rust_7byte_action": {
+          "repeats": 7,
+          "seconds": [
+            0.515163,
+            0.499219,
+            0.50629,
+            0.502826,
+            0.501453,
+            0.505814,
+            0.507472
+          ],
+          "median_seconds": 0.505814,
+          "median_games_per_second": 197701.131245873,
+          "median_ns_per_complete_turn": 74.38441176470589,
+          "median_ns_per_internal_operation": 43.231965811965814,
+          "internal_operations_per_game": 117,
+          "ns_per_complete_turn_range": [
+            73.41455882352942,
+            75.75926470588236
+          ]
+        }
+      },
+      "validated_throughput_ratio_vs_cpp_predecoded": 0.9557256229295693,
+      "validated_speedup_vs_original_rust": 2.0236769248003585
+    },
+    {
+      "seed": 424268,
+      "turns": 64,
+      "canonical_actions": 113,
+      "cpp_native_applies": 64,
+      "legal_choices_by_phase_main_payment_return_noble": [
+        1695,
+        49,
+        0,
+        0
+      ],
+      "max_choices_by_phase": [
+        35,
+        1,
+        0,
+        0
+      ],
+      "profiles": {
+        "full_new_buffer_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.474888,
+            0.489993,
+            0.472622,
+            0.479212,
+            0.483795,
+            0.478949,
+            0.480546
+          ],
+          "median_seconds": 0.479212,
+          "median_games_per_second": 208675.90961829002,
+          "median_ns_per_complete_turn": 74.876875,
+          "median_ns_per_internal_operation": 42.40814159292035,
+          "internal_operations_per_game": 113,
+          "ns_per_complete_turn_range": [
+            73.8471875,
+            76.56140625
+          ]
+        },
+        "full_optimized_enum_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.240604,
+            0.242511,
+            0.24346,
+            0.24167,
+            0.240985,
+            0.242336,
+            0.244617
+          ],
+          "median_seconds": 0.242336,
+          "median_games_per_second": 412650.20467450155,
+          "median_ns_per_complete_turn": 37.865,
+          "median_ns_per_internal_operation": 21.44566371681416,
+          "internal_operations_per_game": 113,
+          "ns_per_complete_turn_range": [
+            37.594375,
+            38.22140625
+          ]
+        },
+        "full_optimized_reused_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.244876,
+            0.241063,
+            0.238798,
+            0.242,
+            0.253522,
+            0.24528,
+            0.247145
+          ],
+          "median_seconds": 0.244876,
+          "median_games_per_second": 408369.950505562,
+          "median_ns_per_complete_turn": 38.261875,
+          "median_ns_per_internal_operation": 21.670442477876104,
+          "internal_operations_per_game": 113,
+          "ns_per_complete_turn_range": [
+            37.3121875,
+            39.612812500000004
+          ]
+        },
+        "full_validated_decision": {
+          "repeats": 7,
+          "seconds": [
+            0.249191,
+            0.244363,
+            0.245617,
+            0.243675,
+            0.242818,
+            0.245281,
+            0.245053
+          ],
+          "median_seconds": 0.245053,
+          "median_games_per_second": 408074.98785976914,
+          "median_ns_per_complete_turn": 38.28953125,
+          "median_ns_per_internal_operation": 21.686106194690264,
+          "internal_operations_per_game": 113,
+          "ns_per_complete_turn_range": [
+            37.9403125,
+            38.93609375
+          ]
+        },
+        "cpp_original_full_turn_trace": {
+          "repeats": 7,
+          "seconds": [
+            0.247963042,
+            0.24407075,
+            0.242769375,
+            0.24457075,
+            0.246164,
+            0.248609708,
+            0.244333625
+          ],
+          "median_seconds": 0.24457075,
+          "median_games_per_second": 408879.63912283053,
+          "median_ns_per_complete_turn": 38.2141796875,
+          "median_ns_per_internal_operation": 38.2141796875,
+          "internal_operations_per_game": 64,
+          "ns_per_complete_turn_range": [
+            37.93271484375,
+            38.845266875
+          ]
+        },
+        "cpp_predecoded_full_enum_apply": {
+          "repeats": 7,
+          "seconds": [
+            0.214286541,
+            0.217263083,
+            0.217679042,
+            0.220223834,
+            0.218791917,
+            0.215900083,
+            0.219953709
+          ],
+          "median_seconds": 0.217679042,
+          "median_games_per_second": 459391.95193628245,
+          "median_ns_per_complete_turn": 34.0123503125,
+          "median_ns_per_internal_operation": 34.0123503125,
+          "internal_operations_per_game": 64,
+          "ns_per_complete_turn_range": [
+            33.48227203125,
+            34.4099740625
+          ]
+        },
+        "original_rust_7byte_action": {
+          "repeats": 7,
+          "seconds": [
+            0.485142,
+            0.474909,
+            0.478993,
+            0.482691,
+            0.480725,
+            0.479212,
+            0.480559
+          ],
+          "median_seconds": 0.480559,
+          "median_games_per_second": 208090.99402986938,
+          "median_ns_per_complete_turn": 75.08734375,
+          "median_ns_per_internal_operation": 42.52734513274336,
+          "internal_operations_per_game": 113,
+          "ns_per_complete_turn_range": [
+            74.20453125,
+            75.8034375
+          ]
+        }
+      },
+      "validated_throughput_ratio_vs_cpp_predecoded": 0.8882937242147617,
+      "validated_speedup_vs_original_rust": 1.961041080909028
+    },
+    {
+      "seed": 424285,
+      "turns": 70,
+      "canonical_actions": 123,
+      "cpp_native_applies": 76,
+      "legal_choices_by_phase_main_payment_return_noble": [
+        1585,
+        49,
+        24,
+        2
+      ],
+      "max_choices_by_phase": [
+        33,
+        3,
+        6,
+        2
+      ],
+      "profiles": {
+        "full_new_buffer_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.511268,
+            0.512723,
+            0.506106,
+            0.511058,
+            0.511231,
+            0.507421,
+            0.505455
+          ],
+          "median_seconds": 0.511058,
+          "median_games_per_second": 195672.5068387541,
+          "median_ns_per_complete_turn": 73.00828571428572,
+          "median_ns_per_internal_operation": 41.54943089430894,
+          "internal_operations_per_game": 123,
+          "ns_per_complete_turn_range": [
+            72.20785714285714,
+            73.24614285714287
+          ]
+        },
+        "full_optimized_enum_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.299146,
+            0.29526,
+            0.293761,
+            0.293496,
+            0.297197,
+            0.295141,
+            0.292542
+          ],
+          "median_seconds": 0.295141,
+          "median_games_per_second": 338821.10584432527,
+          "median_ns_per_complete_turn": 42.163,
+          "median_ns_per_internal_operation": 23.99520325203252,
+          "internal_operations_per_game": 123,
+          "ns_per_complete_turn_range": [
+            41.791714285714285,
+            42.735142857142854
+          ]
+        },
+        "full_optimized_reused_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.290285,
+            0.290075,
+            0.290205,
+            0.293337,
+            0.292398,
+            0.292952,
+            0.296749
+          ],
+          "median_seconds": 0.292398,
+          "median_games_per_second": 341999.60328046023,
+          "median_ns_per_complete_turn": 41.771142857142856,
+          "median_ns_per_internal_operation": 23.77219512195122,
+          "internal_operations_per_game": 123,
+          "ns_per_complete_turn_range": [
+            41.43928571428572,
+            42.392714285714284
+          ]
+        },
+        "full_validated_decision": {
+          "repeats": 7,
+          "seconds": [
+            0.281143,
+            0.284106,
+            0.282959,
+            0.283155,
+            0.282481,
+            0.281479,
+            0.279619
+          ],
+          "median_seconds": 0.282481,
+          "median_games_per_second": 354006.1101454611,
+          "median_ns_per_complete_turn": 40.35442857142857,
+          "median_ns_per_internal_operation": 22.965934959349593,
+          "internal_operations_per_game": 123,
+          "ns_per_complete_turn_range": [
+            39.94557142857143,
+            40.58657142857143
+          ]
+        },
+        "cpp_original_full_turn_trace": {
+          "repeats": 7,
+          "seconds": [
+            0.296481875,
+            0.290318625,
+            0.295053042,
+            0.293778625,
+            0.293956958,
+            0.295298958,
+            0.289851625
+          ],
+          "median_seconds": 0.293956958,
+          "median_games_per_second": 340185.85809423163,
+          "median_ns_per_complete_turn": 41.993851142857146,
+          "median_ns_per_internal_operation": 38.678547105263156,
+          "internal_operations_per_game": 76,
+          "ns_per_complete_turn_range": [
+            41.407375,
+            42.354553571428575
+          ]
+        },
+        "cpp_predecoded_full_enum_apply": {
+          "repeats": 7,
+          "seconds": [
+            0.261782916,
+            0.265425375,
+            0.266676166,
+            0.266834625,
+            0.265075334,
+            0.26547275,
+            0.266804709
+          ],
+          "median_seconds": 0.26547275,
+          "median_games_per_second": 376686.49607163074,
+          "median_ns_per_complete_turn": 37.924678571428565,
+          "median_ns_per_internal_operation": 34.930625,
+          "internal_operations_per_game": 76,
+          "ns_per_complete_turn_range": [
+            37.39755942857143,
+            38.11923214285714
+          ]
+        },
+        "original_rust_7byte_action": {
+          "repeats": 7,
+          "seconds": [
+            0.521109,
+            0.520343,
+            0.517414,
+            0.517929,
+            0.520007,
+            0.526386,
+            0.511839
+          ],
+          "median_seconds": 0.520007,
+          "median_games_per_second": 192305.10358514404,
+          "median_ns_per_complete_turn": 74.28671428571428,
+          "median_ns_per_internal_operation": 42.276991869918696,
+          "internal_operations_per_game": 123,
+          "ns_per_complete_turn_range": [
+            73.11985714285716,
+            75.198
+          ]
+        }
+      },
+      "validated_throughput_ratio_vs_cpp_predecoded": 0.9397897557711846,
+      "validated_speedup_vs_original_rust": 1.8408565531841081
+    },
+    {
+      "seed": 424287,
+      "turns": 62,
+      "canonical_actions": 105,
+      "cpp_native_applies": 65,
+      "legal_choices_by_phase_main_payment_return_noble": [
+        1166,
+        40,
+        9,
+        2
+      ],
+      "max_choices_by_phase": [
+        30,
+        1,
+        5,
+        2
+      ],
+      "profiles": {
+        "full_new_buffer_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.425442,
+            0.427439,
+            0.422403,
+            0.419907,
+            0.430265,
+            0.431203,
+            0.427288
+          ],
+          "median_seconds": 0.427288,
+          "median_games_per_second": 234034.18771414127,
+          "median_ns_per_complete_turn": 68.91741935483871,
+          "median_ns_per_internal_operation": 40.69409523809524,
+          "internal_operations_per_game": 105,
+          "ns_per_complete_turn_range": [
+            67.72693548387097,
+            69.54887096774193
+          ]
+        },
+        "full_optimized_enum_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.242835,
+            0.243885,
+            0.244936,
+            0.243357,
+            0.241038,
+            0.24292,
+            0.244145
+          ],
+          "median_seconds": 0.243357,
+          "median_games_per_second": 410918.9380210966,
+          "median_ns_per_complete_turn": 39.25112903225806,
+          "median_ns_per_internal_operation": 23.17685714285714,
+          "internal_operations_per_game": 105,
+          "ns_per_complete_turn_range": [
+            38.87709677419355,
+            39.505806451612905
+          ]
+        },
+        "full_optimized_reused_checked": {
+          "repeats": 7,
+          "seconds": [
+            0.243129,
+            0.242433,
+            0.241562,
+            0.242685,
+            0.243441,
+            0.242211,
+            0.240625
+          ],
+          "median_seconds": 0.242433,
+          "median_games_per_second": 412485.09897579945,
+          "median_ns_per_complete_turn": 39.10209677419355,
+          "median_ns_per_internal_operation": 23.088857142857144,
+          "internal_operations_per_game": 105,
+          "ns_per_complete_turn_range": [
+            38.810483870967744,
+            39.26467741935484
+          ]
+        },
+        "full_validated_decision": {
+          "repeats": 7,
+          "seconds": [
+            0.231409,
+            0.234977,
+            0.230291,
+            0.23252,
+            0.229786,
+            0.228224,
+            0.232837
+          ],
+          "median_seconds": 0.231409,
+          "median_games_per_second": 432135.31020833243,
+          "median_ns_per_complete_turn": 37.32403225806451,
+          "median_ns_per_internal_operation": 22.03895238095238,
+          "internal_operations_per_game": 105,
+          "ns_per_complete_turn_range": [
+            36.81032258064516,
+            37.89951612903226
+          ]
+        },
+        "cpp_original_full_turn_trace": {
+          "repeats": 7,
+          "seconds": [
+            0.256586417,
+            0.254579458,
+            0.255900459,
+            0.255878875,
+            0.255064917,
+            0.255856375,
+            0.257612833
+          ],
+          "median_seconds": 0.255878875,
+          "median_games_per_second": 390809.90957147203,
+          "median_ns_per_complete_turn": 41.27078629032258,
+          "median_ns_per_internal_operation": 39.36598076923077,
+          "internal_operations_per_game": 65,
+          "ns_per_complete_turn_range": [
+            41.061202903225805,
+            41.55045693548387
+          ]
+        },
+        "cpp_predecoded_full_enum_apply": {
+          "repeats": 7,
+          "seconds": [
+            0.232296583,
+            0.236588292,
+            0.238115708,
+            0.233789708,
+            0.232835667,
+            0.233981625,
+            0.23212325
+          ],
+          "median_seconds": 0.233789708,
+          "median_games_per_second": 427734.82569215575,
+          "median_ns_per_complete_turn": 37.70801741935484,
+          "median_ns_per_internal_operation": 35.96764738461538,
+          "internal_operations_per_game": 65,
+          "ns_per_complete_turn_range": [
+            37.43923387096774,
+            38.40575935483871
+          ]
+        },
+        "original_rust_7byte_action": {
+          "repeats": 7,
+          "seconds": [
+            0.433897,
+            0.424159,
+            0.425041,
+            0.42652,
+            0.444698,
+            0.427595,
+            0.428044
+          ],
+          "median_seconds": 0.427595,
+          "median_games_per_second": 233866.1583975491,
+          "median_ns_per_complete_turn": 68.96693548387097,
+          "median_ns_per_internal_operation": 40.723333333333336,
+          "internal_operations_per_game": 105,
+          "ns_per_complete_turn_range": [
+            68.41274193548387,
+            71.72548387096774
+          ]
+        }
+      },
+      "validated_throughput_ratio_vs_cpp_predecoded": 1.0102878799009547,
+      "validated_speedup_vs_original_rust": 1.847788979685319
+    }
+  ]
+}

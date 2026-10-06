@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "command": "cargo fmt --all --check",
+      "status": "passed",
+      "test_executions": null,
+      "logs": {
+        "local/research/engine-throughput/inline-fmt.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "local/research/engine-throughput/inline-fmt.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --release --locked -- -D warnings",
+      "status": "passed",
+      "test_executions": null,
+      "logs": {
+        "local/research/engine-throughput/inline-clippy.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "local/research/engine-throughput/inline-clippy.stderr": "5aa7393a811bb8de576c57ae150b78b3cdc28995e19e63910fe0859630d0c2fb"
+      }
+    },
+    {
+      "command": "cargo test --workspace --release --locked",
+      "status": "passed",
+      "test_executions": 146,
+      "logs": {
+        "local/research/engine-throughput/inline-workspace-default-tests.stdout": "2a90004c84ba196d1b3631a38d9bd69840bf7707849001fa096d33a630df7566",
+        "local/research/engine-throughput/inline-workspace-default-tests.stderr": "543a3ef2371447ec4c0a2c9532d4f966a55e28fb51ef5430ba33529c8aeea3c9"
+      }
+    },
+    {
+      "command": "cargo test --workspace --release --locked --all-features",
+      "status": "passed",
+      "test_executions": 152,
+      "logs": {
+        "local/research/engine-throughput/inline-workspace-all-tests.stdout": "01d220f317d61c9d0401f34baf68aea9c93241164b45381fe75d121d47dd25c1",
+        "local/research/engine-throughput/inline-workspace-all-tests.stderr": "ec993f529147665097a6dc73b3eac84a9301fc7e783d58daa9e2f53dfcb6899d"
+      }
+    }
+  ],
+  "pinned_toolchain": "1.98.1",
+  "cargo_lock_sha256": "cde6b45f4fa36401baa2053f5ddd9983dbe7f30f88fabde00d018d874a910e6a",
+  "ordered_rules_and_replay_unchanged": true,
+  "engine_version": "splendorust-v2",
+  "normal_core_allocations": 0,
+  "github_actions_enabled": false,
+  "independent_review": "REVIEW.md"
+}

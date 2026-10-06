@@ -1,0 +1,164 @@
+{
+  "scope": "optional dynamic_fpu worker RPC control; default remains false",
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "target_dir": "local/research/sprint48/build-dynamic",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed"
+    },
+    {
+      "command": "cargo test --offline -p splendor-arena --example native_policy_worker dynamic_fpu_requires_a_boolean_and_defaults_off",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed"
+    },
+    {
+      "command": "cargo clippy --offline --locked --release --workspace --all-targets --all-features -- -D warnings",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed",
+      "elapsed_seconds": 10.58
+    },
+    {
+      "command": "cargo test --offline --locked --release --workspace --all-features",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed"
+    },
+    {
+      "command": "cargo test --offline --locked --release -p splendor-arena --example native_policy_worker",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed",
+      "tests_passed": 4,
+      "elapsed_seconds": 13.23
+    },
+    {
+      "command": "cargo build --offline --locked --release -p splendor-arena --bin splendor --example native_policy_worker --example strength_worker --example transfer_parity --example rich_selfplay",
+      "environment": "CARGO_TARGET_DIR=local/research/sprint48/build-dynamic",
+      "status": "passed",
+      "elapsed_seconds": 4.37
+    }
+  ],
+  "binary_sha256": {
+    "local/research/sprint48/build-dynamic/release/splendor": "f32aa7673488b1398ef7b905cc149042a226288eaccfa3a6968c62dcaaff4e07",
+    "local/research/sprint48/build-dynamic/release/examples/native_policy_worker": "da7ba89cbe418acee6df1cac5e753f2c2bfb981c9f34f362c94694c6ace65898",
+    "local/research/sprint48/build-dynamic/release/examples/strength_worker": "4bd368a0ceeeebce42e3e0500f88de2bb0326c1383cd659435386a081e6ea91b",
+    "local/research/sprint48/build-dynamic/release/examples/transfer_parity": "07075e469aa2830699d1644193a1132bee6ca5b888ec1cafccf2ef519938ecf4",
+    "local/research/sprint48/build-dynamic/release/examples/rich_selfplay": "f39d7ee4c26c4cc314271411ff23426d55455d72c42988e65ae2c93fb792034e"
+  },
+  "runtime_rpc_fixture": {
+    "checked_utc": "2026-10-03T22:42:02.571105+00:00",
+    "setup_seed": 3960886096576718399,
+    "fixture_master": 480000123,
+    "model_descriptor_sha256": "8c8a2d129f6989c9badfd7dbe0e80df9b51b84c090141204f9ffda513d0a29f4",
+    "service": "owned trial04 service; no new service or game",
+    "default_choice_work_parity": [
+      {
+        "search": "puct",
+        "iterations": 0,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 1,
+          "simulations": 0
+        }
+      },
+      {
+        "search": "puct",
+        "iterations": 1,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 2,
+          "simulations": 1
+        }
+      },
+      {
+        "search": "puct",
+        "iterations": 128,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 129,
+          "simulations": 128
+        }
+      },
+      {
+        "search": "gumbel",
+        "iterations": 0,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 1,
+          "simulations": 0
+        }
+      },
+      {
+        "search": "gumbel",
+        "iterations": 1,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 2,
+          "simulations": 1
+        }
+      },
+      {
+        "search": "gumbel",
+        "iterations": 128,
+        "chance_universes": 0,
+        "identical": true,
+        "result": {
+          "action": 12,
+          "inferences": 129,
+          "simulations": 128
+        }
+      },
+      {
+        "search": "puct",
+        "iterations": 1600,
+        "chance_universes": 3,
+        "identical": true,
+        "result": {
+          "action": 48,
+          "inferences": 1601,
+          "simulations": 1600
+        }
+      }
+    ],
+    "dynamic_profile": {
+      "accepted": {
+        "ok": true,
+        "settings": {
+          "chance_universes": 3,
+          "cpuct": 0.4,
+          "depth": 32,
+          "dynamic_fpu": true,
+          "fpu_reduction": 0.02965,
+          "gumbel_max_considered": 16,
+          "gumbel_noise": 0.0,
+          "iterations": 1600,
+          "root_only": false,
+          "search": "puct",
+          "uniform_prior": 0.0,
+          "world_pool": 3
+        }
+      },
+      "result": {
+        "action": 48,
+        "inferences": 1601,
+        "simulations": 1600
+      }
+    }
+  },
+  "source_sha256": {
+    "crates/splendor-agents/src/environment.rs": "50a8c8fb88894e1080d76542bf81902db8330b2e99b3d7f65b594a4acf4eefb6",
+    "crates/splendor-agents/src/native_environment.rs": "7fa762275cb41afb3f1288854e7b9838ff3e787f2e3305d79bc75e9803ddb558",
+    "crates/splendor-agents/src/neural_search.rs": "d3d32b568fb30d00fc458de6a6acbfb285d21841d92994e878a1c7ee11e7566c",
+    "crates/splendor-arena/examples/native_policy_worker.rs": "8722a33846b4fddf6e2aa7b4d704112f248892d8bf61b688a1ad189eaae1a044"
+  }
+}

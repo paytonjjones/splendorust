@@ -1,0 +1,316 @@
+{
+  "schema": "actual-first-stage-restore-check-v1",
+  "manifest_sha256": "d5674c8d0857444ff943f0180e41c648a8ed30736b854dfa0d018212fa2aff86",
+  "verified_files": 246,
+  "all_archived_bytes_match": true,
+  "corpus_checks": {
+    "first/dev": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/dev",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/dev/rows.bin",
+        "source_sha256": "bb9353560ced1f1f735efc5ab60ef0bf2178a47a2e919883f64368fcc63f427b",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/dev/inputs.bin",
+        "inputs_sha256": "b99002b14e414d1e4f9299688d3d95079700346bd6cd52cf6d1ce77579efaa92",
+        "history_sha256": "1a648e7b307f6929e124b33679b884da62197bfb8e54b00afe71db8680690462",
+        "rows": 22294,
+        "eligible_rows": 22283,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 11,
+        "setups": 400,
+        "policy_entropy": 1.0211982257446082,
+        "explored_actions_per_row": 10.659381591347664,
+        "executed_vs_visit_argmax": 0.9981600323116276,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "b129a8f49be8de551ed5305992caa0508d8b0a619e94d0e920ff6d4252871f8d",
+      "history_sha256": "1a648e7b307f6929e124b33679b884da62197bfb8e54b00afe71db8680690462",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 400,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 22294,
+      "eligible_rows": 22283,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6520732593232509,
+      "mean_alternative_action_mass": 0.3479267406767491,
+      "mean_legal_actions": 20.848674774169922,
+      "mean_explored_actions": 10.659381591347664,
+      "mean_unexplored_legal_actions": 10.189292285598887,
+      "mean_explored_q_span": 0.16689738631248474,
+      "root_terminal_brier": 0.2013043761253357,
+      "network_terminal_brier": 0.21928228437900543,
+      "root_network_mse": 0.015204990282654762,
+      "eligible_rows_per_collection_hour": 37666.56078453913,
+      "collection_seconds": 2129.708641542,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    },
+    "first/scaling-16": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-16",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-16/rows.bin",
+        "source_sha256": "630a24f39a701545d9f46a2c85147550b5823d7f5cd4c006df4c0ccda86ffb14",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-16/inputs.bin",
+        "inputs_sha256": "696209e9de21b0c2b3d133b4ca6f0bebad634496b22ef5d229530ed8f9a33149",
+        "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+        "rows": 3590,
+        "eligible_rows": 3586,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 4,
+        "setups": 64,
+        "policy_entropy": 1.0203488505816427,
+        "explored_actions_per_row": 10.631344116006693,
+        "executed_vs_visit_argmax": 0.9974902398215282,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "e16d2f985ec4d307f18f6d05efdcf9ac0cd5f768c6dc5a78bc0075595920ce69",
+      "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 64,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 3590,
+      "eligible_rows": 3586,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6525627004322365,
+      "mean_alternative_action_mass": 0.34743729956776354,
+      "mean_legal_actions": 20.482152938842773,
+      "mean_explored_actions": 10.631344116006693,
+      "mean_unexplored_legal_actions": 9.850808700501952,
+      "mean_explored_q_span": 0.16259577870368958,
+      "root_terminal_brier": 0.20632503926753998,
+      "network_terminal_brier": 0.22036495804786682,
+      "root_network_mse": 0.013868141919374466,
+      "eligible_rows_per_collection_hour": 23452.477493219354,
+      "collection_seconds": 550.457835584,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    },
+    "first/scaling-32": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-32",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-32/rows.bin",
+        "source_sha256": "630a24f39a701545d9f46a2c85147550b5823d7f5cd4c006df4c0ccda86ffb14",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-32/inputs.bin",
+        "inputs_sha256": "696209e9de21b0c2b3d133b4ca6f0bebad634496b22ef5d229530ed8f9a33149",
+        "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+        "rows": 3590,
+        "eligible_rows": 3586,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 4,
+        "setups": 64,
+        "policy_entropy": 1.0203488505816427,
+        "explored_actions_per_row": 10.631344116006693,
+        "executed_vs_visit_argmax": 0.9974902398215282,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "b80d6baaaf4ea8b10ccac14ffdb96d3be9ecbca414bff2a355cd03f05f231dc7",
+      "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 64,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 3590,
+      "eligible_rows": 3586,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6525627004322365,
+      "mean_alternative_action_mass": 0.34743729956776354,
+      "mean_legal_actions": 20.482152938842773,
+      "mean_explored_actions": 10.631344116006693,
+      "mean_unexplored_legal_actions": 9.850808700501952,
+      "mean_explored_q_span": 0.16259577870368958,
+      "root_terminal_brier": 0.20632503926753998,
+      "network_terminal_brier": 0.22036495804786682,
+      "root_network_mse": 0.013868141919374466,
+      "eligible_rows_per_collection_hour": 41653.80292523498,
+      "collection_seconds": 309.926083416,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    },
+    "first/scaling-4": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-4",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-4/rows.bin",
+        "source_sha256": "630a24f39a701545d9f46a2c85147550b5823d7f5cd4c006df4c0ccda86ffb14",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-4/inputs.bin",
+        "inputs_sha256": "696209e9de21b0c2b3d133b4ca6f0bebad634496b22ef5d229530ed8f9a33149",
+        "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+        "rows": 3590,
+        "eligible_rows": 3586,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 4,
+        "setups": 64,
+        "policy_entropy": 1.0203488505816427,
+        "explored_actions_per_row": 10.631344116006693,
+        "executed_vs_visit_argmax": 0.9974902398215282,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "60597b7cfeea3b6b1f442edcd34476f98061960ee6e5552e4788c44f4abb731e",
+      "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 64,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 3590,
+      "eligible_rows": 3586,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6525627004322365,
+      "mean_alternative_action_mass": 0.34743729956776354,
+      "mean_legal_actions": 20.482152938842773,
+      "mean_explored_actions": 10.631344116006693,
+      "mean_unexplored_legal_actions": 9.850808700501952,
+      "mean_explored_q_span": 0.16259577870368958,
+      "root_terminal_brier": 0.20632503926753998,
+      "network_terminal_brier": 0.22036495804786682,
+      "root_network_mse": 0.013868141919374466,
+      "eligible_rows_per_collection_hour": 4100.559526125387,
+      "collection_seconds": 3148.253285375,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    },
+    "first/scaling-8": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-8",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-8/rows.bin",
+        "source_sha256": "630a24f39a701545d9f46a2c85147550b5823d7f5cd4c006df4c0ccda86ffb14",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/scaling-8/inputs.bin",
+        "inputs_sha256": "696209e9de21b0c2b3d133b4ca6f0bebad634496b22ef5d229530ed8f9a33149",
+        "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+        "rows": 3590,
+        "eligible_rows": 3586,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 4,
+        "setups": 64,
+        "policy_entropy": 1.0203488505816427,
+        "explored_actions_per_row": 10.631344116006693,
+        "executed_vs_visit_argmax": 0.9974902398215282,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "3717b8c1fb9178e5ba660f9e228ceda4d4a63910f26f731f7ec8dda9088a6ca8",
+      "history_sha256": "49fdb204728bc2dcaaa198a42151fe1906f389213b13f3f8026ce5e46644c95b",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 64,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 3590,
+      "eligible_rows": 3586,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6525627004322365,
+      "mean_alternative_action_mass": 0.34743729956776354,
+      "mean_legal_actions": 20.482152938842773,
+      "mean_explored_actions": 10.631344116006693,
+      "mean_unexplored_legal_actions": 9.850808700501952,
+      "mean_explored_q_span": 0.16259577870368958,
+      "root_terminal_brier": 0.20632503926753998,
+      "network_terminal_brier": 0.22036495804786682,
+      "root_network_mse": 0.013868141919374466,
+      "eligible_rows_per_collection_hour": 12122.937466363624,
+      "collection_seconds": 1064.890422459,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    },
+    "first/train": {
+      "schema": "search-target-audit-v1",
+      "directory": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/train",
+      "receipt": {
+        "schema": "canonical-rich-root-v1",
+        "source": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/train/rows.bin",
+        "source_sha256": "848df084647a02ebd2ade4892b8e4ee42cafdccee66d66447054558db7f79e76",
+        "inputs": "/Users/payton.jones/.codex/worktrees/training-strategy/splendorust/local/research/training-strategy/first-restored/first/train/inputs.bin",
+        "inputs_sha256": "41e6e66d01f791b4c3a96b7721e14cfec0ab5f6452230a1e48698745aaa92778",
+        "history_sha256": "1815e8ab2e7d16d8979ad744ef15b2272eddb1e24c12cfa801c9cdee5757e96b",
+        "rows": 111136,
+        "eligible_rows": 111065,
+        "incomplete_rows": 0,
+        "non_full_or_no_search_rows": 71,
+        "setups": 2000,
+        "policy_entropy": 1.012534781181194,
+        "explored_actions_per_row": 10.572439562418404,
+        "executed_vs_visit_argmax": 0.9980371854319543,
+        "profile": "canonical-v2",
+        "learner_fields": "public x, public context; audit IDs excluded"
+      },
+      "completion_sha256": "65325eae10f3fd846c6969e7eb62e8acdbbc68e036f26ec548a5e962eff83aa0",
+      "history_sha256": "1815e8ab2e7d16d8979ad744ef15b2272eddb1e24c12cfa801c9cdee5757e96b",
+      "terminal_labels_match_records": true,
+      "counts": {
+        "complete": 2000,
+        "no_legal_action": 0,
+        "decision_limit": 0
+      },
+      "rows": 111136,
+      "eligible_rows": 111065,
+      "full_visit_totals": [
+        256
+      ],
+      "mean_executed_action_mass": 0.6553579970062576,
+      "mean_alternative_action_mass": 0.3446420029937424,
+      "mean_legal_actions": 20.842281341552734,
+      "mean_explored_actions": 10.572439562418404,
+      "mean_unexplored_legal_actions": 10.269841984423536,
+      "mean_explored_q_span": 0.16534313559532166,
+      "root_terminal_brier": 0.2002880871295929,
+      "network_terminal_brier": 0.21702486276626587,
+      "root_network_mse": 0.01511549111455679,
+      "eligible_rows_per_collection_hour": 45097.90535249246,
+      "collection_seconds": 8865.91066425,
+      "limits": [
+        "Position-weighted in-sample label diagnostics are not playing strength.",
+        "Unexplored legal actions have no Q target.",
+        "Pilot games are excluded from model training and evaluation."
+      ]
+    }
+  },
+  "seconds": 5.104683876037598,
+  "full_goal_complete": false
+}

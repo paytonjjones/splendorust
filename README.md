@@ -1,8 +1,28 @@
 # Splendorust
 
-A deterministic Rust engine and experiment framework for base Splendor, with 2–4 players. There is no GUI, artwork, network service, or model dependency.
+A deterministic Rust engine and experiment framework for base Splendor, with 2–4 players. The research engine stays independent of graphics, network services, and model dependencies. The optional web client lets a human play two-player Splendor against the registered champion.
 
 The workspace contains the full 90-card and 10-noble datasets, rule tests, random-play audits, hidden-information-safe agents, paired tournaments, replay, benchmarks, and a promotion gate. Read [VALIDATION.md](VALIDATION.md) before treating results as ground truth. In particular, the published rules leave some no-action positions unresolved; the engine reports these positions without inventing a winner.
+
+The [48-hour strength campaign](STRATEGY.md) decisively beat pinned unchanged
+AlphaZero800 in 1,000 fresh two-player native games: **77.5% win credit**,
+with a conservative paired 95% interval of **71.43–83.57%**. All games completed
+by native score. The selected first-onehot Entity used PUCT6400 against
+AlphaZero800; the result is conditional on that unequal compute and native
+rules. See the [confirmed result](research/sprint48/RESULTS.md),
+[research strength champion](research/STRENGTH_CHAMPION.json), and
+[restore and delivery checklist](research/sprint48/FINAL_DELIVERY.md).
+The standalone/demo pointer remains E81 in `research/CHAMPION.json`.
+
+The same campaign also has a separate matched-search-budget diagnostic:
+Splendorust PUCT6400 earned **58.85% win credit** in 1,000 complete games
+against the pinned AlphaZero checkpoint with its active search budget raised to
+6,400 simulations. The paired bootstrap interval is 55.75–61.90%; the more
+conservative Hoeffding interval is 52.78–64.92%. This is positive evidence at
+the same simulation count, not equal total compute or a decisive promotion
+result. See [the recovered diagnostic](research/sprint48/opponent_search/RESULT-6400.md).
+Older schedules below are reproduction instructions, not current campaign
+requirements.
 
 The [external benchmark report](benchmarks/REPORT.md) contains the reproducible
 baseline, workload rankings and limits. Its [protocol](benchmarks/PROTOCOL.md)
@@ -15,6 +35,10 @@ games. Its results are separate from simulator-speed measurements.
 The [information-fair AlphaZero comparison](benchmarks/strength/information-fair/REPORT.md)
 adds public-only AlphaZero and privileged SplendoRust variants to the native
 benchmark. Both variants keep the game rules, models and search budgets fixed.
+
+## Play in the browser
+
+[Play against the champion](https://splendorust.pages.dev). The client in `web/` uses React and a dedicated worker. Rules and champion search run in Rust/WASM. It uses original generated art and separate, content-addressed model assets. Mouse, touch, and arrows plus Enter use the same game actions. All visitor games are recorded for research. See [web setup and deployment](docs/WEB_DEPLOYMENT.md), [game log export and replay validation](docs/web/GAME_LOGS.md), and [web quality evidence](docs/web/QUALITY.md).
 
 ## Run
 
@@ -69,7 +93,9 @@ cargo bench -p splendor-arena --bench arena
 
 The gate runs checks, a throughput smoke test, and a fixed 2,000-game paired gate by default. Use `--confirm 20000` for a fresh milestone confirmation on disjoint seeds. It requires a new output directory, records parameters and completion policy in `run.json`, and writes `decision.json`. It allows at most 1% no-action games per stage while treating their candidate credit as zero for the conservative lower bound. All requested games stay in the denominator; no blocked game gets a winner. Decision-limit games still reject the stage. Use `--max-no-action-fraction 0` for strict completion. The gate can enforce a throughput floor. It uses the executable reported by Cargo, including custom target directories, and records its path and SHA-256 in `build.json` beside `cargo-build.jsonl`. It does not edit source, revert work, or publish anything. For three players, select counts divisible by three. A fresh confirmation seed range is required for each new candidate; repeated use of one holdout does not remain a valid holdout.
 
-CI also runs the pinned independent-reference comparison on six fixed games, checking every visited action set and retaining reference state across shared turns. See [docs/PARITY.md](docs/PARITY.md) for the checked scope and explicit rule differences.
+The local validation suite includes the pinned independent-reference comparison
+on fixed games. GitHub Actions stays disabled at the user's request. See
+[docs/PARITY.md](docs/PARITY.md) for checked scope and explicit rule differences.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [EXPERIMENTS.md](EXPERIMENTS.md), [BENCHMARKS.md](BENCHMARKS.md), and [data/SOURCES.md](data/SOURCES.md).
 
@@ -88,7 +114,13 @@ from the last seat. E20 and E21 record the failed candidate and fresh checks;
 E22 records the noble boundary correction.
 These policies do not guarantee termination for all setups or budgets.
 
-The current research endpoint and search mode are in `research/LINEAGE.json`; the confirmed endpoint is in `research/CHAMPION.json`. The restarted offline loop can use `--teacher-action-targets --teacher-agent flywheel-gumbel --actor-agent flywheel-gumbel --actor-iterations 128 --teacher-iterations 800 --dev-teacher-iterations 800 --search-agent gumbel` to learn verified no-noise teacher actions. This label mode is explicit; old collection defaults remain reproducible. E80 records why the exported Gumbel policy distribution can be weaker than the teacher choice. E81 records the first provisional learning gain with repaired labels.
+Historical small-model lineage is in `research/LINEAGE.json`; the standalone
+endpoint is in `research/CHAMPION.json`. The active confirmed research baseline
+is in `research/STRENGTH_CHAMPION.json`. The old offline loop's
+`--teacher-action-targets` mode remains available for reproduction. E80 records
+why its exported Gumbel policy target could be weaker than the executed teacher
+choice; E81 records a learning gain from repaired labels. New work follows
+STRATEGY.md rather than automatically restarting that loop.
 
 E92 showed that the current champion remains weak against the unchanged AlphaZero800 target. The [E95 supervision pivot](research/e95/REPORT.md) uses external expert labels and deterministic public inputs at every search node, with a public rules flag and separate fresh canonical/native screens. Collection and evaluation data remain disjoint.
 
