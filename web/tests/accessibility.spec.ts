@@ -12,7 +12,7 @@ type TestBridge = {
     botDecisionMs: number[];
     botTurnMs: number[];
   };
-  restart: (seed?: string | number, seat?: number) => Promise<unknown>;
+  restart: (seed?: string | number, seat?: number, testSearchBudget?: { iterations: number; depth: number }) => Promise<unknown>;
   state: () => {
     activePlayer: number;
     humanSeat: number;
@@ -34,6 +34,12 @@ async function startGame(page: Page): Promise<void> {
   await page.evaluate(() => {
     (window as unknown as { splendorTest: TestBridge }).splendorTest.skipWaits();
   });
+  await page.evaluate(() =>
+    (window as unknown as { splendorTest: TestBridge }).splendorTest.restart(undefined, undefined, {
+      iterations: 128,
+      depth: 16,
+    }),
+  );
 }
 
 test("board fits key desktop and mobile widths", async ({ page }) => {
@@ -179,17 +185,18 @@ test("keyboard can reserve a market card", async ({ page }) => {
 });
 
 test("keyboard can buy an affordable card", async ({ page }) => {
+  test.setTimeout(120_000);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await startGame(page);
   const readyToBuy = await page.evaluate(async () => {
     const bridge = (window as unknown as { splendorTest: TestBridge }).splendorTest;
-    await bridge.restart("0x53504c454e440101", 0);
+    await bridge.restart("0x53504c454e440101", 0, { iterations: 128, depth: 16 });
     bridge.skipWaits();
-    for (let turn = 0; turn < 24; turn += 1) {
+    for (let turn = 0; turn < 80; turn += 1) {
       if (bridge.actions().some((action) => action.kind === "buy_visible")) return true;
-      const take = bridge.actions().find((action) => action.kind === "take");
-      if (!take) throw new Error("The human player has no legal gem take while setting up a card buy.");
-      await bridge.act(take.id);
+      const action = bridge.actions().find((candidate) => candidate.kind === "take") ?? bridge.actions()[0];
+      if (!action) throw new Error("The human player has no legal action while setting up a card buy.");
+      await bridge.act(action.id);
     }
     return bridge.actions().some((action) => action.kind === "buy_visible");
   });

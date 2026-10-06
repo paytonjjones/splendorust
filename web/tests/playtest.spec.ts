@@ -424,7 +424,7 @@ test("refresh and reset cancel stale worker actions", async ({ page }) => {
       void window.splendorTest!.act(id).catch(() => undefined);
     }, action.id);
     await page.waitForFunction(() => window.splendorTest!.status() === "thinking", null, { polling: 10, timeout: 30_000 });
-    await page.evaluate(() => window.splendorTest!.restart("0x53504c454e440a12", 0));
+    await page.evaluate(() => window.splendorTest!.restart("0x53504c454e440a12", 0, { iterations: 128, depth: 16 }));
     const restarted = await page.evaluate(() => window.splendorTest!.waitForHuman());
     expect(restarted.revision).toBe(0);
     expect(restarted).not.toEqual(baseline);
@@ -473,7 +473,7 @@ test("seed 91337 follows the canonical champion factory opening", async ({ page 
   await page.goto("/?test=1");
   await page.waitForFunction(() => Boolean(window.splendorTest));
   await page.evaluate(() => window.splendorTest!.skipWaits(true));
-  await page.evaluate(() => window.splendorTest!.restart("91337", 0));
+  await page.evaluate(() => window.splendorTest!.restart("91337", 0, { iterations: 128, depth: 16 }));
   const state = await page.evaluate(() => window.splendorTest!.waitForHuman());
   const opening = state.legalActions.find((action) => action.kind === "take");
   expect(opening).toBeDefined();

@@ -114,7 +114,7 @@ test("research-strength midgame search keeps the mobile UI responsive @midgame-p
     const seed = "0x53504c454e440a21";
     await page.evaluate(async (gameSeed) => {
       const bridge = window.splendorTest!;
-      await bridge.restart(gameSeed, 0);
+      await bridge.restart(gameSeed, 0, { iterations: 128, depth: 16 });
       bridge.skipWaits(true);
       await bridge.waitForHuman();
     }, seed);

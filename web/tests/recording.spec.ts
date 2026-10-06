@@ -83,7 +83,7 @@ test('a complete game uses arrows and Enter, and its download replays in native 
   test.setTimeout(180_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await open(page);
-  await page.evaluate(() => window.splendorTest!.restart('91337', 0));
+  await page.evaluate(() => window.splendorTest!.restart('91337', 0, { iterations: 128, depth: 16 }));
   let state = await page.evaluate(() => window.splendorTest!.waitForHuman());
   const kinds = new Set<string>();
   for (let step = 0; !state.result && step < 180; step++) {
@@ -116,7 +116,7 @@ test('a complete game uses arrows and Enter, and its download replays in native 
 
 test('reset and refresh retain exact u64 seeds and unfinished histories', async ({ page }, info) => {
   await open(page);
-  await page.evaluate(() => window.splendorTest!.restart('18446744073709551615', 0));
+  await page.evaluate(() => window.splendorTest!.restart('18446744073709551615', 0, { iterations: 128, depth: 16 }));
   let state = await page.evaluate(() => window.splendorTest!.waitForHuman());
   state = await act(page, state.legalActions.find(a => a.kind === 'take')!);
   const before = (await records(page)).at(-1)!;
