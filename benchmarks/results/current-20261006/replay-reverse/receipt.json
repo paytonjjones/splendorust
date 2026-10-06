@@ -1,0 +1,617 @@
+{
+  "start_utc": "2026-10-06T16:35:52.388193+00:00",
+  "games": 100000,
+  "repeats": 7,
+  "seeds": [
+    424287,
+    424285,
+    424268,
+    424262
+  ],
+  "commands": [
+    {
+      "name": "upstream-pin",
+      "command": [
+        "git",
+        "-C",
+        "/Users/payton.jones/dev/splendorust/local/strength/external/ahinlendor",
+        "rev-parse",
+        "HEAD"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.408108+00:00",
+      "returncode": 0,
+      "seconds": 0.011122541967779398,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "rustc",
+      "command": [
+        "rustc",
+        "-Vv"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.420181+00:00",
+      "returncode": 0,
+      "seconds": 0.042142916936427355,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "cargo",
+      "command": [
+        "cargo",
+        "-V"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.462975+00:00",
+      "returncode": 0,
+      "seconds": 0.039842375088483095,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "clang",
+      "command": [
+        "clang++",
+        "--version"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.503487+00:00",
+      "returncode": 0,
+      "seconds": 0.020868999883532524,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "host",
+      "command": [
+        "sysctl",
+        "-n",
+        "machdep.cpu.brand_string"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.524906+00:00",
+      "returncode": 0,
+      "seconds": 0.005887374980375171,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "processes",
+      "command": [
+        "ps",
+        "-Ao",
+        "pid,pcpu,comm"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.531315+00:00",
+      "returncode": 0,
+      "seconds": 0.07749741617590189,
+      "load_after": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ]
+    },
+    {
+      "name": "rust-424287",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424287.txt",
+        "424287",
+        "100000",
+        "7"
+      ],
+      "load_before": [
+        6.00439453125,
+        6.3671875,
+        6.31201171875
+      ],
+      "utc": "2026-10-06T16:35:52.610021+00:00",
+      "returncode": 0,
+      "seconds": 15.7184602918569,
+      "load_after": [
+        6.29150390625,
+        6.41357421875,
+        6.32958984375
+      ]
+    },
+    {
+      "name": "cpp-424287",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/ahin_profile",
+        "--repeats",
+        "7",
+        "--iterations",
+        "100000",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424287.txt"
+      ],
+      "load_before": [
+        6.29150390625,
+        6.41357421875,
+        6.32958984375
+      ],
+      "utc": "2026-10-06T16:36:08.329207+00:00",
+      "returncode": 0,
+      "seconds": 23.39144741697237,
+      "load_after": [
+        7.65576171875,
+        6.705078125,
+        6.435546875
+      ]
+    },
+    {
+      "name": "prepare-424285",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424285.txt",
+        "424285",
+        "1",
+        "1"
+      ],
+      "load_before": [
+        7.65576171875,
+        6.705078125,
+        6.435546875
+      ],
+      "utc": "2026-10-06T16:36:31.721737+00:00",
+      "returncode": 0,
+      "seconds": 0.020331916864961386,
+      "load_after": [
+        7.65576171875,
+        6.705078125,
+        6.435546875
+      ]
+    },
+    {
+      "name": "cpp-424285",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/ahin_profile",
+        "--repeats",
+        "7",
+        "--iterations",
+        "100000",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424285.txt"
+      ],
+      "load_before": [
+        7.65576171875,
+        6.705078125,
+        6.435546875
+      ],
+      "utc": "2026-10-06T16:36:31.742936+00:00",
+      "returncode": 0,
+      "seconds": 26.861738708103076,
+      "load_after": [
+        8.5908203125,
+        7.0322265625,
+        6.56298828125
+      ]
+    },
+    {
+      "name": "rust-424285",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424285.txt",
+        "424285",
+        "100000",
+        "7"
+      ],
+      "load_before": [
+        8.5908203125,
+        7.0322265625,
+        6.56298828125
+      ],
+      "utc": "2026-10-06T16:36:58.605471+00:00",
+      "returncode": 0,
+      "seconds": 19.482393624959514,
+      "load_after": [
+        8.078125,
+        6.99658203125,
+        6.55859375
+      ]
+    },
+    {
+      "name": "rust-424268",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424268.txt",
+        "424268",
+        "100000",
+        "7"
+      ],
+      "load_before": [
+        8.078125,
+        6.99658203125,
+        6.55859375
+      ],
+      "utc": "2026-10-06T16:37:18.088980+00:00",
+      "returncode": 0,
+      "seconds": 17.57915366603993,
+      "load_after": [
+        7.52490234375,
+        6.94580078125,
+        6.55078125
+      ]
+    },
+    {
+      "name": "cpp-424268",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/ahin_profile",
+        "--repeats",
+        "7",
+        "--iterations",
+        "100000",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424268.txt"
+      ],
+      "load_before": [
+        7.52490234375,
+        6.94580078125,
+        6.55078125
+      ],
+      "utc": "2026-10-06T16:37:35.668809+00:00",
+      "returncode": 0,
+      "seconds": 24.259454166982323,
+      "load_after": [
+        7.60498046875,
+        6.9990234375,
+        6.58056640625
+      ]
+    },
+    {
+      "name": "prepare-424262",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424262.txt",
+        "424262",
+        "1",
+        "1"
+      ],
+      "load_before": [
+        7.60498046875,
+        6.9990234375,
+        6.58056640625
+      ],
+      "utc": "2026-10-06T16:37:59.929291+00:00",
+      "returncode": 0,
+      "seconds": 0.018889250000938773,
+      "load_after": [
+        7.60498046875,
+        6.9990234375,
+        6.58056640625
+      ]
+    },
+    {
+      "name": "cpp-424262",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/ahin_profile",
+        "--repeats",
+        "7",
+        "--iterations",
+        "100000",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424262.txt"
+      ],
+      "load_before": [
+        7.60498046875,
+        6.9990234375,
+        6.58056640625
+      ],
+      "utc": "2026-10-06T16:37:59.948835+00:00",
+      "returncode": 0,
+      "seconds": 26.216819874942303,
+      "load_after": [
+        9.12353515625,
+        7.41357421875,
+        6.7421875
+      ]
+    },
+    {
+      "name": "rust-424262",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/research/engine-throughput/target/release/examples/engine_profile",
+        "/Users/payton.jones/dev/splendorust/benchmarks/results/current-20261006/replay-reverse/seed-424262.txt",
+        "424262",
+        "100000",
+        "7"
+      ],
+      "load_before": [
+        9.12353515625,
+        7.41357421875,
+        6.7421875
+      ],
+      "utc": "2026-10-06T16:38:26.166474+00:00",
+      "returncode": 0,
+      "seconds": 18.568096375092864,
+      "load_after": [
+        8.54736328125,
+        7.38720703125,
+        6.74755859375
+      ]
+    }
+  ],
+  "source_before": {
+    "Cargo.lock": "d67c773799284f9a65d68e488d86ec5fcf13f74e5b4759f3986e45b2d2d1c5af",
+    "Cargo.toml": "8e558d6799bd05e56252bbe3d880c878151e3fe8375e39008437af1deb0c15af",
+    "crates/splendor-agents/Cargo.toml": "57bb09203fec7abe8dd029aec6e31cbc8c74059893f07e7a1d9adcf217b98665",
+    "crates/splendor-agents/src/belief.rs": "098e79bf3ea7525b973f2de074b0d368d73347539e9e740e58d91c4ea1badc33",
+    "crates/splendor-agents/src/environment.rs": "50a8c8fb88894e1080d76542bf81902db8330b2e99b3d7f65b594a4acf4eefb6",
+    "crates/splendor-agents/src/learned.rs": "8de6ce31f67402d0f7a6d9fbfb6a24886eaaad3604179962275fa51d5e2f2645",
+    "crates/splendor-agents/src/lib.rs": "8fe7352122083a467601f150f689d7f2720a08a1de4ff0db25161d2b4ffd2ab9",
+    "crates/splendor-agents/src/models/e25.bin": "cac22fb338d7c4cc9ba2a32495023ce9ce589f5d39e32a47af78af457a5b6ddf",
+    "crates/splendor-agents/src/models/e26.bin": "ee43086382e10a21dbbbb506e20241b3f876fe3e01291f86dd5db85dee669527",
+    "crates/splendor-agents/src/models/e27.bin": "b4f8560804fa9e4a6db805656a697ef2067ddd4bc2624e77cfe379d3cbd3fb9f",
+    "crates/splendor-agents/src/models/e28.bin": "e1a70ad158e0ad4d9835379a750a0f1a8f63dae022e05839734f2c23751e46da",
+    "crates/splendor-agents/src/models/e30.bin": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+    "crates/splendor-agents/src/native_environment.rs": "7fa762275cb41afb3f1288854e7b9838ff3e787f2e3305d79bc75e9803ddb558",
+    "crates/splendor-agents/src/neural.rs": "a651d1ce8bd9b3c3c65cad79ddbad01bbb00bb953471a1af4f5ce3cd5009e520",
+    "crates/splendor-agents/src/neural_search.rs": "d3d32b568fb30d00fc458de6a6acbfb285d21841d92994e878a1c7ee11e7566c",
+    "crates/splendor-agents/src/privileged_environment.rs": "c6924207222d4404665fbf6218185a239545399e052af4866582a2fd5a89949a",
+    "crates/splendor-agents/src/public_history.rs": "5bedf7b4ac143f8b85a91dfc11348a08770c86d2aad595721008ab677e6bc543",
+    "crates/splendor-agents/src/transfer/attention.rs": "46132a7e3aed2cb86e919345d060af61fb22eb19e107682a8124d7a661f10893",
+    "crates/splendor-agents/src/transfer/entity.rs": "26c29f6d6ef1bee79d40abc8f474ea849c92de3d4399b85d77f72de6050ec049",
+    "crates/splendor-agents/src/transfer/large.rs": "6bb318150da825d6817b4a1abf77f2652d5727852037758c7a25f0c28b9e200d",
+    "crates/splendor-agents/src/transfer/remote.rs": "b931f5c5e7186fd161ec9af275d44114385c8e1d9c7cc08e48356e824b97fff8",
+    "crates/splendor-agents/src/transfer.rs": "8c76d42ed94f0ddc6d384e4fc6186e0154bcd9bd079b2d53c9d99d3337cede5a",
+    "crates/splendor-agents/src/transfer_data.rs": "13edc9989e12d100993411e2be3897b1721f23de39d0d3facfc30d2b0f06159c",
+    "crates/splendor-agents/src/value_weights.rs": "b701e6ca099ffef6183fca5d70170665437b44cc62cd5af7c3efaa0d3610db1d",
+    "crates/splendor-arena/Cargo.toml": "ced022221052f3de44e3c78ccfb32725db839df65e49af693f557004f4b2d461",
+    "crates/splendor-arena/benches/arena.rs": "9a1c198157ff6837842c1e84555c16a7aef4d6998ffe705f88ec60c14ecd1f50",
+    "crates/splendor-arena/build.rs": "d551b0cf3b6fc1b34febfdb22ec1b92a0541273250864fac65042990dc410166",
+    "crates/splendor-arena/examples/agent_probe.rs": "879bf2d33fdec7e11487a27b5261da0727179dcfe313d604827668186f5b7cc3",
+    "crates/splendor-arena/examples/ahin_referee.rs": "335a1d415f442c89231ebd7f7d988c16023fa06beacf31ef9726eb985c4ca4c8",
+    "crates/splendor-arena/examples/aligned_worker.rs": "f9b6c2108f06c88238b47d3babb15fd17de9cdf0e8cdf6c5faca103f4676cab9",
+    "crates/splendor-arena/examples/benchmark_worker.rs": "6d6901817acdb7aef6446c4edf74ab27c549faf89466d752585a58384e88669a",
+    "crates/splendor-arena/examples/block_audit.rs": "32227b7149716beb1f45db11dd28b90a39f9a134c62ac80b812ae9126f66b63b",
+    "crates/splendor-arena/examples/cap_audit.rs": "27449ec1ee12f0d7afd611577834528567414b392825e0e89030f6a7ddf4a8d7",
+    "crates/splendor-arena/examples/context_replay.rs": "4a6f50fe3ebcb4e191d2e57072d0bda75721f9573b8d896de69846272f576dd0",
+    "crates/splendor-arena/examples/decision_bench.rs": "1daafe1f4391174b393d152c97420e665a9e271b3f33ed91ee86edc598dd9ee4",
+    "crates/splendor-arena/examples/depletion_history.rs": "ee2f5773b6199260df9a777fe69235975fb2c8b3f4d2b2b1e4dff99070f5438f",
+    "crates/splendor-arena/examples/encoding_variance.rs": "d82777233cab9a57256131f6dff287e364ed3bbafd65a914da112b9650560df3",
+    "crates/splendor-arena/examples/endpoint_cost.rs": "2198f11cf37665666b9a131c66cc41ca69c8965bb6d0a06f0af1d2836002b3da",
+    "crates/splendor-arena/examples/engine_comparison.rs": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+    "crates/splendor-arena/examples/engine_profile.rs": "35e2a359fbc84f525df16726c79e8e27d693ef8f088ee25363a989edc794e2ec",
+    "crates/splendor-arena/examples/engine_trajectory.rs": "e327f382131a8a597cda90a2fa8b6768487155fcbf4276ef2be190dd89989748",
+    "crates/splendor-arena/examples/expert_data.rs": "af17c0eb373cb9b79f6c4e8f7b981ef157d4174e3d1697c3e296a6a0085385b1",
+    "crates/splendor-arena/examples/flywheel_budget_probe.rs": "6e763e4cb67f9c9b42c065210bc153cc06c27f7c8e1058cd8dda326788dd31b7",
+    "crates/splendor-arena/examples/flywheel_data.rs": "bdd12ff9d3e138447c97dd83b60b6a553fe6b970354f46f0560a005a02dc2edf",
+    "crates/splendor-arena/examples/flywheel_latency.rs": "d42eb992ed2dae2dd6beb0db594ee62b51df674f59dfd65822351668a0df5eb7",
+    "crates/splendor-arena/examples/native_policy_worker.rs": "8722a33846b4fddf6e2aa7b4d704112f248892d8bf61b688a1ad189eaae1a044",
+    "crates/splendor-arena/examples/native_rules_probe.rs": "815d41664adc48ae2cf718c4db60007f7c3f76853329857afcfa7be79298f467",
+    "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284",
+    "crates/splendor-arena/examples/neural_data.rs": "b29588e853ce5fb7007b6c41bd722432a227d312999fc5baeae99ba0f826db33",
+    "crates/splendor-arena/examples/neural_data_v2.rs": "d4dad5ca1dbcb41a2769507198b47c0183ccbb06ec58622024dd3689aaa19031",
+    "crates/splendor-arena/examples/neural_decision_bench.rs": "0886fda3ba6efb4e32abbae00da21c4d37195715f5650a769895c9fc5faf984b",
+    "crates/splendor-arena/examples/neural_latency.rs": "5804693864ed4bc21b4983050820184cf915179ab621d090b80411355ff2e19d",
+    "crates/splendor-arena/examples/neural_parity.rs": "fc59984154b7010dec76dab9c02cd7655b5b2a101c21b6ca01564ff167d8bced",
+    "crates/splendor-arena/examples/parity_export.rs": "28f6e21bd6b07b69c719d71b3529789ed028e9bea9ed864837b555b7fcb40572",
+    "crates/splendor-arena/examples/privileged_native_worker.rs": "54c790f74f0060c85482779ecae548a4c80bc4eb963a637e0e92847a2d662f7b",
+    "crates/splendor-arena/examples/return_audit.rs": "480b6c65088205e3ebe1ed4427b4202b00f598bad44293b89119357bd2986ff7",
+    "crates/splendor-arena/examples/rich_selfplay.rs": "719b7c7b2532ba2f7bbd3fd2b2c579916b62c4cbc60020eb43b8fc0ab99475b7",
+    "crates/splendor-arena/examples/rollout_audit.rs": "b531d15c5bd5e6f1712f1cb14ff3a9c9146f12c304b5eaf47e815a51138d8989",
+    "crates/splendor-arena/examples/strength_replay.rs": "d3937083c351f315be09eb4eb8a7296715820dcf08a88889004337c0e5e230c9",
+    "crates/splendor-arena/examples/strength_worker.rs": "3affdcb15132418b2109b4b907d935d6bdb5b6f849a1c155654e6799b90b4024",
+    "crates/splendor-arena/examples/teacher_repeatability.rs": "1db3c225e1d4fd5a61eda56f6eae7b96e8b7e4ecf525fce64d8b014f2431669d",
+    "crates/splendor-arena/examples/token_audit.rs": "0139129c6ce55ca19436c04a41723626e46e27353e5c184db14b79d778933d53",
+    "crates/splendor-arena/examples/transfer_information.rs": "6cf49e08d161782d9837c30694f517ec481809621660f59b912528277c05567e",
+    "crates/splendor-arena/examples/transfer_inputs.rs": "d922eb285d02c5c85798142a4a2de41a506cafda392b8253c7b45ec73aa370e6",
+    "crates/splendor-arena/examples/transfer_latency.rs": "0b084a80d413ed7b206d5a8a585b3c7caf516fdc7a15dfc2950d848d57c6d914",
+    "crates/splendor-arena/examples/transfer_parity.rs": "93644329139cc8628214f01b82e24b52c67e1529f1de5a4d7f5ff0a99dbd4fc7",
+    "crates/splendor-arena/examples/turn_limit_audit.rs": "9cc06125b93fdf2bede8855e014d2a8e1ef1327311902119568912c1eb9e5a33",
+    "crates/splendor-arena/examples/two_block_audit.rs": "6aeb53999714fec697427eff5b9f6a92fc62eb4cb3caa3d0a0868be64511931e",
+    "crates/splendor-arena/examples/validate_web_records.rs": "0701f5c3f8d40e171b69a071f37de4345758f51dfd378e0caf1e843a1d5c7871",
+    "crates/splendor-arena/examples/value_bench.rs": "0af4572045845ef96d12c80613586c6f60236593059c9e5b75b1c82fa6353dbe",
+    "crates/splendor-arena/examples/value_data.rs": "ac8ca365e32ba77c3d2d4ffe639e782e29a123bcbca0a28ad774e3b379411f3d",
+    "crates/splendor-arena/src/lib.rs": "68136780d4c27d602aecf51b1ff51eb211c5227ccd3afab65fb2ade3b9bbf69c",
+    "crates/splendor-arena/src/main.rs": "d702d057e0bb807d71240996d0aa98c9fcb01af44c3a33459a475a8513f8e89f",
+    "crates/splendor-arena/src/settings.rs": "75c3e4bc4fa8092a359007a969aa94e37a1fb7a129bcebd4b73be0d593065b32",
+    "crates/splendor-arena/tests/learned.rs": "ca692185c8e22553e5fc1bff657a5cd6066ed6764162894f5c350940bdac889a",
+    "crates/splendor-arena/tests/replays.rs": "ddce98ccf21776f6b89fdf74557993f88ed51bab3a3a8ccfa0f0595b4731bec4",
+    "crates/splendor-arena/tests/search_safety.rs": "f6de1ea9941d90a16e8afb6096dbbe5b821e5bb090a2b7fc376e5342cd802417",
+    "crates/splendor-core/Cargo.toml": "b206f2909f1317b2dba3a5c413194c3bfd2a588f77538468bf352256949cff26",
+    "crates/splendor-core/benches/engine.rs": "9aaf0c4ae347d14e3b5993595555406d795ac6bb87848082fde38725835149da",
+    "crates/splendor-core/src/benchmark_compat.rs": "cac207c9a74753ca4fb95ee15c5afe0cf5c0366695823e5398ecdb6866c1bc04",
+    "crates/splendor-core/src/data.rs": "6ae9b2144cd85b8fca86169461b96adff7abe87da7f51acb812211bdeb6b1e05",
+    "crates/splendor-core/src/fast_actions.rs": "aab226b13f2437603212348f1bf661b54a43a228e6e996ef6b0d9c263938b8cc",
+    "crates/splendor-core/src/lib.rs": "a30e1f1b6d1bac95e9f962da9e8bb939bbe840611e7ee5d503336db637120f88",
+    "crates/splendor-core/src/rng.rs": "89caa959556627f7f25c14cc3bdde38ef0830def2c577c7f7a45e42f78e8313c",
+    "crates/splendor-core/src/tests.rs": "d3f7fbed3528d2a633814b8718f0c4a28c40a7e2251bce254de4d379d6b1b611",
+    "crates/splendor-core/tests/allocations.rs": "58db79a40c2d69b73e1783a3f5ba0e742f1051ab0e550c44fd7cfe85c8925555",
+    "local/strength/external/ahinlendor/game_logic.cpp": "928d013a7395caa505d709d720d6707e90c940f490d603790a17d180cf728f51",
+    "local/strength/external/ahinlendor/game_logic.h": "4bbfd0651995e5629ac47f2d2f4f3b5b5e2db51d4ae800ca86b937f65efaab75",
+    "research/ahinlendor/engine/trajectory/ahin_trajectory.cpp": "62538da13dac2253b69c00ee992bd7e54f46b8bd28ede9678741b4d77bcf462d",
+    "research/ahinlendor/engine/trajectory/run.py": "e29632226c83246ed7739ba5454228ae2971d51268bff4aba4d02689da4b0bdc",
+    "research/engine-throughput/SUITE.json": "312c049c42e403a350ea4f91b1b6517ba963fec53dc41c6cb7c5d43d775e31fc",
+    "research/engine-throughput/ahin_profile.cpp": "5a905462c7fb83fe6f7d0bdeca594c5a185675c0b77e2ec28a63b9c2a1a5c4de",
+    "research/engine-throughput/prepare_baseline.py": "7b51bc5eb6f6985296c35feb7082ab80dda564f5b2e4ac1500011ce47bd6dc35",
+    "research/engine-throughput/run.py": "e7c46028d91d8ba7ae2a61aab2d8fcd4628c35198179290cb3778a87785fe4df",
+    "research/engine-throughput/runtime.py": "61103ca5b216786e14abf5fee9636828008af22837dcdd9b634c8c5dbdc42766",
+    "research/engine-throughput/summarize.py": "f2563ce9dff13cdb6cec010b4d65a3a4c9bf5a984d34a306025fc07fd62a4bfb",
+    "rust-toolchain.toml": "887f9be066a15585a2c583578e84b0fcb541126d81546276bad3d2ff00d61167"
+  },
+  "platform": "macOS-26.7-arm64-arm-64bit-Mach-O",
+  "load_start": [
+    6.00439453125,
+    6.3671875,
+    6.31201171875
+  ],
+  "cpu_count": 14,
+  "binaries": {
+    "local/research/engine-throughput/target/release/examples/engine_profile": "f52a64afe66abd785a059325634a373fc4d6395d4463396694743220fc65996d",
+    "local/research/engine-throughput/target/ahin_profile": "faae4c8ab196e72a4832216420d762153633342a52afd948307f80500e362b02"
+  },
+  "outcome_checks": {
+    "424287": {
+      "rust": "2",
+      "cpp": "2",
+      "matched": true
+    },
+    "424285": {
+      "rust": "1",
+      "cpp": "1",
+      "matched": true
+    },
+    "424268": {
+      "rust": "2",
+      "cpp": "2",
+      "matched": true
+    },
+    "424262": {
+      "rust": "2",
+      "cpp": "2",
+      "matched": true
+    }
+  },
+  "trace_sha256": {
+    "424287": "be32b7914da6e1389f503f87063799ce902187a54128222a7e4a06150b48a980",
+    "424285": "138ee6d3a37ca548b5e0f5bf34023f620f6f2c2c288fead98a793a006254d562",
+    "424268": "fa0cdaf4c04d20ab977c26b496766746598bedf2b3e2d7033d33ba6b3cea592d",
+    "424262": "1c34dbb446f085cd56f85c274bb783b88bff5034a5adfc6d9b7b9e9a685f6d9d"
+  },
+  "source_after": {
+    "Cargo.lock": "d67c773799284f9a65d68e488d86ec5fcf13f74e5b4759f3986e45b2d2d1c5af",
+    "Cargo.toml": "8e558d6799bd05e56252bbe3d880c878151e3fe8375e39008437af1deb0c15af",
+    "crates/splendor-agents/Cargo.toml": "57bb09203fec7abe8dd029aec6e31cbc8c74059893f07e7a1d9adcf217b98665",
+    "crates/splendor-agents/src/belief.rs": "098e79bf3ea7525b973f2de074b0d368d73347539e9e740e58d91c4ea1badc33",
+    "crates/splendor-agents/src/environment.rs": "50a8c8fb88894e1080d76542bf81902db8330b2e99b3d7f65b594a4acf4eefb6",
+    "crates/splendor-agents/src/learned.rs": "8de6ce31f67402d0f7a6d9fbfb6a24886eaaad3604179962275fa51d5e2f2645",
+    "crates/splendor-agents/src/lib.rs": "8fe7352122083a467601f150f689d7f2720a08a1de4ff0db25161d2b4ffd2ab9",
+    "crates/splendor-agents/src/models/e25.bin": "cac22fb338d7c4cc9ba2a32495023ce9ce589f5d39e32a47af78af457a5b6ddf",
+    "crates/splendor-agents/src/models/e26.bin": "ee43086382e10a21dbbbb506e20241b3f876fe3e01291f86dd5db85dee669527",
+    "crates/splendor-agents/src/models/e27.bin": "b4f8560804fa9e4a6db805656a697ef2067ddd4bc2624e77cfe379d3cbd3fb9f",
+    "crates/splendor-agents/src/models/e28.bin": "e1a70ad158e0ad4d9835379a750a0f1a8f63dae022e05839734f2c23751e46da",
+    "crates/splendor-agents/src/models/e30.bin": "142f4bc78e84d2bcb0e437b0e0c86147f9b162bbd0bac7f716271aa55a9eab39",
+    "crates/splendor-agents/src/native_environment.rs": "7fa762275cb41afb3f1288854e7b9838ff3e787f2e3305d79bc75e9803ddb558",
+    "crates/splendor-agents/src/neural.rs": "a651d1ce8bd9b3c3c65cad79ddbad01bbb00bb953471a1af4f5ce3cd5009e520",
+    "crates/splendor-agents/src/neural_search.rs": "d3d32b568fb30d00fc458de6a6acbfb285d21841d92994e878a1c7ee11e7566c",
+    "crates/splendor-agents/src/privileged_environment.rs": "c6924207222d4404665fbf6218185a239545399e052af4866582a2fd5a89949a",
+    "crates/splendor-agents/src/public_history.rs": "5bedf7b4ac143f8b85a91dfc11348a08770c86d2aad595721008ab677e6bc543",
+    "crates/splendor-agents/src/transfer/attention.rs": "46132a7e3aed2cb86e919345d060af61fb22eb19e107682a8124d7a661f10893",
+    "crates/splendor-agents/src/transfer/entity.rs": "26c29f6d6ef1bee79d40abc8f474ea849c92de3d4399b85d77f72de6050ec049",
+    "crates/splendor-agents/src/transfer/large.rs": "6bb318150da825d6817b4a1abf77f2652d5727852037758c7a25f0c28b9e200d",
+    "crates/splendor-agents/src/transfer/remote.rs": "b931f5c5e7186fd161ec9af275d44114385c8e1d9c7cc08e48356e824b97fff8",
+    "crates/splendor-agents/src/transfer.rs": "8c76d42ed94f0ddc6d384e4fc6186e0154bcd9bd079b2d53c9d99d3337cede5a",
+    "crates/splendor-agents/src/transfer_data.rs": "13edc9989e12d100993411e2be3897b1721f23de39d0d3facfc30d2b0f06159c",
+    "crates/splendor-agents/src/value_weights.rs": "b701e6ca099ffef6183fca5d70170665437b44cc62cd5af7c3efaa0d3610db1d",
+    "crates/splendor-arena/Cargo.toml": "ced022221052f3de44e3c78ccfb32725db839df65e49af693f557004f4b2d461",
+    "crates/splendor-arena/benches/arena.rs": "9a1c198157ff6837842c1e84555c16a7aef4d6998ffe705f88ec60c14ecd1f50",
+    "crates/splendor-arena/build.rs": "d551b0cf3b6fc1b34febfdb22ec1b92a0541273250864fac65042990dc410166",
+    "crates/splendor-arena/examples/agent_probe.rs": "879bf2d33fdec7e11487a27b5261da0727179dcfe313d604827668186f5b7cc3",
+    "crates/splendor-arena/examples/ahin_referee.rs": "335a1d415f442c89231ebd7f7d988c16023fa06beacf31ef9726eb985c4ca4c8",
+    "crates/splendor-arena/examples/aligned_worker.rs": "f9b6c2108f06c88238b47d3babb15fd17de9cdf0e8cdf6c5faca103f4676cab9",
+    "crates/splendor-arena/examples/benchmark_worker.rs": "6d6901817acdb7aef6446c4edf74ab27c549faf89466d752585a58384e88669a",
+    "crates/splendor-arena/examples/block_audit.rs": "32227b7149716beb1f45db11dd28b90a39f9a134c62ac80b812ae9126f66b63b",
+    "crates/splendor-arena/examples/cap_audit.rs": "27449ec1ee12f0d7afd611577834528567414b392825e0e89030f6a7ddf4a8d7",
+    "crates/splendor-arena/examples/context_replay.rs": "4a6f50fe3ebcb4e191d2e57072d0bda75721f9573b8d896de69846272f576dd0",
+    "crates/splendor-arena/examples/decision_bench.rs": "1daafe1f4391174b393d152c97420e665a9e271b3f33ed91ee86edc598dd9ee4",
+    "crates/splendor-arena/examples/depletion_history.rs": "ee2f5773b6199260df9a777fe69235975fb2c8b3f4d2b2b1e4dff99070f5438f",
+    "crates/splendor-arena/examples/encoding_variance.rs": "d82777233cab9a57256131f6dff287e364ed3bbafd65a914da112b9650560df3",
+    "crates/splendor-arena/examples/endpoint_cost.rs": "2198f11cf37665666b9a131c66cc41ca69c8965bb6d0a06f0af1d2836002b3da",
+    "crates/splendor-arena/examples/engine_comparison.rs": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+    "crates/splendor-arena/examples/engine_profile.rs": "35e2a359fbc84f525df16726c79e8e27d693ef8f088ee25363a989edc794e2ec",
+    "crates/splendor-arena/examples/engine_trajectory.rs": "e327f382131a8a597cda90a2fa8b6768487155fcbf4276ef2be190dd89989748",
+    "crates/splendor-arena/examples/expert_data.rs": "af17c0eb373cb9b79f6c4e8f7b981ef157d4174e3d1697c3e296a6a0085385b1",
+    "crates/splendor-arena/examples/flywheel_budget_probe.rs": "6e763e4cb67f9c9b42c065210bc153cc06c27f7c8e1058cd8dda326788dd31b7",
+    "crates/splendor-arena/examples/flywheel_data.rs": "bdd12ff9d3e138447c97dd83b60b6a553fe6b970354f46f0560a005a02dc2edf",
+    "crates/splendor-arena/examples/flywheel_latency.rs": "d42eb992ed2dae2dd6beb0db594ee62b51df674f59dfd65822351668a0df5eb7",
+    "crates/splendor-arena/examples/native_policy_worker.rs": "8722a33846b4fddf6e2aa7b4d704112f248892d8bf61b688a1ad189eaae1a044",
+    "crates/splendor-arena/examples/native_rules_probe.rs": "815d41664adc48ae2cf718c4db60007f7c3f76853329857afcfa7be79298f467",
+    "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284",
+    "crates/splendor-arena/examples/neural_data.rs": "b29588e853ce5fb7007b6c41bd722432a227d312999fc5baeae99ba0f826db33",
+    "crates/splendor-arena/examples/neural_data_v2.rs": "d4dad5ca1dbcb41a2769507198b47c0183ccbb06ec58622024dd3689aaa19031",
+    "crates/splendor-arena/examples/neural_decision_bench.rs": "0886fda3ba6efb4e32abbae00da21c4d37195715f5650a769895c9fc5faf984b",
+    "crates/splendor-arena/examples/neural_latency.rs": "5804693864ed4bc21b4983050820184cf915179ab621d090b80411355ff2e19d",
+    "crates/splendor-arena/examples/neural_parity.rs": "fc59984154b7010dec76dab9c02cd7655b5b2a101c21b6ca01564ff167d8bced",
+    "crates/splendor-arena/examples/parity_export.rs": "28f6e21bd6b07b69c719d71b3529789ed028e9bea9ed864837b555b7fcb40572",
+    "crates/splendor-arena/examples/privileged_native_worker.rs": "54c790f74f0060c85482779ecae548a4c80bc4eb963a637e0e92847a2d662f7b",
+    "crates/splendor-arena/examples/return_audit.rs": "480b6c65088205e3ebe1ed4427b4202b00f598bad44293b89119357bd2986ff7",
+    "crates/splendor-arena/examples/rich_selfplay.rs": "719b7c7b2532ba2f7bbd3fd2b2c579916b62c4cbc60020eb43b8fc0ab99475b7",
+    "crates/splendor-arena/examples/rollout_audit.rs": "b531d15c5bd5e6f1712f1cb14ff3a9c9146f12c304b5eaf47e815a51138d8989",
+    "crates/splendor-arena/examples/strength_replay.rs": "d3937083c351f315be09eb4eb8a7296715820dcf08a88889004337c0e5e230c9",
+    "crates/splendor-arena/examples/strength_worker.rs": "3affdcb15132418b2109b4b907d935d6bdb5b6f849a1c155654e6799b90b4024",
+    "crates/splendor-arena/examples/teacher_repeatability.rs": "1db3c225e1d4fd5a61eda56f6eae7b96e8b7e4ecf525fce64d8b014f2431669d",
+    "crates/splendor-arena/examples/token_audit.rs": "0139129c6ce55ca19436c04a41723626e46e27353e5c184db14b79d778933d53",
+    "crates/splendor-arena/examples/transfer_information.rs": "6cf49e08d161782d9837c30694f517ec481809621660f59b912528277c05567e",
+    "crates/splendor-arena/examples/transfer_inputs.rs": "d922eb285d02c5c85798142a4a2de41a506cafda392b8253c7b45ec73aa370e6",
+    "crates/splendor-arena/examples/transfer_latency.rs": "0b084a80d413ed7b206d5a8a585b3c7caf516fdc7a15dfc2950d848d57c6d914",
+    "crates/splendor-arena/examples/transfer_parity.rs": "93644329139cc8628214f01b82e24b52c67e1529f1de5a4d7f5ff0a99dbd4fc7",
+    "crates/splendor-arena/examples/turn_limit_audit.rs": "9cc06125b93fdf2bede8855e014d2a8e1ef1327311902119568912c1eb9e5a33",
+    "crates/splendor-arena/examples/two_block_audit.rs": "6aeb53999714fec697427eff5b9f6a92fc62eb4cb3caa3d0a0868be64511931e",
+    "crates/splendor-arena/examples/validate_web_records.rs": "0701f5c3f8d40e171b69a071f37de4345758f51dfd378e0caf1e843a1d5c7871",
+    "crates/splendor-arena/examples/value_bench.rs": "0af4572045845ef96d12c80613586c6f60236593059c9e5b75b1c82fa6353dbe",
+    "crates/splendor-arena/examples/value_data.rs": "ac8ca365e32ba77c3d2d4ffe639e782e29a123bcbca0a28ad774e3b379411f3d",
+    "crates/splendor-arena/src/lib.rs": "68136780d4c27d602aecf51b1ff51eb211c5227ccd3afab65fb2ade3b9bbf69c",
+    "crates/splendor-arena/src/main.rs": "d702d057e0bb807d71240996d0aa98c9fcb01af44c3a33459a475a8513f8e89f",
+    "crates/splendor-arena/src/settings.rs": "75c3e4bc4fa8092a359007a969aa94e37a1fb7a129bcebd4b73be0d593065b32",
+    "crates/splendor-arena/tests/learned.rs": "ca692185c8e22553e5fc1bff657a5cd6066ed6764162894f5c350940bdac889a",
+    "crates/splendor-arena/tests/replays.rs": "ddce98ccf21776f6b89fdf74557993f88ed51bab3a3a8ccfa0f0595b4731bec4",
+    "crates/splendor-arena/tests/search_safety.rs": "f6de1ea9941d90a16e8afb6096dbbe5b821e5bb090a2b7fc376e5342cd802417",
+    "crates/splendor-core/Cargo.toml": "b206f2909f1317b2dba3a5c413194c3bfd2a588f77538468bf352256949cff26",
+    "crates/splendor-core/benches/engine.rs": "9aaf0c4ae347d14e3b5993595555406d795ac6bb87848082fde38725835149da",
+    "crates/splendor-core/src/benchmark_compat.rs": "cac207c9a74753ca4fb95ee15c5afe0cf5c0366695823e5398ecdb6866c1bc04",
+    "crates/splendor-core/src/data.rs": "6ae9b2144cd85b8fca86169461b96adff7abe87da7f51acb812211bdeb6b1e05",
+    "crates/splendor-core/src/fast_actions.rs": "aab226b13f2437603212348f1bf661b54a43a228e6e996ef6b0d9c263938b8cc",
+    "crates/splendor-core/src/lib.rs": "a30e1f1b6d1bac95e9f962da9e8bb939bbe840611e7ee5d503336db637120f88",
+    "crates/splendor-core/src/rng.rs": "89caa959556627f7f25c14cc3bdde38ef0830def2c577c7f7a45e42f78e8313c",
+    "crates/splendor-core/src/tests.rs": "d3f7fbed3528d2a633814b8718f0c4a28c40a7e2251bce254de4d379d6b1b611",
+    "crates/splendor-core/tests/allocations.rs": "58db79a40c2d69b73e1783a3f5ba0e742f1051ab0e550c44fd7cfe85c8925555",
+    "local/strength/external/ahinlendor/game_logic.cpp": "928d013a7395caa505d709d720d6707e90c940f490d603790a17d180cf728f51",
+    "local/strength/external/ahinlendor/game_logic.h": "4bbfd0651995e5629ac47f2d2f4f3b5b5e2db51d4ae800ca86b937f65efaab75",
+    "research/ahinlendor/engine/trajectory/ahin_trajectory.cpp": "62538da13dac2253b69c00ee992bd7e54f46b8bd28ede9678741b4d77bcf462d",
+    "research/ahinlendor/engine/trajectory/run.py": "e29632226c83246ed7739ba5454228ae2971d51268bff4aba4d02689da4b0bdc",
+    "research/engine-throughput/SUITE.json": "312c049c42e403a350ea4f91b1b6517ba963fec53dc41c6cb7c5d43d775e31fc",
+    "research/engine-throughput/ahin_profile.cpp": "5a905462c7fb83fe6f7d0bdeca594c5a185675c0b77e2ec28a63b9c2a1a5c4de",
+    "research/engine-throughput/prepare_baseline.py": "7b51bc5eb6f6985296c35feb7082ab80dda564f5b2e4ac1500011ce47bd6dc35",
+    "research/engine-throughput/run.py": "e7c46028d91d8ba7ae2a61aab2d8fcd4628c35198179290cb3778a87785fe4df",
+    "research/engine-throughput/runtime.py": "61103ca5b216786e14abf5fee9636828008af22837dcdd9b634c8c5dbdc42766",
+    "research/engine-throughput/summarize.py": "f2563ce9dff13cdb6cec010b4d65a3a4c9bf5a984d34a306025fc07fd62a4bfb",
+    "rust-toolchain.toml": "887f9be066a15585a2c583578e84b0fcb541126d81546276bad3d2ff00d61167"
+  },
+  "source_stable": true,
+  "binary_after": {
+    "local/research/engine-throughput/target/release/examples/engine_profile": "f52a64afe66abd785a059325634a373fc4d6395d4463396694743220fc65996d",
+    "local/research/engine-throughput/target/ahin_profile": "faae4c8ab196e72a4832216420d762153633342a52afd948307f80500e362b02"
+  },
+  "binary_stable": true,
+  "all_commands_succeeded": true,
+  "end_utc": "2026-10-06T16:38:44.741805+00:00"
+}

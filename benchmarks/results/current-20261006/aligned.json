@@ -1,0 +1,3219 @@
+{
+  "status": "complete",
+  "profile": "seal256-intersection-v1",
+  "start_utc": "2026-10-06T16:20:26.990705+00:00",
+  "source_commit": "6aa20663fb9077fb4598655c656af8f0a1512086",
+  "source_files": {
+    "Cargo.lock": "d67c773799284f9a65d68e488d86ec5fcf13f74e5b4759f3986e45b2d2d1c5af",
+    "Cargo.toml": "8e558d6799bd05e56252bbe3d880c878151e3fe8375e39008437af1deb0c15af",
+    "benchmarks/PROFILES.md": "ef24275e9ff0afd61fa88eddb23b99c2307c244fd12cc10f211f7c8daacfa3ea",
+    "benchmarks/adapters/ahin_aligned.cpp": "9bf380812581900a1632021975a10786383f61e4f0eeaa3dcc8d1f9de18993aa",
+    "benchmarks/adapters/external_seal256_game.cpp": "f62ac683c9bd0b483b45cad84f5b138060d19322aa4d6496862142bf27839d32",
+    "benchmarks/make_corpus.py": "301a5fbab44e18336a60b9d96717bcf98f7e6217533f32259cff78e57582e032",
+    "benchmarks/refresh_aligned.py": "dbc72631fb9300cdd243280640ecbbaab1769522b7d0f39b483c7492c8a2f35b",
+    "benchmarks/run.py": "723b986551d4ffbbbaf4a9408a46bc6d3c9d9641ef0dbe3d0c9f395a1a086e30",
+    "crates/splendor-agents/Cargo.toml": "57bb09203fec7abe8dd029aec6e31cbc8c74059893f07e7a1d9adcf217b98665",
+    "crates/splendor-agents/src/belief.rs": "098e79bf3ea7525b973f2de074b0d368d73347539e9e740e58d91c4ea1badc33",
+    "crates/splendor-agents/src/environment.rs": "50a8c8fb88894e1080d76542bf81902db8330b2e99b3d7f65b594a4acf4eefb6",
+    "crates/splendor-agents/src/learned.rs": "8de6ce31f67402d0f7a6d9fbfb6a24886eaaad3604179962275fa51d5e2f2645",
+    "crates/splendor-agents/src/lib.rs": "8fe7352122083a467601f150f689d7f2720a08a1de4ff0db25161d2b4ffd2ab9",
+    "crates/splendor-agents/src/native_environment.rs": "7fa762275cb41afb3f1288854e7b9838ff3e787f2e3305d79bc75e9803ddb558",
+    "crates/splendor-agents/src/neural.rs": "a651d1ce8bd9b3c3c65cad79ddbad01bbb00bb953471a1af4f5ce3cd5009e520",
+    "crates/splendor-agents/src/neural_search.rs": "d3d32b568fb30d00fc458de6a6acbfb285d21841d92994e878a1c7ee11e7566c",
+    "crates/splendor-agents/src/privileged_environment.rs": "c6924207222d4404665fbf6218185a239545399e052af4866582a2fd5a89949a",
+    "crates/splendor-agents/src/public_history.rs": "5bedf7b4ac143f8b85a91dfc11348a08770c86d2aad595721008ab677e6bc543",
+    "crates/splendor-agents/src/transfer/attention.rs": "46132a7e3aed2cb86e919345d060af61fb22eb19e107682a8124d7a661f10893",
+    "crates/splendor-agents/src/transfer/entity.rs": "26c29f6d6ef1bee79d40abc8f474ea849c92de3d4399b85d77f72de6050ec049",
+    "crates/splendor-agents/src/transfer/large.rs": "6bb318150da825d6817b4a1abf77f2652d5727852037758c7a25f0c28b9e200d",
+    "crates/splendor-agents/src/transfer/remote.rs": "b931f5c5e7186fd161ec9af275d44114385c8e1d9c7cc08e48356e824b97fff8",
+    "crates/splendor-agents/src/transfer.rs": "8c76d42ed94f0ddc6d384e4fc6186e0154bcd9bd079b2d53c9d99d3337cede5a",
+    "crates/splendor-agents/src/transfer_data.rs": "13edc9989e12d100993411e2be3897b1721f23de39d0d3facfc30d2b0f06159c",
+    "crates/splendor-agents/src/value_weights.rs": "b701e6ca099ffef6183fca5d70170665437b44cc62cd5af7c3efaa0d3610db1d",
+    "crates/splendor-arena/Cargo.toml": "ced022221052f3de44e3c78ccfb32725db839df65e49af693f557004f4b2d461",
+    "crates/splendor-arena/benches/arena.rs": "9a1c198157ff6837842c1e84555c16a7aef4d6998ffe705f88ec60c14ecd1f50",
+    "crates/splendor-arena/build.rs": "d551b0cf3b6fc1b34febfdb22ec1b92a0541273250864fac65042990dc410166",
+    "crates/splendor-arena/examples/agent_probe.rs": "879bf2d33fdec7e11487a27b5261da0727179dcfe313d604827668186f5b7cc3",
+    "crates/splendor-arena/examples/ahin_referee.rs": "335a1d415f442c89231ebd7f7d988c16023fa06beacf31ef9726eb985c4ca4c8",
+    "crates/splendor-arena/examples/aligned_worker.rs": "f9b6c2108f06c88238b47d3babb15fd17de9cdf0e8cdf6c5faca103f4676cab9",
+    "crates/splendor-arena/examples/benchmark_worker.rs": "6d6901817acdb7aef6446c4edf74ab27c549faf89466d752585a58384e88669a",
+    "crates/splendor-arena/examples/block_audit.rs": "32227b7149716beb1f45db11dd28b90a39f9a134c62ac80b812ae9126f66b63b",
+    "crates/splendor-arena/examples/cap_audit.rs": "27449ec1ee12f0d7afd611577834528567414b392825e0e89030f6a7ddf4a8d7",
+    "crates/splendor-arena/examples/context_replay.rs": "4a6f50fe3ebcb4e191d2e57072d0bda75721f9573b8d896de69846272f576dd0",
+    "crates/splendor-arena/examples/decision_bench.rs": "1daafe1f4391174b393d152c97420e665a9e271b3f33ed91ee86edc598dd9ee4",
+    "crates/splendor-arena/examples/depletion_history.rs": "ee2f5773b6199260df9a777fe69235975fb2c8b3f4d2b2b1e4dff99070f5438f",
+    "crates/splendor-arena/examples/encoding_variance.rs": "d82777233cab9a57256131f6dff287e364ed3bbafd65a914da112b9650560df3",
+    "crates/splendor-arena/examples/endpoint_cost.rs": "2198f11cf37665666b9a131c66cc41ca69c8965bb6d0a06f0af1d2836002b3da",
+    "crates/splendor-arena/examples/engine_comparison.rs": "33a8c2bbbeb1cb3156ec0ef584e4200e75b1404ddc8c327e30e6a6a3513cfc9c",
+    "crates/splendor-arena/examples/engine_profile.rs": "35e2a359fbc84f525df16726c79e8e27d693ef8f088ee25363a989edc794e2ec",
+    "crates/splendor-arena/examples/engine_trajectory.rs": "e327f382131a8a597cda90a2fa8b6768487155fcbf4276ef2be190dd89989748",
+    "crates/splendor-arena/examples/expert_data.rs": "af17c0eb373cb9b79f6c4e8f7b981ef157d4174e3d1697c3e296a6a0085385b1",
+    "crates/splendor-arena/examples/flywheel_budget_probe.rs": "6e763e4cb67f9c9b42c065210bc153cc06c27f7c8e1058cd8dda326788dd31b7",
+    "crates/splendor-arena/examples/flywheel_data.rs": "bdd12ff9d3e138447c97dd83b60b6a553fe6b970354f46f0560a005a02dc2edf",
+    "crates/splendor-arena/examples/flywheel_latency.rs": "d42eb992ed2dae2dd6beb0db594ee62b51df674f59dfd65822351668a0df5eb7",
+    "crates/splendor-arena/examples/native_policy_worker.rs": "8722a33846b4fddf6e2aa7b4d704112f248892d8bf61b688a1ad189eaae1a044",
+    "crates/splendor-arena/examples/native_rules_probe.rs": "815d41664adc48ae2cf718c4db60007f7c3f76853329857afcfa7be79298f467",
+    "crates/splendor-arena/examples/native_wire/mod.rs": "04e500f2917e1667878633ad5c1874bd5e6eb64be6a5aa7ddc1d633408e78284",
+    "crates/splendor-arena/examples/neural_data.rs": "b29588e853ce5fb7007b6c41bd722432a227d312999fc5baeae99ba0f826db33",
+    "crates/splendor-arena/examples/neural_data_v2.rs": "d4dad5ca1dbcb41a2769507198b47c0183ccbb06ec58622024dd3689aaa19031",
+    "crates/splendor-arena/examples/neural_decision_bench.rs": "0886fda3ba6efb4e32abbae00da21c4d37195715f5650a769895c9fc5faf984b",
+    "crates/splendor-arena/examples/neural_latency.rs": "5804693864ed4bc21b4983050820184cf915179ab621d090b80411355ff2e19d",
+    "crates/splendor-arena/examples/neural_parity.rs": "fc59984154b7010dec76dab9c02cd7655b5b2a101c21b6ca01564ff167d8bced",
+    "crates/splendor-arena/examples/parity_export.rs": "28f6e21bd6b07b69c719d71b3529789ed028e9bea9ed864837b555b7fcb40572",
+    "crates/splendor-arena/examples/privileged_native_worker.rs": "54c790f74f0060c85482779ecae548a4c80bc4eb963a637e0e92847a2d662f7b",
+    "crates/splendor-arena/examples/return_audit.rs": "480b6c65088205e3ebe1ed4427b4202b00f598bad44293b89119357bd2986ff7",
+    "crates/splendor-arena/examples/rich_selfplay.rs": "719b7c7b2532ba2f7bbd3fd2b2c579916b62c4cbc60020eb43b8fc0ab99475b7",
+    "crates/splendor-arena/examples/rollout_audit.rs": "b531d15c5bd5e6f1712f1cb14ff3a9c9146f12c304b5eaf47e815a51138d8989",
+    "crates/splendor-arena/examples/strength_replay.rs": "d3937083c351f315be09eb4eb8a7296715820dcf08a88889004337c0e5e230c9",
+    "crates/splendor-arena/examples/strength_worker.rs": "3affdcb15132418b2109b4b907d935d6bdb5b6f849a1c155654e6799b90b4024",
+    "crates/splendor-arena/examples/teacher_repeatability.rs": "1db3c225e1d4fd5a61eda56f6eae7b96e8b7e4ecf525fce64d8b014f2431669d",
+    "crates/splendor-arena/examples/token_audit.rs": "0139129c6ce55ca19436c04a41723626e46e27353e5c184db14b79d778933d53",
+    "crates/splendor-arena/examples/transfer_information.rs": "6cf49e08d161782d9837c30694f517ec481809621660f59b912528277c05567e",
+    "crates/splendor-arena/examples/transfer_inputs.rs": "d922eb285d02c5c85798142a4a2de41a506cafda392b8253c7b45ec73aa370e6",
+    "crates/splendor-arena/examples/transfer_latency.rs": "0b084a80d413ed7b206d5a8a585b3c7caf516fdc7a15dfc2950d848d57c6d914",
+    "crates/splendor-arena/examples/transfer_parity.rs": "93644329139cc8628214f01b82e24b52c67e1529f1de5a4d7f5ff0a99dbd4fc7",
+    "crates/splendor-arena/examples/turn_limit_audit.rs": "9cc06125b93fdf2bede8855e014d2a8e1ef1327311902119568912c1eb9e5a33",
+    "crates/splendor-arena/examples/two_block_audit.rs": "6aeb53999714fec697427eff5b9f6a92fc62eb4cb3caa3d0a0868be64511931e",
+    "crates/splendor-arena/examples/validate_web_records.rs": "0701f5c3f8d40e171b69a071f37de4345758f51dfd378e0caf1e843a1d5c7871",
+    "crates/splendor-arena/examples/value_bench.rs": "0af4572045845ef96d12c80613586c6f60236593059c9e5b75b1c82fa6353dbe",
+    "crates/splendor-arena/examples/value_data.rs": "ac8ca365e32ba77c3d2d4ffe639e782e29a123bcbca0a28ad774e3b379411f3d",
+    "crates/splendor-arena/src/lib.rs": "68136780d4c27d602aecf51b1ff51eb211c5227ccd3afab65fb2ade3b9bbf69c",
+    "crates/splendor-arena/src/main.rs": "d702d057e0bb807d71240996d0aa98c9fcb01af44c3a33459a475a8513f8e89f",
+    "crates/splendor-arena/src/settings.rs": "75c3e4bc4fa8092a359007a969aa94e37a1fb7a129bcebd4b73be0d593065b32",
+    "crates/splendor-arena/tests/learned.rs": "ca692185c8e22553e5fc1bff657a5cd6066ed6764162894f5c350940bdac889a",
+    "crates/splendor-arena/tests/replays.rs": "ddce98ccf21776f6b89fdf74557993f88ed51bab3a3a8ccfa0f0595b4731bec4",
+    "crates/splendor-arena/tests/search_safety.rs": "f6de1ea9941d90a16e8afb6096dbbe5b821e5bb090a2b7fc376e5342cd802417",
+    "crates/splendor-core/Cargo.toml": "b206f2909f1317b2dba3a5c413194c3bfd2a588f77538468bf352256949cff26",
+    "crates/splendor-core/benches/engine.rs": "9aaf0c4ae347d14e3b5993595555406d795ac6bb87848082fde38725835149da",
+    "crates/splendor-core/src/benchmark_compat.rs": "cac207c9a74753ca4fb95ee15c5afe0cf5c0366695823e5398ecdb6866c1bc04",
+    "crates/splendor-core/src/data.rs": "6ae9b2144cd85b8fca86169461b96adff7abe87da7f51acb812211bdeb6b1e05",
+    "crates/splendor-core/src/fast_actions.rs": "aab226b13f2437603212348f1bf661b54a43a228e6e996ef6b0d9c263938b8cc",
+    "crates/splendor-core/src/lib.rs": "a30e1f1b6d1bac95e9f962da9e8bb939bbe840611e7ee5d503336db637120f88",
+    "crates/splendor-core/src/rng.rs": "89caa959556627f7f25c14cc3bdde38ef0830def2c577c7f7a45e42f78e8313c",
+    "crates/splendor-core/src/tests.rs": "d3f7fbed3528d2a633814b8718f0c4a28c40a7e2251bce254de4d379d6b1b611",
+    "crates/splendor-core/tests/allocations.rs": "58db79a40c2d69b73e1783a3f5ba0e742f1051ab0e550c44fd7cfe85c8925555",
+    "local/benchmarks/external/seal256/src/game_state.cpp": "70ab114ac2b626f3a1a6818c8ce6d7f98c50cb99558b1a8d53585f2af3f63c73",
+    "local/benchmarks/external/seal256/src/game_state.h": "799cef55f2ab5d768bb3bc1ce4181c6c1052a57c1eac36e1801f9197bb9981f0",
+    "local/benchmarks/external/seal256/src/json.hpp": "e7ca7e6c43eadf5c68ae5417149ab83ba185f0344c2f1d1beb16fe710ea11a3c",
+    "local/benchmarks/external/seal256/src/splendor.cpp": "d73678677d89981804443e8743c1952725c2f78c7697ecb80325994355a44197",
+    "local/benchmarks/external/seal256/src/splendor.h": "55ed3b6cde5cfe1d317fc3daa987d659b791163eb4b95ba2b088351243b0cad0",
+    "local/strength/external/ahinlendor/game_logic.cpp": "928d013a7395caa505d709d720d6707e90c940f490d603790a17d180cf728f51",
+    "local/strength/external/ahinlendor/game_logic.h": "4bbfd0651995e5629ac47f2d2f4f3b5b5e2db51d4ae800ca86b937f65efaab75",
+    "rust-toolchain.toml": "887f9be066a15585a2c583578e84b0fcb541126d81546276bad3d2ff00d61167"
+  },
+  "binaries": {
+    "splendorust": "7c39f09a0f2dc64e4afb61aab075e51f612dbf7f66205650c09d20b8ae3596fe",
+    "seal256": "6de882d95d84075b0105108920e28f5c24c3a18db84ffe071b6af1b466750ebb",
+    "ahinlendor": "0272d0e933328684e9d5c6340dbc7857bb19db9fea82c75cbf00435621673829"
+  },
+  "machine": {
+    "os": "macOS-26.7-arm64-arm-64bit-Mach-O",
+    "cpu": "Apple M4 Pro",
+    "logical_cores": 14,
+    "load_start": [
+      6.9814453125,
+      6.17822265625,
+      5.94189453125
+    ],
+    "load_finish": [
+      5.41796875,
+      6.4248046875,
+      6.3095703125
+    ]
+  },
+  "versions": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+    "clang": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n"
+  },
+  "threads": 1,
+  "repetitions": 7,
+  "pilots": [
+    {
+      "policy": "random",
+      "engine": "splendorust",
+      "count": 2048,
+      "seconds": 0.016464042,
+      "completed": 1329,
+      "turns": 114963,
+      "statuses": {
+        "profile_blocked": 586,
+        "complete": 1329,
+        "no_legal_action": 2,
+        "unsupported_noble_choice": 131
+      },
+      "record_set_sha256": "8ae2b6ce76ca291ddb240b8e9ca64f479f0e8f81002ea819bc804a0ddd8facd2",
+      "load": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ]
+    },
+    {
+      "policy": "random",
+      "engine": "seal256",
+      "count": 2048,
+      "seconds": 0.058564875,
+      "completed": 1329,
+      "turns": 114963,
+      "statuses": {
+        "profile_blocked": 586,
+        "complete": 1329,
+        "no_legal_action": 2,
+        "unsupported_noble_choice": 131
+      },
+      "record_set_sha256": "8ae2b6ce76ca291ddb240b8e9ca64f479f0e8f81002ea819bc804a0ddd8facd2",
+      "load": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ]
+    },
+    {
+      "policy": "random",
+      "engine": "ahinlendor",
+      "count": 2048,
+      "seconds": 0.035963666,
+      "completed": 1329,
+      "turns": 114963,
+      "statuses": {
+        "profile_blocked": 586,
+        "complete": 1329,
+        "no_legal_action": 2,
+        "unsupported_noble_choice": 131
+      },
+      "record_set_sha256": "8ae2b6ce76ca291ddb240b8e9ca64f479f0e8f81002ea819bc804a0ddd8facd2",
+      "load": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ]
+    },
+    {
+      "policy": "fixed",
+      "engine": "splendorust",
+      "count": 2048,
+      "seconds": 0.020868541,
+      "completed": 1634,
+      "turns": 122686,
+      "statuses": {
+        "complete": 1634,
+        "unsupported_noble_choice": 327,
+        "profile_blocked": 87
+      },
+      "record_set_sha256": "bbd1176b79e52861cd93323a1f95629c84d644a1a841757e1bdfe077dd7d87ad",
+      "load": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ]
+    },
+    {
+      "policy": "fixed",
+      "engine": "seal256",
+      "count": 2048,
+      "seconds": 0.071172083,
+      "completed": 1634,
+      "turns": 122686,
+      "statuses": {
+        "complete": 1634,
+        "unsupported_noble_choice": 327,
+        "profile_blocked": 87
+      },
+      "record_set_sha256": "bbd1176b79e52861cd93323a1f95629c84d644a1a841757e1bdfe077dd7d87ad",
+      "load": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ]
+    },
+    {
+      "policy": "fixed",
+      "engine": "ahinlendor",
+      "count": 2048,
+      "seconds": 0.04693225,
+      "completed": 1634,
+      "turns": 122686,
+      "statuses": {
+        "complete": 1634,
+        "unsupported_noble_choice": 327,
+        "profile_blocked": 87
+      },
+      "record_set_sha256": "bbd1176b79e52861cd93323a1f95629c84d644a1a841757e1bdfe077dd7d87ad",
+      "load": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "policy": "random",
+      "engine": "splendorust",
+      "count": 1024,
+      "seconds": 0.027337958,
+      "completed": 670,
+      "turns": 57574,
+      "statuses": {
+        "profile_blocked": 280,
+        "complete": 670,
+        "unsupported_noble_choice": 74
+      },
+      "record_set_sha256": "cf5e0d8b888388b6197b841a68f48fcbe2d41c2772fe15a3c11820bd98d465dc",
+      "load": [
+        6.9814453125,
+        6.17822265625,
+        5.94189453125
+      ],
+      "exact_trace_match": true
+    },
+    {
+      "policy": "random",
+      "engine": "seal256",
+      "count": 1024,
+      "seconds": 0.393515416,
+      "completed": 670,
+      "turns": 57574,
+      "statuses": {
+        "profile_blocked": 280,
+        "complete": 670,
+        "unsupported_noble_choice": 74
+      },
+      "record_set_sha256": "cf5e0d8b888388b6197b841a68f48fcbe2d41c2772fe15a3c11820bd98d465dc",
+      "load": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "exact_trace_match": true
+    },
+    {
+      "policy": "random",
+      "engine": "ahinlendor",
+      "count": 1024,
+      "seconds": 0.383287625,
+      "completed": 670,
+      "turns": 57574,
+      "statuses": {
+        "profile_blocked": 280,
+        "complete": 670,
+        "unsupported_noble_choice": 74
+      },
+      "record_set_sha256": "cf5e0d8b888388b6197b841a68f48fcbe2d41c2772fe15a3c11820bd98d465dc",
+      "load": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "exact_trace_match": true
+    },
+    {
+      "policy": "fixed",
+      "engine": "splendorust",
+      "count": 1024,
+      "seconds": 0.029040708,
+      "completed": 815,
+      "turns": 60833,
+      "statuses": {
+        "complete": 815,
+        "unsupported_noble_choice": 155,
+        "profile_blocked": 54
+      },
+      "record_set_sha256": "348f05f5bbf3b9f4205d047e3d1813350e3c21d6b8d40a8df1b3d2b18482fa10",
+      "load": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "exact_trace_match": true
+    },
+    {
+      "policy": "fixed",
+      "engine": "seal256",
+      "count": 1024,
+      "seconds": 0.428612167,
+      "completed": 815,
+      "turns": 60833,
+      "statuses": {
+        "complete": 815,
+        "unsupported_noble_choice": 155,
+        "profile_blocked": 54
+      },
+      "record_set_sha256": "348f05f5bbf3b9f4205d047e3d1813350e3c21d6b8d40a8df1b3d2b18482fa10",
+      "load": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "exact_trace_match": true
+    },
+    {
+      "policy": "fixed",
+      "engine": "ahinlendor",
+      "count": 1024,
+      "seconds": 0.404241,
+      "completed": 815,
+      "turns": 60833,
+      "statuses": {
+        "complete": 815,
+        "unsupported_noble_choice": 155,
+        "profile_blocked": 54
+      },
+      "record_set_sha256": "348f05f5bbf3b9f4205d047e3d1813350e3c21d6b8d40a8df1b3d2b18482fa10",
+      "load": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "exact_trace_match": true
+    }
+  ],
+  "commands": [
+    {
+      "engine": "splendorust",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1",
+        "--trace",
+        "--check"
+      ],
+      "load_before": [
+        6.9814453125,
+        6.17822265625,
+        5.94189453125
+      ],
+      "utc": "2026-10-06T16:20:27.203478+00:00",
+      "exit": 0,
+      "process_seconds": 0.4555975419934839,
+      "load_after": [
+        6.9814453125,
+        6.17822265625,
+        5.94189453125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1",
+        "--trace"
+      ],
+      "load_before": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "utc": "2026-10-06T16:20:28.829923+00:00",
+      "exit": 0,
+      "process_seconds": 0.7268841250333935,
+      "load_after": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1",
+        "--trace"
+      ],
+      "load_before": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "utc": "2026-10-06T16:20:30.056629+00:00",
+      "exit": 0,
+      "process_seconds": 0.6741036251187325,
+      "load_after": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1",
+        "--trace",
+        "--check"
+      ],
+      "load_before": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "utc": "2026-10-06T16:20:31.284339+00:00",
+      "exit": 0,
+      "process_seconds": 0.4577516249846667,
+      "load_after": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1",
+        "--trace"
+      ],
+      "load_before": [
+        6.90283203125,
+        6.1748046875,
+        5.94189453125
+      ],
+      "utc": "2026-10-06T16:20:33.076100+00:00",
+      "exit": 0,
+      "process_seconds": 0.7708549171220511,
+      "load_after": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "trace",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/trace.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1",
+        "--trace"
+      ],
+      "load_before": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "utc": "2026-10-06T16:20:34.406783+00:00",
+      "exit": 0,
+      "process_seconds": 0.7243094579316676,
+      "load_after": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "utc": "2026-10-06T16:20:36.315703+00:00",
+      "exit": 0,
+      "process_seconds": 0.07933770795352757,
+      "load_after": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "utc": "2026-10-06T16:20:36.416946+00:00",
+      "exit": 0,
+      "process_seconds": 0.13254466699436307,
+      "load_after": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "utc": "2026-10-06T16:20:36.572723+00:00",
+      "exit": 0,
+      "process_seconds": 0.1324239168316126,
+      "load_after": [
+        6.91015625,
+        6.1884765625,
+        5.94775390625
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.78125,
+        6.19482421875,
+        5.95361328125
+      ],
+      "utc": "2026-10-06T16:20:50.109744+00:00",
+      "exit": 0,
+      "process_seconds": 4.646750624990091,
+      "load_after": [
+        6.87841796875,
+        6.224609375,
+        5.96533203125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.4912109375,
+        6.60791015625,
+        6.10498046875
+      ],
+      "utc": "2026-10-06T16:21:07.147495+00:00",
+      "exit": 0,
+      "process_seconds": 13.584766707848758,
+      "load_after": [
+        8.74658203125,
+        6.76953125,
+        6.17138671875
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        9.1669921875,
+        6.88916015625,
+        6.216796875
+      ],
+      "utc": "2026-10-06T16:21:27.780481+00:00",
+      "exit": 0,
+      "process_seconds": 10.452242583036423,
+      "load_after": [
+        9.44482421875,
+        7.044921875,
+        6.28271484375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        9.4091796875,
+        7.0771484375,
+        6.29833984375
+      ],
+      "utc": "2026-10-06T16:21:45.375412+00:00",
+      "exit": 0,
+      "process_seconds": 4.415995999937877,
+      "load_after": [
+        8.7353515625,
+        6.97607421875,
+        6.26708984375
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.83642578125,
+        7.02587890625,
+        6.28857421875
+      ],
+      "utc": "2026-10-06T16:21:57.506800+00:00",
+      "exit": 0,
+      "process_seconds": 9.318418165901676,
+      "load_after": [
+        8.3388671875,
+        6.97607421875,
+        6.27880859375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.8125,
+        6.90966796875,
+        6.26318359375
+      ],
+      "utc": "2026-10-06T16:22:13.765008+00:00",
+      "exit": 0,
+      "process_seconds": 13.159181625116616,
+      "load_after": [
+        7.29296875,
+        6.82958984375,
+        6.24169921875
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.93359375,
+        6.7685546875,
+        6.22705078125
+      ],
+      "utc": "2026-10-06T16:22:34.205921+00:00",
+      "exit": 0,
+      "process_seconds": 9.245421415893361,
+      "load_after": [
+        6.3408203125,
+        6.64453125,
+        6.18896484375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.1533203125,
+        6.6005859375,
+        6.17578125
+      ],
+      "utc": "2026-10-06T16:22:50.445228+00:00",
+      "exit": 0,
+      "process_seconds": 4.34680641698651,
+      "load_after": [
+        6.220703125,
+        6.60693359375,
+        6.18017578125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.88232421875,
+        6.5302734375,
+        6.1552734375
+      ],
+      "utc": "2026-10-06T16:23:02.704224+00:00",
+      "exit": 0,
+      "process_seconds": 12.826294207945466,
+      "load_after": [
+        5.9873046875,
+        6.52001953125,
+        6.158203125
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.98828125,
+        6.51123046875,
+        6.1572265625
+      ],
+      "utc": "2026-10-06T16:23:22.901196+00:00",
+      "exit": 0,
+      "process_seconds": 9.321503250161186,
+      "load_after": [
+        6.61083984375,
+        6.6259765625,
+        6.20166015625
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.58349609375,
+        6.62060546875,
+        6.20458984375
+      ],
+      "utc": "2026-10-06T16:23:39.580221+00:00",
+      "exit": 0,
+      "process_seconds": 13.09808975015767,
+      "load_after": [
+        6.54150390625,
+        6.61474609375,
+        6.20751953125
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.0703125,
+        6.51171875,
+        6.17529296875
+      ],
+      "utc": "2026-10-06T16:24:00.089476+00:00",
+      "exit": 0,
+      "process_seconds": 4.407867332920432,
+      "load_after": [
+        5.744140625,
+        6.4365234375,
+        6.150390625
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.84423828125,
+        6.44580078125,
+        6.1552734375
+      ],
+      "utc": "2026-10-06T16:24:12.635713+00:00",
+      "exit": 0,
+      "process_seconds": 12.943470541853458,
+      "load_after": [
+        5.6875,
+        6.37548828125,
+        6.134765625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.47216796875,
+        6.3193359375,
+        6.1162109375
+      ],
+      "utc": "2026-10-06T16:24:33.003750+00:00",
+      "exit": 0,
+      "process_seconds": 9.217614582972601,
+      "load_after": [
+        5.572265625,
+        6.3095703125,
+        6.1142578125
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.79150390625,
+        6.33203125,
+        6.1240234375
+      ],
+      "utc": "2026-10-06T16:24:49.673784+00:00",
+      "exit": 0,
+      "process_seconds": 4.392835666891187,
+      "load_after": [
+        5.64794921875,
+        6.29296875,
+        6.111328125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.515625,
+        6.2548828125,
+        6.0986328125
+      ],
+      "utc": "2026-10-06T16:25:02.112577+00:00",
+      "exit": 0,
+      "process_seconds": 12.901654332876205,
+      "load_after": [
+        5.5419921875,
+        6.2255859375,
+        6.08984375
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        5.65869140625,
+        6.23828125,
+        6.0947265625
+      ],
+      "utc": "2026-10-06T16:25:22.561234+00:00",
+      "exit": 0,
+      "process_seconds": 4.311348667135462,
+      "load_after": [
+        5.685546875,
+        6.23388671875,
+        6.09375
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.04736328125,
+        6.2919921875,
+        6.115234375
+      ],
+      "utc": "2026-10-06T16:25:34.944599+00:00",
+      "exit": 0,
+      "process_seconds": 9.483670083107427,
+      "load_after": [
+        7.234375,
+        6.53076171875,
+        6.201171875
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.81494140625,
+        6.455078125,
+        6.17626953125
+      ],
+      "utc": "2026-10-06T16:25:51.878691+00:00",
+      "exit": 0,
+      "process_seconds": 4.489860709058121,
+      "load_after": [
+        6.42919921875,
+        6.380859375,
+        6.1513671875
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.689453125,
+        6.4345703125,
+        6.1728515625
+      ],
+      "utc": "2026-10-06T16:26:04.568733+00:00",
+      "exit": 0,
+      "process_seconds": 13.39101625001058,
+      "load_after": [
+        6.5634765625,
+        6.4189453125,
+        6.169921875
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/random.json",
+        "--policy",
+        "random",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.33544921875,
+        6.3720703125,
+        6.15576171875
+      ],
+      "utc": "2026-10-06T16:26:25.250405+00:00",
+      "exit": 0,
+      "process_seconds": 10.546221541939303,
+      "load_after": [
+        8.53173828125,
+        6.82470703125,
+        6.31787109375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "utc": "2026-10-06T16:26:43.857893+00:00",
+      "exit": 0,
+      "process_seconds": 0.07871595793403685,
+      "load_after": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "utc": "2026-10-06T16:26:43.959775+00:00",
+      "exit": 0,
+      "process_seconds": 0.1308764589484781,
+      "load_after": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "pilot",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/pilot.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "utc": "2026-10-06T16:26:44.113003+00:00",
+      "exit": 0,
+      "process_seconds": 0.1319349999539554,
+      "load_after": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.27685546875,
+        6.88232421875,
+        6.349609375
+      ],
+      "utc": "2026-10-06T16:26:53.779834+00:00",
+      "exit": 0,
+      "process_seconds": 3.9188382499851286,
+      "load_after": [
+        8.27685546875,
+        6.88232421875,
+        6.349609375
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.4482421875,
+        6.9677734375,
+        6.3857421875
+      ],
+      "utc": "2026-10-06T16:27:08.159230+00:00",
+      "exit": 0,
+      "process_seconds": 11.51839291700162,
+      "load_after": [
+        8.126953125,
+        6.96923828125,
+        6.39599609375
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.79638671875,
+        6.919921875,
+        6.3818359375
+      ],
+      "utc": "2026-10-06T16:27:25.751410+00:00",
+      "exit": 0,
+      "process_seconds": 8.458305124891922,
+      "load_after": [
+        7.45263671875,
+        6.873046875,
+        6.37109375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.416015625,
+        6.875,
+        6.37451171875
+      ],
+      "utc": "2026-10-06T16:27:40.105962+00:00",
+      "exit": 0,
+      "process_seconds": 4.012277042027563,
+      "load_after": [
+        7.06201171875,
+        6.810546875,
+        6.3544921875
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.576171875,
+        6.7138671875,
+        6.32275390625
+      ],
+      "utc": "2026-10-06T16:27:50.723382+00:00",
+      "exit": 0,
+      "process_seconds": 8.781925749965012,
+      "load_after": [
+        6.240234375,
+        6.6396484375,
+        6.30126953125
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.060546875,
+        6.595703125,
+        6.28759765625
+      ],
+      "utc": "2026-10-06T16:28:05.425326+00:00",
+      "exit": 0,
+      "process_seconds": 11.695292999967933,
+      "load_after": [
+        6.04443359375,
+        6.5751953125,
+        6.28369140625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.20068359375,
+        6.5986328125,
+        6.29345703125
+      ],
+      "utc": "2026-10-06T16:28:23.035908+00:00",
+      "exit": 0,
+      "process_seconds": 8.445415291935205,
+      "load_after": [
+        6.150390625,
+        6.57763671875,
+        6.28955078125
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.37841796875,
+        6.61767578125,
+        6.30517578125
+      ],
+      "utc": "2026-10-06T16:28:34.798987+00:00",
+      "exit": 0,
+      "process_seconds": 3.9205574579536915,
+      "load_after": [
+        6.5078125,
+        6.64013671875,
+        6.31494140625
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.306640625,
+        6.59619140625,
+        6.30126953125
+      ],
+      "utc": "2026-10-06T16:28:45.221402+00:00",
+      "exit": 0,
+      "process_seconds": 11.557391708018258,
+      "load_after": [
+        6.04443359375,
+        6.52734375,
+        6.27978515625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.44091796875,
+        6.6015625,
+        6.30712890625
+      ],
+      "utc": "2026-10-06T16:29:01.845639+00:00",
+      "exit": 0,
+      "process_seconds": 8.38887754199095,
+      "load_after": [
+        7.14111328125,
+        6.74609375,
+        6.361328125
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.12939453125,
+        6.75,
+        6.36474609375
+      ],
+      "utc": "2026-10-06T16:29:16.051485+00:00",
+      "exit": 0,
+      "process_seconds": 11.356381790945306,
+      "load_after": [
+        6.70849609375,
+        6.6748046875,
+        6.34228515625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.4111328125,
+        6.61376953125,
+        6.322265625
+      ],
+      "utc": "2026-10-06T16:29:33.291796+00:00",
+      "exit": 0,
+      "process_seconds": 4.691421166993678,
+      "load_after": [
+        7.0185546875,
+        6.736328125,
+        6.3671875
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.376953125,
+        6.82568359375,
+        6.4033203125
+      ],
+      "utc": "2026-10-06T16:29:43.793057+00:00",
+      "exit": 0,
+      "process_seconds": 11.580094959121197,
+      "load_after": [
+        8.29541015625,
+        7.0439453125,
+        6.48583984375
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        8.591796875,
+        7.1259765625,
+        6.51806640625
+      ],
+      "utc": "2026-10-06T16:29:58.757400+00:00",
+      "exit": 0,
+      "process_seconds": 8.409940000157803,
+      "load_after": [
+        8.0634765625,
+        7.04052734375,
+        6.4912109375
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.65771484375,
+        6.97314453125,
+        6.470703125
+      ],
+      "utc": "2026-10-06T16:30:13.064397+00:00",
+      "exit": 0,
+      "process_seconds": 3.9249267908744514,
+      "load_after": [
+        7.28466796875,
+        6.90673828125,
+        6.4501953125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        7.341796875,
+        6.9248046875,
+        6.458984375
+      ],
+      "utc": "2026-10-06T16:30:23.349826+00:00",
+      "exit": 0,
+      "process_seconds": 11.6116490829736,
+      "load_after": [
+        6.484375,
+        6.76220703125,
+        6.4091796875
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.4453125,
+        6.74951171875,
+        6.40673828125
+      ],
+      "utc": "2026-10-06T16:30:40.949556+00:00",
+      "exit": 0,
+      "process_seconds": 3.9405269171111286,
+      "load_after": [
+        6.8896484375,
+        6.83642578125,
+        6.439453125
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.578125,
+        6.7724609375,
+        6.4189453125
+      ],
+      "utc": "2026-10-06T16:30:51.520647+00:00",
+      "exit": 0,
+      "process_seconds": 8.539123083930463,
+      "load_after": [
+        5.8740234375,
+        6.61474609375,
+        6.36669921875
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    },
+    {
+      "engine": "splendorust",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/target/release/examples/aligned_worker",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.0439453125,
+        6.6376953125,
+        6.3759765625
+      ],
+      "utc": "2026-10-06T16:31:06.028790+00:00",
+      "exit": 0,
+      "process_seconds": 3.972067499998957,
+      "load_after": [
+        6.3603515625,
+        6.693359375,
+        6.39697265625
+      ],
+      "timing_boundary": "full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"
+    },
+    {
+      "engine": "seal256",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.1708984375,
+        6.6484375,
+        6.3828125
+      ],
+      "utc": "2026-10-06T16:31:16.445785+00:00",
+      "exit": 0,
+      "process_seconds": 11.52561550005339,
+      "load_after": [
+        5.6025390625,
+        6.51123046875,
+        6.3369140625
+      ],
+      "timing_boundary": "prepared states; legal generation, profile projection, policy, checked native transitions, clocks and minimal record collection; setup, worker creation, final snapshots, serialization excluded"
+    },
+    {
+      "engine": "ahinlendor",
+      "label": "measure",
+      "command": [
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned",
+        "--corpus",
+        "/Users/payton.jones/dev/splendorust/local/benchmarks/refresh-20261006/fixed.json",
+        "--policy",
+        "fixed",
+        "--threads",
+        "1"
+      ],
+      "load_before": [
+        6.11474609375,
+        6.60205078125,
+        6.36962890625
+      ],
+      "utc": "2026-10-06T16:31:31.272115+00:00",
+      "exit": 0,
+      "process_seconds": 8.497949624899775,
+      "load_after": [
+        5.7158203125,
+        6.49951171875,
+        6.33544921875
+      ],
+      "timing_boundary": "prepared states; native mask, semantic projection, policy, checked apply, clocks and minimal JSON records; setup, snapshots and serialization excluded"
+    }
+  ],
+  "samples": [
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.195031334,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        8.9697265625,
+        6.6689453125,
+        6.12353515625
+      ],
+      "policy": "random",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 8.081521459,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        9.1669921875,
+        6.88916015625,
+        6.216796875
+      ],
+      "policy": "random",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 5.037233125,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        9.4091796875,
+        7.0771484375,
+        6.29833984375
+      ],
+      "policy": "random",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.170280916,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        8.83642578125,
+        7.02587890625,
+        6.28857421875
+      ],
+      "policy": "random",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 4.869159583,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        7.8125,
+        6.90966796875,
+        6.26318359375
+      ],
+      "policy": "random",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 8.067795125,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.93359375,
+        6.7685546875,
+        6.22705078125
+      ],
+      "policy": "random",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 4.880733417,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.1533203125,
+        6.6005859375,
+        6.17578125
+      ],
+      "policy": "random",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.109043583,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.88232421875,
+        6.5302734375,
+        6.1552734375
+      ],
+      "policy": "random",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 7.835731834,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.98828125,
+        6.51123046875,
+        6.1572265625
+      ],
+      "policy": "random",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 4.924120709,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.58349609375,
+        6.62060546875,
+        6.20458984375
+      ],
+      "policy": "random",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 7.960515958,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.0703125,
+        6.51171875,
+        6.17529296875
+      ],
+      "policy": "random",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.111805833,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.84423828125,
+        6.44580078125,
+        6.1552734375
+      ],
+      "policy": "random",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 7.872647959,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.47216796875,
+        6.3193359375,
+        6.1162109375
+      ],
+      "policy": "random",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 4.85761325,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.79150390625,
+        6.33203125,
+        6.1240234375
+      ],
+      "policy": "random",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.09313375,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.515625,
+        6.2548828125,
+        6.0986328125
+      ],
+      "policy": "random",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 7.85271175,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        5.65869140625,
+        6.23828125,
+        6.0947265625
+      ],
+      "policy": "random",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.106135667,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.04736328125,
+        6.2919921875,
+        6.115234375
+      ],
+      "policy": "random",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 5.003879541,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.81494140625,
+        6.455078125,
+        6.17626953125
+      ],
+      "policy": "random",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 286102,
+      "seconds": 2.214930417,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.689453125,
+        6.4345703125,
+        6.1728515625
+      ],
+      "policy": "random",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 286102,
+      "seconds": 8.088080625,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        6.33544921875,
+        6.3720703125,
+        6.15576171875
+      ],
+      "policy": "random",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 286102,
+      "seconds": 5.476273125,
+      "completed": 182022,
+      "turns": 15893808,
+      "statuses": {
+        "complete": 182022,
+        "profile_blocked": 83493,
+        "unsupported_noble_choice": 20536,
+        "no_legal_action": 51
+      },
+      "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+      "load": [
+        8.5166015625,
+        6.87890625,
+        6.3427734375
+      ],
+      "policy": "random",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.216131333,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        8.4482421875,
+        6.9677734375,
+        6.3857421875
+      ],
+      "policy": "fixed",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.615222917,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.79638671875,
+        6.919921875,
+        6.3818359375
+      ],
+      "policy": "fixed",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.079417208,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.416015625,
+        6.875,
+        6.37451171875
+      ],
+      "policy": "fixed",
+      "repetition": 0,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.211317167,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.576171875,
+        6.7138671875,
+        6.32275390625
+      ],
+      "policy": "fixed",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.431942916,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.060546875,
+        6.595703125,
+        6.28759765625
+      ],
+      "policy": "fixed",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.836987625,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.20068359375,
+        6.5986328125,
+        6.29345703125
+      ],
+      "policy": "fixed",
+      "repetition": 1,
+      "engine_order": [
+        "splendorust",
+        "ahinlendor",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.134589917,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.37841796875,
+        6.61767578125,
+        6.30517578125
+      ],
+      "policy": "fixed",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.216546083,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.306640625,
+        6.59619140625,
+        6.30126953125
+      ],
+      "policy": "fixed",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.671285083,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.44091796875,
+        6.6015625,
+        6.30712890625
+      ],
+      "policy": "fixed",
+      "repetition": 2,
+      "engine_order": [
+        "ahinlendor",
+        "splendorust",
+        "seal256"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.091327917,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.12939453125,
+        6.75,
+        6.36474609375
+      ],
+      "policy": "fixed",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.558098667,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.4111328125,
+        6.61376953125,
+        6.322265625
+      ],
+      "policy": "fixed",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.46930775,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.376953125,
+        6.82568359375,
+        6.4033203125
+      ],
+      "policy": "fixed",
+      "repetition": 3,
+      "engine_order": [
+        "ahinlendor",
+        "seal256",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.664272584,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        8.591796875,
+        7.1259765625,
+        6.51806640625
+      ],
+      "policy": "fixed",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.069748209,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.65771484375,
+        6.97314453125,
+        6.470703125
+      ],
+      "policy": "fixed",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.18191675,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        7.341796875,
+        6.9248046875,
+        6.458984375
+      ],
+      "policy": "fixed",
+      "repetition": 4,
+      "engine_order": [
+        "seal256",
+        "ahinlendor",
+        "splendorust"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.745790167,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.4453125,
+        6.74951171875,
+        6.40673828125
+      ],
+      "policy": "fixed",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.209212667,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.578125,
+        6.7724609375,
+        6.4189453125
+      ],
+      "policy": "fixed",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.157437875,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.0439453125,
+        6.6376953125,
+        6.3759765625
+      ],
+      "policy": "fixed",
+      "repetition": 5,
+      "engine_order": [
+        "seal256",
+        "splendorust",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "splendorust",
+      "count": 225717,
+      "seconds": 2.241044875,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.1708984375,
+        6.6484375,
+        6.3828125
+      ],
+      "policy": "fixed",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "seal256",
+      "count": 225717,
+      "seconds": 7.660641583,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        6.11474609375,
+        6.60205078125,
+        6.36962890625
+      ],
+      "policy": "fixed",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    },
+    {
+      "engine": "ahinlendor",
+      "count": 225717,
+      "seconds": 5.144250917,
+      "completed": 179558,
+      "turns": 13460186,
+      "statuses": {
+        "complete": 179558,
+        "unsupported_noble_choice": 35696,
+        "profile_blocked": 10463
+      },
+      "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+      "load": [
+        5.41796875,
+        6.4248046875,
+        6.3095703125
+      ],
+      "policy": "fixed",
+      "repetition": 6,
+      "engine_order": [
+        "splendorust",
+        "seal256",
+        "ahinlendor"
+      ]
+    }
+  ],
+  "scope": "aligned adapter pipeline: native enumeration, semantic projection, policy, checked transitions, per-game clocks and records; setup, final snapshots, and serialization excluded",
+  "limits": [
+    "restricted common policy, not unrestricted Splendor",
+    "no-action, profile-blocked and selected multi-noble stops retained",
+    "Rust records are typed; C++ records use JSON boxing inside timing",
+    "AhinLendor uses a direct serial loop; Rust and seal256 use one prepared worker",
+    "C++ move tables are decoded before timing in both adapters",
+    "one shared Mac; intervals describe repetition noise, not other hosts or playing strength"
+  ],
+  "upstream": {
+    "ahinlendor": {
+      "revision": "96e6f2daff83147495826c4a2073dc3c9c856cc9",
+      "modified_files": []
+    },
+    "seal256": {
+      "revision": "263abc066c563a1c89dba4bdc408446a20ad9d1d",
+      "modified_files": [
+        "src/splendor.h"
+      ]
+    }
+  },
+  "data_mapping": {
+    "card_tuples_matched": 90,
+    "noble_tuples_matched": 10,
+    "ahin_core_to_native_cards": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89
+    ],
+    "ahin_core_to_native_nobles": [
+      8,
+      7,
+      9,
+      5,
+      6,
+      4,
+      3,
+      1,
+      2,
+      0
+    ]
+  },
+  "trace_records": {
+    "random": {
+      "file": "trace-random-records.json.gz",
+      "archive_sha256": "f1fa91f9b3ffabea605da481aa2cfa4839dd5c8a0403b7114c2cef4e8cd4c7db",
+      "corpus_sha256": "470198767ee8cb8b9a3029616b0facdd9a72f7075ded5e23d7ac9d2ed268f819"
+    },
+    "fixed": {
+      "file": "trace-fixed-records.json.gz",
+      "archive_sha256": "1353aa49db942479d1a91f8ec7d2563bed873e004c4ab1a193d59a71883d5247",
+      "corpus_sha256": "470198767ee8cb8b9a3029616b0facdd9a72f7075ded5e23d7ac9d2ed268f819"
+    }
+  },
+  "corpora": {
+    "random": {
+      "count": 286102,
+      "master": 112000001,
+      "sha256": "782c3c8cdb46924c8508bfa65e6d5d1e1e62e9bb154c8e3f0d2a608ca2e6ec1b",
+      "path": "local/benchmarks/refresh-20261006/random.json"
+    },
+    "fixed": {
+      "count": 225717,
+      "master": 112000001,
+      "sha256": "3e3dafb10f9cb1547c1092511beee098f031440e29d94c5279a3099a608e052b",
+      "path": "local/benchmarks/refresh-20261006/fixed.json"
+    }
+  },
+  "records": {
+    "random": {
+      "file": "random-records.json.gz",
+      "archive_sha256": "77aba278a6d67b26b092e32c66b0cb619be854f8430a537b5605989035eaac0d"
+    },
+    "fixed": {
+      "file": "fixed-records.json.gz",
+      "archive_sha256": "6a3d9563dfc4915bff02381058e80ecae050f8d5270d284c9081513ef42c0dbc"
+    }
+  },
+  "summary": {
+    "random": {
+      "splendorust": {
+        "trajectories_per_second": 135477.41725552853,
+        "bootstrap95": [
+          130340.73617465727,
+          135842.15133089048
+        ],
+        "completed_games_per_second": 86192.58321747424,
+        "complete_turns_per_second": 7526169.192089735,
+        "seconds_range": [
+          2.09313375,
+          2.214930417
+        ],
+        "count": 286102,
+        "statuses": {
+          "complete": 182022,
+          "profile_blocked": 83493,
+          "unsupported_noble_choice": 20536,
+          "no_legal_action": 51
+        },
+        "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      },
+      "seal256": {
+        "trajectories_per_second": 35940.13271369413,
+        "bootstrap95": [
+          35401.99719217253,
+          36433.5288379839
+        ],
+        "completed_games_per_second": 22865.60330515702,
+        "complete_turns_per_second": 1996580.1317221604,
+        "seconds_range": [
+          7.835731834,
+          8.088080625
+        ],
+        "count": 286102,
+        "statuses": {
+          "complete": 182022,
+          "profile_blocked": 83493,
+          "unsupported_noble_choice": 20536,
+          "no_legal_action": 51
+        },
+        "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      },
+      "ahinlendor": {
+        "trajectories_per_second": 58102.14998935356,
+        "bootstrap95": [
+          56797.45068380173,
+          58757.98382104495
+        ],
+        "completed_games_per_second": 36965.38138622629,
+        "complete_turns_per_second": 3227745.406596205,
+        "seconds_range": [
+          4.85761325,
+          5.476273125
+        ],
+        "count": 286102,
+        "statuses": {
+          "complete": 182022,
+          "profile_blocked": 83493,
+          "unsupported_noble_choice": 20536,
+          "no_legal_action": 51
+        },
+        "record_set_sha256": "69f428c0e958427afb0daa75f340dbfbead670703c0d1f90fcfe4d30d7a7cd14",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      }
+    },
+    "fixed": {
+      "splendorust": {
+        "trajectories_per_second": 101851.81565681154,
+        "bootstrap95": [
+          100719.53601553828,
+          102170.78843138825
+        ],
+        "completed_games_per_second": 81023.17643644814,
+        "complete_turns_per_second": 6073731.190731737,
+        "seconds_range": [
+          2.18191675,
+          2.46930775
+        ],
+        "count": 225717,
+        "statuses": {
+          "complete": 179558,
+          "unsupported_noble_choice": 35696,
+          "profile_blocked": 10463
+        },
+        "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      },
+      "seal256": {
+        "trajectories_per_second": 29450.544396242993,
+        "bootstrap95": [
+          29140.603493448598,
+          29640.23541531739
+        ],
+        "completed_games_per_second": 23427.92457236539,
+        "complete_turns_per_second": 1756224.8540193622,
+        "seconds_range": [
+          7.558098667,
+          7.836987625
+        ],
+        "count": 225717,
+        "statuses": {
+          "complete": 179558,
+          "unsupported_noble_choice": 35696,
+          "profile_blocked": 10463
+        },
+        "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      },
+      "ahinlendor": {
+        "trajectories_per_second": 43960.08320989347,
+        "bootstrap95": [
+          43765.335709448555,
+          44437.57831991028
+        ],
+        "completed_games_per_second": 34970.27083029658,
+        "complete_turns_per_second": 2621472.448156954,
+        "seconds_range": [
+          5.069748209,
+          5.431942916
+        ],
+        "count": 225717,
+        "statuses": {
+          "complete": 179558,
+          "unsupported_noble_choice": 35696,
+          "profile_blocked": 10463
+        },
+        "record_set_sha256": "1f2ccf2d3613b4e46e8a6a21d801d4e734c359ceaf1c19c380b8adf440b430cf",
+        "repetitions": 7,
+        "confidence": "local repeated timing"
+      }
+    }
+  },
+  "source_and_binary_stable": true,
+  "end_utc": "2026-10-06T16:31:45.533969+00:00"
+}

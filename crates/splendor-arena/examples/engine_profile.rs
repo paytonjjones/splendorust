@@ -327,7 +327,7 @@ fn main() {
     let mut args = std::env::args().skip(1);
     let output = args
         .next()
-        .expect("usage: engine_profile OUTPUT.txt SEED [REPLAYS] [REPEATS]");
+        .expect("usage: engine_profile OUTPUT.txt SEED [REPLAYS] [REPEATS] [--checked-apply-only]");
     let seed = args
         .next()
         .expect("valid seed")
@@ -346,6 +346,12 @@ fn main() {
         .parse::<usize>()
         .expect("valid repeat count");
     assert!(replay_games > 0 && repeats > 0);
+    let checked_only = match args.next().as_deref() {
+        None => false,
+        Some("--checked-apply-only") => true,
+        Some(_) => panic!("unknown profile option"),
+    };
+    assert!(args.next().is_none(), "unexpected extra argument");
     let mut setup_rng = Rng::new(seed);
     let mut orders = [Vec::new(), Vec::new(), Vec::new()];
     for (tier, order) in orders.iter_mut().enumerate() {
@@ -565,6 +571,16 @@ fn main() {
     println!(
         "engine,workload,repeat,replayed_games,complete_turns,canonical_actions,native_apply_calls,legal_enumerations,seconds,turns_per_second,games_per_second,operation_count"
     );
+    if checked_only {
+        profile_full(
+            &action_trace,
+            &initial_state,
+            replay_games,
+            repeats,
+            "full_checked_apply_only",
+        );
+        return;
+    }
     profile_full(
         &action_trace,
         &initial_state,

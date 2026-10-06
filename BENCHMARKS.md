@@ -47,6 +47,8 @@ must not be counted as a complete game.
 
 | Report | Scope |
 | --- | --- |
+| [Prepared checked replay, 2026-10-06](benchmarks/results/prepared-replay-20261006/REPORT.md) | Native moves prepared before timing; checked complete game replay with AhinLendor on four fixed traces. |
+| [Current engine comparison, 2026-10-06](benchmarks/results/current-20261006/REPORT.md) | Aligned random and fixed play with seal256 and AhinLendor, plus a fresh run of the four replay traces. |
 | [Canonical engine throughput](research/engine-throughput/RESULTS.md) | Complete Rust decision lists and transitions compared with pinned AhinLendor C++ on four fixed two-player traces. |
 | [External engine comparison](benchmarks/REPORT.md) | Earlier cross-engine workloads, with explicit compatible rules and timing limits. |
 | [Neural throughput](research/throughput/REPORT.md) | CPU inference and independent-game batching for frozen small models. |

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "ahin-pin",
+    "command": [
+      "git",
+      "-C",
+      "/Users/payton.jones/dev/splendorust/local/strength/external/ahinlendor",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "seconds": 0.009616750059649348
+  },
+  {
+    "name": "ahin-clean",
+    "command": [
+      "git",
+      "-C",
+      "/Users/payton.jones/dev/splendorust/local/strength/external/ahinlendor",
+      "diff",
+      "--name-only"
+    ],
+    "exit": 0,
+    "seconds": 0.009458583081141114
+  },
+  {
+    "name": "rust-build",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "-p",
+      "splendor-arena",
+      "--features",
+      "benchmark-compat",
+      "--example",
+      "aligned_worker"
+    ],
+    "exit": 0,
+    "seconds": 0.2801625831052661
+  },
+  {
+    "name": "seal-build",
+    "command": [
+      "clang++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-pthread",
+      "-I",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256/src",
+      "/Users/payton.jones/dev/splendorust/benchmarks/adapters/external_seal256_game.cpp",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256/src/splendor.cpp",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256/src/game_state.cpp",
+      "-o",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256-game"
+    ],
+    "exit": 0,
+    "seconds": 6.809605791931972
+  },
+  {
+    "name": "ahin-build",
+    "command": [
+      "clang++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-flto",
+      "-I",
+      "/Users/payton.jones/dev/splendorust/local/strength/external/ahinlendor",
+      "-I",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/seal256/src",
+      "/Users/payton.jones/dev/splendorust/benchmarks/adapters/ahin_aligned.cpp",
+      "/Users/payton.jones/dev/splendorust/local/strength/external/ahinlendor/game_logic.cpp",
+      "-o",
+      "/Users/payton.jones/dev/splendorust/local/benchmarks/external/ahin-aligned"
+    ],
+    "exit": 0,
+    "seconds": 2.7563938749954104
+  }
+]

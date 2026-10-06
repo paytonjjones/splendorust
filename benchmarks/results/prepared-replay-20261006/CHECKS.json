@@ -1,0 +1,12 @@
+{
+  "local_checks_passed": {
+    "cargo fmt --all --check": true,
+    "cargo clippy --workspace --all-targets --all-features --release --locked -- -D warnings": true,
+    "cargo test --workspace --release --locked": true,
+    "cargo test --workspace --all-features --release --locked": true,
+    "clang++ -std=c++17 -Wall -Wextra -Werror -fsyntax-only -I local/strength/external/ahinlendor research/engine-throughput/ahin_profile.cpp": true,
+    "python3 -m py_compile research/engine-throughput/run.py research/engine-throughput/summarize_prepared.py": true
+  },
+  "production_engine_changes": false,
+  "README_unchanged_during_measurement": true
+}

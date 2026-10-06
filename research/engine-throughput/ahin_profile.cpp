@@ -295,6 +295,70 @@ std::uint64_t replay_decoded(const std::vector<DecodedTurn>& turns, const GameSt
     return checksum;
 }
 
+// Native moves are prepared with a shadow replay before any timed loop.
+// This resolves noble slots and expands compound returns only once.
+std::vector<std::vector<Move>> prepare_native_turns(
+    const std::vector<DecodedTurn>& turns, const GameState& initial) {
+    GameState state = initial;
+    std::vector<std::vector<Move>> prepared;
+    prepared.reserve(turns.size());
+    for (const auto& turn : turns) {
+        std::vector<Move> moves;
+        const auto append = [&](const Move& move) {
+            applyMove(state, move);
+            moves.push_back(move);
+        };
+        for (const auto& action : turn.actions) {
+            if (action.kind == DecodedKind::Return) {
+                for (int color = 0; color < 5; ++color) {
+                    for (int count = 0; count < action.values[static_cast<std::size_t>(color)]; ++count) {
+                        Move move{};
+                        move.type = RETURN_GEM;
+                        move.gem_returned[static_cast<Color>(color)] = 1;
+                        append(move);
+                    }
+                }
+            } else {
+                append(move_for_decoded(action, state));
+            }
+        }
+        prepared.push_back(std::move(moves));
+    }
+    return prepared;
+}
+
+std::uint64_t replay_prepared_native(const std::vector<std::vector<Move>>& turns,
+                                    const GameState& initial, const Trace* parity_trace = nullptr) {
+    GameState state = initial;
+    std::size_t turn_index = 0;
+    for (const auto& turn : turns) {
+        for (const auto& move : turn) {
+#if defined(__clang__) || defined(__GNUC__)
+            // Match the Rust path's observable supplied native action input.
+            asm volatile("" : : "g"(&move) : "memory");
+#endif
+            applyMove(state, move);
+        }
+        barrier_state(state);
+        if (parity_trace != nullptr) {
+            const auto& expected = parity_trace->turns.at(turn_index);
+            if (material_digest(state) != expected.expected_digest ||
+                material_snapshot(state) != expected.expected_snapshot)
+                throw std::runtime_error("prepared native state mismatch at turn " + std::to_string(turn_index));
+        }
+        ++turn_index;
+    }
+    if (parity_trace != nullptr) {
+        if (turn_index != parity_trace->turns.size() ||
+            material_digest(state) != parity_trace->final_digest ||
+            material_snapshot(state) != parity_trace->final_snapshot || !isGameOver(state))
+            throw std::runtime_error("prepared native final state mismatch");
+        const int winner = determineWinner(state);
+        std::cerr << "outcome_winners_mask=" << (winner == -1 ? 3 : (1 << winner)) << '\n';
+    }
+    return turn_index;
+}
+
 // Collect every state at which the trace selects one native move. A canonical
 // buy+pay pair is one Ahin move; a canonical multi-return is several moves.
 std::vector<ActionCase> collect_action_cases(const Trace& trace, const GameState& initial,
@@ -400,13 +464,37 @@ void emit(const Sample& sample) {
               << sample.seconds << ',' << std::setprecision(3) << rate << '\n';
 }
 
-void profile_trace(const char* path, int repeats, std::uint64_t iterations) {
+void profile_trace(const char* path, int repeats, std::uint64_t iterations, bool prepared_only) {
     active_trace = path;
     const Trace trace = read_complete_trace(path);
     const GameState initial = make_initial(trace);
 
     // Exact snapshots and terminal status are checked before any timed loop.
     const ReplayStats verified = replay(trace, initial, true);
+    if (prepared_only) {
+        const auto native_turns = prepare_native_turns(decode_trace(trace), initial);
+        std::size_t native_applies = 0;
+        for (const auto& turn : native_turns) native_applies += turn.size();
+        if (native_applies != verified.native_applies || native_turns.size() != verified.completed_turns)
+            throw std::runtime_error("prepared native operation count differs from baseline replay");
+        replay_prepared_native(native_turns, initial, &trace);
+        std::cerr << "verified_input=" << path << " seed=" << trace.seed
+                  << " turns=" << verified.completed_turns << " native_actions=" << native_applies
+                  << " exact_full_state_parity=yes prepared_native_moves=yes\n";
+        for (int repeat = 0; repeat < repeats; ++repeat) {
+            const auto sample = timed("prepared_native_checked_apply_only", "all_turns", repeat,
+                                      iterations, iterations * native_applies, [&] {
+                std::uint64_t checksum = 0;
+                for (std::uint64_t n = 0; n < iterations; ++n) {
+                    checksum += replay_prepared_native(native_turns, initial);
+                    barrier(checksum);
+                }
+                return checksum;
+            });
+            emit(sample);
+        }
+        return;
+    }
     PhaseStates states_by_phase;
     std::vector<PaymentCase> payment_cases;
     const auto cases = collect_action_cases(trace, initial, states_by_phase, payment_cases);
@@ -571,9 +659,12 @@ int main(int argc, char** argv) {
             "usage: ahin_profile [--repeats N] [--iterations N] TRACE.txt [TRACE.txt ...]");
         int repeats = 5;
         std::uint64_t iterations = 1000;
+        bool prepared_only = false;
         std::vector<const char*> paths;
         for (int i = 1; i < argc; ++i) {
-            if (std::strcmp(argv[i], "--repeats") == 0 && i + 1 < argc) {
+            if (std::strcmp(argv[i], "--prepared-checked-only") == 0) {
+                prepared_only = true;
+            } else if (std::strcmp(argv[i], "--repeats") == 0 && i + 1 < argc) {
                 repeats = std::stoi(argv[++i]);
             } else if (std::strcmp(argv[i], "--iterations") == 0 && i + 1 < argc) {
                 iterations = std::stoull(argv[++i]);
@@ -584,7 +675,7 @@ int main(int argc, char** argv) {
         if (repeats < 1 || iterations < 1 || paths.empty())
             throw std::runtime_error("repeats and iterations must be positive and at least one trace is required");
         std::cout << "trace,profile,phase,repeat,iterations,operations,seconds,operations_per_second\n";
-        for (const auto* path : paths) profile_trace(path, repeats, iterations);
+        for (const auto* path : paths) profile_trace(path, repeats, iterations, prepared_only);
     } catch (const std::exception& error) {
         std::cerr << "error: " << error.what() << '\n';
         return 1;

@@ -38,12 +38,16 @@ def main():
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--with-original-baseline", action="store_true")
+    parser.add_argument("--prepared-checked-only", action="store_true")
     args = parser.parse_args()
+    if args.prepared_checked_only and args.with_original_baseline:
+        parser.error("prepared checked replay does not use the original enumeration baseline")
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=True)
     if any(out.iterdir()):
         raise SystemExit("output must be empty")
     receipt = {"start_utc": datetime.now(timezone.utc).isoformat(), "games": args.games,
+               "profile": "prepared_native_checked_apply_only" if args.prepared_checked_only else "all_profiles",
                "repeats": args.repeats, "seeds": args.seeds, "commands": [],
                "source_before": inventory(), "platform": platform.platform(),
                "load_start": os.getloadavg(), "cpu_count": os.cpu_count()}
@@ -96,8 +100,14 @@ def main():
         trace = out / f"seed-{seed}.txt"
         rust_command = [rust, trace, str(seed), str(args.games), str(args.repeats)]
         cpp_command = [cpp, "--repeats", str(args.repeats), "--iterations", str(args.games), trace]
+        if args.prepared_checked_only:
+            rust_command.append("--checked-apply-only")
+            cpp_command.append("--prepared-checked-only")
         if index % 2:
-            if not run(f"prepare-{seed}", [rust, trace, str(seed), "1", "1"], required=False):
+            prepare_command = [rust, trace, str(seed), "1", "1"]
+            if args.prepared_checked_only:
+                prepare_command.append("--checked-apply-only")
+            if not run(f"prepare-{seed}", prepare_command, required=False):
                 continue
             before_trace = sha(trace)
             run(f"cpp-{seed}", cpp_command, required=False)

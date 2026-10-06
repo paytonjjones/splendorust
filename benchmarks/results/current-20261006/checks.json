@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "check": "card mapping",
+      "exit": 3,
+      "error": "mapping permutation",
+      "passed": true
+    },
+    {
+      "check": "noble mapping",
+      "exit": 3,
+      "error": "mapping permutation",
+      "passed": true
+    },
+    {
+      "check": "duplicate deck",
+      "exit": 3,
+      "error": "deck partition",
+      "passed": true
+    },
+    {
+      "check": "duplicate noble",
+      "exit": 3,
+      "error": "noble setup",
+      "passed": true
+    },
+    {
+      "check": "all README bytes outside table preserved",
+      "passed": true
+    },
+    {
+      "check": "relative documentation links exist",
+      "passed": true
+    }
+  ],
+  "data_files": {
+    "data/cards.csv": {
+      "sha256": "f9551803e4e8883073afdd2ef42e7afec81baa71cde617db57563010f0b5b23f",
+      "matches_base_commit": true
+    },
+    "data/nobles.csv": {
+      "sha256": "c25a49fc3f55ab6fa45ddecf7b130b20da8c92c997d35c5e157be3c21f953e19",
+      "matches_base_commit": true
+    }
+  },
+  "syntax_checks": [
+    "Python py_compile passed",
+    "C++ -Wall -Wextra -Werror -fsyntax-only passed"
+  ]
+}
