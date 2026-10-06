@@ -170,10 +170,10 @@ export interface ChampionMetadata {
     iterations: number;
     depth: number;
     world_pool: number;
-    gumbel_max_considered: number;
-    gumbel_cvisit: number;
-    gumbel_cscale: number;
-    gumbel_root_noise: number;
+    gumbel_max_considered: number | null;
+    gumbel_cvisit: number | null;
+    gumbel_cscale: number | null;
+    gumbel_root_noise: number | null;
   };
   source?: {
     path: string;

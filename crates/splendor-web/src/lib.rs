@@ -244,21 +244,23 @@ impl WebGame {
             serde_json::from_str(&config_json)
                 .map_err(|e| js_error(&format!("invalid champion config: {e}")))?
         };
-        if config.search_agent != "flywheel-gumbel" {
+        let gumbel = config.search_agent == "flywheel-gumbel";
+        if !gumbel && config.search_agent != "flywheel-best" {
             return Err(js_error(
-                "unsupported champion search agent; this WASM build supports flywheel-gumbel",
+                "unsupported champion search agent; this WASM build supports flywheel-best and flywheel-gumbel",
             ));
         }
         if config.iterations == 0
             || config.depth == 0
             || config.world_pool == 0
-            || config.gumbel_max_considered == 0
-            || !config.gumbel_cvisit.is_finite()
-            || config.gumbel_cvisit < 0.0
-            || !config.gumbel_cscale.is_finite()
-            || config.gumbel_cscale <= 0.0
-            || !config.gumbel_root_noise.is_finite()
-            || config.gumbel_root_noise < 0.0
+            || (gumbel
+                && (config.gumbel_max_considered == 0
+                    || !config.gumbel_cvisit.is_finite()
+                    || config.gumbel_cvisit < 0.0
+                    || !config.gumbel_cscale.is_finite()
+                    || config.gumbel_cscale <= 0.0
+                    || !config.gumbel_root_noise.is_finite()
+                    || config.gumbel_root_noise < 0.0))
         {
             return Err(js_error(
                 "champion search settings are outside valid ranges",
@@ -270,18 +272,23 @@ impl WebGame {
             depth: config.depth,
             ..SearchConfig::default()
         };
-        let bot = make_agent_with_profile(
-            &config.search_agent,
-            seed ^ 0x5350_4c45_4e44_4f52,
-            &search,
-            Some(model),
+        let profile = if gumbel {
             Some(SearchProfileOverrides {
                 world_pool: config.world_pool,
                 gumbel_max_considered: config.gumbel_max_considered,
                 gumbel_cvisit: config.gumbel_cvisit,
                 gumbel_cscale: config.gumbel_cscale,
                 gumbel_noise: config.gumbel_root_noise,
-            }),
+            })
+        } else {
+            None
+        };
+        let bot = make_agent_with_profile(
+            &config.search_agent,
+            seed ^ 0x5350_4c45_4e44_4f52,
+            &search,
+            Some(model),
+            profile,
         )
         .map_err(|e| js_error(&format!("could not configure champion search: {e}")))?;
         let state =
@@ -829,6 +836,14 @@ mod tests {
         );
         std::fs::read(path).expect("E81 production model is present in the source checkout")
     }
+    fn strength_model() -> Vec<u8> {
+        let path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../web/public/models/57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb.bin"
+        );
+        std::fs::read(path)
+            .expect("research-strength Entity model is present in the web asset tree")
+    }
     fn game(seed: u64, human: u8, config: &str) -> WebGame {
         WebGame::new(seed.to_string(), human, model(), config.into()).unwrap()
     }
@@ -959,6 +974,20 @@ mod tests {
             web.events.last().unwrap().action_id,
             action_id(native_action)
         );
+    }
+
+    #[test]
+    fn research_strength_entity_model_runs_with_puct_profile() {
+        let config = r#"{"searchAgent":"flywheel-best","iterations":2,"depth":4,"worldPool":3}"#;
+        let mut web = WebGame::new("91337".into(), 0, strength_model(), config.into()).unwrap();
+        let action = web
+            .legal()
+            .into_iter()
+            .find(|a| matches!(a, Action::Take(_)))
+            .unwrap();
+        web.act(action_id(action)).unwrap();
+        web.bot_step().unwrap();
+        assert!(!web.events.is_empty());
     }
 
     #[test]

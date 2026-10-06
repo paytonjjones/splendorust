@@ -229,16 +229,15 @@ test("real champion replies on a CPU-throttled mobile viewport @perf", async ({ 
     const response = await page.request.get("/champion.json");
     expect(response.ok()).toBe(true);
     const metadata = await response.json();
-    expect(metadata.id).toBe("e81");
+    expect(metadata.id).toBe("entity-onehot-generation-one-puct6400");
     expect(metadata.search).toMatchObject({
-      agent: "flywheel-gumbel",
-      iterations: 128,
-      depth: 16,
+      agent: "flywheel-best",
+      iterations: 6400,
+      depth: 64,
       world_pool: 3,
-      gumbel_max_considered: 16,
-      gumbel_cvisit: 50,
-      gumbel_cscale: 0.1,
-      gumbel_root_noise: 0,
+      algorithm: "puct",
+      cpuct: 0.4,
+      fpu_reduction: 0.02965,
     });
 
     await startGame(page);

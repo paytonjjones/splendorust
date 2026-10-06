@@ -59,7 +59,7 @@ function chooseMainAction(state: GameSnapshot): LegalAction {
   return reserve;
 }
 
-test("E81 midgame search keeps the mobile UI responsive @midgame-perf", async ({ page, browser }) => {
+test("research-strength midgame search keeps the mobile UI responsive @midgame-perf", async ({ page, browser }) => {
   test.setTimeout(180_000);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -84,17 +84,25 @@ test("E81 midgame search keeps the mobile UI responsive @midgame-perf", async ({
     const metadataResponse = await page.request.get("/champion.json");
     expect(metadataResponse.ok()).toBe(true);
     const champion = (await metadataResponse.json()) as ChampionMetadata;
-    expect(champion.id).toBe("e81");
-    expect(champion.model.sha256).toBe("e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8");
+    expect(champion.id).toBe("entity-onehot-generation-one-puct6400");
+    expect(champion.model.sha256).toBe("57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb");
     expect(champion.search).toEqual({
-      agent: "flywheel-gumbel",
-      iterations: 128,
-      depth: 16,
+      agent: "flywheel-best",
+      iterations: 6400,
+      depth: 64,
       world_pool: 3,
-      gumbel_max_considered: 16,
-      gumbel_cvisit: 50,
-      gumbel_cscale: 0.1,
-      gumbel_root_noise: 0,
+      algorithm: "puct",
+      chance_universes: 3,
+      cpuct: 0.4,
+      dynamic_fpu: true,
+      fpu_reduction: 0.02965,
+      gumbel_cscale: null,
+      gumbel_cvisit: null,
+      gumbel_max_considered: null,
+      gumbel_noise: 0,
+      root_noise: 0,
+      root_only: false,
+      uniform_prior: 0,
     });
 
     await page.goto("/?test=1");

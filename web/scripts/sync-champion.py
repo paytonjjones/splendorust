@@ -28,7 +28,9 @@ def source_root() -> tuple[Path, dict[str, object]]:
         if candidate in seen:
             continue
         seen.add(candidate)
-        champion_path = candidate / "research/CHAMPION.json"
+        champion_path = candidate / "research/STRENGTH_CHAMPION.json"
+        if not champion_path.is_file():
+            champion_path = candidate / "research/CHAMPION.json"
         if not champion_path.is_file():
             continue
         champion = json.loads(champion_path.read_text(encoding="utf-8"))
@@ -68,18 +70,18 @@ def main() -> None:
 
     payload = {
         "schema": "splendor-web-champion-v1",
-        "id": Path(relative_model).parts[1] if len(Path(relative_model).parts) > 1 else "champion",
-        "name": f"SplendoRust {Path(relative_model).parts[1].upper()}" if len(Path(relative_model).parts) > 1 else "SplendoRust champion",
+        "id": champion.get("name", "champion"),
+        "name": f"SplendoRust {champion.get('name', 'champion')}",
         "model": {
             "url": f"/models/{model_name}",
             "sha256": model_hash,
             "bytes": len(model_bytes),
         },
         "search": {
-            "agent": champion.get("search_agent"),
-            "iterations": champion.get("iterations"),
-            "depth": champion.get("depth"),
-            **champion.get("search_config", {}),
+            "agent": champion.get("search_agent", "flywheel-best" if champion.get("search", {}).get("algorithm") == "puct" else "flywheel-gumbel"),
+            "iterations": champion.get("iterations", champion.get("search", {}).get("iterations")),
+            "depth": champion.get("depth", champion.get("search", {}).get("depth")),
+            **champion.get("search_config", champion.get("search", {})),
         },
         "source": {
             "path": relative_model,

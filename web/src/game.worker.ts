@@ -104,10 +104,10 @@ function makeEffectiveSearch(
     iterations: validTestOverrides?.iterations ?? metadata.search.iterations,
     depth: validTestOverrides?.depth ?? metadata.search.depth,
     worldPool: metadata.search.world_pool,
-    gumbelMaxConsidered: metadata.search.gumbel_max_considered,
-    gumbelCvisit: metadata.search.gumbel_cvisit,
-    gumbelCscale: metadata.search.gumbel_cscale,
-    gumbelRootNoise: metadata.search.gumbel_root_noise,
+    gumbelMaxConsidered: metadata.search.gumbel_max_considered ?? 16,
+    gumbelCvisit: metadata.search.gumbel_cvisit ?? 50,
+    gumbelCscale: metadata.search.gumbel_cscale ?? 0.1,
+    gumbelRootNoise: metadata.search.gumbel_root_noise ?? 0,
   };
 }
 

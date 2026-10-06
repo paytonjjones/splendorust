@@ -28,7 +28,7 @@ npm run dev
 
 ## Champion replacement
 
-`research/CHAMPION.json` is the source of truth. `npm run sync:champion` verifies its production model SHA-256 and writes:
+`research/STRENGTH_CHAMPION.json` is the source of truth for the public research-strength bot. The script falls back to `research/CHAMPION.json` for the older E81 profile. `npm run sync:champion` verifies the production model SHA-256 and writes:
 
 - `public/champion.json`, fetched at `/champion.json` with no-cache headers;
 - `public/models/<sha256>.bin`, served with a one-year immutable cache policy.
