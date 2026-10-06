@@ -1,0 +1,1384 @@
+diff --git a/benchmarks/strength/native/run.py b/benchmarks/strength/native/run.py
+index 4c9f8b2..90b7069 100644
+--- a/benchmarks/strength/native/run.py
++++ b/benchmarks/strength/native/run.py
+@@ -27,13 +27,16 @@ def validate_settings(iterations,depth,world_pool,gumbel_max_considered,chance_u
+     if not 1<=gumbel_max_considered<=81:raise ValueError('gumbel-max-considered must be in 1..=81')
+     if not 0<=chance_universes<=64:raise ValueError('chance-universes must be in 0..=64')
+ 
++def validate_inference_batch_size(value):
++    if value not in (1,8):raise ValueError('inference-batch-size must be 1 or 8')
++
+ def validate_accepted_settings(expected,accepted):
+     if accepted is None:
+         if (expected['world_pool'],expected['gumbel_max_considered'],expected['chance_universes'],
+-                expected['dynamic_fpu'])!=(3,16,0,False):
++                expected['dynamic_fpu'])!=(3,16,0,False) or expected.get('inference_batch_size',1)!=1:
+             raise RuntimeError('worker does not report accepted search settings')
+         return
+-    defaults={'chance_universes':0,'dynamic_fpu':False}
++    defaults={'chance_universes':0,'dynamic_fpu':False,'inference_batch_size':1}
+     if any(accepted.get(key)!=value for key,value in expected.items()
+            if not (key in defaults and value==defaults[key] and key not in accepted)):
+         raise RuntimeError(f'worker search settings differ: requested={expected}, accepted={accepted}')
+@@ -46,6 +49,7 @@ def main():
+     p.add_argument('--world-pool',type=int,default=3);p.add_argument('--gumbel-max-considered',type=int,default=16)
+     p.add_argument('--chance-universes',type=int,default=0)
+     p.add_argument('--dynamic-fpu',action='store_true')
++    p.add_argument('--inference-batch-size',type=int,default=1)
+     p.add_argument('--root-only',action='store_true');p.add_argument('--model',type=Path,default=ROOT/'research/e56/model/model.bin')
+     p.add_argument('--policy-binary',type=Path,default=DEFAULT_POLICY_BINARY)
+     p.add_argument('--strength-binary',type=Path,default=DEFAULT_STRENGTH_BINARY)
+@@ -57,6 +61,8 @@ def main():
+     if a.campaign_context is not None and a.campaign_games is None:p.error('campaign context requires --campaign-games')
+     try:validate_settings(a.iterations,a.depth,a.world_pool,a.gumbel_max_considered,a.chance_universes)
+     except ValueError as error:p.error(str(error))
++    try:validate_inference_batch_size(a.inference_batch_size)
++    except ValueError as error:p.error(str(error))
+     if a.output.exists():p.error('output already exists')
+     a.output=a.output.resolve();a.model=a.model.resolve(strict=True);a.policy_binary=a.policy_binary.resolve(strict=True);a.strength_binary=a.strength_binary.resolve(strict=True);a.output.parent.mkdir(parents=True,exist_ok=True)
+     if not a.policy_binary.is_file() or not os.access(a.policy_binary,os.X_OK):p.error('policy binary must be an executable file')
+@@ -70,14 +76,14 @@ def main():
+         rpc=RPC([a.policy_binary,a.model])
+         metadata=dict(schema_version=1,engine='alphazero_native',ruleset=PROFILE,planning_profile=PROFILE,
+             observation_profile='native-public-history-v1',players=2,games=a.games,candidate='champion',external='alphazero',
+-            master=a.master,offset_block=a.offset_block,iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,root_only=a.root_only,search=a.search,search_profile='native-public-gumbel-v1' if a.search=='gumbel' else 'native-public-puct-v1',gumbel_max_considered=a.gumbel_max_considered if a.search=='gumbel' else None,gumbel_config=dict(max_considered=a.gumbel_max_considered,cvisit=50,cscale=.1,root_noise=0) if a.search=='gumbel' else None,
++            master=a.master,offset_block=a.offset_block,iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,inference_batch_size=a.inference_batch_size,root_only=a.root_only,search=a.search,search_profile='native-public-gumbel-v1' if a.search=='gumbel' else 'native-public-puct-v1',gumbel_max_considered=a.gumbel_max_considered if a.search=='gumbel' else None,gumbel_config=dict(max_considered=a.gumbel_max_considered,cvisit=50,cscale=.1,root_noise=0) if a.search=='gumbel' else None,
+             cpuct=.4,fpu_reduction=.02965,uniform_prior=0,external_config=dict(u.config),
+             upstream_revision=PIN,upstream_checkpoint_sha256=sha(SOURCE/'splendor/pretrained_2players.pt'),
+             model_sha256=sha(a.model),model_path=str(a.model),policy_binary_path=str(a.policy_binary),policy_binary_sha256=sha(a.policy_binary),
+             strength_binary_path=str(u.strength_binary),strength_binary_sha256=u.strength_binary_sha256,
+             source_id=u.data['source_id'],engine_version=u.data['engine'],
+             revision=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip(),
+-            source_sha256={str(path.relative_to(ROOT)):sha(path) for path in [Path(__file__),Path(__file__).with_name('upstream.py'),Path(__file__).with_name('schedule.py'),ROOT/'crates/splendor-agents/src/environment.rs',ROOT/'crates/splendor-agents/src/native_environment.rs',ROOT/'crates/splendor-agents/src/neural_search.rs',ROOT/'crates/splendor-arena/examples/native_policy_worker.rs',ROOT/'crates/splendor-arena/examples/native_wire/mod.rs']},
++            source_sha256={str(path.relative_to(ROOT)):sha(path) for path in [Path(__file__),Path(__file__).with_name('upstream.py'),Path(__file__).with_name('schedule.py'),ROOT/'crates/splendor-agents/src/environment.rs',ROOT/'crates/splendor-agents/src/native_environment.rs',ROOT/'crates/splendor-agents/src/neural_search.rs',ROOT/'crates/splendor-agents/src/transfer.rs',ROOT/'crates/splendor-agents/src/transfer/remote.rs',ROOT/'crates/splendor-arena/examples/native_policy_worker.rs',ROOT/'crates/splendor-arena/examples/native_wire/mod.rs']},
+             reproduction_command=command,host=platform.platform(),startup_seconds=time.perf_counter()-startup,
+             streams='SHA256 native-v1:{master}:{label}:{block}:{identity}, first 8 bytes little-endian; setup/referee use low32, policy uses64',
+             alpha_information='Unchanged upstream true unordered deck membership and all private reserved identities. SplendoRust samples private information from the actor public observation only.',
+@@ -94,8 +100,8 @@ def main():
+                         state=initial.copy();seat=0;t=Tracker(u,state)
+                         splendor_seed=stream(a.master,'policy',block,0)
+                         alpha_seed=stream(a.master,'policy',block,1)
+-                        reset=rpc.call(op='reset',seed=splendor_seed,iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,gumbel_max_considered=a.gumbel_max_considered,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,search=a.search,root_only=a.root_only)
+-                        expected=dict(iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,gumbel_max_considered=a.gumbel_max_considered,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,search=a.search,root_only=a.root_only)
++                        reset=rpc.call(op='reset',seed=splendor_seed,iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,gumbel_max_considered=a.gumbel_max_considered,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,inference_batch_size=a.inference_batch_size,search=a.search,root_only=a.root_only)
++                        expected=dict(iterations=a.iterations,depth=a.depth,world_pool=a.world_pool,gumbel_max_considered=a.gumbel_max_considered,chance_universes=a.chance_universes,dynamic_fpu=a.dynamic_fpu,inference_batch_size=a.inference_batch_size,search=a.search,root_only=a.root_only)
+                         accepted=reset.get('settings')
+                         validate_accepted_settings(expected,accepted)
+                         u.reset_policy(alpha_seed)
+@@ -103,7 +109,8 @@ def main():
+                         record=dict(index=2*block+rotation,block=block,rotation=rotation,setup_seed=setup_seed,seats=seats,
+                             status='decision_limit',reason=None,rewards=None,native_rewards=None,
+                             initial_state=initial.astype(int).tolist(),actions=[],chance_seeds=[],state_sha256=[],policy_observation_sha256=[],
+-                            policy_seconds=[0.,0.],simulations=0,inferences=0,policy_seeds=[splendor_seed,alpha_seed])
++                            policy_seconds=[0.,0.],simulations=0,inferences=0,batch_wave_histogram=[0]*9,
++                            duplicate_leaf_inferences=0,policy_seeds=[splendor_seed,alpha_seed])
+                         started=time.perf_counter()
+                         try:
+                             for turn in range(125):
+@@ -120,6 +127,9 @@ def main():
+                                     observation=t.snapshot(state,seat)
+                                     result=rpc.call(op='choose',observation=observation,legal=legal)
+                                     action=result['action'];record['simulations']+=result['simulations'];record['inferences']+=result['inferences']
++                                    for size,count in enumerate(result.get('batch_wave_histogram',[0]*9)):
++                                        record['batch_wave_histogram'][size]+=count
++                                    record['duplicate_leaf_inferences']+=result.get('duplicate_leaf_inferences',0)
+                                     record['policy_observation_sha256'].append(__import__('hashlib').sha256(json.dumps(observation,sort_keys=True).encode()).hexdigest())
+                                 else:
+                                     action=u.choose(state,seat)
+diff --git a/benchmarks/strength/native/schedule.py b/benchmarks/strength/native/schedule.py
+index 801c860..5701cbf 100644
+--- a/benchmarks/strength/native/schedule.py
++++ b/benchmarks/strength/native/schedule.py
+@@ -20,9 +20,10 @@ def validate_settings(iterations,depth,world_pool,gumbel_max_considered,chance_u
+ 
+ def run_schedule(directory,games,master,workers,iterations=128,model=None,search="puct",root_only=False,
+                  depth=16,world_pool=3,gumbel_max_considered=16,policy_binary=None,strength_binary=None,
+-                 campaign_context=None,chance_universes=0,dynamic_fpu=False):
++                 campaign_context=None,chance_universes=0,dynamic_fpu=False,inference_batch_size=1):
+     if games<=0 or games%2 or workers<1 or games//2<workers:raise ValueError('invalid paired schedule')
+     validate_settings(iterations,depth,world_pool,gumbel_max_considered,chance_universes)
++    if inference_batch_size not in (1,8):raise ValueError('inference-batch-size must be 1 or 8')
+     policy_binary=Path(policy_binary or DEFAULT_POLICY_BINARY).resolve(strict=True)
+     if not policy_binary.is_file() or not os.access(policy_binary,os.X_OK):raise ValueError('policy binary must be an executable file')
+     policy_binary_sha256=sha(policy_binary)
+@@ -39,6 +40,7 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
+             '--offset-block',str(offset),'--iterations',str(iterations),'--depth',str(depth),
+             '--world-pool',str(world_pool),'--gumbel-max-considered',str(gumbel_max_considered),
+             '--chance-universes',str(chance_universes),
++            '--inference-batch-size',str(inference_batch_size),
+             '--policy-binary',str(policy_binary),'--strength-binary',str(strength_binary),
+             '--output',str(directory/f'shard-{worker:02}.jsonl')]
+         if campaign_context:command+=['--campaign-context',str(campaign_context),'--campaign-games',str(games)]
+@@ -47,7 +49,7 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
+         if root_only:command+=['--root-only']
+         if model:command+=['--model',str(model)]
+         assignments.append(command);offset+=count
+-    plan=dict(games=games,master=master,workers=workers,iterations=iterations,depth=depth,world_pool=world_pool,chance_universes=chance_universes,dynamic_fpu=dynamic_fpu,
++    plan=dict(games=games,master=master,workers=workers,iterations=iterations,depth=depth,world_pool=world_pool,chance_universes=chance_universes,dynamic_fpu=dynamic_fpu,inference_batch_size=inference_batch_size,
+         gumbel_max_considered=gumbel_max_considered if search=='gumbel' else None,
+         root_only=root_only,search=search,policy_binary_path=str(policy_binary),policy_binary_sha256=policy_binary_sha256,
+         strength_binary_path=str(strength_binary),strength_binary_sha256=strength_binary_sha256,commands=assignments,
+@@ -71,7 +73,7 @@ def run_schedule(directory,games,master,workers,iterations=128,model=None,search
+         meta,*part=map(json.loads,(directory/f'shard-{worker:02}.jsonl').read_text().splitlines())
+         assert len(part)==meta['games']
+         metas.append(meta);rows+=part
+-    shared_keys=['model_sha256','policy_binary_path','policy_binary_sha256','strength_binary_path','strength_binary_sha256','source_id','external_config','upstream_revision','upstream_checkpoint_sha256','iterations','depth','world_pool','chance_universes','dynamic_fpu','gumbel_max_considered','master','source_sha256','root_only','search','search_profile','gumbel_config']
++    shared_keys=['model_sha256','policy_binary_path','policy_binary_sha256','strength_binary_path','strength_binary_sha256','source_id','external_config','upstream_revision','upstream_checkpoint_sha256','iterations','depth','world_pool','chance_universes','dynamic_fpu','inference_batch_size','gumbel_max_considered','master','source_sha256','root_only','search','search_profile','gumbel_config']
+     if campaign_context:shared_keys += ['campaign_games','campaign_freeze_path','freeze_sha256','campaign_started_at_utc',
+         'campaign_context_path','campaign_context_sha256','checkpoint_path','checkpoint_sha256',
+         'export_receipt_path','export_receipt_sha256','parity_binary_path','parity_binary_sha256','service_config']
+@@ -100,6 +102,7 @@ def main():
+     p.add_argument('--gumbel-max-considered',type=int,default=16)
+     p.add_argument('--chance-universes',type=int,default=0)
+     p.add_argument('--dynamic-fpu',action='store_true')
++    p.add_argument('--inference-batch-size',type=int,choices=(1,8),default=1)
+     p.add_argument('--root-only',action='store_true');p.add_argument('--search',choices=['puct','gumbel'],default='puct');p.add_argument('--model',type=Path);p.add_argument('--output',type=Path,required=True)
+     p.add_argument('--policy-binary',type=Path,default=DEFAULT_POLICY_BINARY)
+     p.add_argument('--strength-binary',type=Path,default=DEFAULT_STRENGTH_BINARY)
+@@ -107,5 +110,5 @@ def main():
+     a=p.parse_args()
+     print(json.dumps(run_schedule(a.output.resolve(),a.games,a.master,a.workers,a.iterations,a.model,a.search,a.root_only,
+         a.depth,a.world_pool,a.gumbel_max_considered,a.policy_binary,a.strength_binary,a.campaign_context,
+-        a.chance_universes,a.dynamic_fpu)),flush=True)
++        a.chance_universes,a.dynamic_fpu,a.inference_batch_size)),flush=True)
+ if __name__=='__main__':main()
+diff --git a/benchmarks/strength/native/summarize.py b/benchmarks/strength/native/summarize.py
+index 994b3e8..6f1909b 100644
+--- a/benchmarks/strength/native/summarize.py
++++ b/benchmarks/strength/native/summarize.py
+@@ -21,8 +21,12 @@ def main():
+     # Union-bound the lower and upper missing-credit means (two one-sided tails).
+     radius=math.sqrt(math.log(2/.05)/(2*len(lower)))
+     actions=collections.Counter();by_identity={x:collections.Counter() for x in ['champion','alphazero']}
++    batch_waves=[0]*9;duplicate_leaf_inferences=0
+     for row in rows:
+         actions.update(row['actions'])
++        for size,count in enumerate(row.get('batch_wave_histogram',[0]*9)):
++            batch_waves[size]+=count
++        duplicate_leaf_inferences+=row.get('duplicate_leaf_inferences',0)
+         for turn,action in enumerate(row['actions']):by_identity[row['seats'][turn%2]][action]+=1
+     result.update(completion_rate=result['statuses'].get('complete',0)/len(rows),
+         conservative_hoeffding95_missing_envelope=[max(0,statistics.mean(lower)-radius),min(1,statistics.mean(upper)+radius)],
+@@ -30,6 +34,7 @@ def main():
+         elapsed_game_seconds=sum(r['elapsed_seconds'] for r in rows),wall_seconds=meta.get('wall_seconds'),
+         policy_seconds={identity:sum(r['policy_seconds'][r['seats'].index(identity)] for r in rows) for identity in ['champion','alphazero']},
+         simulations=sum(r['simulations'] for r in rows),inferences=sum(r['inferences'] for r in rows),
++        batch_wave_histogram=batch_waves,duplicate_leaf_inferences=duplicate_leaf_inferences,
+         actions_by_identity={i:dict(sorted(c.items())) for i,c in by_identity.items()},
+         source_sha256=sha(__file__),
+         conclusion_scope='Frozen models and fixed search budgets in AlphaZero native rules. Unchanged AlphaZero has true private reservation/deck-membership information; SplendoRust uses public observations. Native cap outcomes are legitimate native results. No canonical or equal-compute rank.')
+diff --git a/benchmarks/strength/native/test_native.py b/benchmarks/strength/native/test_native.py
+index 2324a74..03e01a8 100644
+--- a/benchmarks/strength/native/test_native.py
++++ b/benchmarks/strength/native/test_native.py
+@@ -3,6 +3,25 @@ import json
+ import unittest
+ from upstream import ROOT, Upstream, Tracker, sha
+ from validate import RPC
++from run import validate_accepted_settings
++
++class AcceptedSettingsTest(unittest.TestCase):
++    def setUp(self):
++        self.base=dict(iterations=6400,depth=64,world_pool=3,gumbel_max_considered=16,
++            chance_universes=3,dynamic_fpu=True,inference_batch_size=1)
++    def test_legacy_worker_is_accepted_for_scalar_only(self):
++        accepted={key:value for key,value in self.base.items() if key!='inference_batch_size'}
++        validate_accepted_settings(self.base,accepted)
++        legacy=dict(self.base,chance_universes=0,dynamic_fpu=False)
++        validate_accepted_settings(legacy,None)
++    def test_batch_worker_must_explicitly_accept_batch_size(self):
++        candidate=self.base|dict(inference_batch_size=8)
++        with self.assertRaises(RuntimeError):
++            validate_accepted_settings(candidate,None)
++        accepted=candidate|dict(inference_batch_size=1)
++        with self.assertRaises(RuntimeError):
++            validate_accepted_settings(candidate,accepted)
++        validate_accepted_settings(candidate,candidate)
+ 
+ class InformationTest(unittest.TestCase):
+     @classmethod
+diff --git a/crates/splendor-agents/src/environment.rs b/crates/splendor-agents/src/environment.rs
+index f8b93ff..bc8185c 100644
+--- a/crates/splendor-agents/src/environment.rs
++++ b/crates/splendor-agents/src/environment.rs
+@@ -163,6 +163,9 @@ impl Environment for AlphaZeroNative {
+ pub trait PolicyValue<E: Environment> {
+     type Policy: AsRef<[f32]>;
+     fn evaluate(&mut self, o: &E::Observation) -> (Self::Policy, f64);
++    fn evaluate_batch(&mut self, observations: &[E::Observation]) -> Vec<(Self::Policy, f64)> {
++        observations.iter().map(|o| self.evaluate(o)).collect()
++    }
+     fn choices(o: &E::Observation, legal: &[E::Action]) -> Option<Vec<E::Action>>;
+     fn rollout_action(&mut self, o: &E::Observation, legal: &[E::Action]) -> E::Action;
+ }
+diff --git a/crates/splendor-agents/src/neural_search.rs b/crates/splendor-agents/src/neural_search.rs
+index d89bb09..09f70af 100644
+--- a/crates/splendor-agents/src/neural_search.rs
++++ b/crates/splendor-agents/src/neural_search.rs
+@@ -6,7 +6,7 @@ use super::{
+ };
+ use splendor_core::{Action, Observation, Phase, Rng};
+ use std::{
+-    collections::{HashMap, VecDeque},
++    collections::{HashMap, HashSet, VecDeque},
+     sync::OnceLock,
+ };
+ struct Layer {
+@@ -117,6 +117,18 @@ struct Node<A = Action> {
+     visits: u32,
+     value: f64,
+ }
++struct PendingLeaf<O, A, K> {
++    observation: O,
++    legal: Option<Vec<A>>,
++    key: Option<K>,
++    seat: usize,
++    path: Vec<(usize, usize, usize)>,
++}
++type PendingEnvironmentLeaf<E> = PendingLeaf<
++    <E as crate::environment::Environment>::Observation,
++    <E as crate::environment::Environment>::Action,
++    (<E as crate::environment::Environment>::Key, u64),
++>;
+ const SEARCH_ACTION_CAPACITY: usize = 81;
+ impl<A> Node<A> {
+     /// Appendix D mixed value; unvisited actions have no invented empirical Q.
+@@ -210,6 +222,14 @@ pub struct NeuralAgent {
+     pub uniform_prior: f64,
+     pub dynamic_fpu: bool,
+     pub world_pool: usize,
++    /// Opt-in leaf batch size for observation-only environment search.
++    pub inference_batch_size: usize,
++    /// Number of search waves observed at each request count.
++    pub inference_batch_histogram: [u64; 9],
++    /// Requests for an information set already queued in the same wave.
++    pub duplicate_leaf_inferences: u64,
++    #[cfg(test)]
++    force_batch_search: bool,
+     /// Deterministic chance universes cycled across native root simulations.
+     /// Zero preserves the ordinary per-transition random refill behavior.
+     pub chance_universes: usize,
+@@ -260,6 +280,11 @@ impl NeuralAgent {
+             uniform_prior: 0.02,
+             dynamic_fpu: false,
+             world_pool: 0,
++            inference_batch_size: 1,
++            inference_batch_histogram: [0; 9],
++            duplicate_leaf_inferences: 0,
++            #[cfg(test)]
++            force_batch_search: false,
+             chance_universes: 0,
+             rollout_depth: 0,
+             persistent: false,
+@@ -776,6 +801,384 @@ impl NeuralAgent {
+         let seat = usize::from(o.viewer != o.current);
+         (policy, (f64::from(values[seat]) + 1.0) / 2.0)
+     }
++
++    fn native_leaf_batch(
++        &mut self,
++        observations: &[crate::native_environment::Observation],
++    ) -> Vec<([f32; 81], f64)> {
++        if observations.is_empty() {
++            return Vec::new();
++        }
++        let Some(model) = self.external_model else {
++            return observations.iter().map(|o| self.native_leaf(o)).collect();
++        };
++        assert!(
++            !model.uses_history_bridge(),
++            "batched leaf evaluation does not accept public-history models yet"
++        );
++        if !model.needs_public_context() || self.root_only || self.rollout_depth > 0 {
++            return observations.iter().map(|o| self.native_leaf(o)).collect();
++        }
++        let worlds: Vec<_> = observations
++            .iter()
++            .map(|o| {
++                o.determinize(&mut self.rng)
++                    .expect("valid native observation")
++            })
++            .collect();
++        self.calls += observations.len() as u64;
++        let mut features: Vec<[f32; 392]> = worlds
++            .iter()
++            .map(|world| {
++                if model.uses_native_noble_order() {
++                    world.features()
++                } else {
++                    world.model_features()
++                }
++            })
++            .collect();
++        if self.belief_root && self.root_evaluation {
++            for (o, x) in observations.iter().zip(&mut features) {
++                let context = native_public_context(o);
++                *x = super::belief::moments(x, &context).0;
++                self.belief_calls += 1;
++            }
++        }
++        let contexts: Vec<_> = observations.iter().map(native_public_context).collect();
++        let histories: Vec<_> = observations
++            .iter()
++            .map(|o| self.history_tensor(o.current))
++            .collect();
++        let pools: Vec<_> = observations
++            .iter()
++            .map(crate::public_history::native_pool)
++            .collect();
++        if model.has_correction() {
++            self.correction_calls += observations.len() as u64;
++        }
++        let rows: Vec<_> = (0..observations.len())
++            .map(|i| super::transfer::InferenceRow {
++                features: &features[i],
++                context: &contexts[i],
++                native_rules: true,
++                history: &histories[i],
++                pool: &pools[i],
++            })
++            .collect();
++        model
++            .infer_with_history_batch(&rows)
++            .into_iter()
++            .zip(observations)
++            .map(|((policy, values), o)| {
++                let seat = usize::from(o.viewer != o.current);
++                (policy, (f64::from(values[seat]) + 1.0) / 2.0)
++            })
++            .collect()
++    }
++
++    #[allow(clippy::too_many_arguments)]
++    fn trace_batch_environment<E: crate::environment::Environment>(
++        &mut self,
++        state: &mut E::State,
++        depth: u32,
++        nodes: &mut Vec<Node<E::Action>>,
++        index: &mut HashMap<(E::Key, u64), usize>,
++        chance_seed: Option<u64>,
++        path: &mut Vec<(usize, usize, usize)>,
++        pending_nodes: &mut [u32],
++        pending_edges: &mut HashMap<(usize, usize), u32>,
++        leaves: &mut Vec<PendingEnvironmentLeaf<E>>,
++    ) -> Option<[f64; 2]>
++    where
++        Self: crate::environment::PolicyValue<E>,
++    {
++        if let Some(rewards) = E::rewards(state) {
++            return Some(rewards);
++        }
++        let seat = E::current(state);
++        let observation = E::observe(state, seat);
++        if depth == 0 || E::turns(state) == u32::MAX {
++            leaves.push(PendingLeaf {
++                observation,
++                legal: None,
++                key: None,
++                seat,
++                path: path.clone(),
++            });
++            return None;
++        }
++        let actions = E::legal(state);
++        let legal = actions.as_ref();
++        if legal.is_empty() {
++            leaves.push(PendingLeaf {
++                observation,
++                legal: None,
++                key: None,
++                seat,
++                path: path.clone(),
++            });
++            return None;
++        }
++        if !E::main(state) {
++            let choices =
++                <Self as crate::environment::PolicyValue<E>>::choices(&observation, legal);
++            let action = <Self as crate::environment::PolicyValue<E>>::rollout_action(
++                self,
++                &observation,
++                choices.as_deref().unwrap_or(legal),
++            );
++            let old_turns = E::turns(state);
++            let old_history = self.apply_environment::<E>(state, action, chance_seed);
++            let result = self.trace_batch_environment::<E>(
++                state,
++                depth - u32::from(E::turns(state) != old_turns),
++                nodes,
++                index,
++                chance_seed,
++                path,
++                pending_nodes,
++                pending_edges,
++                leaves,
++            );
++            self.restore_history(old_history);
++            return result;
++        }
++
++        let key = (E::key(&observation, self.transferred), self.history_hash());
++        let Some(&node_index) = index.get(&key) else {
++            let choices =
++                <Self as crate::environment::PolicyValue<E>>::choices(&observation, legal);
++            leaves.push(PendingLeaf {
++                observation,
++                legal: Some(choices.unwrap_or_else(|| legal.to_vec())),
++                key: Some(key),
++                seat,
++                path: path.clone(),
++            });
++            return None;
++        };
++        let edge_index = {
++            let node = &nodes[node_index];
++            (0..node.edges.len())
++                .max_by(|&a, &b| {
++                    let score = |edge_index: usize| {
++                        let edge = &node.edges[edge_index];
++                        let queued = f64::from(
++                            pending_edges
++                                .get(&(node_index, edge_index))
++                                .copied()
++                                .unwrap_or(0),
++                        );
++                        let visits = f64::from(edge.visits) + queued;
++                        let q = if visits == 0.0 {
++                            node.value - self.fpu_reduction
++                        } else {
++                            (edge.sum - queued) / visits
++                        };
++                        q + self.cpuct
++                            * edge.prior
++                            * (f64::from(node.visits + pending_nodes[node_index] + 1)).sqrt()
++                            / (visits + 1.0)
++                    };
++                    score(a).total_cmp(&score(b))
++                })
++                .expect("expanded node has legal edges")
++        };
++        let action = nodes[node_index].edges[edge_index].action;
++        debug_assert!(legal.contains(&action));
++        *pending_nodes
++            .get_mut(node_index)
++            .expect("pending node slot") += 1;
++        *pending_edges.entry((node_index, edge_index)).or_default() += 1;
++        path.push((node_index, edge_index, seat));
++        let old_turns = E::turns(state);
++        let old_history = self.apply_environment::<E>(state, action, chance_seed);
++        let result = self.trace_batch_environment::<E>(
++            state,
++            depth - u32::from(E::turns(state) != old_turns),
++            nodes,
++            index,
++            chance_seed,
++            path,
++            pending_nodes,
++            pending_edges,
++            leaves,
++        );
++        self.restore_history(old_history);
++        path.pop();
++        if let Some(values) = result {
++            pending_nodes[node_index] -= 1;
++            let remove_edge = if let Some(queued) = pending_edges.get_mut(&(node_index, edge_index))
++            {
++                *queued -= 1;
++                *queued == 0
++            } else {
++                false
++            };
++            if remove_edge {
++                pending_edges.remove(&(node_index, edge_index));
++            }
++            let node = &mut nodes[node_index];
++            if self.dynamic_fpu {
++                node.value = (f64::from(node.visits + 1) * node.value + values[seat])
++                    / f64::from(node.visits + 2);
++            }
++            node.visits += 1;
++            node.edges[edge_index].visits += 1;
++            node.edges[edge_index].sum += values[seat];
++        }
++        result
++    }
++
++    fn finish_batch_leaf<E: crate::environment::Environment>(
++        leaf: &PendingEnvironmentLeaf<E>,
++        prediction: &(<Self as crate::environment::PolicyValue<E>>::Policy, f64),
++        nodes: &mut Vec<Node<E::Action>>,
++        index: &mut HashMap<(E::Key, u64), usize>,
++        wave_expansion_values: &mut HashMap<(E::Key, u64), f64>,
++        uniform_prior: f64,
++    ) -> [f64; 2]
++    where
++        Self: crate::environment::PolicyValue<E>,
++        E::Key: Clone,
++    {
++        let mut value = prediction.1;
++        if let (Some(legal), Some(key)) = (&leaf.legal, &leaf.key) {
++            if let Some(&first_value) = wave_expansion_values.get(key) {
++                // Several paths can reach one unseen information set in a
++                // wave. Later rows reuse the first row's expansion value;
++                // sequential search would descend after expanding the node.
++                value = first_value;
++            } else if let Some(&node_index) = index.get(key) {
++                value = nodes[node_index].value;
++            } else {
++                wave_expansion_values.insert(key.clone(), value);
++                let logits = prediction.0.as_ref();
++                let max = legal
++                    .iter()
++                    .map(|&action| logits[E::action_index(action)])
++                    .fold(f32::NEG_INFINITY, f32::max);
++                let weights: Vec<_> = legal
++                    .iter()
++                    .map(|&action| f64::from((logits[E::action_index(action)] - max).exp()))
++                    .collect();
++                let total: f64 = weights.iter().sum();
++                let node = Node {
++                    edges: legal
++                        .iter()
++                        .zip(weights)
++                        .map(|(&action, weight)| Edge {
++                            action,
++                            prior: (1.0 - uniform_prior) * weight / total
++                                + uniform_prior / legal.len() as f64,
++                            visits: 0,
++                            sum: 0.0,
++                        })
++                        .collect(),
++                    visits: 0,
++                    value,
++                };
++                index.insert(key.clone(), nodes.len());
++                nodes.push(node);
++            }
++        }
++        let mut values = [1.0 - value; 2];
++        values[leaf.seat] = value;
++        values
++    }
++
++    fn select_environment_batched<E: crate::environment::Environment>(
++        &mut self,
++        o: &E::Observation,
++        root: usize,
++        nodes: &mut Vec<Node<E::Action>>,
++        index: &mut HashMap<(E::Key, u64), usize>,
++        worlds: &[E::State],
++    ) where
++        Self: crate::environment::PolicyValue<E>,
++        E::Key: Clone,
++    {
++        let budget = self.config.iterations as usize;
++        let batch_size = self.inference_batch_size.max(1);
++        assert!(batch_size <= 8, "batch leaf limit is eight");
++        let chance_seeds = if budget == 0 {
++            Vec::new()
++        } else {
++            self.make_chance_seeds()
++        };
++        let mut completed = 0;
++        while completed < budget {
++            if completed > 0
++                && self
++                    .deadline_ms
++                    .zip(self.clock)
++                    .is_some_and(|(deadline, clock)| clock() >= deadline)
++            {
++                break;
++            }
++            let wave = batch_size.min(budget - completed);
++            let mut leaves = Vec::with_capacity(wave);
++            let mut pending_nodes = vec![0u32; nodes.len()];
++            let mut pending_edges = HashMap::new();
++            for offset in 0..wave {
++                let simulation = completed + offset;
++                let mut state = if worlds.is_empty() {
++                    E::determinize(o, &mut self.rng)
++                } else {
++                    worlds[simulation % worlds.len()].clone()
++                };
++                let mut path = Vec::new();
++                self.trace_batch_environment::<E>(
++                    &mut state,
++                    self.config.depth.max(1),
++                    nodes,
++                    index,
++                    Self::chance_seed_for(&chance_seeds, simulation),
++                    &mut path,
++                    &mut pending_nodes,
++                    &mut pending_edges,
++                    &mut leaves,
++                );
++                self.simulations += 1;
++            }
++            let observations: Vec<_> = leaves.iter().map(|leaf| leaf.observation.clone()).collect();
++            if !leaves.is_empty() {
++                self.inference_batch_histogram[leaves.len()] += 1;
++                let mut seen = HashSet::new();
++                self.duplicate_leaf_inferences += leaves
++                    .iter()
++                    .filter_map(|leaf| leaf.key.as_ref())
++                    .filter(|key| !seen.insert(*key))
++                    .count() as u64;
++            }
++            let predictions =
++                <Self as crate::environment::PolicyValue<E>>::evaluate_batch(self, &observations);
++            assert_eq!(predictions.len(), leaves.len());
++            let mut wave_expansion_values = HashMap::new();
++            for (leaf, prediction) in leaves.iter().zip(&predictions) {
++                let values = Self::finish_batch_leaf::<E>(
++                    leaf,
++                    prediction,
++                    nodes,
++                    index,
++                    &mut wave_expansion_values,
++                    self.uniform_prior,
++                );
++                for &(node_index, edge_index, seat) in leaf.path.iter().rev() {
++                    let node = &mut nodes[node_index];
++                    if self.dynamic_fpu {
++                        node.value = (f64::from(node.visits + 1) * node.value + values[seat])
++                            / f64::from(node.visits + 2);
++                    }
++                    node.visits += 1;
++                    node.edges[edge_index].visits += 1;
++                    node.edges[edge_index].sum += values[seat];
++                }
++            }
++            completed += wave;
++        }
++        debug_assert!(root < nodes.len());
++    }
+     /// Run the same PUCT kernel in an explicit non-canonical environment.
+     /// The caller supplies only a public observation and its legal action set.
+     pub fn select_environment<E: crate::environment::Environment>(
+@@ -785,6 +1188,7 @@ impl NeuralAgent {
+     ) -> E::Action
+     where
+         Self: crate::environment::PolicyValue<E>,
++        E::Key: Clone,
+     {
+         assert!(!legal.is_empty());
+         if legal.len() == 1 {
+@@ -802,12 +1206,47 @@ impl NeuralAgent {
+             let selected = self.gumbel_root::<E>(o, 0, &mut nodes, &mut index, &worlds);
+             return nodes[0].edges[selected].action;
+         }
++        let batch_search = self.inference_batch_size > 1;
++        #[cfg(test)]
++        let batch_search = batch_search || self.force_batch_search;
++        if batch_search {
++            if self.inference_batch_size > 1 {
++                assert!(
++                    self.external_model
++                        .is_some_and(|model| !model.uses_history_bridge()),
++                    "batched PUCT currently requires a frozen no-history external model"
++                );
++                assert!(
++                    !self.root_only && self.rollout_depth == 0,
++                    "batched PUCT does not support root_only or rollout_depth"
++                );
++            }
++            self.select_environment_batched::<E>(o, 0, &mut nodes, &mut index, &worlds);
++            return nodes[0]
++                .edges
++                .iter()
++                .max_by(|a, b| {
++                    a.visits
++                        .cmp(&b.visits)
++                        .then_with(|| a.prior.total_cmp(&b.prior))
++                })
++                .unwrap()
++                .action;
++        }
+         let chance_seeds = if self.config.iterations == 0 {
+             Vec::new()
+         } else {
+             self.make_chance_seeds()
+         };
+         for simulation in 0..self.config.iterations {
++            if simulation > 0
++                && self
++                    .deadline_ms
++                    .zip(self.clock)
++                    .is_some_and(|(deadline, clock)| clock() >= deadline)
++            {
++                break;
++            }
+             let mut state = if worlds.is_empty() {
+                 E::determinize(o, &mut self.rng)
+             } else {
+@@ -834,6 +1273,18 @@ impl NeuralAgent {
+             .action
+     }
+ }
++fn native_public_context(o: &crate::native_environment::Observation) -> [f32; 7] {
++    let opponent = 1 - usize::from(o.current);
++    let mut context = [0.0; 7];
++    for slot in 0..usize::from(o.players[opponent].reserved_count) {
++        let reservation = o.players[opponent].reserved[slot];
++        context[slot] = f32::from(!reservation.public);
++        context[slot + 3] = f32::from(reservation.tier + 1) / 3.0;
++        context[6] += context[slot] / 3.0;
++    }
++    context
++}
++
+ pub(super) fn key(o: &Observation) -> [u8; 192] {
+     debug_assert_eq!(o.phase, Phase::Main);
+     let mut bytes = [0u8; 192];
+@@ -1135,6 +1586,12 @@ impl crate::environment::PolicyValue<crate::environment::AlphaZeroNative> for Ne
+     fn evaluate(&mut self, o: &crate::native_environment::Observation) -> (Self::Policy, f64) {
+         self.native_leaf(o)
+     }
++    fn evaluate_batch(
++        &mut self,
++        observations: &[crate::native_environment::Observation],
++    ) -> Vec<(Self::Policy, f64)> {
++        self.native_leaf_batch(observations)
++    }
+     fn choices(_: &crate::native_environment::Observation, _: &[u8]) -> Option<Vec<u8>> {
+         None
+     }
+@@ -1181,6 +1638,7 @@ impl crate::environment::PolicyValue<crate::privileged_environment::PrivilegedNa
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++    use crate::environment::Environment;
+     #[test]
+     fn runtime_deadline_stops_search_and_can_be_cleared() {
+         let state = GameState::new(2, 91337).unwrap();
+@@ -1264,6 +1722,169 @@ mod tests {
+             assert!(captured.search_targets.is_none());
+         }
+     }
++
++    #[test]
++    fn forced_batch_size_one_matches_sequential_environment_search() {
++        let state = GameState::new(2, 77123).unwrap();
++        let observation = state.observe(0);
++        let mut legal = ActionSet::new();
++        state.legal_actions(&mut legal);
++        let config = SearchConfig {
++            iterations: 24,
++            depth: 8,
++            ..Default::default()
++        };
++        let mut scalar = NeuralAgent::new(902, config.clone());
++        let mut queued = NeuralAgent::new(902, config);
++        queued.force_batch_search = true;
++        scalar.world_pool = 3;
++        queued.world_pool = 3;
++        scalar.chance_universes = 3;
++        queued.chance_universes = 3;
++        let expected =
++            scalar.select_environment::<crate::environment::Canonical>(&observation, &legal);
++        let actual =
++            queued.select_environment::<crate::environment::Canonical>(&observation, &legal);
++        assert_eq!(actual, expected);
++        assert_eq!(queued.work_counts(), scalar.work_counts());
++        assert_eq!(queued.rng.next_u64(), scalar.rng.next_u64());
++    }
++
++    #[test]
++    fn expired_batch_deadline_finishes_one_wave() {
++        let state = GameState::new(2, 77125).unwrap();
++        let observation = state.observe(0);
++        let mut legal = ActionSet::new();
++        state.legal_actions(&mut legal);
++        let mut agent = NeuralAgent::new(
++            904,
++            SearchConfig {
++                iterations: 17,
++                depth: 8,
++                ..Default::default()
++            },
++        );
++        agent.clock = Some(|| 100.0);
++        agent.set_search_deadline(Some(99.0));
++        let root =
++            agent.expand_root_environment::<crate::environment::Canonical>(&observation, &legal);
++        let mut nodes = vec![root];
++        let mut index = HashMap::from([(
++            (
++                crate::environment::Canonical::key(&observation, false),
++                agent.history_hash(),
++            ),
++            0usize,
++        )]);
++        agent.inference_batch_size = 8;
++        agent.select_environment_batched::<crate::environment::Canonical>(
++            &observation,
++            0,
++            &mut nodes,
++            &mut index,
++            &[],
++        );
++        assert_eq!(agent.simulations, 8);
++        assert_eq!(nodes[0].visits, 8);
++        let mut scalar = NeuralAgent::new(
++            904,
++            SearchConfig {
++                iterations: 17,
++                depth: 8,
++                ..Default::default()
++            },
++        );
++        scalar.clock = Some(|| 100.0);
++        scalar.set_search_deadline(Some(99.0));
++        let action =
++            scalar.select_environment::<crate::environment::Canonical>(&observation, &legal);
++        assert!(legal.contains(&action));
++        assert_eq!(scalar.simulations, 1);
++    }
++
++    #[test]
++    fn batched_leaf_waves_consume_exact_simulation_budget() {
++        let state = GameState::new(2, 77124).unwrap();
++        let observation = state.observe(0);
++        let mut legal = ActionSet::new();
++        state.legal_actions(&mut legal);
++        let mut agent = NeuralAgent::new(
++            903,
++            SearchConfig {
++                iterations: 17,
++                depth: 8,
++                ..Default::default()
++            },
++        );
++        let root =
++            agent.expand_root_environment::<crate::environment::Canonical>(&observation, &legal);
++        let mut nodes = vec![root];
++        let mut index = HashMap::from([(
++            (
++                crate::environment::Canonical::key(&observation, false),
++                agent.history_hash(),
++            ),
++            0usize,
++        )]);
++        let worlds: Vec<_> = (0..3)
++            .map(|_| crate::environment::Canonical::determinize(&observation, &mut agent.rng))
++            .collect();
++        agent.world_pool = 3;
++        agent.chance_universes = 3;
++        agent.inference_batch_size = 8;
++        agent.select_environment_batched::<crate::environment::Canonical>(
++            &observation,
++            0,
++            &mut nodes,
++            &mut index,
++            &worlds,
++        );
++        assert_eq!(agent.simulations, 17);
++        assert_eq!(nodes[0].visits, 17);
++        assert_eq!(
++            nodes[0].edges.iter().map(|edge| edge.visits).sum::<u32>(),
++            17
++        );
++    }
++
++    #[test]
++    fn duplicate_unexpanded_leaves_reuse_first_wave_value() {
++        let state = GameState::new(2, 77125).unwrap();
++        let observation = state.observe(0);
++        let mut legal = ActionSet::new();
++        state.legal_actions(&mut legal);
++        let key = (crate::environment::Canonical::key(&observation, false), 0);
++        let leaf = PendingLeaf {
++            observation,
++            legal: Some(legal.iter().copied().collect()),
++            key: Some(key),
++            seat: 0,
++            path: Vec::new(),
++        };
++        let mut nodes = Vec::new();
++        let mut index = HashMap::new();
++        let mut frozen = HashMap::new();
++        let policy = [0.0; ACTIONS];
++        let first = NeuralAgent::finish_batch_leaf::<crate::environment::Canonical>(
++            &leaf,
++            &(policy, 0.2),
++            &mut nodes,
++            &mut index,
++            &mut frozen,
++            0.0,
++        );
++        let second = NeuralAgent::finish_batch_leaf::<crate::environment::Canonical>(
++            &leaf,
++            &(policy, 0.8),
++            &mut nodes,
++            &mut index,
++            &mut frozen,
++            0.0,
++        );
++        assert_eq!(nodes.len(), 1);
++        assert_eq!(first, second);
++        assert_eq!(nodes[0].value, 0.2);
++    }
+     use splendor_core::{ActionSet, GameState};
+     #[test]
+     fn completed_q_policy_and_mixed_value() {
+diff --git a/crates/splendor-agents/src/transfer.rs b/crates/splendor-agents/src/transfer.rs
+index fbcce6d..1656b6b 100644
+--- a/crates/splendor-agents/src/transfer.rs
++++ b/crates/splendor-agents/src/transfer.rs
+@@ -377,6 +377,14 @@ pub fn entity_tokens(input: &[f32; 525]) -> Vec<f32> {
+ pub struct Model {
+     architecture: Architecture,
+ }
++/// One public tensor row for an opt-in batched inference wave.
++pub struct InferenceRow<'a> {
++    pub features: &'a [f32; 392],
++    pub context: &'a [f32; 7],
++    pub native_rules: bool,
++    pub history: &'a [[f32; 32]; 16],
++    pub pool: &'a [f32; 90],
++}
+ type EntityBackend = fn(&[f32]) -> ([f32; 81], [f32; 2]);
+ 
+ enum Architecture {
+@@ -648,6 +656,40 @@ impl Model {
+             self.infer_with_profile(x, context, native_rules)
+         }
+     }
++
++    /// Evaluate public observation rows together when the model uses the
++    /// checkpoint-bound tensor service. Other model formats keep scalar parity.
++    pub fn infer_with_history_batch(
++        &self,
++        inputs: &[InferenceRow<'_>],
++    ) -> Vec<([f32; 81], [f32; 2])> {
++        if let Architecture::Remote(model) = &self.architecture {
++            let rows: Vec<_> = inputs
++                .iter()
++                .map(|row| remote::Input {
++                    x: row.features,
++                    context: row.context,
++                    native: row.native_rules,
++                    history: row.history,
++                    pool: row.pool,
++                })
++                .collect();
++            model.infer_batch(&rows)
++        } else {
++            inputs
++                .iter()
++                .map(|row| {
++                    self.infer_with_history(
++                        row.features,
++                        row.context,
++                        row.native_rules,
++                        row.history,
++                        row.pool,
++                    )
++                })
++                .collect()
++        }
++    }
+ }
+ 
+ struct GatedBlock {
+diff --git a/crates/splendor-agents/src/transfer/remote.rs b/crates/splendor-agents/src/transfer/remote.rs
+index 153dab4..e81166c 100644
+--- a/crates/splendor-agents/src/transfer/remote.rs
++++ b/crates/splendor-agents/src/transfer/remote.rs
+@@ -107,6 +107,83 @@ mod tests {
+         worker.join().unwrap();
+         assert!(result.is_err(), "wrong checkpoint accepted");
+     }
++
++    #[test]
++    fn persistent_batch_lanes_match_scalar_tensor_and_output_contract() {
++        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
++        let address = listener.local_addr().unwrap();
++        let digest = [7u8; 32];
++        let worker_digest = digest;
++        let worker = std::thread::spawn(move || {
++            let accept = || {
++                let (mut conn, _) = listener.accept().unwrap();
++                let mut slot = [0u8; 4];
++                conn.read_exact(&mut slot).unwrap();
++                assert_eq!(u32::from_le_bytes(slot), 2);
++                conn.write_all(&worker_digest).unwrap();
++                conn
++            };
++            let mut scalar = accept();
++            let mut scalar_frame = [0u8; 4508];
++            scalar.read_exact(&mut scalar_frame).unwrap();
++            let mut response = [0u8; 332];
++            for value in response.as_chunks_mut::<4>().0.iter_mut() {
++                value.copy_from_slice(&0.375f32.to_le_bytes());
++            }
++            scalar.write_all(&response).unwrap();
++
++            let mut streams = vec![accept(), accept(), accept()];
++            let mut frames = Vec::new();
++            for conn in &mut streams {
++                let mut frame = [0u8; 4508];
++                conn.read_exact(&mut frame).unwrap();
++                frames.push(frame);
++            }
++            assert_eq!(frames[0], scalar_frame);
++            assert_eq!(frames[1], scalar_frame);
++            assert_ne!(frames[0], frames[2]);
++            for conn in &mut streams {
++                let mut response = [0u8; 332];
++                for value in response.as_chunks_mut::<4>().0.iter_mut() {
++                    value.copy_from_slice(&0.375f32.to_le_bytes());
++                }
++                conn.write_all(&response).unwrap();
++            }
++        });
++        let descriptor = format!("SPREMOTE{address}\n2\n{}\n0\n", "07".repeat(32));
++        let model = RemoteModel::from_bytes(descriptor.as_bytes());
++        let x0 = [0.25f32; 392];
++        let x1 = [0.5f32; 392];
++        let context = [0.0f32; 7];
++        let history = [[0.0f32; 32]; 16];
++        let pool = [1.0f32; 90];
++        let scalar = model.infer(&x0, &context, true, &history, &pool);
++        let batched = model.infer_batch(&[
++            Input {
++                x: &x0,
++                context: &context,
++                native: true,
++                history: &history,
++                pool: &pool,
++            },
++            Input {
++                x: &x0,
++                context: &context,
++                native: true,
++                history: &history,
++                pool: &pool,
++            },
++            Input {
++                x: &x1,
++                context: &context,
++                native: true,
++                history: &history,
++                pool: &pool,
++            },
++        ]);
++        assert_eq!(batched, vec![scalar, scalar, scalar]);
++        worker.join().unwrap();
++    }
+     #[test]
+     #[should_panic(expected = "local tensor service required")]
+     fn reject_nonlocal_service() {
+@@ -117,8 +194,20 @@ mod tests {
+ }
+ thread_local! {
+     static CONNECTIONS: RefCell<Connections> = RefCell::new(HashMap::new());
++    static BATCH_CONNECTIONS: RefCell<BatchConnections> = RefCell::new(HashMap::new());
+ }
+ type Connections = HashMap<(String, u32, [u8; 32]), TcpStream>;
++type BatchConnections = HashMap<(String, u32, [u8; 32]), Vec<TcpStream>>;
++
++#[derive(Clone, Copy)]
++pub(super) struct Input<'a> {
++    pub x: &'a [f32; 392],
++    pub context: &'a [f32; 7],
++    pub native: bool,
++    pub history: &'a [[f32; 32]; 16],
++    pub pool: &'a [f32; 90],
++}
++
+ impl RemoteModel {
+     pub(super) fn from_bytes(bytes: &[u8]) -> Self {
+         let header = std::str::from_utf8(&bytes[8..]).expect("remote model header");
+@@ -154,27 +243,13 @@ impl RemoteModel {
+         history: &[[f32; 32]; 16],
+         pool: &[f32; 90],
+     ) -> ([f32; 81], [f32; 2]) {
+-        let (mean, public) = crate::belief::moments(x, context);
+-        let mut input = [0.0f32; 1127];
+-        input[..392].copy_from_slice(&mean);
+-        input[392..519].copy_from_slice(&public[392..]);
+-        input[519] = f32::from(native);
+-        for (target, row) in input[525..1037]
+-            .as_chunks_mut::<32>()
+-            .0
+-            .iter_mut()
+-            .zip(history)
+-        {
+-            if self.history {
+-                target.copy_from_slice(row);
+-                if self.history_version == 1 {
+-                    target[15] = 0.0;
+-                    target[16] = 0.0;
+-                }
+-            }
+-        }
+-        input[1037..].copy_from_slice(pool);
+-        assert!(input.iter().all(|v| v.is_finite()));
++        let input = self.pack(Input {
++            x,
++            context,
++            native,
++            history,
++            pool,
++        });
+         CONNECTIONS.with(|connections| {
+             let mut connections = connections.borrow_mut();
+             let stream = connections
+@@ -193,27 +268,108 @@ impl RemoteModel {
+                     assert_eq!(actual, self.hash, "tensor service checkpoint mismatch");
+                     stream
+                 });
+-            let mut wire = [0u8; 4508];
+-            for (target, value) in wire.as_chunks_mut::<4>().0.iter_mut().zip(input) {
+-                target.copy_from_slice(&value.to_le_bytes());
+-            }
+-            stream.write_all(&wire).expect("send legal model tensor");
++            Self::write_input(stream, &input);
+             let mut response = [0u8; 332];
+             stream
+                 .read_exact(&mut response)
+                 .expect("read model prediction");
+-            let values: [f32; 83] = std::array::from_fn(|i| {
+-                f32::from_le_bytes(response[4 * i..4 * i + 4].try_into().unwrap())
+-            });
+-            assert!(values.iter().all(|v| v.is_finite()), "finite model outputs");
+-            assert!(
+-                values[81..].iter().all(|v| (-1.0..=1.0).contains(v)),
+-                "bounded values"
+-            );
+-            (
+-                values[..81].try_into().unwrap(),
+-                values[81..].try_into().unwrap(),
+-            )
++            Self::decode_output(&response)
+         })
+     }
++
++    pub(super) fn infer_batch(&self, inputs: &[Input<'_>]) -> Vec<([f32; 81], [f32; 2])> {
++        assert!(inputs.len() <= 8, "batch leaf limit is eight");
++        if inputs.is_empty() {
++            return Vec::new();
++        }
++        let packed: Vec<_> = inputs.iter().map(|&input| self.pack(input)).collect();
++        BATCH_CONNECTIONS.with(|cache| {
++            let mut cache = cache.borrow_mut();
++            let streams = cache
++                .entry((self.endpoint.clone(), self.slot, self.hash))
++                .or_insert_with(Vec::new);
++            while streams.len() < inputs.len() {
++                let mut stream = TcpStream::connect(&self.endpoint)
++                    .expect("connect research tensor service batch lane");
++                stream.set_nodelay(true).expect("tensor socket option");
++                stream
++                    .write_all(&self.slot.to_le_bytes())
++                    .expect("tensor model slot");
++                let mut actual = [0u8; 32];
++                stream
++                    .read_exact(&mut actual)
++                    .expect("tensor checkpoint identity");
++                assert_eq!(actual, self.hash, "tensor service checkpoint mismatch");
++                streams.push(stream);
++            }
++            // Enqueue the complete leaf wave before waiting for any prediction.
++            for (stream, input) in streams.iter_mut().zip(&packed) {
++                Self::write_input(stream, input);
++            }
++            let mut outputs = Vec::with_capacity(inputs.len());
++            for stream in streams.iter_mut().take(inputs.len()) {
++                let mut response = [0u8; 332];
++                stream
++                    .read_exact(&mut response)
++                    .expect("read batched model prediction");
++                outputs.push(Self::decode_output(&response));
++            }
++            outputs
++        })
++    }
++
++    fn pack(&self, request: Input<'_>) -> [f32; 1127] {
++        let Input {
++            x,
++            context,
++            native,
++            history,
++            pool,
++        } = request;
++        let (mean, public) = crate::belief::moments(x, context);
++        let mut input = [0.0f32; 1127];
++        input[..392].copy_from_slice(&mean);
++        input[392..519].copy_from_slice(&public[392..]);
++        input[519] = f32::from(native);
++        for (target, row) in input[525..1037]
++            .as_chunks_mut::<32>()
++            .0
++            .iter_mut()
++            .zip(history)
++        {
++            if self.history {
++                target.copy_from_slice(row);
++                if self.history_version == 1 {
++                    target[15] = 0.0;
++                    target[16] = 0.0;
++                }
++            }
++        }
++        input[1037..].copy_from_slice(pool);
++        assert!(input.iter().all(|v| v.is_finite()));
++        input
++    }
++
++    fn write_input(stream: &mut TcpStream, input: &[f32; 1127]) {
++        let mut wire = [0u8; 4508];
++        for (target, value) in wire.as_chunks_mut::<4>().0.iter_mut().zip(input) {
++            target.copy_from_slice(&value.to_le_bytes());
++        }
++        stream.write_all(&wire).expect("send legal model tensor");
++    }
++
++    fn decode_output(response: &[u8; 332]) -> ([f32; 81], [f32; 2]) {
++        let values: [f32; 83] = std::array::from_fn(|i| {
++            f32::from_le_bytes(response[4 * i..4 * i + 4].try_into().unwrap())
++        });
++        assert!(values.iter().all(|v| v.is_finite()), "finite model outputs");
++        assert!(
++            values[81..].iter().all(|v| (-1.0..=1.0).contains(v)),
++            "bounded values"
++        );
++        (
++            values[..81].try_into().unwrap(),
++            values[81..].try_into().unwrap(),
++        )
++    }
+ }
+diff --git a/crates/splendor-arena/examples/native_policy_worker.rs b/crates/splendor-arena/examples/native_policy_worker.rs
+index 5d46713..ef3f0d3 100644
+--- a/crates/splendor-arena/examples/native_policy_worker.rs
++++ b/crates/splendor-arena/examples/native_policy_worker.rs
+@@ -7,11 +7,21 @@ use splendor_agents::{
+ use splendor_core::Rng;
+ use std::io::{self, BufRead, Write};
+ 
++fn monotonic_ms() -> f64 {
++    static START: std::sync::OnceLock<std::time::Instant> = std::sync::OnceLock::new();
++    START
++        .get_or_init(std::time::Instant::now)
++        .elapsed()
++        .as_secs_f64()
++        * 1000.0
++}
++
+ const DEFAULT_WORLD_POOL: u64 = 3;
+ const DEFAULT_GUMBEL_MAX_CONSIDERED: u64 = 16;
+ const DEFAULT_CHANCE_UNIVERSES: u64 = 0;
+ const MAX_WORLD_POOL: u64 = 64;
+ const MAX_CHANCE_UNIVERSES: u64 = 64;
++const MAX_INFERENCE_BATCH: u64 = 8;
+ const MAX_GUMBEL_MAX_CONSIDERED: u64 = 81;
+ const MAX_DEPTH: u32 = 124;
+ 
+@@ -81,6 +91,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+     let model_path = std::env::args().nth(1).ok_or("model path required")?;
+     let model = Box::leak(Box::new(Model::from_bytes(&std::fs::read(model_path)?)));
+     let mut agent = NeuralAgent::new(0, SearchConfig::default());
++    let mut time_budget_ms = 0;
+     let mut out = io::stdout().lock();
+     for line in io::stdin().lock().lines() {
+         let v: Value = serde_json::from_str(&line?)?;
+@@ -97,8 +108,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                     optional_u64(&v, "gumbel_max_considered", DEFAULT_GUMBEL_MAX_CONSIDERED)?;
+                 let chance_universes =
+                     optional_u64(&v, "chance_universes", DEFAULT_CHANCE_UNIVERSES)?;
++                time_budget_ms = optional_u64(&v, "time_budget_ms", 0)?;
++                if time_budget_ms > 30_000 {
++                    return Err("time_budget_ms must be at most 30000".into());
++                }
+                 let dynamic_fpu = optional_bool(&v, "dynamic_fpu", false)?;
++                let inference_batch_size = optional_u64(&v, "inference_batch_size", 1)?;
+                 validate_controls(world_pool, gumbel_max_considered, chance_universes)?;
++                if !matches!(inference_batch_size, 1 | 8) {
++                    return Err(io::Error::new(
++                        io::ErrorKind::InvalidInput,
++                        format!("inference_batch_size must be 1 or {MAX_INFERENCE_BATCH}"),
++                    )
++                    .into());
++                }
+                 let world_pool = usize::try_from(world_pool)?;
+                 let gumbel_max_considered = usize::try_from(gumbel_max_considered)?;
+                 let chance_universes = usize::try_from(chance_universes)?;
+@@ -107,6 +130,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                     return Err(format!("unknown search profile: {search}").into());
+                 }
+                 let root_only = v["root_only"].as_bool().unwrap_or(false);
++                if inference_batch_size > 1 && (root_only || model.uses_history_bridge()) {
++                    return Err(io::Error::new(
++                        io::ErrorKind::InvalidInput,
++                        "batched PUCT does not support root-only or public-history models",
++                    )
++                    .into());
++                }
+                 agent = NeuralAgent::new(
+                     v["seed"].as_u64().ok_or("policy seed")?,
+                     SearchConfig {
+@@ -115,11 +145,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                         ..Default::default()
+                     },
+                 );
++                agent.clock = Some(monotonic_ms);
+                 agent.transferred = true;
+                 agent.external_model = Some(model);
+                 agent.world_pool = world_pool;
+                 agent.chance_universes = chance_universes;
+                 agent.dynamic_fpu = dynamic_fpu;
++                agent.inference_batch_size = usize::try_from(inference_batch_size)?;
+                 agent.cpuct = 0.4;
+                 agent.fpu_reduction = 0.02965;
+                 agent.uniform_prior = 0.;
+@@ -131,10 +163,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                 }
+                 Ok(json!({"ok":true,"settings":{
+                     "iterations":iterations,
++                    "time_budget_ms":time_budget_ms,
+                     "depth":depth,
+                     "world_pool":world_pool,
+                     "chance_universes":chance_universes,
+                     "dynamic_fpu":dynamic_fpu,
++                    "inference_batch_size":inference_batch_size,
+                     "gumbel_max_considered":gumbel_max_considered,
+                     "search":search,
+                     "root_only":root_only,
+@@ -145,6 +179,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                 }}))
+             }
+             "choose" => {
++                agent.set_search_deadline(
++                    (time_budget_ms > 0).then(|| monotonic_ms() + time_budget_ms as f64),
++                );
+                 let o = native_wire::read(v["observation"].clone())?;
+                 o.validate()?;
+                 if o.viewer != o.current {
+@@ -156,11 +193,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                     return Err("native legal set mismatch".into());
+                 }
+                 let before = agent.work_counts();
++                let batches_before = agent.inference_batch_histogram;
++                let duplicates_before = agent.duplicate_leaf_inferences;
+                 let action = agent.select_environment::<AlphaZeroNative>(&o, &legal);
+                 let after = agent.work_counts();
+-                Ok(
+-                    json!({"action":action,"simulations":after.0-before.0,"inferences":after.1-before.1}),
+-                )
++                let batches_after = agent.inference_batch_histogram;
++                let batch_wave_histogram: [u64; 9] =
++                    std::array::from_fn(|i| batches_after[i] - batches_before[i]);
++                Ok(json!({
++                    "action":action,
++                    "simulations":after.0-before.0,
++                    "inferences":after.1-before.1,
++                    "batch_wave_histogram":batch_wave_histogram,
++                    "duplicate_leaf_inferences":agent.duplicate_leaf_inferences-duplicates_before
++                }))
+             }
+             "sample" => {
+                 let o = native_wire::read(v["observation"].clone())?;

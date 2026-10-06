@@ -1,0 +1,63 @@
+{
+  "games": 2,
+  "master": 17792000000,
+  "workers": 1,
+  "iterations": 6400,
+  "depth": 64,
+  "world_pool": 3,
+  "chance_universes": 3,
+  "dynamic_fpu": true,
+  "inference_batch_size": 8,
+  "gumbel_max_considered": null,
+  "root_only": false,
+  "search": "puct",
+  "policy_binary_path": "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/target/release/examples/native_policy_worker",
+  "policy_binary_sha256": "017ade8617d906e9696d5aec7d224cb771d7804b1e0f74197f5e0ed9ee2944f8",
+  "strength_binary_path": "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/target/release/examples/strength_worker",
+  "strength_binary_sha256": "68dec7c888d7e0e34866a7cb9794cb1f4e5e2919357bd2e02938bd0c2d1631df",
+  "commands": [
+    [
+      "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/local/strength/inference/bin/python",
+      "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/benchmarks/strength/native/run.py",
+      "--games",
+      "2",
+      "--master",
+      "17792000000",
+      "--offset-block",
+      "0",
+      "--iterations",
+      "6400",
+      "--depth",
+      "64",
+      "--world-pool",
+      "3",
+      "--gumbel-max-considered",
+      "16",
+      "--chance-universes",
+      "3",
+      "--inference-batch-size",
+      "8",
+      "--policy-binary",
+      "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/target/release/examples/native_policy_worker",
+      "--strength-binary",
+      "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/target/release/examples/strength_worker",
+      "--output",
+      "/Users/payton.jones/.codex/worktrees/batched-search/splendorust/research/batched-search/pilot-batch8-run1/shard-00.jsonl",
+      "--search",
+      "puct",
+      "--dynamic-fpu",
+      "--model",
+      "research/batched-search/entity-batch8.bin"
+    ]
+  ],
+  "schedule_sha256": "05358cdd5d0e5cf2ea30cf1703958541a5a4394bd52c2b972fff7ebf7c9bfbbd",
+  "run_sha256": "a01a1c8ef5e0a1d6fc3295ec67ada3de8dfbc8e69ac3e77a87951e669186bec8",
+  "executions": [
+    {
+      "worker": 0,
+      "exit": 0,
+      "wall_seconds": 349.1340827080421
+    }
+  ],
+  "wall_seconds": 349.13515191711485
+}
