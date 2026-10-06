@@ -199,6 +199,7 @@ impl GameState {
     pub fn is_terminal(&self) -> bool {
         self.phase == Phase::Terminal
     }
+    #[inline(always)]
     pub fn observe(&self, viewer: usize) -> Observation {
         assert!(viewer < self.player_count());
         let mut players = self.players;
@@ -262,13 +263,7 @@ impl GameState {
     }
     fn eligible(&self) -> u16 {
         let p = &self.players[self.current_player()];
-        let mut mask = 0;
-        for (n, req) in NOBLES.iter().enumerate() {
-            if self.nobles & (1 << n) != 0 && (0..5).all(|i| p.bonuses[i] >= req[i]) {
-                mask |= 1 << n;
-            }
-        }
-        mask
+        data::eligible_nobles(self.nobles, &p.bonuses)
     }
     /// Reuses caller-owned stack storage. Enumeration order is versioned.
     #[inline(always)]
@@ -738,6 +733,7 @@ impl Decision<'_> {
     }
 
     /// Build the same redacted observation as `GameState::observe`.
+    #[inline(always)]
     pub fn observe(&self, viewer: usize) -> Observation {
         self.state.observe(viewer)
     }

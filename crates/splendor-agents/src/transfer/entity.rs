@@ -24,9 +24,9 @@ impl Linear {
         }
     }
     fn apply(&self, x: &[f32], y: &mut [f32]) {
-        for o in 0..self.out {
+        for (o, output) in y[..self.out].iter_mut().enumerate() {
             let row = &self.weight[o * self.input..(o + 1) * self.input];
-            y[o] = self.bias[o] + row.iter().zip(x).map(|(a, b)| a * b).sum::<f32>();
+            *output = self.bias[o] + row.iter().zip(x).map(|(a, b)| a * b).sum::<f32>();
         }
     }
 }
@@ -108,6 +108,8 @@ impl EntityModel {
             y[i] = (x[i] - mean) / d * n.0[i] + n.1[i];
         }
     }
+    // Preserve the frozen reference coefficients and reduction arithmetic.
+    #[allow(clippy::excessive_precision, clippy::approx_constant)]
     fn gelu(x: f32) -> f32 {
         // PyTorch's default GELU uses the exact erf form, not the tanh shortcut.
         let sign = if x < 0.0 { -1.0 } else { 1.0 };

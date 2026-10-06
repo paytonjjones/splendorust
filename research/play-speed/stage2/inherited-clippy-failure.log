@@ -1,0 +1,152 @@
+    Checking cfg-if v1.0.5
+    Checking utf8parse v0.2.2
+    Checking either v1.18.0
+    Checking serde_core v1.0.229
+    Checking crossbeam-utils v0.8.23
+    Checking zmij v1.0.23
+    Checking is_terminal_polyfill v1.70.2
+    Checking anstyle v1.0.14
+    Checking colorchoice v1.0.5
+    Checking anstyle-query v1.1.5
+    Checking memchr v2.8.3
+    Checking arrayvec v0.7.8
+    Checking itoa v1.0.18
+   Compiling syn v3.0.6
+    Checking once_cell v1.21.4
+    Checking anstyle-parse v1.0.0
+    Checking strsim v0.11.1
+    Checking clap_lex v1.1.1
+    Checking half v2.7.1
+    Checking itertools v0.10.5
+   Compiling splendor-arena v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-arena)
+   Compiling wasm-bindgen-shared v0.2.129
+    Checking anstream v1.0.0
+    Checking getrandom v0.3.4
+   Compiling rustversion v1.0.23
+    Checking splendor-core v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-core)
+    Checking getrandom v0.4.3
+   Compiling bumpalo v3.20.3
+    Checking crossbeam-epoch v0.9.21
+    Checking rand_core v0.9.5
+    Checking clap_builder v4.6.7
+    Checking tempfile v3.27.0
+    Checking unicode-ident v1.0.26
+    Checking splendor-agents v0.1.0 (/Users/payton.jones/dev/splendorust/crates/splendor-agents)
+    Checking ciborium-ll v0.2.2
+    Checking rand_chacha v0.9.0
+    Checking rand v0.9.5
+    Checking crossbeam-deque v0.8.8
+    Checking rusty-fork v0.3.1
+    Checking rand_xorshift v0.4.0
+    Checking rayon-core v1.13.0
+    Checking criterion-plot v0.5.0
+    Checking proptest v1.11.0
+    Checking rayon v1.12.0
+error: the loop variable `o` is used to index `y`
+  --> crates/splendor-agents/src/transfer/entity.rs:27:18
+   |
+27 |         for o in 0..self.out {
+   |                  ^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_range_loop
+   = note: `-D clippy::needless-range-loop` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::needless_range_loop)]`
+help: consider using an iterator and enumerate()
+   |
+27 -         for o in 0..self.out {
+27 +         for (o, <item>) in y.iter_mut().enumerate().take(self.out) {
+   |
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:114:28
+    |
+114 |         let ax = x.abs() * 0.7071067811865476;
+    |                            ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+    = note: `-D clippy::excessive-precision` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::excessive_precision)]`
+help: consider changing the type or truncating it to
+    |
+114 -         let ax = x.abs() * 0.7071067811865476;
+114 +         let ax = x.abs() * 0.707_106_77;
+    |
+
+error: approximate value of `f{32, 64}::consts::FRAC_1_SQRT_2` found
+   --> crates/splendor-agents/src/transfer/entity.rs:114:28
+    |
+114 |         let ax = x.abs() * 0.7071067811865476;
+    |                            ^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using the constant directly
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#approx_constant
+    = note: `#[deny(clippy::approx_constant)]` on by default
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:117:16
+    |
+117 |             * (0.254829592
+    |                ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+help: consider changing the type or truncating it to
+    |
+117 -             * (0.254829592
+117 +             * (0.254_829_6
+    |
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:118:25
+    |
+118 |                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+    |                         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+help: consider changing the type or truncating it to
+    |
+118 -                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+118 +                 + t * (-0.284_496_72 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+    |
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:118:44
+    |
+118 |                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+    |                                            ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+help: consider changing the type or truncating it to
+    |
+118 -                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+118 +                 + t * (-0.284496736 + t * (1.421_413_8 + t * (-1.453152027 + t * 1.061405429))));
+    |
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:118:64
+    |
+118 |                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+    |                                                                ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+help: consider changing the type or truncating it to
+    |
+118 -                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+118 +                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453_152_1 + t * 1.061405429))));
+    |
+
+error: float has excessive precision
+   --> crates/splendor-agents/src/transfer/entity.rs:118:82
+    |
+118 |                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+    |                                                                                  ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#excessive_precision
+help: consider changing the type or truncating it to
+    |
+118 -                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))));
+118 +                 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061_405_4))));
+    |
+
+error: could not compile `splendor-agents` (lib) due to 8 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `splendor-agents` (lib test) due to 8 previous errors

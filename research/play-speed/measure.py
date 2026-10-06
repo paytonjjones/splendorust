@@ -15,10 +15,10 @@ def aligned(exe, policy, corpus, threads=1, trace=False):
     return x,records
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--candidate',required=True);p.add_argument('--output',required=True);p.add_argument('--repetitions',type=int,default=7);p.add_argument('--threads',type=int,default=1);p.add_argument('--corpus',default='local/play-speed/corpus.json');a=p.parse_args()
-    exes={'baseline':ROOT/'local/play-speed/baseline-aligned','candidate':ROOT/a.candidate}
+    p=argparse.ArgumentParser();p.add_argument('--baseline',default='local/play-speed/baseline-aligned');p.add_argument('--baseline-commit',default='e429c72');p.add_argument('--candidate',required=True);p.add_argument('--output',required=True);p.add_argument('--repetitions',type=int,default=7);p.add_argument('--threads',type=int,default=1);p.add_argument('--corpus',default='local/play-speed/corpus.json');a=p.parse_args()
+    exes={'baseline':ROOT/a.baseline,'candidate':ROOT/a.candidate}
     out=ROOT/a.output;out.parent.mkdir(parents=True,exist_ok=True)
-    report={'baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'machine':platform.platform(),'cpu':subprocess.check_output(['sysctl','-n','machdep.cpu.brand_string'],text=True).strip(),'load_start':os.getloadavg(),'threads':a.threads,'corpus_sha256':sha(ROOT/a.corpus),'binary_sha256':{k:sha(v) for k,v in exes.items()},'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff','HEAD'])).hexdigest(),'profile':'seal256-intersection-v1','scope':'existing aligned adapter pipeline; complete canonical enumeration and checked apply','samples':[],'validation':[]}
+    report={'baseline_commit':a.baseline_commit,'candidate_checkout_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'machine':platform.platform(),'cpu':subprocess.check_output(['sysctl','-n','machdep.cpu.brand_string'],text=True).strip(),'load_start':os.getloadavg(),'threads':a.threads,'corpus_sha256':sha(ROOT/a.corpus),'binary_sha256':{k:sha(v) for k,v in exes.items()},'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff','HEAD'])).hexdigest(),'profile':'seal256-intersection-v1','scope':'existing aligned adapter pipeline; complete canonical enumeration and checked apply','samples':[],'validation':[]}
     def save(): out.write_text(json.dumps(report,indent=2)+'\n')
     for policy in ('random','fixed'):
         b,br=aligned(exes['baseline'],policy,'benchmarks/fixtures/aligned-smoke.json',trace=True)

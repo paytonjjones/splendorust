@@ -1,0 +1,179 @@
+{
+  "baseline_commit": "7de6146",
+  "candidate_checkout_commit": "71e6900b66f3f5ec7e668a4ce5c1f0ffb7ab0f36",
+  "machine": "macOS-26.7-arm64-arm-64bit-Mach-O",
+  "cpu": "Apple M4 Pro",
+  "load_start": [
+    4.31201171875,
+    3.0439453125,
+    3.66845703125
+  ],
+  "threads": 1,
+  "corpus_sha256": "a99d30bfa806876e5393924346b8b4b71107bee872c54b6149d88f51791ba4ef",
+  "binary_sha256": {
+    "baseline": "3719f143e71c6190bd27e7e6708bb643b3e566724f2beebbae11bf975c048599",
+    "candidate": "97c5ecdf8da8b006d52d71c7951c321e1b326d73a92f6568f0132f15d8571a2f"
+  },
+  "source_diff_sha256": "8484d6337d0d1aad8178fd9597e3142d1da9ceab92d3970fb5172d42fb435b67",
+  "profile": "seal256-intersection-v1",
+  "scope": "existing aligned adapter pipeline; complete canonical enumeration and checked apply",
+  "samples": [
+    {
+      "completed": 50785,
+      "count": 80000,
+      "decisions": 6584428,
+      "seconds": 0.741749458,
+      "setup_seconds": 0.029360958,
+      "statuses": {
+        "complete": 50785,
+        "no_legal_action": 21,
+        "profile_blocked": 23378,
+        "unsupported_noble_choice": 5816
+      },
+      "turns": 4446301,
+      "record_set_sha256": "0da3fb6d10c2472cce995a4fee6340d1dea9ad6525d8a0fcbc51f6d6427db2c2",
+      "policy": "random",
+      "variant": "baseline",
+      "repetition": 0,
+      "load": [
+        4.12646484375,
+        3.0263671875,
+        3.658203125
+      ]
+    },
+    {
+      "completed": 50785,
+      "count": 80000,
+      "decisions": 6584428,
+      "seconds": 0.554650959,
+      "setup_seconds": 0.029413292,
+      "statuses": {
+        "complete": 50785,
+        "no_legal_action": 21,
+        "profile_blocked": 23378,
+        "unsupported_noble_choice": 5816
+      },
+      "turns": 4446301,
+      "record_set_sha256": "0da3fb6d10c2472cce995a4fee6340d1dea9ad6525d8a0fcbc51f6d6427db2c2",
+      "policy": "random",
+      "variant": "candidate",
+      "repetition": 0,
+      "load": [
+        4.12646484375,
+        3.0263671875,
+        3.658203125
+      ]
+    },
+    {
+      "completed": 63446,
+      "count": 80000,
+      "decisions": 8197357,
+      "seconds": 0.868989416,
+      "setup_seconds": 0.027620583,
+      "statuses": {
+        "complete": 63446,
+        "profile_blocked": 3826,
+        "unsupported_noble_choice": 12728
+      },
+      "turns": 4764290,
+      "record_set_sha256": "4df0568f1f21a8d1b2eccf46a83b5c345eb23fb6c49e6be0f9215e09578dccf9",
+      "policy": "fixed",
+      "variant": "baseline",
+      "repetition": 0,
+      "load": [
+        3.9560546875,
+        3.00927734375,
+        3.6484375
+      ]
+    },
+    {
+      "completed": 63446,
+      "count": 80000,
+      "decisions": 8197357,
+      "seconds": 0.72228875,
+      "setup_seconds": 0.0288535,
+      "statuses": {
+        "complete": 63446,
+        "profile_blocked": 3826,
+        "unsupported_noble_choice": 12728
+      },
+      "turns": 4764290,
+      "record_set_sha256": "4df0568f1f21a8d1b2eccf46a83b5c345eb23fb6c49e6be0f9215e09578dccf9",
+      "policy": "fixed",
+      "variant": "candidate",
+      "repetition": 0,
+      "load": [
+        3.9560546875,
+        3.00927734375,
+        3.6484375
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "policy": "random",
+      "cases": 64,
+      "trace_legal_action_outcome_sha256": "6c9a5815ecc0fed39f0b661a3d478576de9bd3755c4e7f251b1c8b106935c864",
+      "exact_match": true
+    },
+    {
+      "policy": "fixed",
+      "cases": 64,
+      "trace_legal_action_outcome_sha256": "41974a168d920a24b372c24ca649289f2edf4cdf99777682ac9a1c86fb29ffa5",
+      "exact_match": true
+    }
+  ],
+  "records": {
+    "random": {
+      "file": "research/play-speed/stage2/shared-screen-random-records.json.gz",
+      "archive_sha256": "8088d7263b7482b772e268cd3105f4b887e2edd2fe63b3bf753fa1f8756d3703"
+    },
+    "fixed": {
+      "file": "research/play-speed/stage2/shared-screen-fixed-records.json.gz",
+      "archive_sha256": "a18a3d1b35c1faf26a73b7a6d4701349cdb5d33218293f629573db9bb072941a"
+    }
+  },
+  "summary": {
+    "random": {
+      "trajectories_per_second": {
+        "baseline": 107853.12902783407,
+        "candidate": 144234.85383354398
+      },
+      "gain_percent": 33.73265581967559,
+      "seconds_range": {
+        "baseline": [
+          0.741749458,
+          0.741749458
+        ],
+        "candidate": [
+          0.554650959,
+          0.554650959
+        ]
+      },
+      "exact_records": true
+    },
+    "fixed": {
+      "trajectories_per_second": {
+        "baseline": 92060.96015328223,
+        "candidate": 110759.02815875229
+      },
+      "gain_percent": 20.310528995502143,
+      "seconds_range": {
+        "baseline": [
+          0.868989416,
+          0.868989416
+        ],
+        "candidate": [
+          0.72228875,
+          0.72228875
+        ]
+      },
+      "exact_records": true
+    }
+  },
+  "load_finish": [
+    3.9560546875,
+    3.00927734375,
+    3.6484375
+  ]
+}

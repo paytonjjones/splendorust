@@ -189,17 +189,17 @@ pub(super) fn legal_actions(state: &GameState, out: &mut ActionSet) {
 fn affordable(card: u8, buying_power: &[u16; 5], gold: u8, colored_affordable: u128) -> bool {
     let cost = &CARDS[card as usize].cost;
     if gold == 0 {
-        return colored_affordable & (1u128 << card) != 0;
+        let word = if card < 64 {
+            colored_affordable as u64
+        } else {
+            (colored_affordable >> 64) as u64
+        };
+        return word & (1u64 << (card & 63)) != 0;
     }
-    let gold = u16::from(gold);
-    let mut deficit = 0u16;
-    for color in 0..5 {
-        deficit += u16::from(cost[color]).saturating_sub(buying_power[color]);
-        if deficit > gold {
-            return false;
-        }
-    }
-    true
+    let deficit: u16 = (0..5)
+        .map(|color| u16::from(cost[color]).saturating_sub(buying_power[color]))
+        .sum();
+    deficit <= u16::from(gold)
 }
 
 pub(super) fn enumerate_payments(cost: [u8; 5], tokens: &[u8; 6], gold: u8, out: &mut ActionSet) {

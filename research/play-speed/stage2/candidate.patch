@@ -1,0 +1,454 @@
+diff --git a/crates/splendor-agents/src/transfer/entity.rs b/crates/splendor-agents/src/transfer/entity.rs
+index c2a166a..44afa00 100644
+--- a/crates/splendor-agents/src/transfer/entity.rs
++++ b/crates/splendor-agents/src/transfer/entity.rs
+@@ -24,9 +24,9 @@ impl Linear {
+         }
+     }
+     fn apply(&self, x: &[f32], y: &mut [f32]) {
+-        for o in 0..self.out {
++        for (o, output) in y[..self.out].iter_mut().enumerate() {
+             let row = &self.weight[o * self.input..(o + 1) * self.input];
+-            y[o] = self.bias[o] + row.iter().zip(x).map(|(a, b)| a * b).sum::<f32>();
++            *output = self.bias[o] + row.iter().zip(x).map(|(a, b)| a * b).sum::<f32>();
+         }
+     }
+ }
+@@ -108,6 +108,8 @@ impl EntityModel {
+             y[i] = (x[i] - mean) / d * n.0[i] + n.1[i];
+         }
+     }
++    // Preserve the frozen reference coefficients and reduction arithmetic.
++    #[allow(clippy::excessive_precision, clippy::approx_constant)]
+     fn gelu(x: f32) -> f32 {
+         // PyTorch's default GELU uses the exact erf form, not the tanh shortcut.
+         let sign = if x < 0.0 { -1.0 } else { 1.0 };
+diff --git a/crates/splendor-arena/Cargo.toml b/crates/splendor-arena/Cargo.toml
+index 18dbcb3..21c32dd 100644
+--- a/crates/splendor-arena/Cargo.toml
++++ b/crates/splendor-arena/Cargo.toml
+@@ -35,6 +35,7 @@ benchmark-compat = ["splendor-core/benchmark-compat"]
+ 
+ [[example]]
+ name = "aligned_worker"
++test = true
+ required-features = ["benchmark-compat"]
+ 
+ [[example]]
+diff --git a/crates/splendor-arena/examples/aligned_worker.rs b/crates/splendor-arena/examples/aligned_worker.rs
+index d2913bf..09bffd2 100644
+--- a/crates/splendor-arena/examples/aligned_worker.rs
++++ b/crates/splendor-arena/examples/aligned_worker.rs
+@@ -3,8 +3,8 @@ use arrayvec::ArrayVec;
+ use rayon::prelude::*;
+ use serde::{Deserialize, Serialize};
+ use splendor_core::{
+-    Action, ActionSet, GameState, NONE, Phase, Rng,
+-    data::{CARDS, NOBLES},
++    Action, ActionSet, GameState, NONE, Observation, Phase, Rng,
++    data::{CARDS, eligible_nobles},
+ };
+ use std::{fs, time::Instant};
+ 
+@@ -85,6 +85,108 @@ struct Record {
+ fn setup(c: &Case) -> GameState {
+     GameState::new_benchmark_setup(2, [&c.decks[0], &c.decks[1], &c.decks[2]], &c.nobles).unwrap()
+ }
++// A take key is a five-digit base-three number. Decode once at compile time.
++const fn take_keys() -> [[u8; 5]; 243] {
++    let mut rows = [[0; 5]; 243];
++    let mut key = 0;
++    while key < rows.len() {
++        let mut digits = key;
++        let mut color = 0;
++        while color < 5 {
++            rows[key][color] = (digits % 3) as u8;
++            digits /= 3;
++            color += 1;
++        }
++        key += 1;
++    }
++    rows
++}
++const TAKE_KEYS: [[u8; 5]; 243] = take_keys();
++
++// A Main projection has at most 12 visible buys, 3 reserved buys,
++// 15 takes and 12 visible reservations. The low byte retains the slot.
++fn project_actions(o: &Observation, legal: &[Action]) -> ArrayVec<u32, 42> {
++    let p = &o.players[o.current as usize];
++    let hand = p.token_count();
++    let reserve_fits = hand + u8::from(o.bank[5] > 0) <= 10;
++    let mut out = ArrayVec::new();
++    for &action in legal {
++        let entry = match action {
++            Action::BuyVisible(i) => Some((u32::from(o.market[i as usize]) << 8) | u32::from(i)),
++            Action::BuyReserved(i) => {
++                Some(((100 + u32::from(p.reserved[i as usize].card)) << 8) | u32::from(i))
++            }
++            Action::ReserveVisible(i) if reserve_fits => {
++                Some(((2000 + u32::from(o.market[i as usize])) << 8) | u32::from(i))
++            }
++            Action::Take(q)
++                if q.iter().sum::<u8>() == 3 && hand <= 7
++                    || q.iter().sum::<u8>() == 2 && q.contains(&2) && hand < 8 =>
++            {
++                let key = u32::from(q[0])
++                    + 3 * u32::from(q[1])
++                    + 9 * u32::from(q[2])
++                    + 27 * u32::from(q[3])
++                    + 81 * u32::from(q[4]);
++                Some((1000 + key) << 8)
++            }
++            _ => None,
++        };
++        if let Some(entry) = entry {
++            out.push(entry);
++        }
++    }
++    out.sort_unstable();
++    out
++}
++
++fn decode_entry(entry: u32) -> (u32, Action) {
++    let key = entry >> 8;
++    let slot = entry as u8;
++    let action = match key {
++        0..100 => Action::BuyVisible(slot),
++        100..200 => Action::BuyReserved(slot),
++        1000..2000 => Action::Take(TAKE_KEYS[(key - 1000) as usize]),
++        2000..2100 => Action::ReserveVisible(slot),
++        _ => unreachable!("projection has a valid semantic key"),
++    };
++    (key, action)
++}
++
++#[cfg(test)]
++fn project_actions_reference(o: &Observation, legal: &[Action]) -> ArrayVec<(u32, Action), 256> {
++    let p = &o.players[o.current as usize];
++    // At most one projected entry per canonical Main action.
++    let mut projected = ArrayVec::<(u32, Action), 256>::new();
++    for &action in legal {
++        let key = match action {
++            Action::BuyVisible(i) => Some(u32::from(o.market[i as usize])),
++            Action::BuyReserved(i) => Some(100 + u32::from(p.reserved[i as usize].card)),
++            Action::ReserveVisible(i) if p.token_count() + u8::from(o.bank[5] > 0) <= 10 => {
++                Some(2000 + u32::from(o.market[i as usize]))
++            }
++            Action::Take(q)
++                if q.iter().sum::<u8>() == 3 && p.token_count() <= 7
++                    || q.iter().sum::<u8>() == 2 && q.contains(&2) && p.token_count() < 8 =>
++            {
++                Some(
++                    1000 + q
++                        .iter()
++                        .enumerate()
++                        .map(|(i, &x)| u32::from(x) * 3u32.pow(i as u32))
++                        .sum::<u32>(),
++                )
++            }
++            _ => None,
++        };
++        if let Some(key) = key {
++            projected.push((key, action));
++        }
++    }
++    projected.sort_unstable_by_key(|x| x.0);
++    projected
++}
++
+ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> Record {
+     let start = Instant::now();
+     let mut rng = Rng::new(c.policy_seed);
+@@ -106,36 +208,9 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) ->
+         let o = s.observe(s.current_player());
+         let p = &o.players[s.current_player()];
+         s.legal_actions(&mut legal);
+-        // At most one projected entry per canonical Main action.
+-        let mut projected = ArrayVec::<(u32, Action), 256>::new();
+-        for &action in &legal {
+-            let key = match action {
+-                Action::BuyVisible(i) => Some(u32::from(o.market[i as usize])),
+-                Action::BuyReserved(i) => Some(100 + u32::from(p.reserved[i as usize].card)),
+-                Action::ReserveVisible(i) if p.token_count() + u8::from(o.bank[5] > 0) <= 10 => {
+-                    Some(2000 + u32::from(o.market[i as usize]))
+-                }
+-                Action::Take(q)
+-                    if q.iter().sum::<u8>() == 3 && p.token_count() <= 7
+-                        || q.iter().sum::<u8>() == 2 && q.contains(&2) && p.token_count() < 8 =>
+-                {
+-                    Some(
+-                        1000 + q
+-                            .iter()
+-                            .enumerate()
+-                            .map(|(i, &x)| u32::from(x) * 3u32.pow(i as u32))
+-                            .sum::<u32>(),
+-                    )
+-                }
+-                _ => None,
+-            };
+-            if let Some(key) = key {
+-                projected.push((key, action));
+-            }
+-        }
+-        projected.sort_unstable_by_key(|x| x.0);
++        let projected = project_actions(&o, &legal);
+         if trace {
+-            legal_keys.push(projected.iter().map(|x| x.0).collect());
++            legal_keys.push(projected.iter().map(|x| x >> 8).collect());
+         }
+         if projected.is_empty() {
+             status = if legal.is_empty() {
+@@ -147,13 +222,13 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) ->
+         }
+         let index = if policy == "random" {
+             rng.index(projected.len())
+-        } else if projected[0].0 < 1000 {
++        } else if projected[0] >> 8 < 1000 {
+             0
+         } else {
+             let mut best = None;
+             let mut best_value = i32::MIN;
+-            for (i, (_, action)) in projected.iter().enumerate() {
+-                if let Action::Take(q) = action {
++            for (i, &entry) in projected.iter().enumerate() {
++                if let (_, Action::Take(q)) = decode_entry(entry) {
+                     let value: i32 = (0..5)
+                         .map(|c| i32::from(q[c]) * (8 - i32::from(p.tokens[c])))
+                         .sum();
+@@ -165,7 +240,7 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) ->
+             }
+             best.unwrap_or(0)
+         };
+-        let (key, action) = projected[index];
++        let (key, action) = decode_entry(projected[index]);
+         // Payment is a policy choice from the complete published action space.
+         let payment = match action {
+             Action::BuyVisible(i) => Some(o.market[i as usize]),
+@@ -186,12 +261,7 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) ->
+         } {
+             let mut bonuses = p.bonuses;
+             bonuses[CARDS[id as usize].bonus as usize] += 1;
+-            let eligible = (0..10)
+-                .filter(|&n| {
+-                    o.nobles & (1 << n) != 0
+-                        && (0..5).all(|color| bonuses[color] >= NOBLES[n][color])
+-                })
+-                .count();
++            let eligible = eligible_nobles(o.nobles, &bonuses).count_ones();
+             if eligible > 1 {
+                 status = "unsupported_noble_choice";
+                 break;
+@@ -298,3 +368,59 @@ fn main() {
+         serde_json::json!({"engine":"splendorust","profile":corpus.profile,"profile_engine_version":splendor_core::BENCHMARK_COMPAT_ENGINE_VERSION,"policy":policy,"threads":threads,"pool_startup_seconds":pool_seconds,"samples":samples,"timing_boundary":"full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"})
+     );
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn projection_matches_original_on_complete_canonical_states() {
++        let mut hands = [false; 14];
++        let mut gold_supply = [false; 2];
++        let mut rng = Rng::new(109000001);
++        let mut main_states = 0;
++        for players in 2..=4 {
++            for seed in 109000001..109000129 {
++                let mut state = GameState::new(players, seed).unwrap();
++                let mut legal = ActionSet::new();
++                for _ in 0..1000 {
++                    state.legal_actions(&mut legal);
++                    if legal.is_empty() {
++                        break;
++                    }
++                    if state.phase() == Phase::Main {
++                        let o = state.observe(state.current_player());
++                        hands[o.players[state.current_player()].token_count() as usize] = true;
++                        gold_supply[usize::from(o.bank[5] > 0)] = true;
++                        assert_eq!(
++                            project_actions(&o, &legal)
++                                .iter()
++                                .copied()
++                                .map(decode_entry)
++                                .collect::<Vec<_>>()
++                                .as_slice(),
++                            project_actions_reference(&o, &legal).as_slice(),
++                            "players={players} seed={seed} turns={}",
++                            state.turns()
++                        );
++                        main_states += 1;
++                    }
++                    let action = if rng.index(2) == 0 {
++                        legal
++                            .iter()
++                            .copied()
++                            .find(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
++                    } else {
++                        None
++                    }
++                    .unwrap_or_else(|| legal[rng.index(legal.len())]);
++                    state.apply_action(action).unwrap();
++                    state.check_invariants().unwrap();
++                }
++            }
++        }
++        assert!(main_states > 10000);
++        assert!(hands[7..=10].iter().all(|x| *x));
++        assert!(gold_supply.iter().all(|x| *x));
++    }
++}
+diff --git a/crates/splendor-core/src/data.rs b/crates/splendor-core/src/data.rs
+index 1734d16..38e44c1 100644
+--- a/crates/splendor-core/src/data.rs
++++ b/crates/splendor-core/src/data.rs
+@@ -560,3 +560,47 @@ pub const NOBLES: [[u8; 5]; 10] = [
+     [3, 0, 0, 3, 3],
+     [3, 3, 0, 0, 3],
+ ];
++
++const fn make_noble_threshold_masks() -> [[u16; 32]; 2] {
++    let mut masks = [[0; 32]; 2];
++    let mut noble = 0;
++    while noble < 10 {
++        let mut requirement = 0;
++        let mut colors = 0u8;
++        let mut color = 0;
++        while color < 5 {
++            let req = NOBLES[noble][color];
++            if req != 0 {
++                assert!(req == 3 || req == 4);
++                assert!(requirement == 0 || requirement == req);
++                requirement = req;
++                colors |= 1 << color;
++            }
++            color += 1;
++        }
++        assert!(requirement == 3 || requirement == 4);
++        let mut available = 0u8;
++        while available < 32 {
++            if available & colors == colors {
++                masks[(requirement - 3) as usize][available as usize] |= 1 << noble;
++            }
++            available += 1;
++        }
++        noble += 1;
++    }
++    masks
++}
++const NOBLE_THRESHOLD_MASKS: [[u16; 32]; 2] = make_noble_threshold_masks();
++
++/// Available nobles whose published requirements are met by these bonuses.
++/// Base nobles require either three or four bonuses in each required color.
++#[inline]
++pub fn eligible_nobles(nobles: u16, bonuses: &[u8; 5]) -> u16 {
++    let mut three = 0usize;
++    let mut four = 0usize;
++    for (color, &bonus) in bonuses.iter().enumerate() {
++        three |= usize::from(bonus >= 3) << color;
++        four |= usize::from(bonus >= 4) << color;
++    }
++    nobles & (NOBLE_THRESHOLD_MASKS[0][three] | NOBLE_THRESHOLD_MASKS[1][four])
++}
+diff --git a/crates/splendor-core/src/fast_actions.rs b/crates/splendor-core/src/fast_actions.rs
+index a45b925..460009e 100644
+--- a/crates/splendor-core/src/fast_actions.rs
++++ b/crates/splendor-core/src/fast_actions.rs
+@@ -189,17 +189,17 @@ pub(super) fn legal_actions(state: &GameState, out: &mut ActionSet) {
+ fn affordable(card: u8, buying_power: &[u16; 5], gold: u8, colored_affordable: u128) -> bool {
+     let cost = &CARDS[card as usize].cost;
+     if gold == 0 {
+-        return colored_affordable & (1u128 << card) != 0;
++        let word = if card < 64 {
++            colored_affordable as u64
++        } else {
++            (colored_affordable >> 64) as u64
++        };
++        return word & (1u64 << (card & 63)) != 0;
+     }
+-    let gold = u16::from(gold);
+-    let mut deficit = 0u16;
+-    for color in 0..5 {
+-        deficit += u16::from(cost[color]).saturating_sub(buying_power[color]);
+-        if deficit > gold {
+-            return false;
+-        }
+-    }
+-    true
++    let deficit: u16 = (0..5)
++        .map(|color| u16::from(cost[color]).saturating_sub(buying_power[color]))
++        .sum();
++    deficit <= u16::from(gold)
+ }
+ 
+ pub(super) fn enumerate_payments(cost: [u8; 5], tokens: &[u8; 6], gold: u8, out: &mut ActionSet) {
+diff --git a/crates/splendor-core/src/lib.rs b/crates/splendor-core/src/lib.rs
+index a9e76cc..6a6023c 100644
+--- a/crates/splendor-core/src/lib.rs
++++ b/crates/splendor-core/src/lib.rs
+@@ -199,6 +199,7 @@ impl GameState {
+     pub fn is_terminal(&self) -> bool {
+         self.phase == Phase::Terminal
+     }
++    #[inline(always)]
+     pub fn observe(&self, viewer: usize) -> Observation {
+         assert!(viewer < self.player_count());
+         let mut players = self.players;
+@@ -262,13 +263,7 @@ impl GameState {
+     }
+     fn eligible(&self) -> u16 {
+         let p = &self.players[self.current_player()];
+-        let mut mask = 0;
+-        for (n, req) in NOBLES.iter().enumerate() {
+-            if self.nobles & (1 << n) != 0 && (0..5).all(|i| p.bonuses[i] >= req[i]) {
+-                mask |= 1 << n;
+-            }
+-        }
+-        mask
++        data::eligible_nobles(self.nobles, &p.bonuses)
+     }
+     /// Reuses caller-owned stack storage. Enumeration order is versioned.
+     #[inline(always)]
+@@ -738,6 +733,7 @@ impl Decision<'_> {
+     }
+ 
+     /// Build the same redacted observation as `GameState::observe`.
++    #[inline(always)]
+     pub fn observe(&self, viewer: usize) -> Observation {
+         self.state.observe(viewer)
+     }
+diff --git a/crates/splendor-core/src/tests.rs b/crates/splendor-core/src/tests.rs
+index 2840e13..fd4c4a9 100644
+--- a/crates/splendor-core/src/tests.rs
++++ b/crates/splendor-core/src/tests.rs
+@@ -966,3 +966,30 @@ fn validated_decisions_reject_invalid_choices_and_capacity_atomically() {
+     );
+     assert_eq!(state, before);
+ }
++
++#[test]
++fn fast_noble_masks_match_requirements_at_all_bonus_boundaries() {
++    let mut state = GameState::new(2, 109000999).unwrap();
++    for pattern in 0..7776usize {
++        let mut digits = pattern;
++        for bonus in &mut state.players[0].bonuses {
++            *bonus = [0, 1, 2, 3, 4, 255][digits % 6];
++            digits /= 6;
++        }
++        for nobles in [0, 1, 3, 15, 0x155, 0x2aa, 0x3ff] {
++            state.nobles = nobles;
++            let expected = NOBLES.iter().enumerate().fold(0u16, |mask, (n, req)| {
++                if nobles & (1 << n) != 0 && (0..5).all(|c| state.players[0].bonuses[c] >= req[c]) {
++                    mask | (1 << n)
++                } else {
++                    mask
++                }
++            });
++            assert_eq!(
++                state.eligible(),
++                expected,
++                "pattern={pattern} nobles={nobles}"
++            );
++        }
++    }
++}

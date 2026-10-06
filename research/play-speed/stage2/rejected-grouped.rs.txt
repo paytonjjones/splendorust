@@ -109,7 +109,9 @@ fn project_actions(o: &Observation, legal: &[Action]) -> ArrayVec<u32, 42> {
     let p = &o.players[o.current as usize];
     let hand = p.token_count();
     let reserve_fits = hand + u8::from(o.bank[5] > 0) <= 10;
-    let mut out = ArrayVec::new();
+    let mut out = ArrayVec::<u32, 42>::new();
+    let mut takes = ArrayVec::<u32, 15>::new();
+    let mut reserves = ArrayVec::<u32, 12>::new();
     for &action in legal {
         let entry = match action {
             Action::BuyVisible(i) => Some((u32::from(o.market[i as usize]) << 8) | u32::from(i)),
@@ -133,10 +135,18 @@ fn project_actions(o: &Observation, legal: &[Action]) -> ArrayVec<u32, 42> {
             _ => None,
         };
         if let Some(entry) = entry {
-            out.push(entry);
+            match entry >> 8 {
+                0..200 => out.push(entry),
+                1000..2000 => takes.push(entry),
+                _ => reserves.push(entry),
+            }
         }
     }
     out.sort_unstable();
+    takes.sort_unstable();
+    reserves.sort_unstable();
+    out.extend(takes);
+    out.extend(reserves);
     out
 }
 
@@ -185,6 +195,62 @@ fn project_actions_reference(o: &Observation, legal: &[Action]) -> ArrayVec<(u32
     }
     projected.sort_unstable_by_key(|x| x.0);
     projected
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn projection_matches_original_on_complete_canonical_states() {
+        let mut hands = [false; 14];
+        let mut gold_supply = [false; 2];
+        let mut rng = Rng::new(109000001);
+        let mut main_states = 0;
+        for players in 2..=4 {
+            for seed in 109000001..109000129 {
+                let mut state = GameState::new(players, seed).unwrap();
+                let mut legal = ActionSet::new();
+                for _ in 0..1000 {
+                    state.legal_actions(&mut legal);
+                    if legal.is_empty() {
+                        break;
+                    }
+                    if state.phase() == Phase::Main {
+                        let o = state.observe(state.current_player());
+                        hands[o.players[state.current_player()].token_count() as usize] = true;
+                        gold_supply[usize::from(o.bank[5] > 0)] = true;
+                        assert_eq!(
+                            project_actions(&o, &legal)
+                                .iter()
+                                .copied()
+                                .map(decode_entry)
+                                .collect::<Vec<_>>()
+                                .as_slice(),
+                            project_actions_reference(&o, &legal).as_slice(),
+                            "players={players} seed={seed} turns={}",
+                            state.turns()
+                        );
+                        main_states += 1;
+                    }
+                    let action = if rng.index(2) == 0 {
+                        legal
+                            .iter()
+                            .copied()
+                            .find(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
+                    } else {
+                        None
+                    }
+                    .unwrap_or_else(|| legal[rng.index(legal.len())]);
+                    state.apply_action(action).unwrap();
+                    state.check_invariants().unwrap();
+                }
+            }
+        }
+        assert!(main_states > 10000);
+        assert!(hands[7..=10].iter().all(|x| *x));
+        assert!(gold_supply.iter().all(|x| *x));
+    }
 }
 
 fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> Record {
@@ -367,60 +433,4 @@ fn main() {
         "{}",
         serde_json::json!({"engine":"splendorust","profile":corpus.profile,"profile_engine_version":splendor_core::BENCHMARK_COMPAT_ENGINE_VERSION,"policy":policy,"threads":threads,"pool_startup_seconds":pool_seconds,"samples":samples,"timing_boundary":"full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"})
     );
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn projection_matches_original_on_complete_canonical_states() {
-        let mut hands = [false; 14];
-        let mut gold_supply = [false; 2];
-        let mut rng = Rng::new(109000001);
-        let mut main_states = 0;
-        for players in 2..=4 {
-            for seed in 109000001..109000129 {
-                let mut state = GameState::new(players, seed).unwrap();
-                let mut legal = ActionSet::new();
-                for _ in 0..1000 {
-                    state.legal_actions(&mut legal);
-                    if legal.is_empty() {
-                        break;
-                    }
-                    if state.phase() == Phase::Main {
-                        let o = state.observe(state.current_player());
-                        hands[o.players[state.current_player()].token_count() as usize] = true;
-                        gold_supply[usize::from(o.bank[5] > 0)] = true;
-                        assert_eq!(
-                            project_actions(&o, &legal)
-                                .iter()
-                                .copied()
-                                .map(decode_entry)
-                                .collect::<Vec<_>>()
-                                .as_slice(),
-                            project_actions_reference(&o, &legal).as_slice(),
-                            "players={players} seed={seed} turns={}",
-                            state.turns()
-                        );
-                        main_states += 1;
-                    }
-                    let action = if rng.index(2) == 0 {
-                        legal
-                            .iter()
-                            .copied()
-                            .find(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
-                    } else {
-                        None
-                    }
-                    .unwrap_or_else(|| legal[rng.index(legal.len())]);
-                    state.apply_action(action).unwrap();
-                    state.check_invariants().unwrap();
-                }
-            }
-        }
-        assert!(main_states > 10000);
-        assert!(hands[7..=10].iter().all(|x| *x));
-        assert!(gold_supply.iter().all(|x| *x));
-    }
 }

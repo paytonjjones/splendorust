@@ -3,8 +3,8 @@ use arrayvec::ArrayVec;
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use splendor_core::{
-    Action, ActionSet, GameState, NONE, Observation, Phase, Rng,
-    data::{CARDS, eligible_nobles},
+    Action, ActionSet, GameState, NONE, Phase, Rng,
+    data::{CARDS, NOBLES},
 };
 use std::{fs, time::Instant};
 
@@ -85,108 +85,6 @@ struct Record {
 fn setup(c: &Case) -> GameState {
     GameState::new_benchmark_setup(2, [&c.decks[0], &c.decks[1], &c.decks[2]], &c.nobles).unwrap()
 }
-// A take key is a five-digit base-three number. Decode once at compile time.
-const fn take_keys() -> [[u8; 5]; 243] {
-    let mut rows = [[0; 5]; 243];
-    let mut key = 0;
-    while key < rows.len() {
-        let mut digits = key;
-        let mut color = 0;
-        while color < 5 {
-            rows[key][color] = (digits % 3) as u8;
-            digits /= 3;
-            color += 1;
-        }
-        key += 1;
-    }
-    rows
-}
-const TAKE_KEYS: [[u8; 5]; 243] = take_keys();
-
-// A Main projection has at most 12 visible buys, 3 reserved buys,
-// 15 takes and 12 visible reservations. The low byte retains the slot.
-fn project_actions(o: &Observation, legal: &[Action]) -> ArrayVec<u32, 42> {
-    let p = &o.players[o.current as usize];
-    let hand = p.token_count();
-    let reserve_fits = hand + u8::from(o.bank[5] > 0) <= 10;
-    let mut out = ArrayVec::new();
-    for &action in legal {
-        let entry = match action {
-            Action::BuyVisible(i) => Some((u32::from(o.market[i as usize]) << 8) | u32::from(i)),
-            Action::BuyReserved(i) => {
-                Some(((100 + u32::from(p.reserved[i as usize].card)) << 8) | u32::from(i))
-            }
-            Action::ReserveVisible(i) if reserve_fits => {
-                Some(((2000 + u32::from(o.market[i as usize])) << 8) | u32::from(i))
-            }
-            Action::Take(q)
-                if q.iter().sum::<u8>() == 3 && hand <= 7
-                    || q.iter().sum::<u8>() == 2 && q.contains(&2) && hand < 8 =>
-            {
-                let key = u32::from(q[0])
-                    + 3 * u32::from(q[1])
-                    + 9 * u32::from(q[2])
-                    + 27 * u32::from(q[3])
-                    + 81 * u32::from(q[4]);
-                Some((1000 + key) << 8)
-            }
-            _ => None,
-        };
-        if let Some(entry) = entry {
-            out.push(entry);
-        }
-    }
-    out.sort_unstable();
-    out
-}
-
-fn decode_entry(entry: u32) -> (u32, Action) {
-    let key = entry >> 8;
-    let slot = entry as u8;
-    let action = match key {
-        0..100 => Action::BuyVisible(slot),
-        100..200 => Action::BuyReserved(slot),
-        1000..2000 => Action::Take(TAKE_KEYS[(key - 1000) as usize]),
-        2000..2100 => Action::ReserveVisible(slot),
-        _ => unreachable!("projection has a valid semantic key"),
-    };
-    (key, action)
-}
-
-#[cfg(test)]
-fn project_actions_reference(o: &Observation, legal: &[Action]) -> ArrayVec<(u32, Action), 256> {
-    let p = &o.players[o.current as usize];
-    // At most one projected entry per canonical Main action.
-    let mut projected = ArrayVec::<(u32, Action), 256>::new();
-    for &action in legal {
-        let key = match action {
-            Action::BuyVisible(i) => Some(u32::from(o.market[i as usize])),
-            Action::BuyReserved(i) => Some(100 + u32::from(p.reserved[i as usize].card)),
-            Action::ReserveVisible(i) if p.token_count() + u8::from(o.bank[5] > 0) <= 10 => {
-                Some(2000 + u32::from(o.market[i as usize]))
-            }
-            Action::Take(q)
-                if q.iter().sum::<u8>() == 3 && p.token_count() <= 7
-                    || q.iter().sum::<u8>() == 2 && q.contains(&2) && p.token_count() < 8 =>
-            {
-                Some(
-                    1000 + q
-                        .iter()
-                        .enumerate()
-                        .map(|(i, &x)| u32::from(x) * 3u32.pow(i as u32))
-                        .sum::<u32>(),
-                )
-            }
-            _ => None,
-        };
-        if let Some(key) = key {
-            projected.push((key, action));
-        }
-    }
-    projected.sort_unstable_by_key(|x| x.0);
-    projected
-}
-
 fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> Record {
     let start = Instant::now();
     let mut rng = Rng::new(c.policy_seed);
@@ -208,9 +106,46 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> 
         let o = s.observe(s.current_player());
         let p = &o.players[s.current_player()];
         s.legal_actions(&mut legal);
-        let projected = project_actions(&o, &legal);
+        // At most one projected entry per canonical Main action.
+        let mut projected = ArrayVec::<(u32, Action), 256>::new();
+        for &action in &legal {
+            let key = match action {
+                Action::BuyVisible(i) => Some(u32::from(o.market[i as usize])),
+                Action::BuyReserved(i) => Some(100 + u32::from(p.reserved[i as usize].card)),
+                Action::ReserveVisible(i) if p.token_count() + u8::from(o.bank[5] > 0) <= 10 => {
+                    Some(2000 + u32::from(o.market[i as usize]))
+                }
+                Action::Take(q)
+                    if q.iter().sum::<u8>() == 3 && p.token_count() <= 7
+                        || q.iter().sum::<u8>() == 2 && q.contains(&2) && p.token_count() < 8 =>
+                {
+                    Some(
+                        1000 + q
+                            .iter()
+                            .enumerate()
+                            .map(|(i, &x)| u32::from(x) * 3u32.pow(i as u32))
+                            .sum::<u32>(),
+                    )
+                }
+                _ => None,
+            };
+            if let Some(key) = key {
+                projected.push((key, action));
+            }
+        }
+        // These short lists have unique keys. Insertion sort keeps the exact
+        // numeric policy order without the general quicksort machinery.
+        for i in 1..projected.len() {
+            let entry = projected[i];
+            let mut j = i;
+            while j > 0 && projected[j - 1].0 > entry.0 {
+                projected[j] = projected[j - 1];
+                j -= 1;
+            }
+            projected[j] = entry;
+        }
         if trace {
-            legal_keys.push(projected.iter().map(|x| x >> 8).collect());
+            legal_keys.push(projected.iter().map(|x| x.0).collect());
         }
         if projected.is_empty() {
             status = if legal.is_empty() {
@@ -222,13 +157,13 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> 
         }
         let index = if policy == "random" {
             rng.index(projected.len())
-        } else if projected[0] >> 8 < 1000 {
+        } else if projected[0].0 < 1000 {
             0
         } else {
             let mut best = None;
             let mut best_value = i32::MIN;
-            for (i, &entry) in projected.iter().enumerate() {
-                if let (_, Action::Take(q)) = decode_entry(entry) {
+            for (i, (_, action)) in projected.iter().enumerate() {
+                if let Action::Take(q) = action {
                     let value: i32 = (0..5)
                         .map(|c| i32::from(q[c]) * (8 - i32::from(p.tokens[c])))
                         .sum();
@@ -240,7 +175,7 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> 
             }
             best.unwrap_or(0)
         };
-        let (key, action) = decode_entry(projected[index]);
+        let (key, action) = projected[index];
         // Payment is a policy choice from the complete published action space.
         let payment = match action {
             Action::BuyVisible(i) => Some(o.market[i as usize]),
@@ -261,7 +196,12 @@ fn play(c: &Case, s: &mut GameState, policy: &str, trace: bool, check: bool) -> 
         } {
             let mut bonuses = p.bonuses;
             bonuses[CARDS[id as usize].bonus as usize] += 1;
-            let eligible = eligible_nobles(o.nobles, &bonuses).count_ones();
+            let eligible = (0..10)
+                .filter(|&n| {
+                    o.nobles & (1 << n) != 0
+                        && (0..5).all(|color| bonuses[color] >= NOBLES[n][color])
+                })
+                .count();
             if eligible > 1 {
                 status = "unsupported_noble_choice";
                 break;
@@ -367,60 +307,4 @@ fn main() {
         "{}",
         serde_json::json!({"engine":"splendorust","profile":corpus.profile,"profile_engine_version":splendor_core::BENCHMARK_COMPAT_ENGINE_VERSION,"policy":policy,"threads":threads,"pool_startup_seconds":pool_seconds,"samples":samples,"timing_boundary":"full legal generation (injected setup before timer), policy projection, checked apply, per-game clock, ordered records; final snapshot extraction and JSON serialization excluded"})
     );
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn projection_matches_original_on_complete_canonical_states() {
-        let mut hands = [false; 14];
-        let mut gold_supply = [false; 2];
-        let mut rng = Rng::new(109000001);
-        let mut main_states = 0;
-        for players in 2..=4 {
-            for seed in 109000001..109000129 {
-                let mut state = GameState::new(players, seed).unwrap();
-                let mut legal = ActionSet::new();
-                for _ in 0..1000 {
-                    state.legal_actions(&mut legal);
-                    if legal.is_empty() {
-                        break;
-                    }
-                    if state.phase() == Phase::Main {
-                        let o = state.observe(state.current_player());
-                        hands[o.players[state.current_player()].token_count() as usize] = true;
-                        gold_supply[usize::from(o.bank[5] > 0)] = true;
-                        assert_eq!(
-                            project_actions(&o, &legal)
-                                .iter()
-                                .copied()
-                                .map(decode_entry)
-                                .collect::<Vec<_>>()
-                                .as_slice(),
-                            project_actions_reference(&o, &legal).as_slice(),
-                            "players={players} seed={seed} turns={}",
-                            state.turns()
-                        );
-                        main_states += 1;
-                    }
-                    let action = if rng.index(2) == 0 {
-                        legal
-                            .iter()
-                            .copied()
-                            .find(|a| matches!(a, Action::BuyVisible(_) | Action::BuyReserved(_)))
-                    } else {
-                        None
-                    }
-                    .unwrap_or_else(|| legal[rng.index(legal.len())]);
-                    state.apply_action(action).unwrap();
-                    state.check_invariants().unwrap();
-                }
-            }
-        }
-        assert!(main_states > 10000);
-        assert!(hands[7..=10].iter().all(|x| *x));
-        assert!(gold_supply.iter().all(|x| *x));
-    }
 }

@@ -966,3 +966,30 @@ fn validated_decisions_reject_invalid_choices_and_capacity_atomically() {
     );
     assert_eq!(state, before);
 }
+
+#[test]
+fn fast_noble_masks_match_requirements_at_all_bonus_boundaries() {
+    let mut state = GameState::new(2, 109000999).unwrap();
+    for pattern in 0..7776usize {
+        let mut digits = pattern;
+        for bonus in &mut state.players[0].bonuses {
+            *bonus = [0, 1, 2, 3, 4, 255][digits % 6];
+            digits /= 6;
+        }
+        for nobles in [0, 1, 3, 15, 0x155, 0x2aa, 0x3ff] {
+            state.nobles = nobles;
+            let expected = NOBLES.iter().enumerate().fold(0u16, |mask, (n, req)| {
+                if nobles & (1 << n) != 0 && (0..5).all(|c| state.players[0].bonuses[c] >= req[c]) {
+                    mask | (1 << n)
+                } else {
+                    mask
+                }
+            });
+            assert_eq!(
+                state.eligible(),
+                expected,
+                "pattern={pattern} nobles={nobles}"
+            );
+        }
+    }
+}
