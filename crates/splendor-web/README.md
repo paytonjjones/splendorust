@@ -31,7 +31,7 @@ supported by the inference crate. `configJson` accepts camel-case fields
 `searchAgent` accepts `flywheel-gumbel` or `flywheel-best`. The latter accepts
 `cpuct`, `fpuReduction`, `dynamicFpu`, `chanceUniverses`, `uniformPrior`,
 `rootOnly`, and zero `rootNoise`. `gpuInference: true` uses the host Entity
-backend. The callback receives only tokens from the public observation.
+backend. The callback receives only tokens from the public observation. This path accepts the `SPENTY01` format marker; the host checks the ONNX graph hash and frozen source hash. The CPU path requires the complete model bytes.
 The web application supplies the current champion settings. It sets an
 absolute monotonic deadline with `botStepWithDeadline(deadlineMs)` for each
 bot decision. All decisions in a turn share one deadline. Ordinary

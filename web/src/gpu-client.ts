@@ -1,9 +1,10 @@
+import type { EngineProgress } from "./engine-download";
 // The search worker can block here. A second worker owns async GPU inference;
 // the page remains free to render and process input.
-export async function startGpu(sourceSha256: string, baseUrl: string, onFailure: (error: string) => void) {
+export async function startGpu(sourceSha256: string, baseUrl: string, onFailure: (error: string) => void, onProgress: (progress: EngineProgress) => void) {
   if (!navigator.gpu) throw new Error("This browser does not support WebGPU.");
   if (!self.crossOriginIsolated || typeof SharedArrayBuffer === "undefined") {
-    throw new Error("The champion needs cross-origin isolated WebGPU workers.");
+    throw new Error("The WebGPU engine needs cross-origin isolated WebGPU workers.");
   }
   const buffer = new SharedArrayBuffer(16 + (31 * 48 + 83) * 4);
   const control = new Int32Array(buffer, 0, 4);
@@ -20,7 +21,8 @@ export async function startGpu(sourceSha256: string, baseUrl: string, onFailure:
       if (initialized) onFailure("The WebGPU worker stopped.");
       else reject(new Error("The WebGPU worker could not start."));
     };
-    worker.onmessage = (event: MessageEvent<{ type: string; error?: string }>) => {
+    worker.onmessage = (event: MessageEvent<{ type: string; error?: string; progress?: EngineProgress }>) => {
+      if (event.data.type === "progress" && event.data.progress) onProgress(event.data.progress);
       if (event.data.type === "ready") { clearTimeout(timer); initialized = true; resolve(); }
       if (event.data.type === "error") {
         clearTimeout(timer);

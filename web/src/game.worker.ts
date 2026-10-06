@@ -1,3 +1,4 @@
+import { downloadBytes, type EngineProgress } from "./engine-download";
 import { startGpu } from "./gpu-client";
 import type {
   ChampionMetadata,
@@ -13,12 +14,14 @@ type StartRequest = {
   seed: string;
   humanSeat: number;
   baseUrl: string;
+  turnBudgetMs?: 5000 | 10000 | 30000;
   testSearchBudget?: { iterations: number; depth: number };
 };
 type ActRequest = { type: "act"; requestId: number; actionId: string };
 type WorkerRequest = StartRequest | ActRequest;
 
 type WorkerMessage =
+  | { type: "progress"; progress: EngineProgress }
   | { type: "status"; status: "loading" | "ready" | "thinking"; requestId?: number }
   | {
       type: "state";
@@ -71,6 +74,8 @@ const metrics: ClientMetrics = {
 let game: WasmGame | null = null;
 let champion: ChampionMetadata | null = null;
 let busy = false;
+let turnBudgetMs: 5000 | 10000 | 30000 = 10000;
+let inferenceBackend: EffectiveSearch["inferenceBackend"] = "webgpu-f32";
 let stopGpu: (() => void) | null = null;
 
 function post(message: WorkerMessage): void {
@@ -105,8 +110,8 @@ function makeEffectiveSearch(
       ? testSearchBudget
       : undefined;
   return {
-    inferenceBackend: "webgpu-f32",
-    turnBudgetMs: 10000,
+    inferenceBackend,
+    turnBudgetMs,
     agent: metadata.search.agent,
     iterations: validTestOverrides?.iterations ?? metadata.search.iterations,
     depth: validTestOverrides?.depth ?? metadata.search.depth,
@@ -145,7 +150,7 @@ function makeConfig(
     iterations: search.iterations,
     depth: search.depth,
     worldPool: search.worldPool,
-    gpuInference: true,
+    gpuInference: inferenceBackend === "webgpu-f32",
     cpuct: search.cpuct,
     fpuReduction: search.fpuReduction,
     dynamicFpu: search.dynamicFpu,
@@ -168,17 +173,17 @@ function assetUrl(path: string, baseUrl: string): URL {
   return new URL(path, base);
 }
 
-async function loadChampion(baseUrl: string): Promise<{
+async function loadChampion(baseUrl: string, gpu: boolean): Promise<{
   metadata: ChampionMetadata;
   modelBytes: Uint8Array;
   loadMs: number;
 }> {
   const loadStart = performance.now();
-  const metadataResponse = await fetch(assetUrl("champion.json", baseUrl), {
+  const metadataResponse = await fetch(assetUrl(gpu ? "champion.json" : "fallback.json", baseUrl), {
     cache: "no-cache",
   });
   if (!metadataResponse.ok) {
-    throw new Error(`Could not load champion metadata (${metadataResponse.status}).`);
+    throw new Error(`Could not load engine metadata (${metadataResponse.status}).`);
   }
   const metadata = (await metadataResponse.json()) as ChampionMetadata;
   if (
@@ -187,25 +192,29 @@ async function loadChampion(baseUrl: string): Promise<{
     !metadata.model?.url ||
     !/^[a-f\d]{64}$/i.test(metadata.model.sha256)
   ) {
-    throw new Error("Champion metadata has an unsupported format.");
+    throw new Error("Engine metadata has an unsupported format.");
   }
+
+  // The GPU graph has its own verified hash and frozen source hash. Rust only
+  // needs the Entity format marker for the external inference adapter.
+  if (gpu) return { metadata, modelBytes: new TextEncoder().encode("SPENTY01"), loadMs: performance.now() - loadStart };
 
   const response = await fetch(assetUrl(metadata.model.url, baseUrl), {
     cache: "force-cache",
   });
   if (!response.ok) {
-    throw new Error(`Could not load champion model (${response.status}).`);
+    throw new Error(`Could not load engine weights (${response.status}).`);
   }
-  const bytes = new Uint8Array(await response.arrayBuffer());
+  const bytes = await downloadBytes(response, metadata.model.bytes, loaded => post({ type: "progress", progress: { label: "Loading the CPU engine", detail: "Downloading smaller engine weights", loaded, total: metadata.model.bytes } }));
   if (metadata.model.bytes > 0 && bytes.byteLength !== metadata.model.bytes) {
-    throw new Error("Champion model size does not match its metadata.");
+    throw new Error("Engine model size does not match its metadata.");
   }
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   const actualHash = Array.from(new Uint8Array(digest), (byte) =>
     byte.toString(16).padStart(2, "0"),
   ).join("");
   if (actualHash.toLowerCase() !== metadata.model.sha256.toLowerCase()) {
-    throw new Error("Champion model SHA-256 verification failed.");
+    throw new Error("Engine model SHA-256 verification failed.");
   }
   return { metadata, modelBytes: bytes, loadMs: performance.now() - loadStart };
 }
@@ -240,7 +249,7 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
     await yieldToWorker();
     const before = JSON.parse(game!.searchWork()) as { simulations: number };
     const decisionStart = performance.now();
-    const serialized = game!.botStepWithDeadline(turnStart + 9900);
+    const serialized = game!.botStepWithDeadline(turnStart + turnBudgetMs - 100);
     metrics.botDecisionMs.push(performance.now() - decisionStart);
     const after = JSON.parse(game!.searchWork()) as { simulations: number };
     metrics.botSimulations.push(after.simulations - before.simulations);
@@ -251,6 +260,11 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
   metrics.botTurnMs.push(performance.now() - turnStart);
   post({ type: "state", state, metrics: copyMetrics(), requestId });
   post({ type: "status", status: "ready", requestId });
+}
+
+async function canUseGpu(): Promise<boolean> {
+  if (!navigator.gpu || !self.crossOriginIsolated || typeof SharedArrayBuffer === "undefined") return false;
+  try { return Boolean(await navigator.gpu.requestAdapter()); } catch { return false; }
 }
 
 async function start(request: StartRequest): Promise<void> {
@@ -266,13 +280,19 @@ async function start(request: StartRequest): Promise<void> {
   post({ type: "status", status: "loading", requestId: request.requestId });
 
   const modelStart = performance.now();
-  const modelTask = loadChampion(request.baseUrl);
-  const [loadedChampion, loadedWasm] = await Promise.all([modelTask, loadWasm()]);
-  stopGpu = await startGpu(loadedChampion.metadata.model.sha256, new URL(request.baseUrl, self.location.origin).href, error => {
+  turnBudgetMs = request.turnBudgetMs ?? 10000;
+  if (![5000, 10000, 30000].includes(turnBudgetMs)) throw new Error("Unsupported turn time limit.");
+  const loadedWasm = await loadWasm();
+  const gpu = await canUseGpu();
+  inferenceBackend = gpu ? "webgpu-f32" : "wasm-cpu";
+  post({ type: "progress", progress: { label: gpu ? "Loading the WebGPU engine" : "Loading the CPU engine", detail: "Loading engine metadata", loaded: 0, total: null } });
+  const modelTask = loadChampion(request.baseUrl, gpu);
+  const loadedChampion = await modelTask;
+  if (gpu) stopGpu = await startGpu(loadedChampion.metadata.model.sha256, new URL(request.baseUrl, self.location.origin).href, error => {
     stopGpu?.();
     stopGpu = null;
     post({ type: "error", error });
-  });
+  }, progress => post({ type: "progress", progress }));
   metrics.modelLoadMs = performance.now() - modelStart;
   metrics.wasmInitMs = loadedWasm.loadMs;
   champion = loadedChampion.metadata;

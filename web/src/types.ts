@@ -1,3 +1,4 @@
+import type { EngineProgress } from "./engine-download";
 export type GemColor = 0 | 1 | 2 | 3 | 4;
 export type BankColor = GemColor | 5;
 export type CardTier = 1 | 2 | 3;
@@ -97,8 +98,8 @@ export interface TrainingReplay {
 }
 
 export interface EffectiveSearch {
-  inferenceBackend: "webgpu-f32";
-  turnBudgetMs: 10000;
+  inferenceBackend: "webgpu-f32" | "wasm-cpu";
+  turnBudgetMs: 5000 | 10000 | 30000;
   agent: string;
   iterations: number;
   depth: number;
@@ -210,6 +211,8 @@ export interface ClientMetrics {
 }
 
 export interface GameClientUpdate {
+  progress?: EngineProgress;
+  effectiveSearch?: EffectiveSearch;
   state: GameSnapshot | null;
   status: ClientStatus;
   requestPending: boolean;

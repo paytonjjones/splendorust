@@ -1,0 +1,101 @@
+{
+  "record": {
+    "schema": "splendor-web-game-v1",
+    "gameId": "bcd80581-c29a-4fe1-9ae5-b5b4707fedad",
+    "version": 3,
+    "startedAt": "2026-10-06T22:08:04.478Z",
+    "updatedAt": "2026-10-06T22:08:04.616Z",
+    "humanSeat": 0,
+    "champion": {
+      "schema": "splendor-web-champion-v1",
+      "id": "E81",
+      "name": "SplendoRust E81",
+      "model": {
+        "url": "/models/e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8.bin",
+        "sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+        "bytes": 569624
+      },
+      "search": {
+        "agent": "flywheel-gumbel",
+        "iterations": 128,
+        "depth": 16,
+        "world_pool": 3,
+        "gumbel_max_considered": 16,
+        "gumbel_cvisit": 50,
+        "gumbel_cscale": 0.1,
+        "gumbel_root_noise": 0
+      },
+      "source": {
+        "path": "research/e81/model/model.bin",
+        "sha256": "e0e9e3b170c7d811a0474a8ce8927aa97d9f87d10db75e6c5b5cf418eaa1e5c8",
+        "scope": "Combined model/search endpoint in canonical SplendoRust v2, two players, fixed128 simulations/depth16; external best-in-class rank remains unestablished",
+        "checkpoint": "research/e81/model/model.pt",
+        "checkpoint_sha256": "84b70dcba91b0870ef23e8944f9ff214c0d29662a11849021c2108795eb033d1"
+      }
+    },
+    "effectiveSearch": {
+      "inferenceBackend": "wasm-cpu",
+      "turnBudgetMs": 10000,
+      "agent": "flywheel-gumbel",
+      "iterations": 128,
+      "depth": 16,
+      "worldPool": 3,
+      "cpuct": 0.4,
+      "fpuReduction": 0.02965,
+      "dynamicFpu": false,
+      "chanceUniverses": 0,
+      "uniformPrior": 0,
+      "rootOnly": false,
+      "rootNoise": 0,
+      "gumbelMaxConsidered": 16,
+      "gumbelCvisit": 50,
+      "gumbelCscale": 0.1,
+      "gumbelRootNoise": 0
+    },
+    "runtime": "test",
+    "status": "in_progress",
+    "replay": {
+      "schema": "splendor-web-replay-v1",
+      "engine": "splendorust-v2",
+      "players": 2,
+      "seed": "12796005318341355754",
+      "actions": [
+        [
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0
+        ]
+      ],
+      "revision": 2,
+      "turns": 2,
+      "stateDebug": "GameState { players: [Player { tokens: [1, 1, 1, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 1, 1, 1, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }, Player { tokens: [0, 0, 0, 0, 0, 0], bonuses: [0, 0, 0, 0, 0], score: 0, owned: 0, nobles: 0, reserved: [Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }, Reservation { card: 255, tier: 0, public: false }] }], count: 2, current: 0, bank: [3, 3, 2, 3, 3, 5], market: [11, 20, 0, 25, 59, 68, 52, 49, 87, 77, 73, 76], decks: [[17, 9, 3, 6, 8, 7, 1, 32, 38, 5, 18, 33, 4, 31, 21, 30, 36, 12, 39, 14, 29, 16, 24, 15, 2, 19, 22, 13, 23, 37, 10, 34, 35, 28, 26, 27, 255, 255, 255, 255], [60, 62, 50, 40, 43, 67, 47, 45, 66, 41, 54, 63, 61, 48, 65, 55, 57, 44, 51, 69, 58, 53, 56, 64, 46, 42, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255], [79, 72, 86, 75, 70, 78, 85, 83, 71, 80, 81, 82, 88, 84, 74, 89, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]], remaining: [36, 26, 16], nobles: 98, initial_nobles: 98, phase: Main, final_round: false, turns: 2 }",
+      "result": null
+    }
+  },
+  "metrics": {
+    "wasmInitMs": 4.065000057220459,
+    "modelLoadMs": 14.305000066757202,
+    "botDecisionMs": [
+      88.9300000667572
+    ],
+    "botSimulations": [
+      128
+    ],
+    "botTurnMs": [
+      89.26999998092651
+    ]
+  }
+}

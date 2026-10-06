@@ -543,7 +543,7 @@ impl NeuralAgent {
         active.truncate(considered);
         let mut remaining = budget;
         let mut simulation = 0usize;
-        while remaining > 0 {
+        'search: while remaining > 0 {
             let phases = if active.len() == 1 {
                 1
             } else {
@@ -551,6 +551,19 @@ impl NeuralAgent {
             };
             let allocation = remaining / phases;
             for turn in 0..allocation {
+                if simulation > 0
+                    && self
+                        .deadline_ms
+                        .zip(self.clock)
+                        .is_some_and(|(deadline, clock)| clock() >= deadline)
+                {
+                    let scores =
+                        nodes[root].completed_scores(self.gumbel_cvisit, self.gumbel_cscale);
+                    active.sort_by(|&a, &b| {
+                        (noise[b] + scores[b]).total_cmp(&(noise[a] + scores[a]))
+                    });
+                    break 'search;
+                }
                 let edge = active[turn % active.len()];
                 let mut state = if worlds.is_empty() {
                     E::determinize(o, &mut self.rng)
@@ -1174,19 +1187,22 @@ mod tests {
         let o = state.observe(0);
         let mut legal = ActionSet::new();
         state.legal_actions(&mut legal);
-        let config = SearchConfig {
-            iterations: 32,
-            depth: 4,
-            ..Default::default()
-        };
-        let mut agent = NeuralAgent::new(77, config);
-        agent.clock = Some(|| 10.0);
-        agent.set_search_deadline(Some(9.0));
-        assert!(legal.contains(&agent.select_action(&o, &legal)));
-        assert_eq!(agent.work_counts().0, 1);
-        agent.set_search_deadline(None);
-        assert!(legal.contains(&agent.select_action(&o, &legal)));
-        assert_eq!(agent.work_counts().0, 33);
+        for gumbel in [false, true] {
+            let config = SearchConfig {
+                iterations: 32,
+                depth: 4,
+                ..Default::default()
+            };
+            let mut agent = NeuralAgent::new(77, config);
+            agent.gumbel = gumbel;
+            agent.clock = Some(|| 10.0);
+            agent.set_search_deadline(Some(9.0));
+            assert!(legal.contains(&agent.select_action(&o, &legal)));
+            assert_eq!(agent.work_counts().0, 1);
+            agent.set_search_deadline(None);
+            assert!(legal.contains(&agent.select_action(&o, &legal)));
+            assert_eq!(agent.work_counts().0, 33);
+        }
     }
 
     #[test]

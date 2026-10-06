@@ -1,3 +1,4 @@
+import type { EngineProgress } from "./engine-download";
 import type {
   ChampionMetadata,
   ClientMetrics,
@@ -45,6 +46,7 @@ interface WorkerErrorMessage {
   error: string;
 }
 type WorkerMessage =
+  | { type: "progress"; progress: EngineProgress }
   | WorkerStatusMessage
   | WorkerStateMessage
   | WorkerChampionMessage
@@ -66,7 +68,7 @@ export interface GameClientPort {
   start(seed?: string | number, humanSeat?: number): Promise<void>;
   act(actionId: string): Promise<void>;
   reset(seed?: string | number, humanSeat?: number): Promise<void>;
-  newGame(seed?: string | number, humanSeat?: number): Promise<void>;
+  newGame(seed?: string | number, humanSeat?: number, turnBudgetMs?: 5000 | 10000 | 30000): Promise<void>;
   retry(): Promise<void>;
   exportGames(): Promise<string>;
   retryUploads(): void;
@@ -134,7 +136,7 @@ export class GameClient implements GameClientPort {
     metrics: freshMetrics(),
     recorder: initialRecorderStatus(),
   };
-  private lastOptions: { seed: string; humanSeat: number } = {
+  private lastOptions: { seed: string; humanSeat: number; turnBudgetMs?: 5000 | 10000 | 30000 } = {
     seed: "",
     humanSeat: 0,
   };
@@ -177,8 +179,8 @@ export class GameClient implements GameClientPort {
     return this.launch({ seed: resolvedSeed, humanSeat });
   }
 
-  newGame(seed?: string | number, humanSeat = this.lastOptions.humanSeat): Promise<void> {
-    return this.reset(seed, humanSeat);
+  newGame(seed?: string | number, humanSeat = this.lastOptions.humanSeat, turnBudgetMs?: 5000 | 10000 | 30000): Promise<void> {
+    return this.launch({ seed: seed === undefined ? createSeed() : String(seed), humanSeat, turnBudgetMs });
   }
 
   retry(): Promise<void> {
@@ -224,12 +226,17 @@ export class GameClient implements GameClientPort {
   }
 
   private launch(
-    options: { seed: string; humanSeat: number },
+    options: { seed: string; humanSeat: number; turnBudgetMs?: 5000 | 10000 | 30000 },
     testSearchBudget?: { iterations: number; depth: number },
   ): Promise<void> {
     if (this.disposed) return Promise.reject(new Error("This game client was disposed."));
     if (!Number.isInteger(options.humanSeat) || options.humanSeat < 0 || options.humanSeat > 1) {
       return Promise.reject(new Error("The human seat must be 0 or 1."));
+    }
+    if (options.turnBudgetMs === undefined) {
+      let saved: number = 10000;
+      try { saved = Number(localStorage.getItem("splendor-turn-budget") || 10000); } catch { /* Storage can be disabled. */ }
+      options.turnBudgetMs = saved === 5000 || saved === 30000 ? saved : 10000;
     }
     this.abandonCurrentGame();
     this.recordingHeader = {
@@ -277,6 +284,7 @@ export class GameClient implements GameClientPort {
         seed: options.seed,
         humanSeat: options.humanSeat,
         baseUrl,
+        turnBudgetMs: options.turnBudgetMs,
         ...(testSearchBudget ? { testSearchBudget } : {}),
       },
       worker,
@@ -296,6 +304,10 @@ export class GameClient implements GameClientPort {
   private handleMessage(worker: Worker, message: WorkerMessage): void {
     if (worker !== this.worker || this.disposed) return;
     switch (message.type) {
+      case "progress":
+        this.update = { ...this.update, progress: message.progress };
+        this.publish();
+        break;
       case "status":
         this.update = { ...this.update, status: message.status, error: undefined };
         // The worker emits ready immediately before its request acknowledgement.
@@ -313,6 +325,7 @@ export class GameClient implements GameClientPort {
         this.update = {
           ...this.update,
           champion: message.champion,
+          effectiveSearch: message.effectiveSearch,
           metrics: copyMetrics(message.metrics),
         };
         this.publish();

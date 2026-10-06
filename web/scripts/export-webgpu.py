@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Export the frozen SPENTY01 weights. No training or parameter changes."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -7,6 +8,9 @@ import numpy as np
 import onnx
 from onnx import helper as h, numpy_helper as nh, TensorProto as T
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--batch-size', type=int, choices=[1,4,8], default=1)
+batch = parser.parse_args().batch_size
 ROOT = Path(__file__).resolve().parents[2]
 champion = json.loads((ROOT / 'research/STRENGTH_CHAMPION.json').read_text())
 source = ROOT / champion['model']
@@ -47,8 +51,8 @@ def norm(prefix, x):
 identity = take('identity', (1,31,256))
 z = linear('project', 'tokens', 48, 256)
 z = node('Add', [z, identity], 'embedding')
-constant('headsShape', [1,31,8,32], np.int64)
-constant('mergedShape', [1,31,256], np.int64)
+constant('headsShape', [batch,31,8,32], np.int64)
+constant('mergedShape', [batch,31,256], np.int64)
 constant('attentionScale', np.sqrt(32))
 constant('sqrt2', np.sqrt(2))
 constant('one', 1)
@@ -101,12 +105,12 @@ v=linear('value',cls,256,2)
 node('Identity',[pi],'logits')
 node('Tanh',[v],'values')
 assert offset == weights.size, (offset,weights.size)
-graph=h.make_graph(nodes,'frozen-entity-champion',[h.make_tensor_value_info('tokens',T.FLOAT,[1,31,48])],[h.make_tensor_value_info('logits',T.FLOAT,[1,81]),h.make_tensor_value_info('values',T.FLOAT,[1,2])],initializers)
+graph=h.make_graph(nodes,'frozen-entity-champion',[h.make_tensor_value_info('tokens',T.FLOAT,[batch,31,48])],[h.make_tensor_value_info('logits',T.FLOAT,[batch,81]),h.make_tensor_value_info('values',T.FLOAT,[batch,2])],initializers)
 model=h.make_model(graph,opset_imports=[h.make_opsetid('',17)],producer_name='splendorust-frozen-export',ir_version=9)
 onnx.checker.check_model(model)
 body=model.SerializeToString(); digest=hashlib.sha256(body).hexdigest()
 dest=ROOT/'web/public/models'/f'{digest}.onnx';dest.write_bytes(body)
-manifest={'schema':'splendor-webgpu-model-v1','sourceSha256':champion['model_sha256'],'sha256':digest,'bytes':len(body),'url':f'/models/{digest}.onnx','input':'tokens','shape':[1,31,48],'precision':'float32'}
-(ROOT/'web/public/webgpu.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(ROOT/'research/webgpu-20261006/export.json').write_text(json.dumps(manifest,indent=2)+'\n')
+manifest={'schema':'splendor-webgpu-model-v1','sourceSha256':champion['model_sha256'],'sha256':digest,'bytes':len(body),'url':f'/models/{digest}.onnx','input':'tokens','shape':[batch,31,48],'precision':'float32'}
+(ROOT/'web/public'/('webgpu.json' if batch == 1 else f'webgpu-batch{batch}.json')).write_text(json.dumps(manifest,indent=2)+'\n')
+(ROOT/'research/webgpu-20261006'/('export.json' if batch == 1 else f'batch-export{batch}.json')).write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps(manifest))

@@ -7,7 +7,7 @@ self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceS
   const input = new Float32Array(buffer, 16, 31 * 48);
   const output = new Float32Array(buffer, 16 + 31 * 48 * 4, 83);
   try {
-    const model = await loadGpuModel(sourceSha256, baseUrl);
+    const model = await loadGpuModel(sourceSha256, baseUrl, true, progress => self.postMessage({ type: "progress", progress }));
     void model.lost.then(error => {
       Atomics.store(control, 0, -1);
       Atomics.notify(control, 0);

@@ -40,8 +40,7 @@ def source_root() -> tuple[Path, dict[str, object]]:
     raise SystemExit("Could not find research/CHAMPION.json and its model in this checkout or canonical SplendoRust root.")
 
 
-def main() -> None:
-    root, champion = source_root()
+def publish(root: Path, champion: dict, filename: str) -> Path:
     relative_model = champion.get("model")
     if not isinstance(relative_model, str) or not relative_model:
         raise SystemExit("CHAMPION.json must name its production model in the model field.")
@@ -64,9 +63,6 @@ def main() -> None:
         temporary = destination.with_suffix(".bin.tmp")
         temporary.write_bytes(model_bytes)
         temporary.replace(destination)
-    for stale_model in model_dir.glob("*.bin"):
-        if stale_model != destination:
-            stale_model.unlink()
 
     payload = {
         "schema": "splendor-web-champion-v1",
@@ -96,10 +92,23 @@ def main() -> None:
     if checkpoint_hash:
         payload["source"]["checkpoint_sha256"] = checkpoint_hash
 
-    metadata_path = WEB_DIR / "public/champion.json"
+    metadata_path = WEB_DIR / "public" / filename
     metadata_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Champion metadata ready: {metadata_path.relative_to(WEB_DIR)}")
     print(f"Model: {payload['model']['url']} ({len(model_bytes):,} bytes; sha256 {model_hash})")
+
+    return destination
+
+
+def main() -> None:
+    root, champion = source_root()
+    keep = {publish(root, champion, "champion.json")}
+    fallback = json.loads((root / "research/CHAMPION.json").read_text())
+    fallback["name"] = "E81"
+    keep.add(publish(root, fallback, "fallback.json"))
+    for stale in (WEB_DIR / "public/models").glob("*.bin"):
+        if stale not in keep:
+            stale.unlink()
 
 
 if __name__ == "__main__":

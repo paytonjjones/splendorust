@@ -1,0 +1,26 @@
+{
+  "checkpointSha256": "ef8a4521cd6c03c7075f15efee23f4cde6ec94d1b5398765cf0c24a09ad745cb",
+  "precision": "float32",
+  "torch": "2.5.1",
+  "includes": "CPU tokens to MPS, forward, CPU output readback; excludes public tokenization and service queue",
+  "maxLogitError": 1.5735626220703125e-05,
+  "maxValueError": 1.4901161193847656e-06,
+  "measurements": [
+    {
+      "batch": 1,
+      "measuredCalls": 500,
+      "medianMs": 4.021478467620909,
+      "p95Ms": 4.725292092189193,
+      "meanMs": 4.08712441381067,
+      "rowsPerSecond": 248.66476547158936
+    },
+    {
+      "batch": 32,
+      "measuredCalls": 500,
+      "medianMs": 4.466021084226668,
+      "p95Ms": 4.949917085468769,
+      "meanMs": 4.5327080697752535,
+      "rowsPerSecond": 7165.214717194084
+    }
+  ]
+}

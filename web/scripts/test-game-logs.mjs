@@ -47,7 +47,10 @@ try {
   const oldSearch = oldChampion.search;
   await request({ ...base, gameId: crypto.randomUUID(), champion: oldChampion, effectiveSearch: { agent: oldSearch.agent, iterations: oldSearch.iterations, depth: oldSearch.depth, worldPool: oldSearch.world_pool, gumbelMaxConsidered: oldSearch.gumbel_max_considered, gumbelCvisit: oldSearch.gumbel_cvisit, gumbelCscale: oldSearch.gumbel_cscale, gumbelRootNoise: oldSearch.gumbel_root_noise } }, 202);
   const gpuSearch = { ...base.effectiveSearch, inferenceBackend: "webgpu-f32", turnBudgetMs: 10000 };
-  await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: gpuSearch }, 202);
+  for (const turnBudgetMs of [5000, 10000, 30000]) {
+    await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, turnBudgetMs } }, 202);
+    await request({ ...base, gameId: crypto.randomUUID(), champion: oldChampion, effectiveSearch: { ...gpuSearch, agent: oldSearch.agent, iterations: 128, depth: 16, worldPool: 3, cpuct: 0.4, fpuReduction: 0.02965, dynamicFpu: false, chanceUniverses: 0, uniformPrior: 0, rootOnly: false, rootNoise: 0, inferenceBackend: "wasm-cpu", turnBudgetMs } }, 202);
+  }
   for (const invalid of [{ turnBudgetMs: 10001 }, { inferenceBackend: "cpu" }, { turnBudgetMs: undefined }]) {
     await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, ...invalid } }, 400);
   }

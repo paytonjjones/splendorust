@@ -36,7 +36,7 @@ cargo run --release --locked -p splendor-arena --example validate_web_records --
 
 The validator replays the exact actions through the Rust engine, checks invariants, and compares state, turns, revision, and result. It returns a failure if any record is rejected and reports finished, blocked, and each nonterminal status separately. Use the engine version that matches the records.
 
-The WebGPU client adds `inferenceBackend: "webgpu-f32"` and `turnBudgetMs: 10000` to effective search settings. The simulation setting is a ceiling under this time cap. Older CPU records remain valid. Do not treat capped browser records as fixed-budget native champion games.
+The client adds `inferenceBackend` (`"webgpu-f32"` or `"wasm-cpu"`) and `turnBudgetMs` (5000, 10000, or 30000) to effective search settings. The model metadata identifies the champion or E81 fallback. These settings remain fixed for the game. The simulation setting is a ceiling under this time cap. Older CPU records remain valid. Do not treat capped browser records as fixed-budget native champion games.
 
 Client records are untrusted. Legal replay does not prove a human identity or authenticate champion metadata. Reconstruct each acting player's `Observation` for learner inputs. Keep the seed and full diagnostic state for validation; do not feed hidden deck order or an opponent's private reservations to a public-input learner. Collecting records does not automatically train or promote a model.
 

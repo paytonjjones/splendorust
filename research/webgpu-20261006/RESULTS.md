@@ -92,7 +92,7 @@ were at most 9,902.705 ms. Five late-game decisions reached 6,400 simulations;
 the other main decisions stopped at the time cap. The initial model load took
 8.62 seconds and is outside the per-turn budget. This host had no GPU fallback.
 
-All 25 observed uploads returned 202. Public journal reads returned 405.
+All 24 observed uploads returned 202. Public journal reads returned 405.
 The downloaded record reported the production WebGPU backend and 10-second
 budget. Native replay validation reported `verified=1 rejected=0 finished=1`.
 The record hash is in [the public check](public-check.json). The private replay
