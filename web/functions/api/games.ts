@@ -34,6 +34,13 @@ type Runtime = "production" | "test";
 type CanonicalAction = [number, number, number, number, number, number, number];
 
 interface SearchSettings {
+  cpuct?: number;
+  fpuReduction?: number;
+  dynamicFpu?: boolean;
+  chanceUniverses?: number;
+  uniformPrior?: number;
+  rootOnly?: boolean;
+  rootNoise?: number;
   agent: string;
   iterations: number;
   depth: number;
@@ -50,14 +57,21 @@ interface Champion {
   name?: string;
   model: { url: string; sha256: string; bytes: number };
   search: {
+    cpuct?: number;
+    fpu_reduction?: number;
+    dynamic_fpu?: boolean;
+    chance_universes?: number;
+    uniform_prior?: number;
+    root_only?: boolean;
+    root_noise?: number;
     agent: string;
     iterations: number;
     depth: number;
     world_pool: number;
-    gumbel_max_considered: number;
-    gumbel_cvisit: number;
-    gumbel_cscale: number;
-    gumbel_root_noise: number;
+    gumbel_max_considered?: number | null;
+    gumbel_cvisit?: number | null;
+    gumbel_cscale?: number | null;
+    gumbel_root_noise?: number | null;
   };
   [key: string]: unknown;
 }
@@ -258,17 +272,29 @@ function validateChampion(value: unknown): value is Champion {
       !finiteInteger(model.bytes, 1, 20 * 1024 * 1024) ||
       typeof search.agent !== "string" || search.agent.length < 1 || search.agent.length > 64 ||
       !finiteInteger(search.iterations, 1, 1_000_000) || !finiteInteger(search.depth, 1, 100_000) ||
-      !finiteInteger(search.world_pool, 1, 128) || !finiteInteger(search.gumbel_max_considered, 1, 128) ||
+      !finiteInteger(search.world_pool, 1, 128)) return false;
+  if (search.agent === "flywheel-best") {
+    if (!validPuct(search.cpuct, search.fpu_reduction, search.dynamic_fpu, search.chance_universes, search.uniform_prior, search.root_only, search.root_noise)) return false;
+  } else if (!finiteInteger(search.gumbel_max_considered, 1, 128) ||
       !finiteNumber(search.gumbel_cvisit, 0, 1_000_000) || !finiteNumber(search.gumbel_cscale, 0, 1_000_000, true) ||
       !finiteNumber(search.gumbel_root_noise, 0, 1)) return false;
   if (value.name !== undefined && (typeof value.name !== "string" || value.name.length > 100)) return false;
   return byteLength(stableJson(value)) <= 16 * 1024;
 }
 
+function validPuct(cpuct: unknown, fpu: unknown, dynamic: unknown, chance: unknown, uniform: unknown, rootOnly: unknown, noise: unknown): boolean {
+  return finiteNumber(cpuct, 0, 1_000_000) && finiteNumber(fpu, 0, 1_000_000) &&
+    typeof dynamic === "boolean" && finiteInteger(chance, 0, 64) && finiteNumber(uniform, 0, 1) &&
+    typeof rootOnly === "boolean" && noise === 0;
+}
+
 function validateSearch(value: unknown): value is SearchSettings {
-  if (!isRecord(value) || !exactKeys(value, [
-    "agent", "iterations", "depth", "worldPool", "gumbelMaxConsidered", "gumbelCvisit", "gumbelCscale", "gumbelRootNoise",
-  ])) return false;
+  const legacy = ["agent", "iterations", "depth", "worldPool", "gumbelMaxConsidered", "gumbelCvisit", "gumbelCscale", "gumbelRootNoise"];
+  const puct = ["cpuct", "fpuReduction", "dynamicFpu", "chanceUniverses", "uniformPrior", "rootOnly", "rootNoise"];
+  if (!isRecord(value)) return false;
+  const hasPuct = exactKeys(value, [...legacy, ...puct]);
+  if (!hasPuct && (!exactKeys(value, legacy) || value.agent === "flywheel-best")) return false;
+  if (hasPuct && !validPuct(value.cpuct, value.fpuReduction, value.dynamicFpu, value.chanceUniverses, value.uniformPrior, value.rootOnly, value.rootNoise)) return false;
   return typeof value.agent === "string" && value.agent.length > 0 && value.agent.length <= 64 &&
     finiteInteger(value.iterations, 1, 1_000_000) && finiteInteger(value.depth, 1, 100_000) &&
     finiteInteger(value.worldPool, 1, 128) && finiteInteger(value.gumbelMaxConsidered, 1, 128) &&
@@ -281,10 +307,16 @@ function searchMatchesChampion(search: SearchSettings, champion: Champion["searc
     (allowBudgetOverride || search.iterations === champion.iterations) &&
     (allowBudgetOverride || search.depth === champion.depth) &&
     search.worldPool === champion.world_pool &&
-    search.gumbelMaxConsidered === champion.gumbel_max_considered &&
-    search.gumbelCvisit === champion.gumbel_cvisit &&
-    search.gumbelCscale === champion.gumbel_cscale &&
-    search.gumbelRootNoise === champion.gumbel_root_noise;
+    search.gumbelMaxConsidered === (champion.gumbel_max_considered ?? 16) &&
+    search.gumbelCvisit === (champion.gumbel_cvisit ?? 50) &&
+    search.gumbelCscale === (champion.gumbel_cscale ?? 0.1) &&
+    search.gumbelRootNoise === (champion.gumbel_root_noise ?? 0) &&
+    (search.cpuct === undefined || (
+      search.cpuct === (champion.cpuct ?? 0.4) && search.fpuReduction === (champion.fpu_reduction ?? 0.02965) &&
+      search.dynamicFpu === (champion.dynamic_fpu ?? false) && search.chanceUniverses === (champion.chance_universes ?? 0) &&
+      search.uniformPrior === (champion.uniform_prior ?? 0) && search.rootOnly === (champion.root_only ?? false) &&
+      search.rootNoise === (champion.root_noise ?? 0)
+    ));
 }
 
 function validateResult(value: unknown): value is GamePayload["replay"]["result"] {

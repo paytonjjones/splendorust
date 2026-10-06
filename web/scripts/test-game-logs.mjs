@@ -28,7 +28,7 @@ try {
   const base = {
     schema: 'splendor-web-game-v1', gameId: crypto.randomUUID(), writeToken: 'a'.repeat(64), version: 1,
     startedAt: '2026-10-03T00:00:00.000Z', updatedAt: '2026-10-03T00:00:00.000Z', humanSeat: 0,
-    champion, effectiveSearch: { agent: search.agent, iterations: search.iterations, depth: search.depth, worldPool: search.world_pool, gumbelMaxConsidered: search.gumbel_max_considered, gumbelCvisit: search.gumbel_cvisit, gumbelCscale: search.gumbel_cscale, gumbelRootNoise: search.gumbel_root_noise },
+    champion, effectiveSearch: { agent: search.agent, iterations: search.iterations, depth: search.depth, worldPool: search.world_pool, gumbelMaxConsidered: search.gumbel_max_considered ?? 16, gumbelCvisit: search.gumbel_cvisit ?? 50, gumbelCscale: search.gumbel_cscale ?? 0.1, gumbelRootNoise: search.gumbel_root_noise ?? 0, cpuct: search.cpuct ?? 0.4, fpuReduction: search.fpu_reduction ?? 0.02965, dynamicFpu: search.dynamic_fpu ?? false, chanceUniverses: search.chance_universes ?? 0, uniformPrior: search.uniform_prior ?? 0, rootOnly: search.root_only ?? false, rootNoise: search.root_noise ?? 0 },
     runtime: 'test', status: 'in_progress',
     replay: { schema: 'splendor-web-replay-v1', engine: 'splendorust-v2', players: 2, seed: '18446744073709551615', actions: [], revision: 0, turns: 0, stateDebug: 'structural test fixture', result: null },
   };
@@ -40,6 +40,12 @@ try {
     checks++;
     return response.json();
   };
+  for (const [key, value] of [["dynamicFpu", false], ["chanceUniverses", 0], ["cpuct", 0.5]]) {
+    await request({ ...base, runtime: "production", gameId: crypto.randomUUID(), effectiveSearch: { ...base.effectiveSearch, [key]: value } }, 400);
+  }
+  const oldChampion = { schema: 'splendor-web-champion-v1', id: 'e81', model: { url: '/models/' + 'e'.repeat(64) + '.bin', sha256: 'e'.repeat(64), bytes: 569624 }, search: { agent: 'flywheel-gumbel', iterations: 128, depth: 16, world_pool: 3, gumbel_max_considered: 16, gumbel_cvisit: 50, gumbel_cscale: 0.1, gumbel_root_noise: 0 } };
+  const oldSearch = oldChampion.search;
+  await request({ ...base, gameId: crypto.randomUUID(), champion: oldChampion, effectiveSearch: { agent: oldSearch.agent, iterations: oldSearch.iterations, depth: oldSearch.depth, worldPool: oldSearch.world_pool, gumbelMaxConsidered: oldSearch.gumbel_max_considered, gumbelCvisit: oldSearch.gumbel_cvisit, gumbelCscale: oldSearch.gumbel_cscale, gumbelRootNoise: oldSearch.gumbel_root_noise } }, 202);
   await request(base, 202);
   await request(base, 200);
   const row = sqlite.prepare('SELECT * FROM games WHERE game_id = ?').get(base.gameId);

@@ -13,7 +13,7 @@ declare global {
       restart(seed?: string | number, seat?: number, testSearchBudget?: { iterations: number; depth: number }): Promise<void>;
       waitForHuman(): Promise<GameSnapshot>;
       status(): "loading" | "ready" | "thinking" | "error";
-      metrics(): { wasmInitMs: number | null; modelLoadMs: number | null; botDecisionMs: number[]; botTurnMs: number[] };
+      metrics(): { wasmInitMs: number | null; modelLoadMs: number | null; botDecisionMs: number[]; botSimulations: number[]; botTurnMs: number[] };
       events(): GameEvent[];
       clearEvents(): void;
       skipWaits(skip?: boolean): void;

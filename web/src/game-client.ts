@@ -80,6 +80,7 @@ function freshMetrics(): ClientMetrics {
     wasmInitMs: null,
     modelLoadMs: null,
     botDecisionMs: [],
+    botSimulations: [],
     botTurnMs: [],
   };
 }
@@ -104,6 +105,7 @@ function copyMetrics(metrics: ClientMetrics): ClientMetrics {
     wasmInitMs: metrics.wasmInitMs,
     modelLoadMs: metrics.modelLoadMs,
     botDecisionMs: [...metrics.botDecisionMs],
+    botSimulations: [...metrics.botSimulations],
     botTurnMs: [...metrics.botTurnMs],
   };
 }

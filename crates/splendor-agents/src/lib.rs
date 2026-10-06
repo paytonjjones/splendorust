@@ -737,11 +737,23 @@ pub fn make_agent_with_model(
     make_agent_with_profile(name, seed, search, external_model, None)
 }
 
-/// Runtime settings for a metadata-selected flywheel Gumbel search profile.
+/// Runtime PUCT settings for a metadata-selected flywheel search.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct PuctProfileOverrides {
+    pub cpuct: f64,
+    pub fpu_reduction: f64,
+    pub dynamic_fpu: bool,
+    pub chance_universes: usize,
+    pub uniform_prior: f64,
+    pub root_only: bool,
+}
+
+/// Runtime settings for a metadata-selected flywheel search profile.
 ///
 /// The normal factory profile remains authoritative when this is `None`.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct SearchProfileOverrides {
+    pub puct: Option<PuctProfileOverrides>,
     pub world_pool: usize,
     pub gumbel_max_considered: usize,
     pub gumbel_cvisit: f64,
@@ -752,7 +764,7 @@ pub struct SearchProfileOverrides {
 /// Create an agent with an optional runtime profile override and external model.
 ///
 /// Overrides apply after the canonical agent factory has set its defaults.
-/// They are supported only for flywheel Gumbel agents.
+/// They are supported for flywheel-best and flywheel Gumbel agents.
 pub fn make_agent_with_profile(
     name: &str,
     seed: u64,
@@ -761,11 +773,12 @@ pub fn make_agent_with_profile(
     profile: Option<SearchProfileOverrides>,
 ) -> Result<Box<dyn Agent>, String> {
     if profile.is_some()
-        && !(name.starts_with("flywheel-gumbel")
+        && !(name == "flywheel-best"
+            || name.starts_with("flywheel-gumbel")
             || name.starts_with("flywheel-root-gumbel")
             || name.starts_with("flywheel-belief-gumbel"))
     {
-        return Err("search profile overrides require a flywheel Gumbel agent".into());
+        return Err("search profile overrides require a supported flywheel agent".into());
     }
     Ok(match name {
         "random" => Box::new(RandomAgent::new(seed)),
@@ -893,8 +906,24 @@ pub fn make_agent_with_profile(
                 agent.rollout_depth = 8;
             }
             if let Some(profile) = profile {
-                if !agent.gumbel {
-                    return Err("search profile overrides require a flywheel Gumbel agent".into());
+                if let Some(puct) = profile.puct {
+                    if agent.gumbel
+                        || !puct.cpuct.is_finite()
+                        || puct.cpuct < 0.0
+                        || !puct.fpu_reduction.is_finite()
+                        || puct.fpu_reduction < 0.0
+                        || !puct.uniform_prior.is_finite()
+                        || !(0.0..=1.0).contains(&puct.uniform_prior)
+                        || puct.chance_universes > 64
+                    {
+                        return Err("invalid PUCT profile override".into());
+                    }
+                    agent.cpuct = puct.cpuct;
+                    agent.fpu_reduction = puct.fpu_reduction;
+                    agent.dynamic_fpu = puct.dynamic_fpu;
+                    agent.chance_universes = puct.chance_universes;
+                    agent.uniform_prior = puct.uniform_prior;
+                    agent.root_only = puct.root_only;
                 }
                 if profile.world_pool == 0
                     || profile.gumbel_max_considered == 0

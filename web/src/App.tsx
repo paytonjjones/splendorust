@@ -7,7 +7,7 @@ import type { GameClient } from './game-client';
 import type { Card, GameClientUpdate, GameSnapshot, LegalAction, PlayerSnapshot } from './types';
 import { COLOR_NAMES, Gem, Engraving, Seal, Cost, cardLabel, colorStyle } from './art';
 
-const EMPTY: GameClientUpdate = { state: null, status: 'loading', requestPending: false, champion: null, metrics: { wasmInitMs: null, modelLoadMs: null, botDecisionMs: [], botTurnMs: [] }, recorder: { status: 'idle', pendingUploads: 0, storedGames: 0 } };
+const EMPTY: GameClientUpdate = { state: null, status: 'loading', requestPending: false, champion: null, metrics: { wasmInitMs: null, modelLoadMs: null, botDecisionMs: [], botSimulations: [], botTurnMs: [] }, recorder: { status: 'idle', pendingUploads: 0, storedGames: 0 } };
 const equal = (a: number[], b: number[]) => a.every((n, i) => n === b[i]);
 const total = (a: number[]) => a.reduce((n, v) => n + v, 0);
 const bundleText = (a: number[]) => a.map((n, c) => n ? `${n} ${COLOR_NAMES[c].toLowerCase()}` : '').filter(Boolean).join(', ');

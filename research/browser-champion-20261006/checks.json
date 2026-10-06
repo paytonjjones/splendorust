@@ -1,0 +1,48 @@
+{
+  "rustToolchain": "1.98.1",
+  "commands": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "passed": true
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --release --locked -- -D warnings",
+      "passed": true
+    },
+    {
+      "command": "cargo test --release --locked --workspace",
+      "passed": true
+    },
+    {
+      "command": "cargo test --release --locked --workspace --all-features",
+      "passed": true
+    },
+    {
+      "command": "cargo test --release --locked -p splendor-web research_strength_entity_model_matches_registered_puct_profile -- --nocapture",
+      "passed": true,
+      "note": "Full 6400 check ran before adding its ignore annotation. It passed; see native.json."
+    },
+    {
+      "command": "npm run typecheck",
+      "cwd": "web",
+      "passed": true
+    },
+    {
+      "command": "npm run test:logs",
+      "cwd": "web",
+      "passed": true,
+      "checks": 28
+    },
+    {
+      "command": "npm run build:test",
+      "cwd": "web",
+      "passed": true
+    },
+    {
+      "command": "npm run build",
+      "cwd": "web",
+      "passed": true
+    }
+  ],
+  "githubActions": "correctness disabled_manually"
+}

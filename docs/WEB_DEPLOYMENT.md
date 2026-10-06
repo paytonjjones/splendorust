@@ -33,7 +33,7 @@ npm run dev
 - `public/champion.json`, fetched at `/champion.json` with no-cache headers;
 - `public/models/<sha256>.bin`, served with a one-year immutable cache policy.
 
-If a worktree does not contain the champion metadata and model, the sync script checks `SPLENDORUST_ROOT`, then `/Users/payton.jones/dev/splendorust`. To replace the champion, update the research promotion pointer and model, run the sync script, then build and deploy. Search settings and model hash travel in metadata; the worker should pass those settings through its configuration boundary.
+If a worktree does not contain the champion metadata and model, the sync script checks `SPLENDORUST_ROOT`, then `/Users/payton.jones/dev/splendorust`. To replace the champion, update the research promotion pointer and model, run the sync script, then build and deploy. Search settings and the model hash travel in metadata. The worker passes the PUCT budget, depth, world pool, chance universes, cpuct, FPU settings, uniform prior, and root settings to Rust. Nonzero PUCT root noise is not supported. The current champion uses 6,400 simulations and zero root noise. Search runs in the browser worker with portable CPU inference. Its latency can differ from the research model service.
 
 ## Cloudflare Pages
 
@@ -64,6 +64,9 @@ The `@playwright/test` harness uses a separate `dist-test` build and preview ser
 npm run test:e2e
 npm run test:a11y
 npm run test:perf
+npx playwright test champion.spec.ts --workers=1
 ```
+
+The champion test runs a full 6,400-simulation decision and checks the Rust simulation counter. It can take several minutes. Run the full native configuration check with `cargo test --release --locked -p splendor-web research_strength_entity_model_matches_registered_puct_profile -- --ignored --nocapture`. These checks do not establish browser playing strength.
 
 After deployment, `node scripts/check-public.mjs` plays through the normal public UI, verifies upload replies and read isolation, downloads its records into ignored `local/web-games/`, and writes a compact public check report. It records a real production game; do not run it as a background load generator.

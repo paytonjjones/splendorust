@@ -3,7 +3,8 @@
 //! Small, observation-safe JSON API for the browser game worker.
 use serde::{Deserialize, Serialize};
 use splendor_agents::{
-    Agent, SearchConfig, SearchProfileOverrides, make_agent_with_profile, transfer,
+    Agent, PuctProfileOverrides, SearchConfig, SearchProfileOverrides, make_agent_with_profile,
+    transfer,
 };
 use splendor_core::{
     Action, ActionSet, ENGINE_VERSION, GameOutcome, GameState, NONE, Observation, Phase, Player,
@@ -19,6 +20,14 @@ use wasm_bindgen::prelude::*;
 #[serde(default, rename_all = "camelCase", deny_unknown_fields)]
 struct ChampionConfig {
     search_agent: String,
+    cpuct: f64,
+    fpu_reduction: f64,
+    dynamic_fpu: bool,
+    chance_universes: usize,
+    uniform_prior: f64,
+    root_only: bool,
+    root_noise: f64,
+
     iterations: u32,
     depth: u32,
     world_pool: usize,
@@ -31,6 +40,13 @@ impl Default for ChampionConfig {
     fn default() -> Self {
         Self {
             search_agent: "flywheel-gumbel".into(),
+            cpuct: 0.4,
+            fpu_reduction: 0.02965,
+            dynamic_fpu: false,
+            chance_universes: 0,
+            uniform_prior: 0.0,
+            root_only: false,
+            root_noise: 0.0,
             iterations: 128,
             depth: 16,
             world_pool: 3,
@@ -272,17 +288,32 @@ impl WebGame {
             depth: config.depth,
             ..SearchConfig::default()
         };
-        let profile = if gumbel {
-            Some(SearchProfileOverrides {
-                world_pool: config.world_pool,
-                gumbel_max_considered: config.gumbel_max_considered,
-                gumbel_cvisit: config.gumbel_cvisit,
-                gumbel_cscale: config.gumbel_cscale,
-                gumbel_noise: config.gumbel_root_noise,
-            })
-        } else {
-            None
-        };
+        if !config.cpuct.is_finite()
+            || config.cpuct < 0.0
+            || !config.fpu_reduction.is_finite()
+            || config.fpu_reduction < 0.0
+            || !config.uniform_prior.is_finite()
+            || !(0.0..=1.0).contains(&config.uniform_prior)
+            || config.chance_universes > 64
+            || config.root_noise != 0.0
+        {
+            return Err(js_error("invalid PUCT settings; root noise is unsupported"));
+        }
+        let profile = Some(SearchProfileOverrides {
+            puct: (!gumbel).then_some(PuctProfileOverrides {
+                cpuct: config.cpuct,
+                fpu_reduction: config.fpu_reduction,
+                dynamic_fpu: config.dynamic_fpu,
+                chance_universes: config.chance_universes,
+                uniform_prior: config.uniform_prior,
+                root_only: config.root_only,
+            }),
+            world_pool: config.world_pool,
+            gumbel_max_considered: config.gumbel_max_considered,
+            gumbel_cvisit: config.gumbel_cvisit,
+            gumbel_cscale: config.gumbel_cscale,
+            gumbel_noise: config.gumbel_root_noise,
+        });
         let bot = make_agent_with_profile(
             &config.search_agent,
             seed ^ 0x5350_4c45_4e44_4f52,
@@ -351,6 +382,14 @@ impl WebGame {
         self.apply(action)?;
         self.resolve_forced_human_choices()?;
         self.snapshot_json()
+    }
+
+    /// Cumulative search work for runtime verification.
+    #[wasm_bindgen(js_name = searchWork)]
+    pub fn search_work(&self) -> String {
+        let (simulations, inference_calls) = self.bot.work_counts();
+        serde_json::json!({"simulations": simulations, "inferenceCalls": inference_calls})
+            .to_string()
     }
 
     /// Make one bot engine decision. The caller can repeat this in test mode.
@@ -977,17 +1016,43 @@ mod tests {
     }
 
     #[test]
-    fn research_strength_entity_model_runs_with_puct_profile() {
-        let config = r#"{"searchAgent":"flywheel-best","iterations":2,"depth":4,"worldPool":3}"#;
-        let mut web = WebGame::new("91337".into(), 0, strength_model(), config.into()).unwrap();
+    #[ignore = "full 6400-simulation deployment check; run with --ignored --nocapture"]
+    fn research_strength_entity_model_matches_registered_puct_profile() {
+        let seed = 91337;
+        let config = r#"{"searchAgent":"flywheel-best","iterations":6400,"depth":64,"worldPool":3,"cpuct":0.4,"fpuReduction":0.02965,"dynamicFpu":true,"chanceUniverses":3,"uniformPrior":0,"rootOnly":false,"rootNoise":0}"#;
+        let bytes = strength_model();
+        let mut web = WebGame::new(seed.to_string(), 0, bytes.clone(), config.into()).unwrap();
         let action = web
             .legal()
             .into_iter()
             .find(|a| matches!(a, Action::Take(_)))
             .unwrap();
         web.act(action_id(action)).unwrap();
+        let mut native = splendor_agents::neural_search::NeuralAgent::new(
+            seed ^ 0x5350_4c45_4e44_4f52,
+            SearchConfig {
+                iterations: 6400,
+                depth: 64,
+                ..SearchConfig::default()
+            },
+        );
+        native.transferred = true;
+        native.external_model = Some(load_model(&bytes).unwrap());
+        native.cpuct = 0.4;
+        native.fpu_reduction = 0.02965;
+        native.dynamic_fpu = true;
+        native.world_pool = 3;
+        native.chance_universes = 3;
+        native.uniform_prior = 0.0;
+        let expected = native.select_action(&web.state.observe(1), &web.legal());
         web.bot_step().unwrap();
-        assert!(!web.events.is_empty());
+        assert_eq!(web.events.last().unwrap().action_id, action_id(expected));
+        assert_eq!(web.bot.work_counts().0, 6400);
+        println!(
+            "CHAMPION_PARITY action={} work={}",
+            action_id(expected),
+            web.search_work()
+        );
     }
 
     #[test]

@@ -45,6 +45,7 @@ interface WasmGame {
   trainingRecord(): string;
   act(actionId: string): string;
   botStep(): string;
+  searchWork(): string;
 }
 
 interface WasmModule {
@@ -61,6 +62,7 @@ const metrics: ClientMetrics = {
   wasmInitMs: null,
   modelLoadMs: null,
   botDecisionMs: [],
+  botSimulations: [],
   botTurnMs: [],
 };
 
@@ -104,6 +106,13 @@ function makeEffectiveSearch(
     iterations: validTestOverrides?.iterations ?? metadata.search.iterations,
     depth: validTestOverrides?.depth ?? metadata.search.depth,
     worldPool: metadata.search.world_pool,
+    cpuct: metadata.search.cpuct ?? 0.4,
+    fpuReduction: metadata.search.fpu_reduction ?? 0.02965,
+    dynamicFpu: metadata.search.dynamic_fpu ?? false,
+    chanceUniverses: metadata.search.chance_universes ?? 0,
+    uniformPrior: metadata.search.uniform_prior ?? 0,
+    rootOnly: metadata.search.root_only ?? false,
+    rootNoise: metadata.search.root_noise ?? 0,
     gumbelMaxConsidered: metadata.search.gumbel_max_considered ?? 16,
     gumbelCvisit: metadata.search.gumbel_cvisit ?? 50,
     gumbelCscale: metadata.search.gumbel_cscale ?? 0.1,
@@ -116,6 +125,7 @@ function copyMetrics(): ClientMetrics {
     wasmInitMs: metrics.wasmInitMs,
     modelLoadMs: metrics.modelLoadMs,
     botDecisionMs: [...metrics.botDecisionMs],
+    botSimulations: [...metrics.botSimulations],
     botTurnMs: [...metrics.botTurnMs],
   };
 }
@@ -130,6 +140,13 @@ function makeConfig(
     iterations: search.iterations,
     depth: search.depth,
     worldPool: search.worldPool,
+    cpuct: search.cpuct,
+    fpuReduction: search.fpuReduction,
+    dynamicFpu: search.dynamicFpu,
+    chanceUniverses: search.chanceUniverses,
+    uniformPrior: search.uniformPrior,
+    rootOnly: search.rootOnly,
+    rootNoise: search.rootNoise,
     gumbelMaxConsidered: search.gumbelMaxConsidered,
     gumbelCvisit: search.gumbelCvisit,
     gumbelCscale: search.gumbelCscale,
@@ -215,9 +232,12 @@ async function runBot(requestId: number, initialState: GameSnapshot): Promise<vo
   while (state.activePlayer !== state.humanSeat && !isTerminal(state)) {
     // Yield between Rust decisions so the main thread can paint each published move.
     await yieldToWorker();
+    const before = JSON.parse(game!.searchWork()) as { simulations: number };
     const decisionStart = performance.now();
     const serialized = game!.botStep();
     metrics.botDecisionMs.push(performance.now() - decisionStart);
+    const after = JSON.parse(game!.searchWork()) as { simulations: number };
+    metrics.botSimulations.push(after.simulations - before.simulations);
     state = JSON.parse(serialized) as GameSnapshot;
     postTrainingRecord(requestId);
     post({ type: "state", state, metrics: copyMetrics(), requestId });
@@ -233,6 +253,7 @@ async function start(request: StartRequest): Promise<void> {
   metrics.wasmInitMs = null;
   metrics.modelLoadMs = null;
   metrics.botDecisionMs = [];
+  metrics.botSimulations = [];
   metrics.botTurnMs = [];
   post({ type: "status", status: "loading", requestId: request.requestId });
 

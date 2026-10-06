@@ -101,6 +101,13 @@ export interface EffectiveSearch {
   iterations: number;
   depth: number;
   worldPool: number;
+  cpuct: number;
+  fpuReduction: number;
+  dynamicFpu: boolean;
+  chanceUniverses: number;
+  uniformPrior: number;
+  rootOnly: boolean;
+  rootNoise: number;
   gumbelMaxConsidered: number;
   gumbelCvisit: number;
   gumbelCscale: number;
@@ -170,6 +177,13 @@ export interface ChampionMetadata {
     iterations: number;
     depth: number;
     world_pool: number;
+    cpuct?: number;
+    fpu_reduction?: number;
+    dynamic_fpu?: boolean;
+    chance_universes?: number;
+    uniform_prior?: number;
+    root_only?: boolean;
+    root_noise?: number;
     gumbel_max_considered: number | null;
     gumbel_cvisit: number | null;
     gumbel_cscale: number | null;
@@ -189,6 +203,7 @@ export interface ClientMetrics {
   wasmInitMs: number | null;
   modelLoadMs: number | null;
   botDecisionMs: number[];
+  botSimulations: number[];
   botTurnMs: number[];
 }
 
