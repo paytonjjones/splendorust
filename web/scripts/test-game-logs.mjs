@@ -51,6 +51,8 @@ try {
     await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, turnBudgetMs } }, 202);
     await request({ ...base, gameId: crypto.randomUUID(), champion: oldChampion, effectiveSearch: { ...gpuSearch, agent: oldSearch.agent, iterations: 128, depth: 16, worldPool: 3, cpuct: 0.4, fpuReduction: 0.02965, dynamicFpu: false, chanceUniverses: 0, uniformPrior: 0, rootOnly: false, rootNoise: 0, inferenceBackend: "wasm-cpu", turnBudgetMs } }, 202);
   }
+  await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, inferenceBatchSize: 8 } }, 202);
+  await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, inferenceBatchSize: 7 } }, 400);
   for (const invalid of [{ turnBudgetMs: 10001 }, { inferenceBackend: "cpu" }, { turnBudgetMs: undefined }]) {
     await request({ ...base, gameId: crypto.randomUUID(), effectiveSearch: { ...gpuSearch, ...invalid } }, 400);
   }

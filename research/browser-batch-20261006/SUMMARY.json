@@ -1,0 +1,42 @@
+{
+  "games": 4,
+  "wins": 1,
+  "ties": 0,
+  "losses": 3,
+  "unknown": 0,
+  "credit_bounds_unknowns": [
+    0.25,
+    0.25
+  ],
+  "conservative_cluster_ci95": [
+    0,
+    1
+  ],
+  "ci_method": "Conservative two-sided Hoeffding over two independent setup clusters. Too small to establish non-inferiority.",
+  "cost": {
+    "1": {
+      "main_searches": 108,
+      "mean_simulations": 3042.925925925926,
+      "median_search_ms": 4900.992499947548,
+      "simulations_per_second": 695.2335158590055,
+      "inferences_per_second": 489.55282786562736,
+      "max_turn_ms": 4906.880000114441
+    },
+    "8": {
+      "main_searches": 108,
+      "mean_simulations": 6400,
+      "median_search_ms": 2215.7849999666214,
+      "simulations_per_second": 3101.8711570838045,
+      "inferences_per_second": 2673.8380683068176,
+      "max_turn_ms": 2451.1349999904633
+    }
+  },
+  "game_seconds": [
+    191.1340799999237,
+    164.73401999998092,
+    150.77124499988557,
+    188.89732499980926
+  ],
+  "game_records_sha256": "db7bda0218358b4ac654182d1a77f17c9f063386969f40f04b3134b2b2c92a71",
+  "scope": "Chrome WebGPU, canonical rules, four fixed games, same weights and5s whole-turn limit. Exploratory only; no champion promotion."
+}

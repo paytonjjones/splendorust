@@ -28,9 +28,9 @@ The same frozen weights and public token fixtures ran through native FP32 MPS. E
 | WebGPU | 4 | 2.205 ms | 1,814 |
 | WebGPU | 8 | 2.645 ms | 3,025 |
 
-The native research service batches positions from concurrent games. The current browser search requests one position at a time. This makes native throughput per position much higher than native single-position latency. In these matched single-position measurements, WebGPU is faster than MPS.
+The native research service batches positions from concurrent games. At commit `c9c932b`, the browser search requested one position at a time. This makes native throughput per position much higher than native single-position latency. In these matched single-position measurements, WebGPU is faster than MPS.
 
-Batches of eight give about six times the WebGPU throughput of batch one. This is an inference-only result. A single-game search must collect multiple leaf positions before inference can use it. Virtual visits or a leaf queue change search order. That needs a separate candidate and fresh strength evaluation. Batched search is not deployed. Batch-four and batch-eight graphs are development probe assets only; they are not included in the production build. Reproduce them with `web/scripts/export-webgpu.py --batch-size 4` or `--batch-size 8`, then run the development probe with `batch4` or `batch8`.
+Batches of eight give about six times the WebGPU throughput of batch one. This is an inference-only result. A single-game search must collect multiple leaf positions before inference can use it. Virtual visits or a leaf queue change search order. That needs a separate candidate and fresh strength evaluation. At that measurement, batched search was not deployed and both larger graphs were development probe assets. Commit `762289d` later deployed batch-eight search. See [the direct browser comparison](../browser-batch-20261006/PLAN.json). Reproduce them with `web/scripts/export-webgpu.py --batch-size 4` or `--batch-size 8`, then run the development probe with `batch4` or `batch8`.
 
 The timeout bot has no fresh playing-strength result. More simulations are a possible benefit, not a verified strength gain.
 

@@ -1,0 +1,27 @@
+{
+  "hypothesis": "At the same five-second turn budget, batch-eight PUCT gains enough simulations to avoid a large strength loss versus sequential PUCT.",
+  "games": 4,
+  "seeds": [
+    "17686060870960672706",
+    "14473093179205629750"
+  ],
+  "both_seats": true,
+  "turn_budget_ms": 5000,
+  "search_deadline_slack_ms": 100,
+  "simulation_ceiling": 6400,
+  "depth": 64,
+  "world_pool": 3,
+  "weights_sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+  "backend": "Chrome WebGPU FP32 captured graphs; batch1 sequential, batch8 candidate; one game at a time, no concurrent searches",
+  "rules": "Canonical SplendoRust; both agents receive own Observation only",
+  "budget": "Four fixed games, max8min per game, max512 decisions; 45active minutes including local checks and analysis",
+  "unknowns": "Retain blocked and capped games without invented winners",
+  "scope": "Exploratory direct match. No small-margin non-inferiority or champion promotion.",
+  "candidate_commit": "762289d",
+  "source_sha256": {
+    "web/src/batch-strength.worker.ts": "b4882fdffc5f18dd508bc0ae52691d9618189d0b2cccac8b04858ef7ba25abd1",
+    "web/scripts/test-batch-strength.mjs": "5bb0160878cfed2c320d07de0796c3ed19e6cc0e06496530a61fccc0d5377a86",
+    "crates/splendor-agents/src/neural_search.rs": "64d547f3ccf9542cdfe9cc3aefb6cc7361f899a79852af299c700d59da919c44",
+    "crates/splendor-web/src/lib.rs": "0e29cfe7ec5e33693aa47a8acc29d0914147ecdf50f272c0a652ba5d11d22ae3"
+  }
+}
