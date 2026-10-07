@@ -1,6 +1,14 @@
 # Beat the Bot! 
 
-[Play in the browser](https://splendorust.pages.dev). 
+<a href="https://splendorust.pages.dev">
+  <img src="https://github.com/user-attachments/assets/615dc3b1-9018-4c48-a65b-aadd3a9feedb" alt="SplendoRust" width="600" height="600">
+</a>
+
+<p align="left">
+  <a href="https://splendorust.pages.dev">
+    <strong>Play in the browser</strong>
+  </a>
+</p>
 
 I do not know if the bot is superhuman. Let me know if you beat it!
 
