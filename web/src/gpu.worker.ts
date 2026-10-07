@@ -1,7 +1,7 @@
 import { waitForGpuRequest } from "./gpu-mailbox";
 import { loadGpuModel } from "./webgpu-model";
 
-self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceSha256: string; baseUrl: string; batch: 1 | 8 }>) => {
+self.onmessage = async (event: MessageEvent<{ buffer: SharedArrayBuffer; sourceSha256: string; baseUrl: string; batch: 1 | 2 | 8 }>) => {
   const { buffer, sourceSha256, baseUrl, batch } = event.data;
   const control = new Int32Array(buffer, 0, 4);
   const input = new Float32Array(buffer, 16, batch * 31 * 48);

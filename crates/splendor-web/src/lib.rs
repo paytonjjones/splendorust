@@ -335,7 +335,7 @@ impl WebGame {
         )
         .map_err(|e| js_error(&format!("could not configure champion search: {e}")))?;
         if config.gpu_inference {
-            if !matches!(config.inference_batch_size, 1 | 8) {
+            if !matches!(config.inference_batch_size, 1 | 2 | 8) {
                 return Err(js_error("invalid inference batch size"));
             }
             bot.set_inference_batch_size(config.inference_batch_size);
@@ -942,7 +942,7 @@ fn gpu_infer(tokens: &[f32], count: usize) -> Vec<([f32; 81], [f32; 2])> {
         assert_eq!(tokens.len(), count * 31 * 48);
         let output = gpu_predict(tokens);
         let batch = output.len() / 83;
-        assert!(matches!(batch, 1 | 8) && output.len() == batch * 83 && count <= batch);
+        assert!(matches!(batch, 1 | 2 | 8) && output.len() == batch * 83 && count <= batch);
         assert!(output.iter().all(|v| v.is_finite()));
         (0..count)
             .map(|i| {

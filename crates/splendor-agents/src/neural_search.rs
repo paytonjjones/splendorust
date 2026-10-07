@@ -1360,7 +1360,7 @@ pub(super) fn key(o: &Observation) -> [u8; 192] {
 
 impl Agent for NeuralAgent {
     fn set_inference_batch_size(&mut self, size: usize) {
-        assert!(matches!(size, 1 | 8));
+        assert!(matches!(size, 1 | 2 | 8));
         self.inference_batch_size = size;
     }
     fn set_search_deadline(&mut self, deadline_ms: Option<f64>) {

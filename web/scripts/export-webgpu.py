@@ -9,7 +9,7 @@ import onnx
 from onnx import helper as h, numpy_helper as nh, TensorProto as T
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--batch-size', type=int, choices=[1,4,8], default=1)
+parser.add_argument('--batch-size', type=int, choices=[1,2,4,8], default=1)
 batch = parser.parse_args().batch_size
 ROOT = Path(__file__).resolve().parents[2]
 champion = json.loads((ROOT / 'research/STRENGTH_CHAMPION.json').read_text())

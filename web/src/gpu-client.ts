@@ -1,7 +1,7 @@
 import type { EngineProgress } from "./engine-download";
 // The search worker can block here. A second worker owns async GPU inference;
 // the page remains free to render and process input.
-export async function startGpu(sourceSha256: string, baseUrl: string, onFailure: (error: string) => void, onProgress: (progress: EngineProgress) => void, batch: 1 | 8 = 8) {
+export async function startGpu(sourceSha256: string, baseUrl: string, onFailure: (error: string) => void, onProgress: (progress: EngineProgress) => void, batch: 1 | 2 | 8 = 8) {
   if (!navigator.gpu) throw new Error("This browser does not support WebGPU.");
   if (!self.crossOriginIsolated || typeof SharedArrayBuffer === "undefined") {
     throw new Error("The WebGPU engine needs cross-origin isolated WebGPU workers.");

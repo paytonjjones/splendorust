@@ -1,0 +1,330 @@
+{
+  "hypothesis": "At an equal five-second whole-turn budget, batch2 may retain better search feedback than batch8 while performing more simulations than batch1. Compare all pairs directly.",
+  "budget_start_utc": "2026-10-07T14:57:59Z",
+  "play_cutoff_utc": "2026-10-07T15:52:59Z",
+  "report_deadline_utc": "2026-10-07T15:57:59Z",
+  "batch_sizes": [
+    1,
+    2,
+    8
+  ],
+  "turn_budget_ms": 5000,
+  "search_slack_ms": 100,
+  "simulation_ceiling": 1000000000,
+  "ceiling_policy": "Must not bind; disclose any turn that reaches it.",
+  "search": {
+    "depth": 64,
+    "world_pool": 3,
+    "cpuct": 0.4,
+    "fpu_reduction": 0.02965,
+    "dynamic_fpu": true,
+    "uniform_prior": 0,
+    "root_only": false,
+    "root_noise": 0
+  },
+  "weights_sha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+  "rules": "Canonical SplendoRust; private information only through actor Observation",
+  "backend": "Chrome hardware WebGPU FP32, captured static batch1/batch2/batch8 graphs, no special browser flags",
+  "scheduling": "One game and one search at a time. Fixed rotating round robin, both seat orders per setup block. Process the fixed reservoir in order until clock cutoff; never change schedule from outcomes.",
+  "schedule": [
+    {
+      "id": 0,
+      "block": 0,
+      "rotation": 0,
+      "seed": "16824072270146086759",
+      "seats": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1,
+      "block": 0,
+      "rotation": 0,
+      "seed": "16824072270146086759",
+      "seats": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": 2,
+      "block": 0,
+      "rotation": 0,
+      "seed": "16824072270146086759",
+      "seats": [
+        2,
+        8
+      ]
+    },
+    {
+      "id": 3,
+      "block": 0,
+      "rotation": 1,
+      "seed": "16824072270146086759",
+      "seats": [
+        2,
+        1
+      ]
+    },
+    {
+      "id": 4,
+      "block": 0,
+      "rotation": 1,
+      "seed": "16824072270146086759",
+      "seats": [
+        8,
+        1
+      ]
+    },
+    {
+      "id": 5,
+      "block": 0,
+      "rotation": 1,
+      "seed": "16824072270146086759",
+      "seats": [
+        8,
+        2
+      ]
+    },
+    {
+      "id": 6,
+      "block": 1,
+      "rotation": 0,
+      "seed": "15010500553269889204",
+      "seats": [
+        8,
+        1
+      ]
+    },
+    {
+      "id": 7,
+      "block": 1,
+      "rotation": 0,
+      "seed": "15010500553269889204",
+      "seats": [
+        8,
+        2
+      ]
+    },
+    {
+      "id": 8,
+      "block": 1,
+      "rotation": 0,
+      "seed": "15010500553269889204",
+      "seats": [
+        2,
+        1
+      ]
+    },
+    {
+      "id": 9,
+      "block": 1,
+      "rotation": 1,
+      "seed": "15010500553269889204",
+      "seats": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": 10,
+      "block": 1,
+      "rotation": 1,
+      "seed": "15010500553269889204",
+      "seats": [
+        2,
+        8
+      ]
+    },
+    {
+      "id": 11,
+      "block": 1,
+      "rotation": 1,
+      "seed": "15010500553269889204",
+      "seats": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 12,
+      "block": 2,
+      "rotation": 0,
+      "seed": "14548144924908385648",
+      "seats": [
+        2,
+        8
+      ]
+    },
+    {
+      "id": 13,
+      "block": 2,
+      "rotation": 0,
+      "seed": "14548144924908385648",
+      "seats": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 14,
+      "block": 2,
+      "rotation": 0,
+      "seed": "14548144924908385648",
+      "seats": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": 15,
+      "block": 2,
+      "rotation": 1,
+      "seed": "14548144924908385648",
+      "seats": [
+        8,
+        2
+      ]
+    },
+    {
+      "id": 16,
+      "block": 2,
+      "rotation": 1,
+      "seed": "14548144924908385648",
+      "seats": [
+        2,
+        1
+      ]
+    },
+    {
+      "id": 17,
+      "block": 2,
+      "rotation": 1,
+      "seed": "14548144924908385648",
+      "seats": [
+        8,
+        1
+      ]
+    },
+    {
+      "id": 18,
+      "block": 3,
+      "rotation": 0,
+      "seed": "15309477581817057027",
+      "seats": [
+        2,
+        1
+      ]
+    },
+    {
+      "id": 19,
+      "block": 3,
+      "rotation": 0,
+      "seed": "15309477581817057027",
+      "seats": [
+        8,
+        1
+      ]
+    },
+    {
+      "id": 20,
+      "block": 3,
+      "rotation": 0,
+      "seed": "15309477581817057027",
+      "seats": [
+        8,
+        2
+      ]
+    },
+    {
+      "id": 21,
+      "block": 3,
+      "rotation": 1,
+      "seed": "15309477581817057027",
+      "seats": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 22,
+      "block": 3,
+      "rotation": 1,
+      "seed": "15309477581817057027",
+      "seats": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": 23,
+      "block": 3,
+      "rotation": 1,
+      "seed": "15309477581817057027",
+      "seats": [
+        2,
+        8
+      ]
+    }
+  ],
+  "stopping": "Do not start a turn with less than5s remaining. Retain the active game as unknown. Max8min/game or512decisions; caps/blocks/errors have no invented winner. Record every started game, completed game, and replay checkpoint. Reserved games not reached are reported not_started, not losses.",
+  "analysis": "Pairwise wins/ties/losses/unknowns and seat balance; equal-pair weighted scores; paired setup uncertainty when available. Do not declare superiority from a small point lead or promote a champion without evidence. All results only at this budget/backend/profile.",
+  "source_sha256": {
+    "Cargo.lock": "d67c773799284f9a65d68e488d86ec5fcf13f74e5b4759f3986e45b2d2d1c5af",
+    "rust-toolchain.toml": "887f9be066a15585a2c583578e84b0fcb541126d81546276bad3d2ff00d61167",
+    "crates/splendor-agents/src/neural_search.rs": "99eac73ef6cf5ff629b8ff6918f4b48429cf81268d4e2b83981602795abb9676",
+    "crates/splendor-agents/src/transfer.rs": "19b03ea2c6269d2cace8d46c4241a4e9549d382f7f45b4530699fe7a558666ac",
+    "crates/splendor-web/src/lib.rs": "4424c44857b352806b9c378b74c0a4112f73cbdaab26f281262cce76769e0f88",
+    "web/src/gpu-client.ts": "ccfb342e4858bd23d134b05a10f608771c163daf4fefe173ebf94dc694dba0a6",
+    "web/src/gpu.worker.ts": "d67c71982c4814f2f2cc69705fd5ad9ece48579257a8d57364a9ec1b44b6796e",
+    "web/src/webgpu-model.ts": "96169f204a57a734b47889647382831c678aabab7a384901dc37fd5899443065",
+    "web/src/batch-hour.worker.ts": "a51741fb7647b7e3ac4002d46656522516b72719fe992d33b343437abc57190d",
+    "web/scripts/test-batch-hour.mjs": "738dfb9717951188329e16951a276db89e6034a8a84aff8caeba4274265e325e",
+    "web/pkg/splendor_web_bg.wasm": "621f2bf93e5147e06cb59f41ef1d99b38031dc37e237c864b759c52f7cb62b2d"
+  },
+  "graphs": {
+    "1": {
+      "schema": "splendor-webgpu-model-v1",
+      "sourceSha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+      "sha256": "d6ae3b1a35bbbd7f138912eec3eb569df714356e12b136621237d6aee8ec4d32",
+      "bytes": 19140738,
+      "url": "/models/d6ae3b1a35bbbd7f138912eec3eb569df714356e12b136621237d6aee8ec4d32.onnx",
+      "input": "tokens",
+      "shape": [
+        1,
+        31,
+        48
+      ],
+      "precision": "float32"
+    },
+    "2": {
+      "schema": "splendor-webgpu-model-v1",
+      "sourceSha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+      "sha256": "8e867631dab122406a5ea99a9acc6ab91ec58a29b2b21fb7e042e957ab6312f5",
+      "bytes": 19140738,
+      "url": "/models/8e867631dab122406a5ea99a9acc6ab91ec58a29b2b21fb7e042e957ab6312f5.onnx",
+      "input": "tokens",
+      "shape": [
+        2,
+        31,
+        48
+      ],
+      "precision": "float32"
+    },
+    "8": {
+      "schema": "splendor-webgpu-model-v1",
+      "sourceSha256": "57f6e227f8ac0382b7fa67dba6b58ec6663d1f635c7b9f583937867cd6692deb",
+      "sha256": "39387a5c92d9b41cb139ec86bb08e9690c427a12beca73aaf8436e4c2f231250",
+      "bytes": 19140738,
+      "url": "/models/39387a5c92d9b41cb139ec86bb08e9690c427a12beca73aaf8436e4c2f231250.onnx",
+      "input": "tokens",
+      "shape": [
+        8,
+        31,
+        48
+      ],
+      "precision": "float32"
+    }
+  }
+}

@@ -11,7 +11,7 @@ export interface GpuManifest {
 }
 
 export async function loadGpuModel(sourceSha256: string, baseUrl: string, capture = true, onProgress?: (progress: EngineProgress) => void, batch = 1) {
-  if (![1,4,8].includes(batch)) throw new Error("Unsupported inference batch size.");
+  if (![1,2,4,8].includes(batch)) throw new Error("Unsupported inference batch size.");
   if (!navigator.gpu) throw new Error("This browser does not support WebGPU.");
   ort.env.wasm.numThreads = 1;
   ort.env.wasm.wasmPaths = { mjs: moduleUrl };
